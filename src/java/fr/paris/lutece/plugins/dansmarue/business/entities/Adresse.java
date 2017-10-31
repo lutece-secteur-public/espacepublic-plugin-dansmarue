@@ -1,0 +1,111 @@
+package fr.paris.lutece.plugins.dansmarue.business.entities;
+
+
+
+public class Adresse
+{
+    private Double _lat;
+    private Double _lng;
+    private Double _latAddress;
+    private Double _lngAddress;
+    private Long _nId;
+    private Signalement _signalement;
+    private String _strAdresse;
+    private String _strPrecisionLocalisation;
+
+    public String getAdresse( )
+    {
+        return _strAdresse;
+    }
+
+    public Long getId( )
+    {
+        return _nId;
+    }
+
+    public Double getLat( )
+    {
+        return _lat;
+    }
+
+    public Double getLng( )
+    {
+        return _lng;
+    }
+
+    public Double getLatAddress( )
+    {
+        return _latAddress;
+    }
+
+    public Double getLngAddress( )
+    {
+        return _lngAddress;
+    }
+
+    public String getPrecisionLocalisation( )
+    {
+        return _strPrecisionLocalisation;
+    }
+
+    public Signalement getSignalement( )
+    {
+        return _signalement;
+    }
+
+    public void setAdresse( String adresse )
+    {
+        this._strAdresse = adresse;
+    }
+
+    public void setId( Long id )
+    {
+        this._nId = id;
+    }
+
+    public void setLat( Double lat )
+    {
+        this._lat = lat;
+    }
+
+    public void setLng( Double lng )
+    {
+        this._lng = lng;
+    }
+
+    public void setLatAddress( Double latAddress )
+    {
+        this._latAddress = latAddress;
+    }
+
+    public void setLngAddress( Double lngAddress )
+    {
+        this._lngAddress = lngAddress;
+    }
+
+    public void setPrecisionLocalisation( String precisionLocalisation )
+    {
+        this._strPrecisionLocalisation = precisionLocalisation;
+    }
+
+    public void setSignalement( Signalement signalement )
+    {
+        this._signalement = signalement;
+    }
+
+    public String getGoogleLink( )
+    {
+    	if( this.getLat(  ) == null || this.getLng(  ) == null  || this.getAdresse(  ) == null )
+    	{
+    		return this.getAdresse(  );
+    	}
+    	else
+    	{
+        	String strLat = Double.toString( this.getLat(  ) ).replaceAll(",", "\\.");
+        	String strLng = Double.toString( this.getLng(  ) ).replaceAll(",", "\\.");
+        	String strAdr = this.getAdresse(  ).replaceAll("'", " ").replaceAll(" ", "\\+");
+            return "https://maps.google.fr/?t=h&z=18&q=" + strLat + "," + strLng + "+("+strAdr+")";
+    	}
+    }
+    
+}

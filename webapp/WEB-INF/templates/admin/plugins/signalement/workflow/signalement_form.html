@@ -1,0 +1,31 @@
+<div class="container">
+	<div class="row-fluid">
+		<legend>
+			#i18n{dansmarue.tasks_form_workflow.title.action${action_id}} </legend>
+		<form class="form-horizontal"
+			action="jsp/admin/plugins/signalement/DoProcessActionWorkflow.jsp"
+			method="post" name="" id="" enctype="multipart/form-data">
+			<input name="action_id" value="${action_id}" type="hidden" /> <input
+				name="signalement_id" value="${signalement_id}" type="hidden" />
+			${task_form}
+			<div class="text-center">
+				<button class="btn btn-paris btn-red btn-lg" type="submit" name="save">
+					#i18n{workflow.tasks_form_test_workflow.button_save}
+				</button>
+				<#if has_next>
+				<button class="btn btn-paris btn-red btn-lg" type="submit"
+					name="validate_next">
+					#i18n{ramen.commons.validateNext}
+				</button>
+				</#if>
+				<noscript>
+					<input type="hidden" value="access" name="access" />
+				</noscript>
+				<a href="jsp/admin/plugins/signalement/ManageSignalement.jsp"
+					class="btn btn-paris btn-blue btn-lg" name="cancel">
+					#i18n{workflow.tasks_form_test_workflow.button_cancel}
+				</a>
+			</div>
+		</form>
+	</div>
+</div>

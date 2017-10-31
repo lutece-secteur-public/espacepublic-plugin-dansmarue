@@ -1,0 +1,95 @@
+<div class="row">
+	<fieldset>
+		<legend>
+			#i18n{dansmarue.listtypesignalement.modifytypesignalement.title}
+			</h2>
+		</legend>
+		${error!}
+		<form class="form-horizontal" method="post"
+			enctype="multipart/form-data"
+			action="jsp/admin/plugins/signalement/DoModifyTypeSignalement.jsp">
+			<input type="hidden" id="jsp_back" name="jsp_back"
+				value="${jsp_back!}" /> <input type="hidden" name="id"
+				value="${typesignalement.id!}" /> <input type="hidden"
+				name="idTypeSignalementParent"
+				value="${typesignalement.typeSignalementParent.id!}" />
+			<div class="col-xs-12 col-sm-12 col-md-12">
+				<div class="form-group">
+					<label class="<@label />" for="libelle">#i18n{dansmarue.commons.libelle}
+						* : </label>
+					<div class="<@input />">
+						<input class="form-control input-sm" type="text" id="libelle"
+							name="libelle" value="${typesignalement.libelle!}" maxlength="50" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="<@label />" for="image">#i18n{dansmarue.commons.image}
+						: </label> <#if typesignalement.imageUrl!?has_content >
+					<div class="<@input />">
+						<img width="100" src='${typesignalement.imageUrl!}' /><br />
+					</div>
+					</#if>
+				</div>
+				<div class="form-group">
+					<label class="<@label />" for="image">&nbsp;</label>
+					<div class="<@input />">
+						<input type="file" id="image" name="image" maxlength="100" />
+					</div>
+				</div>
+
+				<#if nosoustype>
+				<div class="form-group">
+					<label class="<@label />" for="unit.idUnit">#i18n{dansmarue.listtypesignalement.direction.label}
+						: </label>
+					<div class="<@input />">
+						#i18n{dansmarue.listtypesignalement.direction.info} <@combo
+						name="unit.idUnit" default_value=typesignalement.unit.idUnit
+						items=unit_list /></div>
+				</div>
+				<div class="form-group">
+					<label class="<@label />" for="alias">#i18n{dansmarue.listtypesignalement.alias.label}
+						: </label>
+					<div class="<@input />">
+						<input class="form-control input-sm" type="text" id="alias"
+							name="alias" value="${typesignalement.alias!}" maxlength="255" />
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="<@label />" for="aliasMobile">#i18n{dansmarue.listtypesignalement.alias.mobile.label}
+						: </label>
+					<div class="<@input />">
+					<input class="form-control input-sm" type="text" id="aliasMobile"
+							name="aliasMobile" value="${typesignalement.aliasMobile!}" maxlength="255" />
+					</div>
+				</div>
+				
+				</#if>
+
+				<div class="form-group">
+					<label class="<@label />" for="actif">#i18n{dansmarue.commons.actif}
+						:</label>
+					<div class="<@input />">
+						<input class="checkbox" type="checkbox" name="actif" id="actif"<#if
+						(typesignalement.actif) > checked="checked" </#if> />
+					</div>
+				</div>
+			</div>
+			<div class="form-actions">
+				<button type="submit" value="#i18n{dansmarue.commons.save}"
+					name="#i18n{dansmarue.commons.save}" class="btn btn-primary btn-sm"
+					tabindex="3">
+					<i class="glyphicon glyphicon-ok"></i>
+					#i18n{dansmarue.commons.save}
+				</button>
+				<button type="submit" value="#i18n{dansmarue.commons.cancel}"
+					name="cancel" class="btn btn-default btn-sm">
+					<i class="glyphicon glyphicon-remove-circle"></i>
+					#i18n{dansmarue.commons.cancel}
+				</button>
+			</div>
+
+		</form>
+	</fieldset>
+</div>

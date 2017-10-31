@@ -1,0 +1,75 @@
+<div class="container">
+	<div class="row">
+		<legend> #i18n{dansmarue.mail.title} </legend>
+		<div class="bg-danger">${error!}</div>
+		<form class="form-horizontal"
+			action="jsp/admin/plugins/signalement/DoSendMail.jsp" method="post">
+			<div class="form-group">
+				<label class="<@label />"> #i18n{dansmarue.mail.recipient} :
+				</label>
+				<div class="<@input />">
+					<input class="form-control input-sm" maxlength="250" type="text"
+						value="${( mail_item.recipientsTo )!}" name="recipientsTo"
+						id="recipientsTo" /> #i18n{dansmarue.mail.recipient.definition}
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="<@label />"> #i18n{dansmarue.mail.sender} * :
+				</label>
+				<div class="<@input />">
+					<input class="form-control input-sm" maxlength="100" type="text"
+						value="${( mail_item.senderEmail )!}" name="senderEmail"
+						id="senderEmail" /> #i18n{dansmarue.mail.sender.definition}
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="<@label />"> #i18n{dansmarue.mail.object} * :
+				</label>
+				<div class="<@input />">
+					<input class="form-control input-sm" maxlength="100" type="text"
+						value="${( mail_item.subject )!}" name="subject" id="subject" />
+					#i18n{dansmarue.mail.object.definition}
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="<@label />"> #i18n{dansmarue.mail.photos} : </label>
+				<div class="<@checkbox />">
+					<div class="checkbox">
+						<label> <input class="checkbox" type="checkbox"
+							name="photos" id="photos"<#if
+							mail_item.filesAttachement!?has_content> checked="checked" </#if>
+							/> #i18n{dansmarue.mail.photos.definition}
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="<@label />"> #i18n{dansmarue.mail.message} * :
+				</label>
+				<div class="<@input />">
+					<div class="editor">
+						<textarea rows="10" cols="100" id="message" name="message"
+							class="richtext">
+							${( mail_item.message )!}
+						</textarea>
+					</div>
+					#i18n{dansmarue.mail.message.definition}
+				</div>
+			</div>
+			<div class="text-center">
+				<div class="form-actions">
+					<input type="hidden" id="jsp_back" name="jsp_back"
+						value="${jsp_back!}" /> <input type="hidden" name="signalement_id"
+						value="${signalement_id!}" />
+					<button class="btn btn-paris btn-red btn-lg" type="submit">
+						<i class="glyphicon glyphicon-ok"></i> #i18n{dansmarue.mail.send}
+					</button>
+					<button class="btn btn-paris btn-blue btn-lg" name="cancel" value="cancel">
+						<i class="glyphicon glyphicon-arrow-left"></i> #i18n{dansmarue.retour.title}
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<#include "/admin/util/editor/editor.html" /> <@initEditor />

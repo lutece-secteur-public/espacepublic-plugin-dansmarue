@@ -1,0 +1,308 @@
+form>a>img, .actionsButtons>a>img {
+	border: 1px solid #55B4E5;
+	margin-bottom: 2px;
+}
+
+/* DASHBOARD */
+#dashboard label{
+	color: #0C518A;
+}
+
+#dashboard .dashboard-result .state-header{
+	text-align: center;
+	height: 90px;
+	background-color: rgb(12,81,138);
+	color: rgb(255,255,255);
+	font-weight: 600;
+	display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#dashboard .dashboard-result .state-header button{
+	background: none;
+	border: none;
+	width: 100%;
+	height: 80%;
+	border-right: solid 1px rgb(255,255,255);
+}
+
+#dashboard .dashboard-result .state-header::after{
+	border-right: solid black 1px;
+	height: 30px:
+}
+
+#dashboard .dashboard-result .state-block:last-child .state-header button{
+	border-right: none;
+}
+
+#dashboard .dashboard-result .state-block:first-child .state-header
+{
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+#dashboard .dashboard-result .state-block:last-child .state-header
+{
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+#dashboard .state-row-collapsed{
+	margin-bottom: 10px;
+}
+
+#dashboard .repartition-wrapper button{
+	width: 100%;
+	border: none;
+	box-shadow: none;
+	background: none;
+	padding: 0px;
+}
+
+#dashboard .dashboard-result .repartition-block{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 5px 0px;
+	border-radius: 5px;
+	height: 90px;
+	color: rgb(255,255,255);
+	font-weight: 600;
+	text-align: center;
+}
+
+	
+#dashboard .repartition-wrapper:first-child{
+	margin-top: 5px;
+}
+
+#dashboard .repartition-wrapper:last-child{
+	margin-bottom: 5px;
+}
+
+#dashboard .repartition-wrapper:nth-child(1) .repartition-block{
+	background-color: rgb(223,34,90);
+}
+
+#dashboard .repartition-wrapper:nth-child(2) .repartition-block{
+	background-color: rgb(247,127,104);
+}
+
+#dashboard .repartition-wrapper:nth-child(3) .repartition-block{
+	background-color: rgb(125,196,255);
+}
+
+#dashboard .repartition-block a {
+	color: rgb(255,255,255);
+}
+
+#dashboard .dashboard-result .state-block:nth-child(2n) .repartition-block,
+#dashboard .dashboard-result .state-block:nth-child(3n) .repartition-block{
+	margin-right: 3px;
+	margin-left: 3px;
+}
+
+
+#dashboard .dashboard-result .state-block:nth-child(4n+1) .repartition-block,
+#dashboard .dashboard-result .state-block:nth-child(1) .repartition-block{
+	margin-right: 3px;
+	margin-left: 0px;
+}
+
+#dashboard .dashboard-result .state-block:nth-child(4n) .repartition-block{
+	margin-left: 3px;
+	margin-right: 0px;
+}
+
+#dashboard .state-header:has(> .collapsed){
+	margin-top: 10px;
+}
+
+/* MANAGE SIGNALEMENT */
+#manage-signalement .form-group > label{
+	color: #0C518A;
+}
+
+#manage-signalement input[type='text'], #manage-signalement select{
+	border-radius: 5px !important;
+}
+
+#manage-signalement .display-advanced-search{
+	cursor: pointer;
+	text-decoration:underline;
+}
+
+#manage-signalement	.toggle-map-btns{
+	text-transform: uppercase;
+	background-color: rgb(255,255,255);
+	color: rgb(12,81,138);
+	font-weight: 800;
+	border: solid 1px #ddd;
+}
+				
+#manage-signalement	.toggle-map-btns.active{
+	background-color: rgb(12,81,138);
+	color: rgb(255,255,255);
+}
+
+#manage-signalement	#toggle-map-btns{
+	margin: 10px 0px;
+}
+
+#manage-signalement .svg{
+	width: 25px;
+	height: 25px;
+}
+
+#manage-signalement .toggle-map-btns svg{
+	vertical-align:middle;
+}
+
+#manage-signalement .toggle-map-btns svg path{
+	fill: rgb(12,81,138);
+}
+
+#manage-signalement .toggle-map-btns.active svg path{
+	fill: rgb(255,255,255);
+}
+
+#manage-signalement .label-title{
+	color: #0C518A;
+}
+
+#manage-signalement #map_nb_result_div{
+	margin-top: 10px;
+}
+
+#table-signalements thead tr{
+	background-color: rgb(12,81,138);
+	color: rgb(255,255,255);
+}
+
+#table-signalements thead tr a.btn{
+	background-color: rgb(12,81,138);
+	color: rgb(255,255,255);
+}
+
+#table-signalements td{
+	border: solid 1px rgb(215,215,215);
+}
+
+#table-signalements th{
+	border: solid 1px rgb(68,124,171);
+}
+
+#table-signalements tbody td a.link, #table-signalements tbody td a.link:hover{
+	text-decoration: underline;
+	color: rgb(0,0,0);
+}
+
+#table-signalements .signalement-comment{
+   word-break: break-all;
+}
+
+/* SIGNALEMENT PAGINATOR */
+#signalement-paginator .paginator-items-count, .pagination{
+	display: inline-block;
+	vertical-align: middle;
+}
+
+#signalement-paginator .paginator-items-count{
+	margin-bottom: 15px;
+}
+
+#signalement-paginator .showcount{
+	margin-right: 2vw;
+}
+
+#signalement-paginator ul.pagination{
+	margin-left: 2vw;
+}
+
+#signalement-paginator ul.pagination > li > a{
+	margin-right: 8px;
+}
+
+#signalement-paginator ul.pagination > li > a{
+	border-radius: 5px !important;
+}
+
+#signalement-paginator ul.pagination > li > a{
+	background: none;
+	border: none;
+}
+
+#signalement-paginator ul.pagination > li:first-child > a, ul.pagination > li:last-child > a{
+	background-color: rgb(248,226,115) !important;
+}
+
+#signalement-paginator ul.pagination > li.active > a{
+	background-color: rgb(12,81,138);
+}
+
+/* INPUT RADIO / CHECKBOX*/
+/* Affichage des checkbox / radio bouton sous forme de boutons */
+label.btn-checkbox.active, label.btn-radio.active {
+    border-color: #0C518A;
+    color: #0C518A;
+	border: solid 2px;
+	font-weight: bold;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+}
+
+.btn-checkbox, .btn-radio{
+	background-color: white;
+	color: black;
+	border-radius: 5px;
+	border: solid 1px #d2d6de;
+	margin: 5px 5px 5px 0px;
+}
+
+label.btn-radio > [type='radio']{
+	display: none;
+}
+
+/* EXPANDABLE */
+.expandable, .expandable > label {
+	cursor: pointer;
+}
+
+.expandable::after{
+	font-family: 'Glyphicons Halflings';
+    content: "\e260";
+}
+
+.expandable.collapsed::after{
+	font-family: 'Glyphicons Halflings';
+    content: "\e259";
+}
+
+/*MODAL*/
+.modal-content{
+	border-radius: 5px;
+	text-align: center;
+	font-family: 'Montserrat', sans-serif;
+}
+.modal-header{
+	background-color: rgb(12,81,138);
+	border-radius: 5px 5px 0px 0px;
+	font-family: 'Montserrat', sans-serif;
+}
+.modal-header .close{
+	color: rgb(255,255,255);
+	opacity: 1;
+	font-size: 30px;
+	margin-top: -15px;
+}
+
+#modal-img{
+	width: 100%;
+	height: 100%;
+}
+
+/* JS TREE */
+.jstree-default li, .jstree-default ins {
+	background-image: url(/sira/images/js-tree-sira.png);
+}

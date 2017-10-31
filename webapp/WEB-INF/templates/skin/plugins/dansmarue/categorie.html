@@ -1,0 +1,496 @@
+<link rel="stylesheet" href="js/jquery/plugins/treeview/jquery.treeview.css" type="text/css" media="screen, projection" />
+<!-- <link rel="stylesheet" href="js/jquery/plugins/ui/datepicker/ui.datepicker.css" type="text/css" media="screen, projection" /> remplace par jquery-ui.css -->
+<link rel="stylesheet" href="js/jquery/plugins/autocomplete/jquery.autocomplete.css" type="text/css" media="screen, projection" />
+<!--<link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection" />-->
+<link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print" />
+<!--[if IE]><link rel="stylesheet" href="http://dev.lutece.paris.fr/sira/css/blueprint/ie.css" type="text/css" media="screen, projection" /><![endif]-->
+<!--<link rel="stylesheet" href="css/page_template_styles.css" type="text/css" media="screen, projection" />-->
+<link rel="shortcut icon" href="favicon.ico" />
+
+<link rel="stylesheet" href="js/jquery/plugins/ui/css/jquery-ui.css" type="text/css" media="screen, projection" />
+<!-- <link rel="stylesheet" href="css/jquery-ui.css" type="text/css"/> -->
+
+<style>
+.colonneInfoTypeSignalement {
+	display: none;
+}
+
+.ui-widget-overlay {
+	background: #fff;
+	opacity: 0.8;
+	position: fixed !important;
+}
+
+
+.ui-widget-header,.ui-widget-content {
+	background: #f3f3f3;
+}
+
+.ui-widget-header {
+	border: 0;
+}
+
+.ui-dialog-content {
+	padding-top: 0 !important;
+}
+
+.ui-dialog-titlebar {
+	padding-bottom: 0 !important;
+}
+
+.ui-corner-all {
+	border-radius: 0 !important;
+}
+
+.ui-state-focus {
+	border: 0 !important;
+	color: #2eb7d7 !important;
+}
+
+.ui-menu-item {
+	text-align: left;
+	z-index: 101;
+}
+
+ul li {
+    padding: 0 !important;
+}
+.formulaire {
+	width: 762px !important;
+	text-align: left;
+	display: table;
+}
+
+.row>.type_signalement {
+	margin: 0;
+}
+
+.row>.type_signalement>.title {
+	position: relative;
+	margin-top: 3em;
+}
+
+.row>.type_signalement>.title>.firstLevelInfo {
+	position: absolute;
+	top: -20px;
+	background-color: #fa8787;
+	background-image: url("images/signa_ok2.png");
+	background-position: 1px 3px;
+	background-repeat: no-repeat;
+	padding: 0.3em 0.8em 0.3em 1.7em;
+	color: white;
+	overflow: hidden;
+	white-space: nowrap;
+	z-index: 100;
+	background-repeat: no-repeat;
+}
+
+.row>.type_signalement>.title>.infoTriangle {
+	position: absolute;
+	top: 2px;
+	left: 34px;
+	width: 0px;
+	height: 0px;
+	border-style: solid;
+	border-width: 16px 7.5px 0 7.5px;
+	border-color: #fa8787 transparent transparent transparent;
+	width: 0px;
+}
+
+#popup {
+	color: #545454 !important;
+}
+
+ .ui-dialog{
+	z-index: 1001 !important;
+} 
+
+#popup .coloredRed {
+	color: #fb7f7f
+}
+
+#popup .type_signalement,#popup label {
+	cursor: pointer;
+	display: block;
+	text-align: left;
+}
+
+/*
+ * 2&egrave;me niveau de la nomenclature 
+ */
+#popup>#selection>.type_signalement {
+	margin: 0;
+}
+
+#popup>#selection>.type_signalement {
+	margin-bottom: 0.3em;
+}
+
+#popup>#selection>.type_signalement>.title {
+	color: #01acc8;
+	font-weight: bold;
+	background-color: #fff;
+	padding-left: 2em;
+}
+
+#popup .signaUnfolded {
+	background-image: url("images/signa_arrow-off.png");
+	background-repeat: no-repeat;
+		color: #01acc8;
+	font-weight: bold;
+	background-color: #fff;
+	padding-left: 2em;
+}
+
+#popup .signaFolded {
+	background-image: url("images/signa_arrow-on.png");
+	background-repeat: no-repeat;
+		color: #01acc8;
+	font-weight: bold;
+	background-color: #fff;
+	padding-left: 2em;
+}
+
+/*
+ * 3&egrave;me niveau de la nomenclature 
+ */
+#popup>#selection>.type_signalement>.type_signalement .last{
+	margin: 0 0 0 2.1em;
+	border-bottom: 1.5px dotted #808080;
+	padding-bottom: 1.5px;
+	
+}
+
+#popup>#selection>.type_signalement>.type_signalement:last-child {
+	border-bottom: 0;
+	margin-bottom: 1em;
+}
+
+#popup>#selection>.type_signalement>.type_signalement>label {
+	cursor: pointer;
+}
+
+#popup>#selection>.type_signalement .type_signalement{
+margin:0;
+}
+
+#popup>#selection>.type_signalement .tree-plus, #popup>#selection>.type_signalement .tree-minus {
+margin: 10px 20px 0 0;
+}
+
+#popup .signaSelected {
+	font-weight: bold;
+	background-image: url("images/signa_ok.png");
+	padding-left: 2em;
+	background-repeat: no-repeat;
+}
+
+*.ui-dialog .ui-dialog-titlebar-close span {
+position:initial !important;
+margin:0px !important;
+}
+
+
+</style>
+<#assign indexFirstLvl = 0 >
+<#macro liste_type_signalement_cascade liste_type_signalement="" deep=1>
+	<#if liste_type_signalement?has_content>
+		<#list liste_type_signalement as type_signalement>
+			<#if type_signalement.typeSignalementParent.id! ==0>
+				<#if indexFirstLvl % 6 == 0>
+					<div class="row pictos">
+				</#if>
+				<#assign indexFirstLvl = indexFirstLvl + 1 >
+				            <div class="col-md-2 col-sm-4 col-xs-12">
+                                <a href="#" data-toggle="modal" data-target="#genericModal${type_signalement.id!}">
+                                    <div class="svg">
+      
+                                            <style type="text/css">
+                                                .st0{fill-rule:evenodd;clip-rule:evenodd;}
+                                            </style>
+											<path id=${type_signalement.libelle!} class="st0 defaut-eclairage" d=""/>
+
+											<object data="${type_signalement.imageUrl}" width="100" height="92" type="image/svg+xml">
+												<img src="${type_signalement.imageUrl}" />
+											</object>
+                                        </svg>   
+                                    </div>
+                                    <p class="type-remarque-texte">${type_signalement.libelle!}</p>
+                                    <span class="selected-value"></span>
+                                </a>
+                            </div>
+							<div id="genericModal${type_signalement.id!}" class="modal fade" role="dialog">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+											<h4 class="modal-title">${type_signalement.libelle!}</h4>
+											<p>S&eacute;l&eacute;ctionnez un th&egrave;me :</p>
+										</div>
+										<div class="tree">
+											<div class="liste-popin">
+												<ul>
+												<@liste_type_signalement_cascade liste_type_signalement=type_signalement.listChild  deep=deep+1 />
+												</ul>
+								            </div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-title-remarque">VALIDER LA SELECTION</button>
+										</div>
+									</div>
+								</div>
+							</div>
+	
+					
+				<#if indexFirstLvl % 6 == 0>
+					</div>
+				</#if>
+			<#else>
+				<#if deep == 2>
+					<div class="modal-body">
+				</#if>
+				<#if type_signalement.listChild?has_content>
+				
+                    <li class="parent_li">
+                        <span class="parent" title="Expand this branch">${type_signalement.libelle!}<img src="assets/img/selecteur-bas.png" alt="S&eacute;lecteur"></span>
+                            <ul class="child">
+						<@liste_type_signalement_cascade liste_type_signalement=type_signalement.listChild  deep=deep+1 />
+						    </ul>
+                    </li>
+				<#else>
+				 <li>
+                    <div class="radio">
+                        <label><input type="radio" name="radiobtn-grp">${type_signalement.libelle!}</label>
+                    </div>
+                </li>
+				<@liste_type_signalement_cascade liste_type_signalement=type_signalement.listChild  deep=deep+1 />
+				</#if>
+				<#if deep == 2>
+					</div>
+				</#if>
+			</#if>	
+   		</#list>
+   </#if>
+</#macro>
+
+<@header/>
+
+<section id="page_categorie">
+
+		<@descriptionSteps/>
+		<@mobileDescription/>
+
+		<div class="horizontal-steps">
+			<@rowPreviousStepLocalisation />
+			<@rowPreviousStepDoublons />
+			<div class="step active">
+				<@stepActive step="3" etape="categorie"/>
+				<div class="container">
+                    <div class="row">
+                        <div  class="demande-etape3">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <p class="p-etape3">#i18n{dansmarue.etape.type.description}</p>
+                                <div class="form-group" id="autocompleteBox" >
+                                    <input type="text" class="form-control" id="autocomplete">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="bloc-info">
+                                    <div class="select-bloc-etape3"></div>
+                                    <p class="infobulle-center" >#i18n{dansmarue.etape.type.description.tooltip}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <img src="images/image-DMR/ou.png" alt="Ou" class="ou">
+                        </div>
+                    </div>
+                </div>
+                   
+
+				<div class="container">
+				 <form id="regular" style="">
+					   <div class="row">
+                            <div class="col-md-12">
+                                <p class="p-etape3">#i18n{dansmarue.label.categorie.type.image}</p>
+                            </div>
+                        </div>
+
+					<@liste_type_signalement_cascade liste_type_signalement=typeSignalement />
+					</form>
+            	</div>
+
+				<form id="form" class="form" name="dansmarue"
+			  action="jsp/site/Portal.jsp?page=dansmarue"
+			  method="post">
+				<div class="container">
+                	<div class="row">
+                   		<div class="col-md-12">
+                        	<button type="submit" class="btn btn-center" name="action_validate_categorie" role="button" >#i18n{dansmarue.continuer}
+                            	 <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+                       		</button>
+                    	</div>
+                	</div>
+           		</div>
+				</form>
+			</div>	                             
+</div>			
+			<@stepInactive step="4" etape="finalisation"/>
+			<@stepInactive step="5" etape="confirmation"/>
+		</div>
+
+		<@conditionGeneral/>
+
+</section>
+
+
+<div id="popup" style="display: none">
+	<div style="margin-bottom: 1em">
+		S&eacute;lectionnez <span class="coloredRed">un th&egrave;me</span> :
+	</div>
+	<div id="selection"></div>
+	<div style="text-align: center">
+		<input style="margin-top: 1.2em" value="Valider" name="action" type="submit" onclick="$('#popup').dialog('close');">
+	</div>	
+</div>
+
+
+
+
+
+
+<!--<script src="js/jquery/plugins/autocomplete/jquery.autocomplete.pack.js" type="text/javascript"></script>-->
+<!--<script src="js/jquery/plugins/treeview/jquery.treeview.pack.js" type="text/javascript"></script>-->
+<!--<script src="js/jquery/plugins/treeview/jquery.cookie.js" type="text/javascript"></script>-->
+<!--<script src="js/jquery/plugins/ui/jquery-ui.min.js" type="text/javascript"></script>-->
+<script src="js/jquery/plugins/jquery-1.11.3.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/plugins/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/plugins/dansmarue/dansmarue.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+
+$("#autocompleteBox").show();
+$(".row .type_signalement").hide();
+$(".row>.type_signalement").show().css("width", "150px").css("display", "inline-block");
+
+
+/*
+ * autocomplete, on parse toute la nomenclature et on en extrait tous les labels
+ */
+var autoCompletArray = new Array();
+var SEPARATOR = ">";
+$(".row>.type_signalement label").each(function(index) {
+	var node = $(this);
+	var tmp = $.trim(node.text());
+	while (node.parent().parent().hasClass("type_signalement")) {
+		node = node.parent().parent().children(".title");
+		tmp = $.trim(node.text()) + SEPARATOR + tmp;
+	}
+	autoCompletArray.push(tmp);
+});
+
+$("input#autocomplete").autocomplete({
+	source : autoCompletArray,
+	autoFocus : true
+});
+$("input#autocomplete").bind("autocompleteselect", function(event, ui) {
+	var labelTab = ui.item.label.split(SEPARATOR);
+	var lastLabel = labelTab[labelTab.length - 1];
+	$(".row>.type_signalement>.type_signalement").find(":radio").each(function() {
+		if ($.trim($(this).parent().children(".title").html()) == lastLabel) {
+			$(this).prop("checked", true);
+		}
+	});
+	drawFirstLevel();		
+});
+
+/**
+ * Vide le champ autocomplement avant submit pour eviter le rejet du filtre
+ * anti xss.
+ */
+$("#signalementtype").submit(function() {
+	$("#autocomplete").val("");	
+});
+
+/*
+ * 1 niveau de nomenclature, si on clique, on obtient une popup
+ */
+ $(".row>.type_signalement>.title").click(function() {
+
+		/* Affichage de la popup */
+	$("#popup").dialog({
+			modal : true,
+			minWidth : 530,
+			minHeight : 200
+		});
+		 $(this).parent().children(".type_signalement").clone().appendTo($("#popup>#selection").html("")).show();
+		 $("input[type=radio]").hide();
+		 $("#ui-dialog-title-popup").html($(this).children('label').text().trim());
+		
+	}).css("cursor", "pointer");
+
+	$('#selection').on('click', ".tree-plus > .title",function() {
+		$(this).parent().removeClass('tree-plus');
+		$(this).parent().addClass('tree-minus');
+		$(this).parent().children('.type_signalement').show();
+		$(this).parent().children('.title').addClass("signaFolded");
+		$(this).parent().children('.title').removeClass("signaUnfolded");
+		return true;
+	});
+	
+	$('#selection').on('click',".tree-minus > .title", function() {
+		$(this).parent().removeClass('tree-minus');
+		$(this).parent().addClass('tree-plus');
+		$(this).parent().children('.type_signalement').hide();
+		$(this).parent().children('.title').addClass("signaUnfolded");
+		$(this).parent().children('.title').removeClass("signaFolded");
+		return true;
+	});
+ 
+	
+	$('#popup').on('click', "label",function() {
+		var idLabel = $(this).parent().children(":radio").attr("id");
+		$(".row>.type_signalement>.type_signalement").find(":radio").each(function() {
+			if ($(this).attr("id") === idLabel) {
+				$(this).prop("checked", true);
+			}
+		});
+			$("#popup .type_signalement label").removeClass("signaSelected");
+			$(this).addClass("signaSelected");
+		});
+	
+		
+	function drawFirstLevel() {
+		var node = $("input[name='typeSignalementId']:checked");
+		var label = $.trim(node.parent().text());
+		while (node.parent().hasClass("type_signalement")) {
+			node = node.parent();
+		}
+		$(".firstLevelInfo").hide();
+		$(".infoTriangle").hide();
+		node.children(".title").children("img").before("<div class='firstLevelInfo'>" + label + "</div>").before("<div class='infoTriangle' />");
+	}
+
+	$(".row>.type_signalement>.title").hover(function() {
+		$(this).children(".firstLevelInfo, .infoTriangle").stop().animate({
+			marginTop : "-8px"
+		}, 220).animate({
+			marginTop : "2px"
+		}, 300).animate({
+			marginTop : "-6px"
+		}, 300).animate({
+			marginTop : "0px"
+		}, 400);
+	}, function() {
+	});
+
+	$("#popup").bind("dialogclose", function(event, ui) {
+		drawFirstLevel();
+		$("#autocomplete").val("");
+	});
+	drawFirstLevel();
+</script>
