@@ -67,11 +67,12 @@ $(document).ready(function(){
 	var filterSector = $("#idSector").attr("filter");
 	var filterArrondissements = [${(filter.listIdArrondissements!)?join(",")}];
 	var filterQuartier = [${(filter.listIdQuartier!)?join(",")}];
-	<#--var filterCategories = [${(filter.listIdCategories!)?join(",")}]; -->
+	var filterIdDomaine = ${(filter.idDomaine)!};
 	
 	jQuery.ajax({
 		url :"jsp/admin/plugins/signalement/DoInitDomainsAjax.jsp",
 		async:false,
+		data: {idDomaine: filterIdDomaine},
 		success : function(data) { 
 			if(data != undefined){
 				var domain;
@@ -87,7 +88,7 @@ $(document).ready(function(){
 				if(undefined == domain){
 					domain = data[0];
 				}
-				updateFiltersFromDomain(domain,false);
+				updateFiltersFromDomain(domain.id,false);
 				
 				// Replace by the filter value
 				// Types
@@ -110,12 +111,6 @@ $(document).ready(function(){
 					$('#conseilQuartier').find('[value='+idQuartier+']').prop('selected', true)
 					$("#conseilQuartier").selectpicker('refresh')
 				});
-				
-<#--			// Category
-				filterCategories.forEach(function(idCategory){
-					$("input[type='checkbox'][name='category'][value='"+idCategory+"']").attr("checked","true");
-					$("input[type='checkbox'][name='category'][value='"+idCategory+"']").parent().addClass("active");
-				}); -->
 			}
 		},
 		error:function (xhr, ajaxOptions, thrownError){
@@ -125,11 +120,7 @@ $(document).ready(function(){
 	
 	$("#idDomaine").change(function(){
 		var idDomain = $(this).val();
-		domains.forEach(function(domain){
-			if(domain.id == idDomain){
-				updateFiltersFromDomain(domain,true);
-			}
-		});
+		updateFiltersFromDomain(idDomain,true);
 	});
 	
 	$("#idDirection").change(function(){
@@ -153,85 +144,96 @@ function getDomainById(idDomain){
 	return searchedDomain;
 }
 
-function updateFiltersFromDomain(domain,reset){
-	   <#--$("#categoryCheckboxes, #idDirection, #idSector, #arrondissements").html("");-->
-	   $("#idDirection, #idSector, #checkbox_arrondissement").html("");
-		if(reset){
-			deleteFields();
-		}
-		// Arrondissements
-	   var arrondissements = domain.arrondissementsRefList;
-	   if(undefined != arrondissements && arrondissements.length > 0){
-		   arrondissements.forEach(function(element,index,array){
-			 $("#checkbox_arrondissement").append('\
-				<label class="btn btn-checkbox">\
-					<input type="checkbox" name="listIdArrondissementsParam" value="' + element.code +'">'+ element.name +'</input>\
-				</label>');
-		   });
-	   }else{
-		   $("#checkbox_arrondissement").append("#i18n{dansmarue.reportingList.listEmpty}");
-	   }
-	   
-		// Quartier
-	   var quartiers = domain.quartierRefList;
-	   if(undefined != quartiers && quartiers.length > 0){
-		   quartiers.forEach(function(element,index,array){
-			 $('#conseilQuartier').append($('<option>', {value: element.code,text: element.name}));
-		   });
-	   }
-	   $("#conseilQuartier").selectpicker('refresh');
+function updateFiltersFromDomain(idDomaine,reset){
+	$(".overlay").show()
+	jQuery.ajax({
+		url :"jsp/admin/plugins/signalement/DoGetDomainAjax.jsp",
+		data: {idDomaine: idDomaine},
+		async:false,
+		success : function(domain) { 
+			$("#idDirection, #idSector, #checkbox_arrondissement").html("");
+			if(reset){
+				deleteFields(true);
+			}
+			// Arrondissements
+		   var arrondissements = domain.arrondissementsRefList;
+		   if(undefined != arrondissements && arrondissements.length > 0){
+			   arrondissements.forEach(function(element,index,array){
+				 $("#checkbox_arrondissement").append('\
+					<label class="btn btn-checkbox">\
+						<input type="checkbox" name="listIdArrondissementsParam" value="' + element.code +'">'+ element.name +'</input>\
+					</label>');
+			   });
+		   }else{
+			   $("#checkbox_arrondissement").append("#i18n{dansmarue.reportingList.listEmpty}");
+		   }
+		   
+			// Quartier
+		   var quartiers = domain.quartierRefList;
+		   if(undefined != quartiers && quartiers.length > 0){
+			   quartiers.forEach(function(element,index,array){
+				 $('#conseilQuartier').append($('<option>', {value: element.code,text: element.name}));
+			   });
+		   }
+		   $("#conseilQuartier").selectpicker('refresh');
 
-	   <#--// Categories
-	   var categories = domain.categoriesRefList;
-	   if(undefined != categories && categories.length > 0){
-		   categories.forEach(function(element,index,array){
-			 $("#categoryCheckboxes").append('\
-				<label class="btn btn-checkbox">\
-					<input type="checkbox" name="category" value="' + element.code +'">'+ element.name +'</input>\
-				</label>');
-		   });
-	   }else{
-		   $("#categoryCheckboxes").append("#i18n{dansmarue.reportingList.listEmpty}");
-	   }-->
-	   
-	   // Directions
-	   var directions = domain.directionsRefList;
-	   initSelectFromArray($("#idDirection"),directions);
-	   
-	   // Secteurs
-	   var secteurs = domain.secteursRefList;
-	   initSelectFromArray($("#idSector"),secteurs);
-	   
-	   // Types anomalie
-	   var typesAnomalie = domain.typesAnomalieRefList;
-	   $("#typeSignalements").autocomplete("destroy");
-	   var autocomplete = $("#typeSignalements").autocomplete({
-			source: function(request,response){
-				<#--var categories = $("input[name='category']:checked").map(function(){
-				  return $(this).val();
-				}).get();-->
-				
-				var resultList = new Array();
-				typesAnomalie.forEach(function(element){
-					<#--if(categories != undefined && categories.length > 0 && categories.indexOf(element.idCategory.toString()) == -1){
-						return;
-					}-->
-					if(element.name.toLowerCase().indexOf(request.term.toLowerCase()) != -1){
-						var resultItem = new Object();
-						resultItem.label = element.name;
-						resultItem.value = element.name;
-						resultItem.id = element.code;
-						resultList.push(resultItem);
-					}
-				});
-				response(resultList);
-			},
-			select: function(event,ui){ $('#idTypeSignalement').val(ui.item.id)}
-		});
-	   
-	   $("#typeSignalements").on("keyup", function(event,ui) {
-			   $('#idTypeSignalement').val("");
-	    });
+		   <#--// Categories
+		   var categories = domain.categoriesRefList;
+		   if(undefined != categories && categories.length > 0){
+			   categories.forEach(function(element,index,array){
+				 $("#categoryCheckboxes").append('\
+					<label class="btn btn-checkbox">\
+						<input type="checkbox" name="category" value="' + element.code +'">'+ element.name +'</input>\
+					</label>');
+			   });
+		   }else{
+			   $("#categoryCheckboxes").append("#i18n{dansmarue.reportingList.listEmpty}");
+		   }-->
+		   
+		   // Directions
+		   var directions = domain.directionsRefList;
+		   initSelectFromArray($("#idDirection"),directions);
+		   
+		   // Secteurs
+		   var secteurs = domain.secteursRefList;
+		   initSelectFromArray($("#idSector"),secteurs);
+		   
+		   // Types anomalie
+		   var typesAnomalie = domain.typesAnomalieRefList;
+		   $("#typeSignalements").autocomplete("destroy");
+		   var autocomplete = $("#typeSignalements").autocomplete({
+				source: function(request,response){
+					<#--var categories = $("input[name='category']:checked").map(function(){
+					  return $(this).val();
+					}).get();-->
+					
+					var resultList = new Array();
+					typesAnomalie.forEach(function(element){
+						<#--if(categories != undefined && categories.length > 0 && categories.indexOf(element.idCategory.toString()) == -1){
+							return;
+						}-->
+						if(element.name.toLowerCase().indexOf(request.term.toLowerCase()) != -1){
+							var resultItem = new Object();
+							resultItem.label = element.name;
+							resultItem.value = element.name;
+							resultItem.id = element.code;
+							resultList.push(resultItem);
+						}
+					});
+					response(resultList);
+				},
+				select: function(event,ui){ $('#idTypeSignalement').val(ui.item.id)}
+			});
+		   
+		   $("#typeSignalements").on("keyup", function(event,ui) {
+				   $('#idTypeSignalement').val("");
+		    });
+		},
+		error:function (xhr, ajaxOptions, thrownError){
+			alert(thrownError); 
+		}   
+	});
+	$(".overlay").hide()
 }
 
 function initSelectFromArray(selector,refList){
@@ -306,8 +308,47 @@ function updateSectorList(idDirection){
     overflow-y: auto;
     overflow-x: hidden;
   }
-</style>
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 20;
+    opacity: 1;
+    transition: opacity .3s .5s;
+	display: none;
+}
 
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute; 
+}
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+<div class="overlay">
+	<div class="loader"></div>
+</div>
 <div id="manage-signalement" class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<div class="box box-info">
@@ -511,7 +552,7 @@ function updateSectorList(idDirection){
 										#i18n{dansmarue.reportingList.search}
 									</button>
 									<button type="button" class="btn btn-paris btn-blue btn-lg"
-										id="re-init-button" onclick="deleteFields()">
+										id="re-init-button" onclick="deleteFields(false)">
 										#i18n{dansmarue.reportingList.reInitChamps}
 									</button>
 
@@ -699,7 +740,7 @@ function updateSectorList(idDirection){
         }
     });
     
-    function deleteFields()
+    function deleteFields(isReset)
     {
         //$('#idTypeSignalement option:selected').removeAttr('selected');
        // $('#idTypeSignalement option:first').attr("selected", "selected");
@@ -716,7 +757,8 @@ function updateSectorList(idDirection){
         $("#filter_dateBegin").val('');
         $("#filter_dateEnd").val('');
 
-        $("#conseilQuartier option").remove();
+		isReset ? $("#conseilQuartier option").remove() : $("#conseilQuartier").selectpicker('val', '');
+       
         $("#conseilQuartier").selectpicker('refresh');
         
 // 		$("#categoryCheckboxes .btn-checkbox").removeClass("active");
