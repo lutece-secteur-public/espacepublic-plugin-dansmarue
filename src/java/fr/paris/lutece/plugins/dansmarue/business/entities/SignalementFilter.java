@@ -64,6 +64,7 @@ public class SignalementFilter implements Serializable
     private int                   _nIdEtat;
     private List<EtatSignalement> _etats;
     private List<Integer>         _listIdSecteurAutorises;
+    private List<Integer>         _listIdUnit;
     private List<Integer>         _listIdCategories;
     private List<Integer>         _listIdQuartier;
 
@@ -351,6 +352,16 @@ public class SignalementFilter implements Serializable
     public void setListIdQuartier( List<Integer> _listIdQuartier )
     {
         this._listIdQuartier = _listIdQuartier;
+    }
+
+    public List<Integer> getListIdUnit( )
+    {
+        return _listIdUnit;
+    }
+
+    public void setListIdUnit( List<Integer> _listIdUnit )
+    {
+        this._listIdUnit = _listIdUnit;
     }
 
 }

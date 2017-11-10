@@ -949,20 +949,24 @@ public class SignalementJspBean extends AbstractJspBean
             listSignalements = _signalementService.findByFilter( filter, getPaginationProperties( request, totalResult ), false );
         }
 
-        Unit unitPrincipaleSector = null;
-
         // get the first unit linked to the signalement sector
+        // Map of idSector and Unit instance
+        Map<String, Unit> mapUnits = new HashMap<>( );
         for ( Signalement signalement : listSignalements )
         {
             Sector sector = signalement.getSecteur( );
-            List<Unit> listUnitsSector = _unitService.findBySectorId( sector.getIdSector( ) );
-
-            for ( Unit unit : listUnitsSector )
+            if ( mapUnits.containsKey( String.valueOf( sector.getIdSector( ) )  ) )
             {
-                if ( unit.getIdParent( ) == 0 )
+                signalement.setDirectionSector( mapUnits.get( String.valueOf( sector.getIdSector( ) )  ) );
+            } else {
+                List<Unit> listUnitsSector = _unitService.findBySectorId( sector.getIdSector( ) );
+                for ( Unit unit : listUnitsSector )
                 {
-                    unitPrincipaleSector = unit;
-                    signalement.setDirectionSector( unitPrincipaleSector );
+                    if ( unit.getIdParent( ) == 0 )
+                    {
+                        signalement.setDirectionSector( unit );
+                        mapUnits.put( String.valueOf( sector.getIdSector( ) ), unit );
+                    }
                 }
             }
         }
@@ -1231,11 +1235,14 @@ public class SignalementJspBean extends AbstractJspBean
         List<Unit> listUnits = _unitService.getUnitsByIdUser( adminUser.getUserId( ), false );
 
         List<Integer> listSectorsOfUnit = new ArrayList<Integer>( );
+        List<Integer> listOfUnit = new ArrayList<Integer>( );
         for ( Unit userUnit : listUnits )
         {
+            listOfUnit.add( userUnit.getIdUnit( ) );
             listSectorsOfUnit.addAll( _sectorService.getIdsSectorByIdUnit( userUnit.getIdUnit( ) ) );
         }
 
+        _signalementFilter.setListIdUnit( listOfUnit );
         _signalementFilter.setListIdSecteurAutorises( listSectorsOfUnit );
     }
 
