@@ -25,14 +25,6 @@
 		<freemarker-macro-file>/common/plugins/dansmarue/commons.html</freemarker-macro-file>
 	</freemarker-macro-files>
 
-	<!-- Front office -->
- 	<applications>
-	     <application>
-	         <application-id>dansmarue</application-id>
-	         <application-class>fr.paris.lutece.plugins.dansmarue.fo.xpage.XPageDansMaRue</application-class>
-	     </application>
-    </applications>
-
 	<!--Administration interface parameters -->
 	<admin-features>
 		<admin-feature>
