@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import fr.paris.lutece.plugins.sira.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
@@ -13,6 +14,7 @@ import fr.paris.lutece.plugins.unittree.modules.sira.business.sector.Sector;
 /**
  * The Class Signalement.
  */
+@JsonIgnoreProperties( ignoreUnknown = true )
 public class Signalement
 {
 
@@ -47,7 +49,7 @@ public class Signalement
     private int                    _nFelicitations;
 
     /** The photos. */
-    private List<PhotoDMR>            _photos                      = new ArrayList<PhotoDMR>( );
+    private List<PhotoDMR>         _photos                      = new ArrayList<PhotoDMR>( );
 
     /** The priorite. */
     private Priorite               _priorite;

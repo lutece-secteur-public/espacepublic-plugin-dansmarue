@@ -1,17 +1,18 @@
 package fr.paris.lutece.plugins.dansmarue.business.entities;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-
+@JsonIgnoreProperties( ignoreUnknown = true )
 public class Adresse
 {
-    private Double _lat;
-    private Double _lng;
-    private Double _latAddress;
-    private Double _lngAddress;
-    private Long _nId;
+    private Double      _lat;
+    private Double      _lng;
+    private Double      _latAddress;
+    private Double      _lngAddress;
+    private Long        _nId;
     private Signalement _signalement;
-    private String _strAdresse;
-    private String _strPrecisionLocalisation;
+    private String      _strAdresse;
+    private String      _strPrecisionLocalisation;
 
     public String getAdresse( )
     {
@@ -55,57 +56,56 @@ public class Adresse
 
     public void setAdresse( String adresse )
     {
-        this._strAdresse = adresse;
+        _strAdresse = adresse;
     }
 
     public void setId( Long id )
     {
-        this._nId = id;
+        _nId = id;
     }
 
     public void setLat( Double lat )
     {
-        this._lat = lat;
+        _lat = lat;
     }
 
     public void setLng( Double lng )
     {
-        this._lng = lng;
+        _lng = lng;
     }
 
     public void setLatAddress( Double latAddress )
     {
-        this._latAddress = latAddress;
+        _latAddress = latAddress;
     }
 
     public void setLngAddress( Double lngAddress )
     {
-        this._lngAddress = lngAddress;
+        _lngAddress = lngAddress;
     }
 
     public void setPrecisionLocalisation( String precisionLocalisation )
     {
-        this._strPrecisionLocalisation = precisionLocalisation;
+        _strPrecisionLocalisation = precisionLocalisation;
     }
 
     public void setSignalement( Signalement signalement )
     {
-        this._signalement = signalement;
+        _signalement = signalement;
     }
 
     public String getGoogleLink( )
     {
-    	if( this.getLat(  ) == null || this.getLng(  ) == null  || this.getAdresse(  ) == null )
-    	{
-    		return this.getAdresse(  );
-    	}
-    	else
-    	{
-        	String strLat = Double.toString( this.getLat(  ) ).replaceAll(",", "\\.");
-        	String strLng = Double.toString( this.getLng(  ) ).replaceAll(",", "\\.");
-        	String strAdr = this.getAdresse(  ).replaceAll("'", " ").replaceAll(" ", "\\+");
-            return "https://maps.google.fr/?t=h&z=18&q=" + strLat + "," + strLng + "+("+strAdr+")";
-    	}
+        if ( ( getLat( ) == null ) || ( getLng( ) == null ) || ( getAdresse( ) == null ) )
+        {
+            return getAdresse( );
+        } else
+        {
+            String strLat = Double.toString( getLat( ) ).replaceAll( ",", "\\." );
+            String strLng = Double.toString( getLng( ) ).replaceAll( ",", "\\." );
+            String strAdr = getAdresse( ).replaceAll( "'", " " ).replaceAll( " ", "\\+" );
+            return "https://maps.google.fr/?t=h&z=18&q=" + strLat + "," + strLng + "+(" + strAdr + ")";
+        }
     }
-    
+
 }
