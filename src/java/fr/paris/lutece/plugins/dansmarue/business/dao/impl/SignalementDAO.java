@@ -66,7 +66,7 @@ public class SignalementDAO implements ISignalementDAO
     private static final String SQL_QUERY_SELECT_ALL                               = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon FROM signalement_signalement";
 
     /** The Constant SQL_QUERY_ADD_FILTER_SECTOR_ALLOWED. */
-    private static final String SQL_QUERY_ADD_FILTER_SECTOR_ALLOWED                = " fk_id_sector IN ({0})";
+    private static final String SQL_QUERY_ADD_FILTER_SECTOR_ALLOWED                = " fk_id_sector IN (SELECT s.id_sector FROM unittree_sector s INNER JOIN unittree_unit_sector u ON s.id_sector = u.id_sector WHERE u.id_unit in ({0}))";
 
     /** The Constant SQL_QUERY_SELECT_SIGNALEMENT_BY_TOKEN. */
     private static final String SQL_QUERY_SELECT_SIGNALEMENT_BY_TOKEN              = "SELECT id_signalement, token FROM signalement_signalement WHERE token = ?";
@@ -431,8 +431,7 @@ public class SignalementDAO implements ISignalementDAO
         daoUtil.setInt( nIndex++, idSector );
 
         daoUtil.setBoolean( nIndex++, signalement.isDoublon( ) );
-        if ( StringUtils.isNotBlank( signalement.getDateServiceFaitTraitement( ) )
-                && StringUtils.isNotBlank( signalement.getHeureServiceFaitTraitement( ) ) )
+        if ( StringUtils.isNotBlank( signalement.getDateServiceFaitTraitement( ) ) && StringUtils.isNotBlank( signalement.getHeureServiceFaitTraitement( ) ) )
         {
             String dateTraitementString = signalement.getDateServiceFaitTraitement( ) + signalement.getHeureServiceFaitTraitement( );
             try
@@ -870,12 +869,12 @@ public class SignalementDAO implements ISignalementDAO
                 {
                     if ( index == listeOrders.size( ) )
                     {
-                        sbSQL.append( " signalement.prefix " + order.getOrder( ) + ", signalement.annee " + order.getOrder( ) + ", signalement.mois "
-                                + order.getOrder( ) + ", signalement.numero " + order.getOrder( ) + " " );
+                        sbSQL.append( " signalement.prefix " + order.getOrder( ) + ", signalement.annee " + order.getOrder( ) + ", signalement.mois " + order.getOrder( ) + ", signalement.numero "
+                                + order.getOrder( ) + " " );
                     } else
                     {
-                        sbSQL.append( " signalement.prefix " + order.getOrder( ) + ", signalement.annee " + order.getOrder( ) + ", signalement.mois "
-                                + order.getOrder( ) + ", signalement.numero " + order.getOrder( ) + ", " );
+                        sbSQL.append( " signalement.prefix " + order.getOrder( ) + ", signalement.annee " + order.getOrder( ) + ", signalement.mois " + order.getOrder( ) + ", signalement.numero "
+                                + order.getOrder( ) + ", " );
                         index++;
                     }
                 } else
@@ -961,9 +960,9 @@ public class SignalementDAO implements ISignalementDAO
         }
 
         // daoUtil.setLong() autant de fois qu'il y a d'elems dans la liste des secteurs autorisés.
-        if ( ( filter.getListIdSecteurAutorises( ) != null ) && !filter.getListIdSecteurAutorises( ).isEmpty( ) )
+        if ( ( filter.getListIdUnit( ) != null ) && !filter.getListIdUnit( ).isEmpty( ) )
         {
-            for ( Integer nIdSecteur : filter.getListIdSecteurAutorises( ) )
+            for ( Integer nIdSecteur : filter.getListIdUnit( ) )
             {
                 daoUtil.setLong( nIndex++, nIdSecteur );
             }
@@ -1265,10 +1264,8 @@ public class SignalementDAO implements ISignalementDAO
 
         StringBuilder stringBuilder = new StringBuilder( );
         stringBuilder.append( "SELECT id_signalement FROM signalement_adresse " );
-        stringBuilder
-                .append( "INNER JOIN signalement_signalement AS signalement ON signalement_adresse.fk_id_signalement = signalement.id_signalement " );
-        stringBuilder.append(
-                "INNER JOIN workflow_resource_workflow AS resource_workflow ON resource_workflow.id_resource = signalement.id_signalement " );
+        stringBuilder.append( "INNER JOIN signalement_signalement AS signalement ON signalement_adresse.fk_id_signalement = signalement.id_signalement " );
+        stringBuilder.append( "INNER JOIN workflow_resource_workflow AS resource_workflow ON resource_workflow.id_resource = signalement.id_signalement " );
         stringBuilder.append( "WHERE ST_Within(ST_Transform( signalement_adresse.geom,3857), ST_Buffer(ST_Transform(ST_SetSRID(ST_MakePoint(" );
         stringBuilder.append( lng );
         stringBuilder.append( ", " );
@@ -1320,13 +1317,11 @@ public class SignalementDAO implements ISignalementDAO
         StringBuilder stringBuilder = new StringBuilder( );
         stringBuilder.append(
                 "SELECT id_signalement, adresse, date_creation, commentaire, heure_creation, ST_X(geom), ST_Y(geom), signalement.fk_id_type_signalement, signalement.prefix, vstswp.id_parent FROM signalement_adresse " );
-        stringBuilder
-                .append( "INNER JOIN signalement_signalement AS signalement ON signalement_adresse.fk_id_signalement = signalement.id_signalement " );
+        stringBuilder.append( "INNER JOIN signalement_signalement AS signalement ON signalement_adresse.fk_id_signalement = signalement.id_signalement " );
         stringBuilder.append( "INNER JOIN signalement_type_signalement AS type ON type.id_type_signalement = signalement.fk_id_type_signalement " );
         stringBuilder.append(
                 "INNER JOIN v_signalement_type_signalement_with_parents_links AS vstswp ON vstswp.id_type_signalement = signalement.fk_id_type_signalement AND vstswp.is_parent_a_category=1 " );
-        stringBuilder.append(
-                "INNER JOIN workflow_resource_workflow AS resource_workflow ON resource_workflow.id_resource = signalement.id_signalement " );
+        stringBuilder.append( "INNER JOIN workflow_resource_workflow AS resource_workflow ON resource_workflow.id_resource = signalement.id_signalement " );
         stringBuilder.append( "WHERE ST_Within(ST_Transform( signalement_adresse.geom,3857), ST_Buffer(ST_Transform(ST_SetSRID(ST_MakePoint(" );
         stringBuilder.append( lng );
         stringBuilder.append( ", " );
@@ -1386,8 +1381,7 @@ public class SignalementDAO implements ISignalementDAO
     @Override
     public Integer getDistanceBetweenSignalement( double lat1, double lng1, double lat2, double lng2 )
     {
-        String query = "SELECT ST_Distance(ST_GeographyFromText('POINT(" + lng1 + "" + lat1 + ")'), " + "ST_GeographyFromText('POINT(" + lng2 + ""
-                + lat2 + ")')) ";
+        String query = "SELECT ST_Distance(ST_GeographyFromText('POINT(" + lng1 + "" + lat1 + ")'), " + "ST_GeographyFromText('POINT(" + lng2 + "" + lat2 + ")')) ";
 
         Integer distance = 0;
 
@@ -1426,7 +1420,7 @@ public class SignalementDAO implements ISignalementDAO
 
     /**
      * Know if there's results (signalements) before printing a road map
-     * 
+     *
      * @param listSectorId
      *            user allowed sectors
      * @return boolean
@@ -1485,8 +1479,8 @@ public class SignalementDAO implements ISignalementDAO
     public Double[] getGeomFromLambertToWgs84( Double dLatLambert, Double dLngLambert )
     {
 
-        String query = "SELECT ST_X(ST_Transform(ST_GeomFromText('POINT(" + dLatLambert + " " + dLngLambert
-                + ")',27561),4326)), ST_Y(ST_Transform(ST_GeomFromText('POINT(" + dLatLambert + " " + dLngLambert + ")',27561),4326))";
+        String query = "SELECT ST_X(ST_Transform(ST_GeomFromText('POINT(" + dLatLambert + " " + dLngLambert + ")',27561),4326)), ST_Y(ST_Transform(ST_GeomFromText('POINT(" + dLatLambert + " "
+                + dLngLambert + ")',27561),4326))";
 
         Double geom[] = new Double[2];
         DAOUtil daoUtil = new DAOUtil( query );
@@ -1504,7 +1498,7 @@ public class SignalementDAO implements ISignalementDAO
 
     /**
      * Count the number of results for a given query
-     * 
+     *
      * @param filter
      *            the signalementfilter
      * @param plugin
@@ -1534,7 +1528,7 @@ public class SignalementDAO implements ISignalementDAO
 
     /**
      * Build the query to count the number of results for a given query
-     * 
+     *
      * @param filter
      *            the signalementfilter
      * @return the query
@@ -1550,7 +1544,7 @@ public class SignalementDAO implements ISignalementDAO
 
     /**
      * Adds filter criterias to query
-     * 
+     *
      * @param filter
      *            the signalement filter
      * @param sbSQL
@@ -1668,9 +1662,9 @@ public class SignalementDAO implements ISignalementDAO
 
         // Allowed sectors
 
-        if ( !filter.getListIdSecteurAutorises( ).isEmpty( ) )
+        if ( !filter.getListIdUnit( ).isEmpty( ) )
         {
-            int listeLength = filter.getListIdSecteurAutorises( ).size( );
+            int listeLength = filter.getListIdUnit( ).size( );
             Character[] array = new Character[listeLength];
             for ( int i = 0; i < listeLength; i++ )
             {
@@ -2026,7 +2020,7 @@ public class SignalementDAO implements ISignalementDAO
 
     /**
      * Finds the matching signalement ids for the filter
-     * 
+     *
      * @param filter
      *            the signalementfilter
      * @param plugin
@@ -2057,7 +2051,7 @@ public class SignalementDAO implements ISignalementDAO
 
     /**
      * Build the query to get the signalement ids matching the filter
-     * 
+     *
      * @param filter
      *            the signalementfilter
      * @return the query
