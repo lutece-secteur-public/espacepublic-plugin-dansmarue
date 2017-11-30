@@ -66,7 +66,7 @@ public class SignalementDAO implements ISignalementDAO
     private static final String SQL_QUERY_SELECT_ALL                               = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon FROM signalement_signalement";
 
     /** The Constant SQL_QUERY_ADD_FILTER_SECTOR_ALLOWED. */
-    private static final String SQL_QUERY_ADD_FILTER_SECTOR_ALLOWED                = " fk_id_sector IN ({0})";
+    private static final String SQL_QUERY_ADD_FILTER_SECTOR_ALLOWED                = " fk_id_sector IN (SELECT s.id_sector FROM unittree_sector s INNER JOIN unittree_unit_sector u ON s.id_sector = u.id_sector WHERE u.id_unit in ({0}))";
 
     /** The Constant SQL_QUERY_SELECT_SIGNALEMENT_BY_TOKEN. */
     private static final String SQL_QUERY_SELECT_SIGNALEMENT_BY_TOKEN              = "SELECT id_signalement, token FROM signalement_signalement WHERE token = ?";
@@ -731,9 +731,9 @@ public class SignalementDAO implements ISignalementDAO
 
         // Allowed sectors
 
-        if ( !filter.getListIdSecteurAutorises( ).isEmpty( ) )
+        if ( !filter.getListIdUnit( ).isEmpty( ) )
         {
-            int listeLength = filter.getListIdSecteurAutorises( ).size( );
+            int listeLength = filter.getListIdUnit( ).size( );
             Character[] array = new Character[listeLength];
             for ( int i = 0; i < listeLength; i++ )
             {
@@ -961,9 +961,9 @@ public class SignalementDAO implements ISignalementDAO
         }
 
         // daoUtil.setLong() autant de fois qu'il y a d'elems dans la liste des secteurs autorisés.
-        if ( ( filter.getListIdSecteurAutorises( ) != null ) && !filter.getListIdSecteurAutorises( ).isEmpty( ) )
+        if ( ( filter.getListIdUnit( ) != null ) && !filter.getListIdUnit( ).isEmpty( ) )
         {
-            for ( Integer nIdSecteur : filter.getListIdSecteurAutorises( ) )
+            for ( Integer nIdSecteur : filter.getListIdUnit( ) )
             {
                 daoUtil.setLong( nIndex++, nIdSecteur );
             }
@@ -1668,9 +1668,9 @@ public class SignalementDAO implements ISignalementDAO
 
         // Allowed sectors
 
-        if ( !filter.getListIdSecteurAutorises( ).isEmpty( ) )
+        if ( !filter.getListIdUnit( ).isEmpty( ) )
         {
-            int listeLength = filter.getListIdSecteurAutorises( ).size( );
+            int listeLength = filter.getListIdUnit( ).size( );
             Character[] array = new Character[listeLength];
             for ( int i = 0; i < listeLength; i++ )
             {

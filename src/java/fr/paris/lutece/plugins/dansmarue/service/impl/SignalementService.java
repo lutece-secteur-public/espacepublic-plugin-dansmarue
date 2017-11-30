@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -1357,20 +1358,10 @@ public class SignalementService
 
         String strListActionsNonAffichables = AppPropertiesService
             .getProperty(PROPERTY_ACTIONS_NON_AFFICHABLES);
-        String[] listActionsNonAffichables = strListActionsNonAffichables.split(",");
-
-        int nIdAction;
+        List<String> listActionsNonAffichables = Arrays.asList( strListActionsNonAffichables.split(",") ) ;
 
         for (Action action : listActionsPossibles) {
-          boolean estAffichable = true;
-          for (String strIAction : listActionsNonAffichables) {
-            nIdAction = Integer.parseInt(strIAction);
-
-            if (nIdAction == action.getId()) {
-              estAffichable = false;
-            }
-          }
-          if (estAffichable) {
+          if ( !listActionsNonAffichables.contains( String.valueOf( action.getId( ) ) )) {
             listActions.add(action);
           }
         }

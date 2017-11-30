@@ -135,7 +135,7 @@ public class ArrondissementDAO implements IArrondissementDAO
             query += idSector;
             first = false;
         }
-        query += ") ORDER BY ramen_arrondissement.id_arrondissement ";
+        query += ") ORDER BY id_arrondissement ";
 
         DAOUtil daoUtil = new DAOUtil( query );
         daoUtil.executeQuery( );
