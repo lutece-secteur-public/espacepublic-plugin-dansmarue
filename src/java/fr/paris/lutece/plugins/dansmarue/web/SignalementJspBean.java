@@ -1045,7 +1045,7 @@ public class SignalementJspBean extends AbstractJspBean
     {
         Map<String, Object> model = new HashMap<String, Object>( );
         Signalement signalement = new Signalement( );
-        List<PhotoDMR> photos = new ArrayList<PhotoDMR>( );
+        List<PhotoDMR> photos = new ArrayList<>( );
         Signaleur signaleur = null;
         Adresse adresse = null;
 
@@ -1420,7 +1420,7 @@ public class SignalementJspBean extends AbstractJspBean
             String strSignalementId = request.getParameter( PARAMETER_SIGNALEMENT_ID );
             if ( strSignalementId != null )
             {
-                List<PhotoDMR> photos = new ArrayList<PhotoDMR>( );
+                List<PhotoDMR> photos = new ArrayList<>( );
                 Signaleur signaleur = null;
                 Adresse adresse = null;
                 TypeSignalement typeSignalement = null;
@@ -1520,11 +1520,11 @@ public class SignalementJspBean extends AbstractJspBean
     public String getViewSignalement( HttpServletRequest request )
     {
         Signalement signalement = null;
-        List<PhotoDMR> photos = new ArrayList<PhotoDMR>( );
+        List<PhotoDMR> photos = new ArrayList<>( );
         Signaleur signaleur = null;
         Adresse adresse = null;
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         String strFromPage = request.getParameter( PARAMETER_FROM_PAGE );
         if ( StringUtils.equals( strFromPage, PARAMETER_VALUE_DISPLAY_PAGE ) )
@@ -3725,7 +3725,7 @@ public class SignalementJspBean extends AbstractJspBean
         boolean isDomaineCompletRenseigne = false;
         for ( DomaineFonctionnel domFonc : domainesFonctionnels )
         {
-            if ( ( !isDomaineCompletRenseigne && idDomaine == 0 ) || idDomaine == domFonc.getId( ) )
+            if ( ( !isDomaineCompletRenseigne && ( idDomaine == 0 ) ) || ( idDomaine == domFonc.getId( ) ) )
             {
                 // Directions
                 Set<Unit> directions = new HashSet<>( );
