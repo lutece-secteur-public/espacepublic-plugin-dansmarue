@@ -81,10 +81,15 @@ public class PhotoDMR
      * @param imageContent
      *            the new image thumbnail
      */
-    public void setImageThumbnail( byte[] imageContent )
+    public void setImageThumbnailWithBytes( byte[] imageContent )
     {
         _imageThumbnail.setImage( imageContent );
 
+    }
+
+    public void setImageThumbnail( ImageResource _imageResource )
+    {
+        _imageThumbnail.setImage( _imageResource.getImage( ) );
     }
 
     /**
