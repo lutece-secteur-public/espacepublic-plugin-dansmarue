@@ -2,6 +2,7 @@ package fr.paris.lutece.plugins.dansmarue.service.dto;
 
 import fr.paris.lutece.plugins.sira.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
+import fr.paris.lutece.portal.service.image.ImageResource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,9 @@ public class TypeSignalementDTO
 
     /** The imageUrl. */
     private String _imageUrl;
+    
+    /** The imageResource. */
+    private ImageResource _image;
 
     /** The list child. */
     private List<TypeSignalementDTO> _listChild = new ArrayList<TypeSignalementDTO>( );
@@ -243,5 +247,15 @@ public class TypeSignalementDTO
     public void setUnit( Unit unit )
     {
         this._unit = unit;
+    }
+
+    public ImageResource getImage( )
+    {
+        return _image;
+    }
+
+    public void setImage( ImageResource _image )
+    {
+        this._image = _image;
     }
 }
