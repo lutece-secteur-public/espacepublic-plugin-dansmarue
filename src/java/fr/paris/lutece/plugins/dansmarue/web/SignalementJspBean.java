@@ -1784,7 +1784,7 @@ public class SignalementJspBean extends AbstractJspBean
             image.setImage( baImageSource );
             image.setMimeType( imageSource.getContentType( ) );
             photoSignalement.setImage( image );
-            photoSignalement.setImageThumbnail( resizeImage );
+            photoSignalement.setImageThumbnailWithBytes( resizeImage );
             photoSignalement.setSignalement( signalement );
 
             Integer nVuePhoto = Integer.parseInt( strVuePhoto );
@@ -2175,7 +2175,7 @@ public class SignalementJspBean extends AbstractJspBean
             image.setMimeType( mimeType );
             photoSignalement.setImage( image );
             photoSignalement.setImageContent( ImgUtils.checkQuality( image.getImage( ) ) );
-            photoSignalement.setImageThumbnail( resizeImage );
+            photoSignalement.setImageThumbnailWithBytes( resizeImage );
             photoSignalement.setSignalement( signalement );
             photoSignalement.setVue( VUE_ENSEMBLE );
             photoSignalement.setDate( sdfDate.format( Calendar.getInstance( ).getTime( ) ) );

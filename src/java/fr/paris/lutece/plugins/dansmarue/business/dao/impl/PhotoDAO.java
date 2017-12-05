@@ -1,5 +1,10 @@
 package fr.paris.lutece.plugins.dansmarue.business.dao.impl;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
 import fr.paris.lutece.plugins.dansmarue.business.dao.IPhotoDAO;
 import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
@@ -8,29 +13,23 @@ import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-
-
 public class PhotoDAO implements IPhotoDAO
 {
-    private static final String SQL_QUERY_NEW_PK = "SELECT nextval('seq_signalement_photo_id_photo')";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_photo(id_photo, image_content, image_mime_type, image_thumbnail, fk_id_signalement, date_photo, vue_photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_photo WHERE id_photo=?";
-    private static final String SQL_QUERY_SELECT = "SELECT id_photo, image_content, image_mime_type, vue_photo, date_photo, fk_id_signalement FROM signalement_photo WHERE id_photo =?";
-    private static final String SQL_QUERY_SELECT_BY_SIGNALEMENT = "SELECT id_photo, image_content, image_mime_type, vue_photo, date_photo, fk_id_signalement FROM signalement_photo WHERE fk_id_signalement =?";
-    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_photo SET id_photo=?, image_content=?, image_mime_type=?, fk_id_signalement=? WHERE id_photo=?";
-    private static final String SQL_QUERY_FIND_IMAGE_BY_PRIMARY_KEY = "SELECT image_content, image_mime_type, vue_photo,date_photo FROM signalement_photo WHERE id_photo=? ";
+    private static final String SQL_QUERY_NEW_PK                              = "SELECT nextval('seq_signalement_photo_id_photo')";
+    private static final String SQL_QUERY_INSERT                              = "INSERT INTO signalement_photo(id_photo, image_content, image_mime_type, image_thumbnail, fk_id_signalement, date_photo, vue_photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_QUERY_DELETE                              = "DELETE FROM signalement_photo WHERE id_photo=?";
+    private static final String SQL_QUERY_SELECT                              = "SELECT id_photo, image_content, image_mime_type, vue_photo, date_photo, fk_id_signalement FROM signalement_photo WHERE id_photo =?";
+    private static final String SQL_QUERY_SELECT_BY_SIGNALEMENT               = "SELECT id_photo, image_content, image_mime_type, vue_photo, date_photo, fk_id_signalement FROM signalement_photo WHERE fk_id_signalement =?";
+    private static final String SQL_QUERY_UPDATE                              = "UPDATE signalement_photo SET id_photo=?, image_content=?, image_mime_type=?, fk_id_signalement=? WHERE id_photo=?";
+    private static final String SQL_QUERY_FIND_IMAGE_BY_PRIMARY_KEY           = "SELECT image_content, image_mime_type, vue_photo,date_photo FROM signalement_photo WHERE id_photo=? ";
     private static final String SQL_QUERY_FIND_IMAGE_THUMBNAIL_BY_PRIMARY_KEY = "SELECT image_thumbnail, image_mime_type FROM signalement_photo WHERE id_photo=?";
-    private static final String SQL_QUERY_SELECT_LIST_PHOTOS = "SELECT id_photo, fk_id_signalement, vue_photo, date_photo FROM signalement_photo WHERE fk_id_signalement=?";
-    private static final String SQL_QUERY_SELECT_LIST_PHOTOS_WITH_FULL = "SELECT id_photo, image_content, image_thumbnail, image_mime_type, fk_id_signalement, vue_photo, date_photo FROM signalement_photo WHERE fk_id_signalement=?";
-    private static final String EMPTY_STRING = "";
+    private static final String SQL_QUERY_SELECT_LIST_PHOTOS                  = "SELECT id_photo, fk_id_signalement, vue_photo, date_photo FROM signalement_photo WHERE fk_id_signalement=?";
+    private static final String SQL_QUERY_SELECT_LIST_PHOTOS_WITH_FULL        = "SELECT id_photo, image_content, image_thumbnail, image_mime_type, fk_id_signalement, vue_photo, date_photo FROM signalement_photo WHERE fk_id_signalement=?";
+    private static final String EMPTY_STRING                                  = "";
 
     /**
      * Generates a new primary key.
-     * 
+     *
      * @return The new primary key
      */
     private Long newPrimaryKey( )
@@ -49,15 +48,16 @@ public class PhotoDAO implements IPhotoDAO
 
     /**
      * Save a new photo.
-     * 
-     * @param photo the photo
+     *
+     * @param photo
+     *            the photo
      * @return the long
      */
     @Override
     public Long insert( PhotoDMR photo )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT );
-        if ( photo.getId( ) == null || photo.getId( ) == 0 )
+        if ( ( photo.getId( ) == null ) || ( photo.getId( ) == 0 ) )
         {
             photo.setId( newPrimaryKey( ) );
         }
@@ -69,8 +69,7 @@ public class PhotoDAO implements IPhotoDAO
         {
             daoUtil.setBytes( nIndex++, photo.getImage( ).getImage( ) );
             daoUtil.setString( nIndex++, photo.getImage( ).getMimeType( ) );
-        }
-        else
+        } else
         {
             byte[] baImageNull = null;
             daoUtil.setBytes( nIndex++, baImageNull );
@@ -79,8 +78,7 @@ public class PhotoDAO implements IPhotoDAO
         if ( photo.getImageThumbnail( ) != null )
         {
             daoUtil.setBytes( nIndex++, photo.getImageThumbnail( ).getImage( ) );
-        }
-        else
+        } else
         {
             byte[] baImageNull = null;
             daoUtil.setBytes( nIndex++, baImageNull );
@@ -88,11 +86,10 @@ public class PhotoDAO implements IPhotoDAO
 
         daoUtil.setLong( nIndex++, photo.getSignalement( ).getId( ) );
 
-        if ( photo.getDate( ) != null && !( photo.getDate( ).equals( EMPTY_STRING ) ) )
+        if ( ( photo.getDate( ) != null ) && !( photo.getDate( ).equals( EMPTY_STRING ) ) )
         {
             daoUtil.setDate( nIndex++, DateUtil.formatDateSql( photo.getDate( ), Locale.FRENCH ) );
-        }
-        else
+        } else
         {
             daoUtil.setDate( nIndex++, new java.sql.Date( Calendar.getInstance( ).getTime( ).getTime( ) ) );
         }
@@ -110,8 +107,9 @@ public class PhotoDAO implements IPhotoDAO
 
     /**
      * Delete an photo
-     * 
-     * @param lId the photo id
+     *
+     * @param lId
+     *            the photo id
      */
     @Override
     public void remove( long lId )
@@ -124,8 +122,9 @@ public class PhotoDAO implements IPhotoDAO
 
     /**
      * Load a photo.
-     * 
-     * @param lId the photo id
+     *
+     * @param lId
+     *            the photo id
      * @return the photo
      */
     @Override
@@ -141,7 +140,7 @@ public class PhotoDAO implements IPhotoDAO
             photo.setId( daoUtil.getLong( nIndex++ ) );
             Object oImageContent = daoUtil.getBytes( nIndex++ );
             photo.setImage( new ImageResource( ) );
-            photo.setImageContent( (byte[]) oImageContent );
+            photo.setImageContent( ( byte[] ) oImageContent );
             photo.setMimeType( daoUtil.getString( nIndex++ ) );
             photo.setVue( daoUtil.getInt( nIndex++ ) );
             photo.setDate( DateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
@@ -156,8 +155,9 @@ public class PhotoDAO implements IPhotoDAO
 
     /**
      * Load a photo with the id of the signalement.
-     * 
-     * @param signalementId the signalement id
+     *
+     * @param signalementId
+     *            the signalement id
      * @return the photo
      */
     @Override
@@ -173,9 +173,9 @@ public class PhotoDAO implements IPhotoDAO
             photo.setId( daoUtil.getLong( nIndex++ ) );
             Object oImageContent = daoUtil.getBytes( nIndex++ );
             photo.setImage( new ImageResource( ) );
-            photo.setImageContent( (byte[]) oImageContent );
+            photo.setImageContent( ( byte[] ) oImageContent );
             Object oImageThumbnailContent = daoUtil.getBytes( nIndex++ );
-            photo.setImageThumbnail( (byte[]) oImageThumbnailContent );
+            photo.setImageThumbnailWithBytes( ( byte[] ) oImageThumbnailContent );
             photo.setMimeType( daoUtil.getString( nIndex++ ) );
             photo.setVue( daoUtil.getInt( nIndex++ ) );
             photo.setDate( DateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
@@ -192,8 +192,9 @@ public class PhotoDAO implements IPhotoDAO
 
     /**
      * Store a photo
-     * 
-     * @param photo the photo object
+     *
+     * @param photo
+     *            the photo object
      */
     @Override
     public void store( PhotoDMR photo )
@@ -207,7 +208,7 @@ public class PhotoDAO implements IPhotoDAO
         daoUtil.setString( nIndex++, photo.getImage( ).getMimeType( ) );
         daoUtil.setLong( nIndex++, photo.getSignalement( ).getId( ) );
 
-        //WHERE
+        // WHERE
         daoUtil.setLong( nIndex++, photo.getId( ) );
 
         daoUtil.executeUpdate( );
@@ -216,8 +217,9 @@ public class PhotoDAO implements IPhotoDAO
 
     /**
      * Load the data of the image from the table.
-     * 
-     * @param nIdPhoto the photo id
+     *
+     * @param nIdPhoto
+     *            the photo id
      * @return the image resource
      */
     @Override
@@ -262,9 +264,11 @@ public class PhotoDAO implements IPhotoDAO
 
     /**
      * Find photos for a Signalement id
-     * @param lIdSignalement the signalement id
+     *
+     * @param lIdSignalement
+     *            the signalement id
      * @return list of photos
-     * 
+     *
      */
     @Override
     public List<PhotoDMR> findBySignalementId( long lIdSignalement )
@@ -298,9 +302,11 @@ public class PhotoDAO implements IPhotoDAO
 
     /**
      * Find photos for a Signalement id with photo content
-     * @param lIdSignalement the signalement id
+     *
+     * @param lIdSignalement
+     *            the signalement id
      * @return list of photos
-     * 
+     *
      */
     @Override
     public List<PhotoDMR> findWithFullPhotoBySignalementId( long lIdSignalement )
@@ -320,9 +326,9 @@ public class PhotoDAO implements IPhotoDAO
             photo.setId( daoUtil.getLong( nIndex++ ) );
             Object oImageContent = daoUtil.getBytes( nIndex++ );
             photo.setImage( new ImageResource( ) );
-            photo.setImageContent( (byte[]) oImageContent );
+            photo.setImageContent( ( byte[] ) oImageContent );
             Object oImageContentThumbnail = daoUtil.getBytes( nIndex++ );
-            photo.setImageThumbnail( (byte[]) oImageContentThumbnail );
+            photo.setImageThumbnailWithBytes( ( byte[] ) oImageContentThumbnail );
             photo.setMimeType( daoUtil.getString( nIndex++ ) );
             Signalement signalement = new Signalement( );
             signalement.setId( daoUtil.getLong( nIndex++ ) );
