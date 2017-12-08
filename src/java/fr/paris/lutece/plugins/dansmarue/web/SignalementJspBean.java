@@ -267,6 +267,9 @@ public class SignalementJspBean extends AbstractJspBean
     /** The Constant PARAMETER_SERVICE_ID. */
     private static final String           PARAMETER_SERVICE_ID                          = "serviceId";
 
+    /** The Constant PARAMETER_SERVICE__ID. */
+    private static final String           PARAMETER_SERVICE__ID                          = "service_id";
+
     /** The Constant PARAMETER_DIRECTION_ID. */
     private static final String           PARAMETER_DIRECTION_ID                        = "direction_id";
 
@@ -2454,6 +2457,11 @@ public class SignalementJspBean extends AbstractJspBean
             if ( StringUtils.isNotBlank( strIdService ) )
             {
                 urlItem.addParameter( PARAMETER_SERVICE_ID, strIdService );
+            }
+            String strServiceId = request.getParameter( PARAMETER_SERVICE__ID );
+            if ( StringUtils.isNotBlank( strServiceId ) )
+            {
+                urlItem.addParameter( PARAMETER_SERVICE__ID, strServiceId );
             }
 
             strUrl = urlItem.getUrl( );
