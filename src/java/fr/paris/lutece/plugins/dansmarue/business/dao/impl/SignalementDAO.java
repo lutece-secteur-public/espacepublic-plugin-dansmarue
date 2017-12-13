@@ -431,7 +431,8 @@ public class SignalementDAO implements ISignalementDAO
         daoUtil.setInt( nIndex++, idSector );
 
         daoUtil.setBoolean( nIndex++, signalement.isDoublon( ) );
-        if ( StringUtils.isNotBlank( signalement.getDateServiceFaitTraitement( ) ) && StringUtils.isNotBlank( signalement.getHeureServiceFaitTraitement( ) ) )
+        if ( StringUtils.isNotBlank( signalement.getDateServiceFaitTraitement( ) )
+                && StringUtils.isNotBlank( signalement.getHeureServiceFaitTraitement( ) ) )
         {
             String dateTraitementString = signalement.getDateServiceFaitTraitement( ) + signalement.getHeureServiceFaitTraitement( );
             try
@@ -869,12 +870,12 @@ public class SignalementDAO implements ISignalementDAO
                 {
                     if ( index == listeOrders.size( ) )
                     {
-                        sbSQL.append( " signalement.prefix " + order.getOrder( ) + ", signalement.annee " + order.getOrder( ) + ", signalement.mois " + order.getOrder( ) + ", signalement.numero "
-                                + order.getOrder( ) + " " );
+                        sbSQL.append( " signalement.prefix " + order.getOrder( ) + ", signalement.annee " + order.getOrder( ) + ", signalement.mois "
+                                + order.getOrder( ) + ", signalement.numero " + order.getOrder( ) + " " );
                     } else
                     {
-                        sbSQL.append( " signalement.prefix " + order.getOrder( ) + ", signalement.annee " + order.getOrder( ) + ", signalement.mois " + order.getOrder( ) + ", signalement.numero "
-                                + order.getOrder( ) + ", " );
+                        sbSQL.append( " signalement.prefix " + order.getOrder( ) + ", signalement.annee " + order.getOrder( ) + ", signalement.mois "
+                                + order.getOrder( ) + ", signalement.numero " + order.getOrder( ) + ", " );
                         index++;
                     }
                 } else
@@ -1264,8 +1265,10 @@ public class SignalementDAO implements ISignalementDAO
 
         StringBuilder stringBuilder = new StringBuilder( );
         stringBuilder.append( "SELECT id_signalement FROM signalement_adresse " );
-        stringBuilder.append( "INNER JOIN signalement_signalement AS signalement ON signalement_adresse.fk_id_signalement = signalement.id_signalement " );
-        stringBuilder.append( "INNER JOIN workflow_resource_workflow AS resource_workflow ON resource_workflow.id_resource = signalement.id_signalement " );
+        stringBuilder
+                .append( "INNER JOIN signalement_signalement AS signalement ON signalement_adresse.fk_id_signalement = signalement.id_signalement " );
+        stringBuilder.append(
+                "INNER JOIN workflow_resource_workflow AS resource_workflow ON resource_workflow.id_resource = signalement.id_signalement " );
         stringBuilder.append( "WHERE ST_Within(ST_Transform( signalement_adresse.geom,3857), ST_Buffer(ST_Transform(ST_SetSRID(ST_MakePoint(" );
         stringBuilder.append( lng );
         stringBuilder.append( ", " );
@@ -1317,11 +1320,13 @@ public class SignalementDAO implements ISignalementDAO
         StringBuilder stringBuilder = new StringBuilder( );
         stringBuilder.append(
                 "SELECT id_signalement, adresse, date_creation, commentaire, heure_creation, ST_X(geom), ST_Y(geom), signalement.fk_id_type_signalement, signalement.prefix, vstswp.id_parent FROM signalement_adresse " );
-        stringBuilder.append( "INNER JOIN signalement_signalement AS signalement ON signalement_adresse.fk_id_signalement = signalement.id_signalement " );
+        stringBuilder
+                .append( "INNER JOIN signalement_signalement AS signalement ON signalement_adresse.fk_id_signalement = signalement.id_signalement " );
         stringBuilder.append( "INNER JOIN signalement_type_signalement AS type ON type.id_type_signalement = signalement.fk_id_type_signalement " );
         stringBuilder.append(
                 "INNER JOIN v_signalement_type_signalement_with_parents_links AS vstswp ON vstswp.id_type_signalement = signalement.fk_id_type_signalement AND vstswp.is_parent_a_category=1 " );
-        stringBuilder.append( "INNER JOIN workflow_resource_workflow AS resource_workflow ON resource_workflow.id_resource = signalement.id_signalement " );
+        stringBuilder.append(
+                "INNER JOIN workflow_resource_workflow AS resource_workflow ON resource_workflow.id_resource = signalement.id_signalement " );
         stringBuilder.append( "WHERE ST_Within(ST_Transform( signalement_adresse.geom,3857), ST_Buffer(ST_Transform(ST_SetSRID(ST_MakePoint(" );
         stringBuilder.append( lng );
         stringBuilder.append( ", " );
@@ -1381,7 +1386,8 @@ public class SignalementDAO implements ISignalementDAO
     @Override
     public Integer getDistanceBetweenSignalement( double lat1, double lng1, double lat2, double lng2 )
     {
-        String query = "SELECT ST_Distance(ST_GeographyFromText('POINT(" + lng1 + "" + lat1 + ")'), " + "ST_GeographyFromText('POINT(" + lng2 + "" + lat2 + ")')) ";
+        String query = "SELECT ST_Distance(ST_GeographyFromText('POINT(" + lng1 + "" + lat1 + ")'), " + "ST_GeographyFromText('POINT(" + lng2 + ""
+                + lat2 + ")')) ";
 
         Integer distance = 0;
 
@@ -1479,8 +1485,8 @@ public class SignalementDAO implements ISignalementDAO
     public Double[] getGeomFromLambertToWgs84( Double dLatLambert, Double dLngLambert )
     {
 
-        String query = "SELECT ST_X(ST_Transform(ST_GeomFromText('POINT(" + dLatLambert + " " + dLngLambert + ")',27561),4326)), ST_Y(ST_Transform(ST_GeomFromText('POINT(" + dLatLambert + " "
-                + dLngLambert + ")',27561),4326))";
+        String query = "SELECT ST_X(ST_Transform(ST_GeomFromText('POINT(" + dLatLambert + " " + dLngLambert
+                + ")',27561),4326)), ST_Y(ST_Transform(ST_GeomFromText('POINT(" + dLatLambert + " " + dLngLambert + ")',27561),4326))";
 
         Double geom[] = new Double[2];
         DAOUtil daoUtil = new DAOUtil( query );
@@ -1896,7 +1902,7 @@ public class SignalementDAO implements ISignalementDAO
                 lowerBoundDate.plus( new Long( lowerBound ), ChronoUnit.MONTHS );
                 // > à lowerBound
                 nIndex = addSQLWhereOr( false, query, nIndex );
-                query.append( " s.date_creation > ? " );
+                query.append( " s.date_creation >= ? " );
             }
         }
 
