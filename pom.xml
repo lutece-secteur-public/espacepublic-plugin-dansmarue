@@ -73,7 +73,6 @@
 		<dependency>
 			<groupId>fr.paris.lutece</groupId>
 			<artifactId>lutece-core</artifactId>
-			<version>6.0.0-RC-03</version>
 			<exclusions>
 				<exclusion>
 					<groupId>fr.paris.lutece.plugins</groupId>
@@ -112,7 +111,7 @@
 		<dependency>
 			<groupId>fr.paris.lutece.plugins</groupId>
 			<artifactId>library-sira</artifactId>
-			<version>6.0.1</version>
+			<version>6.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>fr.paris.lutece.plugins</groupId>
