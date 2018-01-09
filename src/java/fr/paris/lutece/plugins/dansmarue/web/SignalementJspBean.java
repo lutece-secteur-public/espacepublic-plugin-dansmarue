@@ -1,3 +1,36 @@
+/*
+ * Copyright (c) 2002-2012, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.dansmarue.web;
 
 import java.io.IOException;
@@ -48,14 +81,11 @@ import fr.paris.lutece.plugins.dansmarue.commons.exceptions.FunctionnalException
 import fr.paris.lutece.plugins.dansmarue.service.IAdresseService;
 import fr.paris.lutece.plugins.dansmarue.service.IArrondissementService;
 import fr.paris.lutece.plugins.dansmarue.service.IConseilQuartierService;
-import fr.paris.lutece.plugins.dansmarue.service.IDashboardPeriodService;
 import fr.paris.lutece.plugins.dansmarue.service.IDomaineFonctionnelService;
 import fr.paris.lutece.plugins.dansmarue.service.IFileMessageCreationService;
 import fr.paris.lutece.plugins.dansmarue.service.IPhotoService;
 import fr.paris.lutece.plugins.dansmarue.service.IPrioriteService;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementService;
-import fr.paris.lutece.plugins.dansmarue.service.ISignalementUnitService;
-import fr.paris.lutece.plugins.dansmarue.service.ISignalementWebService;
 import fr.paris.lutece.plugins.dansmarue.service.ISignaleurService;
 import fr.paris.lutece.plugins.dansmarue.service.ITypeSignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.IWorkflowService;
@@ -485,6 +515,8 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant MESSAGE_TITLE_DELETE_SIGNALEMENT. */
     private static final String           MESSAGE_TITLE_DELETE_SIGNALEMENT              = "dansmarue.messagetitle.deleteSignalement.title";
+    
+    private static final String           MESSAGE_RAMEN_WS_ERROR                        = "dansmarue.ramen.webservice.erreur";
 
     // PROPERTIES
     private static final String           PROPERTY_FILE_FOLDER_PATH                     = "signalement.pathForFileMessageCreation";
@@ -547,8 +579,6 @@ public class SignalementJspBean extends AbstractJspBean
     /** The conseilQuartier service. */
     private IConseilQuartierService       _conseilQuartier;
 
-    private ISignalementWebService        _signalementWebService;
-
     private IUnitSiraService              _unitSiraService;
 
     /** The _fileMessageCreation service. */
@@ -559,12 +589,6 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The _domaineFonctionnelService */
     private IDomaineFonctionnelService    _domaineFonctionnelService;
-
-    /** The signalementUnitService */
-    private ISignalementUnitService       _signalementUnitService;
-
-    /** The dashboardPeriodService */
-    private IDashboardPeriodService       _dashboardPeriodService;
 
     // parameters
     private static final String           PARAMETER_SEARCH                              = "search";
@@ -678,11 +702,8 @@ public class SignalementJspBean extends AbstractJspBean
         _conseilQuartier = ( IConseilQuartierService ) SpringContextService.getBean( "signalement.conseilQuartierService" );
         _fileMessageCreationService = ( IFileMessageCreationService ) SpringContextService.getBean( "fileMessageCreationService" );
         _signalementViewRoleService = ( SignalementViewRoleService ) SpringContextService.getBean( "signalement.signalementViewRoleService" );
-        _signalementWebService = ( ISignalementWebService ) SpringContextService.getBean( "signalement.signalementWebService" );
         _domaineFonctionnelService = ( IDomaineFonctionnelService ) SpringContextService.getBean( "domaineFonctionnelService" );
         _unitSiraService = ( IUnitSiraService ) SpringContextService.getBean( "unittree-sira.unitSiraService" );
-        _signalementUnitService = ( ISignalementUnitService ) SpringContextService.getBean( "signalementUnitService" );
-        _dashboardPeriodService = ( IDashboardPeriodService ) SpringContextService.getBean( "signalement.dashboardPeriodService" );
     }
 
     /**
@@ -1111,7 +1132,6 @@ public class SignalementJspBean extends AbstractJspBean
      */
     private SignalementFilter getSignalementFilter( HttpServletRequest request )
     {
-        AdminUser adminUser = AdminUserService.getAdminUser( request );
         List<EtatSignalement> etats = new ArrayList<EtatSignalement>( );
         if ( _signalementFilter == null )
         {
@@ -2330,7 +2350,6 @@ public class SignalementJspBean extends AbstractJspBean
                 // suppression des signalements sur lesquels l'action ne peut pas être réalisée
                 int index = 0;
                 boolean suppression = false;
-                boolean arretAction = false;
                 Signalement signalement;
                 UrlItem urlItem = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_WORKFLOW__ACTION );
                 putActionType( request, urlItem );
@@ -2835,10 +2854,14 @@ public class SignalementJspBean extends AbstractJspBean
 
         if ( WorkflowService.getInstance( ).canProcessAction( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction, null, request, false ) )
         {
-            String strErrorUrl = WorkflowService.getInstance( ).doSaveTasksForm( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction, null, request, getLocale( ) );
-            if ( strErrorUrl != null )
-            {
-                return strErrorUrl;
+            try {
+                String strErrorUrl = WorkflowService.getInstance( ).doSaveTasksForm( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction, null, request, getLocale( ) );
+                if ( strErrorUrl != null )
+                {
+                    return strErrorUrl;
+                }
+            } catch (Exception e) {
+                return AdminMessageService.getMessageUrl(request, MESSAGE_RAMEN_WS_ERROR, AdminMessage.TYPE_STOP);
             }
 
             if ( request.getParameter( SignalementConstants.PARAMETER_VALIDATE_NEXT ) != null )
@@ -3069,7 +3092,7 @@ public class SignalementJspBean extends AbstractJspBean
             strTaskForm = StringUtils.EMPTY;
         }
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<String, Object>( );       
         model.put( MARK_HAS_NEXT, bHasNext );
         model.put( MARK_TASK_FORM, strTaskForm );
         model.put( MARK_ACTION_ID, nIdAction );
