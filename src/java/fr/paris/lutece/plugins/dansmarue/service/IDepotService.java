@@ -48,8 +48,10 @@ public interface IDepotService {
 	 * 
 	 * @param request
 	 *            the HTTP request
+	 * @param resourceId
+	 *            the original resource id
 	 */
-	void doCreate(HttpServletRequest request);
+	void doCreate(HttpServletRequest request, int resourceId);
 
 	/**
 	 * Do validate a depot

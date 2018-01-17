@@ -97,12 +97,13 @@ public final class DepotManager
     /**
      * Do create the additional attributes of the given unit
      * @param request the HTTP request
+     * @param resourceId the original resource id
      */
-    public static void doCreate( HttpServletRequest request )
+    public static void doCreate( HttpServletRequest request, int resourceId )
     {
         for ( IDepotService service : getListUnitAttributeService(  ) )
         {
-            service.doCreate( request );
+            service.doCreate( request, resourceId );
         }
     }
     
