@@ -11,68 +11,68 @@
 			<fieldset>
 				<div class="form-group">
 					<div class="col-xs-6 col-sm-6 col-md-6">
-						<label class="<@label />"
+						<label class="<@labelStyle />"
 							for="#i18n{dansmarue.saveSignalement.priorite}">
 							#i18n{dansmarue.saveSignalement.priorite} : </label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							${signalement.priorite.libelle}
 						</div>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-xs-6 col-sm-6 col-md-6">
-						<label class="<@label />"
+						<label class="<@labelStyle />"
 							for="#i18n{dansmarue.viewSignalement.numero}">
 							#i18n{dansmarue.viewSignalement.numero} : </label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							${signalement.prefix}${signalement.annee}${signalement.mois}${signalement.numero}
 						</div>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-xs-6 col-sm-6 col-md-6">
-						<label class="<@label />"
+						<label class="<@labelStyle />"
 							for="#i18n{dansmarue.viewSignalement.numero}">
 							#i18n{dansmarue.saveSignalement.type} : </label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							${signalement.type}</div>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-xs-6 col-sm-6 col-md-6">
-						<label class="<@label />"
+						<label class="<@labelStyle />"
 							for="#i18n{dansmarue.viewSignalement.service}">
 							#i18n{dansmarue.viewSignalement.service} : </label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							${signalement.directionSector.label}</div>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-xs-6 col-sm-6 col-md-6">
-						<label class="<@label />"
+						<label class="<@labelStyle />"
 							for="#i18n{dansmarue.viewSignalement.service}">
 							#i18n{dansmarue.saveSignalement.adresse} : </label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							${adresse.adresse}</div>
 					</div>
 				</div>
 				<#if signalement.commentaire?has_content>
 				<div class="form-group">
 					<div class="col-xs-6 col-sm-6 col-md-6">
-						<label class="<@label />"
+						<label class="<@labelStyle />"
 							for="#i18n{dansmarue.saveSignalement.commentaire}">
 							#i18n{dansmarue.saveSignalement.commentaire} : </label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							${signalement.commentaire}</div>
 					</div>
 				</div>
 				</#if> <#if signalement.commentaireProgrammation != "">
 				<div class="form-group">
 					<div class="col-xs-6 col-sm-6 col-md-6">
-						<label class="<@label />"
+						<label class="<@labelStyle />"
 							for="#i18n{dansmarue.viewSignalement.commentaireProgrammation}">
 							#i18n{dansmarue.viewSignalement.commentaireProgrammation} : </label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							${signalement.commentaireProgrammation}</div>
 					</div>
 				</div>
@@ -81,10 +81,10 @@
 				<#if (signalement.observationRejet.libelle)! != "">
 				<div class="col-xs-6 col-sm-6 col-md-6">
 					<div class="form-group">
-						<label class="<@label />" for="#i18n{dansmarue.viewSignalement.commentaireRejet}">
+						<label class="<@labelStyle />" for="#i18n{dansmarue.viewSignalement.commentaireRejet}">
 							#i18n{dansmarue.viewSignalement.commentaireRejet} : 
 						</label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							${signalement.observationRejet.libelle}
 						</div>
 					</div>
@@ -94,10 +94,10 @@
 				<#assign index = 1> 
 				<div class="form-group">
 					<div class="col-xs-6 col-sm-6 col-md-6">
-						<label class="<@label />" for="image">
+						<label class="<@labelStyle />" for="image">
 							#i18n{dansmarue.saveSignalement.photo} n&deg; ${index} : 
 						</label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 						<#list photos as photo> 
 							<#if photo.imageUrl != "">
 								<a href='#' data-toggle="modal" data-target="#imageModal" image-url='${photo.imageUrl}'>
@@ -112,10 +112,10 @@
 				</#if>
 				<div class="form-group">
 					<div class="col-xs-6 col-sm-6 col-md-6">
-						<label class="<@label />" for="#i18n{dansmarue.viewSignalement.etat}">
+						<label class="<@labelStyle />" for="#i18n{dansmarue.viewSignalement.etat}">
 							#i18n{dansmarue.viewSignalement.etat} : 
 						</label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							${stateSignalement.name}
 						</div>
 					</div>

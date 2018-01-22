@@ -58,10 +58,6 @@ public class SignalementDAO implements ISignalementDAO
     /** The Constant SQL_QUERY_UPDATE. */
     private static final String SQL_QUERY_UPDATE                                   = "UPDATE signalement_signalement SET id_signalement=?, suivi=?, date_creation=?, date_prevue_traitement=?, commentaire=? , fk_id_priorite=?, fk_id_type_signalement=?, fk_id_arrondissement = ?, fk_id_sector = ?, is_doublon = ?, service_fait_date_passage = ? WHERE id_signalement=?";
 
-    /** The Constant SQL_QUERY_SELECT_MAX_NUMBER. */
-
-    private static final String SQL_QUERY_SELECT_MAX_NUMBER                        = "SELECT MAX(numero) FROM signalement_signalement WHERE mois = ? AND annee = ?";
-
     /** The Constant SQL_QUERY_SELECT_ALL. */
     private static final String SQL_QUERY_SELECT_ALL                               = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon FROM signalement_signalement";
 
@@ -246,23 +242,6 @@ public class SignalementDAO implements ISignalementDAO
     @Override
     public Long insert( Signalement signalement )
     {
-
-        // build the n° of the signalement
-        DAOUtil daoUtil01 = new DAOUtil( SQL_QUERY_SELECT_MAX_NUMBER );
-        int nIndex01 = 1;
-        daoUtil01.setString( nIndex01++, signalement.getMois( ) );
-        daoUtil01.setInt( nIndex01++, signalement.getAnnee( ) );
-        daoUtil01.executeQuery( );
-        if ( daoUtil01.next( ) )
-        {
-            signalement.setNumero( daoUtil01.getInt( 1 ) + 1 );
-        }
-        daoUtil01.free( );
-        if ( signalement.getNumero( ) < 1 )
-        {
-            signalement.setNumero( 1 );
-        }
-
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT );
         if ( ( signalement.getId( ) == null ) || signalement.getId( ).equals( new Long( 0 ) ) )
         {

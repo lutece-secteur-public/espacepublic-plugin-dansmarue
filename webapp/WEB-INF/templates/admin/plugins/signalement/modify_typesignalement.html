@@ -15,51 +15,51 @@
 				value="${typesignalement.typeSignalementParent.id!}" />
 			<div class="col-xs-12 col-sm-12 col-md-12">
 				<div class="form-group">
-					<label class="<@label />" for="libelle">#i18n{dansmarue.commons.libelle}
+					<label class="<@labelStyle />" for="libelle">#i18n{dansmarue.commons.libelle}
 						* : </label>
-					<div class="<@input />">
+					<div class="<@inputStyle />">
 						<input class="form-control input-sm" type="text" id="libelle"
 							name="libelle" value="${typesignalement.libelle!}" maxlength="255" />
 					</div>
 				</div>
 
 				<div class="form-group">
-					<label class="<@label />" for="image">#i18n{dansmarue.commons.image}
+					<label class="<@labelStyle />" for="image">#i18n{dansmarue.commons.image}
 						: </label> <#if typesignalement.imageUrl!?has_content >
-					<div class="<@input />">
+					<div class="<@inputStyle />">
 						<img width="100" src='${typesignalement.imageUrl!}' /><br />
 					</div>
 					</#if>
 				</div>
 				<div class="form-group">
-					<label class="<@label />" for="image">&nbsp;</label>
-					<div class="<@input />">
+					<label class="<@labelStyle />" for="image">&nbsp;</label>
+					<div class="<@inputStyle />">
 						<input type="file" id="image" name="image" maxlength="100" />
 					</div>
 				</div>
 
 				<#if nosoustype>
 				<div class="form-group">
-					<label class="<@label />" for="unit.idUnit">#i18n{dansmarue.listtypesignalement.direction.label}
+					<label class="<@labelStyle />" for="unit.idUnit">#i18n{dansmarue.listtypesignalement.direction.label}
 						: </label>
-					<div class="<@input />">
+					<div class="<@inputStyle />">
 						#i18n{dansmarue.listtypesignalement.direction.info} <@combo
 						name="unit.idUnit" default_value=typesignalement.unit.idUnit
 						items=unit_list /></div>
 				</div>
 				<div class="form-group">
-					<label class="<@label />" for="alias">#i18n{dansmarue.listtypesignalement.alias.label}
+					<label class="<@labelStyle />" for="alias">#i18n{dansmarue.listtypesignalement.alias.label}
 						: </label>
-					<div class="<@input />">
+					<div class="<@inputStyle />">
 						<input class="form-control input-sm" type="text" id="alias"
 							name="alias" value="${typesignalement.alias!}" maxlength="255" />
 					</div>
 				</div>
 				
 				<div class="form-group">
-					<label class="<@label />" for="aliasMobile">#i18n{dansmarue.listtypesignalement.alias.mobile.label}
+					<label class="<@labelStyle />" for="aliasMobile">#i18n{dansmarue.listtypesignalement.alias.mobile.label}
 						: </label>
-					<div class="<@input />">
+					<div class="<@inputStyle />">
 					<input class="form-control input-sm" type="text" id="aliasMobile"
 							name="aliasMobile" value="${typesignalement.aliasMobile!}" maxlength="255" />
 					</div>
@@ -68,9 +68,9 @@
 				</#if>
 
 				<div class="form-group">
-					<label class="<@label />" for="actif">#i18n{dansmarue.commons.actif}
+					<label class="<@labelStyle />" for="actif">#i18n{dansmarue.commons.actif}
 						:</label>
-					<div class="<@input />">
+					<div class="<@inputStyle />">
 						<input class="checkbox" type="checkbox" name="actif" id="actif"<#if
 						(typesignalement.actif) > checked="checked" </#if> />
 					</div>

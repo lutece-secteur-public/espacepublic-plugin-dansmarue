@@ -106,10 +106,10 @@
 					<!-- NUMERO -->
 					<#if signalement.id?has_content && signalement.id &gt; 0 >
 					<div class="form-group">
-						<label class="<@label />"
+						<label class="<@labelStyle />"
 							for="#i18n{dansmarue.viewSignalement.numero}">#i18n{dansmarue.viewSignalement.numero}
 							:</label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							${signalement.prefix!}${signalement.annee!}${signalement.mois!}${signalement.numero!}
 						</div>
 					</div>
@@ -118,20 +118,20 @@
 					<!-- ETAT -->
 					<#if signalement.id?has_content && signalement.id &gt; 0 >
 					<div class="form-group">
-						<label class="<@label />"
+						<label class="<@labelStyle />"
 							for="#i18n{dansmarue.viewSignalement.etat}">#i18n{dansmarue.viewSignalement.etat}
 							:</label>
-						<div class="<@input />">${(stateSignalement.name)!}</div>
+						<div class="<@inputStyle />">${(stateSignalement.name)!}</div>
 					</div>
 					</#if>
 	
 					<!-- PRIORITE -->
 					<div class="form-group">
-						<label class="<@label />" for="priorite"<#if
+						<label class="<@labelStyle />" for="priorite"<#if
 							signalement.id?has_content && signalement.id &gt; 0 >
 							class="shiftLabelSignalement"
 							</#if>>#i18n{dansmarue.saveSignalement.priorite} * :</label>
-						<div class="<@select />"><#if priorite_list?has_content &&
+						<div class="<@selectStyle />"><#if priorite_list?has_content &&
 							priorite_list?size != 0> <@comboWithParams
 							additionalParameters="class='form-control input-sm'"
 							name="priorite" default_value="${(signalement.priorite.id)!}"
@@ -140,15 +140,15 @@
 	
 					<!-- TYPE SIGNALEMENT -->
 					<div class="form-group">
-						<label class="<@label />"
+						<label class="<@labelStyle />"
 							for="#i18n{dansmarue.saveSignalement.type}"<#if
 							signalement.id?has_content && signalement.id &gt; 0 >
 							class="shiftLabelSignalement"
 							</#if>>#i18n{dansmarue.saveSignalement.type} * :</label>
 							
-						<!-- <div class="<@select />">-->
+						<!-- <div class="<@selectStyle />">-->
 						
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							<#if signalement.id?has_content &&
 							signalement.id &gt; 0 > ${type.formatTypeSignalement} <#else> 
 							<#if type_list?has_content && type_list?size != 0> 
@@ -169,12 +169,12 @@
 	
 					<!-- ADRESSE -->
 					<div class="form-group">
-						<label class="<@label />"
+						<label class="<@labelStyle />"
 							for="#i18n{dansmarue.saveSignalement.adresse}"<#if
 							signalement.id?has_content && signalement.id &gt; 0 >
 							class="shiftLabelSignalement"
 							</#if>>#i18n{dansmarue.saveSignalement.adresse} * :</label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							<#if signalement.id?has_content && signalement.id &gt; 0 >
 							${adresse.adresse} <#else> <input id="longitude" type="hidden"
 								name="adressesForm[0].lng"<#if
@@ -197,22 +197,22 @@
 	
 					<!-- MAIL -->
 					<div class="form-group">
-						<label class="<@label />"
+						<label class="<@labelStyle />"
 							for="#i18n{dansmarue.saveSignalement.mail}"<#if
 							signalement.id?has_content && signalement.id &gt; 0 >
 							class="shiftLabelSignalement"
 							</#if>>#i18n{dansmarue.saveSignalement.mail} : </label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							<input type="text" id="mail" value="${(signaleur.mail)!}"
 								name="mail" class="form-control input-sm" maxlength="255" />
 						</div>
 					</div>
 					<!-- PRECISION LOCALISATION -->
 					<div class="form-group">
-						<label class="<@label />"
+						<label class="<@labelStyle />"
 							for="#i18n{dansmarue.saveSignalement.precisionLocalisation}">#i18n{dansmarue.saveSignalement.precisionLocalisation}
 							: </label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							<input type="text" id="precisionLocalisation"
 								value="${(adresse.precisionLocalisation)!}"
 								name="precisionLocalisation" class="form-control input-sm"
@@ -222,10 +222,10 @@
 	
 					<!-- COMMENTAIRE -->
 					<div class="form-group">
-						<label class="<@label />"
+						<label class="<@labelStyle />"
 							for="#i18n{dansmarue.saveSignalement.commentaire}">#i18n{dansmarue.saveSignalement.commentaire}
 							: </label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							<input type="text" id="commentaire"
 								value="${(signalement.commentaire)!}" name="commentaire"
 								class="form-control input-sm" maxlength="155" />
@@ -235,10 +235,10 @@
 					<!-- RAISON REJET -->
 					<#if (signalement.observationRejet.libelle)! != "">
 					<div class="form-group">
-						<label class="<@label />"
+						<label class="<@labelStyle />"
 							for="#i18n{dansmarue.saveSignalement.commentaireRejet}">#i18n{dansmarue.saveSignalement.commentaireRejet}:
 						</label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							${signalement.observationRejet.libelle }</div>
 					</div>
 					</#if>
@@ -253,13 +253,13 @@
 						class="table table-striped table-condensed">
 						<tbody>
 							<tr>
-								<td><label class="<@label />" for="image${index}">
-										#i18n{dansmarue.saveSignalement.photo} n°${index} <#if
+								<td><label class="<@labelStyle />" for="image${index}">
+										#i18n{dansmarue.saveSignalement.photo} nï¿½${index} <#if
 										photo.vue == 1> (#i18n{dansmarue.saveSignalement.vueEnsemble})
 										<#else> (#i18n{dansmarue.saveSignalement.vuePres}) </#if> :</label></td>
 								<td><img src='${photo.imageUrl}' style="max-width: 500px" />
 								</td>
-								<td><label class="<@label />" for="deletePhoto">
+								<td><label class="<@labelStyle />" for="deletePhoto">
 										&nbsp; </label> <a class="btn btn-danger btn-sm"
 									alt="#i18n{dansmarue.deletePhotoSignalement.title}"
 									title="#i18n{dansmarue.deletePhotoSignalement.title}"
@@ -271,16 +271,16 @@
 					</table>
 					<#assign index = index + 1> </#if> </#list> </#if> <#else>
 					<div class="form-group">
-						<label class="<@label />" for="image">#i18n{dansmarue.saveSignalement.vueEnsemble}:
+						<label class="<@labelStyle />" for="image">#i18n{dansmarue.saveSignalement.vueEnsemble}:
 						</label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							<input type="file" id="photoEnsemble" name="photoEnsemble" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="<@label />" for="image">#i18n{dansmarue.saveSignalement.vuePres}
+						<label class="<@labelStyle />" for="image">#i18n{dansmarue.saveSignalement.vuePres}
 							: </label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							<input type="file" id="photoPres" name="photoPres" />
 						</div>
 					</div>
@@ -293,9 +293,9 @@
 				<#if !signalement.id?has_content>
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="form-group">
-						<label class="<@label />" for="messageForUser">#i18n{dansmarue.saveSignalement.messageForUser}:
+						<label class="<@labelStyle />" for="messageForUser">#i18n{dansmarue.saveSignalement.messageForUser}:
 						</label>
-						<div class="<@input />">
+						<div class="<@inputStyle />">
 							<textarea name="message" id="" rows="5" cols="80">${messageForUser!}</textarea>
 						</div>
 					</div>

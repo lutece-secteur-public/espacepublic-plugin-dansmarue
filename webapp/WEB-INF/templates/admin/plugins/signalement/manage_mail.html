@@ -5,35 +5,35 @@
 		<form class="form-horizontal"
 			action="jsp/admin/plugins/signalement/DoSendMail.jsp" method="post">
 			<div class="form-group">
-				<label class="<@label />"> #i18n{dansmarue.mail.recipient} :
+				<label class="<@labelStyle />"> #i18n{dansmarue.mail.recipient} :
 				</label>
-				<div class="<@input />">
+				<div class="<@inputStyle />">
 					<input class="form-control input-sm" maxlength="250" type="text"
 						value="${( mail_item.recipientsTo )!}" name="recipientsTo"
 						id="recipientsTo" /> #i18n{dansmarue.mail.recipient.definition}
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="<@label />"> #i18n{dansmarue.mail.sender} * :
+				<label class="<@labelStyle />"> #i18n{dansmarue.mail.sender} * :
 				</label>
-				<div class="<@input />">
+				<div class="<@inputStyle />">
 					<input class="form-control input-sm" maxlength="100" type="text"
 						value="${( mail_item.senderEmail )!}" name="senderEmail"
 						id="senderEmail" /> #i18n{dansmarue.mail.sender.definition}
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="<@label />"> #i18n{dansmarue.mail.object} * :
+				<label class="<@labelStyle />"> #i18n{dansmarue.mail.object} * :
 				</label>
-				<div class="<@input />">
+				<div class="<@inputStyle />">
 					<input class="form-control input-sm" maxlength="100" type="text"
 						value="${( mail_item.subject )!}" name="subject" id="subject" />
 					#i18n{dansmarue.mail.object.definition}
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="<@label />"> #i18n{dansmarue.mail.photos} : </label>
-				<div class="<@checkbox />">
+				<label class="<@labelStyle />"> #i18n{dansmarue.mail.photos} : </label>
+				<div class="<@checkboxStyle />">
 					<div class="checkbox">
 						<label> <input class="checkbox" type="checkbox"
 							name="photos" id="photos"<#if
@@ -44,9 +44,9 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="<@label />"> #i18n{dansmarue.mail.message} * :
+				<label class="<@labelStyle />"> #i18n{dansmarue.mail.message} * :
 				</label>
-				<div class="<@input />">
+				<div class="<@inputStyle />">
 					<div class="editor">
 						<textarea rows="10" cols="100" id="message" name="message"
 							class="richtext">

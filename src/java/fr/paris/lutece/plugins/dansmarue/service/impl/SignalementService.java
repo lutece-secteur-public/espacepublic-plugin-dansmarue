@@ -50,6 +50,7 @@ import fr.paris.lutece.plugins.dansmarue.commons.exceptions.BusinessException;
 import fr.paris.lutece.plugins.dansmarue.service.IArrondissementService;
 import fr.paris.lutece.plugins.dansmarue.service.IDashboardPeriodService;
 import fr.paris.lutece.plugins.dansmarue.service.IFileMessageCreationService;
+import fr.paris.lutece.plugins.dansmarue.service.INumeroSignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.IObservationRejetSignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementSuiviService;
@@ -183,6 +184,10 @@ public class SignalementService implements ISignalementService, fr.paris.lutece.
     @Inject
     @Named( "signalement.dashboardPeriodService" )
     private IDashboardPeriodService             _dashboardPeriodService;
+    
+    @Inject
+    @Named("dansmarue.numeroSignalementService")
+    private INumeroSignalementService           _numeroSignalementService;
 
     // SERVICES
     /** The _signalement workflow service. */
@@ -310,6 +315,10 @@ public class SignalementService implements ISignalementService, fr.paris.lutece.
     public Long insert( Signalement signalement )
     {
         updateSignalementUnit( signalement );
+        
+        Long numeroSignalement = _numeroSignalementService.findByMonthYear( signalement.getMois( ), signalement.getAnnee( ) );
+        signalement.setNumero( numeroSignalement.intValue( ) );
+        
         return _signalementDAO.insert( signalement );
     }
 
@@ -324,6 +333,9 @@ public class SignalementService implements ISignalementService, fr.paris.lutece.
         {
             throw new BusinessException( signalement, MESSAGE_ERROR_NO_SECTOR );
         }
+
+        Long numeroSignalement = _numeroSignalementService.findByMonthYear( signalement.getMois( ), signalement.getAnnee( ) );
+        signalement.setNumero( numeroSignalement.intValue( ) );
 
         Long signalementId = _signalementDAO.insert( signalement );
         signalement.setId( signalementId );

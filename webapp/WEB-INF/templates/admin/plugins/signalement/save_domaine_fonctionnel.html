@@ -16,17 +16,17 @@
 						value="${(domaine_fonctionnel.id)!}" />
 					<div class="col-xs-12 col-sm-12 col-md-12">
 						<div class="form-group">
-							<label class="<@label />" for="libelle">#i18n{dansmarue.commons.libelle}
+							<label class="<@labelStyle />" for="libelle">#i18n{dansmarue.commons.libelle}
 								* : </label>
-							<div class="<@input />">
+							<div class="<@inputStyle />">
 								<input type="text" class="form-control input-sm" id="libelle"
 									name="libelle" value="${domaine_fonctionnel.libelle!}"/>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="<@label />" for="actif">#i18n{dansmarue.commons.actif}
+							<label class="<@labelStyle />" for="actif">#i18n{dansmarue.commons.actif}
 								* :</label>
-							<div class="<@input />">
+							<div class="<@inputStyle />">
 								<INPUT class="checkbox" TYPE=CHECKBOX NAME="actif" value="true"<#if
 								domaine_fonctionnel.actif >checked="checked"</#if>>
 							</div>
@@ -34,8 +34,8 @@
 					</div>
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<div class="form-group">
-							<label class="<@label />" for="actif">#i18n{dansmarue.field.domainefonctionnel.arrondissement} :</label>
-							<div class="<@input />" style="text-align:left">
+							<label class="<@labelStyle />" for="actif">#i18n{dansmarue.field.domainefonctionnel.arrondissement} :</label>
+							<div class="<@inputStyle />" style="text-align:left">
 								<select name="arrondissements" multiple size="${arrondissement_list_size}">
 								<#list arrondissement_list as arrondissement>
 									<option value="${arrondissement.id}">${arrondissement.numero}</option>
@@ -46,8 +46,8 @@
 					</div>
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<div class="form-group">
-							<label class="<@label />" for="actif">#i18n{dansmarue.field.domainefonctionnel.quartier} :</label>
-							<div class="<@input />" style="text-align:left">
+							<label class="<@labelStyle />" for="actif">#i18n{dansmarue.field.domainefonctionnel.quartier} :</label>
+							<div class="<@inputStyle />" style="text-align:left">
 							<select name="conseilQuartier"  id="conseilQuartier" class="selectpicker show-menu-arrow form-control" data-width="300px" data-size="10" multiple data-actions-box="true" data-live-search="true">
 								<#list quartier_list as conseilQuartier>
 									<option value="${conseilQuartier.idConsqrt}">${conseilQuartier.nomConsqrt}</option>
@@ -58,8 +58,8 @@
 					</div>
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<div class="form-group">
-							<label class="<@label />" for="actif">#i18n{dansmarue.field.domainefonctionnel.categorie} :</label>
-							<div class="<@input />" style="text-align:left">
+							<label class="<@labelStyle />" for="actif">#i18n{dansmarue.field.domainefonctionnel.categorie} :</label>
+							<div class="<@inputStyle />" style="text-align:left">
 								<select name="categories" multiple size="${category_list_size}">
 								<#list category_list as category>
 									<option value="${category.id}">${category.libelle}</option>
@@ -70,8 +70,8 @@
 					</div>
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<div class="form-group">
-							<label class="<@label />" for="actif">Entit&eacute; :</label>
-							<div class="<@input />" style="text-align:left">
+							<label class="<@labelStyle />" for="actif">Entit&eacute; :</label>
+							<div class="<@inputStyle />" style="text-align:left">
 								<select name="units" multiple size="${unit_list_size}">
 									<@inputUnitTree node=unit_tree/>
 								</select>
