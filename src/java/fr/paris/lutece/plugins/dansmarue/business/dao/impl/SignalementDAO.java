@@ -162,6 +162,9 @@ public class SignalementDAO implements ISignalementDAO
 
     /** The Constant SQL_QUERY_DELETE_MESSAGE_CREATION. */
     private static final String SQL_QUERY_DELETE_MESSAGE_CREATION                  = "DELETE FROM signalement_message_creation WHERE id_message=1";
+    
+    /** The Constant SQL_QUERY_UPDATE_DATE_MISE_SURVEILLANCE. */
+    private static final String SQL_QUERY_UPDATE_DATE_MISE_SURVEILLANCE            = "UPDATE signalement_signalement SET date_mise_surveillance =? WHERE id_signalement=?";
 
     /** The Constant SQL_WHERE. */
     private static final String SQL_WHERE                                          = " WHERE ";
@@ -2067,5 +2070,18 @@ public class SignalementDAO implements ISignalementDAO
         StringBuilder sbSQL = new StringBuilder( SQL_SELECT_ID_SIGNALEMENT );
         addFilterCriterias( filter, sbSQL );
         return sbSQL.toString( );
+    }
+
+    @Override
+    public void addMiseEnSurveillanceDate( int idSignalement, String dateMiseEnSurveillance )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_DATE_MISE_SURVEILLANCE );
+        int nIndex = 1;
+        daoUtil.setDate( nIndex++, DateUtil.formatDateSql( dateMiseEnSurveillance, Locale.FRENCH ) );
+        daoUtil.setInt( nIndex++, idSignalement );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
+        
+        
     }
 }

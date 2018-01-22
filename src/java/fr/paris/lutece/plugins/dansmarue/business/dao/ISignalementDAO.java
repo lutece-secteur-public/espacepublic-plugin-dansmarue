@@ -202,4 +202,11 @@ public interface ISignalementDAO
      * @return the query
      */
 	List<Integer> getIdsSignalementByFilter(SignalementFilter filter, Plugin plugin);
+	
+	/**
+	 * Execute Query to add dateMiseEnSurveillance for this signalement
+	 * @param idSignalement the signalement id
+	 * @param dateMiseEnSurveillance the date
+	 */
+	void addMiseEnSurveillanceDate(int idSignalement, String dateMiseEnSurveillance);
 }
