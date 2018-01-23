@@ -650,13 +650,29 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
 
         if ( typeSignalement.getId( ) != null && typeSignalement.getId( ) > 0 )
         {
-            daoUtil = new DAOUtil( SQL_QUERY_EXISTS_TYPE_SIGNALEMENT_WITH_ID );
+            StringBuilder request = new StringBuilder( );
+            request.append( SQL_QUERY_EXISTS_TYPE_SIGNALEMENT_WITH_ID );
+            
+            if( typeSignalement.getTypeSignalementParent( ) != null && typeSignalement.getTypeSignalementParent( ).getId( ) != 0 ) {
+                request.append( " and fk_id_type_signalement=" + typeSignalement.getTypeSignalementParent( ).getId( ) );
+            } else {
+                request.append( " and fk_id_type_signalement is null ");
+            }
+            
+            daoUtil = new DAOUtil( request.toString( ) );
             daoUtil.setString( 1, typeSignalement.getLibelle( ) );
             daoUtil.setLong( 2, typeSignalement.getId( ) );
         }
         else
         {
-            daoUtil = new DAOUtil( SQL_QUERY_EXISTS_TYPE_SIGNALEMENT );
+            StringBuilder request = new StringBuilder( );
+            request.append( SQL_QUERY_EXISTS_TYPE_SIGNALEMENT );
+            if( typeSignalement.getIdTypeSignalementParent( ) != 0 ) {
+                request.append( " and fk_id_type_signalement=" + typeSignalement.getIdTypeSignalementParent( ) );
+            } else {
+                request.append( " and fk_id_type_signalement is null ");
+            }
+            daoUtil = new DAOUtil( request.toString( ) );
             daoUtil.setString( 1, typeSignalement.getLibelle( ) );
         }
         daoUtil.executeQuery( );
