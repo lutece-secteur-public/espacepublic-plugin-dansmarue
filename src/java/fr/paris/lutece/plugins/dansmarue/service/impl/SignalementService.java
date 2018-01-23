@@ -1464,4 +1464,11 @@ public class SignalementService implements ISignalementService, fr.paris.lutece.
         return reference;
     }
 
+    @Override
+    public void doMettreSousSurveillance( int nIdSignalement, String dateMiseEnSurveillance )
+    {
+        _signalementDAO.addMiseEnSurveillanceDate( nIdSignalement, dateMiseEnSurveillance );
+        
+    }
+
 }

@@ -413,4 +413,12 @@ public interface ISignalementService
 	 * 		the signalement id reference
 	 */
 	String getSignalementReference(String reference, Signalement signalement);
+	
+	/**
+	 * Add date dateMiseEnSurveillance for Signalement
+	 * @param nIdSignalement
+	 *        Id of the signalement reference
+	 * @param dateMiseEnSurveillance
+	 */
+	void doMettreSousSurveillance(int nIdSignalement, String dateMiseEnSurveillance);
 }
