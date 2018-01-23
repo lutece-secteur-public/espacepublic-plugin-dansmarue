@@ -38,95 +38,96 @@ import java.util.List;
 import fr.paris.lutece.plugins.sira.utils.SiraUtils;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
-
 /**
  * SignalementConstants
  */
 public final class SignalementConstants
 {
-	// ROLES
-	public static final String 							ROLE_OBSERVATEUR_MAIRIES = "OBSERVATEUR_MAIRIES";
-	
-    // VALUES
-    public static final Integer 						VALUE_PRIORITE_PEU_GENANT_ID = 3;
+    // ROLES
+    public static final String       ROLE_OBSERVATEUR_MAIRIES                               = "OBSERVATEUR_MAIRIES";
 
-    //FIELDS 
-    public static final String 							FIELD_LAT = "lat";
-    public static final String 							FIELD_LNG = "lng";
-    
-    public static final Integer							SIGNALEMENT_WORKFLOW_ID = 2;
-    
-    //MARKS
-    public static final String 							MARK_JSP_BACK = "jsp_back";
-    public static final String 							MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
-    public static final String 							MARK_PAGINATOR = "paginator";
-    public static final String 							MARK_FILTER = "filter";
-    public static final String 							MARK_LOCALE = "locale";
+    // VALUES
+    public static final Integer      VALUE_PRIORITE_PEU_GENANT_ID                           = 3;
+
+    // FIELDS
+    public static final String       FIELD_LAT                                              = "lat";
+    public static final String       FIELD_LNG                                              = "lng";
+
+    public static final Integer      SIGNALEMENT_WORKFLOW_ID                                = 2;
+
+    // MARKS
+    public static final String       MARK_JSP_BACK                                          = "jsp_back";
+    public static final String       MARK_NB_ITEMS_PER_PAGE                                 = "nb_items_per_page";
+    public static final String       MARK_PAGINATOR                                         = "paginator";
+    public static final String       MARK_FILTER                                            = "filter";
+    public static final String       MARK_LOCALE                                            = "locale";
 
     // Properties
-    public static final String 							PROPERTY_DEFAULT_ITEM_PER_PAGE = "signalement.itemsPerPage";
+    public static final String       PROPERTY_DEFAULT_ITEM_PER_PAGE                         = "signalement.itemsPerPage";
 
     // Parameters
-    public static final String PARAMETER_BUTTON_CANCEL = "cancel";
-    public static final String PARAMETER_ERROR = "error";
-    public static final String PARAMETER_VALIDATE_NEXT = "validate_next";
-    public static final String PARAMETER_BUTTON_SEARCH = "search";
-	public static final String PARAMETER_PRIORITE = "priorite";
+    public static final String       PARAMETER_BUTTON_CANCEL                                = "cancel";
+    public static final String       PARAMETER_ERROR                                        = "error";
+    public static final String       PARAMETER_VALIDATE_NEXT                                = "validate_next";
+    public static final String       PARAMETER_BUTTON_SEARCH                                = "search";
+    public static final String       PARAMETER_PRIORITE                                     = "priorite";
 
     // Messages
-    public static final String MESSAGE_ERROR_OCCUR = "dansmarue.message.error.erroroccur";
-    public static final String MESSAGE_SIGNALEMENT_NOT_FOUND = "dansmarue.task_annulation_signalement.signalementNotFound";
-    public static final String MESSAGE_OBSERVATION_NOT_FOUND = "task_annulation_signalement.observationNotFound";
+    public static final String       MESSAGE_ERROR_OCCUR                                    = "dansmarue.message.error.erroroccur";
+    public static final String       MESSAGE_SIGNALEMENT_NOT_FOUND                          = "dansmarue.task_annulation_signalement.signalementNotFound";
+    public static final String       MESSAGE_OBSERVATION_NOT_FOUND                          = "task_annulation_signalement.observationNotFound";
 
     // Attribute
-    public static final String ATTRIBUTE_HAS_NEXT = "has_next";
+    public static final String       ATTRIBUTE_HAS_NEXT                                     = "has_next";
 
     // Attribute session
-    public static final String ATTRIBUTE_SESSION_DERNIERE_SAISIE_ACTION = "derniere_saisie_action";
-    public static final String ATTRIBUTE_SESSION_IS_USER_RECTRICTED = "signalement_is_user_restricted";
-    public static final String ATTRIBUTE_SESSION_LIST_RESTRICTED_ARRONDISSEMENTS = "signalement_list_restricted_arrondissements";
-    public static final String ATTRIBUTE_SESSION_LIST_RESTRICTED_TYPE_SIGNALEMENT = "signalement_list_restricted_type_signalement";
-    public static final String ATTRIBUTE_SESSION_LIST_RESTRICTED_CATEGORY_SIGNALEMENT = "signalement_list_restricted_category_signalement";
+    public static final String       ATTRIBUTE_SESSION_DERNIERE_SAISIE_ACTION               = "derniere_saisie_action";
+    public static final String       ATTRIBUTE_SESSION_IS_USER_RECTRICTED                   = "signalement_is_user_restricted";
+    public static final String       ATTRIBUTE_SESSION_LIST_RESTRICTED_ARRONDISSEMENTS      = "signalement_list_restricted_arrondissements";
+    public static final String       ATTRIBUTE_SESSION_LIST_RESTRICTED_TYPE_SIGNALEMENT     = "signalement_list_restricted_type_signalement";
+    public static final String       ATTRIBUTE_SESSION_LIST_RESTRICTED_CATEGORY_SIGNALEMENT = "signalement_list_restricted_category_signalement";
 
     // pour les lists
-    public static final String REFERENCE_LIST_ID = "id";
-    public static final String REFERENCE_LIST_LIBELLE = "libelle";
+    public static final String       REFERENCE_LIST_ID                                      = "id";
+    public static final String       REFERENCE_LIST_LIBELLE                                 = "libelle";
 
     // google maps
-    public static final String GOOGLE_MAPS_API_KEY = AppPropertiesService.getProperty( "signalement.maps.key" );
+    public static final String       GOOGLE_MAPS_API_KEY                                    = AppPropertiesService.getProperty( "signalement.maps.key" );
 
     // achive
-    public static final String ARCHIVE_LIMIT = "signalement.archive.limit";
-    
-    // images resizing
-    public static final String IMAGE_RESIZE_WIDTH = "image.resize.width";
-    public static final String IMAGE_RESIZE_HEIGHT = "image.resize.height";
+    public static final String       ARCHIVE_LIMIT                                          = "signalement.archive.limit";
 
-    public static final String IMAGE_THUMBNAIL_RESIZE_WIDTH = "imageThumbnail.resize.width";
-    public static final String IMAGE_THUMBNAIL_RESIZE_HEIGHT = "imageThumbnail.resize.height";
+    // images resizing
+    public static final String       IMAGE_RESIZE_WIDTH                                     = "image.resize.width";
+    public static final String       IMAGE_RESIZE_HEIGHT                                    = "image.resize.height";
+
+    public static final String       IMAGE_THUMBNAIL_RESIZE_WIDTH                           = "imageThumbnail.resize.width";
+    public static final String       IMAGE_THUMBNAIL_RESIZE_HEIGHT                          = "imageThumbnail.resize.height";
 
     // units property keys definitions
-    public static final String UNIT_ATELIER_JARDINAGE = "signalement.unit.atelierJardinage";
-    public static final String UNIT_JARDINAGE = "signalement.unit.jardinage";
-    public static final String UNIT_SYLVICOLE = "signalement.unit.sylvicole";
-    public static final String UNIT_CIMETIERE = "signalement.unit.cimetiere";
-    public static final String UNIT_DEVE = AppPropertiesService.getProperty( "signalement.unit.deve" );
-    public static final Integer UNIT_DPE = AppPropertiesService.getPropertyInt("signalement.unit.dpe",-1);
+    public static final String       UNIT_ATELIER_JARDINAGE                                 = "signalement.unit.atelierJardinage";
+    public static final String       UNIT_JARDINAGE                                         = "signalement.unit.jardinage";
+    public static final String       UNIT_SYLVICOLE                                         = "signalement.unit.sylvicole";
+    public static final String       UNIT_CIMETIERE                                         = "signalement.unit.cimetiere";
+    public static final String       UNIT_DEVE                                              = AppPropertiesService.getProperty( "signalement.unit.deve" );
+    public static final Integer      UNIT_DPE                                               = AppPropertiesService.getPropertyInt( "signalement.unit.dpe", -1 );
 
     // type signalement keys definitions
-    public static final String TYPE_SIGNALEMENT_ENCOMBRANT = "signalement.typeSignalement.encombrant";
-    
+    public static final String       TYPE_SIGNALEMENT_ENCOMBRANT                            = "signalement.typeSignalement.encombrant";
+
     // inc version type signalement
-    public static final String INC_VERSION_TYPE_SIGNALEMENT = "signalement.inc.typeSignalement";
+    public static final String       INC_VERSION_TYPE_SIGNALEMENT                           = "signalement.inc.typeSignalement";
 
     // Préfixes des signalements
-    public static final String SIGNALEMENT_PREFIX_IOS = AppPropertiesService.getProperty("signalement.prefix.origin.ios");
-    public static final String SIGNALEMENT_PREFIX_ANDROID = AppPropertiesService.getProperty("signalement.prefix.origin.android");
-    public static final String SIGNALEMENT_PREFIX_TELESERVICE = AppPropertiesService.getProperty("signalement.prefix.origin.teleservice");
-    public static final String SIGNALEMENT_PREFIX_BACKOFFICE = AppPropertiesService.getProperty("signalement.prefix.origin.backoffice");
-    public static final String SIGNALEMENT_PREFIX_KEY = "signalement.prefix.origin";
-    public static final List<String> SIGNALEMENT_PREFIXES = SiraUtils.getProperties(SIGNALEMENT_PREFIX_KEY);
-    
+    public static final String       SIGNALEMENT_PREFIX_IOS                                 = AppPropertiesService.getProperty( "signalement.prefix.origin.ios" );
+    public static final String       SIGNALEMENT_PREFIX_ANDROID                             = AppPropertiesService.getProperty( "signalement.prefix.origin.android" );
+    public static final String       SIGNALEMENT_PREFIX_TELESERVICE                         = AppPropertiesService.getProperty( "signalement.prefix.origin.teleservice" );
+    public static final String       SIGNALEMENT_PREFIX_BACKOFFICE                          = AppPropertiesService.getProperty( "signalement.prefix.origin.backoffice" );
+    public static final String       SIGNALEMENT_PREFIX_KEY                                 = "signalement.prefix.origin";
+    public static final List<String> SIGNALEMENT_PREFIXES                                   = SiraUtils.getProperties( SIGNALEMENT_PREFIX_KEY );
+
+    public static final int          START_SIGNALEMENT_NUMERO                               = 1;
+
     /**
      * Utility class - empty constructor
      */
@@ -134,5 +135,5 @@ public final class SignalementConstants
     {
         // nothing
     }
-    
+
 }

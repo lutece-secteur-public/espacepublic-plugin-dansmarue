@@ -1,5 +1,15 @@
 package fr.paris.lutece.plugins.dansmarue.web;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
+
 import fr.paris.lutece.plugins.dansmarue.business.entities.Adresse;
 import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
@@ -22,79 +32,67 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.mail.FileAttachment;
 import fr.paris.lutece.util.url.UrlItem;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.validator.constraints.impl.EmailValidator;
-
-
 public class MailSignalementJspBean extends AbstractJspBean
 {
 
-    //TEMPLATES
-    private static final String TEMPLATE_MANAGE_MAIL = "admin/plugins/signalement/manage_mail.html";
+    // TEMPLATES
+    private static final String TEMPLATE_MANAGE_MAIL              = "admin/plugins/signalement/manage_mail.html";
 
-    //PARAMETERS
+    // PARAMETERS
     /** The Constant PARAMETER_SIGNALEMENT_ID. */
-    public static final String PARAMETER_SIGNALEMENT_ID = "signalement_id";
+    public static final String  PARAMETER_SIGNALEMENT_ID          = "signalement_id";
     /** The Constant PARAMETER_RECIPIENT. */
-    public static final String PARAMETER_RECIPIENT = "recipientMail";
+    public static final String  PARAMETER_RECIPIENT               = "recipientMail";
     /** The Constant PARAMETER_SENDER. */
-    public static final String PARAMETER_SENDER = "senderMail";
+    public static final String  PARAMETER_SENDER                  = "senderMail";
     /** The Constant PARAMETER_OBJECT. */
-    public static final String PARAMETER_OBJECT = "objectMail";
+    public static final String  PARAMETER_OBJECT                  = "objectMail";
     /** The Constant PARAMETER_CONTENT. */
-    public static final String PARAMETER_CONTENT = "contentMail";
-    public static final String PARAMETER_WANTS_PHOTO_IN_MAIL = "photos";
-    public static final String PARAMETER_ON = "on";
+    public static final String  PARAMETER_CONTENT                 = "contentMail";
+    public static final String  PARAMETER_WANTS_PHOTO_IN_MAIL     = "photos";
+    public static final String  PARAMETER_ON                      = "on";
 
-    //MESSAGES
+    // MESSAGES
     private static final String MESSAGE_ERROR_RECIPIENT_MANDATORY = "dansmarue.message.recipient.mandatory";
-    private static final String MESSAGE_ERROR_RECIPIENT_FORMAT = "dansmarue.message.recipient.format";
-    private static final String MESSAGE_ERROR_SENDER_MANDATORY = "dansmarue.message.sender.mandatory";
-    private static final String MESSAGE_ERROR_OBJECT_MANDATORY = "dansmarue.message.object.mandatory";
-    private static final String MESSAGE_ERROR_CONTENT_MANDATORY = "dansmarue.message.content.mandatory";
-    private static final String MESSAGE_ERROR_EXPEDITEUR_FORMAT = "dansmarue.message.exp.format";
-    private static final String MESSAGE_MAIL_NUMBER_SIGNALEMENT = "Num\u00e9ro du message";
-    private static final String MESSAGE_MAIL_COMMENTAIRE = "Commentaire";
-    private static final String MESSAGE_MAIL_MAIL_SIGNALEUR = "Email du signaleur";
-    private static final String MESSAGE_MAIL_TYPE_SIGNALEMENT = "Type d'incident";
-    private static final String MESSAGE_MAIL_PRIORITE = "Priorit\u00E9";
-    private static final String MESSAGE_MAIL_ADRESSE_SIGNALEMENT = "Localisation";
-    private static final String MESSAGE_MAIL_PRECISION_LOC = "Pr\u00e9cision de localisation";
-    private static final String MESSAGE_MAIL_LINK = "Lien";
-    private static final String MESSAGE_MAIL_BONJOUR = "Bonjour, ";
+    private static final String MESSAGE_ERROR_RECIPIENT_FORMAT    = "dansmarue.message.recipient.format";
+    private static final String MESSAGE_ERROR_SENDER_MANDATORY    = "dansmarue.message.sender.mandatory";
+    private static final String MESSAGE_ERROR_OBJECT_MANDATORY    = "dansmarue.message.object.mandatory";
+    private static final String MESSAGE_ERROR_CONTENT_MANDATORY   = "dansmarue.message.content.mandatory";
+    private static final String MESSAGE_ERROR_EXPEDITEUR_FORMAT   = "dansmarue.message.exp.format";
+    private static final String MESSAGE_MAIL_NUMBER_SIGNALEMENT   = "Num\u00e9ro du message";
+    private static final String MESSAGE_MAIL_COMMENTAIRE          = "Commentaire";
+    private static final String MESSAGE_MAIL_MAIL_SIGNALEUR       = "Email du signaleur";
+    private static final String MESSAGE_MAIL_TYPE_SIGNALEMENT     = "Type d'incident";
+    private static final String MESSAGE_MAIL_PRIORITE             = "Priorit\u00E9";
+    private static final String MESSAGE_MAIL_ADRESSE_SIGNALEMENT  = "Localisation";
+    private static final String MESSAGE_MAIL_PRECISION_LOC        = "Pr\u00e9cision de localisation";
+    private static final String MESSAGE_MAIL_LINK                 = "Lien";
+    private static final String MESSAGE_MAIL_BONJOUR              = "Bonjour, ";
 
-    //CONSTANTS
-    private final static String LINE_SEPARATOR = "<br />";
-    private final static String RECIPIENT_SEPARATOR = ";";
+    // CONSTANTS
+    private final static String LINE_SEPARATOR                    = "<br />";
+    private final static String RECIPIENT_SEPARATOR               = ";";
 
     // MEMBERS VARIABLES
     private ISignalementService _signalementService;
-    private IPhotoService _photoService;
+    private IPhotoService       _photoService;
 
-    //PROPERTIES
-    private static final String PROPERTY_BASE_URL = "lutece.prod.url";
+    // PROPERTIES
+    private static final String PROPERTY_BASE_URL                 = "lutece.prod.url";
 
-    //Markers
+    // Markers
     /** The Constant MARK_MAIL_ITEM. */
-    private static final String MARK_MAIL_ITEM = "mail_item";
-    private static final String MARK_WEBAPP_URL = "webapp_url";
+    private static final String MARK_MAIL_ITEM                    = "mail_item";
+    private static final String MARK_WEBAPP_URL                   = "webapp_url";
 
-    //JSP
-    private static final String JSP_MANAGE_MAIL = "DoCreateMailSignalement.jsp";
-    private static final String JSP_MANAGE_SIGNALEMENTS = "ManageSignalement.jsp";
-    private static final String JSP_PORTAL = "jsp/admin/plugins/signalement/ViewSignalement.jsp?signalement_id=";
-    private static final String JSP_MANAGE_SIGNALEMENT = "jsp/admin/plugins/signalement/ManageSignalement.jsp";
+    // JSP
+    private static final String JSP_MANAGE_MAIL                   = "DoCreateMailSignalement.jsp";
+    private static final String JSP_MANAGE_SIGNALEMENTS           = "ManageSignalement.jsp";
+    private static final String JSP_PORTAL                        = "jsp/admin/plugins/signalement/ViewSignalement.jsp?signalement_id=";
+    private static final String JSP_MANAGE_SIGNALEMENT            = "jsp/admin/plugins/signalement/ManageSignalement.jsp";
 
     @Override
-    public void init( HttpServletRequest request, String strRight, String keyResourceType, String permission )
-            throws AccessDeniedException
+    public void init( HttpServletRequest request, String strRight, String keyResourceType, String permission ) throws AccessDeniedException
     {
         super.init( request, strRight, keyResourceType, permission );
         initServices( );
@@ -105,16 +103,18 @@ public class MailSignalementJspBean extends AbstractJspBean
      */
     private void initServices( )
     {
-        this._signalementService = (ISignalementService) SpringContextService.getBean( "signalementService" );
-        this._photoService = (IPhotoService) SpringContextService.getBean( "photoService" );
+        this._signalementService = ( ISignalementService ) SpringContextService.getBean( "signalementService" );
+        this._photoService = ( IPhotoService ) SpringContextService.getBean( "photoService" );
     }
 
     /**
      * Return the manage mail page.
      * 
-     * @param request the request
+     * @param request
+     *            the request
      * @return html of the manage mail page
-     * @throws AccessDeniedException the access denied exception
+     * @throws AccessDeniedException
+     *             the access denied exception
      */
     public String getManageMail( HttpServletRequest request ) throws AccessDeniedException
     {
@@ -129,23 +129,20 @@ public class MailSignalementJspBean extends AbstractJspBean
         try
         {
             nIdCase = Integer.parseInt( strCaseId );
-        }
-        catch ( NumberFormatException e )
+        } catch ( NumberFormatException e )
         {
-            return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR,
-                    AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
         }
 
         // Manage validation errors
         FunctionnalException ve = getErrorOnce( request );
         if ( ve != null )
         {
-            mailItem = (MailItem) ve.getBean( );
+            mailItem = ( MailItem ) ve.getBean( );
             model.put( "error", getHtmlError( ve ) );
-        }
-        else
+        } else
         {
-            //If there is no precedent errors
+            // If there is no precedent errors
             if ( StringUtils.isNotBlank( strCaseId ) )
             {
                 Signalement signalement = new Signalement( );
@@ -159,39 +156,35 @@ public class MailSignalementJspBean extends AbstractJspBean
                 strBuff.append( MESSAGE_MAIL_BONJOUR + LINE_SEPARATOR );
 
                 // case number
-                strBuff.append( LINE_SEPARATOR + MESSAGE_MAIL_NUMBER_SIGNALEMENT + " : "
-                        + signalement.getNumeroSignalement( ) );
+                strBuff.append( LINE_SEPARATOR + MESSAGE_MAIL_NUMBER_SIGNALEMENT + " : " + signalement.getNumeroSignalement( ) );
 
-                // mail 
+                // mail
                 if ( !signaleurs.isEmpty( ) && !signaleurs.get( 0 ).getMail( ).isEmpty( ) )
                 {
-                    strBuff.append( LINE_SEPARATOR + MESSAGE_MAIL_MAIL_SIGNALEUR + " : "
-                            + signaleurs.get( 0 ).getMail( ) );
+                    strBuff.append( LINE_SEPARATOR + MESSAGE_MAIL_MAIL_SIGNALEUR + " : " + signaleurs.get( 0 ).getMail( ) );
                 }
 
                 // signalement type
                 strBuff.append( LINE_SEPARATOR + MESSAGE_MAIL_TYPE_SIGNALEMENT + " : " + signalement.getType( ) );
 
-                // priority 
+                // priority
                 strBuff.append( LINE_SEPARATOR + MESSAGE_MAIL_PRIORITE + " : " + signalement.getPrioriteName( ) );
-                
+
                 // address
                 strBuff.append( LINE_SEPARATOR + MESSAGE_MAIL_ADRESSE_SIGNALEMENT + " : " );
                 for ( Adresse adresse : signalement.getAdresses( ) )
                 {
-                    strBuff.append( "<a href=\"" + adresse.getGoogleLink() + "\">" + adresse.getAdresse( ) + "</a>" + LINE_SEPARATOR );
+                    strBuff.append( "<a href=\"" + adresse.getGoogleLink( ) + "\">" + adresse.getAdresse( ) + "</a>" + LINE_SEPARATOR );
                 }
 
                 for ( Adresse adresse : signalement.getAdresses( ) )
                 {
                     if ( StringUtils.isNotBlank( adresse.getPrecisionLocalisation( ) ) )
                     {
-                        strBuff.append( MESSAGE_MAIL_PRECISION_LOC + " : " + adresse.getPrecisionLocalisation( )
-                                + LINE_SEPARATOR );
+                        strBuff.append( MESSAGE_MAIL_PRECISION_LOC + " : " + adresse.getPrecisionLocalisation( ) + LINE_SEPARATOR );
                     }
                 }
 
-                
                 // comment
                 if ( StringUtils.isNotBlank( signalement.getCommentaire( ) ) )
                 {
@@ -199,8 +192,7 @@ public class MailSignalementJspBean extends AbstractJspBean
                 }
 
                 // Link to the consultation page
-                strBuff.append( LINE_SEPARATOR + LINE_SEPARATOR + MESSAGE_MAIL_LINK + " : "
-                        + this.getLinkConsultation( signalement, request ) + signalement.getId( ) );
+                strBuff.append( LINE_SEPARATOR + LINE_SEPARATOR + MESSAGE_MAIL_LINK + " : " + this.getLinkConsultation( signalement, request ) + signalement.getId( ) );
 
                 mailItem.setMessage( strBuff.toString( ) );
             }
@@ -222,6 +214,7 @@ public class MailSignalementJspBean extends AbstractJspBean
 
     /**
      * Send a mail with informations of the form
+     * 
      * @param request
      * @return url to go
      */
@@ -231,8 +224,7 @@ public class MailSignalementJspBean extends AbstractJspBean
         {
             String strJspBack = request.getParameter( SignalementConstants.MARK_JSP_BACK );
 
-            return StringUtils.isNotBlank( strJspBack ) ? ( AppPathService.getBaseUrl( request ) + strJspBack )
-                    : AppPathService.getBaseUrl( request ) + JSP_MANAGE_SIGNALEMENT;
+            return StringUtils.isNotBlank( strJspBack ) ? ( AppPathService.getBaseUrl( request ) + strJspBack ) : AppPathService.getBaseUrl( request ) + JSP_MANAGE_SIGNALEMENT;
         }
 
         String strIdSignalement = request.getParameter( PARAMETER_SIGNALEMENT_ID );
@@ -242,11 +234,9 @@ public class MailSignalementJspBean extends AbstractJspBean
         try
         {
             nIdSignalement = Integer.parseInt( strIdSignalement );
-        }
-        catch ( NumberFormatException e )
+        } catch ( NumberFormatException e )
         {
-            return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR,
-                    AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
         }
 
         MailItem mailItem = new MailItem( );
@@ -264,25 +254,22 @@ public class MailSignalementJspBean extends AbstractJspBean
                 {
                     String[] mime = photo.getImage( ).getMimeType( ).split( "/" );
                     String imgExtention = mime[1];
-                    if( imgExtention != null )
+                    if ( imgExtention != null )
                     {
-                    	imgExtention.replaceAll("pjpeg", "jpg");
+                        imgExtention.replaceAll( "pjpeg", "jpg" );
                     }
-                    
+
                     if ( photo.getVue( ) == 1 )
                     {
-                        files.add( new FileAttachment( "VueEnsemble." + imgExtention, photo.getImage( )
-                                        .getImage( ), photo.getImage( ).getMimeType( ) ) );
+                        files.add( new FileAttachment( "VueEnsemble." + imgExtention, photo.getImage( ).getImage( ), photo.getImage( ).getMimeType( ) ) );
 
-                    }
-                    else
+                    } else
                     {
-                        files.add( new FileAttachment( "VueDetaillee." + imgExtention, photo.getImage( )
-                                        .getImage( ), photo.getImage( ).getMimeType( ) ) );
+                        files.add( new FileAttachment( "VueDetaillee." + imgExtention, photo.getImage( ).getImage( ), photo.getImage( ).getMimeType( ) ) );
                     }
                 }
 
-                    mailItem.setFilesAttachement( files );
+                mailItem.setFilesAttachement( files );
 
             }
         }
@@ -292,25 +279,22 @@ public class MailSignalementJspBean extends AbstractJspBean
         {
             this.valideFormFields( request, mailItem );
 
-            // Check format email expediteur 
+            // Check format email expediteur
             EmailValidator emailValidator = new EmailValidator( );
 
             if ( !emailValidator.isValid( mailItem.getSenderEmail( ), null ) )
             {
                 throw new BusinessException( mailItem, MESSAGE_ERROR_EXPEDITEUR_FORMAT );
             }
-        }
-        catch ( BusinessException e )
+        } catch ( BusinessException e )
         {
-            return manageFunctionnalException( request, e, JSP_MANAGE_MAIL + "?" + PARAMETER_SIGNALEMENT_ID + "="
-                    + nIdSignalement );
+            return manageFunctionnalException( request, e, JSP_MANAGE_MAIL + "?" + PARAMETER_SIGNALEMENT_ID + "=" + nIdSignalement );
         }
 
-        //Send the mail
-        //        MailService.sendMailHtml( mailItem.getRecipientsTo( ), mailItem.getSenderEmail( ), "",
-        //                mailItem.getSubject( ), mailItem.getMessage( ), );
-        MailService.sendMailMultipartHtml( mailItem.getRecipientsTo( ), null, null, "Mairie de Paris",
-                mailItem.getSenderEmail( ), mailItem.getSubject( ), mailItem.getMessage( ), null,
+        // Send the mail
+        // MailService.sendMailHtml( mailItem.getRecipientsTo( ), mailItem.getSenderEmail( ), "",
+        // mailItem.getSubject( ), mailItem.getMessage( ), );
+        MailService.sendMailMultipartHtml( mailItem.getRecipientsTo( ), null, null, "Mairie de Paris", mailItem.getSenderEmail( ), mailItem.getSubject( ), mailItem.getMessage( ), null,
                 mailItem.getFilesAttachement( ) );
 
         return JSP_MANAGE_SIGNALEMENTS;
@@ -318,7 +302,9 @@ public class MailSignalementJspBean extends AbstractJspBean
 
     /**
      * Check if the fields are completed
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      */
     private void valideFormFields( HttpServletRequest request, MailItem mailItem )
     {
@@ -326,16 +312,13 @@ public class MailSignalementJspBean extends AbstractJspBean
         if ( StringUtils.isBlank( mailItem.getRecipientsTo( ) ) )
         {
             throw new BusinessException( mailItem, MESSAGE_ERROR_RECIPIENT_MANDATORY );
-        }
-        else if ( StringUtils.isBlank( mailItem.getSenderEmail( ) ) )
+        } else if ( StringUtils.isBlank( mailItem.getSenderEmail( ) ) )
         {
             throw new BusinessException( mailItem, MESSAGE_ERROR_SENDER_MANDATORY );
-        }
-        else if ( StringUtils.isBlank( mailItem.getSubject( ) ) )
+        } else if ( StringUtils.isBlank( mailItem.getSubject( ) ) )
         {
             throw new BusinessException( mailItem, MESSAGE_ERROR_OBJECT_MANDATORY );
-        }
-        else if ( StringUtils.isBlank( mailItem.getMessage( ) ) )
+        } else if ( StringUtils.isBlank( mailItem.getMessage( ) ) )
         {
             throw new BusinessException( mailItem, MESSAGE_ERROR_CONTENT_MANDATORY );
         }

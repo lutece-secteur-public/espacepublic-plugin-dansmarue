@@ -63,33 +63,33 @@ $(document).ready(function() {
 				</div>
 				<div class="col-xs-6 col-sm-6 col-md-6">
 					<div class="form-group">
-						<label class="<@label />">
+						<label class="<@labelStyle />">
 							#i18n{dansmarue.viewSignalement.numero} </label>
 						<div class="control-label col-xs-12 col-sm-8 col-md-6">
 							${signalement.prefix}${signalement.annee}${signalement.mois}${signalement.numero}
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="<@label />">
+						<label class="<@labelStyle />">
 							#i18n{dansmarue.viewSignalement.etat} </label>
 						<div class="control-label col-xs-12 col-sm-8 col-md-6">
 							${stateSignalement.name}</div>
 					</div>
 					<div class="form-group">
-						<label class="<@label />">
+						<label class="<@labelStyle />">
 							#i18n{dansmarue.saveSignalement.priorite} </label>
 						<div class="control-label col-xs-12 col-sm-8 col-md-6">
 							${signalement.priorite.libelle}</div>
 					</div>
 					<div class="form-group">
-						<label class="<@label />">
+						<label class="<@labelStyle />">
 							#i18n{dansmarue.saveSignalement.type} </label>
 						<div class="control-label col-xs-12 col-sm-8 col-md-6"><#if
 							signalement.type?has_content> ${signalement.type!} <#else >
 							&nbsp; </#if></div>
 					</div>
 					<div class="form-group">
-						<label class="<@label />">
+						<label class="<@labelStyle />">
 							#i18n{dansmarue.saveSignalement.adresse} </label>
 						<div class="control-label col-xs-12 col-sm-8 col-md-6">
 							${adresse.adresse} <br /> <a
@@ -102,7 +102,7 @@ $(document).ready(function() {
 						<input id="latitude" type="hidden" name="adresse.lat" value="${(adresse.lat)!?c}" />
 					</div>
 					<div class="form-group">
-						<label class="<@label />">
+						<label class="<@labelStyle />">
 							#i18n{dansmarue.viewSignalement.direction} </label>
 						<div class="control-label col-xs-12 col-sm-8 col-md-6">
 							${signalement.directionSector.label}
@@ -110,28 +110,28 @@ $(document).ready(function() {
 					</div>
 					<#if signaleur.mail?has_content>
 					<div class="form-group">
-						<label class="<@label />">
+						<label class="<@labelStyle />">
 							#i18n{dansmarue.saveSignalement.mail} </label>
 						<div class="control-label col-xs-12 col-sm-8 col-md-6">
 							${signaleur.mail}</div>
 					</div>
 					</#if> <#if adresse.precisionLocalisation?has_content>
 					<div class="form-group">
-						<label class="<@label />">
+						<label class="<@labelStyle />">
 							#i18n{dansmarue.saveSignalement.precisionLocalisation} </label>
 						<div class="control-label col-xs-12 col-sm-8 col-md-6">
 							${adresse.precisionLocalisation}</div>
 					</div>
 					</#if> <#if signalement.commentaire?has_content>
 					<div class="form-group">
-						<label class="<@label />">
+						<label class="<@labelStyle />">
 							#i18n{dansmarue.saveSignalement.commentaire} </label>
 						<div class="control-label col-xs-12 col-sm-8 col-md-6">
 							${signalement.commentaire}</div>
 					</div>
 					</#if>
 					<div class="form-group">
-						<label class="<@label />">
+						<label class="<@labelStyle />">
 							#i18n{dansmarue.viewSignalement.dateCreation} </label>
 						<div class="control-label col-xs-12 col-sm-8 col-md-6">
 							${signalement.dateCreation} ${signalement.heureCreation?string["HH:mm"]}
@@ -140,7 +140,7 @@ $(document).ready(function() {
 					<#if photos?has_content>
 						<#assign index = 1> 
 						<div class="form-group">
-							<label class="<@label />" for="image">
+							<label class="<@labelStyle />" for="image">
 								#i18n{dansmarue.saveSignalement.photo}(s)
 							</label>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -156,14 +156,14 @@ $(document).ready(function() {
 						</div>
 					</#if>
 					<div class="form-group">
-						<label class="<@label />">
+						<label class="<@labelStyle />">
 							#i18n{dansmarue.viewSignalement.nbSuivis} </label>
 						<div class="control-label col-xs-12 col-sm-8 col-md-6">
 							${signalement.suivi}
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="<@label />">
+						<label class="<@labelStyle />">
 							#i18n{dansmarue.viewSignalement.nbCongratulations} </label>
 						<div class="control-label col-xs-12 col-sm-8 col-md-6">
 							${signalement.felicitations}
@@ -172,7 +172,7 @@ $(document).ready(function() {
 					<!-- RAISON REJET -->
 					<#if (signalement.observationRejet.libelle)! != "">
 					<div class="form-group">
-						<label class="<@label />"
+						<label class="<@labelStyle />"
 							for="#i18n{dansmarue.viewSignalement.commentaireRejet}">
 							#i18n{dansmarue.viewSignalement.commentaireRejet} </label>
 						<div class="control-label col-xs-12 col-sm-8 col-md-6">

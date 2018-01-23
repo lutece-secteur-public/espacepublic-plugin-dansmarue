@@ -9,15 +9,15 @@
 			<input type="hidden" id="jsp_back" name="jsp_back"
 				value="${jsp_back!}" />
 			<div class="form-group">
-				<label class="<@label />">
+				<label class="<@labelStyle />">
 					#i18n{dansmarue.saveSignalement.photo} * : </label>
-				<div class="<@input />">
+				<div class="<@inputStyle />">
 					<input type="file" id="photo" name="photo" />
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="<@label />"> &nbsp; </label>
-				<div class="<@checkbox />">
+				<label class="<@labelStyle />"> &nbsp; </label>
+				<div class="<@checkboxStyle />">
 					<!-- VuePhoto 1 for ensemble, 0 for près  -->
 					<label class="radio-inline"> <input class="radio"
 						type="radio" name="vuePhoto" id="vuePhoto" value="1" checked />

@@ -200,7 +200,6 @@ function updateFiltersFromDomain(idDomaine,reset){
 		   
 		   // Types anomalie
 		   var typesAnomalie = domain.typesAnomalieRefList;
-		   $("#typeSignalements").autocomplete("destroy");
 		   var autocomplete = $("#typeSignalements").autocomplete({
 				source: function(request,response){
 					<#--var categories = $("input[name='category']:checked").map(function(){
@@ -423,7 +422,7 @@ function updateSectorList(idDirection){
 									</noscript>
 								</div>
 								<input type="hidden" value="${filter.idSector!}"
-									class="<@input />" name="idSelectedSector"
+									class="<@inputStyle />" name="idSelectedSector"
 									id="idSelectedSector" />
 							</div>
 						</div>
@@ -605,7 +604,7 @@ function updateSectorList(idDirection){
 				<form action="jsp/admin/plugins/signalement/ProcessAction.jsp"
 					method="post">
 					<div class="pull-left">
-						<!-- export en input pour récupérer les dossiers cochés -->
+						<!-- export en input pour rï¿½cupï¿½rer les dossiers cochï¿½s -->
 						<@estAutoriseMacro ressourceType="GESTION_DES_SIGNALEMENTS"
 						permission="EXPORTER_SIGNALEMENT">
 						<button type="submit" value="exportcsvdisplay"
@@ -705,7 +704,7 @@ function updateSectorList(idDirection){
 						</tbody>
 					</table>
 					<div class="pull-left">
-						<!-- export en input pour récupérer les dossiers cochés -->
+						<!-- export en input pour rï¿½cupï¿½rer les dossiers cochï¿½s -->
 						<@estAutoriseMacro ressourceType="GESTION_DES_SIGNALEMENTS"
 						permission="EXPORTER_SIGNALEMENT">
 						<button type="submit" value="exportcsvdisplay"

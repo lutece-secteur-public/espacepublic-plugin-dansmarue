@@ -14,17 +14,17 @@
 						value="${observation_rejet.id!}" />
 					<div class="col-xs-12 col-sm-12 col-md-12">
 						<div class="form-group">
-							<label class="<@label />" for="libelle">#i18n{dansmarue.commons.libelle}
+							<label class="<@labelStyle />" for="libelle">#i18n{dansmarue.commons.libelle}
 								* : </label>
-							<div class="<@input />">
+							<div class="<@inputStyle />">
 								<textarea class="form-control input-sm" id="libelle"
 									name="libelle">${observation_rejet.libelle!}</textarea>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="<@label />" for="actif">#i18n{dansmarue.commons.actif}
+							<label class="<@labelStyle />" for="actif">#i18n{dansmarue.commons.actif}
 								* :</label>
-							<div class="<@input />">
+							<div class="<@inputStyle />">
 								<INPUT class="checkbox" TYPE=CHECKBOX NAME="actif"<#if
 								observation_rejet.actif>checked="checked"</#if>>
 							</div>
