@@ -22,7 +22,6 @@ import org.apache.commons.lang.StringUtils;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.DashboardPeriod;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDashboardFilter;
-import fr.paris.lutece.plugins.sira.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.UnitNode;
 import fr.paris.lutece.plugins.dansmarue.service.IArrondissementService;
 import fr.paris.lutece.plugins.dansmarue.service.IDashboardPeriodService;
@@ -37,6 +36,7 @@ import fr.paris.lutece.plugins.dansmarue.service.role.SignalementViewRoleService
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.dansmarue.utils.ListUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.UnitUtils;
+import fr.paris.lutece.plugins.sira.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.modules.sira.service.sector.ISectorService;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
@@ -96,6 +96,7 @@ public class SignalementDashboardJspBean extends AbstractJspBean {
   private static final String PROPERTY_DASHBOARD_STATES = "signalement.dashboard.states";
   private static final String PROPERTY_DASHBOARD_PLANNED = "signalement.dashboard.planned";
   private static final String PROPERTY_DASHBOARD_DEFAULT_STATES = "signalement.dashboard.default.displayed.states";
+  private static final String PROPERTY_DASHBOARD_STATES_MISE_EN_SURVEILLANCE = "signalement.dashboard.states.miseSurveillance";
   
   // CONSTANTS
   private static final Integer ID_WORKFLOW_SIGNALEMENT = AppPropertiesService.getPropertyInt(PROPERTY_ID_WORKFLOW_SIGNALEMENT, -1);
@@ -400,6 +401,8 @@ public class SignalementDashboardJspBean extends AbstractJspBean {
 	  		String[] dashboardStatesArr = strDashboardStates.split(",");
 	  		String[] plannedStatesArr = strPlannedStates.split(",");
 	  		
+	  		String strIdStateMiseEnSurveillance = AppPropertiesService.getProperty(PROPERTY_DASHBOARD_STATES_MISE_EN_SURVEILLANCE);
+	  		
 	  		for(State state:stateList){
 	  			Integer stateId = state.getId();
 	  			if(ArrayUtils.contains(dashboardStatesArr, Integer.toString(stateId))){
@@ -423,12 +426,18 @@ public class SignalementDashboardJspBean extends AbstractJspBean {
 	  							dateHigherBound = LocalDate.now().plus(new Long(higherBound),unit);
 	  						}
 	  						
+	  						
+	  						
 	  						Iterator<DashboardSignalementDTO> iterator = dashboardSignalementDTOList.iterator();
 	  						while(iterator.hasNext()){
 	  							DashboardSignalementDTO dsd = iterator.next();
 	  							if(dsd.getIdStatus() == stateId){
 	  								//Comparing dates
 	  								LocalDate creationDate = dsd.getCreationDate();
+	  								if(stateId == Integer.parseInt(strIdStateMiseEnSurveillance.trim( ))) {
+	  								   //Mise en surveillance
+	  								  creationDate = dsd.getDateMiseEnSurveillance( );
+	  								}
 	  								if(null != dateLowerBound && null != dateHigherBound 
 	  										&& !creationDate.isBefore(dateLowerBound) && !creationDate.isAfter(dateHigherBound)){
 	  									anomaliesIds.add(dsd.getIdSignalement());

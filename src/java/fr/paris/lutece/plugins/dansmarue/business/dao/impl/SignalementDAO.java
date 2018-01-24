@@ -1828,7 +1828,8 @@ public class SignalementDAO implements ISignalementDAO
         query.append( "s.id_signalement" ).append( COMA_SEPARATOR );
         query.append( "s.date_creation" ).append( COMA_SEPARATOR );
         query.append( "id_state" ).append( COMA_SEPARATOR );
-        query.append( "date_prevue_traitement" );
+        query.append( "date_prevue_traitement" ).append( COMA_SEPARATOR );
+        query.append( "date_mise_surveillance" );
 
         /// FROM
         query.append( " FROM " );
@@ -1998,6 +1999,12 @@ public class SignalementDAO implements ISignalementDAO
             {
                 LocalDate localDate = datePrevueTraitement.toLocalDate( );
                 dashboardSigDTO.setDatePrevueTraitement( localDate );
+            }
+            java.sql.Date dateMiseSurveillance = daoUtil.getDate( nIndex++ );
+            if ( null != dateMiseSurveillance )
+            {
+                LocalDate localDate = dateMiseSurveillance.toLocalDate( );
+                dashboardSigDTO.setDateMiseEnSurveillance( localDate );
             }
             dashboardSigList.add( dashboardSigDTO );
         }
