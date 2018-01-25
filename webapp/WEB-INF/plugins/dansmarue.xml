@@ -93,4 +93,11 @@
 			<dashboard-feature-right>SIGNALEMENT_MANAGEMENT</dashboard-feature-right>
 		</dashboard-component>
 	</dashboard-components>
+	
+	<admin-javascript-files>
+        <admin-javascript-file>js/bootstrap-datepicker.js</admin-javascript-file>
+        <admin-javascript-file>js/locales/bootstrap-datepicker.fr.js</admin-javascript-file>
+        <admin-javascript-file>js/bootstrap-select.js</admin-javascript-file>
+        <admin-javascript-file>js/admin_sira.js</admin-javascript-file>
+    </admin-javascript-files>
 </plug-in>
