@@ -96,6 +96,7 @@ public class SignalementDashboardJspBean extends AbstractJspBean {
   private static final String PROPERTY_DASHBOARD_STATES = "signalement.dashboard.states";
   private static final String PROPERTY_DASHBOARD_PLANNED = "signalement.dashboard.planned";
   private static final String PROPERTY_DASHBOARD_DEFAULT_STATES = "signalement.dashboard.default.displayed.states";
+  private static final String PROPERTY_DASHBOARD_STATES_MISE_EN_SURVEILLANCE = "signalement.dashboard.states.miseSurveillance";
   
   // CONSTANTS
   private static final Integer ID_WORKFLOW_SIGNALEMENT = AppPropertiesService.getPropertyInt(PROPERTY_ID_WORKFLOW_SIGNALEMENT, -1);
@@ -400,6 +401,8 @@ public class SignalementDashboardJspBean extends AbstractJspBean {
 	  		String[] dashboardStatesArr = strDashboardStates.split(",");
 	  		String[] plannedStatesArr = strPlannedStates.split(",");
 	  		
+	  		String strIdStateMiseEnSurveillance = AppPropertiesService.getProperty(PROPERTY_DASHBOARD_STATES_MISE_EN_SURVEILLANCE);
+	  		
 	  		for(State state:stateList){
 	  			Integer stateId = state.getId();
 	  			if(ArrayUtils.contains(dashboardStatesArr, Integer.toString(stateId))){
@@ -423,12 +426,18 @@ public class SignalementDashboardJspBean extends AbstractJspBean {
 	  							dateHigherBound = LocalDate.now().plus(new Long(higherBound),unit);
 	  						}
 	  						
+	  						
+	  						
 	  						Iterator<DashboardSignalementDTO> iterator = dashboardSignalementDTOList.iterator();
 	  						while(iterator.hasNext()){
 	  							DashboardSignalementDTO dsd = iterator.next();
 	  							if(dsd.getIdStatus() == stateId){
 	  								//Comparing dates
 	  								LocalDate creationDate = dsd.getCreationDate();
+	  								if(stateId == Integer.parseInt(strIdStateMiseEnSurveillance.trim( ))) {
+	  								   //Mise en surveillance
+	  								  creationDate = dsd.getDateMiseEnSurveillance( );
+	  								}
 	  								if(null != dateLowerBound && null != dateHigherBound 
 	  										&& !creationDate.isBefore(dateLowerBound) && !creationDate.isAfter(dateHigherBound)){
 	  									anomaliesIds.add(dsd.getIdSignalement());

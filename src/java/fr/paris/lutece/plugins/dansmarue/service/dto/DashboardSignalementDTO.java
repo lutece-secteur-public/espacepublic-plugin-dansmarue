@@ -7,6 +7,7 @@ public class DashboardSignalementDTO {
 	private LocalDate creationDate;
 	private Integer idStatus;
 	private LocalDate datePrevueTraitement;
+	private LocalDate dateMiseEnSurveillance;
 	
 	public Integer getIdSignalement() {
 		return idSignalement;
@@ -32,4 +33,15 @@ public class DashboardSignalementDTO {
 	public void setDatePrevueTraitement(LocalDate datePrevueTraitement) {
 		this.datePrevueTraitement = datePrevueTraitement;
 	}
+	
+    public LocalDate getDateMiseEnSurveillance( )
+    {
+        return dateMiseEnSurveillance;
+    }
+    public void setDateMiseEnSurveillance( LocalDate dateMiseEnSurveillance )
+    {
+        this.dateMiseEnSurveillance = dateMiseEnSurveillance;
+    }
+	
+	
 }
