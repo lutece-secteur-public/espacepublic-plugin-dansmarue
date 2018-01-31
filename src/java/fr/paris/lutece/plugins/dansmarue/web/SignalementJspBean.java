@@ -102,7 +102,7 @@ import fr.paris.lutece.plugins.dansmarue.utils.ImgUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.ListUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.SignalementUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.TypeSignalementItem;
-import fr.paris.lutece.plugins.leaflet.modules.sira.consts.LeafletSiraConstants;
+import fr.paris.lutece.plugins.leaflet.modules.dansmarue.consts.LeafletDansMaRueConstants;
 import fr.paris.lutece.plugins.sira.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.sira.commons.Order;
 import fr.paris.lutece.plugins.sira.utils.DateUtils;
@@ -4124,13 +4124,13 @@ public class SignalementJspBean extends AbstractJspBean
                     _signalementWorkflowService.getSignalementWorkflowId( ), null );
             if ( GREEN_MARKER_STATES.contains( stateSignalement.getId( ) ) )
             {
-                sigMarker.setIconName( LeafletSiraConstants.GREEN_ICON );
+                sigMarker.setIconName( LeafletDansMaRueConstants.GREEN_ICON );
             } else if ( YELLOW_MARKER_STATES.contains( stateSignalement.getId( ) ) )
             {
-                sigMarker.setIconName( LeafletSiraConstants.YELLOW_ICON );
+                sigMarker.setIconName( LeafletDansMaRueConstants.YELLOW_ICON );
             } else
             {
-                sigMarker.setIconName( LeafletSiraConstants.RED_ICON );
+                sigMarker.setIconName( LeafletDansMaRueConstants.RED_ICON );
             }
 
             signalementMarkers.add( sigMarker );
