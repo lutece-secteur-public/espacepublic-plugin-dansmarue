@@ -44,7 +44,7 @@
 	<bean id="signalementUnitService"
 		class="fr.paris.lutece.plugins.dansmarue.service.impl.SignalementUnitService" />
 	<bean id="siraUserService"
-		class="fr.paris.lutece.plugins.sira.service.SiraUserService" />
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.SiraUserService" />
 	<bean id="signalementSuiviService"
 		class="fr.paris.lutece.plugins.dansmarue.service.impl.SignalementSuiviService" />
 	<bean id="signalement.dashboardPeriodService"
@@ -92,7 +92,7 @@
 	<bean id="signalement.signalementUnitDAO"
 		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.SignalementUnitDAO" />
 	<bean id="siraUserDAO"
-		class="fr.paris.lutece.plugins.sira.business.dao.impl.SiraUserDAO" />
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.SiraUserDAO" />
 	<bean id="signalementSuiviDAO"
 		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.SignalementSuiviDAO" />
 	<bean id="signalement.dashboardPeriodDAO"
@@ -101,7 +101,7 @@
 		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.DashboardUserPreferencesDAO" />
 	<bean id="observationRejetSignalementDAO"
 		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.ObservationRejetSignalementDAO" />
-	<bean id="signalement.roadMapDAO" class="fr.paris.lutece.plugins.sira.business.dao.impl.RoadMapDAO" />
+	<bean id="signalement.roadMapDAO" class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.RoadMapDAO" />
 		
 	<!-- image services -->
 	<bean id="signalement.imageService"
