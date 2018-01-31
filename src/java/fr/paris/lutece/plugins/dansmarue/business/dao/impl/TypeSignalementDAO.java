@@ -2,15 +2,13 @@ package fr.paris.lutece.plugins.dansmarue.business.dao.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Stack;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.ITypeSignalementDAO;
-import fr.paris.lutece.plugins.sira.business.entities.TypeSignalement;
+import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.dansmarue.service.SignalementPlugin;
 import fr.paris.lutece.plugins.dansmarue.service.impl.ImageObjetService;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;

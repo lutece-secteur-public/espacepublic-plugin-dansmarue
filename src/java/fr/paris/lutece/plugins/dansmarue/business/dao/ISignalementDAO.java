@@ -7,7 +7,7 @@ import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDashboardF
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
 import fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DashboardSignalementDTO;
-import fr.paris.lutece.plugins.sira.dto.DossierSignalementDTO;
+import fr.paris.lutece.plugins.dansmarue.service.dto.DossierSignalementDTO;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 

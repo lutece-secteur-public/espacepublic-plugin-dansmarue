@@ -5,7 +5,7 @@ import java.util.List;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementSuiviDAO;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementSuivi;
-import fr.paris.lutece.plugins.sira.business.entities.SiraUser;
+import fr.paris.lutece.plugins.dansmarue.business.entities.SiraUser;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 public class SignalementSuiviDAO implements ISignalementSuiviDAO {

@@ -42,6 +42,8 @@ import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDashboardF
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementSuivi;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signaleur;
+import fr.paris.lutece.plugins.dansmarue.business.entities.SiraUser;
+import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.dansmarue.business.exceptions.AlreadyFollowedException;
 import fr.paris.lutece.plugins.dansmarue.business.exceptions.InvalidStateActionException;
 import fr.paris.lutece.plugins.dansmarue.business.exceptions.NonExistentFollowItem;
@@ -54,17 +56,15 @@ import fr.paris.lutece.plugins.dansmarue.service.INumeroSignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.IObservationRejetSignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementSuiviService;
+import fr.paris.lutece.plugins.dansmarue.service.ISiraUserService;
 import fr.paris.lutece.plugins.dansmarue.service.IWorkflowService;
 import fr.paris.lutece.plugins.dansmarue.service.SignalementPlugin;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DashboardSignalementDTO;
+import fr.paris.lutece.plugins.dansmarue.service.dto.DossierSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
+import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.ImgUtils;
-import fr.paris.lutece.plugins.sira.business.entities.SiraUser;
-import fr.paris.lutece.plugins.sira.business.entities.TypeSignalement;
-import fr.paris.lutece.plugins.sira.dto.DossierSignalementDTO;
-import fr.paris.lutece.plugins.sira.service.ISiraUserService;
-import fr.paris.lutece.plugins.sira.utils.DateUtils;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.modules.sira.business.sector.Sector;
 import fr.paris.lutece.plugins.unittree.modules.sira.service.sector.ISectorService;
@@ -85,7 +85,7 @@ import fr.paris.lutece.util.url.UrlItem;
 /**
  * The Class SignalementService.
  */
-public class SignalementService implements ISignalementService, fr.paris.lutece.plugins.sira.service.ISignalementService
+public class SignalementService implements ISignalementService
 {
 
     // PROPERTIES

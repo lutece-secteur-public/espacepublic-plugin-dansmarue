@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.dansmarue.util.constants;
 
 import java.util.List;
 
-import fr.paris.lutece.plugins.sira.utils.SiraUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.SignalementUtils;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 /**
@@ -124,7 +124,7 @@ public final class SignalementConstants
     public static final String       SIGNALEMENT_PREFIX_TELESERVICE                         = AppPropertiesService.getProperty( "signalement.prefix.origin.teleservice" );
     public static final String       SIGNALEMENT_PREFIX_BACKOFFICE                          = AppPropertiesService.getProperty( "signalement.prefix.origin.backoffice" );
     public static final String       SIGNALEMENT_PREFIX_KEY                                 = "signalement.prefix.origin";
-    public static final List<String> SIGNALEMENT_PREFIXES                                   = SiraUtils.getProperties( SIGNALEMENT_PREFIX_KEY );
+    public static final List<String> SIGNALEMENT_PREFIXES                                   = SignalementUtils.getProperties( SIGNALEMENT_PREFIX_KEY );
 
     public static final int          START_SIGNALEMENT_NUMERO                               = 1;
 

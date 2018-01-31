@@ -3,7 +3,7 @@ package fr.paris.lutece.plugins.dansmarue.utils;
 import java.util.Comparator;
 import java.util.Stack;
 
-import fr.paris.lutece.plugins.sira.business.entities.TypeSignalement;
+import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 
 public class TypeSignalementComparator implements Comparator<TypeSignalement>{
 	

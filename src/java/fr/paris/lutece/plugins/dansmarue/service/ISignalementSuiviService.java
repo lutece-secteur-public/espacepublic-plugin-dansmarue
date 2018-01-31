@@ -3,7 +3,7 @@ package fr.paris.lutece.plugins.dansmarue.service;
 import java.util.List;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementSuivi;
-import fr.paris.lutece.plugins.sira.business.entities.SiraUser;
+import fr.paris.lutece.plugins.dansmarue.business.entities.SiraUser;
 
 public interface ISignalementSuiviService {
 	/**

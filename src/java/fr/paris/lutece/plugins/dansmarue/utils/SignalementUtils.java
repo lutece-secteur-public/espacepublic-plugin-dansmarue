@@ -12,10 +12,13 @@ import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * 
@@ -167,4 +170,21 @@ public final class SignalementUtils
     	return SignalementConstants.SIGNALEMENT_PREFIXES.contains(prefixe);
     }
 
+    
+    /**
+     * Returns all the properties matching the prefix
+     * @param prefix
+     * @return
+     */
+    public static List<String> getProperties(String prefix){
+        List<String> propertiesKeys = AppPropertiesService.getKeys(prefix);
+        List<String> properties = new ArrayList<String>();
+        for(String propertyKey : propertiesKeys){
+            String property = AppPropertiesService.getProperty(propertyKey);
+            if(StringUtils.isNotBlank(property)){
+                properties.add(property);
+            }
+        }
+        return properties;
+    }
 }

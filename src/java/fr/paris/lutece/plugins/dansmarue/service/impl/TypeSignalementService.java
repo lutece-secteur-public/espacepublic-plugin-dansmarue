@@ -1,8 +1,16 @@
 
 package fr.paris.lutece.plugins.dansmarue.service.impl;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.apache.commons.beanutils.BeanUtils;
+
 import fr.paris.lutece.plugins.dansmarue.business.dao.ITypeSignalementDAO;
-import fr.paris.lutece.plugins.sira.business.entities.TypeSignalement;
+import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.dansmarue.commons.exceptions.BusinessException;
 import fr.paris.lutece.plugins.dansmarue.service.ITypeSignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.SignalementPlugin;
@@ -11,14 +19,6 @@ import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.util.AppLogService;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.apache.commons.beanutils.BeanUtils;
 
 
 /**

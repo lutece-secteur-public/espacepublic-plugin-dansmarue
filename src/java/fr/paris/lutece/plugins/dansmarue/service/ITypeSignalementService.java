@@ -2,8 +2,8 @@ package fr.paris.lutece.plugins.dansmarue.service;
 
 import java.util.List;
 
+import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.dansmarue.service.dto.TypeSignalementDTO;
-import fr.paris.lutece.plugins.sira.business.entities.TypeSignalement;
 import fr.paris.lutece.portal.service.image.ImageResource;
 
 /**

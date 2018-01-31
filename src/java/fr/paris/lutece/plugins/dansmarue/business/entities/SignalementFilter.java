@@ -37,7 +37,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.paris.lutece.plugins.sira.commons.Order;
+import fr.paris.lutece.plugins.dansmarue.commons.Order;
 
 /**
  *

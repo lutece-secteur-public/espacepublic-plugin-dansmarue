@@ -1,6 +1,10 @@
 package fr.paris.lutece.plugins.dansmarue.service.role;
 
-import fr.paris.lutece.plugins.sira.business.entities.TypeSignalement;
+import java.util.Locale;
+
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.dansmarue.service.ITypeSignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.SignalementPlugin;
 import fr.paris.lutece.plugins.dansmarue.utils.ListUtils;
@@ -10,10 +14,6 @@ import fr.paris.lutece.portal.service.rbac.ResourceType;
 import fr.paris.lutece.portal.service.rbac.ResourceTypeManager;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
-
-import java.util.Locale;
-
-import org.apache.commons.lang.StringUtils;
 
 
 /**

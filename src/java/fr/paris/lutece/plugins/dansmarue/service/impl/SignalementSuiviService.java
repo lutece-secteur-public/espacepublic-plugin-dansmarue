@@ -7,8 +7,8 @@ import javax.inject.Named;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementSuiviDAO;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementSuivi;
+import fr.paris.lutece.plugins.dansmarue.business.entities.SiraUser;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementSuiviService;
-import fr.paris.lutece.plugins.sira.business.entities.SiraUser;
 
 public class SignalementSuiviService implements ISignalementSuiviService {
 

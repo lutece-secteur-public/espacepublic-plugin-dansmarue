@@ -1,6 +1,16 @@
 package fr.paris.lutece.plugins.dansmarue.web;
 
-import fr.paris.lutece.plugins.sira.business.entities.TypeSignalement;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.dansmarue.commons.exceptions.BusinessException;
 import fr.paris.lutece.plugins.dansmarue.commons.exceptions.FunctionnalException;
 import fr.paris.lutece.plugins.dansmarue.service.ITypeSignalementService;
@@ -23,16 +33,6 @@ import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
 
 
 public class TypeSignalementJspBean extends AbstractJspBean

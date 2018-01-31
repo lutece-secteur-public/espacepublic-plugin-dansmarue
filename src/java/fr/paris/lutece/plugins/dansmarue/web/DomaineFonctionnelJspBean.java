@@ -1,8 +1,18 @@
 package fr.paris.lutece.plugins.dansmarue.web;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
+import org.quartz.xml.ValidationException;
+
 import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.DomaineFonctionnel;
-import fr.paris.lutece.plugins.sira.business.entities.TypeSignalement;
+import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.UnitNode;
 import fr.paris.lutece.plugins.dansmarue.commons.exceptions.BusinessException;
 import fr.paris.lutece.plugins.dansmarue.commons.exceptions.FunctionnalException;
@@ -13,9 +23,7 @@ import fr.paris.lutece.plugins.dansmarue.service.ITypeSignalementService;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.dansmarue.utils.ListUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.UnitUtils;
-import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
-import fr.paris.lutece.plugins.unittree.service.unit.UnitService;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -27,16 +35,6 @@ import fr.paris.lutece.portal.web.constants.Messages;
 import fr.paris.lutece.util.beanvalidation.ValidationError;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
-import org.quartz.xml.ValidationException;
 
 
 /**

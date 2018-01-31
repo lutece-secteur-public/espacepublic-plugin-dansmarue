@@ -8,7 +8,7 @@ import java.util.Locale;
 import fr.paris.lutece.plugins.dansmarue.business.dao.IPhotoDAO;
 import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
-import fr.paris.lutece.plugins.sira.utils.DateUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.sql.DAOUtil;

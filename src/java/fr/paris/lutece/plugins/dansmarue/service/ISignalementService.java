@@ -13,8 +13,8 @@ import fr.paris.lutece.plugins.dansmarue.business.exceptions.InvalidStateActionE
 import fr.paris.lutece.plugins.dansmarue.business.exceptions.NonExistentFollowItem;
 import fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DashboardSignalementDTO;
+import fr.paris.lutece.plugins.dansmarue.service.dto.DossierSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
-import fr.paris.lutece.plugins.sira.dto.DossierSignalementDTO;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;

@@ -1,10 +1,10 @@
 package fr.paris.lutece.plugins.dansmarue.business.dao;
 
-import fr.paris.lutece.plugins.sira.business.entities.TypeSignalement;
+import java.util.List;
+
+import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-
-import java.util.List;
 
 
 /**

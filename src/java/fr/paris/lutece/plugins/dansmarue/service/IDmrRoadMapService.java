@@ -2,9 +2,9 @@ package fr.paris.lutece.plugins.dansmarue.service;
 
 import java.util.List;
 
-import fr.paris.lutece.plugins.sira.business.entities.RoadMapFilter;
-import fr.paris.lutece.plugins.sira.business.entities.SignalementDossier;
-import fr.paris.lutece.plugins.sira.business.entities.TypeSignalement;
+import fr.paris.lutece.plugins.dansmarue.business.entities.RoadMapFilter;
+import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDossier;
+import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 /**

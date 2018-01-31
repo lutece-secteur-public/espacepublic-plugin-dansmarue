@@ -1,13 +1,13 @@
 package fr.paris.lutece.plugins.dansmarue.business.dao.impl;
 
-import fr.paris.lutece.plugins.dansmarue.business.dao.IViewRoleDAO;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
-import fr.paris.lutece.plugins.sira.business.entities.TypeSignalement;
-import fr.paris.lutece.portal.business.rbac.RBAC;
-import fr.paris.lutece.util.sql.DAOUtil;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import fr.paris.lutece.plugins.dansmarue.business.dao.IViewRoleDAO;
+import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
+import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
+import fr.paris.lutece.portal.business.rbac.RBAC;
+import fr.paris.lutece.util.sql.DAOUtil;
 
 
 /**

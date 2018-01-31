@@ -22,7 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.DashboardPeriod;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDashboardFilter;
-import fr.paris.lutece.plugins.sira.business.entities.TypeSignalement;
+import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.UnitNode;
 import fr.paris.lutece.plugins.dansmarue.service.IArrondissementService;
 import fr.paris.lutece.plugins.dansmarue.service.IDashboardPeriodService;
