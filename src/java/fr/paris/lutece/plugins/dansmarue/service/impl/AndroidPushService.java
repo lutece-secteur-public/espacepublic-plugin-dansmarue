@@ -31,7 +31,7 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.dansmarue.service;
+package fr.paris.lutece.plugins.dansmarue.service.impl;
 
 import java.util.HashMap;
 import java.util.Map;
