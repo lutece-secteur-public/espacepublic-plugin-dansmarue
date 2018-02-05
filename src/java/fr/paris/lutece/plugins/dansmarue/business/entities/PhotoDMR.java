@@ -8,8 +8,9 @@ import fr.paris.lutece.util.url.UrlItem;
 
 public class PhotoDMR
 {
-    public static final Integer VUE_D_ENSEMBLE  = 1;
-    public static final Integer VUE_DETAILLE    = 0;
+    public static final Integer VUE_D_ENSEMBLE      = 1;
+    public static final Integer VUE_DETAILLE        = 0;
+    public static final Integer VUE_SERVICE_FAIT    = 2;
     private Long                _lId;
     private ImageResource       _image          = null;
     private ImageResource       _imageThumbnail = new ImageResource( );
