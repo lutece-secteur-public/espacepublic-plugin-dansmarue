@@ -42,6 +42,7 @@ import fr.paris.lutece.portal.service.database.AppConnectionService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
@@ -62,6 +63,7 @@ public class SignalementDashboardComponent extends DashboardComponent
 	// MARKS
 	private static final String MARK_URL = "url";
 	private static final String MARK_ICON = "icon";
+	private static final String MARK_URL_RAMEN = "url_ramen";
     // PARAMETERS
     private static final String PARAMETER_PLUGIN_NAME = "plugin_name";
     
@@ -72,6 +74,9 @@ public class SignalementDashboardComponent extends DashboardComponent
     // OTHER CONSTANTS
     private static final int ZONE_1 = 1;
     private static final int FILTER_NO_STATUS = -1;
+    
+    //properties
+    private static final String URL_RAMEN = "ramen-rest.url_picture";
 
     /**
      * The HTML code of the component
@@ -100,6 +105,9 @@ public class SignalementDashboardComponent extends DashboardComponent
         Rights rights = new Rights( );
         rights.init( request );
         model.put( "rights", rights );
+
+        //ajout des liens vers Ramen 
+        model.put( MARK_URL_RAMEN, AppPropertiesService.getProperty( URL_RAMEN ) );
 
         HtmlTemplate t = AppTemplateService.getTemplate( getTemplateDashboard(  ), user.getLocale(  ), model );
 
