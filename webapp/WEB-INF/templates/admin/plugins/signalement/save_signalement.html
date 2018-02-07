@@ -254,9 +254,11 @@
 						<tbody>
 							<tr>
 								<td><label class="<@labelStyle />" for="image${index}">
-										#i18n{dansmarue.saveSignalement.photo} n�${index} <#if
-										photo.vue == 1> (#i18n{dansmarue.saveSignalement.vueEnsemble})
-										<#else> (#i18n{dansmarue.saveSignalement.vuePres}) </#if> :</label></td>
+										#i18n{dansmarue.saveSignalement.photo} n&deg;${index}
+										<#if photo.vue == 1> (#i18n{dansmarue.saveSignalement.vueEnsemble})
+										<#elseif photo.vue == 0> (#i18n{dansmarue.saveSignalement.vuePres})
+										<#else> (#i18n{dansmarue.saveSignalement.serviceFait}) 
+										</#if> :</label></td>
 								<td><img src='${photo.imageUrl}' style="max-width: 500px" />
 								</td>
 								<td><label class="<@labelStyle />" for="deletePhoto">
@@ -284,8 +286,17 @@
 							<input type="file" id="photoPres" name="photoPres" />
 						</div>
 					</div>
-					</#if> <#assign index = index - 1> <#if !signalement.id?has_content>
-					<div id="map_canvas" style="z-index:1" class="map"></div>
+					<div class="form-group">
+						<label class="<@labelStyle />" for="image">#i18n{dansmarue.saveSignalement.serviceFait}
+							: </label>
+						<div class="<@inputStyle />">
+							<input type="file" id="photoDone" name="photoDone" />
+						</div>
+					</div>
+					</#if> 
+					<#assign index = index - 1> 
+					<#if !signalement.id?has_content>
+						<div id="map_canvas" style="z-index:1" class="map"></div>
 					</#if>
 				</div>
 			</fieldset>

@@ -138,22 +138,34 @@ $(document).ready(function() {
 						</div>
 					</div>
 					<#if photos?has_content>
-						<#assign index = 1> 
-						<div class="form-group">
-							<label class="<@labelStyle />" for="image">
-								#i18n{dansmarue.saveSignalement.photo}(s)
-							</label>
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<#list photos as photo> 
-								<#if photo.imageUrl != "">
-									<a href='#' data-toggle="modal" data-target="#imageModal" image-url='${photo.imageUrl}'>
-										<img src='${photo.imageUrl}' style="max-width: 150px" />
-									</a>
-									<#assign index = index + 1>
-								</#if>
-							</#list>
-							</div>
-						</div>
+						<#assign index = 1>
+						<#list photos as photo> 
+							<#if photo.imageUrl != "" && photo.vue == 2>  
+								<div class="form-group">
+									<label class="<@labelStyle />" for="image">
+										#i18n{dansmarue.saveSignalement.photo.done}
+									</label>
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<a href='#' data-toggle="modal" data-target="#imageModal" image-url='${photo.imageUrl}'>
+											<img src='${photo.imageUrl}' style="max-width: 150px" />
+										</a>
+										<#assign index = index + 1>
+									</div>
+								</div>
+							<#elseif photo.imageUrl != "" && photo.vue != 2>
+								<div class="form-group">
+									<label class="<@labelStyle />" for="image">
+										#i18n{dansmarue.saveSignalement.photo}(s)
+									</label>
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<a href='#' data-toggle="modal" data-target="#imageModal" image-url='${photo.imageUrl}'>
+											<img src='${photo.imageUrl}' style="max-width: 150px" />
+										</a>
+										<#assign index = index + 1>
+									</div>
+								</div>
+							</#if>
+						</#list>
 					</#if>
 					<div class="form-group">
 						<label class="<@labelStyle />">

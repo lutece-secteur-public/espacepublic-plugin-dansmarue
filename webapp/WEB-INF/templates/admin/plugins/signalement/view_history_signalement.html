@@ -91,25 +91,52 @@
 				</div>
 				</#if> 
 				<#if photos?has_content> 
-				<#assign index = 1> 
-				<div class="form-group">
-					<div class="col-xs-6 col-sm-6 col-md-6">
-						<label class="<@labelStyle />" for="image">
-							#i18n{dansmarue.saveSignalement.photo} n&deg; ${index} : 
-						</label>
-						<div class="<@inputStyle />">
-						<#list photos as photo> 
-							<#if photo.imageUrl != "">
-								<a href='#' data-toggle="modal" data-target="#imageModal" image-url='${photo.imageUrl}'>
-									<img style="max-width: 100px" src='${photo.imageUrl}' />
-								</a>
-								<#assign index = index + 1>
+					<#assign index = 1> 
+					<#list photos as photo> 
+						<#if photo.imageUrl != "">
+							<#if photo.vue != 2>
+							
+								<div class="form-group">
+									<div class="col-xs-6 col-sm-6 col-md-6">
+										<label class="<@labelStyle />" for="image">
+											#i18n{dansmarue.saveSignalement.photo} n&deg; ${index} : 
+										</label>
+										
+										<div class="<@inputStyle />">
+										
+											<a href='#' data-toggle="modal" data-target="#imageModal" image-url='${photo.imageUrl}'>
+												<img style="max-width: 100px" src='${photo.imageUrl}' />
+											</a>
+											<#assign index = index + 1>
+											
+										</div>
+									</div>
+								</div>
+								
+							<#else>
+							
+								<div class="form-group">
+									<div class="col-xs-6 col-sm-6 col-md-6">
+										<label class="<@labelStyle />" for="image">
+											#i18n{dansmarue.saveSignalement.photo.done} 
+										</label>
+										
+										<div class="<@inputStyle />">
+										
+											<a href='#' data-toggle="modal" data-target="#imageModal" image-url='${photo.imageUrl}'>
+												<img style="max-width: 100px" src='${photo.imageUrl}' />
+											</a>
+											<#assign index = index + 1>
+											
+										</div>
+									</div>
+								</div>
+								
 							</#if>
-						</#list>
-						</div>
-					</div>
-				</div>
-				</#if>
+						</#if>
+					</#list>
+				</#if>	
+				
 				<div class="form-group">
 					<div class="col-xs-6 col-sm-6 col-md-6">
 						<label class="<@labelStyle />" for="#i18n{dansmarue.viewSignalement.etat}">

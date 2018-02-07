@@ -94,6 +94,7 @@ public class SignalementService implements ISignalementService
     private static final String                 PROPERTY_STATUS_NOT_FOLLOWABLE   = "signalement.status.not.followable";
     private static final String                 PROPERTY_FILE_FOLDER_PATH        = "signalement.pathForFileMessageCreation";
     private static final String                 PROPERTY_ACTIONS_NON_AFFICHABLES = "signalement.workflow.actions.nonAffichables";
+    private static final String                 PROPERTY_URL_PICTURE             = "signalement-rest.url_picture";
     private static final String                 ID_STATE_NOUVEAU                 = "signalement.idStateNouveau";
     private static final String                 ID_STATE_A_REQUALIFIER           = "signalement.idStateARequalifier";
     private static final String                 ID_STATE_ETAT_INITIAL            = "signalement.idStateEtatInitial";
@@ -947,7 +948,8 @@ public class SignalementService implements ISignalementService
             List<PhotoDMR> listPhoto = _photoDAO.findBySignalementId( dossierSignalementDTO.getId( ) );
             if ( listPhoto.size( ) > 0 )
             {
-                dossierSignalementDTO.setImgUrl( listPhoto.get( 0 ).getImageUrl( ) );
+                dossierSignalementDTO.setImgUrl( AppPropertiesService.getProperty( 
+                        PROPERTY_URL_PICTURE ) + listPhoto.get( 0 ).getId( ) ) ;
             }
         }
 
