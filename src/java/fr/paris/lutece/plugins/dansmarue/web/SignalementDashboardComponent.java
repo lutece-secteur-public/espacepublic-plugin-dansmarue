@@ -42,6 +42,7 @@ import fr.paris.lutece.portal.service.database.AppConnectionService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
@@ -72,7 +73,7 @@ public class SignalementDashboardComponent extends DashboardComponent
     // OTHER CONSTANTS
     private static final int ZONE_1 = 1;
     private static final int FILTER_NO_STATUS = -1;
-
+    
     /**
      * The HTML code of the component
      * @param user The Admin User
