@@ -155,7 +155,7 @@ $(document).ready(function() {
 							<#elseif photo.imageUrl != "" && photo.vue != 2>
 								<div class="form-group">
 									<label class="<@labelStyle />" for="image">
-										#i18n{dansmarue.saveSignalement.photo}(s)
+										#i18n{dansmarue.saveSignalement.photo} n&deg; ${index}
 									</label>
 									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 										<a href='#' data-toggle="modal" data-target="#imageModal" image-url='${photo.imageUrl}'>

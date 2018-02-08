@@ -1219,7 +1219,8 @@ public class SignalementJspBean extends AbstractJspBean
             /*
              * initialisation des valeurs par defaut a Nouveau, A traiter, A faire terrain et A faire Bureau
              */
-            if ( ( state != null ) && ( ( state.getId( ) == 7 ) || ( state.getId( ) == 8 ) || ( state.getId( ) == 16 ) || ( state.getId( ) == 17 ) ) )
+            if ( ( state != null ) && ( ( state.getId( ) == 7 ) || ( state.getId( ) == 8 ) || ( state.getId( ) == 16 ) || ( state.getId( ) == 17 ) || ( state.getId( ) == 18 )
+                    || ( state.getId( ) == 21 )) )
             {
 
                 EtatSignalement etatSignalement = new EtatSignalement( );
