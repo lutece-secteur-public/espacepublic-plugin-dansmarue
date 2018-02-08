@@ -4113,6 +4113,11 @@ public class SignalementJspBean extends AbstractJspBean
             String priorite = signalement.getPrioriteName( );
             String prioriteTitle = I18nService.getLocalizedString( "dansmarue.map.tooltips.priorite", request.getLocale( ) );
             sigMarker.addTooltipText( prioriteTitle, priorite );
+            
+            // Type Signalement
+            String typeSignalement = signalement.getTypeSignalement( ).getLibelle( );
+            String typeSignalementTitle = I18nService.getLocalizedString( "dansmarue.map.tooltips.typeSignalement", request.getLocale( ) );
+            sigMarker.addTooltipText( typeSignalementTitle, typeSignalement );
 
             // Lng
             sigMarker.setLng( signalement.getAdresses( ).get( 0 ).getLng( ) );
