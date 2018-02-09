@@ -3503,7 +3503,7 @@ public class SignalementJspBean extends AbstractJspBean
         {
             List<Integer> noRessource = new ArrayList<>( );
             noRessource.add( NO_RESOURCE_FOUND );
-            filter.setListIdArrondissements( noRessource );
+            filter.setListIdQuartier( noRessource );
         }
 
         // Secteurs
