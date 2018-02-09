@@ -11,7 +11,7 @@
 	<artifactId>plugin-dansmarue</artifactId>
 	<packaging>lutece-plugin</packaging>
 	<version>6.0.4-SNAPSHOT</version>
-	<name>Lutece Signalement plugin</name>
+	<name>plugin Dans Ma Rue (BO signalement)</name>
 
 	<distributionManagement>
 		<repository>

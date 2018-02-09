@@ -65,7 +65,9 @@ import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.ImgUtils;
+import fr.paris.lutece.plugins.unittree.business.unit.IUnitDAO;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
+import fr.paris.lutece.plugins.unittree.modules.sira.business.sector.ISectorDAO;
 import fr.paris.lutece.plugins.unittree.modules.sira.business.sector.Sector;
 import fr.paris.lutece.plugins.unittree.modules.sira.service.sector.ISectorService;
 import fr.paris.lutece.plugins.unittree.modules.sira.service.unit.IUnitSiraService;
@@ -173,7 +175,15 @@ public class SignalementService implements ISignalementService
     @Inject
     @Named( "taskNotificationConfigDAO" )
     private ITaskNotificationConfigDAO          _taskNotificationConfigDAO;
+    
+    @Inject
+    @Named( "unittree-sira.sectorDAO" )
+    private ISectorDAO                          _sectorDAO;
 
+    @Inject
+    @Named( "unittree.unitDAO" )
+    private IUnitDAO                            _unitDAO; 
+    
     @Inject
     @Named( "signalementSuiviDAO" )
     private ISignalementSuiviDAO                signalementSuiviDAO;
@@ -460,9 +470,12 @@ public class SignalementService implements ISignalementService
             dto.setAliasMobile( StringUtils.defaultString( signalement.getTypeSignalement( ).getAliasMobile( ) ) );
 
             // label unit
-            Unit unit = type.getUnit( );
+            int idUnit = _sectorDAO.getDirectionUnitIdBySectorId(  signalement.getSecteur( ).getIdSector( ) );
+            Unit unit = _unitDAO.load( idUnit, plugin );
             dto.setDirection( unit.getLabel( ) );
 
+            
+            
             // adresse
             Adresse adresse = _adresseDAO.loadByIdSignalement( signalement.getId( ) );
             dto.setAdresse( adresse.getAdresse( ) );

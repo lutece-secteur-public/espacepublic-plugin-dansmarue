@@ -80,7 +80,7 @@ public class SignalementDAO implements ISignalementDAO
 
     private static final String SQL_QUERY_FROM_SIGNALEMENT_CATEGORY                = " INNER JOIN v_signalement_type_signalement_with_parents_links AS vstswp ON vstswp.id_type_signalement = signalement.fk_id_type_signalement AND vstswp.is_parent_a_category=1";
 
-    private static final String SQL_QUERY_FROM_UNITTREE                            = " INNER JOIN unittree_unit AS unit ON unit.id_unit = type.fk_id_unit ";
+    private static final String SQL_QUERY_FROM_UNITTREE                            = " INNER JOIN unittree_unit_sector uus ON signalement.fk_id_sector = uus.id_sector ";
 
     private static final String SQL_QUERY_FROM_SIGNALEUR                           = " LEFT OUTER JOIN signalement_signaleur AS signaleur ON signalement.id_signalement = signaleur.fk_id_signalement ";
 
@@ -94,7 +94,7 @@ public class SignalementDAO implements ISignalementDAO
     private static final String SQL_QUERY_ADD_FILTER_NUMERO                        = " signalement.prefix || signalement.annee || signalement.mois || signalement.numero LIKE ? ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_DIRECTION. */
-    private static final String SQL_QUERY_ADD_FILTER_DIRECTION                     = " unit.id_unit = ? ";
+    private static final String SQL_QUERY_ADD_FILTER_DIRECTION                     = " uus.id_unit = ? ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_LIST_ARRONDISSEMENT. */
     private static final String SQL_QUERY_ADD_FILTER_LIST_ARRONDISSEMENT           = " signalement.fk_id_arrondissement IN ({0}) ";
