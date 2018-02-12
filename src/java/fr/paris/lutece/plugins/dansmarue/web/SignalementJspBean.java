@@ -2019,6 +2019,9 @@ public class SignalementJspBean extends AbstractJspBean
                     signaleur.setSignalement( signalement );
                     _signaleurService.insert( signaleur );
                 }
+                else {
+                    _signaleurService.insert( signaleur );
+                }
 
                 // image 1 ensemble treatement CREATION
                 insertPhoto( signalement, imageSourceEnsemble );
