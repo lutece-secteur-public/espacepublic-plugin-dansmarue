@@ -18,7 +18,7 @@
 				</label>
 				<div class="<@inputStyle />">
 					<input class="form-control input-sm" maxlength="100" type="text"
-						value="${( mail_item.senderEmail )!}" name="senderEmail"
+						value="${( sender_mail )!}" name="senderEmail"
 						id="senderEmail" /> #i18n{dansmarue.mail.sender.definition}
 				</div>
 			</div>
@@ -35,10 +35,9 @@
 				<label class="<@labelStyle />"> #i18n{dansmarue.mail.photos} : </label>
 				<div class="<@checkboxStyle />">
 					<div class="checkbox">
-						<label> <input class="checkbox" type="checkbox"
-							name="photos" id="photos"<#if
-							mail_item.filesAttachement!?has_content> checked="checked" </#if>
-							/> #i18n{dansmarue.mail.photos.definition}
+						<label> 
+							<input class="checkbox" type="checkbox"
+							name="photos" id="photos" checked="checked" /> #i18n{dansmarue.mail.photos.definition}
 						</label>
 					</div>
 				</div>

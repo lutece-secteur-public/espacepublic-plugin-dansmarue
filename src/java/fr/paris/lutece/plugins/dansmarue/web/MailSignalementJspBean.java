@@ -19,6 +19,7 @@ import fr.paris.lutece.plugins.dansmarue.commons.exceptions.FunctionnalException
 import fr.paris.lutece.plugins.dansmarue.service.IPhotoService;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementService;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
+import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.mail.MailItem;
 import fr.paris.lutece.portal.service.mail.MailService;
@@ -84,6 +85,7 @@ public class MailSignalementJspBean extends AbstractJspBean
     /** The Constant MARK_MAIL_ITEM. */
     private static final String MARK_MAIL_ITEM                    = "mail_item";
     private static final String MARK_WEBAPP_URL                   = "webapp_url";
+    private static final String MARK_SENDER_MAIL                  = "sender_mail";
 
     // JSP
     private static final String JSP_MANAGE_MAIL                   = "DoCreateMailSignalement.jsp";
@@ -192,13 +194,18 @@ public class MailSignalementJspBean extends AbstractJspBean
                 }
 
                 // Link to the consultation page
-                strBuff.append( LINE_SEPARATOR + LINE_SEPARATOR + MESSAGE_MAIL_LINK + " : " + this.getLinkConsultation( signalement, request ) + signalement.getId( ) );
+                strBuff.append( LINE_SEPARATOR + LINE_SEPARATOR + MESSAGE_MAIL_LINK + " : <a href=\"" 
+                        + this.getLinkConsultation( signalement, request ) + signalement.getId( ) + "\">" 
+                        + this.getLinkConsultation( signalement, request ) + signalement.getId( ) + "</a>" );
 
                 mailItem.setMessage( strBuff.toString( ) );
             }
 
         }
+        
+        AdminUser user = getUser(  );
 
+        model.put( MARK_SENDER_MAIL, user.getEmail( ) );
         model.put( PARAMETER_SIGNALEMENT_ID, nIdCase );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( "locale", this.getLocale( ) );
