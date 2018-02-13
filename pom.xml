@@ -10,7 +10,7 @@
 
 	<artifactId>plugin-dansmarue</artifactId>
 	<packaging>lutece-plugin</packaging>
-	<version>6.0.4-SNAPSHOT</version>
+	<version>6.0.4</version>
 	<name>plugin Dans Ma Rue (BO signalement)</name>
 
 	<distributionManagement>
@@ -236,7 +236,7 @@
         <connection>scm:git:http://gestionversion.acn/applications_lutece/plugin-dansmarue.git</connection>
         <developerConnection>scm:git:http://gestionversion.acn/applications_lutece/plugin-dansmarue.git</developerConnection>
         <url>http://gestionversion.acn/applications_lutece/plugin-dansmarue.git</url>
-		<tag>plugin-dansmarue-6.0.2</tag>
+		<tag>plugin-dansmarue-6.0.4</tag>
     </scm>
 	<groupId>fr.paris.lutece.plugins</groupId>
 </project>
