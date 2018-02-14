@@ -29,4 +29,6 @@ public interface IWorkflowService
      * 		   -1 if not found
      */
 	int selectIdActionByStates(int idStateBefore, int idStateAfter);
+
+    String selectMessageNotification( Integer idHistory );
 }

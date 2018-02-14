@@ -8,6 +8,8 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mchange.lang.StringUtils;
+
 
 public class SignaleurDAO implements ISignaleurDAO
 {
@@ -75,7 +77,12 @@ public class SignaleurDAO implements ISignaleurDAO
         }
         int nIndex = 1;
         daoUtil.setLong( nIndex++, signaleur.getId( ) );
-        daoUtil.setString( nIndex++, signaleur.getMail( ) );
+        if( signaleur.getMail( ) == null ) {
+            daoUtil.setString( nIndex++, "" );
+        }
+        else {
+            daoUtil.setString( nIndex++, signaleur.getMail( ) );
+        }        
         daoUtil.setString( nIndex++, signaleur.getIdTelephone( ) );
         daoUtil.setLong( nIndex++, signaleur.getSignalement( ).getId( ) );
         daoUtil.setString( nIndex++, signaleur.getGuid());

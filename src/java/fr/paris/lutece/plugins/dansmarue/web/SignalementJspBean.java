@@ -2020,6 +2020,7 @@ public class SignalementJspBean extends AbstractJspBean
                     _signaleurService.insert( signaleur );
                 }
                 else {
+                    signaleur.setSignalement( signalement );
                     _signaleurService.insert( signaleur );
                 }
 

@@ -34,4 +34,6 @@ public interface IWorkflowDAO
      */
     int selectIdActionByStates( int idStateBefore, int idStateAfter, Plugin plugin );
 
+    String selectMessageNotification( Integer idHistory );
+
 }

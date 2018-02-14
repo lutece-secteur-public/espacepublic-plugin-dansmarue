@@ -63,5 +63,13 @@ public class WorkflowService extends AbstractCacheableService implements IWorkfl
     public int selectIdActionByStates(int idStateBefore, int idStateAfter){
     	return _workflowDAO.selectIdActionByStates(idStateBefore, idStateAfter, null);
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String selectMessageNotification( Integer idHistory ){
+        return _workflowDAO.selectMessageNotification( idHistory );
+    }
 
 }
