@@ -1,0 +1,34 @@
+<#if history_information_list?has_content>
+<table class="table table-striped table-condensed">
+    <tr>
+        <th>#i18n{workflow.resource_history.row_action_name}</th>
+        <th>#i18n{workflow.resource_history.row_action_user}</th>
+        <th>#i18n{workflow.resource_history.row_action_date}</th>
+        <th>#i18n{workflow.resource_history.row_task_information}</th>
+    </tr>	
+    <#list history_information_list as history_information>	
+    <tr>
+        <td>${history_information.resource_history.action.name}</td>
+        <td>
+            <#if history_information.admin_user_history?exists>
+                <#if adminAvatar><img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${history_information.admin_user_history.userId}" alt="Avatar" title="Avatar"></#if>
+                <em>&nbsp; ${history_information.admin_user_history.firstName} ${history_information.admin_user_history.lastName} - ${history_information.admin_user_history.email}</em>
+            </#if>	
+        </td>
+        <td>
+            <em>${history_information.resource_history.creationDate}</em>
+        </td>
+        <td>
+            <#list history_information.task_information_list as task_information>	
+            ${task_information}<br />
+            </#list>
+        </td>
+    </tr>
+    </#list>
+</table> 	
+<#else>
+<div class="alert alert-error">#i18n{workflow.resource_history.history_empty}</div>
+</#if>
+
+
+

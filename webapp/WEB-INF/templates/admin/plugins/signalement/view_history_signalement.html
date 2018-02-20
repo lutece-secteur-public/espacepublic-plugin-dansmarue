@@ -56,6 +56,17 @@
 							${adresse.adresse}</div>
 					</div>
 				</div>
+				<#if signaleur.mail?has_content>
+				<div class="form-group">
+					<div class="col-xs-6 col-sm-6 col-md-6">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.saveSignalement.mail}">
+							#i18n{dansmarue.saveSignalement.mail} : </label>
+						<div class="<@inputStyle />">
+						${signaleur.mail}</div>
+					</div>
+				</div>
+				</#if>
 				<#if signalement.commentaire?has_content>
 				<div class="form-group">
 					<div class="col-xs-6 col-sm-6 col-md-6">
@@ -66,7 +77,8 @@
 							${signalement.commentaire}</div>
 					</div>
 				</div>
-				</#if> <#if signalement.commentaireProgrammation != "">
+				</#if> 
+				<#if signalement.commentaireProgrammation != "">
 				<div class="form-group">
 					<div class="col-xs-6 col-sm-6 col-md-6">
 						<label class="<@labelStyle />"
@@ -131,7 +143,6 @@
 									</div>
 								</div>
 							<#else>
-							<#else>
 							
 								<div class="form-group">
 									<div class="col-xs-6 col-sm-6 col-md-6">
@@ -153,8 +164,7 @@
 							</#if>
 						</#if>
 					</#list>
-				</#if>	
-				
+				</#if>			
 				<div class="form-group">
 					<div class="col-xs-6 col-sm-6 col-md-6">
 						<label class="<@labelStyle />" for="#i18n{dansmarue.viewSignalement.etat}">
