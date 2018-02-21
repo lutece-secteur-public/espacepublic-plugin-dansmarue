@@ -269,10 +269,13 @@ public class MailSignalementJspBean extends AbstractJspBean
                     if ( photo.getVue( ) == 1 )
                     {
                         files.add( new FileAttachment( "VueEnsemble." + imgExtention, photo.getImage( ).getImage( ), photo.getImage( ).getMimeType( ) ) );
-
-                    } else
+                    } 
+                    else if ( photo.getVue( ) == 2 )
                     {
                         files.add( new FileAttachment( "VueDetaillee." + imgExtention, photo.getImage( ).getImage( ), photo.getImage( ).getMimeType( ) ) );
+                    }else
+                    {
+                        files.add( new FileAttachment( "ServiceFait." + imgExtention, photo.getImage( ).getImage( ), photo.getImage( ).getMimeType( ) ) );
                     }
                 }
 
