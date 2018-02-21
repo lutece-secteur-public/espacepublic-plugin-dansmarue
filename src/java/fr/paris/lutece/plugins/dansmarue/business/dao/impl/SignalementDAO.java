@@ -849,7 +849,7 @@ public class SignalementDAO implements ISignalementDAO
             int index = 1;
             for ( Order order : listeOrders )
             {
-                if ( order.getName( ).equals( "numSignalement" ) )
+                if ( "numSignalement".equals( order.getName( ) ) )
                 {
                     if ( index == listeOrders.size( ) )
                     {
@@ -862,7 +862,7 @@ public class SignalementDAO implements ISignalementDAO
                         index++;
                     }
                 }
-                else if ( order.getName( ).equals( "signaleur.mail" ) )
+                else if ( "signaleur.mail".equals( order.getName( ) ) )
                 {
                     if ( index == listeOrders.size( ) )
                     {
