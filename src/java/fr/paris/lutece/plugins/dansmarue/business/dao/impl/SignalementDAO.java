@@ -207,6 +207,7 @@ public class SignalementDAO implements ISignalementDAO
         _ordersMap = new HashMap<String, String>( );
         _ordersMap.put( "signalement.suivi", "signalement.suivi" );
         _ordersMap.put( "numSignalement", "numSignalement" );
+        _ordersMap.put( "signaleur.mail", "signaleur.mail" );
         _ordersMap.put( "priorite.libelle", "priorite.libelle" );
         _ordersMap.put( "type.libelle", "type.libelle" );
         _ordersMap.put( "direction_unit.label", "direction_unit.label" );
@@ -599,7 +600,7 @@ public class SignalementDAO implements ISignalementDAO
                     bHasOrderSignalementType = true;
                 } else if ( order.getName( ).startsWith( "signaleur." ) )
                 {
-                    bHasOrderSignalementType = true;
+                    bHasOrderSignaleur = true;
                 }
             }
         }
@@ -860,7 +861,19 @@ public class SignalementDAO implements ISignalementDAO
                                 + order.getOrder( ) + ", signalement.numero " + order.getOrder( ) + ", " );
                         index++;
                     }
-                } else
+                }
+                else if ( order.getName( ).equals( "signaleur.mail" ) )
+                {
+                    if ( index == listeOrders.size( ) )
+                    {
+                        sbSQL.append( order.getName( ) + " " + order.getOrder( ) + " NULLS LAST " );
+                    } else
+                    {
+                        sbSQL.append( order.getName( ) + " " + order.getOrder( ) + " NULLS LAST, " );
+                        index++;
+                    }
+                }                
+                else
                 {
                     if ( index == listeOrders.size( ) )
                     {
