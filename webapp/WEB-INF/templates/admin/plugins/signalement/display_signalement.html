@@ -629,6 +629,9 @@ function updateSectorList(idDirection){
 								<th><@sort
 									jsp_url="jsp/admin/plugins/signalement/DisplaySignalement.jsp"
 									attribute="suivi"/>#i18n{dansmarue.reportingList.nbfollowers}</th>
+									<th><@sort
+									jsp_url="jsp/admin/plugins/signalement/DisplaySignalement.jsp"
+									attribute="mail"/>#i18n{dansmarue.reportingList.mail}</th>
 								<th><@sort
 									jsp_url="jsp/admin/plugins/signalement/DisplaySignalement.jsp"
 									attribute="numSignalement"/>#i18n{dansmarue.reportingList.number}</th>
@@ -682,6 +685,7 @@ function updateSectorList(idDirection){
 									</#if>
 								</td>
 								<td class="signalement-vote">${signalement.suivi!}</td>
+								<td class="signalement-mail">${(signalement.signaleurs[0].mail)!}</td> 
 								<td class="signalement-id"><@a class="link" visu=true
 									href="jsp/admin/plugins/signalement/ViewSignalement.jsp"
 									params="?signalement_id=${signalement.id}">${signalement.numeroSignalement!}</@a></td>

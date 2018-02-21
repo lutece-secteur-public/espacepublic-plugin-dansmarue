@@ -970,7 +970,7 @@ public class SignalementJspBean extends AbstractJspBean
             listSignalements = dashboardSignalements;
         } else
         {
-            listSignalements = _signalementService.findByFilter( filter, getPaginationProperties( request, totalResult ), false );
+            listSignalements = _signalementService.findByFilter( filter, getPaginationProperties( request, totalResult ), true );
         }
 
         // get the first unit linked to the signalement sector
@@ -3534,7 +3534,7 @@ public class SignalementJspBean extends AbstractJspBean
         }
 
         Integer totalResult = _signalementService.countIdSignalementByFilter( filter, getPlugin( ) );
-        List<Signalement> signalementList = _signalementService.findByFilter( filter, getPaginationProperties( request, totalResult ), false );
+        List<Signalement> signalementList = _signalementService.findByFilter( filter, getPaginationProperties( request, totalResult ), true );
 
         if ( isAllQuartier )
         {

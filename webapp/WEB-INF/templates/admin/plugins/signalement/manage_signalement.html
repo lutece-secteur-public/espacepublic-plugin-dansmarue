@@ -530,6 +530,9 @@ $(document).ready(function() {
 								<th><@sort
 									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
 									attribute="suivi"/>#i18n{dansmarue.reportingList.nbfollowers}</th>
+									<th><@sort
+									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
+									attribute="mail"/>#i18n{dansmarue.reportingList.mail}</th> 
 								<th><@sort
 									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
 									attribute="numSignalement"/>#i18n{dansmarue.reportingList.number}</th>
@@ -612,6 +615,7 @@ $(document).ready(function() {
 									</#if>
 								</td>
 								<td class="signalement-suivi">${signalement.suivi!}</td>
+								<td class="signalement-mail">${(signalement.signaleurs[0].mail)!}</td>
 								<td class="signalement-id"><@a class="link" visu=true
 									href="jsp/admin/plugins/signalement/ViewSignalement.jsp"
 									params="?signalement_id=${signalement.id}">${signalement.numeroSignalement!}</@a></td>
