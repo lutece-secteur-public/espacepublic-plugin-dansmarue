@@ -536,6 +536,12 @@ public class SignalementService implements ISignalementService
                 strRejets.add( observationRejet.getLibelle( ) );
             }
             dto.setRaisonsRejet( strRejets );
+            
+            // Nombre de suivis
+            dto.setNbSuivis( String.valueOf( signalement.getSuivi( ) ) );
+            
+            // Nombre de félicitations
+            dto.setNbFelicitations( String.valueOf( signalement.getFelicitations( ) ) );
         }
         return listeSignalementExportCSVDTO;
 
@@ -631,6 +637,12 @@ public class SignalementService implements ISignalementService
                 strRejets.add( observationRejet.getLibelle( ) );
             }
             dto.setRaisonsRejet( strRejets );
+            
+            // Nombre de suivis
+            dto.setNbSuivis( String.valueOf( signalement.getSuivi( ) ) );
+            
+            // Nombre de félicitations
+            dto.setNbFelicitations( String.valueOf( signalement.getFelicitations( ) ) );
 
             listeSignalementExportCSVDTO.add( dto );
         }

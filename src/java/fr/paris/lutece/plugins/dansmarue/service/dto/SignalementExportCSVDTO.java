@@ -24,6 +24,8 @@ public class SignalementExportCSVDTO
     private Integer _nNbPhotos;
     private List<String> _strRaisonsRejet;
     private String _strNumeroSignalement;
+    private String _strNbSuivis;
+    private String _strNbFelicitations;
     private String[] _tabAllDatas;
 
 
@@ -32,7 +34,7 @@ public class SignalementExportCSVDTO
         return new String[] { getNumeroSignalement( ), getPriorite( ), getTypeSignalement( ), getAlias(), getAliasMobile(), getDirection( ),
                 getAdresse( ), Double.toString(getCoordX()), Double.toString(getCoordY()), getArrondissement(), getSecteur(), getDateCreation( ),
                 getHeureCreation(), getEtat( ), getMailUsager(), getCommentaireUsager(), Integer.toString(getNbPhotos()),
-                getFormatObservationRejet()};
+                getFormatObservationRejet(), getNbSuivis(), getNbFelicitations()};
     }
 
     public String getPriorite( )
@@ -197,6 +199,26 @@ public class SignalementExportCSVDTO
     public void setSecteur( String _strSecteur )
     {
         this._strSecteur = _strSecteur;
+    }
+
+    public String getNbSuivis( )
+    {
+        return _strNbSuivis;
+    }
+
+    public void setNbSuivis( String _strNbSuivis )
+    {
+        this._strNbSuivis = _strNbSuivis;
+    }
+
+    public String getNbFelicitations( )
+    {
+        return _strNbFelicitations;
+    }
+
+    public void setNbFelicitations( String _strNbFelicitations )
+    {
+        this._strNbFelicitations = _strNbFelicitations;
     }
     
 }
