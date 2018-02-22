@@ -3148,7 +3148,7 @@ public class SignalementJspBean extends AbstractJspBean
             response.setCharacterEncoding( CSV_ISO );
             writer = new CSVWriter( response.getWriter( ), CSV_SEPARATOR );
 
-            writer.writeNext( new String[] { "Numéro", "Priorité", "Type", "Alias", "Alias mobile", "Direction", "Adresse", "Coordonnée X", "Coordonnée Y", "Arrondissement", "Secteur d'affectation", "Date de création",
+            writer.writeNext( new String[] { "Numéro", "Priorité", "Type", "Alias", "Alias mobile", "Direction", "Quartier", "Adresse", "Coordonnée X", "Coordonnée Y", "Arrondissement", "Secteur d'affectation", "Date de création",
                     "Heure de création", "Etat", "Mail usager", "Commentaire usager", "Nombre de photos", "Raisons de rejet", "Nombre de suivis", "Nombre de félicitations" } );
             for ( SignalementExportCSVDTO signalementDTO : listeSignalementExportCSVDTO )
             {
@@ -4164,6 +4164,7 @@ public class SignalementJspBean extends AbstractJspBean
         boolean hasCritereMail = StringUtils.isNotBlank( filter.getMail( ) );
         boolean hasCritereCommentaire = StringUtils.isNotBlank( filter.getCommentaire( ) );
         boolean hasCritereArrondissement = CollectionUtils.isNotEmpty( filter.getListIdArrondissements( ) ) && !( filter.getListIdArrondissements( ).containsAll( availableArrondissementIds ) );
+        boolean hasCritereQuartier = CollectionUtils.isNotEmpty( filter.getListIdQuartier( ) );
         boolean hasCritereEtat = false;
         for ( EtatSignalement etat : filter.getEtats( ) )
         {
@@ -4173,7 +4174,7 @@ public class SignalementJspBean extends AbstractJspBean
             }
         }
 
-        return hasCritereAdresse || hasCritereMail || hasCritereCommentaire || hasCritereArrondissement || hasCritereEtat;
+        return hasCritereAdresse || hasCritereMail || hasCritereCommentaire || hasCritereArrondissement || hasCritereEtat || hasCritereQuartier;
     }
 
 }

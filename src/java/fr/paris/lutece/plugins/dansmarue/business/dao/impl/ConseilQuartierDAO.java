@@ -56,7 +56,8 @@ public final class ConseilQuartierDAO implements IConseilQuartierDao
     private static final String SQL_QUERY_DELETE    = "DELETE FROM signalement_conseil_quartier WHERE id_consqrt = ? ";
     private static final String SQL_QUERY_UPDATE    = "UPDATE signalement_conseil_quartier SET id_consqrt = ?, numero_consqrt = ?, surface = ?, nom_consqrt = ?, numero_arrondissement = ? WHERE id_consqrt = ?";
     private static final String SQL_QUERY_SELECTALL = "SELECT id_consqrt, numero_consqrt, surface, nom_consqrt, numero_arrondissement FROM signalement_conseil_quartier order by numero_arrondissement,nom_consqrt asc";
-
+    private static final String SQL_QUERY_SELECT_BY_ADRESSE = "SELECT id_consqrt, numero_consqrt, surface, nom_consqrt, numero_arrondissement from signalement_conseil_quartier where ST_Intersects( ( select ST_Union(geom) from signalement_adresse where id_adresse = ? )::geometry, signalement_conseil_quartier.geom::geometry )";
+    
     /**
      * Generates a new primary key
      *
@@ -117,6 +118,30 @@ public final class ConseilQuartierDAO implements IConseilQuartierDao
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT );
         daoUtil.setInt( 1, nId );
+        daoUtil.executeQuery( );
+
+        ConseilQuartier quartier = null;
+
+        if ( daoUtil.next( ) )
+        {
+            quartier = new ConseilQuartier( );
+
+            quartier.setIdConsqrt( daoUtil.getInt( 1 ) );
+            quartier.setNumeroConsqrt( daoUtil.getString( 2 ) );
+            quartier.setSurface( daoUtil.getBigDecimal( 3 ) );
+            quartier.setNomConsqrt( daoUtil.getString( 4 ) );
+            quartier.setNumeroArrondissement( daoUtil.getBigDecimal( 5 ) );
+        }
+
+        daoUtil.free( );
+        return quartier;
+    }
+    
+    @Override
+    public ConseilQuartier selectQuartierByAdresse( int nIdAdresse )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_ADRESSE );
+        daoUtil.setInt( 1, nIdAdresse );
         daoUtil.executeQuery( );
 
         ConseilQuartier quartier = null;

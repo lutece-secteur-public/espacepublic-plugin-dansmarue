@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.util.DigestUtils;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.IAdresseDAO;
+import fr.paris.lutece.plugins.dansmarue.business.dao.IConseilQuartierDao;
 import fr.paris.lutece.plugins.dansmarue.business.dao.IObservationRejetDAO;
 import fr.paris.lutece.plugins.dansmarue.business.dao.IPhotoDAO;
 import fr.paris.lutece.plugins.dansmarue.business.dao.IPrioriteDAO;
@@ -33,6 +34,7 @@ import fr.paris.lutece.plugins.dansmarue.business.dao.ITaskNotificationConfigDAO
 import fr.paris.lutece.plugins.dansmarue.business.dao.ITypeSignalementDAO;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Adresse;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
+import fr.paris.lutece.plugins.dansmarue.business.entities.ConseilQuartier;
 import fr.paris.lutece.plugins.dansmarue.business.entities.DashboardPeriod;
 import fr.paris.lutece.plugins.dansmarue.business.entities.ObservationRejet;
 import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
@@ -145,6 +147,11 @@ public class SignalementService implements ISignalementService
     @Inject
     @Named( "signalementAdresseDAO" )
     private IAdresseDAO                         _adresseDAO;
+    
+    /** The _conseilQuartier dao. */
+    @Inject
+    @Named( "signalement.conseilQuartierDAO" )
+    private IConseilQuartierDao                 _conseilQuartierDAO;
 
     /** The _priorite dao. */
     @Inject
@@ -473,8 +480,10 @@ public class SignalementService implements ISignalementService
             int idUnit = _sectorDAO.getDirectionUnitIdBySectorId(  signalement.getSecteur( ).getIdSector( ) );
             Unit unit = _unitDAO.load( idUnit, plugin );
             dto.setDirection( unit.getLabel( ) );
-
             
+            // Quartier
+            ConseilQuartier quartier = _conseilQuartierDAO.selectQuartierByAdresse( signalement.getAdresses( ).get( 0 ).getId( ).intValue( ) ) ;
+            dto.setQuartier( quartier.getNomConsqrt( ) );
             
             // adresse
             Adresse adresse = _adresseDAO.loadByIdSignalement( signalement.getId( ) );
@@ -577,6 +586,10 @@ public class SignalementService implements ISignalementService
 
             // label unit
             dto.setDirection( signalement.getTypeSignalement( ).getUnit( ).getLabel( ) );
+            
+            // Quartier
+            ConseilQuartier quartier = _conseilQuartierDAO.selectQuartierByAdresse( signalement.getAdresses( ).get( 0 ).getId( ).intValue( ) ) ;
+            dto.setQuartier( quartier.getNomConsqrt( ) );
 
             // adresse
             Adresse adresse = _adresseDAO.loadByIdSignalement( signalement.getId( ) );
