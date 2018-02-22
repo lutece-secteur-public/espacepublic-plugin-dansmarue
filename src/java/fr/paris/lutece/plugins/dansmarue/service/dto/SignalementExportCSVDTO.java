@@ -15,6 +15,7 @@ public class SignalementExportCSVDTO
     private Double _dCoordX;
     private Double _dCoordY;
     private String _strArrondissement;
+    private String _strSecteur;
     private String _strDateCreation;
     private String _strHeureCreation;
     private String _strEtat;
@@ -29,7 +30,7 @@ public class SignalementExportCSVDTO
     public String[] getTabAllDatas( )
     {
         return new String[] { getNumeroSignalement( ), getPriorite( ), getTypeSignalement( ), getAlias(), getAliasMobile(), getDirection( ),
-                getAdresse( ), Double.toString(getCoordX()), Double.toString(getCoordY()), getArrondissement(), getDateCreation( ),
+                getAdresse( ), Double.toString(getCoordX()), Double.toString(getCoordY()), getArrondissement(), getSecteur(), getDateCreation( ),
                 getHeureCreation(), getEtat( ), getMailUsager(), getCommentaireUsager(), Integer.toString(getNbPhotos()),
                 getFormatObservationRejet()};
     }
@@ -186,6 +187,16 @@ public class SignalementExportCSVDTO
     
     public String getFormatObservationRejet(){
     	return StringUtils.join(_strRaisonsRejet,",");
+    }
+
+    public String getSecteur( )
+    {
+        return _strSecteur;
+    }
+
+    public void setSecteur( String _strSecteur )
+    {
+        this._strSecteur = _strSecteur;
     }
     
 }

@@ -494,6 +494,10 @@ public class SignalementService implements ISignalementService
                     dto.setArrondissement( arrondissement.getNumero( ) );
                 }
             }
+            
+            // Secteur d'affectation
+            Sector sector = _sectorDAO.load( signalement.getSecteur( ).getIdSector( ), plugin );
+            dto.setSecteur( sector.getName( ) );
 
             // date creation
             dto.setDateCreation( signalement.getDateCreation( ) );
@@ -540,6 +544,8 @@ public class SignalementService implements ISignalementService
     @Override
     public List<SignalementExportCSVDTO> getSignalementForExportByFilter( SignalementFilter filter, PaginationProperties paginationProperties )
     {
+        Plugin plugin = PluginService.getPlugin( SignalementPlugin.PLUGIN_NAME );
+        
         List<Signalement> listeSignalement = findByFilter( filter, paginationProperties, true );
 
         List<SignalementExportCSVDTO> listeSignalementExportCSVDTO = new ArrayList<SignalementExportCSVDTO>( );
@@ -584,6 +590,11 @@ public class SignalementService implements ISignalementService
                     dto.setArrondissement( arrondissement.getNumero( ) );
                 }
             }
+            
+            // Secteur d'affectation
+            Sector sector = _sectorDAO.load( signalement.getSecteur( ).getIdSector( ), plugin );
+            dto.setSecteur( sector.getName( ) );
+            
             // date creation
             dto.setDateCreation( signalement.getDateCreation( ) );
 

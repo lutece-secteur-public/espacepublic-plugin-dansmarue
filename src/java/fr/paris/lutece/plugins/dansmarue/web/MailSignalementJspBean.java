@@ -270,7 +270,7 @@ public class MailSignalementJspBean extends AbstractJspBean
                     {
                         files.add( new FileAttachment( "VueEnsemble." + imgExtention, photo.getImage( ).getImage( ), photo.getImage( ).getMimeType( ) ) );
                     } 
-                    else if ( photo.getVue( ) == 2 )
+                    else if ( photo.getVue( ) == 0 )
                     {
                         files.add( new FileAttachment( "VueDetaillee." + imgExtention, photo.getImage( ).getImage( ), photo.getImage( ).getMimeType( ) ) );
                     }else
