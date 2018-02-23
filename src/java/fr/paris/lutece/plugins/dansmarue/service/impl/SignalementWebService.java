@@ -114,7 +114,7 @@ public class SignalementWebService implements ISignalementWebService
 
         JSONObject jsonAnomalie = new JSONObject( );
         jsonAnomalie.accumulate( "id", signalement.getId( ) );
-//        jsonAnomalie.accumulate( "reference", signalement.getNumeroSignalement() );
+        jsonAnomalie.accumulate( "reference", signalement.getNumeroSignalement() );
         jsonAnomalie.accumulate( "date_creation", signalement.getDateCreation( ) );
         jsonAnomalie.accumulate( "commentaire", encode( signalement.getCommentaire( ) ) );
         jsonAnomalie.accumulate( "type", encode( signalement.getTypeSignalement( ).getLibelle( ) ) );
@@ -124,7 +124,7 @@ public class SignalementWebService implements ISignalementWebService
         jsonAnomalie.accumulate( "adresse", encode( signalement.getAdresses( ).get( 0 ).getAdresse( ) ) );
         jsonAnomalie.accumulate( "lat", signalement.getAdresses( ).get( 0 ).getLat( ) );
         jsonAnomalie.accumulate( "lng", signalement.getAdresses( ).get( 0 ).getLng( ) );
-//        jsonAnomalie.accumulate( "token", signalement.getToken( ) );
+        jsonAnomalie.accumulate( "token", signalement.getToken( ) );
         
 
         List<PhotoDMR> photos = signalement.getPhotos( );
