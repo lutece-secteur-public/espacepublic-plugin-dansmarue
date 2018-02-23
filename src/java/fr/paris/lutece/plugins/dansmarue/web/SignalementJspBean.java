@@ -50,6 +50,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -3627,7 +3629,19 @@ public class SignalementJspBean extends AbstractJspBean
         ReferenceList emptyList = new ReferenceList( );
 
         // Directions
-        Set<Unit> directions = new HashSet<>( );
+        Set<Unit> directions = new TreeSet<>( new Comparator<Unit>( )
+        {
+
+            @Override
+            public int compare( Unit o1, Unit o2 )
+            {
+                if ( o1 == null || o2 == null )
+                    return 0;
+                
+                return o1.getLabel( ).compareTo( o2.getLabel( ) );
+            }
+            
+        });
         if ( CollectionUtils.isNotEmpty( domFonc.getUnitIds( ) ) )
         {
             List<Unit> firstLevelUnits = _unitService.getUnitsFirstLevel( false );
