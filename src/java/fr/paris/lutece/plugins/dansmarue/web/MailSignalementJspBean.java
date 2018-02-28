@@ -48,6 +48,7 @@ public class MailSignalementJspBean extends AbstractJspBean
     public static final String  PARAMETER_SENDER                  = "senderMail";
     /** The Constant PARAMETER_OBJECT. */
     public static final String  PARAMETER_OBJECT                  = "objectMail";
+    public static final String  PARAMETER_SUBJECT                 = "DMR – Anomalie sur un espace public";
     /** The Constant PARAMETER_CONTENT. */
     public static final String  PARAMETER_CONTENT                 = "contentMail";
     public static final String  PARAMETER_WANTS_PHOTO_IN_MAIL     = "photos";
@@ -199,6 +200,7 @@ public class MailSignalementJspBean extends AbstractJspBean
                         + this.getLinkConsultation( signalement, request ) + signalement.getId( ) + "</a>" );
 
                 mailItem.setMessage( strBuff.toString( ) );
+                mailItem.setSubject( PARAMETER_SUBJECT );
             }
 
         }
