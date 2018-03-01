@@ -848,11 +848,11 @@ public class SignalementJspBean extends AbstractJspBean
                 Unit temp = userUnit;
                 while ( ( temp.getIdUnit( ) != 0 ) && !isChildOfRestrictedUnit )
                 {
-                    if ( !unitsIds.isEmpty( ) ) {                        
-                        if( unitsIds.contains( temp.getIdParent( ) ) ){     
-                            isChildOfRestrictedUnit = true;
-                        }
-                    } 
+                    if ( unitsIds.contains( temp.getIdParent( ) ) )
+                    {
+                        isChildOfRestrictedUnit = true;
+                    }
+
                     temp = _unitService.getUnit( temp.getIdParent( ), true );
                 }
 
