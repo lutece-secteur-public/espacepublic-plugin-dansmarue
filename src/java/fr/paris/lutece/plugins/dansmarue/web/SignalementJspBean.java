@@ -309,6 +309,10 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant PARAMETER_VALUE_DISPLAY_PAGE **/
     private static final String           PARAMETER_VALUE_DISPLAY_PAGE                  = "display_page";
+    
+    private static final String           PARAMETER_NEXT_URL                            = "next";
+    
+    private static final String           PARAMETER_WEBAPP_RAMEN                        = "ramen";
 
     /** The Constant JSON_KEY_ID. */
     private static final String           JSON_KEY_ID                                   = "id";
@@ -3104,6 +3108,15 @@ public class SignalementJspBean extends AbstractJspBean
         model.put( MARK_ACTION_ID, nIdAction );
         model.put( MARK_SIGNALEMENT, nIdResource );
         model.put( PARAMETER_SIGNALEMENT_ID, nIdResource );
+        
+        String nextURL =request.getParameter( PARAMETER_NEXT_URL );
+        if(nextURL != null && nextURL.contains( PARAMETER_WEBAPP_RAMEN )) {
+            //redirect on RAMEN Webapp
+          model.put( MARK_BACK_URL, nextURL );
+        } else {
+           //stay on SIGNALEMENT Webapp
+            model.put( MARK_BACK_URL,  JSP_MANAGE_SIGNALEMENT);
+        }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_WORKFLOW, getLocale( ), model );
 
