@@ -721,6 +721,7 @@ $(document).ready(function() {
         $('#idDirection option:first').attr("selected", "selected");
         $('#idSector option:selected').removeAttr('selected');
         $('#idSector option:first').attr("selected", "selected");
+        updateSectorList(-1);
         $("#filter_adresse").val('');
         $("#filter_mail").val('');
         $("#filter_commentaire").val('');
