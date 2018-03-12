@@ -35,7 +35,7 @@ update
 set
 	adresse = regexp_replace(adresse, 'í', 'i' )
 where
-	lower( adresse ) similar to lower( '%í%' )
+	lower( adresse ) similar to lower( '%í%' );
 	
 /* PARIS en majuscule partout */
 update
@@ -43,5 +43,22 @@ update
 set
 	adresse = replace(lower(adresse), 'paris', 'PARIS' )
 where
-	lower( adresse ) similar to lower( '%((%[0-9]{5}%) PARIS%)%' )
+	lower( adresse ) similar to lower( '%((%[0-9]{5}%) PARIS%)%' );
+	
+
+/* ? à la place de tiret */	
+update
+	signalement_adresse
+set
+	adresse = regexp_replace(adresse, '?', '-' )
+where
+	lower( adresse ) similar to lower( '%\?%' );
+	
+/* ? à la place de tiret */	
+update
+	signalement_adresse
+set
+	adresse = replace(lower(adresse), 'parigi', 'PARIS' )
+where
+	lower( adresse ) similar to lower( '%((%[0-9]{5}%) parigi%)%' );
 	
