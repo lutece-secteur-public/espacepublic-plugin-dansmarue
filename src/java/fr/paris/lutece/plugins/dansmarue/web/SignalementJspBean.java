@@ -309,6 +309,14 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant PARAMETER_VALUE_DISPLAY_PAGE **/
     private static final String           PARAMETER_VALUE_DISPLAY_PAGE                  = "display_page";
+    
+    private static final String           PARAMETER_NEXT_URL                            = "next";
+    
+    private static final String           PARAMETER_WEBAPP_RAMEN                        = "ramen";
+    
+    private static final String           PARAMETER_SECTOR__ID                          = "sector_id";
+    
+    private static final String           PARAMETER_UNIT__ID                            = "unit_id";
 
     /** The Constant JSON_KEY_ID. */
     private static final String           JSON_KEY_ID                                   = "id";
@@ -3104,6 +3112,32 @@ public class SignalementJspBean extends AbstractJspBean
         model.put( MARK_ACTION_ID, nIdAction );
         model.put( MARK_SIGNALEMENT, nIdResource );
         model.put( PARAMETER_SIGNALEMENT_ID, nIdResource );
+        
+        String nextURL =request.getParameter( PARAMETER_NEXT_URL );
+        if(nextURL != null && nextURL.contains( PARAMETER_WEBAPP_RAMEN )) {
+            //redirect on RAMEN Webapp
+            UrlItem urlRedirect = new UrlItem( nextURL );
+            
+            String serviceID =request.getParameter( PARAMETER_SERVICE__ID );
+            if(serviceID != null) {
+                urlRedirect.addParameter( PARAMETER_SERVICE__ID, serviceID );
+            }
+            
+            String sectorID =request.getParameter( PARAMETER_SECTOR__ID );
+            if(sectorID != null) {
+                urlRedirect.addParameter( PARAMETER_SECTOR__ID, sectorID );
+            }
+            
+            String unitID =request.getParameter( PARAMETER_UNIT__ID );
+            if(unitID != null) {
+                urlRedirect.addParameter( PARAMETER_UNIT__ID, unitID );
+            }
+          
+           model.put( MARK_BACK_URL, urlRedirect.getUrl( ) );
+        } else {
+           //stay on SIGNALEMENT Webapp
+            model.put( MARK_BACK_URL,  JSP_MANAGE_SIGNALEMENT);
+        }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_WORKFLOW, getLocale( ), model );
 

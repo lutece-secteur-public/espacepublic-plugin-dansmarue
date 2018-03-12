@@ -257,9 +257,9 @@ function initSelectFromArray(selector,refList){
 <script type="text/javascript">
 // Update the Sector List with selected Unit (direction)
 function updateSectorList(idDirection){
-    if( !(idDirection === void 0) &&  idDirection != "")
+    if( idDirection != "")
     {
-		if(idDirection > 0){
+		if(idDirection >= 0){
 			jQuery.ajax( {
 				url :"jsp/admin/plugins/signalement/DoGetSectorListByIdDirectionForDisplayAjax.jsp",
 				data: {
@@ -756,6 +756,7 @@ function updateSectorList(idDirection){
         $('#idDirection option:first').attr("selected", "selected");
         $('#idSector option:selected').removeAttr('selected');
         $('#idSector option:first').attr("selected", "selected");
+        updateSectorList("0");
         $("#filter_adresse").val('');
         $("#filter_mail").val('');
         $("#filter_commentaire").val('');
