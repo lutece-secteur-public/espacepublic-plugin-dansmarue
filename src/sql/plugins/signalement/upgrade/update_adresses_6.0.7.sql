@@ -35,3 +35,42 @@ where
 			)
 	);
 	
+/* DMR-119 */ 
+update
+	signalement_adresse
+set
+	adresse = concat(adresse, ', 75019 PARIS')	
+where
+	id_adresse = 258160;
+	
+	
+update
+	signalement_adresse
+set
+	adresse = concat( adresse, ' PARIS' )
+where
+	id_adresse in(
+		249269,
+		266840,
+		265613,
+		260419,
+		260160,
+		260136,
+		241993,
+		236893
+	);
+	
+update
+	signalement_adresse
+set
+	adresse = '51 rue Guy Moquet, 75017 PARIS'
+where
+	id_adresse = 243443
+	
+/* DMR-114 */	
+	
+UPDATE public.signalement_adresse
+
+SET adresse='33 rue Etienne Marcel, 75001 PARIS'
+
+WHERE fk_id_signalement = 276563;
