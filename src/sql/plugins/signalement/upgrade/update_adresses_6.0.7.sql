@@ -74,3 +74,20 @@ UPDATE public.signalement_adresse
 SET adresse='33 rue Etienne Marcel, 75001 PARIS'
 
 WHERE fk_id_signalement = 276563;
+
+/* DMR-800 4 adresses à mettre à jour */
+update signalement_adresse
+set adresse = 'jardinet de la Mairie du Vieme, 75006 PARIS'
+where id_adresse = 214886;
+
+update signalement_adresse
+set adresse = 'rue des Lombards, 75001 PARIS'
+where id_adresse = 85254;
+
+update signalement_adresse
+set adresse = '18 rue de la Voûte, 75012 PARIS'
+where id_adresse = 82479;
+
+update signalement_adresse
+set adresse = '11 rue Audubon, 75012 PARIS'
+where id_adresse = 47630;
