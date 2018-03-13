@@ -22,6 +22,7 @@ public class WorkflowDAO implements IWorkflowDAO
     private static final String SQL_QUERY_SELECT_HISTORY_BY_SIGNALEMENT = "SELECT workflow_action.name, workflow_resource_history.creation_date, workflow_resource_history.user_access_code FROM workflow_action, workflow_resource_history WHERE workflow_action.id_action = workflow_resource_history.id_action AND resource_type = ? AND id_resource = ?";
     private static final String SQL_QUERY_SELECT_ACTION_BY_STATES = "SELECT id_action FROM workflow_action WHERE id_state_before=? AND id_state_after=?";
     private static final String SQL_QUERY_SELECT_MESSAGE_NOTIFICATION = "select notification_value from signalement_workflow_notifuser_3contents_value where id_history = ? "; 
+    private static final String SQL_QUERY_SELECT_USER_SERVICE_FAIT = "select user_access_code from workflow_resource_history where id_resource = ? and id_action in (62,70,22,18,49,53,41)"; 
 
     
     /**
@@ -89,6 +90,29 @@ public class WorkflowDAO implements IWorkflowDAO
         daoUtil.free( );
 
         return message;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public String selectUserServiceFait( Integer idResource )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_USER_SERVICE_FAIT );
+        
+        int nIndex = 1;
+        daoUtil.setInt(nIndex++, idResource);
+        
+        daoUtil.executeQuery( );
+
+        String user = null;
+        if ( daoUtil.next( ) )
+        {
+            user = daoUtil.getString( 1 );
+        }
+
+        daoUtil.free( );
+
+        return user;
     }
 
 

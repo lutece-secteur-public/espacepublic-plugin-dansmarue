@@ -71,5 +71,13 @@ public class WorkflowService extends AbstractCacheableService implements IWorkfl
     public String selectMessageNotification( Integer idHistory ){
         return _workflowDAO.selectMessageNotification( idHistory );
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String selectUserServiceFait( Integer idResource ){
+        return _workflowDAO.selectUserServiceFait( idResource );
+    }
 
 }

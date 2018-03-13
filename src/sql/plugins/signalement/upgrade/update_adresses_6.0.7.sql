@@ -65,7 +65,7 @@ update
 set
 	adresse = '51 rue Guy Moquet, 75017 PARIS'
 where
-	id_adresse = 243443
+	id_adresse = 243443;
 	
 /* DMR-114 */	
 	

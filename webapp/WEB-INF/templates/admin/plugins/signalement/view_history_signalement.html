@@ -175,6 +175,18 @@
 						</div>
 					</div>
 				</div>
+				<#if stateSignalement.id == serviceFaitValue && serviceFaitUser != "">
+					<div class="form-group">
+						<div class="col-xs-6 col-sm-6 col-md-6">
+							<label class="<@labelStyle />" for="#i18n{dansmarue.viewSignalement.service.fait}">
+								#i18n{dansmarue.viewSignalement.service.fait}
+							</label>
+							<div class="<@inputStyle />">
+								${serviceFaitUser}
+							</div>
+						</div>
+					</div>
+				</#if>	
 			</fieldset>
 		</div>
 		<br />

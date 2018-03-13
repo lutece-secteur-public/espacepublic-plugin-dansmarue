@@ -31,4 +31,6 @@ public interface IWorkflowService
 	int selectIdActionByStates(int idStateBefore, int idStateAfter);
 
     String selectMessageNotification( Integer idHistory );
+
+    String selectUserServiceFait( Integer idResource );
 }

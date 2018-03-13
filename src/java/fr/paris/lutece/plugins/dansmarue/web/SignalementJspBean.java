@@ -113,8 +113,10 @@ import fr.paris.lutece.plugins.unittree.modules.sira.service.sector.ISectorServi
 import fr.paris.lutece.plugins.unittree.modules.sira.service.unit.IUnitSiraService;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
+import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.business.user.AdminUserHome;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.fileupload.FileUploadService;
@@ -390,6 +392,12 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant MARK_STATE_SIGNALEMENT. */
     private static final String           MARK_STATE_SIGNALEMENT                        = "stateSignalement";
+    
+    /** The Constant MARL_STATE_SERVICE_FAIT. */
+    private static final String           MARK_STATE_SERVICE_FAIT                       = "serviceFaitValue";    
+    
+    /** The Constant MARL_USER_SERVICE_FAIT. */
+    private static final String           MARK_USER_SERVICE_FAIT                        = "serviceFaitUser"; 
 
     /** The Constant MARK_NO_VALID_ADDRESSES. */
     public static final String            MARK_NO_VALID_ADDRESSES                       = "noValidAddresses";
@@ -526,6 +534,9 @@ public class SignalementJspBean extends AbstractJspBean
     private static final String           MESSAGE_TITLE_DELETE_SIGNALEMENT              = "dansmarue.messagetitle.deleteSignalement.title";
     
     private static final String           MESSAGE_RAMEN_WS_ERROR                        = "dansmarue.ramen.webservice.erreur";
+    
+    /** The Constant USAGER_MOBILE */
+    public static final String           USAGER_MOBILE                                  = "Usager mobile";
 
     // PROPERTIES
     private static final String           PROPERTY_FILE_FOLDER_PATH                     = "signalement.pathForFileMessageCreation";
@@ -1124,8 +1135,31 @@ public class SignalementJspBean extends AbstractJspBean
 
         // get the signalement's state
         State stateSignalement = workflowService.getState( nIdSignalement, Signalement.WORKFLOW_RESOURCE_TYPE, _signalementWorkflowService.getSignalementWorkflowId( ), null );
-
+        String serviceFaitValue = AppPropertiesService.getProperty( SignalementConstants.PROPERTY_SERVICE_FAIT_VALUE );
+        
         model.put( MARK_STATE_SIGNALEMENT, stateSignalement );
+        model.put( MARK_STATE_SERVICE_FAIT, Integer.parseInt( serviceFaitValue ) );
+        
+        String userAccessCode = "";
+        if ( stateSignalement.getId( ) == Integer.parseInt( serviceFaitValue ) ) {
+            userAccessCode = _signalementWorkflowService.selectUserServiceFait( signalement.getId( ).intValue( ) );    
+        }
+        if ( userAccessCode != StringUtils.EMPTY && userAccessCode != null ) {
+            if( userAccessCode.equals( "auto" ) ) {
+                if ( ( signaleur.getIdTelephone( ) != StringUtils.EMPTY && signaleur.getIdTelephone( ) != null && signaleur.getMail( ) == StringUtils.EMPTY ) ) {
+                    model.put( MARK_USER_SERVICE_FAIT, USAGER_MOBILE );
+                }               
+                else {
+                    model.put( MARK_USER_SERVICE_FAIT, signaleur.getMail( ) );
+                }                
+            }
+            else {
+                model.put( MARK_USER_SERVICE_FAIT, AdminUserHome.findUserByLogin( userAccessCode ).getEmail( ) );
+            }
+        }
+        else {
+            model.put( MARK_USER_SERVICE_FAIT, StringUtils.EMPTY ); 
+        }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_SIGNALEMENT_HISTORY, getLocale( ), model );
 

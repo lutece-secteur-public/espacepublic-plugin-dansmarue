@@ -64,6 +64,7 @@ public final class SignalementConstants
 
     // Properties
     public static final String       PROPERTY_DEFAULT_ITEM_PER_PAGE                         = "signalement.itemsPerPage";
+    public static final String       PROPERTY_SERVICE_FAIT_VALUE                            = "signalement.idStateServiceFait";
 
     // Parameters
     public static final String       PARAMETER_BUTTON_CANCEL                                = "cancel";
