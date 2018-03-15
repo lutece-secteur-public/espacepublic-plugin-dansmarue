@@ -464,7 +464,7 @@ public class SignalementJspBean extends AbstractJspBean
     private static final int[]            ID_ACTIONS_ACCEPTER                           = { 13 };
 
     /** The Constant ID_ETATS_DEFAULT. */
-    private static final int[]            ID_ETATS_DEFAULT                              = { 7, 8, 16, 17, 18, 21, 10 };
+    private static final int[]            ID_ETATS_DEFAULT                              = { 7, 8, 16, 17, 18, 21 };
 
     /** The Constant CSV_SEPARATOR. */
     private static final char             CSV_SEPARATOR                                 = ';';
