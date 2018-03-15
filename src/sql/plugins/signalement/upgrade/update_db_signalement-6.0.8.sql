@@ -60,3 +60,10 @@ where
 		'DPE_CHEFDESECTEUR',
 		'DPE_FEUILLEDEROUTE'
 	);
+
+	
+/* Correction fait 68060 */ 
+	
+update signalement_workflow_notifuser_3contents_config
+set subject_ramen = 'DansMaRue : Suivi de l’anomalie n°${numero}'
+where id_task in (133,85);
