@@ -66,23 +66,25 @@ public class AdresseDAO implements IAdresseDAO
      * Save a new adresse
      * 
      */
-    public Long insert( Adresse adresse )
+    public synchronized Long insert( Adresse adresse )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_WITH_GEOM );
         if ( adresse.getId( ) == null || adresse.getId( ) == 0 )
         {
             adresse.setId( newPrimaryKey( ) );
-        }
-        int nIndex = 1;
-        daoUtil.setLong( nIndex++, adresse.getId( ) );
-        daoUtil.setString( nIndex++, adresse.getAdresse( ) );
-        daoUtil.setString( nIndex++, adresse.getPrecisionLocalisation( ) );
-        daoUtil.setLong( nIndex++, adresse.getSignalement( ).getId( ) );
-        daoUtil.setDouble( nIndex++, adresse.getLng( ) );
-        daoUtil.setDouble( nIndex++, adresse.getLat( ) );
+            
+            int nIndex = 1;
+            daoUtil.setLong( nIndex++, adresse.getId( ) );
+            daoUtil.setString( nIndex++, adresse.getAdresse( ) );
+            daoUtil.setString( nIndex++, adresse.getPrecisionLocalisation( ) );
+            daoUtil.setLong( nIndex++, adresse.getSignalement( ).getId( ) );
+            daoUtil.setDouble( nIndex++, adresse.getLng( ) );
+            daoUtil.setDouble( nIndex++, adresse.getLat( ) );
 
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+            daoUtil.executeUpdate( );
+            daoUtil.free( );
+        }
+       
 
         return adresse.getId( );
     }
