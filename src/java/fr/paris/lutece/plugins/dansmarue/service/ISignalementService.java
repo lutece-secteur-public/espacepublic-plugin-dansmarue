@@ -20,6 +20,7 @@ import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.plugin.Plugin;
+import net.sf.json.JSONObject;
 
 
 /**
@@ -421,4 +422,7 @@ public interface ISignalementService
 	 * @param dateMiseEnSurveillance
 	 */
 	void doMettreSousSurveillance(int nIdSignalement, String dateMiseEnSurveillance);
+
+    JSONObject getHistorySignalement( Integer idSignalement,
+            HttpServletRequest request );
 }

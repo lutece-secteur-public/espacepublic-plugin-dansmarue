@@ -1,6 +1,8 @@
 package fr.paris.lutece.plugins.dansmarue.service;
 
+import java.util.List;
 
+import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 
 /**
  * 
@@ -33,4 +35,12 @@ public interface IWorkflowService
     String selectMessageNotification( Integer idHistory );
 
     String selectUserServiceFait( Integer idResource );
+
+    String select3ContentsMessageNotification( Integer idHistory );
+
+    List<ResourceHistory> getAllHistoryByResource( int nIdResource,
+            String strResourceType, int nIdWorkflow );
+
+    ResourceHistory getLastHistoryResource( int nIdResource,
+            String strResourceType, int nIdWorkflow );
 }

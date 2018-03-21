@@ -68,7 +68,8 @@ public class MailSignalementJspBean extends AbstractJspBean
     private static final String MESSAGE_MAIL_PRIORITE             = "Priorit\u00E9";
     private static final String MESSAGE_MAIL_ADRESSE_SIGNALEMENT  = "Localisation";
     private static final String MESSAGE_MAIL_PRECISION_LOC        = "Pr\u00e9cision de localisation";
-    private static final String MESSAGE_MAIL_LINK                 = "Lien";
+    private static final String MESSAGE_MAIL_LINK_WITH_ACCOUNT    = "Lien back-office authentifié";
+    private static final String MESSAGE_MAIL_LINK                 = "Lien accessible pour l'usager";
     private static final String MESSAGE_MAIL_BONJOUR              = "Bonjour, ";
 
     // CONSTANTS
@@ -81,6 +82,7 @@ public class MailSignalementJspBean extends AbstractJspBean
 
     // PROPERTIES
     private static final String PROPERTY_BASE_URL                 = "lutece.prod.url";
+    private static final String PROPERTY_BASE_TS_URL              = "lutece.ts.prod.url";
 
     // Markers
     /** The Constant MARK_MAIL_ITEM. */
@@ -92,6 +94,7 @@ public class MailSignalementJspBean extends AbstractJspBean
     private static final String JSP_MANAGE_MAIL                   = "DoCreateMailSignalement.jsp";
     private static final String JSP_MANAGE_SIGNALEMENTS           = "ManageSignalement.jsp";
     private static final String JSP_PORTAL                        = "jsp/admin/plugins/signalement/ViewSignalement.jsp?signalement_id=";
+    private static final String JSP_PORTAL_USER                   = "jsp/site/Portal.jsp?instance=signalement&bo_link=true&page=suivi&token=";
     private static final String JSP_MANAGE_SIGNALEMENT            = "jsp/admin/plugins/signalement/ManageSignalement.jsp";
 
     @Override
@@ -194,10 +197,15 @@ public class MailSignalementJspBean extends AbstractJspBean
                     strBuff.append( MESSAGE_MAIL_COMMENTAIRE + " : " + signalement.getCommentaire( ) );
                 }
 
-                // Link to the consultation page
+                // Link to the consultation page with BO account
+                strBuff.append( LINE_SEPARATOR + LINE_SEPARATOR + MESSAGE_MAIL_LINK_WITH_ACCOUNT + " : <a href=\"" 
+                        + this.getLinkConsultationWithAcc( signalement, request ) + signalement.getId( ) + "\">" 
+                        + this.getLinkConsultationWithAcc( signalement, request ) + signalement.getId( ) + "</a>" );
+                
+                // Link to the consultation page user
                 strBuff.append( LINE_SEPARATOR + LINE_SEPARATOR + MESSAGE_MAIL_LINK + " : <a href=\"" 
-                        + this.getLinkConsultation( signalement, request ) + signalement.getId( ) + "\">" 
-                        + this.getLinkConsultation( signalement, request ) + signalement.getId( ) + "</a>" );
+                        + this.getLinkConsultation( signalement, request ) + signalement.getToken( ) + "\">" 
+                        + this.getLinkConsultation( signalement, request ) + signalement.getToken( ) + "</a>" );
 
                 mailItem.setMessage( strBuff.toString( ) );
                 mailItem.setSubject( PARAMETER_SUBJECT );
@@ -346,12 +354,21 @@ public class MailSignalementJspBean extends AbstractJspBean
             }
         }
     }
+    
+    private String getLinkConsultationWithAcc( Signalement signalement, HttpServletRequest request )
+    {
+        UrlItem urlItem;
+
+        urlItem = new UrlItem( AppPropertiesService.getProperty( PROPERTY_BASE_URL ) + JSP_PORTAL );
+
+        return urlItem.getUrl( );
+    }
 
     private String getLinkConsultation( Signalement signalement, HttpServletRequest request )
     {
         UrlItem urlItem;
 
-        urlItem = new UrlItem( AppPropertiesService.getProperty( PROPERTY_BASE_URL ) + JSP_PORTAL );
+        urlItem = new UrlItem( AppPropertiesService.getProperty( PROPERTY_BASE_TS_URL ) + JSP_PORTAL_USER );
 
         return urlItem.getUrl( );
     }

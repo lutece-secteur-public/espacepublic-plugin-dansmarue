@@ -2,6 +2,7 @@ package fr.paris.lutece.plugins.dansmarue.service.impl;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -12,6 +13,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -67,6 +69,7 @@ import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.ImgUtils;
+import fr.paris.lutece.plugins.dansmarue.service.dto.HistorySignalementDTO;
 import fr.paris.lutece.plugins.unittree.business.unit.IUnitDAO;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.modules.sira.business.sector.ISectorDAO;
@@ -74,7 +77,9 @@ import fr.paris.lutece.plugins.unittree.modules.sira.business.sector.Sector;
 import fr.paris.lutece.plugins.unittree.modules.sira.service.sector.ISectorService;
 import fr.paris.lutece.plugins.unittree.modules.sira.service.unit.IUnitSiraService;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
+import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
+import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistoryService;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -85,6 +90,7 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.util.image.ImageUtil;
 import fr.paris.lutece.util.url.UrlItem;
+import net.sf.json.JSONObject;
 
 /**
  * The Class SignalementService.
@@ -112,9 +118,11 @@ public class SignalementService implements ISignalementService
     private static final String                 PROPERTY_TASK_NOTIFICATION_USER  = "signalement.taskType.signalementUserNotification";
     private static final String                 PROPERTY_ID_WORKFLOW_SIGNALEMENT = "signalement.idWorkflow";
     private static final String                 PROPERTY_BASE_URL                = "lutece.prod.url";
+    private static final String                 PROPERTY_BASE_TS_URL             = "lutece.ts.prod.url";
+    private static final String                 PARAMETER_VALIDATE_SUIVI         = "validate_suivi";
 
     // JSP
-    private static final String                 JSP_PORTAL                       = "jsp/site/Portal.jsp";
+    private static final String                 JSP_PORTAL                       = "jsp/site/Portal.jsp?instance=signalement";
 
     // CONSTANTS
     private static final String                 STRING_RECU                      = "Re&ccedil;u";
@@ -125,6 +133,12 @@ public class SignalementService implements ISignalementService
 
     private static final String                 CHARSET_UTF_8                    = "UTF-8";
     private static final int                    TOKEN_NB_RANDOM_CHAR             = 100;
+    
+    private static final String                 MARK_CURRENT_STATE               = "currentState";
+    private static final String                 MARK_CURRENT_STATE_ID            = "currentStateId";
+    private static final String                 MARK_DATE_LAST_STATE             = "currentStateDate";
+    private static final String                 MARK_HISTORY                     = "history";
+    private static final String                 MARK_SERVICE_FAIT_AVAILABLE      = "service_fait_available";
 
     // MESSAGES
     private static final String                 MESSAGE_ERROR_NO_SECTOR          = "dansmarue.message.error.aucunSecteur";
@@ -138,6 +152,7 @@ public class SignalementService implements ISignalementService
     @Inject
     @Named( "fileMessageCreationService" )
     private IFileMessageCreationService         _fileMessageCreationService;
+        
     /** The _signalement dao. */
     @Inject
     @Named( "signalementDAO" )
@@ -1238,7 +1253,7 @@ public class SignalementService implements ISignalementService
     {
         UrlItem urlItem;
 
-        urlItem = new UrlItem( AppPropertiesService.getProperty( PROPERTY_BASE_URL ) + JSP_PORTAL );
+        urlItem = new UrlItem( AppPropertiesService.getProperty( PROPERTY_BASE_TS_URL ) + JSP_PORTAL );
 
         urlItem.addParameter( PARAMETER_PAGE, PARAMETER_SUIVI );
         urlItem.addParameter( PARAMETER_TOKEN, signalement.getToken( ) );
@@ -1520,6 +1535,110 @@ public class SignalementService implements ISignalementService
     {
         _signalementDAO.addMiseEnSurveillanceDate( nIdSignalement, dateMiseEnSurveillance );
         
+    }
+    
+    @Override
+    public JSONObject getHistorySignalement( Integer idSignalement, HttpServletRequest request )
+    {
+        
+        boolean service_fait = false;
+        JSONObject jsonObject = new JSONObject(  );
+        
+        int nIdWorkflow = _signalementWorkflowService.getSignalementWorkflowId( );
+        
+        WorkflowService workflowService = WorkflowService.getInstance( );
+        
+        //check if this incident can be resolved
+        State stateOfSignalement = workflowService.getState( idSignalement,
+                Signalement.WORKFLOW_RESOURCE_TYPE, nIdWorkflow, null ); 
+        int idStatutServiceFait = AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_FAIT, -1);
+        int idActionServiceFait = _signalementWorkflowService.selectIdActionByStates(stateOfSignalement.getId(), idStatutServiceFait);
+        if(idActionServiceFait > -1){
+            service_fait = true;
+            
+            if(request.getParameter( PARAMETER_VALIDATE_SUIVI ) != null){
+                workflowService.doProcessAction( idSignalement, Signalement.WORKFLOW_RESOURCE_TYPE,
+                        idActionServiceFait, null, request,
+                        request.getLocale( ), true );
+                //Une fois service fait, réaffichage avec les nouvelles données
+                service_fait = false;
+                stateOfSignalement= workflowService.getState( idSignalement,
+                        Signalement.WORKFLOW_RESOURCE_TYPE, nIdWorkflow, null ); 
+            }
+        }            
+                
+        //get the current state
+        String strState = this.changeToGoodStateForSuivi( stateOfSignalement );
+
+        //get the current state's date
+        ResourceHistory rhLastState = _signalementWorkflowService.getLastHistoryResource( idSignalement, Signalement.WORKFLOW_RESOURCE_TYPE, nIdWorkflow );
+
+        Date dateLastState = new Date( rhLastState.getCreationDate( ).getTime( ) );
+        SimpleDateFormat sdfDate = new SimpleDateFormat( "dd/MM/yyyy" );
+        String strDateLastState = sdfDate.format( dateLastState );
+
+        //get the history list
+        List<HistorySignalementDTO> listHistory = this.getHistorySignalementList( idSignalement );  
+        
+        /* Remplissage du JSON */
+        jsonObject.accumulate( MARK_CURRENT_STATE, strState );
+        jsonObject.accumulate( MARK_CURRENT_STATE_ID, stateOfSignalement.getId( ) );
+        jsonObject.accumulate( MARK_DATE_LAST_STATE, strDateLastState );
+        jsonObject.accumulate( MARK_HISTORY, listHistory );
+        jsonObject.accumulate( MARK_SERVICE_FAIT_AVAILABLE, service_fait );
+        
+        return jsonObject;
+        
+    }
+    
+    private List<HistorySignalementDTO> getHistorySignalementList( int nIdSignalement )
+    {
+        List<HistorySignalementDTO> listHistoryDTO = new ArrayList<HistorySignalementDTO>( );
+
+        List<ResourceHistory> listHistory = _signalementWorkflowService.getAllHistoryByResource( nIdSignalement,
+                Signalement.WORKFLOW_RESOURCE_TYPE, _signalementWorkflowService.getSignalementWorkflowId( ) );
+
+        ListIterator<ResourceHistory> iterator = listHistory.listIterator( );
+
+        while ( iterator.hasNext( ) )
+        {
+            ResourceHistory rh = iterator.next( );
+
+            HistorySignalementDTO dto = new HistorySignalementDTO( );
+
+            //get the date of action
+            Date dateLastState = new Date( rh.getCreationDate( ).getTime( ) );
+            SimpleDateFormat sdfDate = new SimpleDateFormat( "dd/MM/yyyy" );
+            dto.setDate( sdfDate.format( dateLastState ) );
+
+            //get the state 
+            State stateAfterAction = rh.getAction( ).getStateAfter( );
+            dto.setState( this.changeToGoodStateForSuivi( stateAfterAction ) );
+
+            //get the message
+            String notificationUser3ContentsValue = _signalementWorkflowService.select3ContentsMessageNotification( rh.getId( ) );
+
+            String notificationUserValue = _signalementWorkflowService.selectMessageNotification( rh.getId( ) );
+
+            if ( notificationUser3ContentsValue != null
+                    && !notificationUser3ContentsValue.equals( StringUtils.EMPTY ) )
+            {
+                //add the history only if there's a saved email in database
+                dto.setMessage( notificationUser3ContentsValue );
+                listHistoryDTO.add( dto );
+            }
+
+            if ( notificationUserValue != null && !notificationUserValue.equals( StringUtils.EMPTY ) )
+            {
+                //add the history only if there's a saved email in database (case of creation only)
+                dto.setMessage( notificationUserValue );
+                listHistoryDTO.add( dto );
+            }
+
+        }
+
+        return listHistoryDTO;
+
     }
 
 }

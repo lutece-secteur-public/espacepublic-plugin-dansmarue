@@ -2,9 +2,12 @@ package fr.paris.lutece.plugins.dansmarue.service.impl;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.IWorkflowDAO;
 import fr.paris.lutece.plugins.dansmarue.service.IWorkflowService;
+import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -60,14 +63,6 @@ public class WorkflowService extends AbstractCacheableService implements IWorkfl
      * {@inheritDoc}
      */
     @Override
-    public int selectIdActionByStates(int idStateBefore, int idStateAfter){
-    	return _workflowDAO.selectIdActionByStates(idStateBefore, idStateAfter, null);
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String selectMessageNotification( Integer idHistory ){
         return _workflowDAO.selectMessageNotification( idHistory );
     }
@@ -76,8 +71,56 @@ public class WorkflowService extends AbstractCacheableService implements IWorkfl
      * {@inheritDoc}
      */
     @Override
+    public String select3ContentsMessageNotification( Integer idHistory ){
+        return _workflowDAO.select3ContentsMessageNotification( idHistory );
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<ResourceHistory> getAllHistoryByResource( int nIdResource, String strResourceType, int nIdWorkflow )
+    {
+        List<ResourceHistory> listResourceHistory = _workflowDAO.selectByResource( nIdResource, strResourceType,
+                nIdWorkflow );
+
+        for ( ResourceHistory resourceHistory : listResourceHistory )
+        {
+            resourceHistory.setAction( _workflowDAO.findByPrimaryKey( resourceHistory.getAction(  ).getId(  ) ) );
+        }
+
+        return listResourceHistory;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ResourceHistory getLastHistoryResource( int nIdResource, String strResourceType, int nIdWorkflow )
+    {
+        List<ResourceHistory> listResourceHistory = _workflowDAO.selectByResource( nIdResource, strResourceType,
+                nIdWorkflow );
+
+        for ( ResourceHistory resourceHistory : listResourceHistory )
+        {
+            resourceHistory.setAction( _workflowDAO.findByPrimaryKey( resourceHistory.getAction(  ).getId(  ) ) );
+        }
+
+        return ( listResourceHistory.size(  ) > 0 ) ? listResourceHistory.get( 0 ) : null;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String selectUserServiceFait( Integer idResource ){
         return _workflowDAO.selectUserServiceFait( idResource );
+    }
+
+    @Override
+    public int selectIdActionByStates( int idStateBefore, int idStateAfter )
+    {
+        return _workflowDAO.selectIdActionByStates(idStateBefore, idStateAfter, null);
     }
 
 }
