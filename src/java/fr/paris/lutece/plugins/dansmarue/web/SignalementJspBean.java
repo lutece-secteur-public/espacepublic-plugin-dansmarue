@@ -781,7 +781,7 @@ public class SignalementJspBean extends AbstractJspBean
         //// THE DIVISION LIST ALLOWED BY USER ////
         ///////////////////////////////////////////
         List<Unit> listUnits = _unitService.getUnitsByIdUser( adminUser.getUserId( ), false );
-
+        
         ReferenceList listeDirections = new ReferenceList( );
         List<Sector> listSectorsOfUnits = new ArrayList<Sector>( );
         ReferenceList listeArrondissement = new ReferenceList( );
@@ -932,6 +932,11 @@ public class SignalementJspBean extends AbstractJspBean
 
         if ( filter.getIdDirection( ) > 0 )
         {
+            //Specificity for DEVE entity, change the id from SEJ to DEVE
+            if ( filter.getIdDirection( ) == 94 )
+            {
+                filter.setIdDirection( 1 );
+            }
             listSectorsOfUnits = _sectorService.loadByIdUnitWithoutChosenId( filter.getIdDirection( ), ID_JARDIN );
         }
 
@@ -1062,6 +1067,10 @@ public class SignalementJspBean extends AbstractJspBean
         model.put( MARK_TITLE, I18nService.getLocalizedString( PAGE_TITLE_MANAGE_SIGNALEMENT, getLocale( ) ) );
 
         // the filter
+        if ( filter.getIdDirection( ) == 1 )
+        {
+            filter.setIdDirection( 94 );
+        }
         model.put( SignalementConstants.MARK_FILTER, filter );
         model.put( SignalementConstants.MARK_LOCALE, request.getLocale( ) );
 
@@ -3607,7 +3616,11 @@ public class SignalementJspBean extends AbstractJspBean
             noRessource.add( NO_RESOURCE_FOUND );
             filter.setListIdCategories( noRessource );
         }
-
+        
+        if ( filter.getIdDirection( ) == 94 )
+        {
+            filter.setIdDirection( 1 );
+        }
         Integer totalResult = _signalementService.countIdSignalementByFilter( filter, getPlugin( ) );
         List<Signalement> signalementList = _signalementService.findByFilter( filter, getPaginationProperties( request, totalResult ), true );
 
@@ -3682,6 +3695,10 @@ public class SignalementJspBean extends AbstractJspBean
         model.put( MARK_ADVANCED_SEARCH_STATES, ADVANCED_SEARCH_STATES );
         model.put( MARK_MAP_MAX_RESULTS, AppPropertiesService.getPropertyInt( PROPERTY_MAP_MAX_RESULTS, 0 ) );
 
+        if ( filter.getIdDirection( ) == 1 )
+        {
+            filter.setIdDirection( 94 );
+        }
         model.put( MARK_FILTER, filter );
         _signalementFilter = filter;
 
