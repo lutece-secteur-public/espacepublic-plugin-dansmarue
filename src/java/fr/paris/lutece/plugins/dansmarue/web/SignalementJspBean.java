@@ -3429,6 +3429,11 @@ public class SignalementJspBean extends AbstractJspBean
             try
             {
                 Integer directionId = Integer.parseInt( strDirectionId );
+                //Specificity for DEVE entity, change the id from SEJ to DEVE
+                if ( directionId == 94 )
+                {
+                    directionId = 1;
+                }
                 Unit unitSelected = _unitService.getUnit( directionId, false );
                 AdminUser adminUser = AdminUserService.getAdminUser( request );
                 List<Unit> listUnits = _unitService.getUnitsByIdUser( adminUser.getUserId( ), false );
@@ -3453,6 +3458,7 @@ public class SignalementJspBean extends AbstractJspBean
                 List<Sector> listSectors = new ArrayList<>( );
                 for ( Unit userUnit : listAuthorizedUnits )
                 {
+                    // Trie les secteurs en retirant SC et Jardins pour la DEVE
                     List<Sector> listSectorsOfUnit = _sectorService.loadByIdUnitWithoutSpecificDeveUnits( userUnit.getIdUnit( ) );
                     for ( Sector sector : listSectors )
                     {
