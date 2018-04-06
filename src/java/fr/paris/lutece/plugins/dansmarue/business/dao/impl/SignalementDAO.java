@@ -85,7 +85,7 @@ public class SignalementDAO implements ISignalementDAO
     private static final String SQL_QUERY_FROM_SIGNALEUR                           = " LEFT OUTER JOIN signalement_signaleur AS signaleur ON signalement.id_signalement = signaleur.fk_id_signalement ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_LIST_TYPE_SIGNALEMENT. */
-    private static final String SQL_QUERY_ADD_FILTER_LIST_TYPE_SIGNALEMENT         = " fk_id_type_signalement IN ({0}) ";
+    private static final String SQL_QUERY_ADD_FILTER_LIST_TYPE_SIGNALEMENT         = " signalement.fk_id_type_signalement IN ({0}) ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_TYPE_SIGNALEMENT. */
     private static final String SQL_QUERY_ADD_FILTER_TYPE_SIGNALEMENT              = " vstswpl.id_parent = ? ";
