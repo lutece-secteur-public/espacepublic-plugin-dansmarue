@@ -34,6 +34,8 @@
 package fr.paris.lutece.plugins.dansmarue.web;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.*;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -214,6 +216,9 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant URL_JSP_DISPLAY_SIGNALEMENTS **/
     private static final String           URL_JSP_DISPLAY_SIGNALEMENTS                  = "jsp/admin/plugins/signalement/DisplaySignalement.jsp";
+
+    /** The Constant URL_JSP_GET_ROAD_MAP **/
+    private static final String           URL_JSP_GET_ROAD_MAP                          = "jsp/admin/plugins/ramen/GetRoadMap.jsp";
 
     /** The Constant CSV_ISO. */
     private static final String           CSV_ISO                                       = "ISO-8859-1";
@@ -2522,7 +2527,6 @@ public class SignalementJspBean extends AbstractJspBean
             }
             urlItem.addParameter( PARAMETER_ACTION_ID, nIdAction.intValue( ) );
             urlItem.addParameter( PARAMETER_SIGNALEMENT_ID, nIdResource );
-            urlItem.addParameter( "next", request.getParameter( "next" ) );
             urlItem.addParameter( PARAMETER_IS_ROAD_MAP, Boolean.toString( StringUtils.isNotBlank( request.getParameter( PARAMETER_IS_ROAD_MAP ) ) ) );
             String strDateService = request.getParameter( PARAMETER_DATE_SERVICE );
             if ( StringUtils.isNotBlank( strDateService ) )
@@ -2538,6 +2542,43 @@ public class SignalementJspBean extends AbstractJspBean
             if ( StringUtils.isNotBlank( strServiceId ) )
             {
                 urlItem.addParameter( PARAMETER_SERVICE__ID, strServiceId );
+            }
+
+            String next = request.getParameter( PARAMETER_NEXT_URL );
+
+            if ( StringUtils.contains( next, URL_JSP_GET_ROAD_MAP ) ) {
+                try {
+                    // Gestion de l'URL de retour
+                    URI uri = new URI(next);
+                    String nextPath = new URI(uri.getScheme(), uri.getAuthority(), uri.getPath(), null, uri.getFragment()).toString();
+                    UrlItem nextUrl = new UrlItem(nextPath);
+                    // date de service
+                    if (StringUtils.isNotBlank(strDateService)) {
+                        nextUrl.addParameter(PARAMETER_DATE_SERVICE, strDateService);
+                    }
+                    // service id
+                    if (StringUtils.isNotBlank(strServiceId)) {
+                        nextUrl.addParameter(PARAMETER_SERVICE__ID, strServiceId);
+                    }
+                    // unit id
+                    String strUnitId = request.getParameter(PARAMETER_UNIT__ID);
+                    if (StringUtils.isNotBlank(strUnitId)) {
+                        nextUrl.addParameter(PARAMETER_UNIT__ID, strUnitId);
+                    }
+                    // sector id
+                    String strSectorId = request.getParameter(PARAMETER_SECTOR__ID);
+                    if (StringUtils.isNotBlank(strSectorId)) {
+                        nextUrl.addParameter(PARAMETER_SECTOR__ID, strSectorId);
+                    }
+                    // set next url in the return url object
+                    urlItem.addParameter(PARAMETER_NEXT_URL, encodeURIComponent( nextUrl.getUrl( ) ) );
+                    // set next url in the session
+                    request.getSession( ).setAttribute( PARAMETER_NEXT_URL, nextUrl.getUrl( ) );
+                } catch (Exception e) {
+                    AppLogService.error(e);
+                }
+            } else {
+                urlItem.addParameter( PARAMETER_NEXT_URL, next );
             }
 
             strUrl = urlItem.getUrl( );
@@ -2560,7 +2601,6 @@ public class SignalementJspBean extends AbstractJspBean
      * @throws AccessDeniedException
      *             the access denied exception
      */
-
     public IPluginActionResult processActionServicefait( HttpServletRequest request, HttpServletResponse response ) throws AccessDeniedException
     {
 
@@ -2974,6 +3014,7 @@ public class SignalementJspBean extends AbstractJspBean
             {
                 homeUrl = getHomeUrl( request );
             }
+
         } catch ( ClassCastException e )
         {
             homeUrl = getHomeUrl( request );
@@ -4279,6 +4320,28 @@ public class SignalementJspBean extends AbstractJspBean
         }
 
         return hasCritereAdresse || hasCritereMail || hasCritereCommentaire || hasCritereArrondissement || hasCritereEtat || hasCritereQuartier;
+    }
+
+    private String encodeURIComponent( String component )
+    {
+
+        String result = null;
+
+        try {
+            result = URLEncoder.encode ( component, "UTF-8" )
+                    .replaceAll( "\\%28", "(" )
+                    .replaceAll( "\\%29", ")" )
+                    .replaceAll( "\\+", "%20" )
+                    .replaceAll( "\\%27", "'" )
+                    .replaceAll( "\\%21", "!" )
+                    .replaceAll( "\\%7E", "~" );
+        } catch ( UnsupportedEncodingException e )
+        {
+            result = component;
+        }
+
+        return result;
+
     }
 
 }
