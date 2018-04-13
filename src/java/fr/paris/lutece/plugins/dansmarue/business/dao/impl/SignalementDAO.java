@@ -1084,6 +1084,13 @@ public class SignalementDAO implements ISignalementDAO
         }
 
         DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ), plugin );
+        
+        //Special case Specificity for DEVE entity, change the id from SEJ to DEVE
+        if ( filter.getIdDirection( ) == 94 )
+        {
+            filter.setIdDirection( 1 );
+        }
+        
         setFilterValues( filter, daoUtil );
 
         daoUtil.executeQuery( );

@@ -600,7 +600,10 @@ public class SignalementService implements ISignalementService
             dto.setAliasMobile( StringUtils.defaultString( signalement.getTypeSignalement( ).getAliasMobile( ) ) );
 
             // label unit
-            dto.setDirection( signalement.getTypeSignalement( ).getUnit( ).getLabel( ) );
+            //dto.setDirection( signalement.getTypeSignalement( ).getUnit( ).getLabel( ) );
+            int idUnit = _sectorDAO.getDirectionUnitIdBySectorId(  signalement.getSecteur( ).getIdSector( ) );
+            Unit unit = _unitDAO.load( idUnit, plugin );
+            dto.setDirection( unit.getLabel( ) );
             
             // Quartier
             ConseilQuartier quartier = _conseilQuartierDAO.selectQuartierByAdresse( signalement.getAdresses( ).get( 0 ).getId( ).intValue( ) ) ;
