@@ -5,7 +5,7 @@
 		</legend>
 	</div>
 	<form class="form-horizontal"
-		action="${back_url}"
+		action="${back_url}#ancre-signalement-${signalement.id}"
 		method="get">
 		<div class="row">
 			<fieldset>
@@ -193,8 +193,7 @@
 		<div>${historiqueHtml}</div>
 		<div class="text-center">
 			<div class="form-actions">
-				<button type="submit" class="btn btn-lg btn-paris btn-blue"
-					id="search-button" name="search">
+				<button type="submit" class="btn btn-lg btn-paris btn-blue">
 					<i class="glyphicon glyphicon-search"></i>
 					#i18n{dansmarue.retour}
 				</button>

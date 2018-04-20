@@ -144,12 +144,10 @@ public final class ConseilQuartierDAO implements IConseilQuartierDao
         daoUtil.setInt( 1, nIdAdresse );
         daoUtil.executeQuery( );
 
-        ConseilQuartier quartier = null;
+        ConseilQuartier quartier = new ConseilQuartier( );
 
         if ( daoUtil.next( ) )
         {
-            quartier = new ConseilQuartier( );
-
             quartier.setIdConsqrt( daoUtil.getInt( 1 ) );
             quartier.setNumeroConsqrt( daoUtil.getString( 2 ) );
             quartier.setSurface( daoUtil.getBigDecimal( 3 ) );

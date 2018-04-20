@@ -10,7 +10,7 @@
 
 	<artifactId>plugin-dansmarue</artifactId>
 	<packaging>lutece-plugin</packaging>
-	<version>6.0.10-SNAPSHOT</version>
+	<version>6.0.11-SNAPSHOT</version>
 	<name>plugin Dans Ma Rue (BO signalement)</name>
 
 	<distributionManagement>
@@ -58,7 +58,7 @@
 			<dependency>
 				<groupId>fr.paris.lutece</groupId>
 				<artifactId>lutece-core</artifactId>
-				<version>6.0.1</version>
+				<version>6.1.0</version>
 			</dependency>
 
 			<dependency>
