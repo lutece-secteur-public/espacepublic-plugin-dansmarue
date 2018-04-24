@@ -112,7 +112,8 @@ public final class SignalementConstants
     public static final String       UNIT_CIMETIERE                                         = "signalement.unit.cimetiere";
     public static final String       UNIT_DEVE                                              = AppPropertiesService.getProperty( "signalement.unit.deve" );
     public static final Integer      UNIT_DPE                                               = AppPropertiesService.getPropertyInt( "signalement.unit.dpe", -1 );
-
+    public static final Integer      UNIT_RAMEN                                             = AppPropertiesService.getPropertyInt( "signalement.unit.ramen", -1 );
+    
     // type signalement keys definitions
     public static final String       TYPE_SIGNALEMENT_ENCOMBRANT                            = "signalement.typeSignalement.encombrant";
 

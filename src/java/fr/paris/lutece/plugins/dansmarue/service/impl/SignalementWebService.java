@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -92,13 +94,32 @@ public class SignalementWebService implements ISignalementWebService
 
         Map<String, List<String>> params = new HashMap<String, List<String>>( );
         List<String> values = new ArrayList<String>( );
-        String jsonFormated = "[" + jsonSrc.toString( ) + "]";
-        values.add( jsonFormated );
-        params.put( "jsonStream", values );
+        
+        Pattern p = Pattern.compile("/ramen");
+        Matcher m = p.matcher( url );
+        
+        boolean isRamen = m.find();
+        
+        // Gère l'appel à Ramen
+        if ( isRamen ) {
+            String jsonFormated = jsonSrc.toString( );
+            values.add( jsonFormated );
+            params.put( "jsonStream", values );
+        }
+        else {
+            String jsonFormated = "[" + jsonSrc.toString( ) + "]";
+            values.add( jsonFormated );
+            params.put( "jsonStream", values );
+        }
 
         try
-        {
-            result = _wsCaller.callWebService( url, params, _authenticator, values );
+        { 
+            if ( isRamen ) {
+                result = "[" + _wsCaller.callWebService( url, params, _authenticator, values ) + "]";
+            }
+            else {
+                result = _wsCaller.callWebService( url, params, _authenticator, values );
+            }
         }
         catch ( Exception e )
         {
