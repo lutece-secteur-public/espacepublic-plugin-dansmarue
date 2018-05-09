@@ -15,14 +15,18 @@ import javax.inject.Named;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
+
+import com.google.gson.JsonObject;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.commons.exceptions.BusinessException;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementWebService;
 import fr.paris.lutece.plugins.dansmarue.utils.ws.IWebServiceCaller;
+import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.util.signrequest.RequestAuthenticator;
 
 
@@ -154,8 +158,10 @@ public class SignalementWebService implements ISignalementWebService
         if ( photos != null && !photos.isEmpty( ) )
         {
             for ( PhotoDMR p : photos )
-            {
-                array.add( p.getId( ) );
+            {  
+                JSONObject photoJson = new JSONObject( );
+                photoJson.accumulate( "photo",  getImageBase64( p.getImageThumbnail( ) ) );
+                array.add( photoJson );
             }
             jsonAnomalie.accumulate( JSON_TAG_PHOTOS, array );
         }
@@ -172,5 +178,23 @@ public class SignalementWebService implements ISignalementWebService
     private String encode( String data ) throws UnsupportedEncodingException
     {
         return StringUtils.isNotBlank( data ) ? URLEncoder.encode( data, CharEncoding.UTF_8 ) : StringUtils.EMPTY;
+    }
+    
+    
+    /**
+     * Encode Image for transport WS.
+     * @param image
+     * @return Encode Image
+     */
+    private String getImageBase64( ImageResource image ) {
+        String dataImg = "";
+        if ( image != null && image.getImage( ) != null ) {
+            Base64 codec = new Base64( );
+            String data = new String( codec.encode( image.getImage( ) ) );
+            String mimeType = (image.getMimeType( ) == null) ? "data:image/jpg;base64," : "data:" + image.getMimeType( ) + ";base64,";
+            dataImg = mimeType + data ;
+        }
+        
+        return dataImg;
     }
 }
