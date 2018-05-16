@@ -66,6 +66,9 @@ public class SignalementDAO implements ISignalementDAO
 
     /** The Constant SQL_QUERY_SELECT_SIGNALEMENT_BY_TOKEN. */
     private static final String SQL_QUERY_SELECT_SIGNALEMENT_BY_TOKEN              = "SELECT id_signalement, token FROM signalement_signalement WHERE token = ?";
+    
+    /** SQL QUERY FOR WebServicePartnerDaemon */
+    private static final String SQL_QUERY_SELECT_ID_SIGNALEMENT_FOR_PARTNER_DEAMON = "SELECT id_signalement FROM signalement_signalement, workflow_resource_workflow  WHERE id_signalement = id_resource AND id_state =? ORDER BY id_signalement DESC";
 
     // FOR THE FILTERS
     /** The Constant SQL_QUERY_PART_SELECT. */
@@ -2089,5 +2092,26 @@ public class SignalementDAO implements ISignalementDAO
         daoUtil.free( );
         
         
+    }
+    
+    /**
+     * {@inheritDoc} 
+     */
+    public List<Integer> findIdsSingalementForWSPartnerDeamon(int signalementState) {
+        
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ID_SIGNALEMENT_FOR_PARTNER_DEAMON );
+        daoUtil.setInt( 1, signalementState );
+        daoUtil.executeQuery( );
+        
+        List<Integer> signalementsIds = new ArrayList<>( );
+
+        while ( daoUtil.next( ) )
+        {
+            signalementsIds.add( daoUtil.getInt( 1 ) );
+        }
+        
+        daoUtil.free( );
+      
+        return signalementsIds;   
     }
 }

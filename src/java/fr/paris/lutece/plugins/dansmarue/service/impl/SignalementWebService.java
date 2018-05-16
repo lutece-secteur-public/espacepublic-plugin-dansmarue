@@ -19,7 +19,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
 
-import com.google.gson.JsonObject;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
@@ -27,6 +26,7 @@ import fr.paris.lutece.plugins.dansmarue.commons.exceptions.BusinessException;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementWebService;
 import fr.paris.lutece.plugins.dansmarue.utils.ws.IWebServiceCaller;
 import fr.paris.lutece.portal.service.image.ImageResource;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.signrequest.RequestAuthenticator;
 
 
@@ -35,11 +35,14 @@ public class SignalementWebService implements ISignalementWebService
 
     //JSON TAG
     public static final String REQUEST_METHOD_NAME = "addAnomalie";
+   
 
     public static final String JSON_TAG_ANOMALIE = "anomalie";
     public static final String JSON_TAG_UDID = "udid";
     public static final String JSON_TAG_EMAIL = "email";
     public static final String JSON_TAG_PHOTOS = "photos";
+    
+    private static final String TAG_REQUEST= "request";
 
     @Inject
     private IWebServiceCaller _wsCaller;
@@ -61,16 +64,18 @@ public class SignalementWebService implements ISignalementWebService
         }
         catch ( BusinessException e )
         {
+            AppLogService.error( e.getMessage( ), e);
             response = new JSONObject( );
-            response.accumulate( "request", REQUEST_METHOD_NAME );
+            response.accumulate( TAG_REQUEST, REQUEST_METHOD_NAME );
             JSONObject error = new JSONObject( );
             error.accumulate( "error", "erreur lors du contact avec " + url );
             response.accumulate( "answer", error );
         }
         catch ( UnsupportedEncodingException e )
         {
+            AppLogService.error( e.getMessage( ), e);
             response = new JSONObject( );
-            response.accumulate( "request", REQUEST_METHOD_NAME );
+            response.accumulate( TAG_REQUEST, REQUEST_METHOD_NAME );
             JSONObject error = new JSONObject( );
             error.accumulate( "error", "erreur d'encoding" );
             response.accumulate( "answer", error );
@@ -85,8 +90,9 @@ public class SignalementWebService implements ISignalementWebService
     {
         String result = null;
 
-        if ( signalement == null )
+        if ( signalement == null ) {
             throw new BusinessException( signalement, "dansmarue.ws.error.url.empty" );
+        }
 
         JSONObject json = createJSON( signalement );
 
@@ -94,7 +100,7 @@ public class SignalementWebService implements ISignalementWebService
         jsonSrc.accumulate( JSON_TAG_ANOMALIE, json );
 
         //name of the method in REST api
-        jsonSrc.accumulate( "request", REQUEST_METHOD_NAME );
+        jsonSrc.accumulate( TAG_REQUEST, REQUEST_METHOD_NAME );
 
         Map<String, List<String>> params = new HashMap<String, List<String>>( );
         List<String> values = new ArrayList<String>( );
@@ -127,6 +133,7 @@ public class SignalementWebService implements ISignalementWebService
         }
         catch ( Exception e )
         {
+            AppLogService.error( e.getMessage( ), e);
             throw new BusinessException( signalement, "dansmarue.ws.error.url.connexion" );
         }
 
