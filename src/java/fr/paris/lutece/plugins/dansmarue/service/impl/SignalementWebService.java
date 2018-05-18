@@ -27,6 +27,7 @@ import fr.paris.lutece.plugins.dansmarue.service.ISignalementWebService;
 import fr.paris.lutece.plugins.dansmarue.utils.ws.IWebServiceCaller;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.util.httpaccess.HttpAccessException;
 import fr.paris.lutece.util.signrequest.RequestAuthenticator;
 
 
@@ -34,7 +35,8 @@ public class SignalementWebService implements ISignalementWebService
 {
 
     //JSON TAG
-    public static final String REQUEST_METHOD_NAME = "addAnomalie";
+    public static final String REQUEST_METHOD_ADD = "addAnomalie";
+    public static final String REQUEST_METHOD_DONE= "doneAnomalie";
    
 
     public static final String JSON_TAG_ANOMALIE = "anomalie";
@@ -66,7 +68,7 @@ public class SignalementWebService implements ISignalementWebService
         {
             AppLogService.error( e.getMessage( ), e);
             response = new JSONObject( );
-            response.accumulate( TAG_REQUEST, REQUEST_METHOD_NAME );
+            response.accumulate( TAG_REQUEST, REQUEST_METHOD_ADD );
             JSONObject error = new JSONObject( );
             error.accumulate( "error", "erreur lors du contact avec " + url );
             response.accumulate( "answer", error );
@@ -75,7 +77,7 @@ public class SignalementWebService implements ISignalementWebService
         {
             AppLogService.error( e.getMessage( ), e);
             response = new JSONObject( );
-            response.accumulate( TAG_REQUEST, REQUEST_METHOD_NAME );
+            response.accumulate( TAG_REQUEST, REQUEST_METHOD_ADD );
             JSONObject error = new JSONObject( );
             error.accumulate( "error", "erreur d'encoding" );
             response.accumulate( "answer", error );
@@ -100,7 +102,7 @@ public class SignalementWebService implements ISignalementWebService
         jsonSrc.accumulate( JSON_TAG_ANOMALIE, json );
 
         //name of the method in REST api
-        jsonSrc.accumulate( TAG_REQUEST, REQUEST_METHOD_NAME );
+        jsonSrc.accumulate( TAG_REQUEST, REQUEST_METHOD_ADD );
 
         Map<String, List<String>> params = new HashMap<String, List<String>>( );
         List<String> values = new ArrayList<String>( );
@@ -117,7 +119,8 @@ public class SignalementWebService implements ISignalementWebService
             params.put( "jsonStream", values );
         }
         else {
-            String jsonFormated = "[" + jsonSrc.toString( ) + "]";
+            //String jsonFormated = "[" + jsonSrc.toString( ) + "]";
+            String jsonFormated = jsonSrc.toString( );
             values.add( jsonFormated );
             params.put( "jsonStream", values );
         }
@@ -165,15 +168,54 @@ public class SignalementWebService implements ISignalementWebService
         if ( photos != null && !photos.isEmpty( ) )
         {
             for ( PhotoDMR p : photos )
-            {  
+            {
                 JSONObject photoJson = new JSONObject( );
-                photoJson.accumulate( "photo",  getImageBase64( p.getImageThumbnail( ) ) );
+                photoJson.accumulate( "id_photo", p.getId( ) );
+                photoJson.accumulate( "vue_photo", p.getVue( ) );
+                photoJson.accumulate( "photo", getImageBase64( p.getImageThumbnail( ) ) );
                 array.add( photoJson );
             }
+            jsonAnomalie.accumulate( JSON_TAG_PHOTOS, array );
+        } else
+        {
             jsonAnomalie.accumulate( JSON_TAG_PHOTOS, array );
         }
 
         return jsonAnomalie;
+    }
+    
+    
+    /**
+     * {@inheritDoc}
+     */
+    public String callWSPartnerServiceDone( int idSignalement, String urlPartner )
+    {
+
+        String result = null;
+
+        Map<String, List<String>> params = new HashMap<String, List<String>>( );
+        List<String> values = new ArrayList<String>( );
+
+        JSONObject jsonSrc = new JSONObject( );
+        jsonSrc.accumulate( TAG_REQUEST, REQUEST_METHOD_DONE );
+        jsonSrc.accumulate( "id", idSignalement );
+
+        String jsonFormated = jsonSrc.toString( );
+        values.add( jsonFormated );
+        params.put( "jsonStream", values );
+
+        try
+        {
+            AppLogService.info( "Call web service " +urlPartner + " for id anomalie : " + idSignalement );
+            result = _wsCaller.callWebService( urlPartner, params, _authenticator, values );
+        } catch ( HttpAccessException e )
+        {
+            AppLogService.error( e.getMessage( ), e );
+            throw new BusinessException( idSignalement, "dansmarue.ws.error.url.connexion" );
+        }
+
+        AppLogService.info( "Web service response for id anomalie : " + idSignalement +"is : " + result );
+        return result;
     }
 
     /**
