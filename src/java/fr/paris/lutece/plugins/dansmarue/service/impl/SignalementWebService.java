@@ -87,12 +87,12 @@ public class SignalementWebService implements ISignalementWebService
     }
 
     @Override
-    public String sendByWS( Signalement signalement, String url) throws BusinessException,
-            UnsupportedEncodingException
+    public String sendByWS( Signalement signalement, String url ) throws BusinessException, UnsupportedEncodingException
     {
         String result = null;
 
-        if ( signalement == null ) {
+        if ( signalement == null )
+        {
             throw new BusinessException( signalement, "dansmarue.ws.error.url.empty" );
         }
 
@@ -101,42 +101,22 @@ public class SignalementWebService implements ISignalementWebService
         JSONObject jsonSrc = new JSONObject( );
         jsonSrc.accumulate( JSON_TAG_ANOMALIE, json );
 
-        //name of the method in REST api
+        // name of the method in REST api
         jsonSrc.accumulate( TAG_REQUEST, REQUEST_METHOD_ADD );
 
         Map<String, List<String>> params = new HashMap<String, List<String>>( );
         List<String> values = new ArrayList<String>( );
-        
-        Pattern p = Pattern.compile("/ramen");
-        Matcher m = p.matcher( url );
-        
-        boolean isRamen = m.find();
-        
-        // Gère l'appel à Ramen
-        if ( isRamen ) {
-            String jsonFormated = jsonSrc.toString( );
-            values.add( jsonFormated );
-            params.put( "jsonStream", values );
-        }
-        else {
-            //String jsonFormated = "[" + jsonSrc.toString( ) + "]";
-            String jsonFormated = jsonSrc.toString( );
-            values.add( jsonFormated );
-            params.put( "jsonStream", values );
-        }
+
+        String jsonFormated = jsonSrc.toString( );
+        values.add( jsonFormated );
+        params.put( "jsonStream", values );
 
         try
-        { 
-            if ( isRamen ) {
-                result = "[" + _wsCaller.callWebService( url, params, _authenticator, values ) + "]";
-            }
-            else {
-                result = _wsCaller.callWebService( url, params, _authenticator, values );
-            }
-        }
-        catch ( Exception e )
         {
-            AppLogService.error( e.getMessage( ), e);
+            result = _wsCaller.callWebService( url, params, _authenticator, values );
+        } catch ( Exception e )
+        {
+            AppLogService.error( e.getMessage( ), e );
             throw new BusinessException( signalement, "dansmarue.ws.error.url.connexion" );
         }
 

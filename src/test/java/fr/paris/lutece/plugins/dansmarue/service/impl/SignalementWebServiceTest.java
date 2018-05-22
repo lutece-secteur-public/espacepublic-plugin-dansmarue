@@ -74,7 +74,7 @@ public class SignalementWebServiceTest
     @Test
     public void sendByWSTest( ) throws HttpAccessException, BusinessException, UnsupportedEncodingException
     {
-        String jsonStream = "[{\"anomalie\":{\"id\":null,\"reference\":\"null0null0\",\"date_creation\":null,\"commentaire\":\"\",\"type\":\"\",\"secteur\":\"\",\"priorite\":\"\",\"arrondissement\":null,\"adresse\":\"\",\"lat\":null,\"lng\":null,\"token\":null,\"photos\":[]},\"request\":\"addAnomalie\"}]";
+        String jsonStream = "{\"anomalie\":{\"id\":null,\"reference\":\"null0null0\",\"date_creation\":null,\"commentaire\":\"\",\"type\":\"\",\"secteur\":\"\",\"priorite\":\"\",\"arrondissement\":null,\"adresse\":\"\",\"lat\":null,\"lng\":null,\"token\":null,\"photos\":[]},\"request\":\"addAnomalie\"}";
 
         List<String> arrayList = new ArrayList<String>( );
         arrayList.add( jsonStream );

@@ -376,6 +376,9 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant MARK_ETATS. */
     private static final String           MARK_ETATS                                    = "map_etats";
+    
+    /** The Constant MARK_HAS_SIGNALEMENT_PRESTATAIRE. */
+    private static final String           MARK_HAS_SIGNALEMENT_PRESTATAIRE              = "hasSignalementPrestataire";
 
     /** The Constant MARK_ACTIONS. */
     private static final String           MARK_ACTIONS                                  = "map_actions";
@@ -1044,6 +1047,7 @@ public class SignalementJspBean extends AbstractJspBean
         Map<String, String> mapStates = new HashMap<String, String>( );
         WorkflowService workflowService = WorkflowService.getInstance( );
         Integer signalementWorkflowId = _signalementWorkflowService.getSignalementWorkflowId( );
+        boolean hasSignalementPrestataire = false;
         if ( workflowService.isAvailable( ) )
         {
             for ( Signalement signalement : paginator.getPageItems( ) )
@@ -1056,9 +1060,15 @@ public class SignalementJspBean extends AbstractJspBean
                 State state = workflowService.getState( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE, signalementWorkflowId, null );
 
                 mapStates.put( signalement.getId( ).toString( ), state == null ? "Non défini" : state.getName( ) );
+                
+                if ( state.getId( ) == 18 || state.getId( ) == 21 ) {
+                    hasSignalementPrestataire = true;
+                }
             }
         }
 
+        model.put( MARK_HAS_SIGNALEMENT_PRESTATAIRE, hasSignalementPrestataire );
+        
         // Reaffichage des options avancees
         List<Integer> listArrondissementIds = listeArrondissement.stream( ).map( referenceItem -> Integer.valueOf( referenceItem.getCode( ) ) ).collect( Collectors.toList( ) );
         boolean hasCriteresAvances = hasCriteresAvances( filter, listArrondissementIds );
@@ -2082,10 +2092,10 @@ public class SignalementJspBean extends AbstractJspBean
                 }
 
                 // image 1 ensemble treatement CREATION
-                insertPhoto( signalement, imageSourceEnsemble );
+                insertPhoto( signalement, imageSourceEnsemble, VUE_ENSEMBLE );
 
                 // image 2 près treatement CREATION
-                insertPhoto( signalement, imageSourcePres );
+                insertPhoto( signalement, imageSourcePres, VUE_PRES );
                 _signalementService.initializeSignalementWorkflow( signalement );
             }
             // MODIFICATION
@@ -2244,7 +2254,7 @@ public class SignalementJspBean extends AbstractJspBean
         return url;
     }
 
-    private void insertPhoto( Signalement signalement, FileItem imageFile )
+    private void insertPhoto( Signalement signalement, FileItem imageFile, Integer vuePhoto )
     {
         String strImageName = FileUploadService.getFileNameOnly( imageFile );
         if ( StringUtils.isNotBlank( strImageName ) )
@@ -2262,7 +2272,7 @@ public class SignalementJspBean extends AbstractJspBean
             photoSignalement.setImageContent( ImgUtils.checkQuality( image.getImage( ) ) );
             photoSignalement.setImageThumbnailWithBytes( resizeImage );
             photoSignalement.setSignalement( signalement );
-            photoSignalement.setVue( VUE_ENSEMBLE );
+            photoSignalement.setVue( vuePhoto );
             photoSignalement.setDate( sdfDate.format( Calendar.getInstance( ).getTime( ) ) );
 
             // creation of the image in the db linked to the signalement
