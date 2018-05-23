@@ -33,9 +33,9 @@ public interface ISignalementWebService
     
     /**
      * Send notification service done to the correct recipient, with Web Service
-     * @param idSignalement id signalement to send
+     * @param signalement the signalement to send
      * @param urlPartner  the ws url
      * @return the return of the call, fail or success
      */
-    String callWSPartnerServiceDone (int idSignalement, String urlPartner );
+    JSONObject callWSPartnerServiceDone (Signalement signalement, String urlPartner );
 }

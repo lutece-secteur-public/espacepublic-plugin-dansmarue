@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -36,7 +33,7 @@ public class SignalementWebService implements ISignalementWebService
 
     //JSON TAG
     public static final String REQUEST_METHOD_ADD = "addAnomalie";
-    public static final String REQUEST_METHOD_DONE= "doneAnomalie";
+    public static final String REQUEST_METHOD_DONE= "serviceDoneAnomalie";
    
 
     public static final String JSON_TAG_ANOMALIE = "anomalie";
@@ -133,9 +130,9 @@ public class SignalementWebService implements ISignalementWebService
         jsonAnomalie.accumulate( "date_creation", signalement.getDateCreation( ) );
         jsonAnomalie.accumulate( "commentaire", encode( signalement.getCommentaire( ) ) );
         jsonAnomalie.accumulate( "type", encode( signalement.getTypeSignalement( ).getLibelle( ) ) );
-        jsonAnomalie.accumulate( "secteur", encode( signalement.getSecteur( ).getName( ) ) );
+        //jsonAnomalie.accumulate( "secteur", encode( signalement.getSecteur( ).getName( ) ) );
         jsonAnomalie.accumulate( "priorite", encode( signalement.getPriorite( ).getLibelle( ) ) );
-        jsonAnomalie.accumulate( "arrondissement", signalement.getArrondissement( ).getNumero( ) );
+        //jsonAnomalie.accumulate( "arrondissement", signalement.getArrondissement( ).getNumero( ) );
         jsonAnomalie.accumulate( "adresse", encode( signalement.getAdresses( ).get( 0 ).getAdresse( ) ) );
         jsonAnomalie.accumulate( "lat", signalement.getAdresses( ).get( 0 ).getLat( ) );
         jsonAnomalie.accumulate( "lng", signalement.getAdresses( ).get( 0 ).getLng( ) );
@@ -168,17 +165,24 @@ public class SignalementWebService implements ISignalementWebService
     /**
      * {@inheritDoc}
      */
-    public String callWSPartnerServiceDone( int idSignalement, String urlPartner )
+    public JSONObject callWSPartnerServiceDone( Signalement signalement, String urlPartner )
     {
 
+        
+        JSONObject response = null;
         String result = null;
-
+        
+        
         Map<String, List<String>> params = new HashMap<String, List<String>>( );
         List<String> values = new ArrayList<String>( );
 
         JSONObject jsonSrc = new JSONObject( );
         jsonSrc.accumulate( TAG_REQUEST, REQUEST_METHOD_DONE );
-        jsonSrc.accumulate( "id", idSignalement );
+        jsonSrc.accumulate( "id", signalement.getId( ) );
+        jsonSrc.accumulate( "reference", signalement.getNumeroSignalement() );
+        jsonSrc.accumulate( "token", signalement.getToken( ) );
+        jsonSrc.accumulate( "date_creation", signalement.getDateCreation( ) );
+        jsonSrc.accumulate( "date_service_fait", signalement.getDateServiceFaitTraitement( ));
 
         String jsonFormated = jsonSrc.toString( );
         values.add( jsonFormated );
@@ -186,16 +190,20 @@ public class SignalementWebService implements ISignalementWebService
 
         try
         {
-            AppLogService.info( "Call web service " +urlPartner + " for id anomalie : " + idSignalement );
+            AppLogService.info( "Call web service " +urlPartner + " for id anomalie : " + signalement.getId( ));
             result = _wsCaller.callWebService( urlPartner, params, _authenticator, values );
+            
+            JSONArray array = JSONArray.fromObject( result );
+            response = array.getJSONObject( 0 );
+            
         } catch ( HttpAccessException e )
         {
             AppLogService.error( e.getMessage( ), e );
-            throw new BusinessException( idSignalement, "dansmarue.ws.error.url.connexion" );
+            throw new BusinessException( signalement.getId( ), "dansmarue.ws.error.url.connexion" );
         }
 
-        AppLogService.info( "Web service response for id anomalie : " + idSignalement +"is : " + result );
-        return result;
+        AppLogService.info( "Web service response for id anomalie : " + signalement.getId( ) +"is : " + result );
+        return response;
     }
 
     /**
