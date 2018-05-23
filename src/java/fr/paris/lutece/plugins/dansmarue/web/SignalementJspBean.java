@@ -473,6 +473,10 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant ID_ETATS_DEFAULT. */
     private static final int[]            ID_ETATS_DEFAULT                              = { 7, 8, 16, 17, 18, 21 };
+    
+    private static final String           ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE  = "signalement.idStateServiceProgrammePrestataire";
+    
+    private static final String           ID_STATE_TRANSFERE_PRESTATAIRE          = "signalement.idStateTransferePrestataire";
 
     /** The Constant CSV_SEPARATOR. */
     private static final char             CSV_SEPARATOR                                 = ';';
@@ -1061,7 +1065,7 @@ public class SignalementJspBean extends AbstractJspBean
 
                 mapStates.put( signalement.getId( ).toString( ), state == null ? "Non défini" : state.getName( ) );
                 
-                if ( state.getId( ) == 18 || state.getId( ) == 21 ) {
+                if ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_TRANSFERE_PRESTATAIRE, -1 ) || state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE, -1 ) ) {
                     hasSignalementPrestataire = true;
                 }
             }

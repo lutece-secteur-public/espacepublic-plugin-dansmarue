@@ -3,7 +3,10 @@ package fr.paris.lutece.plugins.dansmarue.business.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.dansmarue.business.dao.IWorkflowDAO;
+import fr.paris.lutece.plugins.dansmarue.business.entities.NotificationSignalementUser3Contents;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.icon.Icon;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
@@ -24,6 +27,9 @@ public class WorkflowDAO implements IWorkflowDAO
     private static final String SIGNALEMENT_RESOURCE = "SIGNALEMENT_SIGNALEMENT";
 
     //QUERY
+    private static final String SQL_QUERY_SELECT_MESSAGES_PRESTA = 
+            "SELECT id_task,subject,sender,message1,message2,subject_ramen,message1_ramen,message2_ramen,title1, title2 "
+            + " FROM signalement_workflow_notifuser_3contents_config WHERE id_task in(";
     private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_workflow";
     private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_workflow (id_workflow) VALUES (?)";
     private static final String SQL_QUERY_SELECT = "SELECT id_workflow FROM signalement_workflow";
@@ -257,6 +263,52 @@ public class WorkflowDAO implements IWorkflowDAO
         daoUtil.free();
         
         return action;
+    }
+
+    @Override
+    public List<NotificationSignalementUser3Contents> selectMessageServiceFaitPresta( List<String> listTaskPrestaServiceFait )
+    {
+        List<NotificationSignalementUser3Contents> messagesServiceFait = new ArrayList<>( );
+        
+        String[] tab = new String[listTaskPrestaServiceFait.size( )];
+        for ( int i = 0; i < tab.length; i++ )
+        {
+            tab[i] = "?";
+        }
+        String listewhere = StringUtils.join( tab, "," );
+        
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MESSAGES_PRESTA + listewhere + ")" );
+        
+        int nIndex = 1;
+        for ( String idTask : listTaskPrestaServiceFait )
+        {
+            daoUtil.setInt( nIndex++, Integer.parseInt( idTask ) );
+        }
+
+        daoUtil.executeQuery( );
+        
+        while ( daoUtil.next( ) )
+        {
+            nIndex = 1;
+            NotificationSignalementUser3Contents message = new NotificationSignalementUser3Contents( );
+            
+            message.setIdTask( daoUtil.getInt( nIndex++ ) );
+            message.setSubject( daoUtil.getString( nIndex++ ) );
+            message.setSender( daoUtil.getString( nIndex++ ) );
+            message.setMessage1( daoUtil.getString( nIndex++ ) );
+            message.setMessage2( daoUtil.getString( nIndex++ ) );
+            message.setSubjectRamen( daoUtil.getString( nIndex++ ) );
+            message.setMessage1Ramen( daoUtil.getString( nIndex++ ) );
+            message.setMessage2Ramen( daoUtil.getString( nIndex++ ) );
+            message.setTitle1( daoUtil.getString( nIndex++) );
+            message.setTitle2( daoUtil.getString( nIndex++ ) );
+            
+            messagesServiceFait.add( message );
+        }
+
+        daoUtil.free( );
+        
+        return messagesServiceFait;
     }
     
 }
