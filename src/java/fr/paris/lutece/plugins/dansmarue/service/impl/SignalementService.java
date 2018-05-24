@@ -794,9 +794,12 @@ public class SignalementService implements ISignalementService
             int idParent = next.getIdParent( );
             if ( idParent != sylvicole )
             {
-                if ( idParent != cimetiere && idParent == jardinage)
+                if ( idParent != cimetiere )
                 {
-                    selected = next;
+                    if( idParent == jardinage ) { 
+                        
+                        selected = next; 
+                    } 
                 } else
                 {
                     selected = next;

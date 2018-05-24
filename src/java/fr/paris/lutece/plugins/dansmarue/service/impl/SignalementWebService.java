@@ -147,7 +147,7 @@ public class SignalementWebService implements ISignalementWebService
                 JSONObject photoJson = new JSONObject( );
                 photoJson.accumulate( "id_photo", p.getId( ) );
                 photoJson.accumulate( "vue_photo", p.getVue( ) );
-                photoJson.accumulate( "photo", getImageBase64( p.getImageThumbnail( ) ) );
+                photoJson.accumulate( "photo", getImageBase64( p.getImage( ) ) );
                 array.add( photoJson );
             }
             jsonAnomalie.accumulate( JSON_TAG_PHOTOS, array );

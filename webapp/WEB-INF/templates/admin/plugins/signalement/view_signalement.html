@@ -27,14 +27,21 @@ $(document).ready(function() {
 			<fieldset>
 				<div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
 					<div class="form-group">
+					
+								<#if stateSignalement.name != "Transféré \x00E0 un prestataire" 
+									&& stateSignalement.name != "Transféré \x00E0 un tiers"
+									&& stateSignalement.name != "Service programmé prestataire"
+									&& stateSignalement.name != "Service programmé tiers">
 								<@a class="btn
 									btn-xs btn-primary" visu=false
 									sector=(signalement.secteur.idSector)!?string
 									href="jsp/admin/plugins/signalement/ModifySignalement.jsp"
 									params="?signalement_id=${signalement.id}"
 									additionalParameters="title='#i18n{dansmarue.reportingList.alt.modify}'">
-									<i class="glyphicon glyphicon-edit"></i> </@a> <a
-									class="btn btn-xs btn-primary"
+									<i class="glyphicon glyphicon-edit"></i> </@a> 
+								</#if>
+									
+								<a class="btn btn-xs btn-primary"
 									title="#i18n{dansmarue.reportingList.alt.history}"
 									href="jsp/admin/plugins/signalement/ViewHistory.jsp?signalement_id=${signalement.id}">
 										<i class="glyphicon glyphicon-book"></i>
@@ -47,12 +54,21 @@ $(document).ready(function() {
 										<img width="24px"
 										src="image?resource_type=workflow_icon_img&id=${action.icon.id}"
 										alt="${action.name}" />
-								</a> </#if> </#list> <@a class="btn btn-xs btn-danger" visu=false
+								</a> </#if> </#list> 
+								
+								<#if stateSignalement.name != "Transféré \x00E0 un prestataire" 
+									&& stateSignalement.name != "Transféré \x00E0 un tiers"
+									&& stateSignalement.name != "Service programmé prestataire"
+									&& stateSignalement.name != "Service programmé tiers">
+								<@a class="btn btn-xs btn-danger" visu=false
 									sector=(signalement.secteur.idSector)!?string
 									href="jsp/admin/plugins/signalement/DeleteSignalement.jsp"
 									params="?signalement_id=${signalement.id}"
 									additionalParameters="title='#i18n{dansmarue.commons.supprimer}'">
-									<i class="glyphicon glyphicon-trash"></i> </@a> <@a class="btn
+									<i class="glyphicon glyphicon-trash"></i> </@a> 
+								</#if>
+								
+								<@a class="btn
 									btn-xs btn-primary" visu=false
 									sector=(signalement.secteur.idSector)!?string
 									href="jsp/admin/plugins/signalement/DoCreateMailSignalement.jsp"
