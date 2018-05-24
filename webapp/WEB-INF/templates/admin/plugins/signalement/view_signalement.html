@@ -28,10 +28,10 @@ $(document).ready(function() {
 				<div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
 					<div class="form-group">
 					
-								<#if map_etats[signalement.id?string] != "Transféré \x00E0 un prestataire" 
-									&& map_etats[signalement.id?string] != "Transféré \x00E0 un tiers"
-									&& map_etats[signalement.id?string] != "Service programmé prestataire"
-									&& map_etats[signalement.id?string] != "Service programmé tiers">
+								<#if stateSignalement.name != "Transféré \x00E0 un prestataire" 
+									&& stateSignalement.name != "Transféré \x00E0 un tiers"
+									&& stateSignalement.name != "Service programmé prestataire"
+									&& stateSignalement.name != "Service programmé tiers">
 								<@a class="btn
 									btn-xs btn-primary" visu=false
 									sector=(signalement.secteur.idSector)!?string
@@ -56,10 +56,10 @@ $(document).ready(function() {
 										alt="${action.name}" />
 								</a> </#if> </#list> 
 								
-								<#if map_etats[signalement.id?string] != "Transféré \x00E0 un prestataire" 
-									&& map_etats[signalement.id?string] != "Transféré \x00E0 un tiers"
-									&& map_etats[signalement.id?string] != "Service programmé prestataire"
-									&& map_etats[signalement.id?string] != "Service programmé tiers">
+								<#if stateSignalement.name != "Transféré \x00E0 un prestataire" 
+									&& stateSignalement.name != "Transféré \x00E0 un tiers"
+									&& stateSignalement.name != "Service programmé prestataire"
+									&& stateSignalement.name != "Service programmé tiers">
 								<@a class="btn btn-xs btn-danger" visu=false
 									sector=(signalement.secteur.idSector)!?string
 									href="jsp/admin/plugins/signalement/DeleteSignalement.jsp"
