@@ -130,9 +130,7 @@ public class SignalementWebService implements ISignalementWebService
         jsonAnomalie.accumulate( "date_creation", signalement.getDateCreation( ) );
         jsonAnomalie.accumulate( "commentaire", encode( signalement.getCommentaire( ) ) );
         jsonAnomalie.accumulate( "type", encode( signalement.getTypeSignalement( ).getLibelle( ) ) );
-        //jsonAnomalie.accumulate( "secteur", encode( signalement.getSecteur( ).getName( ) ) );
         jsonAnomalie.accumulate( "priorite", encode( signalement.getPriorite( ).getLibelle( ) ) );
-        //jsonAnomalie.accumulate( "arrondissement", signalement.getArrondissement( ).getNumero( ) );
         jsonAnomalie.accumulate( "adresse", encode( signalement.getAdresses( ).get( 0 ).getAdresse( ) ) );
         jsonAnomalie.accumulate( "lat", signalement.getAdresses( ).get( 0 ).getLat( ) );
         jsonAnomalie.accumulate( "lng", signalement.getAdresses( ).get( 0 ).getLng( ) );
