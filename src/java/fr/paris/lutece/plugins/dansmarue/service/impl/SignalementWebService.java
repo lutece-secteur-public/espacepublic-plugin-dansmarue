@@ -110,6 +110,7 @@ public class SignalementWebService implements ISignalementWebService
 
         try
         {
+            AppLogService.info( "Call web service " +url + " for id anomalie : " + signalement.getId( ));
             result = _wsCaller.callWebService( url, params, _authenticator, values );
         } catch ( Exception e )
         {
@@ -117,6 +118,7 @@ public class SignalementWebService implements ISignalementWebService
             throw new BusinessException( signalement, "dansmarue.ws.error.url.connexion" );
         }
 
+        AppLogService.info( "Web service response for id anomalie : " + signalement.getId( ) +" is : " + result );
         return result;
     }
 
@@ -188,7 +190,7 @@ public class SignalementWebService implements ISignalementWebService
 
         try
         {
-            AppLogService.info( "Call web service " +urlPartner + " for id anomalie : " + signalement.getId( ));
+            AppLogService.info( "Call web service PartnerServiceDone " +urlPartner + " for id anomalie : " + signalement.getId( ));
             result = _wsCaller.callWebService( urlPartner, params, _authenticator, values );
             
             JSONArray array = JSONArray.fromObject( result );
@@ -200,7 +202,7 @@ public class SignalementWebService implements ISignalementWebService
             throw new BusinessException( signalement.getId( ), "dansmarue.ws.error.url.connexion" );
         }
 
-        AppLogService.info( "Web service response for id anomalie : " + signalement.getId( ) +"is : " + result );
+        AppLogService.info( "Web service PartnerServiceDone response for id anomalie : " + signalement.getId( ) +" is : " + result );
         return response;
     }
 
