@@ -23,6 +23,7 @@ public class SignalementExportCSVDTO
     private String _strMailUsager;
     private String _strCommentaireUsager;
     private Integer _nNbPhotos;
+    private String _strDateCloture;
     private List<String> _strRaisonsRejet;
     private String _strNumeroSignalement;
     private String _strNbSuivis;
@@ -35,7 +36,7 @@ public class SignalementExportCSVDTO
         return new String[] { getNumeroSignalement( ), getPriorite( ), getTypeSignalement( ), getAlias(), getAliasMobile(), getDirection( ),
                 getQuartier(), getAdresse( ), Double.toString(getCoordX()), Double.toString(getCoordY()), getArrondissement(), getSecteur(), 
                 getDateCreation( ), getHeureCreation(), getEtat( ), getMailUsager(), getCommentaireUsager(), Integer.toString(getNbPhotos()),
-                getFormatObservationRejet(), getNbSuivis(), getNbFelicitations()};
+                getDateCloture(), getFormatObservationRejet(), getNbSuivis(), getNbFelicitations()};
     }
 
     public String getPriorite( )
@@ -103,9 +104,9 @@ public class SignalementExportCSVDTO
         return _strNumeroSignalement;
     }
 
-    public void setNumeroSignalement( String _strNumeroSignalement )
+    public void setNumeroSignalement( String strNumeroSignalement )
     {
-        this._strNumeroSignalement = _strNumeroSignalement;
+        this._strNumeroSignalement = strNumeroSignalement;
     }
 
     public String getAlias(){
@@ -197,9 +198,9 @@ public class SignalementExportCSVDTO
         return _strSecteur;
     }
 
-    public void setSecteur( String _strSecteur )
+    public void setSecteur( String strSecteur )
     {
-        this._strSecteur = _strSecteur;
+        this._strSecteur = strSecteur;
     }
 
     public String getNbSuivis( )
@@ -207,9 +208,9 @@ public class SignalementExportCSVDTO
         return _strNbSuivis;
     }
 
-    public void setNbSuivis( String _strNbSuivis )
+    public void setNbSuivis( String strNbSuivis )
     {
-        this._strNbSuivis = _strNbSuivis;
+        this._strNbSuivis = strNbSuivis;
     }
 
     public String getNbFelicitations( )
@@ -217,9 +218,9 @@ public class SignalementExportCSVDTO
         return _strNbFelicitations;
     }
 
-    public void setNbFelicitations( String _strNbFelicitations )
+    public void setNbFelicitations( String strNbFelicitations )
     {
-        this._strNbFelicitations = _strNbFelicitations;
+        this._strNbFelicitations = strNbFelicitations;
     }
 
     public String getQuartier( )
@@ -227,9 +228,25 @@ public class SignalementExportCSVDTO
         return _strQuartier;
     }
 
-    public void setQuartier( String _strQuartier )
+    public void setQuartier( String strQuartier )
     {
-        this._strQuartier = _strQuartier;
+        this._strQuartier = strQuartier;
+    }
+
+    /**
+     * @return the _strDateCloture
+     */
+    public String getDateCloture( )
+    {
+        return _strDateCloture;
+    }
+
+    /**
+     * @param _strDateCloture the _strDateCloture to set
+     */
+    public void setDateCloture( String strDateCloture )
+    {
+        this._strDateCloture = strDateCloture;
     }
     
 }

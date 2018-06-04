@@ -217,4 +217,6 @@ public interface ISignalementDAO
 	 * @return list id signalement find.
 	 */
 	List<Integer> findIdsSingalementForWSPartnerDeamon(int signalementState);
+
+    void setDateRejet( int idSignalement, String dateRejet );
 }

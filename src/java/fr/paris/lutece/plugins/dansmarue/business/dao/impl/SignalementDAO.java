@@ -51,7 +51,7 @@ public class SignalementDAO implements ISignalementDAO
     private static final String SQL_QUERY_DELETE                                   = "DELETE FROM signalement_signalement WHERE id_signalement = ?";
 
     /** The Constant SQL_QUERY_SELECT. */
-    private static final String SQL_QUERY_SELECT                                   = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, heure_creation, is_doublon, token, service_fait_date_passage, felicitations FROM signalement_signalement WHERE id_signalement = ?";
+    private static final String SQL_QUERY_SELECT                                   = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, heure_creation, is_doublon, token, service_fait_date_passage, felicitations, date_mise_surveillance, date_rejet FROM signalement_signalement WHERE id_signalement = ?";
 
     /** The Constant SQL_QUERY_SELECT_BY_STATUS. */
     private static final String SQL_QUERY_SELECT_BY_STATUS                         = "SELECT signalement.id_signalement, signalement.suivi, signalement.date_creation, signalement.date_prevue_traitement, signalement.commentaire, signalement.annee,  signalement.mois, signalement.numero, signalement.prefix, signalement.fk_id_priorite,   signalement.fk_id_arrondissement,  signalement.fk_id_type_signalement,  signalement.fk_id_sector,   signalement.is_doublon, signalement.service_fait_date_passage FROM signalement_signalement AS signalement  INNER JOIN workflow_resource_workflow AS resource_workflow ON resource_workflow.id_resource = signalement.id_signalement  INNER JOIN workflow_resource_history AS resource_history ON resource_history.id_resource = signalement.id_signalement INNER JOIN workflow_action AS action ON action.id_action = resource_history.id_action WHERE resource_workflow.resource_type = ''SIGNALEMENT_SIGNALEMENT''  AND resource_history.resource_type = ''SIGNALEMENT_SIGNALEMENT''  AND resource_workflow.id_state = ? AND action.id_state_after = ? AND resource_history.creation_date + ''{0} days''::interval < now();";
@@ -165,6 +165,9 @@ public class SignalementDAO implements ISignalementDAO
     /** The Constant SQL_QUERY_UPDATE_DATE_MISE_SURVEILLANCE. */
     private static final String SQL_QUERY_UPDATE_DATE_MISE_SURVEILLANCE            = "UPDATE signalement_signalement SET date_mise_surveillance =? WHERE id_signalement=?";
 
+    /** The Constant SQL_QUERY_UPDATE_DATE_REJET. */
+    private static final String SQL_QUERY_UPDATE_DATE_REJET                        = "UPDATE signalement_signalement SET date_rejet =? WHERE id_signalement=?";
+    
     /** The Constant SQL_WHERE. */
     private static final String SQL_WHERE                                          = " WHERE ";
 
@@ -375,6 +378,16 @@ public class SignalementDAO implements ISignalementDAO
                 signalement.setHeureServiceFaitTraitement( DateUtils.getHourFrSansColonne( serviceFaitTraitement ) );
             }
             signalement.setFelicitations( daoUtil.getInt( nIndex++ ) );
+            Date miseEnSurveillance = daoUtil.getTimestamp( nIndex++ );
+            if ( miseEnSurveillance != null )
+            {
+                signalement.setDateMiseEnSurveillance( DateUtils.getDateFr( miseEnSurveillance ) );
+            }
+            Date rejet = daoUtil.getTimestamp( nIndex++ );
+            if ( rejet != null )
+            {
+                signalement.setDateRejet( DateUtils.getDateFr( rejet ) );
+            }
 
         }
 
@@ -501,6 +514,16 @@ public class SignalementDAO implements ISignalementDAO
                 signalement.setHeureServiceFaitTraitement( DateUtils.getHourFrSansColonne( serviceFaitTraitement ) );
             }
             signalement.setFelicitations( daoUtil.getInt( nIndex++ ) );
+            Date miseEnSurveillance = daoUtil.getTimestamp( nIndex++ );
+            if ( miseEnSurveillance != null )
+            {
+                signalement.setDateMiseEnSurveillance( DateUtils.getDateFr( miseEnSurveillance ) );
+            }
+            Date rejet = daoUtil.getTimestamp( nIndex++ );
+            if ( rejet != null )
+            {
+                signalement.setDateRejet( DateUtils.getDateFr( rejet ) );
+            }
 
         }
 
@@ -2087,6 +2110,19 @@ public class SignalementDAO implements ISignalementDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_DATE_MISE_SURVEILLANCE );
         int nIndex = 1;
         daoUtil.setDate( nIndex++, DateUtil.formatDateSql( dateMiseEnSurveillance, Locale.FRENCH ) );
+        daoUtil.setInt( nIndex++, idSignalement );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
+        
+        
+    }
+    
+    @Override
+    public void setDateRejet( int idSignalement, String dateRejet )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_DATE_REJET );
+        int nIndex = 1;
+        daoUtil.setDate( nIndex++, DateUtil.formatDateSql( dateRejet, Locale.FRENCH ) );
         daoUtil.setInt( nIndex++, idSignalement );
         daoUtil.executeUpdate( );
         daoUtil.free( );

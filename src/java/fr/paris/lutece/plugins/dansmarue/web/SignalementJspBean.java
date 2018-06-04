@@ -3282,7 +3282,7 @@ public class SignalementJspBean extends AbstractJspBean
             writer = new CSVWriter( response.getWriter( ), CSV_SEPARATOR );
 
             writer.writeNext( new String[] { "Numéro", "Priorité", "Type", "Alias", "Alias mobile", "Direction", "Quartier", "Adresse", "Coordonnée X", "Coordonnée Y", "Arrondissement", "Secteur d'affectation", "Date de création",
-                    "Heure de création", "Etat", "Mail usager", "Commentaire usager", "Nombre de photos", "Raisons de rejet", "Nombre de suivis", "Nombre de félicitations" } );
+                    "Heure de création", "Etat", "Mail usager", "Commentaire usager", "Nombre de photos", "Date de clôture", "Raisons de rejet", "Nombre de suivis", "Nombre de félicitations" } );
             for ( SignalementExportCSVDTO signalementDTO : listeSignalementExportCSVDTO )
             {
                 datas = signalementDTO.getTabAllDatas( );
@@ -3293,7 +3293,7 @@ public class SignalementJspBean extends AbstractJspBean
 
         } catch ( IOException e )
         {
-            AppLogService.error( e.getMessage( ) );
+            AppLogService.error( e );
         }
     }
 

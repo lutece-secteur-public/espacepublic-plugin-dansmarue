@@ -551,6 +551,23 @@ public class SignalementService implements ISignalementService
             // Nombre de photos
             Integer nbPhotos = signalement.getPhotos( ).size( );
             dto.setNbPhotos( nbPhotos );
+            
+            // Date de clôture
+            String dateSF = signalement.getDateServiceFaitTraitement( );
+            String dateMS = signalement.getDateMiseEnSurveillance( );
+            String dateRejet = signalement.getDateRejet( );
+            if ( dateSF != null ) {
+                dto.setDateCloture( dateSF );
+            }
+            else if ( dateMS != null ) {
+                dto.setDateCloture( dateMS );
+            }
+            else if ( dateRejet != null ) {
+                dto.setDateCloture( dateRejet );
+            }
+            else {
+                dto.setDateCloture( "" ); 
+            }
 
             // Raisons rejet
             List<ObservationRejet> observationsRejets = _observationRejetSignalementService.findByIdSignalement( signalement.getId( ).intValue( ) );
@@ -658,6 +675,23 @@ public class SignalementService implements ISignalementService
             // Nombre de photos
             Integer nbPhotos = signalement.getPhotos( ).size( );
             dto.setNbPhotos( nbPhotos );
+            
+            // Date de clôture
+            String dateSF = signalement.getDateServiceFaitTraitement( );
+            String dateMS = signalement.getDateMiseEnSurveillance( );
+            String dateRejet = signalement.getDateRejet( );
+            if ( dateSF != null ) {
+                dto.setDateCloture( dateSF );
+            }
+            else if ( dateMS != null ) {
+                dto.setDateCloture( dateMS );
+            }
+            else if ( dateRejet != null ) {
+                dto.setDateCloture( dateRejet );
+            }
+            else {
+                dto.setDateCloture( "" ); 
+            }            
 
             // Raisons rejet
             List<ObservationRejet> observationsRejets = _observationRejetSignalementService.findByIdSignalement( signalement.getId( ).intValue( ) );
@@ -1222,6 +1256,12 @@ public class SignalementService implements ISignalementService
             update( signalement );
         }
 
+    }
+    
+    @Override
+    public void setDateRejet( Integer lIdSignalement, String dateRejet )
+    {
+        _signalementDAO.setDateRejet( lIdSignalement, dateRejet );
     }
 
     /**

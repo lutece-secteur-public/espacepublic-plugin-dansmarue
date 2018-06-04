@@ -484,4 +484,6 @@ public interface ISignalementService
 
     JSONObject getHistorySignalement( Integer idSignalement,
             HttpServletRequest request );
+
+    void setDateRejet( Integer lIdSignalement, String dateRejet );
 }

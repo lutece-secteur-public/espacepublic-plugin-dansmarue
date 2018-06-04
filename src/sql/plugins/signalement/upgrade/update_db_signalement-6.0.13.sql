@@ -11,3 +11,7 @@ set fk_id_unit = (select id_unit from unittree_unit where label = 'Ramen')
 where fk_id_type_signalement = 1000
 and id_type_signalement not in ( 1006,1007,1008, 11013 );
 
+-- DMR 973 Ajout de la colonne date de clôture dans l'export Excel
+ALTER TABLE signalement_signalement
+ADD date_rejet timestamp  without time zone NOT NULL;
+
