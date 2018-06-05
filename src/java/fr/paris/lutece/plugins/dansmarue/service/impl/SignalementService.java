@@ -113,6 +113,7 @@ public class SignalementService implements ISignalementService
     private static final String                 ID_STATE_A_FAIRE_BUREAU          = "signalement.idStateAFaireBureau";
     private static final String                 ID_STATE_PROGRAMME               = "signalement.idStateProgramme";
     private static final String                 ID_STATE_SERVICE_FAIT            = "signalement.idStateServiceFait";
+    private static final String                 ID_STATE_SURVEILLANCE            = "signalement.idStateSurveillance";
     private static final String                 ID_STATE_ARCHIVE                 = "signalement.idStateArchive";
     private static final String                 ID_STATE_REJETE                  = "signalement.idStateRejete";
     private static final String                 ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE = "signalement.idStateServiceProgrammePrestataire";
@@ -556,13 +557,13 @@ public class SignalementService implements ISignalementService
             String dateSF = signalement.getDateServiceFaitTraitement( );
             String dateMS = signalement.getDateMiseEnSurveillance( );
             String dateRejet = signalement.getDateRejet( );
-            if ( dateSF != null ) {
+            if ( dateSF != null && state.getId( ) == Integer.parseInt( ID_STATE_SERVICE_FAIT ) ) {
                 dto.setDateCloture( dateSF );
             }
-            else if ( dateMS != null ) {
+            else if ( dateMS != null && state.getId( ) == Integer.parseInt( ID_STATE_SURVEILLANCE ) ) {
                 dto.setDateCloture( dateMS );
             }
-            else if ( dateRejet != null ) {
+            else if ( dateRejet != null && state.getId( ) == Integer.parseInt( ID_STATE_REJETE ) ) {
                 dto.setDateCloture( dateRejet );
             }
             else {
@@ -680,18 +681,18 @@ public class SignalementService implements ISignalementService
             String dateSF = signalement.getDateServiceFaitTraitement( );
             String dateMS = signalement.getDateMiseEnSurveillance( );
             String dateRejet = signalement.getDateRejet( );
-            if ( dateSF != null ) {
+            if ( dateSF != null && state.getId( ) == Integer.parseInt( ID_STATE_SERVICE_FAIT ) ) {
                 dto.setDateCloture( dateSF );
             }
-            else if ( dateMS != null ) {
+            else if ( dateMS != null && state.getId( ) == Integer.parseInt( ID_STATE_SURVEILLANCE ) ) {
                 dto.setDateCloture( dateMS );
             }
-            else if ( dateRejet != null ) {
+            else if ( dateRejet != null && state.getId( ) == Integer.parseInt( ID_STATE_REJETE ) ) {
                 dto.setDateCloture( dateRejet );
             }
             else {
                 dto.setDateCloture( "" ); 
-            }            
+            }      
 
             // Raisons rejet
             List<ObservationRejet> observationsRejets = _observationRejetSignalementService.findByIdSignalement( signalement.getId( ).intValue( ) );

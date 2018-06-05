@@ -13,5 +13,5 @@ and id_type_signalement not in ( 1006,1007,1008, 11013 );
 
 -- DMR 973 Ajout de la colonne date de clôture dans l'export Excel
 ALTER TABLE signalement_signalement
-ADD date_rejet timestamp  without time zone NOT NULL;
+ADD date_rejet timestamp  without time zone;
 
