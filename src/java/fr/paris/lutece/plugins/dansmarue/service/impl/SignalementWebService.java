@@ -84,7 +84,7 @@ public class SignalementWebService implements ISignalementWebService
     }
 
     @Override
-    public String sendByWS( Signalement signalement, String url ) throws BusinessException, UnsupportedEncodingException
+    public String sendByWS( Signalement signalement, String url ) throws UnsupportedEncodingException
     {
         String result = null;
 

@@ -2972,6 +2972,7 @@ public class SignalementJspBean extends AbstractJspBean
                     return strErrorUrl;
                 }
             } catch (Exception e) {
+                AppLogService.error( e );
                 return AdminMessageService.getMessageUrl(request, MESSAGE_RAMEN_WS_ERROR, AdminMessage.TYPE_STOP);
             }
 
