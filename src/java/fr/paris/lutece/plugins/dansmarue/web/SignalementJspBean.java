@@ -4063,6 +4063,8 @@ public class SignalementJspBean extends AbstractJspBean
         int idDomaine = Integer.parseInt( request.getParameter( "idDomaine" ) );
         DomaineFonctionnel domFonc = _domaineFonctionnelService.getById( idDomaine );
         
+        String strDirectionId = request.getParameter( PARAMETER_DIRECTION_ID );        
+        
         JSONBuilder jsonStringer;
         response.setContentType( "application/json" );
         try
@@ -4076,7 +4078,9 @@ public class SignalementJspBean extends AbstractJspBean
                     
                     for ( Integer idUnit : domFonc.getUnitIds( ) ) {
                         Unit unitSelected = _unitService.getUnit( idUnit, false );
-                        units.add( unitSelected );
+                        if( unitSelected.getIdParent( ) == Integer.parseInt( strDirectionId ) ) {
+                            units.add( unitSelected );
+                        }                        
                     }                   
                 }                
 
