@@ -263,7 +263,8 @@ function updateSectorList(idDirection){
 			jQuery.ajax( {
 				url :"jsp/admin/plugins/signalement/DoGetSectorListByIdDirectionForDisplayAjax.jsp",
 				data: {
-					direction_id: idDirection
+					direction_id: idDirection,
+					idDomaine: idDomaine
 				},
 				success : function(data) { 
 					var text = "";

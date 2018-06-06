@@ -4060,7 +4060,9 @@ public class SignalementJspBean extends AbstractJspBean
      */
     public void getSectorListByIdDirectionForDisplay( HttpServletRequest request, HttpServletResponse response )
     {
-        String strDirectionId = request.getParameter( PARAMETER_DIRECTION_ID );
+        int idDomaine = Integer.parseInt( request.getParameter( "idDomaine" ) );
+        DomaineFonctionnel domFonc = _domaineFonctionnelService.getById( idDomaine );
+        
         JSONBuilder jsonStringer;
         response.setContentType( "application/json" );
         try
@@ -4068,17 +4070,21 @@ public class SignalementJspBean extends AbstractJspBean
             jsonStringer = new JSONBuilder( response.getWriter( ) );
             try
             {
-                Integer directionId = Integer.parseInt( strDirectionId );
-                Unit unitSelected = _unitService.getUnit( directionId, false );
+                List<Unit> units = new ArrayList<>( );
+                
+                if ( CollectionUtils.isNotEmpty( domFonc.getUnitIds( ) ) ) {
+                    
+                    for ( Integer idUnit : domFonc.getUnitIds( ) ) {
+                        Unit unitSelected = _unitService.getUnit( idUnit, false );
+                        units.add( unitSelected );
+                    }                   
+                }                
 
-                if ( null != unitSelected )
+                if ( CollectionUtils.isNotEmpty( units )  )
                 {
-                    List<Unit> units = new ArrayList<>( );
-                    units.add( unitSelected );
+                    List<Sector> listSectorsForSelectedUnit = getSectorsByUnits( units );                    
 
-                    List<Sector> listSectors = getSectorsByUnits( units );
-
-                    ReferenceList refListSectorsOfUnit = ListUtils.toReferenceList( listSectors, "idSector", "name", StringUtils.EMPTY, true );
+                    ReferenceList refListSectorsOfUnit = ListUtils.toReferenceList( listSectorsForSelectedUnit, "idSector", "name", StringUtils.EMPTY, true );
 
                     jsonStringer.object( ).key( MARK_SECTEUR_LIST ).array( );
                     for ( ReferenceItem sector : refListSectorsOfUnit )
@@ -4093,7 +4099,7 @@ public class SignalementJspBean extends AbstractJspBean
             }
         } catch ( IOException e1 )
         {
-            AppLogService.error( e1.getMessage( ) );
+            AppLogService.error( e1 );
         }
     }
 
