@@ -681,13 +681,13 @@ public class SignalementService implements ISignalementService
             String dateSF = signalement.getDateServiceFaitTraitement( );
             String dateMS = signalement.getDateMiseEnSurveillance( );
             String dateRejet = signalement.getDateRejet( );
-            if ( dateSF != null && state.getId( ) == Integer.parseInt( ID_STATE_SERVICE_FAIT ) ) {
+            if ( dateSF != null && state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_FAIT, -1 ) ) {
                 dto.setDateCloture( dateSF );
             }
-            else if ( dateMS != null && state.getId( ) == Integer.parseInt( ID_STATE_SURVEILLANCE ) ) {
+            else if ( dateMS != null && state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SURVEILLANCE, -1 ) ) {
                 dto.setDateCloture( dateMS );
             }
-            else if ( dateRejet != null && state.getId( ) == Integer.parseInt( ID_STATE_REJETE ) ) {
+            else if ( dateRejet != null && state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_REJETE, -1 ) ) {
                 dto.setDateCloture( dateRejet );
             }
             else {
