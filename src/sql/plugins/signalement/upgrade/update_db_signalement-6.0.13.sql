@@ -15,3 +15,34 @@ and id_type_signalement not in ( 1006,1007,1008, 11013 );
 ALTER TABLE signalement_signalement
 ADD date_rejet timestamp  without time zone;
 
+-- Mise à jour date de clôture des dossiers
+update
+	signalement_signalement
+set
+	date_rejet = (
+		select
+			max( workflow_resource_history.creation_date )
+		from
+			workflow_resource_history
+		where
+			id_resource = signalement_signalement.id_signalement
+			and signalement_signalement.id_signalement in (
+				select
+					id_resource
+				from
+					workflow_resource_workflow
+				where
+					id_state = 11
+			)
+	)
+where
+	signalement_signalement.id_signalement in (
+		select
+			id_resource
+		from
+			workflow_resource_workflow
+		where
+			id_state = 11
+	);
+	
+
