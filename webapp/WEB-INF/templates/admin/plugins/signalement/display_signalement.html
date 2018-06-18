@@ -124,7 +124,7 @@ $(document).ready(function(){
 	});
 	
 	$("#idDirection").change(function(){
-        updateSectorList($("#idDirection").val());
+        updateSectorList($("#idDirection").val(), $("#idDomaine").val());
         return false;
     });	
 	
@@ -256,14 +256,15 @@ function initSelectFromArray(selector,refList){
 
 <script type="text/javascript">
 // Update the Sector List with selected Unit (direction)
-function updateSectorList(idDirection){
+function updateSectorList(idDirection, idDomaine){
     if( idDirection != "")
     {
 		if(idDirection >= 0){
 			jQuery.ajax( {
 				url :"jsp/admin/plugins/signalement/DoGetSectorListByIdDirectionForDisplayAjax.jsp",
 				data: {
-					direction_id: idDirection
+					direction_id: idDirection,
+					idDomaine: idDomaine
 				},
 				success : function(data) { 
 					var text = "";
@@ -284,7 +285,6 @@ function updateSectorList(idDirection){
 					}
 				},
 				error:function (xhr, ajaxOptions, thrownError){
-					alert(thrownError); 
 				}   
 			});
 		}else{

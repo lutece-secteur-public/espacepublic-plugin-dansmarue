@@ -94,6 +94,16 @@
 		</dashboard-component>
 	</dashboard-components>
 	
+	<!-- Daemons -->
+	<daemons>
+	 <daemon>
+	  <daemon-id>webservicePartnerDaemon</daemon-id>
+	  <daemon-name>dansmarue.deamon.webservicepartnerdaemon.name</daemon-name>
+	  <daemon-description>dansmarue.deamon.webservicepartnerdaemon.description</daemon-description>
+	  <daemon-class>fr.paris.lutece.plugins.dansmarue.service.deamon.WebServicePartnerDaemon</daemon-class>
+	 </daemon>
+	</daemons>
+	
 	<admin-javascript-files>
         <admin-javascript-file>js/bootstrap-datepicker.js</admin-javascript-file>
         <admin-javascript-file>js/locales/bootstrap-datepicker.fr.js</admin-javascript-file>

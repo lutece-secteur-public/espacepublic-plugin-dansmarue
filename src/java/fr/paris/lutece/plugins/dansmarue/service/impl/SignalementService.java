@@ -65,11 +65,11 @@ import fr.paris.lutece.plugins.dansmarue.service.IWorkflowService;
 import fr.paris.lutece.plugins.dansmarue.service.SignalementPlugin;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DashboardSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DossierSignalementDTO;
+import fr.paris.lutece.plugins.dansmarue.service.dto.HistorySignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.ImgUtils;
-import fr.paris.lutece.plugins.dansmarue.service.dto.HistorySignalementDTO;
 import fr.paris.lutece.plugins.unittree.business.unit.IUnitDAO;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.modules.sira.business.sector.ISectorDAO;
@@ -79,7 +79,6 @@ import fr.paris.lutece.plugins.unittree.modules.sira.service.unit.IUnitSiraServi
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
-import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistoryService;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -99,11 +98,12 @@ public class SignalementService implements ISignalementService
 {
 
     // PROPERTIES
-    private static final String                 PROPERTY_HIDE_RULE               = "signalement.rulesToHideSignalement";
-    private static final String                 PROPERTY_STATUS_PUBLIC           = "signalement.status.public";
-    private static final String                 PROPERTY_STATUS_NOT_FOLLOWABLE   = "signalement.status.not.followable";
-    private static final String                 PROPERTY_FILE_FOLDER_PATH        = "signalement.pathForFileMessageCreation";
-    private static final String                 PROPERTY_ACTIONS_NON_AFFICHABLES = "signalement.workflow.actions.nonAffichables";
+    private static final String                 PROPERTY_HIDE_RULE                           = "signalement.rulesToHideSignalement";
+    private static final String                 PROPERTY_STATUS_PUBLIC                       = "signalement.status.public";
+    private static final String                 PROPERTY_STATUS_NOT_FOLLOWABLE               = "signalement.status.not.followable";
+    private static final String                 PROPERTY_FILE_FOLDER_PATH                    = "signalement.pathForFileMessageCreation";
+    private static final String                 PROPERTY_ACTIONS_NON_AFFICHABLES             = "signalement.workflow.actions.nonAffichables";
+    private static final String                 PROPERTY_ACTIONS_NON_AFFICHABLES_PRESTATAIRE = "signalement.workflow.actions.nonAffichables.prestataire";
     private static final String                 PROPERTY_URL_PICTURE             = "signalement-rest.url_picture";
     private static final String                 ID_STATE_NOUVEAU                 = "signalement.idStateNouveau";
     private static final String                 ID_STATE_A_REQUALIFIER           = "signalement.idStateARequalifier";
@@ -113,11 +113,13 @@ public class SignalementService implements ISignalementService
     private static final String                 ID_STATE_A_FAIRE_BUREAU          = "signalement.idStateAFaireBureau";
     private static final String                 ID_STATE_PROGRAMME               = "signalement.idStateProgramme";
     private static final String                 ID_STATE_SERVICE_FAIT            = "signalement.idStateServiceFait";
+    private static final String                 ID_STATE_SURVEILLANCE            = "signalement.idStateSurveillance";
     private static final String                 ID_STATE_ARCHIVE                 = "signalement.idStateArchive";
     private static final String                 ID_STATE_REJETE                  = "signalement.idStateRejete";
+    private static final String                 ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE = "signalement.idStateServiceProgrammePrestataire";
+    private static final String                 ID_STATE_TRANSFERE_PRESTATAIRE   = "signalement.idStateTransferePrestataire";
     private static final String                 PROPERTY_TASK_NOTIFICATION_USER  = "signalement.taskType.signalementUserNotification";
     private static final String                 PROPERTY_ID_WORKFLOW_SIGNALEMENT = "signalement.idWorkflow";
-    private static final String                 PROPERTY_BASE_URL                = "lutece.prod.url";
     private static final String                 PROPERTY_BASE_TS_URL             = "lutece.ts.prod.url";
     private static final String                 PARAMETER_VALIDATE_SUIVI         = "validate_suivi";
 
@@ -364,7 +366,8 @@ public class SignalementService implements ISignalementService
             updateSignalementUnit( signalement );
         } catch ( BusinessException e )
         {
-            throw new BusinessException( signalement, MESSAGE_ERROR_NO_SECTOR );
+            AppLogService.error( e );
+            throw new BusinessException( signalement, MESSAGE_ERROR_NO_SECTOR );            
         }
 
         Long numeroSignalement = _numeroSignalementService.findByMonthYear( signalement.getMois( ), signalement.getAnnee( ) );
@@ -440,14 +443,14 @@ public class SignalementService implements ISignalementService
      */
     public static String getLetterByMonth( int month )
     {
+        final int nbMonthInYear = 12;
         String letter = Character.toString( Character.toChars( 65 + month )[0] );
-        return month < 12 ? letter : null;
+        return month < nbMonthInYear ? letter : null;
     }
 
     @Override
     public void update( Signalement signalement )
     {
-        // this.updateSignalementUnit( signalement );
         _signalementDAO.update( signalement );
 
     }
@@ -480,7 +483,6 @@ public class SignalementService implements ISignalementService
             dto.setPriorite( priorite.getLibelle( ) );
 
             // libelle type signalement
-            // TypeSignalement type = this._typeSignalementDAO.load( signalement.getTypeSignalement( ).getId( ), plugin );
             TypeSignalement type = _typeSignalementDAO.getTypeSignalementByIdWithParents( signalement.getTypeSignalement( ).getId( ) );
 
             dto.setTypeSignalement( type.getFormatTypeSignalement( ) );
@@ -550,6 +552,23 @@ public class SignalementService implements ISignalementService
             // Nombre de photos
             Integer nbPhotos = signalement.getPhotos( ).size( );
             dto.setNbPhotos( nbPhotos );
+            
+            // Date de clôture
+            String dateSF = signalement.getDateServiceFaitTraitement( );
+            String dateMS = signalement.getDateMiseEnSurveillance( );
+            String dateRejet = signalement.getDateRejet( );
+            if ( dateSF != null && state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_FAIT, -1 ) ) {
+                dto.setDateCloture( dateSF );
+            }
+            else if ( dateMS != null && state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SURVEILLANCE, -1 ) ) {
+                dto.setDateCloture( dateMS );
+            }
+            else if ( dateRejet != null && state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_REJETE, -1 ) ) {
+                dto.setDateCloture( dateRejet );
+            }
+            else {
+                dto.setDateCloture( "" ); 
+            }
 
             // Raisons rejet
             List<ObservationRejet> observationsRejets = _observationRejetSignalementService.findByIdSignalement( signalement.getId( ).intValue( ) );
@@ -600,7 +619,6 @@ public class SignalementService implements ISignalementService
             dto.setAliasMobile( StringUtils.defaultString( signalement.getTypeSignalement( ).getAliasMobile( ) ) );
 
             // label unit
-            //dto.setDirection( signalement.getTypeSignalement( ).getUnit( ).getLabel( ) );
             int idUnit = _sectorDAO.getDirectionUnitIdBySectorId(  signalement.getSecteur( ).getIdSector( ) );
             Unit unit = _unitDAO.load( idUnit, plugin );
             dto.setDirection( unit.getLabel( ) );
@@ -658,6 +676,23 @@ public class SignalementService implements ISignalementService
             // Nombre de photos
             Integer nbPhotos = signalement.getPhotos( ).size( );
             dto.setNbPhotos( nbPhotos );
+            
+            // Date de clôture
+            String dateSF = signalement.getDateServiceFaitTraitement( );
+            String dateMS = signalement.getDateMiseEnSurveillance( );
+            String dateRejet = signalement.getDateRejet( );
+            if ( dateSF != null && state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_FAIT, -1 ) ) {
+                dto.setDateCloture( dateSF );
+            }
+            else if ( dateMS != null && state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SURVEILLANCE, -1 ) ) {
+                dto.setDateCloture( dateMS );
+            }
+            else if ( dateRejet != null && state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_REJETE, -1 ) ) {
+                dto.setDateCloture( dateRejet );
+            }
+            else {
+                dto.setDateCloture( "" ); 
+            }      
 
             // Raisons rejet
             List<ObservationRejet> observationsRejets = _observationRejetSignalementService.findByIdSignalement( signalement.getId( ).intValue( ) );
@@ -698,7 +733,8 @@ public class SignalementService implements ISignalementService
     @Override
     public List<Signalement> getSignalementByStatusId( Integer statusId )
     {
-        Integer limit = AppPropertiesService.getPropertyInt( SignalementConstants.ARCHIVE_LIMIT, 30 );
+        final int limitNb = 30;
+        Integer limit = AppPropertiesService.getPropertyInt( SignalementConstants.ARCHIVE_LIMIT, limitNb );
         return _signalementDAO.getSignalementsArchivableByStatusId( statusId, limit );
     }
 
@@ -733,7 +769,6 @@ public class SignalementService implements ISignalementService
         Unit majorUnit = this.getMajorUnit( listeUnit );
         if ( majorUnit == null )
         {
-            // = signalement.getTypeSignalement( ).getId( );
             majorUnit = unitSiraService.findUnitByGeomAndTypeSignalement( lng, lat, idTypeSignalement );
         } else
         {
@@ -796,13 +831,12 @@ public class SignalementService implements ISignalementService
             {
                 if ( idParent != cimetiere )
                 {
-                    if ( idParent == jardinage )
-                    {
-                        selected = next;
-                    }
+                    if( idParent == jardinage ) { 
+                        
+                        selected = next; 
+                    } 
                 } else
                 {
-
                     selected = next;
                 }
             } else
@@ -1013,7 +1047,7 @@ public class SignalementService implements ISignalementService
         for ( DossierSignalementDTO dossierSignalementDTO : listDTO )
         {
             List<PhotoDMR> listPhoto = _photoDAO.findBySignalementId( dossierSignalementDTO.getId( ) );
-            if ( listPhoto.size( ) > 0 )
+            if ( !listPhoto.isEmpty( ) )
             {
                 dossierSignalementDTO.setImgUrl( AppPropertiesService.getProperty( 
                         PROPERTY_URL_PICTURE ) + listPhoto.get( 0 ).getId( ) ) ;
@@ -1033,12 +1067,12 @@ public class SignalementService implements ISignalementService
             // récupération de l'identifiant du workflow
             Integer workflowId = _signalementWorkflowService.getSignalementWorkflowId( );
             if ( workflowId != null )
-            {
-                State state = workflowService.getState( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE, workflowId, null );
-
-                // FIXME : gestion des longs dans le plugin-workflow - LUTECE-1467
+            {                
                 // création de l'état initial et exécution des tâches automatiques
+                workflowService.getState( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE, workflowId, null );
+                
                 workflowService.executeActionAutomatic( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE, workflowId, null );
+                
             } else
             {
                 AppLogService.error( "Signalement : No workflow selected" );
@@ -1125,9 +1159,6 @@ public class SignalementService implements ISignalementService
     @Override
     public void doDeleteSignalement( int[] lIdSignalement )
     {
-
-        // TODO Auto-generated method stub
-
         if ( ( lIdSignalement != null ) && ( lIdSignalement.length > 0 ) )
         {
 
@@ -1227,6 +1258,12 @@ public class SignalementService implements ISignalementService
         }
 
     }
+    
+    @Override
+    public void setDateRejet( Integer lIdSignalement, String dateRejet )
+    {
+        _signalementDAO.setDateRejet( lIdSignalement, dateRejet );
+    }
 
     /**
      * Gets the message to notify the user with, for a signalement creation
@@ -1303,7 +1340,6 @@ public class SignalementService implements ISignalementService
 
     @Override
     public void addFollower( Long signalementId, String guid, String strUDID, String email, String device, String userToken, boolean createUser )
-            throws InvalidStateActionException, AlreadyFollowedException
     {
 
         State signalementState = WorkflowService.getInstance( ).getState( signalementId.intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE, _signalementWorkflowService.getSignalementWorkflowId( ),
@@ -1414,8 +1450,7 @@ public class SignalementService implements ISignalementService
             filter.setDashboardPeriod( dashboardPeriod );
         }
         Plugin pluginSignalement = PluginService.getPlugin( SignalementPlugin.PLUGIN_NAME );
-        List<DashboardSignalementDTO> listeSignalements = _signalementDAO.findByDashboardFilter( filter, pluginSignalement );
-        return listeSignalements;
+        return _signalementDAO.findByDashboardFilter( filter, pluginSignalement );
     }
 
     @Override
@@ -1453,7 +1488,6 @@ public class SignalementService implements ISignalementService
     @Override
     public List<Integer> getIdsSignalementByFilter( SignalementFilter filter )
     {
-        ;
         return _signalementDAO.getIdsSignalementByFilter( filter, PluginService.getPlugin( SignalementPlugin.PLUGIN_NAME ) );
     }
 
@@ -1470,13 +1504,30 @@ public class SignalementService implements ISignalementService
 
         String strListActionsNonAffichables = AppPropertiesService.getProperty( PROPERTY_ACTIONS_NON_AFFICHABLES );
         List<String> listActionsNonAffichables = Arrays.asList( strListActionsNonAffichables.split( "," ) );
+        
+        String strListActionsNonAffichablesPrestataire = AppPropertiesService.getProperty( PROPERTY_ACTIONS_NON_AFFICHABLES_PRESTATAIRE );
+        List<String> listActionsNonAffichablesPrestataire = Arrays.asList( strListActionsNonAffichablesPrestataire.split( "," ) );
 
+        // Récupère l'état pour bloquer certaines actions
+        WorkflowService workflowService = WorkflowService.getInstance( );
+        State state = workflowService.getState( nIdSignalement, Signalement.WORKFLOW_RESOURCE_TYPE, workflowId, null );
+        
         for ( Action action : listActionsPossibles )
         {
-            if ( !listActionsNonAffichables.contains( String.valueOf( action.getId( ) ) ) )
+            boolean estAffichable = true;
+            if ( listActionsNonAffichables.contains( String.valueOf( action.getId( ) ) ) )
+            {
+                estAffichable = false;
+            }
+            if ( ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_TRANSFERE_PRESTATAIRE, -1 ) || state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE, -1 ) ) && listActionsNonAffichablesPrestataire.contains( String.valueOf( action.getId( ) ) ) )
+            {
+                estAffichable = false;
+            }
+            if ( estAffichable )
             {
                 listActions.add( action );
             }
+            
         }
 
         return listActions;
@@ -1488,6 +1539,7 @@ public class SignalementService implements ISignalementService
     @Override
     public boolean isSignalementFollowable( int nIdSignalement )
     {
+        boolean ret = true;        
         State signalementState = WorkflowService.getInstance( ).getState( nIdSignalement, Signalement.WORKFLOW_RESOURCE_TYPE, _signalementWorkflowService.getSignalementWorkflowId( ), null );
         Integer stateId = signalementState.getId( );
 
@@ -1496,9 +1548,9 @@ public class SignalementService implements ISignalementService
 
         if ( !statusPublic.contains( stateId ) || notFollowableStatusList.contains( stateId ) )
         {
-            return false;
+            ret = false;
         }
-        return true;
+        return ret;
     }
 
     /**
@@ -1507,12 +1559,13 @@ public class SignalementService implements ISignalementService
     @Override
     public boolean isSignalementFollowedByUser( int nIdSignalement, String userGuid )
     {
+        boolean ret = false;  
         long idSuivi = _signalementSuiviService.findByIdSignalementAndGuid( nIdSignalement, userGuid );
         if ( idSuivi != -1 )
         {
-            return true;
+            ret = true;
         }
-        return false;
+        return ret;
     }
 
     /**
@@ -1529,8 +1582,8 @@ public class SignalementService implements ISignalementService
         String annee = StringUtils.EMPTY + signalement.getAnnee( ) + StringUtils.EMPTY;
         String mois = signalement.getMois( );
         String numero = StringUtils.EMPTY + signalement.getNumero( ) + StringUtils.EMPTY;
-        reference = prefix + annee + mois + numero;
-        return reference;
+        
+        return prefix + annee + mois + numero;
     }
 
     @Override
@@ -1544,7 +1597,7 @@ public class SignalementService implements ISignalementService
     public JSONObject getHistorySignalement( Integer idSignalement, HttpServletRequest request )
     {
         
-        boolean service_fait = false;
+        boolean serviceFait = false;
         JSONObject jsonObject = new JSONObject(  );
         
         int nIdWorkflow = _signalementWorkflowService.getSignalementWorkflowId( );
@@ -1557,14 +1610,14 @@ public class SignalementService implements ISignalementService
         int idStatutServiceFait = AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_FAIT, -1);
         int idActionServiceFait = _signalementWorkflowService.selectIdActionByStates(stateOfSignalement.getId(), idStatutServiceFait);
         if(idActionServiceFait > -1){
-            service_fait = true;
+            serviceFait = true;
             
             if(request.getParameter( PARAMETER_VALIDATE_SUIVI ) != null){
                 workflowService.doProcessAction( idSignalement, Signalement.WORKFLOW_RESOURCE_TYPE,
                         idActionServiceFait, null, request,
                         request.getLocale( ), true );
                 //Une fois service fait, réaffichage avec les nouvelles données
-                service_fait = false;
+                serviceFait = false;
                 stateOfSignalement= workflowService.getState( idSignalement,
                         Signalement.WORKFLOW_RESOURCE_TYPE, nIdWorkflow, null ); 
             }
@@ -1588,7 +1641,7 @@ public class SignalementService implements ISignalementService
         jsonObject.accumulate( MARK_CURRENT_STATE_ID, stateOfSignalement.getId( ) );
         jsonObject.accumulate( MARK_DATE_LAST_STATE, strDateLastState );
         jsonObject.accumulate( MARK_HISTORY, listHistory );
-        jsonObject.accumulate( MARK_SERVICE_FAIT_AVAILABLE, service_fait );
+        jsonObject.accumulate( MARK_SERVICE_FAIT_AVAILABLE, serviceFait );
         
         return jsonObject;
         

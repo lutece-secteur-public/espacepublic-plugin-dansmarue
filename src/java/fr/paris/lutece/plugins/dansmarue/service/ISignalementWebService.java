@@ -29,4 +29,13 @@ public interface ISignalementWebService
      * @throws UnsupportedEncodingException the exception
      */
     JSONObject createJSON( Signalement signalement ) throws UnsupportedEncodingException;
+    
+    
+    /**
+     * Send notification service done to the correct recipient, with Web Service
+     * @param signalement the signalement to send
+     * @param urlPartner  the ws url
+     * @return the return of the call, fail or success
+     */
+    JSONObject callWSPartnerServiceDone (Signalement signalement, String urlPartner );
 }

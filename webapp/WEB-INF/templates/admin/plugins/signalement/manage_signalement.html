@@ -487,35 +487,73 @@ $(document).ready(function() {
 							name="exportcsv" class="btn btn-xs btn-primary">
 							<i class="glyphicon glyphicon-save"></i>
 						</button>
-						</@estAutoriseMacro> <@estAutoriseMacro
-						ressourceType="GESTION_DES_SIGNALEMENTS"
-						permission="TRAITEMENT_MASSE">
-						<button class="btn btn-xs btn-primary" type="submit" value="4"
-							id="button-fait-masse" name="servicefait"
-							title="#i18n{dansmarue.caseList.ServiceFaitMasse}">
-							<i class="glyphicon glyphicon-ok"></i>
-						</button>
-
-						<button class="btn btn-xs btn-primary" type="submit" value="5"
-							id="button-programmer-masse" name="programmer"
-							title="#i18n{dansmarue.caseList.ProgrammerMasse}">
-							<i class="glyphicon glyphicon-calendar"></i>
-						</button>
-						<button class="btn btn-xs btn-primary" type="submit" value="6"
-							id="button-reprogrammer-masse" name="reprogrammer"
-							title="#i18n{dansmarue.caseList.ReprogrammerMasse}">
-							<i class="glyphicon glyphicon-refresh"></i>
-						</button>
-						</@estAutoriseMacro>
-						<@estAutoriseMacro
-						ressourceType="GESTION_DES_SIGNALEMENTS"
-						permission="SUPPRIMER_SIGNALEMENT_MASSE">
-						<button class="btn btn-xs btn-primary" type="submit" value="7"
-							id="button-supprimer-masses" name="masse_deletes"
-							title="#i18n{dansmarue.caseList.SupprimerMasse}">
-							<i class="glyphicon glyphicon-trash"></i>
-						</button>
-						</@estAutoriseMacro>
+						</@estAutoriseMacro> 
+						
+						<#if hasSignalementPrestataire >
+						
+							<@estAutoriseMacro
+							ressourceType="GESTION_DES_SIGNALEMENTS"
+							permission="TRAITEMENT_MASSE">
+							<button class="btn btn-xs btn-primary" type="submit" value="4"
+								id="button-fait-masse" name="servicefait"
+								title="#i18n{dansmarue.caseList.ServiceFaitMasse}" disabled>
+								<i class="glyphicon glyphicon-ok"></i>
+							</button>						
+							<button class="btn btn-xs btn-primary" type="submit" value="5"
+								id="button-programmer-masse" name="programmer"
+								title="#i18n{dansmarue.caseList.ProgrammerMasse}" disabled>
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+							<button class="btn btn-xs btn-primary" type="submit" value="6"
+								id="button-reprogrammer-masse" name="reprogrammer"
+								title="#i18n{dansmarue.caseList.ReprogrammerMasse}" disabled>
+								<i class="glyphicon glyphicon-refresh"></i>
+							</button>
+							</@estAutoriseMacro>
+							<@estAutoriseMacro
+							ressourceType="GESTION_DES_SIGNALEMENTS"
+							permission="SUPPRIMER_SIGNALEMENT_MASSE">
+							<button class="btn btn-xs btn-primary" type="submit" value="7"
+								id="button-supprimer-masses" name="masse_deletes"
+								title="#i18n{dansmarue.caseList.SupprimerMasse}" disabled>
+								<i class="glyphicon glyphicon-trash"></i>
+							</button>
+							
+							</@estAutoriseMacro>
+						
+						<#else>
+						
+							<@estAutoriseMacro
+							ressourceType="GESTION_DES_SIGNALEMENTS"
+							permission="TRAITEMENT_MASSE">
+							<button class="btn btn-xs btn-primary" type="submit" value="4"
+								id="button-fait-masse" name="servicefait"
+								title="#i18n{dansmarue.caseList.ServiceFaitMasse}">
+								<i class="glyphicon glyphicon-ok"></i>
+							</button>
+							<button class="btn btn-xs btn-primary" type="submit" value="5"
+								id="button-programmer-masse" name="programmer"
+								title="#i18n{dansmarue.caseList.ProgrammerMasse}">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+							<button class="btn btn-xs btn-primary" type="submit" value="6"
+								id="button-reprogrammer-masse" name="reprogrammer"
+								title="#i18n{dansmarue.caseList.ReprogrammerMasse}">
+								<i class="glyphicon glyphicon-refresh"></i>
+							</button>
+							</@estAutoriseMacro>
+							<@estAutoriseMacro
+							ressourceType="GESTION_DES_SIGNALEMENTS"
+							permission="SUPPRIMER_SIGNALEMENT_MASSE">
+							<button class="btn btn-xs btn-primary" type="submit" value="7"
+								id="button-supprimer-masses" name="masse_deletes"
+								title="#i18n{dansmarue.caseList.SupprimerMasse}">
+								<i class="glyphicon glyphicon-trash"></i>
+							</button>
+						
+							</@estAutoriseMacro>
+						</#if>
+						
 					</div>
 					<br />
 					<br />
@@ -570,37 +608,63 @@ $(document).ready(function() {
 									name="signalement_id" value="${signalement.id}"
 									title="#i18n{dansmarue.reportingList.alt.select}" /></td>
 								</@hasAutorisationMacro>
-								<td class="signalement-actions"><@a class="btn btn-xs
+								<td class="signalement-actions">
+								
+									<@a class="btn btn-xs
 									btn-primary" visu=false
 									href="jsp/admin/plugins/signalement/ViewSignalement.jsp"
 									params="?signalement_id=${signalement.id}"
 									additionalParameters="title='#i18n{dansmarue.reportingList.alt.view}'"> <i
-									class="glyphicon glyphicon-eye-open"></i> </@a> <@a class="btn
-									btn-xs btn-primary" visu=false
-									sector=(signalement.secteur.idSector)!?string
-									href="jsp/admin/plugins/signalement/ModifySignalement.jsp"
-									params="?signalement_id=${signalement.id}"
-									additionalParameters="title='#i18n{dansmarue.reportingList.alt.modify}'">
-									<i class="glyphicon glyphicon-edit"></i> </@a> <a
+									class="glyphicon glyphicon-eye-open"></i> </@a> 
+									
+									<#if map_etats[signalement.id?string] != "Transféré \x00E0 un prestataire" 
+									&& map_etats[signalement.id?string] != "Transféré \x00E0 un tiers"
+									&& map_etats[signalement.id?string] != "Service programmé prestataire"
+									&& map_etats[signalement.id?string] != "Service programmé tiers">
+										<@a class="btn
+										btn-xs btn-primary" visu=false
+										sector=(signalement.secteur.idSector)!?string
+										href="jsp/admin/plugins/signalement/ModifySignalement.jsp"
+										params="?signalement_id=${signalement.id}"
+										additionalParameters="title='#i18n{dansmarue.reportingList.alt.modify}'">
+										<i class="glyphicon glyphicon-edit"></i> </@a> 
+									</#if>
+									
+									<a
 									class="btn btn-xs btn-primary"
 									title="#i18n{dansmarue.reportingList.alt.history}"
 									href="jsp/admin/plugins/signalement/ViewHistory.jsp?signalement_id=${signalement.id}">
 										<i class="glyphicon glyphicon-book"></i>
-								</a> <#assign list_actions = map_actions[signalement.id?string] />
-									<#-- actions du workflow --> <#list list_actions as action>
+									</a> 
+									
+									<#assign list_actions = map_actions[signalement.id?string] />
+									<#-- actions du workflow --> 
+									<#list list_actions as action>
 									<#if
 									rights.estAutorise("*","*",(signalement.secteur.idSector)!?string)>
+									
 									<a title="${action.name}"
 									href="jsp/admin/plugins/signalement/ProcessAction.jsp?action_id=${action.id}&amp;signalement_id=${signalement.id}">
 										<img width="24px"
 										src="image?resource_type=workflow_icon_img&id=${action.icon.id}"
 										alt="${action.name}" />
-								</a> </#if> </#list> <@a class="btn btn-xs btn-danger" visu=false
+									</a> </#if> 
+									
+									</#list> 
+									
+									<#if map_etats[signalement.id?string] != "Transféré \x00E0 un prestataire" 
+									&& map_etats[signalement.id?string] != "Transféré \x00E0 un tiers"
+									&& map_etats[signalement.id?string] != "Service programmé prestataire"
+									&& map_etats[signalement.id?string] != "Service programmé tiers">
+									<@a class="btn btn-xs btn-danger" visu=false
 									sector=(signalement.secteur.idSector)!?string
 									href="jsp/admin/plugins/signalement/DeleteSignalement.jsp"
 									params="?signalement_id=${signalement.id}"
 									additionalParameters="title='#i18n{dansmarue.commons.supprimer}'">
-									<i class="glyphicon glyphicon-trash"></i> </@a> <@a class="btn
+									<i class="glyphicon glyphicon-trash"></i> </@a> 
+									</#if>
+									
+									<@a class="btn
 									btn-xs btn-primary" visu=false
 									sector=(signalement.secteur.idSector)!?string
 									href="jsp/admin/plugins/signalement/DoCreateMailSignalement.jsp"

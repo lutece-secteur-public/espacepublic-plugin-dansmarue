@@ -376,6 +376,9 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant MARK_ETATS. */
     private static final String           MARK_ETATS                                    = "map_etats";
+    
+    /** The Constant MARK_HAS_SIGNALEMENT_PRESTATAIRE. */
+    private static final String           MARK_HAS_SIGNALEMENT_PRESTATAIRE              = "hasSignalementPrestataire";
 
     /** The Constant MARK_ACTIONS. */
     private static final String           MARK_ACTIONS                                  = "map_actions";
@@ -470,6 +473,10 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant ID_ETATS_DEFAULT. */
     private static final int[]            ID_ETATS_DEFAULT                              = { 7, 8, 16, 17, 18, 21 };
+    
+    private static final String           ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE  = "signalement.idStateServiceProgrammePrestataire";
+    
+    private static final String           ID_STATE_TRANSFERE_PRESTATAIRE          = "signalement.idStateTransferePrestataire";
 
     /** The Constant CSV_SEPARATOR. */
     private static final char             CSV_SEPARATOR                                 = ';';
@@ -1044,6 +1051,7 @@ public class SignalementJspBean extends AbstractJspBean
         Map<String, String> mapStates = new HashMap<String, String>( );
         WorkflowService workflowService = WorkflowService.getInstance( );
         Integer signalementWorkflowId = _signalementWorkflowService.getSignalementWorkflowId( );
+        boolean hasSignalementPrestataire = false;
         if ( workflowService.isAvailable( ) )
         {
             for ( Signalement signalement : paginator.getPageItems( ) )
@@ -1056,9 +1064,15 @@ public class SignalementJspBean extends AbstractJspBean
                 State state = workflowService.getState( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE, signalementWorkflowId, null );
 
                 mapStates.put( signalement.getId( ).toString( ), state == null ? "Non défini" : state.getName( ) );
+                
+                if ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_TRANSFERE_PRESTATAIRE, -1 ) || state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE, -1 ) ) {
+                    hasSignalementPrestataire = true;
+                }
             }
         }
 
+        model.put( MARK_HAS_SIGNALEMENT_PRESTATAIRE, hasSignalementPrestataire );
+        
         // Reaffichage des options avancees
         List<Integer> listArrondissementIds = listeArrondissement.stream( ).map( referenceItem -> Integer.valueOf( referenceItem.getCode( ) ) ).collect( Collectors.toList( ) );
         boolean hasCriteresAvances = hasCriteresAvances( filter, listArrondissementIds );
@@ -2082,10 +2096,10 @@ public class SignalementJspBean extends AbstractJspBean
                 }
 
                 // image 1 ensemble treatement CREATION
-                insertPhoto( signalement, imageSourceEnsemble );
+                insertPhoto( signalement, imageSourceEnsemble, VUE_ENSEMBLE );
 
                 // image 2 près treatement CREATION
-                insertPhoto( signalement, imageSourcePres );
+                insertPhoto( signalement, imageSourcePres, VUE_PRES );
                 _signalementService.initializeSignalementWorkflow( signalement );
             }
             // MODIFICATION
@@ -2244,7 +2258,7 @@ public class SignalementJspBean extends AbstractJspBean
         return url;
     }
 
-    private void insertPhoto( Signalement signalement, FileItem imageFile )
+    private void insertPhoto( Signalement signalement, FileItem imageFile, Integer vuePhoto )
     {
         String strImageName = FileUploadService.getFileNameOnly( imageFile );
         if ( StringUtils.isNotBlank( strImageName ) )
@@ -2262,7 +2276,7 @@ public class SignalementJspBean extends AbstractJspBean
             photoSignalement.setImageContent( ImgUtils.checkQuality( image.getImage( ) ) );
             photoSignalement.setImageThumbnailWithBytes( resizeImage );
             photoSignalement.setSignalement( signalement );
-            photoSignalement.setVue( VUE_ENSEMBLE );
+            photoSignalement.setVue( vuePhoto );
             photoSignalement.setDate( sdfDate.format( Calendar.getInstance( ).getTime( ) ) );
 
             // creation of the image in the db linked to the signalement
@@ -2958,6 +2972,7 @@ public class SignalementJspBean extends AbstractJspBean
                     return strErrorUrl;
                 }
             } catch (Exception e) {
+                AppLogService.error( e );
                 return AdminMessageService.getMessageUrl(request, MESSAGE_RAMEN_WS_ERROR, AdminMessage.TYPE_STOP);
             }
 
@@ -3268,7 +3283,7 @@ public class SignalementJspBean extends AbstractJspBean
             writer = new CSVWriter( response.getWriter( ), CSV_SEPARATOR );
 
             writer.writeNext( new String[] { "Numéro", "Priorité", "Type", "Alias", "Alias mobile", "Direction", "Quartier", "Adresse", "Coordonnée X", "Coordonnée Y", "Arrondissement", "Secteur d'affectation", "Date de création",
-                    "Heure de création", "Etat", "Mail usager", "Commentaire usager", "Nombre de photos", "Raisons de rejet", "Nombre de suivis", "Nombre de félicitations" } );
+                    "Heure de création", "Etat", "Mail usager", "Commentaire usager", "Nombre de photos", "Date de clôture", "Raisons de rejet", "Nombre de suivis", "Nombre de félicitations" } );
             for ( SignalementExportCSVDTO signalementDTO : listeSignalementExportCSVDTO )
             {
                 datas = signalementDTO.getTabAllDatas( );
@@ -3279,7 +3294,7 @@ public class SignalementJspBean extends AbstractJspBean
 
         } catch ( IOException e )
         {
-            AppLogService.error( e.getMessage( ) );
+            AppLogService.error( e );
         }
     }
 
@@ -4045,7 +4060,11 @@ public class SignalementJspBean extends AbstractJspBean
      */
     public void getSectorListByIdDirectionForDisplay( HttpServletRequest request, HttpServletResponse response )
     {
-        String strDirectionId = request.getParameter( PARAMETER_DIRECTION_ID );
+        int idDomaine = Integer.parseInt( request.getParameter( "idDomaine" ) );
+        DomaineFonctionnel domFonc = _domaineFonctionnelService.getById( idDomaine );
+        
+        String strDirectionId = request.getParameter( PARAMETER_DIRECTION_ID );        
+        
         JSONBuilder jsonStringer;
         response.setContentType( "application/json" );
         try
@@ -4053,17 +4072,23 @@ public class SignalementJspBean extends AbstractJspBean
             jsonStringer = new JSONBuilder( response.getWriter( ) );
             try
             {
-                Integer directionId = Integer.parseInt( strDirectionId );
-                Unit unitSelected = _unitService.getUnit( directionId, false );
+                List<Unit> units = new ArrayList<>( );
+                
+                if ( CollectionUtils.isNotEmpty( domFonc.getUnitIds( ) ) ) {
+                    
+                    for ( Integer idUnit : domFonc.getUnitIds( ) ) {
+                        Unit unitSelected = _unitService.getUnit( idUnit, false );
+                        if( unitSelected.getIdParent( ) == Integer.parseInt( strDirectionId ) ) {
+                            units.add( unitSelected );
+                        }                        
+                    }                   
+                }                
 
-                if ( null != unitSelected )
+                if ( CollectionUtils.isNotEmpty( units )  )
                 {
-                    List<Unit> units = new ArrayList<>( );
-                    units.add( unitSelected );
+                    List<Sector> listSectorsForSelectedUnit = getSectorsByUnits( units );                    
 
-                    List<Sector> listSectors = getSectorsByUnits( units );
-
-                    ReferenceList refListSectorsOfUnit = ListUtils.toReferenceList( listSectors, "idSector", "name", StringUtils.EMPTY, true );
+                    ReferenceList refListSectorsOfUnit = ListUtils.toReferenceList( listSectorsForSelectedUnit, "idSector", "name", StringUtils.EMPTY, true );
 
                     jsonStringer.object( ).key( MARK_SECTEUR_LIST ).array( );
                     for ( ReferenceItem sector : refListSectorsOfUnit )
@@ -4078,7 +4103,7 @@ public class SignalementJspBean extends AbstractJspBean
             }
         } catch ( IOException e1 )
         {
-            AppLogService.error( e1.getMessage( ) );
+            AppLogService.error( e1 );
         }
     }
 

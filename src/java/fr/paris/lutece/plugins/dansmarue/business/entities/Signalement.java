@@ -32,6 +32,12 @@ public class Signalement
     /** The _heure creation. */
     private Date                   _heureCreation;
 
+    /** The date mise en surveillance. */
+    private String                 _dateMiseEnSurveillance;
+    
+    /** The date rehet. */
+    private String                 _dateRejet;
+    
     /** The id. */
     private Long                   _lId;
 
@@ -97,6 +103,9 @@ public class Signalement
     private String                 _strHeureServiceFaitTraitement;
 
     private List<ObservationRejet> observationsRejet;
+    
+    /** The attribute to check if the signalement is a duplicate */
+    private boolean _bIsDoublon;
 
     public void setDirection( Unit direction )
     {
@@ -107,9 +116,6 @@ public class Signalement
     {
         _direction = direction;
     }
-
-    /** The attribute to check if the signalement is a duplicate */
-    private boolean _bIsDoublon;
 
     /**
      * Generer lien google map.
@@ -666,9 +672,9 @@ public class Signalement
      * @param _strDateServiceFaitTraitement
      *            the _strDateServiceFaitTraitement to set
      */
-    public void setDateServiceFaitTraitement( String _strDateServiceFaitTraitement )
+    public void setDateServiceFaitTraitement( String strDateServiceFaitTraitement )
     {
-        this._strDateServiceFaitTraitement = _strDateServiceFaitTraitement;
+        this._strDateServiceFaitTraitement = strDateServiceFaitTraitement;
     }
 
     /**
@@ -683,9 +689,9 @@ public class Signalement
      * @param _strHeureServiceFaitTraitement
      *            the _strHeureServiceFaitTraitement to set
      */
-    public void setHeureServiceFaitTraitement( String _strHeureServiceFaitTraitement )
+    public void setHeureServiceFaitTraitement( String strHeureServiceFaitTraitement )
     {
-        this._strHeureServiceFaitTraitement = _strHeureServiceFaitTraitement;
+        this._strHeureServiceFaitTraitement = strHeureServiceFaitTraitement;
     }
 
     /**
@@ -745,5 +751,37 @@ public class Signalement
         reference = prefix + annee + mois + numero;
 
         return reference;
+    }
+
+    /**
+     * @return the _dateMiseEnSurveillance
+     */
+    public String getDateMiseEnSurveillance( )
+    {
+        return _dateMiseEnSurveillance;
+    }
+
+    /**
+     * @param _dateMiseEnSurveillance the _dateMiseEnSurveillance to set
+     */
+    public void setDateMiseEnSurveillance( String dateMiseEnSurveillance )
+    {
+        this._dateMiseEnSurveillance = dateMiseEnSurveillance;
+    }
+
+    /**
+     * @return the _dateRejet
+     */
+    public String getDateRejet( )
+    {
+        return _dateRejet;
+    }
+
+    /**
+     * @param _dateRejet the _dateRejet to set
+     */
+    public void setDateRejet( String dateRejet )
+    {
+        this._dateRejet = dateRejet;
     }
 }

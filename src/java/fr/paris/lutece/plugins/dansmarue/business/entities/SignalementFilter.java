@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.dansmarue.business.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import fr.paris.lutece.plugins.dansmarue.commons.Order;
@@ -70,6 +71,22 @@ public class SignalementFilter implements Serializable
 
     private boolean               _bOrderAsc;
     private List<Order>           _orders          = new ArrayList<Order>( );
+    
+    
+    /**
+     * Init empty list for signalement filter to avoid
+     * Null Pointer Exception.
+     */
+    public void initEmptyList() {
+        _listIdTypeSignalements = Collections.emptyList( );
+        _listIdArrondissements = Collections.emptyList( );
+        _etats = Collections.emptyList( );
+        _listIdSecteurAutorises = Collections.emptyList( );
+        _listIdUnit = Collections.emptyList( );
+        _listIdCategories = Collections.emptyList( );
+        _listIdQuartier = Collections.emptyList( );
+        _orders = Collections.emptyList( );
+    }
 
     public List<EtatSignalement> getEtats( )
     {

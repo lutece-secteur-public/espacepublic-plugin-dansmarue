@@ -69,7 +69,7 @@ public class MailSignalementJspBean extends AbstractJspBean
     private static final String MESSAGE_MAIL_ADRESSE_SIGNALEMENT  = "Localisation";
     private static final String MESSAGE_MAIL_PRECISION_LOC        = "Pr\u00e9cision de localisation";
     private static final String MESSAGE_MAIL_LINK_WITH_ACCOUNT    = "Lien back-office authentifié";
-    private static final String MESSAGE_MAIL_LINK                 = "Lien accessible pour l'usager";
+    private static final String MESSAGE_MAIL_LINK                 = "Lien accessible pour concessionnaire";
     private static final String MESSAGE_MAIL_BONJOUR              = "Bonjour, ";
 
     // CONSTANTS

@@ -209,4 +209,14 @@ public interface ISignalementDAO
 	 * @param dateMiseEnSurveillance the date
 	 */
 	void addMiseEnSurveillanceDate(int idSignalement, String dateMiseEnSurveillance);
+	
+	/**
+	 * Find ids signalements canditate for WebServicePartnerDeamon
+	 * @param signalementState
+	 *            the signalement state
+	 * @return list id signalement find.
+	 */
+	List<Integer> findIdsSingalementForWSPartnerDeamon(int signalementState);
+
+    void setDateRejet( int idSignalement, String dateRejet );
 }

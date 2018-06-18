@@ -129,6 +129,10 @@ public final class SignalementConstants
     public static final List<String> SIGNALEMENT_PREFIXES                                   = SignalementUtils.getProperties( SIGNALEMENT_PREFIX_KEY );
 
     public static final int          START_SIGNALEMENT_NUMERO                               = 1;
+    
+    //Action workflow
+    public static final String      ID_ACTION_TRANSFERT_PARTNER                            = "signalement.daemon.idAction.transfert.partner";
+    public static final String      ID_ACTION_DAEMON_SIGNALEMENT_DONE                      = "signalement.daemon.idAction.done"; 
 
     /**
      * Utility class - empty constructor
