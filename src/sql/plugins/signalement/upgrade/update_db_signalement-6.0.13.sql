@@ -45,4 +45,10 @@ where
 			id_state = 11
 	);
 	
+-- Rajout du delete en cascade sur la table observation_rejet
+ alter table
+	public.signalement_observation_rejet_signalement 
+	drop constraint observation_rejet_signalement_fk,
+	add constraint observation_rejet_signalement_fk foreign key (fk_id_signalement) references signalement_signalement(id_signalement) on delete cascade;
+	
 
