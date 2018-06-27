@@ -44,6 +44,11 @@
 			select: function(event,ui){ $('#typeSignalements').val(ui.item.value);initType();}
 		});
 	</#if>
+
+	 <#if photos?has_content && photos?size==2>
+		$('button[name="addPhotoModif"]').attr("disabled","disabled")
+	 </#if>
+	
 });
 
 	function initType(){

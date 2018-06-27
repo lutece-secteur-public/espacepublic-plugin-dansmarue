@@ -496,6 +496,9 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant MESSAGE_ERROR_EMPTY_PHOTO_FIELD. */
     private static final String           MESSAGE_ERROR_EMPTY_PHOTO_FIELD               = "dansmarue.message.error.emptyPhoto";
+    
+    /** The Constant MESSAGE_ERROR_EXISTING_PHOTO. */
+    private static final String           MESSAGE_ERROR_EXISTING_PHOTO                  = "dansmarue.message.error.photo.existante";
 
     /** The Constant MESSAGE_TITLE_MASS_ACTION_IMPOSSIBLE. */
     private static final String           MESSAGE_TITLE_MASS_ACTION_IMPOSSIBLE          = "dansmarue.messagetitle.massActionImpossible.message";
@@ -1863,6 +1866,17 @@ public class SignalementJspBean extends AbstractJspBean
 
             return urlItem.getUrl( );
         }
+        
+        List<PhotoDMR> photos = _signalementService.getSignalement( nIdSignalement ).getPhotos( );
+        Integer nVuePhoto = Integer.parseInt( strVuePhoto );
+        
+        for (PhotoDMR photo : photos) {
+            //Si photo déjà existante
+            if(photo.getVue( ) == nVuePhoto) {
+                return AdminMessageService.getMessageUrl( multipartRequest, MESSAGE_ERROR_EXISTING_PHOTO, AdminMessage.TYPE_STOP );
+            }
+        }
+        
 
         FileItem imageSource = multipartRequest.getFile( PARAMETER_PHOTO );
         String strImageName = FileUploadService.getFileNameOnly( imageSource );
@@ -1881,8 +1895,6 @@ public class SignalementJspBean extends AbstractJspBean
             photoSignalement.setImage( image );
             photoSignalement.setImageThumbnailWithBytes( resizeImage );
             photoSignalement.setSignalement( signalement );
-
-            Integer nVuePhoto = Integer.parseInt( strVuePhoto );
 
             photoSignalement.setVue( nVuePhoto );
 
