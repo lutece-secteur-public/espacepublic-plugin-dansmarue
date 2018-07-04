@@ -1,6 +1,8 @@
 update signalement_dashboard_period set ordre=0 where id_period=18;
 update signalement_dashboard_period set ordre=2 where id_period=16;
 
+delete from core_attribute_field where title='DPE_CHEFDESECTEUR';
+
 
 /* DMR-1088 */
 
