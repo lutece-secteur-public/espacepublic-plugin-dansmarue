@@ -1,12 +1,16 @@
 package fr.paris.lutece.plugins.dansmarue.business.dao.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.IWorkflowDAO;
-import fr.paris.lutece.plugins.dansmarue.business.entities.NotificationSignalementUser3Contents;
+import fr.paris.lutece.plugins.dansmarue.business.entities.NotificationSignalementUserMultiContents;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.icon.Icon;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
@@ -27,20 +31,18 @@ public class WorkflowDAO implements IWorkflowDAO
     private static final String SIGNALEMENT_RESOURCE = "SIGNALEMENT_SIGNALEMENT";
 
     //QUERY
-    private static final String SQL_QUERY_SELECT_MESSAGES_PRESTA = 
-            "SELECT id_task,subject,sender,message1,message2,subject_ramen,message1_ramen,message2_ramen,title1, title2 "
-            + " FROM signalement_workflow_notifuser_3contents_config WHERE id_task in(";
     private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_workflow";
     private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_workflow (id_workflow) VALUES (?)";
     private static final String SQL_QUERY_SELECT = "SELECT id_workflow FROM signalement_workflow";
-    private static final String SQL_QUERY_SELECT_HISTORY_BY_SIGNALEMENT = "SELECT workflow_action.name, workflow_resource_history.creation_date, workflow_resource_history.user_access_code FROM workflow_action, workflow_resource_history WHERE workflow_action.id_action = workflow_resource_history.id_action AND resource_type = ? AND id_resource = ?";
     private static final String SQL_QUERY_SELECT_ACTION_BY_STATES = "SELECT id_action FROM workflow_action WHERE id_state_before=? AND id_state_after=?";
-    private static final String SQL_QUERY_SELECT_3CONTENTS_MESSAGE_NOTIFICATION = "select notification_value from signalement_workflow_notifuser_3contents_value where id_history = ? "; 
+    private static final String SQL_QUERY_SELECT_MULTI_CONTENTS_MESSAGE_NOTIFICATION = "select notification_value from signalement_workflow_notifuser_multi_contents_value where id_history = ? "; 
     private static final String SQL_QUERY_SELECT_MESSAGE_NOTIFICATION = "select notification_value from signalement_workflow_notification_user_value where id_history = ? "; 
     private static final String SQL_QUERY_SELECT_USER_SERVICE_FAIT = "select user_access_code from workflow_resource_history where id_resource = ? and id_action in (62,70,22,18,49,53,41)"; 
     private static final String SQL_QUERY_SELECT_HISTORY_BY_RESOURCES = "select * from workflow_resource_history where id_resource = ? and resource_type = ? and id_workflow = ? "; 
     private static final String SQL_QUERY_SELECT_ACTION_BY_HISTORY = "select * from workflow_action where id_action = ?";
-
+    private static final String SQL_QUERY_SELECT_ALL_MESSAGE_TASK = "SELECT id_task, id_message from signalement_workflow_notifuser_multi_contents_task WHERE id_task in (";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY     = "SELECT signalement_workflow_notifuser_multi_contents_config.id_message,subject,sender,title,message" + " FROM signalement_workflow_notifuser_multi_contents_config INNER JOIN signalement_workflow_notifuser_multi_contents_task on signalement_workflow_notifuser_multi_contents_config.id_message = signalement_workflow_notifuser_multi_contents_task.id_message WHERE signalement_workflow_notifuser_multi_contents_config.id_message=? AND signalement_workflow_notifuser_multi_contents_task.id_task=?";
+    
     
     /**
      * {@inheritDoc}
@@ -89,9 +91,9 @@ public class WorkflowDAO implements IWorkflowDAO
     /**
      * {@inheritDoc}
      */
-    public String select3ContentsMessageNotification( Integer idHistory )
+    public String selectMultiContentsMessageNotification( Integer idHistory )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_3CONTENTS_MESSAGE_NOTIFICATION );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MULTI_CONTENTS_MESSAGE_NOTIFICATION );
         
         int nIndex = 1;
         daoUtil.setInt(nIndex++, idHistory);
@@ -266,49 +268,83 @@ public class WorkflowDAO implements IWorkflowDAO
     }
 
     @Override
-    public List<NotificationSignalementUser3Contents> selectMessageServiceFaitPresta( List<String> listTaskPrestaServiceFait )
+    public Map<Integer, List<NotificationSignalementUserMultiContents>> selectMessageServiceFaitPresta( List<String> listTaskPrestaServiceFait )
     {
-        List<NotificationSignalementUser3Contents> messagesServiceFait = new ArrayList<>( );
+        Map<Integer, List<NotificationSignalementUserMultiContents>> taskMessagesServiceFait = new HashMap<>( );
         
         String[] tab = new String[listTaskPrestaServiceFait.size( )];
         for ( int i = 0; i < tab.length; i++ )
         {
             tab[i] = "?";
         }
-        String listewhere = StringUtils.join( tab, "," );
+        String listewhere = StringUtils.join( tab, "," );    
         
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MESSAGES_PRESTA + listewhere + ")" );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL_MESSAGE_TASK + listewhere + ") ORDER BY id_task, id_message" );
         
-        int nIndex = 1;
+        int index = 1;
         for ( String idTask : listTaskPrestaServiceFait )
         {
-            daoUtil.setInt( nIndex++, Integer.parseInt( idTask ) );
+            daoUtil.setInt( index++, Integer.parseInt( idTask ) );
         }
-
+        
         daoUtil.executeQuery( );
         
+        List<Long> listIdMessage = new ArrayList<>( );
+        List<Integer> listIdTask = new ArrayList<>( );        
+                
         while ( daoUtil.next( ) )
         {
-            nIndex = 1;
-            NotificationSignalementUser3Contents message = new NotificationSignalementUser3Contents( );
+            int nIndex = 1;
+            listIdTask.add( daoUtil.getInt( nIndex++ ) ); 
+            listIdMessage.add( daoUtil.getLong( nIndex ) );
+        }
+        
+        daoUtil.free( );
+        
+        Set<Integer> set = new HashSet<>() ;
+        set.addAll( listIdTask ) ;
+        List<Integer> distinctListIdTask = new ArrayList<>( set );
+        
+        for( Integer idTask : distinctListIdTask ) {
+            List<NotificationSignalementUserMultiContents> messagesServiceFait = new ArrayList<>( );
             
-            message.setIdTask( daoUtil.getInt( nIndex++ ) );
-            message.setSubject( daoUtil.getString( nIndex++ ) );
-            message.setSender( daoUtil.getString( nIndex++ ) );
-            message.setMessage1( daoUtil.getString( nIndex++ ) );
-            message.setMessage2( daoUtil.getString( nIndex++ ) );
-            message.setSubjectRamen( daoUtil.getString( nIndex++ ) );
-            message.setMessage1Ramen( daoUtil.getString( nIndex++ ) );
-            message.setMessage2Ramen( daoUtil.getString( nIndex++ ) );
-            message.setTitle1( daoUtil.getString( nIndex++) );
-            message.setTitle2( daoUtil.getString( nIndex++ ) );
-            
-            messagesServiceFait.add( message );
+            for ( Long idMessage : listIdMessage ) {
+                NotificationSignalementUserMultiContents message = getMessageByIdMessage( idMessage, idTask, null );
+                if( message.getIdMessage( ) != null ) {
+                    message.setIdTask( idTask );
+                    messagesServiceFait.add( message );
+                }                
+            }            
+            taskMessagesServiceFait.put( idTask, messagesServiceFait );
+        }                              
+        
+        return taskMessagesServiceFait;
+    }
+
+    private NotificationSignalementUserMultiContents getMessageByIdMessage( Long nIdMessage, Integer idTask, Plugin plugin )
+    {
+        NotificationSignalementUserMultiContents userTaskConfig = new NotificationSignalementUserMultiContents( );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
+
+        daoUtil.setLong( 1, nIdMessage );
+        daoUtil.setInt( 2, idTask );
+
+        daoUtil.executeQuery( );
+
+        int nPos = 0;
+
+        if ( daoUtil.next( ) )
+        {
+            userTaskConfig.setIdMessage( daoUtil.getLong( ++nPos ) );
+            userTaskConfig.setSubject( daoUtil.getString( ++nPos ) );
+            userTaskConfig.setSender( daoUtil.getString( ++nPos ) );
+            userTaskConfig.setTitle( daoUtil.getString( ++nPos ) );
+            userTaskConfig.setMessage( daoUtil.getString( ++nPos ) );
         }
 
         daoUtil.free( );
-        
-        return messagesServiceFait;
+
+        return userTaskConfig;
     }
     
 }

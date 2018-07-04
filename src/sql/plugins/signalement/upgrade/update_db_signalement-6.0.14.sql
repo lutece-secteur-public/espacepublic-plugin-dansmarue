@@ -1,2 +1,58 @@
 update signalement_dashboard_period set ordre=0 where id_period=18;
 update signalement_dashboard_period set ordre=2 where id_period=16;
+
+
+/* DMR-1088 */
+
+/* Création de la nouvelle table de messages */
+CREATE SEQUENCE seq_signalement_workflow_notifuser_multi_contents_config;
+CREATE TABLE signalement_workflow_notifuser_multi_contents_config (
+	id_message bigint NOT NULL,
+	subject character varying(255),
+	sender character varying(255),
+	title character varying(255),
+	message text,
+	id_task bigint,
+	CONSTRAINT id_message_pk PRIMARY KEY(id_message)
+);
+SELECT setval( 'seq_signalement_workflow_notifuser_multi_contents_config', ( SELECT MAX( signalement_workflow_notifuser_multi_contents_config.id_message )+1 FROM signalement_workflow_notifuser_multi_contents_config) );
+
+/* Rename des tables notifuser_3contents */
+alter table signalement_workflow_notifuser_3contents_value
+rename to signalement_workflow_notifuser_multi_contents_value;
+
+/* Création de la table association */
+CREATE TABLE signalement_workflow_notifuser_multi_contents_task (
+	id_task bigint NOT NULL,
+	id_message bigint NOT null,
+	CONSTRAINT signalement_workflow_notifuser_multi_contents_config_message_fk FOREIGN KEY (id_message) REFERENCES signalement_workflow_notifuser_multi_contents_config(id_message)
+);
+
+/* Remplissage table association et table message */
+insert into signalement_workflow_notifuser_multi_contents_config(id_message,subject,sender,title,message,id_task)
+	select nextval('seq_signalement_workflow_notifuser_multi_contents_config'),subject, sender, title1, message1, id_task
+	from signalement_workflow_notifuser_3contents_config;
+
+insert into signalement_workflow_notifuser_multi_contents_config(id_message,subject,sender,title,message,id_task)
+	select nextval('seq_signalement_workflow_notifuser_multi_contents_config'),subject, sender, title2, message2, id_task
+	from signalement_workflow_notifuser_3contents_config;
+
+insert into signalement_workflow_notifuser_multi_contents_config(id_message,subject,sender,title,message,id_task)
+	select nextval('seq_signalement_workflow_notifuser_multi_contents_config'),subject, sender, title3, message3, id_task
+	from signalement_workflow_notifuser_3contents_config;
+
+insert into signalement_workflow_notifuser_multi_contents_task
+	select id_task, id_message
+	from signalement_workflow_notifuser_multi_contents_config;
+	
+--- Supprime l'entrée id_task servant juste à remplir la table précédente et delete l'ancienne table 
+alter table signalement_workflow_notifuser_multi_contents_config
+	drop column id_task;
+drop table signalement_workflow_notifuser_3contents_config;
+
+/* Changement du nom de la tâche */ 
+update workflow_task
+set task_type_key = 'taskSignalementUserNotificationMultiContents'
+where task_type_key = 'taskSignalementUserNotification3Contents'
+
+

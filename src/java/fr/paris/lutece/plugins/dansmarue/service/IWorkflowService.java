@@ -1,8 +1,9 @@
 package fr.paris.lutece.plugins.dansmarue.service;
 
 import java.util.List;
+import java.util.Map;
 
-import fr.paris.lutece.plugins.dansmarue.business.entities.NotificationSignalementUser3Contents;
+import fr.paris.lutece.plugins.dansmarue.business.entities.NotificationSignalementUserMultiContents;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 
 /**
@@ -37,7 +38,7 @@ public interface IWorkflowService
 
     String selectUserServiceFait( Integer idResource );
 
-    String select3ContentsMessageNotification( Integer idHistory );
+    String selectMultiContentsMessageNotification( Integer idHistory );
 
     List<ResourceHistory> getAllHistoryByResource( int nIdResource,
             String strResourceType, int nIdWorkflow );
@@ -45,5 +46,5 @@ public interface IWorkflowService
     ResourceHistory getLastHistoryResource( int nIdResource,
             String strResourceType, int nIdWorkflow );
 
-    List<NotificationSignalementUser3Contents> selectMessageServiceFaitPresta( );
+    Map<Integer, List<NotificationSignalementUserMultiContents>> selectMessageServiceFaitPresta( String strIdAction );
 }

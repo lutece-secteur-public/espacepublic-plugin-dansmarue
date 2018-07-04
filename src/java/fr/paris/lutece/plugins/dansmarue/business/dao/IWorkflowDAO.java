@@ -1,8 +1,9 @@
 package fr.paris.lutece.plugins.dansmarue.business.dao;
 
 import java.util.List;
+import java.util.Map;
 
-import fr.paris.lutece.plugins.dansmarue.business.entities.NotificationSignalementUser3Contents;
+import fr.paris.lutece.plugins.dansmarue.business.entities.NotificationSignalementUserMultiContents;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -43,14 +44,14 @@ public interface IWorkflowDAO
     
     String selectUserServiceFait( Integer idResource );
 
-    String select3ContentsMessageNotification( Integer idHistory );
+    String selectMultiContentsMessageNotification( Integer idHistory );
 
     Action findByPrimaryKey( int id );
 
     List<ResourceHistory> selectByResource( int nIdResource,
             String strResourceType, int nIdWorkflow );
 
-    List<NotificationSignalementUser3Contents> selectMessageServiceFaitPresta(
+    Map<Integer, List<NotificationSignalementUserMultiContents>> selectMessageServiceFaitPresta(
             List<String> listTaskPrestaServiceFait );
 
 }

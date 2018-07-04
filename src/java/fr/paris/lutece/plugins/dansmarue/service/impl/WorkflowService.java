@@ -1,28 +1,37 @@
 package fr.paris.lutece.plugins.dansmarue.service.impl;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.IWorkflowDAO;
-import fr.paris.lutece.plugins.dansmarue.business.entities.NotificationSignalementUser3Contents;
+import fr.paris.lutece.plugins.dansmarue.business.entities.NotificationSignalementUserMultiContents;
 import fr.paris.lutece.plugins.dansmarue.service.IWorkflowService;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
+import fr.paris.lutece.plugins.workflowcore.service.task.ITask;
+import fr.paris.lutece.plugins.workflowcore.service.task.ITaskService;
+import fr.paris.lutece.plugins.workflowcore.service.task.TaskService;
 import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.inject.Inject;
+
+import org.apache.commons.lang.StringUtils;
 
 public class WorkflowService extends AbstractCacheableService implements IWorkflowService
 {
     private static final String SIGNALEMENT_WORKFLOW_KEY = "workflow_signalement";
-    private static final String SERVICE_NAME = "Signalement workflow service";
+    private static final String SERVICE_NAME             = "Signalement workflow service";
 
-
-    //DAO
+    // DAO
     @Inject
-    private IWorkflowDAO _workflowDAO;
+    private IWorkflowDAO        _workflowDAO;
+    @Inject
+    private ITaskService        _taskService;
 
     @Override
     /**
@@ -39,7 +48,7 @@ public class WorkflowService extends AbstractCacheableService implements IWorkfl
     @Override
     public Integer getSignalementWorkflowId( )
     {
-        Integer nIdWorkflow = (Integer) getFromCache( SIGNALEMENT_WORKFLOW_KEY );
+        Integer nIdWorkflow = ( Integer ) getFromCache( SIGNALEMENT_WORKFLOW_KEY );
         if ( nIdWorkflow == null )
         {
             nIdWorkflow = _workflowDAO.selectWorkflowId( null );
@@ -59,78 +68,91 @@ public class WorkflowService extends AbstractCacheableService implements IWorkfl
         getCache( ).remove( SIGNALEMENT_WORKFLOW_KEY );
     }
 
-    
     /**
      * {@inheritDoc}
      */
     @Override
-    public String selectMessageNotification( Integer idHistory ){
+    public String selectMessageNotification( Integer idHistory )
+    {
         return _workflowDAO.selectMessageNotification( idHistory );
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public String select3ContentsMessageNotification( Integer idHistory ){
-        return _workflowDAO.select3ContentsMessageNotification( idHistory );
+    public String selectMultiContentsMessageNotification( Integer idHistory )
+    {
+        return _workflowDAO.selectMultiContentsMessageNotification( idHistory );
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     public List<ResourceHistory> getAllHistoryByResource( int nIdResource, String strResourceType, int nIdWorkflow )
     {
-        List<ResourceHistory> listResourceHistory = _workflowDAO.selectByResource( nIdResource, strResourceType,
-                nIdWorkflow );
+        List<ResourceHistory> listResourceHistory = _workflowDAO.selectByResource( nIdResource, strResourceType, nIdWorkflow );
 
         for ( ResourceHistory resourceHistory : listResourceHistory )
         {
-            resourceHistory.setAction( _workflowDAO.findByPrimaryKey( resourceHistory.getAction(  ).getId(  ) ) );
+            resourceHistory.setAction( _workflowDAO.findByPrimaryKey( resourceHistory.getAction( ).getId( ) ) );
         }
 
         return listResourceHistory;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     public ResourceHistory getLastHistoryResource( int nIdResource, String strResourceType, int nIdWorkflow )
     {
-        List<ResourceHistory> listResourceHistory = _workflowDAO.selectByResource( nIdResource, strResourceType,
-                nIdWorkflow );
+        List<ResourceHistory> listResourceHistory = _workflowDAO.selectByResource( nIdResource, strResourceType, nIdWorkflow );
 
         for ( ResourceHistory resourceHistory : listResourceHistory )
         {
-            resourceHistory.setAction( _workflowDAO.findByPrimaryKey( resourceHistory.getAction(  ).getId(  ) ) );
+            resourceHistory.setAction( _workflowDAO.findByPrimaryKey( resourceHistory.getAction( ).getId( ) ) );
         }
 
         return ( !listResourceHistory.isEmpty( ) ) ? listResourceHistory.get( 0 ) : null;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public String selectUserServiceFait( Integer idResource ){
+    public String selectUserServiceFait( Integer idResource )
+    {
         return _workflowDAO.selectUserServiceFait( idResource );
     }
 
     @Override
     public int selectIdActionByStates( int idStateBefore, int idStateAfter )
     {
-        return _workflowDAO.selectIdActionByStates(idStateBefore, idStateAfter, null);
-    }
-    
-    @Override
-    public List<NotificationSignalementUser3Contents> selectMessageServiceFaitPresta( )
-    {
-        String strListTaskPrestaServiceFait = AppPropertiesService.getProperty( "signalement.task.presta.message.service.fait" );
-        List<String> listTaskPrestaServiceFait = Arrays.asList( strListTaskPrestaServiceFait.split( "," ) );
-        
-        return _workflowDAO.selectMessageServiceFaitPresta( listTaskPrestaServiceFait );
+        return _workflowDAO.selectIdActionByStates( idStateBefore, idStateAfter, null );
     }
 
+    @Override
+    public Map<Integer,List<NotificationSignalementUserMultiContents>> selectMessageServiceFaitPresta( String strIdAction )
+    {        
+        String strListTaskPrestaServiceFait = AppPropertiesService.getProperty( "signalement.task.presta.message.service.fait" );
+        List<String> listTaskPrestaServiceFait =  Arrays.asList( strListTaskPrestaServiceFait.split( "," ) );
+        List<String> listTaskPrestaServiceFaitToReturn = new ArrayList<>( );
+        
+        if( StringUtils.EMPTY.equals( strIdAction ) ) {
+            List<ITask> listActionTasks = _taskService.getListTaskByIdAction( Integer.parseInt( strIdAction ), Locale.FRENCH );
+            for( ITask task : listActionTasks ) {
+                String idTask = Integer.toString( task.getId( ) );
+                if ( listTaskPrestaServiceFait.contains( idTask ) ) {
+                    listTaskPrestaServiceFaitToReturn.add( idTask );
+                }
+            }            
+        } else {
+            listTaskPrestaServiceFaitToReturn = listTaskPrestaServiceFait;            
+        }
+        
+        
+        return _workflowDAO.selectMessageServiceFaitPresta( listTaskPrestaServiceFaitToReturn );
+    }
 }

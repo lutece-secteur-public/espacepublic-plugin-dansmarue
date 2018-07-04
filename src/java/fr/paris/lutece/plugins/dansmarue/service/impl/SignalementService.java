@@ -1672,15 +1672,15 @@ public class SignalementService implements ISignalementService
             dto.setState( this.changeToGoodStateForSuivi( stateAfterAction ) );
 
             //get the message
-            String notificationUser3ContentsValue = _signalementWorkflowService.select3ContentsMessageNotification( rh.getId( ) );
+            String notificationUserMultiContentsValue = _signalementWorkflowService.selectMultiContentsMessageNotification( rh.getId( ) );
 
             String notificationUserValue = _signalementWorkflowService.selectMessageNotification( rh.getId( ) );
 
-            if ( notificationUser3ContentsValue != null
-                    && !notificationUser3ContentsValue.equals( StringUtils.EMPTY ) )
+            if ( notificationUserMultiContentsValue != null
+                    && !notificationUserMultiContentsValue.equals( StringUtils.EMPTY ) )
             {
                 //add the history only if there's a saved email in database
-                dto.setMessage( notificationUser3ContentsValue );
+                dto.setMessage( notificationUserMultiContentsValue );
                 listHistoryDTO.add( dto );
             }
 
