@@ -1,6 +1,7 @@
 package fr.paris.lutece.plugins.dansmarue.web;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import fr.paris.lutece.plugins.dansmarue.commons.exceptions.FunctionnalException
 import fr.paris.lutece.plugins.dansmarue.service.IPhotoService;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementService;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
+import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.mail.MailItem;
@@ -62,6 +64,7 @@ public class MailSignalementJspBean extends AbstractJspBean
     private static final String MESSAGE_ERROR_CONTENT_MANDATORY   = "dansmarue.message.content.mandatory";
     private static final String MESSAGE_ERROR_EXPEDITEUR_FORMAT   = "dansmarue.message.exp.format";
     private static final String MESSAGE_MAIL_NUMBER_SIGNALEMENT   = "Num\u00e9ro du message";
+    private static final String MESSAGE_MAIL_DATE_CREATION        = "Date de cr\u00e9ation de l'anomalie";
     private static final String MESSAGE_MAIL_COMMENTAIRE          = "Commentaire";
     private static final String MESSAGE_MAIL_MAIL_SIGNALEUR       = "Email du signaleur";
     private static final String MESSAGE_MAIL_TYPE_SIGNALEMENT     = "Type d'incident";
@@ -164,6 +167,9 @@ public class MailSignalementJspBean extends AbstractJspBean
                 // case number
                 strBuff.append( LINE_SEPARATOR + MESSAGE_MAIL_NUMBER_SIGNALEMENT + " : " + signalement.getNumeroSignalement( ) );
 
+                // date_creation                 
+                strBuff.append( LINE_SEPARATOR + MESSAGE_MAIL_DATE_CREATION + " : Le " + signalement.getDateCreation( ) + " à " + DateUtils.getHourFr( signalement.getHeureCreation( ) ) );
+                
                 // mail
                 if ( !signaleurs.isEmpty( ) && !signaleurs.get( 0 ).getMail( ).isEmpty( ) )
                 {
