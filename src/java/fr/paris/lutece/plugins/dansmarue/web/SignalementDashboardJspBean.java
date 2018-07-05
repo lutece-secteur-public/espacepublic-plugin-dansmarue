@@ -512,12 +512,12 @@ public class SignalementDashboardJspBean extends AbstractJspBean {
   		List<Entry<State,Map<DashboardPeriod,List<Integer>>>> listCollapsedStates = new ArrayList<>();
   		
   		for(Entry<State, Map<DashboardPeriod, List<Integer>>> dashboardEntry:dashboard.entrySet()){
-  			State state = dashboardEntry.getKey();
-  			if(userDashboardStatesId.contains(state.getId())){
+  			/*State state = dashboardEntry.getKey();
+  			if(userDashboardStatesId.contains(state.getId())){*/
   				listDisplayedStates.add(dashboardEntry);
-  			}else{
+  			/*}else{
   				listCollapsedStates.add(dashboardEntry);
-  			}
+  			}*/
   		}
   		
   		model.put(MARK_COLLAPSED_STATES_LIST, listCollapsedStates);

@@ -98,19 +98,21 @@ form>a>img, .actionsButtons>a>img {
 }
 
 #dashboard .dashboard-result .state-block:nth-child(2n) .repartition-block,
-#dashboard .dashboard-result .state-block:nth-child(3n) .repartition-block{
+#dashboard .dashboard-result .state-block:nth-child(3n) .repartition-block,
+#dashboard .dashboard-result .state-block:nth-child(4n) .repartition-block,
+#dashboard .dashboard-result .state-block:nth-child(5n) .repartition-block{
 	margin-right: 3px;
 	margin-left: 3px;
 }
 
 
-#dashboard .dashboard-result .state-block:nth-child(4n+1) .repartition-block,
+#dashboard .dashboard-result .state-block:nth-child(5n+1) .repartition-block,
 #dashboard .dashboard-result .state-block:nth-child(1) .repartition-block{
 	margin-right: 3px;
 	margin-left: 0px;
 }
 
-#dashboard .dashboard-result .state-block:nth-child(4n) .repartition-block{
+#dashboard .dashboard-result .state-block:nth-child(6n) .repartition-block{
 	margin-left: 3px;
 	margin-right: 0px;
 }

@@ -88,14 +88,8 @@
 	<div class="dashboard-result">
 		<#-- Etats affichés -->
 		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-offset-1 col-md-10 col-lg-offset-3 col-lg-6">
+			<div class="col-xs-12 col-sm-12 col-md-offset-1 col-md-10 col-lg-offset-1 col-lg-10">
 				<@displayStatePeriods list_entry=displayed_states_list collapsed=false/>
-			</div>
-		</div>
-		<#-- Etats masqués -->
-		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-offset-1 col-md-10 col-lg-offset-3 col-lg-6">
-				<@displayStatePeriods list_entry=collapsed_states_list/>
 			</div>
 		</div>
 	</div>
@@ -144,44 +138,37 @@
 		<#assign state = entry.key/>
 		<#assign mapPeriod = entry.value/>
 		
-<#-- Création de nouvelle ligne -->
-		<#if index == 1>
-			<#if collapsed>
-				<div class="row state-row-collapsed">
-			<#else>
+		<#assign nbAnos = 0/>
+		<#list mapPeriod as period, listAnomalies>
+			<#assign nbAnos = (nbAnos + listAnomalies?size) />
+		</#list>
+		
+		<#if nbAnos != 0>
+		
+			<#-- Création de nouvelle ligne -->
+			<#if index == 1>			
 				<div class="row state-row">
 			</#if>
-		</#if>
-		
-<#-- Nouvelle colonne -->
-		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 state-block">
-<#-- Header constitue des states -->
-			<form method="post" action="jsp/admin/plugins/signalement/ManageSignalementDashboard.jsp">
-					<input type="hidden" name="action" value="updateUserDashboardPreferences"/>
-					<input type="hidden" name="state_id" value="${state.id}"/>
-					<#if collapsed>
-						<input type="hidden" name="display" value="true"/>
-					<#else>
+			
+			<#-- Nouvelle colonne -->
+			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 state-block">
+			<#-- Header constitue des states -->
+				<form method="post" action="jsp/admin/plugins/signalement/ManageSignalementDashboard.jsp">
+						<input type="hidden" name="action" value="updateUserDashboardPreferences"/>
+						<input type="hidden" name="state_id" value="${state.id}"/>
 						<input type="hidden" name="display" value="false"/>
-					</#if>
-				<div class="row state-header">
-					<button type="submit" >
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 state-block-content
-						expandable <#if collapsed>collapsed</#if>" >
-						${state.name}
-						<br/>
-						<#assign nbAnos = 0/>
-						<#list mapPeriod as period, listAnomalies>
-							<#assign nbAnos = (nbAnos + listAnomalies?size) />
-						</#list>
-						${nbAnos}
-						<br/>
+					<div class="row state-header">
+						<button type="submit" >
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 state-block-content" >
+							${state.name}
+							<br/>							
+							${nbAnos}
+							<br/>
+						</div>
+						</button>
 					</div>
-					</button>
-				</div>
-			</form>
-<#-- Elements de repartition -->
-			<#if !collapsed>
+				</form>
+				<#-- Elements de repartition -->
 				<div id="state-${state.id}" class="row">
 				<#list mapPeriod as period, listAnomalies>
 					<form class="repartition-wrapper"  method="post" action="jsp/admin/plugins/signalement/ManageSignalementDashboard.jsp">
@@ -199,14 +186,14 @@
 						<!--<#list listAnomalies as anomalie>${anomalie},</#list> -->
 				</#list>
 				</div>
-			</#if>
-		</div>
-		<#if index == 4 || entry?is_last>
 			</div>
-			<#assign index = 1/>
-		<#else>
-			<#assign index = index+1/>
-		</#if>
+			<#if index == 6 || entry?is_last>
+				</div>
+				<#assign index = 1/>
+			<#else>
+				<#assign index = index+1/>
+			</#if>		
+		</#if>		
 	</#list>
 </#macro>
 
