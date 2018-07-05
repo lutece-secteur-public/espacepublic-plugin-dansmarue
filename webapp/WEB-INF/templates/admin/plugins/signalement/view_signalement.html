@@ -8,7 +8,18 @@ $(document).ready(function() {
 		initLeafletMap("map_view");
 		var lat = $("#latitude").val();
 		var lng = $("#longitude").val();
-		zoomTo(lat,lng);
+		var etatSignalementId = ${stateSignalement.id};
+
+		//Si « Service fait », « Archivé », « Sous surveillance » , « Rejeté » -> puce vert 
+		if(etatSignalementId===10 || etatSignalementId===12 || etatSignalementId===22 || etatSignalementId===11 ) {
+			zoomToWithEtat(lat,lng, "greenIcon");
+		} else if (etatSignalementId===9 || etatSignalementId===21) {
+			//Si « Service programmé », « Service programmé tiers » -> puce jaune
+			zoomToWithEtat(lat,lng, "yellowIcon");
+		} else {
+			//Sinon, puce rouge
+			zoomToWithEtat(lat,lng, "redIcon");
+		}
 	});
 });
 
