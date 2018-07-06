@@ -1,11 +1,15 @@
 package fr.paris.lutece.plugins.dansmarue.business.dao.impl;
 
+import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -23,6 +27,7 @@ import fr.paris.lutece.plugins.dansmarue.business.entities.Priorite;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDashboardFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
+import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementRequalification;
 import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.dansmarue.commons.Order;
 import fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties;
@@ -32,6 +37,7 @@ import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
 import fr.paris.lutece.plugins.unittree.modules.sira.business.sector.Sector;
 import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -40,6 +46,14 @@ import fr.paris.lutece.util.sql.DAOUtil;
  */
 public class SignalementDAO implements ISignalementDAO
 {
+
+    private static final String SQL_QUERY_AND = " AND ";
+
+    private static final String SQL_QUERY_INNER_JOIN = " INNER JOIN ";
+
+    private static final String SIGNALEUR_MAIL = "signaleur.mail";
+
+    private static final String NUM_SIGNALEMENT = "numSignalement";
 
     /** The Constant SQL_QUERY_NEW_PK. */
     private static final String SQL_QUERY_NEW_PK                                   = "SELECT nextval('seq_signalement_signalement_id_signalement')";
@@ -172,7 +186,7 @@ public class SignalementDAO implements ISignalementDAO
     private static final String SQL_WHERE                                          = " WHERE ";
 
     /** The Constant SQL_AND. */
-    private static final String SQL_AND                                            = " AND ";
+    private static final String SQL_AND                                            = SQL_QUERY_AND;
 
     /** The Constant SQL_OR. */
     private static final String SQL_OR                                             = " OR ";
@@ -195,7 +209,14 @@ public class SignalementDAO implements ISignalementDAO
 
     /** The Constant DISTINCT */
     private static final String SQL_DISTINCT                                       = " DISTINCT ";
+    
+    /** The Constant SQL_QUERY_INSERT_REQUALIFICATION. */
+    private static final String SQL_QUERY_INSERT_REQUALIFICATION                   = "INSERT INTO signalement_requalification(id_signalement,id_type_signalement,adresse,id_sector,date_requalification) VALUES (?,?,?,?,?)";
 
+    /** The Constant SQL_QUERY_SELECT_REQUALIFICATION. */
+    private static final String SQL_QUERY_SELECT_REQUALIFICATION                   = "SELECT * from signalement_requalification where id_signalement = ? ORDER BY date_requalification DESC";
+
+    
     /**
      * Makes references between client sort keyword and actual sql joins / columns names.
      */
@@ -212,8 +233,8 @@ public class SignalementDAO implements ISignalementDAO
         // par soucis de non régression les clé actuelles sont les les chemins directs vers les attributs utilisés précédement.
         _ordersMap = new HashMap<String, String>( );
         _ordersMap.put( "signalement.suivi", "signalement.suivi" );
-        _ordersMap.put( "numSignalement", "numSignalement" );
-        _ordersMap.put( "signaleur.mail", "signaleur.mail" );
+        _ordersMap.put( NUM_SIGNALEMENT, NUM_SIGNALEMENT );
+        _ordersMap.put( SIGNALEUR_MAIL, SIGNALEUR_MAIL );
         _ordersMap.put( "priorite.libelle", "priorite.libelle" );
         _ordersMap.put( "type.libelle", "type.libelle" );
         _ordersMap.put( "direction_unit.label", "direction_unit.label" );
@@ -439,7 +460,7 @@ public class SignalementDAO implements ISignalementDAO
                 daoUtil.setTimestamp( nIndex++, DateUtils.formatDateSqlWithTime( dateTraitementString ) );
             } catch ( ParseException e )
             {
-                e.printStackTrace( );
+                AppLogService.error( e );
             }
         } else
         {
@@ -551,7 +572,7 @@ public class SignalementDAO implements ISignalementDAO
             {
                 if ( index == listeOrders.size( ) )
                 {
-                    if ( order.getName( ).equals( "numSignalement" ) )
+                    if ( order.getName( ).equals( NUM_SIGNALEMENT ) )
                     {
                         sbSQL.append( "signalement.prefix, signalement.annee, signalement.mois, signalement.numero " );
                     } else
@@ -560,7 +581,7 @@ public class SignalementDAO implements ISignalementDAO
                     }
                 } else
                 {
-                    if ( order.getName( ).equals( "numSignalement" ) )
+                    if ( order.getName( ).equals( NUM_SIGNALEMENT ) )
                     {
                         sbSQL.append( "signalement.prefix, signalement.annee, signalement.mois, signalement.numero, " );
                     } else
@@ -797,13 +818,6 @@ public class SignalementDAO implements ISignalementDAO
         }
 
         // ETAT
-        // if ( filter.getIdEtat( ) > 0 )
-        // {
-        // nIndex = this.addSQLWhereOr( false, sbSQL, nIndex );
-        // sbSQL.append( SQL_QUERY_ADD_FILTER_ETAT );
-        // }
-
-        // ETAT
         if ( filter.getEtats( ) != null )
         {
             int i = filter.getEtats( ).size( );
@@ -875,7 +889,7 @@ public class SignalementDAO implements ISignalementDAO
             int index = 1;
             for ( Order order : listeOrders )
             {
-                if ( "numSignalement".equals( order.getName( ) ) )
+                if ( NUM_SIGNALEMENT.equals( order.getName( ) ) )
                 {
                     if ( index == listeOrders.size( ) )
                     {
@@ -888,7 +902,7 @@ public class SignalementDAO implements ISignalementDAO
                         index++;
                     }
                 }
-                else if ( "signaleur.mail".equals( order.getName( ) ) )
+                else if ( SIGNALEUR_MAIL.equals( order.getName( ) ) )
                 {
                     if ( index == listeOrders.size( ) )
                     {
@@ -1023,12 +1037,6 @@ public class SignalementDAO implements ISignalementDAO
             daoUtil.setTimestamp( nIndex++, DateUtil.formatTimestamp( filter.getDateEnd( ), Locale.FRENCH ) );
         }
 
-        // //ETAT
-        // if ( filter.getIdEtat( ) > 0 )
-        // {
-        // daoUtil.setLong( nIndex++, filter.getIdEtat( ) );
-        // }
-
         // ETAT
         if ( ( filter.getEtats( ) != null ) && !filter.getEtats( ).isEmpty( ) )
         {
@@ -1133,15 +1141,9 @@ public class SignalementDAO implements ISignalementDAO
 
             // Type Signalement
             TypeSignalement typeSignalement = new TypeSignalement( );
-            // typeSignalement.setLibelle( daoUtil.getString( nIndex++ ) );
             typeSignalement.setId( daoUtil.getInt( nIndex++ ) );
 
-            // Unit
-            // Unit unit = new Unit( );
-            // unit.setLabel( daoUtil.getString( nIndex++ ) );
-
             signalement.setPriorite( priorite );
-            // typeSignalement.setUnit( unit );
             signalement.setTypeSignalement( typeSignalement );
 
             listSignalements.add( signalement );
@@ -1163,7 +1165,7 @@ public class SignalementDAO implements ISignalementDAO
         List<Signalement> listResult = new ArrayList<Signalement>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL );
         daoUtil.executeQuery( );
-        // int nIndex;
+        
         while ( daoUtil.next( ) )
         {
             Signalement signalement = getSignalementFromDaoUtil( daoUtil );
@@ -1882,19 +1884,19 @@ public class SignalementDAO implements ISignalementDAO
         query.append( "signalement_signalement s" );
 
         // JOIN
-        query.append( " INNER JOIN " );
+        query.append( SQL_QUERY_INNER_JOIN );
         query.append( " workflow_resource_workflow wrw " );
         query.append( " ON " );
         query.append( " wrw.id_resource = s.id_signalement " );
 
-        query.append( " INNER JOIN " );
+        query.append( SQL_QUERY_INNER_JOIN );
         query.append( "v_signalement_type_signalement_with_parents_links vstsawpl" );
         query.append( " ON " );
         query.append( " s.fk_id_type_signalement = vstsawpl.id_type_signalement " );
-        query.append( " AND " );
+        query.append( SQL_QUERY_AND );
         query.append( " vstsawpl.is_parent_a_category = 1 " );
 
-        query.append( " INNER JOIN " );
+        query.append( SQL_QUERY_INNER_JOIN );
         query.append( " unittree_unit_sector uus" );
         query.append( " ON " );
         query.append( " s.fk_id_sector = uus.id_sector" );
@@ -1937,7 +1939,7 @@ public class SignalementDAO implements ISignalementDAO
 
         // FILTER BY UNIT (mandatory)
         nIndex = addSQLWhereOr( false, query, nIndex );
-        query.append( " uus.id_unit = ? " );
+        query.append( SQL_QUERY_ADD_FILTER_DIRECTION );
 
         // FILTER BY CATEGORY
         if ( !ArrayUtils.isEmpty( filter.getCategoryIds( ) ) )
@@ -2150,4 +2152,48 @@ public class SignalementDAO implements ISignalementDAO
       
         return signalementsIds;   
     }
+    
+    @Override
+    public void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector ) {
+                
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_REQUALIFICATION );
+        daoUtil.setLong( 1, lIdSignalement );
+        daoUtil.setInt( 2, idTypeSignalement );
+        daoUtil.setString( 3, adresse );
+        daoUtil.setInt( 4, idSector );
+        daoUtil.setTimestamp( 5, new Timestamp( Calendar.getInstance(  ).getTimeInMillis(  ) ) );
+        
+        daoUtil.executeUpdate( );
+               
+        daoUtil.free( );
+    }
+    
+    @Override
+    public List<SignalementRequalification> getRequalification( long lIdSignalement ) {
+        
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_REQUALIFICATION );
+        daoUtil.setLong( 1, lIdSignalement );
+        
+        daoUtil.executeQuery( );
+        
+        List<SignalementRequalification> listRequalification = new ArrayList<>( );
+        
+        int nIndex;
+        
+        while( daoUtil.next( ) ) {
+            nIndex = 1;
+            SignalementRequalification signalementRequalification = new SignalementRequalification( );
+            signalementRequalification.setIdSignalement( daoUtil.getLong( nIndex++ ) );
+            signalementRequalification.setIdTypeSignalement( daoUtil.getInt( nIndex++ ) );
+            signalementRequalification.setAdresse( daoUtil.getString( nIndex++ ) );
+            signalementRequalification.setIdSector( daoUtil.getInt( nIndex++ ) );
+            signalementRequalification.setDateRequalification( DateUtils.getDateFr( daoUtil.getDate( nIndex ) ) );
+            
+            listRequalification.add( signalementRequalification );            
+        }
+               
+        daoUtil.free( );
+        
+        return listRequalification;
+    }   
 }

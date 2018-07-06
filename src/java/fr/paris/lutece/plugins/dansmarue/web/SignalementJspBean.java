@@ -230,6 +230,9 @@ public class SignalementJspBean extends AbstractJspBean
     /** The Constant PARAMETER_PRIORITE. */
     public static final String            PARAMETER_PRIORITE                            = "priorite";
 
+    /** The Constant PARAMETER_SECTOR. */
+    public static final String            PARAMETER_SECTOR                              = "sector";
+
     /** The Constant PARAMETER_TYPE_SIGNALEMENT. */
     public static final String            PARAMETER_TYPE_SIGNALEMENT                    = "typeSignalement";
 
@@ -306,7 +309,7 @@ public class SignalementJspBean extends AbstractJspBean
     private static final String           PARAMETER_SERVICE_ID                          = "serviceId";
 
     /** The Constant PARAMETER_SERVICE__ID. */
-    private static final String           PARAMETER_SERVICE__ID                          = "service_id";
+    private static final String           PARAMETER_SERVICE__ID                         = "service_id";
 
     /** The Constant PARAMETER_DIRECTION_ID. */
     private static final String           PARAMETER_DIRECTION_ID                        = "direction_id";
@@ -316,13 +319,13 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant PARAMETER_VALUE_DISPLAY_PAGE **/
     private static final String           PARAMETER_VALUE_DISPLAY_PAGE                  = "display_page";
-    
+
     private static final String           PARAMETER_NEXT_URL                            = "next";
-    
+
     private static final String           PARAMETER_WEBAPP_RAMEN                        = "ramen";
-    
+
     private static final String           PARAMETER_SECTOR__ID                          = "sector_id";
-    
+
     private static final String           PARAMETER_UNIT__ID                            = "unit_id";
 
     /** The Constant JSON_KEY_ID. */
@@ -376,7 +379,7 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant MARK_ETATS. */
     private static final String           MARK_ETATS                                    = "map_etats";
-    
+
     /** The Constant MARK_HAS_SIGNALEMENT_PRESTATAIRE. */
     private static final String           MARK_HAS_SIGNALEMENT_PRESTATAIRE              = "hasSignalementPrestataire";
 
@@ -400,12 +403,12 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant MARK_STATE_SIGNALEMENT. */
     private static final String           MARK_STATE_SIGNALEMENT                        = "stateSignalement";
-    
+
     /** The Constant MARL_STATE_SERVICE_FAIT. */
-    private static final String           MARK_STATE_SERVICE_FAIT                       = "serviceFaitValue";    
-    
+    private static final String           MARK_STATE_SERVICE_FAIT                       = "serviceFaitValue";
+
     /** The Constant MARL_USER_SERVICE_FAIT. */
-    private static final String           MARK_USER_SERVICE_FAIT                        = "serviceFaitUser"; 
+    private static final String           MARK_USER_SERVICE_FAIT                        = "serviceFaitUser";
 
     /** The Constant MARK_NO_VALID_ADDRESSES. */
     public static final String            MARK_NO_VALID_ADDRESSES                       = "noValidAddresses";
@@ -473,10 +476,10 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant ID_ETATS_DEFAULT. */
     private static final int[]            ID_ETATS_DEFAULT                              = { 7, 8, 16, 17, 18, 21 };
-    
-    private static final String           ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE  = "signalement.idStateServiceProgrammePrestataire";
-    
-    private static final String           ID_STATE_TRANSFERE_PRESTATAIRE          = "signalement.idStateTransferePrestataire";
+
+    private static final String           ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE        = "signalement.idStateServiceProgrammePrestataire";
+
+    private static final String           ID_STATE_TRANSFERE_PRESTATAIRE                = "signalement.idStateTransferePrestataire";
 
     /** The Constant CSV_SEPARATOR. */
     private static final char             CSV_SEPARATOR                                 = ';';
@@ -496,7 +499,7 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant MESSAGE_ERROR_EMPTY_PHOTO_FIELD. */
     private static final String           MESSAGE_ERROR_EMPTY_PHOTO_FIELD               = "dansmarue.message.error.emptyPhoto";
-    
+
     /** The Constant MESSAGE_ERROR_EXISTING_PHOTO. */
     private static final String           MESSAGE_ERROR_EXISTING_PHOTO                  = "dansmarue.message.error.photo.existante";
 
@@ -547,11 +550,11 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant MESSAGE_TITLE_DELETE_SIGNALEMENT. */
     private static final String           MESSAGE_TITLE_DELETE_SIGNALEMENT              = "dansmarue.messagetitle.deleteSignalement.title";
-    
+
     private static final String           MESSAGE_RAMEN_WS_ERROR                        = "dansmarue.ramen.webservice.erreur";
-    
+
     /** The Constant USAGER_MOBILE */
-    public static final String           USAGER_MOBILE                                  = "Usager mobile";
+    public static final String            USAGER_MOBILE                                 = "Usager mobile";
 
     // PROPERTIES
     private static final String           PROPERTY_FILE_FOLDER_PATH                     = "signalement.pathForFileMessageCreation";
@@ -796,7 +799,7 @@ public class SignalementJspBean extends AbstractJspBean
         //// THE DIVISION LIST ALLOWED BY USER ////
         ///////////////////////////////////////////
         List<Unit> listUnits = _unitService.getUnitsByIdUser( adminUser.getUserId( ), false );
-        
+
         ReferenceList listeDirections = new ReferenceList( );
         List<Sector> listSectorsOfUnits = new ArrayList<Sector>( );
         ReferenceList listeArrondissement = new ReferenceList( );
@@ -882,11 +885,13 @@ public class SignalementJspBean extends AbstractJspBean
                 Unit temp = userUnit;
                 while ( ( temp.getIdUnit( ) != 0 ) && !isChildOfRestrictedUnit )
                 {
-                    if ( unitsIds != null ) {                        
-                        if( !unitsIds.isEmpty( ) || unitsIds.contains( temp.getIdParent( ) ) ){     
+                    if ( unitsIds != null )
+                    {
+                        if ( !unitsIds.isEmpty( ) || unitsIds.contains( temp.getIdParent( ) ) )
+                        {
                             isChildOfRestrictedUnit = true;
                         }
-                    } 
+                    }
                     temp = _unitService.getUnit( temp.getIdParent( ), true );
                 }
 
@@ -947,7 +952,7 @@ public class SignalementJspBean extends AbstractJspBean
 
         if ( filter.getIdDirection( ) > 0 )
         {
-            //Specificity for DEVE entity, change the id from SEJ to DEVE
+            // Specificity for DEVE entity, change the id from SEJ to DEVE
             if ( filter.getIdDirection( ) == 94 )
             {
                 filter.setIdDirection( 1 );
@@ -1067,15 +1072,17 @@ public class SignalementJspBean extends AbstractJspBean
                 State state = workflowService.getState( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE, signalementWorkflowId, null );
 
                 mapStates.put( signalement.getId( ).toString( ), state == null ? "Non défini" : state.getName( ) );
-                
-                if ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_TRANSFERE_PRESTATAIRE, -1 ) || state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE, -1 ) ) {
+
+                if ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_TRANSFERE_PRESTATAIRE, -1 )
+                        || state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE, -1 ) )
+                {
                     hasSignalementPrestataire = true;
                 }
             }
         }
 
         model.put( MARK_HAS_SIGNALEMENT_PRESTATAIRE, hasSignalementPrestataire );
-        
+
         // Reaffichage des options avancees
         List<Integer> listArrondissementIds = listeArrondissement.stream( ).map( referenceItem -> Integer.valueOf( referenceItem.getCode( ) ) ).collect( Collectors.toList( ) );
         boolean hasCriteresAvances = hasCriteresAvances( filter, listArrondissementIds );
@@ -1167,29 +1174,33 @@ public class SignalementJspBean extends AbstractJspBean
         // get the signalement's state
         State stateSignalement = workflowService.getState( nIdSignalement, Signalement.WORKFLOW_RESOURCE_TYPE, _signalementWorkflowService.getSignalementWorkflowId( ), null );
         String serviceFaitValue = AppPropertiesService.getProperty( SignalementConstants.PROPERTY_SERVICE_FAIT_VALUE );
-        
+
         model.put( MARK_STATE_SIGNALEMENT, stateSignalement );
         model.put( MARK_STATE_SERVICE_FAIT, Integer.parseInt( serviceFaitValue ) );
-        
+
         String userAccessCode = "";
-        if ( stateSignalement.getId( ) == Integer.parseInt( serviceFaitValue ) ) {
-            userAccessCode = _signalementWorkflowService.selectUserServiceFait( signalement.getId( ).intValue( ) );    
+        if ( stateSignalement.getId( ) == Integer.parseInt( serviceFaitValue ) )
+        {
+            userAccessCode = _signalementWorkflowService.selectUserServiceFait( signalement.getId( ).intValue( ) );
         }
-        if ( userAccessCode != StringUtils.EMPTY && userAccessCode != null ) {
-            if( userAccessCode.equals( "auto" ) ) {
-                if ( ( signaleur.getIdTelephone( ) != StringUtils.EMPTY && signaleur.getIdTelephone( ) != null && signaleur.getMail( ) == StringUtils.EMPTY ) ) {
+        if ( userAccessCode != StringUtils.EMPTY && userAccessCode != null )
+        {
+            if ( userAccessCode.equals( "auto" ) )
+            {
+                if ( ( signaleur.getIdTelephone( ) != StringUtils.EMPTY && signaleur.getIdTelephone( ) != null && signaleur.getMail( ) == StringUtils.EMPTY ) )
+                {
                     model.put( MARK_USER_SERVICE_FAIT, USAGER_MOBILE );
-                }               
-                else {
+                } else
+                {
                     model.put( MARK_USER_SERVICE_FAIT, signaleur.getMail( ) );
-                }                
-            }
-            else {
+                }
+            } else
+            {
                 model.put( MARK_USER_SERVICE_FAIT, AdminUserHome.findUserByLogin( userAccessCode ).getEmail( ) );
             }
-        }
-        else {
-            model.put( MARK_USER_SERVICE_FAIT, StringUtils.EMPTY ); 
+        } else
+        {
+            model.put( MARK_USER_SERVICE_FAIT, StringUtils.EMPTY );
         }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_SIGNALEMENT_HISTORY, getLocale( ), model );
@@ -1293,8 +1304,8 @@ public class SignalementJspBean extends AbstractJspBean
             /*
              * initialisation des valeurs par defaut a Nouveau, A traiter, A faire terrain et A faire Bureau
              */
-            if ( ( state != null ) && ( ( state.getId( ) == 7 ) || ( state.getId( ) == 8 ) || ( state.getId( ) == 16 ) || ( state.getId( ) == 17 ) || ( state.getId( ) == 18 )
-                    || ( state.getId( ) == 21 )) )
+            if ( ( state != null )
+                    && ( ( state.getId( ) == 7 ) || ( state.getId( ) == 8 ) || ( state.getId( ) == 16 ) || ( state.getId( ) == 17 ) || ( state.getId( ) == 18 ) || ( state.getId( ) == 21 ) ) )
             {
 
                 EtatSignalement etatSignalement = new EtatSignalement( );
@@ -1866,17 +1877,18 @@ public class SignalementJspBean extends AbstractJspBean
 
             return urlItem.getUrl( );
         }
-        
+
         List<PhotoDMR> photos = _signalementService.getSignalement( nIdSignalement ).getPhotos( );
         Integer nVuePhoto = Integer.parseInt( strVuePhoto );
-        
-        for (PhotoDMR photo : photos) {
-            //Si photo déjà existante
-            if(photo.getVue( ) == nVuePhoto) {
+
+        for ( PhotoDMR photo : photos )
+        {
+            // Si photo déjà existante
+            if ( photo.getVue( ) == nVuePhoto )
+            {
                 return AdminMessageService.getMessageUrl( multipartRequest, MESSAGE_ERROR_EXISTING_PHOTO, AdminMessage.TYPE_STOP );
             }
         }
-        
 
         FileItem imageSource = multipartRequest.getFile( PARAMETER_PHOTO );
         String strImageName = FileUploadService.getFileNameOnly( imageSource );
@@ -2101,8 +2113,8 @@ public class SignalementJspBean extends AbstractJspBean
                     signaleur.setIdTelephone( strIdTelephone );
                     signaleur.setSignalement( signalement );
                     _signaleurService.insert( signaleur );
-                }
-                else {
+                } else
+                {
                     signaleur.setSignalement( signalement );
                     _signaleurService.insert( signaleur );
                 }
@@ -2572,38 +2584,46 @@ public class SignalementJspBean extends AbstractJspBean
 
             String next = request.getParameter( PARAMETER_NEXT_URL );
 
-            if ( StringUtils.contains( next, URL_JSP_GET_ROAD_MAP ) ) {
-                try {
+            if ( StringUtils.contains( next, URL_JSP_GET_ROAD_MAP ) )
+            {
+                try
+                {
                     // Gestion de l'URL de retour
-                    URI uri = new URI(next);
-                    String nextPath = new URI(uri.getScheme(), uri.getAuthority(), uri.getPath(), null, uri.getFragment()).toString();
-                    UrlItem nextUrl = new UrlItem(nextPath);
+                    URI uri = new URI( next );
+                    String nextPath = new URI( uri.getScheme( ), uri.getAuthority( ), uri.getPath( ), null, uri.getFragment( ) ).toString( );
+                    UrlItem nextUrl = new UrlItem( nextPath );
                     // date de service
-                    if (StringUtils.isNotBlank(strDateService)) {
-                        nextUrl.addParameter(PARAMETER_DATE_SERVICE, strDateService);
+                    if ( StringUtils.isNotBlank( strDateService ) )
+                    {
+                        nextUrl.addParameter( PARAMETER_DATE_SERVICE, strDateService );
                     }
                     // service id
-                    if (StringUtils.isNotBlank(strServiceId)) {
-                        nextUrl.addParameter(PARAMETER_SERVICE__ID, strServiceId);
+                    if ( StringUtils.isNotBlank( strServiceId ) )
+                    {
+                        nextUrl.addParameter( PARAMETER_SERVICE__ID, strServiceId );
                     }
                     // unit id
-                    String strUnitId = request.getParameter(PARAMETER_UNIT__ID);
-                    if (StringUtils.isNotBlank(strUnitId)) {
-                        nextUrl.addParameter(PARAMETER_UNIT__ID, strUnitId);
+                    String strUnitId = request.getParameter( PARAMETER_UNIT__ID );
+                    if ( StringUtils.isNotBlank( strUnitId ) )
+                    {
+                        nextUrl.addParameter( PARAMETER_UNIT__ID, strUnitId );
                     }
                     // sector id
-                    String strSectorId = request.getParameter(PARAMETER_SECTOR__ID);
-                    if (StringUtils.isNotBlank(strSectorId)) {
-                        nextUrl.addParameter(PARAMETER_SECTOR__ID, strSectorId);
+                    String strSectorId = request.getParameter( PARAMETER_SECTOR__ID );
+                    if ( StringUtils.isNotBlank( strSectorId ) )
+                    {
+                        nextUrl.addParameter( PARAMETER_SECTOR__ID, strSectorId );
                     }
                     // set next url in the return url object
-                    urlItem.addParameter(PARAMETER_NEXT_URL, encodeURIComponent( nextUrl.getUrl( ) ) );
+                    urlItem.addParameter( PARAMETER_NEXT_URL, encodeURIComponent( nextUrl.getUrl( ) ) );
                     // set next url in the session
                     request.getSession( ).setAttribute( PARAMETER_NEXT_URL, nextUrl.getUrl( ) );
-                } catch (Exception e) {
-                    AppLogService.error(e);
+                } catch ( Exception e )
+                {
+                    AppLogService.error( e );
                 }
-            } else {
+            } else
+            {
                 urlItem.addParameter( PARAMETER_NEXT_URL, next );
             }
 
@@ -2975,17 +2995,32 @@ public class SignalementJspBean extends AbstractJspBean
             throw new AppException( "Invalid action id " + nfe.getMessage( ), nfe );
         }
 
+        String strListActionsRequalification = AppPropertiesService.getProperty( "signalement.idRequalificationAction" );
+        List<String> listActionsRequalification = Arrays.asList( strListActionsRequalification.split( "," ) );
+
+        if ( listActionsRequalification.contains( strIdAction ) )
+        {
+            String strIdSignalement = request.getParameter( PARAMETER_SIGNALEMENT_ID );
+            Signalement signalement = _signalementService.getSignalement( Long.parseLong( strIdSignalement ) );
+
+            _signalementService.saveRequalification( signalement.getId( ), 
+                    signalement.getTypeSignalement( ).getId( ), signalement.getAdresses( ).get( 0 ).getAdresse( ), 
+                    signalement.getSecteur( ).getIdSector( ) );
+        }
+
         if ( WorkflowService.getInstance( ).canProcessAction( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction, null, request, false ) )
         {
-            try {
+            try
+            {
                 String strErrorUrl = WorkflowService.getInstance( ).doSaveTasksForm( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction, null, request, getLocale( ) );
                 if ( strErrorUrl != null )
                 {
                     return strErrorUrl;
                 }
-            } catch (Exception e) {
+            } catch ( Exception e )
+            {
                 AppLogService.error( e );
-                return AdminMessageService.getMessageUrl(request, MESSAGE_RAMEN_WS_ERROR, AdminMessage.TYPE_STOP);
+                return AdminMessageService.getMessageUrl( request, MESSAGE_RAMEN_WS_ERROR, AdminMessage.TYPE_STOP );
             }
 
             if ( request.getParameter( SignalementConstants.PARAMETER_VALIDATE_NEXT ) != null )
@@ -3217,37 +3252,42 @@ public class SignalementJspBean extends AbstractJspBean
             strTaskForm = StringUtils.EMPTY;
         }
 
-        Map<String, Object> model = new HashMap<String, Object>( );       
+        Map<String, Object> model = new HashMap<String, Object>( );
         model.put( MARK_HAS_NEXT, bHasNext );
         model.put( MARK_TASK_FORM, strTaskForm );
         model.put( MARK_ACTION_ID, nIdAction );
         model.put( MARK_SIGNALEMENT, nIdResource );
         model.put( PARAMETER_SIGNALEMENT_ID, nIdResource );
-        
-        String nextURL =request.getParameter( PARAMETER_NEXT_URL );
-        if(nextURL != null && nextURL.contains( PARAMETER_WEBAPP_RAMEN )) {
-            //redirect on RAMEN Webapp
+
+        String nextURL = request.getParameter( PARAMETER_NEXT_URL );
+        if ( nextURL != null && nextURL.contains( PARAMETER_WEBAPP_RAMEN ) )
+        {
+            // redirect on RAMEN Webapp
             UrlItem urlRedirect = new UrlItem( nextURL );
-            
-            String serviceID =request.getParameter( PARAMETER_SERVICE__ID );
-            if(serviceID != null) {
+
+            String serviceID = request.getParameter( PARAMETER_SERVICE__ID );
+            if ( serviceID != null )
+            {
                 urlRedirect.addParameter( PARAMETER_SERVICE__ID, serviceID );
             }
-            
-            String sectorID =request.getParameter( PARAMETER_SECTOR__ID );
-            if(sectorID != null) {
+
+            String sectorID = request.getParameter( PARAMETER_SECTOR__ID );
+            if ( sectorID != null )
+            {
                 urlRedirect.addParameter( PARAMETER_SECTOR__ID, sectorID );
             }
-            
-            String unitID =request.getParameter( PARAMETER_UNIT__ID );
-            if(unitID != null) {
+
+            String unitID = request.getParameter( PARAMETER_UNIT__ID );
+            if ( unitID != null )
+            {
                 urlRedirect.addParameter( PARAMETER_UNIT__ID, unitID );
             }
-          
-           model.put( MARK_BACK_URL, urlRedirect.getUrl( ) );
-        } else {
-           //stay on SIGNALEMENT Webapp
-            model.put( MARK_BACK_URL,  JSP_MANAGE_SIGNALEMENT);
+
+            model.put( MARK_BACK_URL, urlRedirect.getUrl( ) );
+        } else
+        {
+            // stay on SIGNALEMENT Webapp
+            model.put( MARK_BACK_URL, JSP_MANAGE_SIGNALEMENT );
         }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_WORKFLOW, getLocale( ), model );
@@ -3294,8 +3334,9 @@ public class SignalementJspBean extends AbstractJspBean
             response.setCharacterEncoding( CSV_ISO );
             writer = new CSVWriter( response.getWriter( ), CSV_SEPARATOR );
 
-            writer.writeNext( new String[] { "Numéro", "Priorité", "Type", "Alias", "Alias mobile", "Direction", "Quartier", "Adresse", "Coordonnée X", "Coordonnée Y", "Arrondissement", "Secteur d'affectation", "Date de création",
-                    "Heure de création", "Etat", "Mail usager", "Commentaire usager", "Nombre de photos", "Date de clôture", "Raisons de rejet", "Nombre de suivis", "Nombre de félicitations" } );
+            writer.writeNext( new String[] { "Numéro", "Priorité", "Type", "Alias", "Alias mobile", "Direction", "Quartier", "Adresse", "Coordonnée X", "Coordonnée Y", "Arrondissement",
+                    "Secteur d'affectation", "Date de création", "Heure de création", "Etat", "Mail usager", "Commentaire usager", "Nombre de photos", "Date de clôture", "Raisons de rejet",
+                    "Nombre de suivis", "Nombre de félicitations" } );
             for ( SignalementExportCSVDTO signalementDTO : listeSignalementExportCSVDTO )
             {
                 datas = signalementDTO.getTabAllDatas( );
@@ -3506,7 +3547,7 @@ public class SignalementJspBean extends AbstractJspBean
             try
             {
                 Integer directionId = Integer.parseInt( strDirectionId );
-                //Specificity for DEVE entity, change the id from SEJ to DEVE
+                // Specificity for DEVE entity, change the id from SEJ to DEVE
                 if ( directionId == 94 )
                 {
                     directionId = 1;
@@ -3684,7 +3725,7 @@ public class SignalementJspBean extends AbstractJspBean
             noRessource.add( NO_RESOURCE_FOUND );
             filter.setListIdCategories( noRessource );
         }
-        
+
         if ( filter.getIdDirection( ) == 94 )
         {
             filter.setIdDirection( 1 );
@@ -3795,11 +3836,11 @@ public class SignalementJspBean extends AbstractJspBean
             {
                 if ( o1 == null || o2 == null )
                     return 0;
-                
+
                 return o1.getLabel( ).compareTo( o2.getLabel( ) );
             }
-            
-        });
+
+        } );
         if ( CollectionUtils.isNotEmpty( domFonc.getUnitIds( ) ) )
         {
             List<Unit> firstLevelUnits = _unitService.getUnitsFirstLevel( false );
@@ -4074,9 +4115,9 @@ public class SignalementJspBean extends AbstractJspBean
     {
         int idDomaine = Integer.parseInt( request.getParameter( "idDomaine" ) );
         DomaineFonctionnel domFonc = _domaineFonctionnelService.getById( idDomaine );
-        
-        String strDirectionId = request.getParameter( PARAMETER_DIRECTION_ID );        
-        
+
+        String strDirectionId = request.getParameter( PARAMETER_DIRECTION_ID );
+
         JSONBuilder jsonStringer;
         response.setContentType( "application/json" );
         try
@@ -4085,20 +4126,23 @@ public class SignalementJspBean extends AbstractJspBean
             try
             {
                 List<Unit> units = new ArrayList<>( );
-                
-                if ( CollectionUtils.isNotEmpty( domFonc.getUnitIds( ) ) ) {
-                    
-                    for ( Integer idUnit : domFonc.getUnitIds( ) ) {
-                        Unit unitSelected = _unitService.getUnit( idUnit, false );
-                        if( unitSelected.getIdParent( ) == Integer.parseInt( strDirectionId ) ) {
-                            units.add( unitSelected );
-                        }                        
-                    }                   
-                }                
 
-                if ( CollectionUtils.isNotEmpty( units )  )
+                if ( CollectionUtils.isNotEmpty( domFonc.getUnitIds( ) ) )
                 {
-                    List<Sector> listSectorsForSelectedUnit = getSectorsByUnits( units );                    
+
+                    for ( Integer idUnit : domFonc.getUnitIds( ) )
+                    {
+                        Unit unitSelected = _unitService.getUnit( idUnit, false );
+                        if ( unitSelected.getIdParent( ) == Integer.parseInt( strDirectionId ) )
+                        {
+                            units.add( unitSelected );
+                        }
+                    }
+                }
+
+                if ( CollectionUtils.isNotEmpty( units ) )
+                {
+                    List<Sector> listSectorsForSelectedUnit = getSectorsByUnits( units );
 
                     ReferenceList refListSectorsOfUnit = ListUtils.toReferenceList( listSectorsForSelectedUnit, "idSector", "name", StringUtils.EMPTY, true );
 
@@ -4299,7 +4343,7 @@ public class SignalementJspBean extends AbstractJspBean
             String priorite = signalement.getPrioriteName( );
             String prioriteTitle = I18nService.getLocalizedString( "dansmarue.map.tooltips.priorite", request.getLocale( ) );
             sigMarker.addTooltipText( prioriteTitle, priorite );
-            
+
             // Type Signalement
             String typeSignalement = signalement.getTypeSignalement( ).getLibelle( );
             String typeSignalementTitle = I18nService.getLocalizedString( "dansmarue.map.tooltips.typeSignalement", request.getLocale( ) );
@@ -4364,13 +4408,9 @@ public class SignalementJspBean extends AbstractJspBean
 
         String result = null;
 
-        try {
-            result = URLEncoder.encode ( component, "UTF-8" )
-                    .replaceAll( "\\%28", "(" )
-                    .replaceAll( "\\%29", ")" )
-                    .replaceAll( "\\+", "%20" )
-                    .replaceAll( "\\%27", "'" )
-                    .replaceAll( "\\%21", "!" )
+        try
+        {
+            result = URLEncoder.encode( component, "UTF-8" ).replaceAll( "\\%28", "(" ).replaceAll( "\\%29", ")" ).replaceAll( "\\+", "%20" ).replaceAll( "\\%27", "'" ).replaceAll( "\\%21", "!" )
                     .replaceAll( "\\%7E", "~" );
         } catch ( UnsupportedEncodingException e )
         {

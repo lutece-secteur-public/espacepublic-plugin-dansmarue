@@ -486,4 +486,6 @@ public interface ISignalementService
             HttpServletRequest request );
 
     void setDateRejet( Integer lIdSignalement, String dateRejet );
+
+    void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector );
 }

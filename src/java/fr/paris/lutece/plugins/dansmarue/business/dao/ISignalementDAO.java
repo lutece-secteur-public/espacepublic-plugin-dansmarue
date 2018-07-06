@@ -5,6 +5,7 @@ import java.util.List;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDashboardFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
+import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementRequalification;
 import fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DashboardSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DossierSignalementDTO;
@@ -219,4 +220,8 @@ public interface ISignalementDAO
 	List<Integer> findIdsSingalementForWSPartnerDeamon(int signalementState);
 
     void setDateRejet( int idSignalement, String dateRejet );
+
+    void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector );
+
+    List<SignalementRequalification> getRequalification( long lIdSignalement );
 }

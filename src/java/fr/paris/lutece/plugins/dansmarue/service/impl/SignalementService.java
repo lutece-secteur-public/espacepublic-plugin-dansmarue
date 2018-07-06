@@ -255,6 +255,13 @@ public class SignalementService implements ISignalementService
 
         return signalement;
     }
+    
+    @Override
+    public void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector )
+    {
+        _signalementDAO.saveRequalification( lIdSignalement, idTypeSignalement, adresse, idSector );
+        
+    }
 
     @Override
     public Signalement getSignalementWithFullPhoto( long lIdSignalement )

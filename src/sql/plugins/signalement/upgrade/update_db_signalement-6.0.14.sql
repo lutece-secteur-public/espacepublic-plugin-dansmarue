@@ -57,4 +57,15 @@ update workflow_task
 set task_type_key = 'taskSignalementUserNotificationMultiContents'
 where task_type_key = 'taskSignalementUserNotification3Contents'
 
+/* DMR-1072 */
+CREATE TABLE signalement_requalification (
+	id_signalement bigint NOT NULL,
+	id_type_signalement bigint,
+	adresse character varying(255),
+	id_sector bigInt,
+	date_requalification timestamp  without time zone;
+	CONSTRAINT id_signalement_fk FOREIGN KEY(id_signalement) REFERENCES signalement_signalement(id_signalement) ON DELETE CASCADE
+);
+
+
 
