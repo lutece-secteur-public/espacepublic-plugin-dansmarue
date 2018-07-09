@@ -57,4 +57,8 @@ update workflow_task
 set task_type_key = 'taskSignalementUserNotificationMultiContents'
 where task_type_key = 'taskSignalementUserNotification3Contents'
 
-
+-- Ajout de l'id message 
+ALTER TABLE signalement_workflow_notifuser_multi_contents_value ADD COLUMN id_message int8;
+ALTER TABLE signalement_signalement ADD COLUMN courriel_destinataire varchar(255);
+ALTER TABLE signalement_signalement ADD COLUMN courriel_expediteur varchar(255);
+ALTER TABLE signalement_signalement ADD COLUMN courriel_date timestamp;

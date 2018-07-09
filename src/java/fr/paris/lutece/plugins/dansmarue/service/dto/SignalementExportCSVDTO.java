@@ -29,6 +29,11 @@ public class SignalementExportCSVDTO
     private String _strNbSuivis;
     private String _strNbFelicitations;
     private String[] _tabAllDatas;
+    private boolean isPhotoServiceFait;
+    private Integer idMailServiceFait;
+    private String executeurServiceFait;
+    private String dateDerniereAction;
+    private String actionCourriel;
 
 
     public String[] getTabAllDatas( )
@@ -36,7 +41,8 @@ public class SignalementExportCSVDTO
         return new String[] { getNumeroSignalement( ), getPriorite( ), getTypeSignalement( ), getAlias(), getAliasMobile(), getDirection( ),
                 getQuartier(), getAdresse( ), Double.toString(getCoordX()), Double.toString(getCoordY()), getArrondissement(), getSecteur(), 
                 getDateCreation( ), getHeureCreation(), getEtat( ), getMailUsager(), getCommentaireUsager(), Integer.toString(getNbPhotos()),
-                getDateCloture(), getFormatObservationRejet(), getNbSuivis(), getNbFelicitations()};
+                getDateCloture(), getFormatObservationRejet(), getNbSuivis(), getNbFelicitations(), isPhotoServiceFait( ) ? "Photo présente" : "Pas de photo", 
+                getActionCourriel( ), getIdMailServiceFait( ) != null ? getIdMailServiceFait( ).toString( ) : "", getExecuteurServiceFait(),  getDateDerniereAction( ) };
     }
 
     public String getPriorite( )
@@ -248,5 +254,56 @@ public class SignalementExportCSVDTO
     {
         this._strDateCloture = strDateCloture;
     }
+
+    public boolean isPhotoServiceFait( )
+    {
+        return isPhotoServiceFait;
+    }
+
+    public void setPhotoServiceFait( boolean isPhotoServiceFait )
+    {
+        this.isPhotoServiceFait = isPhotoServiceFait;
+    }
+
+    public Integer getIdMailServiceFait( )
+    {
+        return idMailServiceFait;
+    }
+
+    public void setIdMailServiceFait( Integer idMailServiceFait )
+    {
+        this.idMailServiceFait = idMailServiceFait;
+    }
+
+    public String getExecuteurServiceFait( )
+    {
+        return executeurServiceFait;
+    }
+
+    public void setExecuteurServiceFait( String executeurServiceFait )
+    {
+        this.executeurServiceFait = executeurServiceFait;
+    }
+
+    public String getDateDerniereAction( )
+    {
+        return dateDerniereAction;
+    }
+
+    public void setDateDerniereAction( String dateDerniereAction )
+    {
+        this.dateDerniereAction = dateDerniereAction;
+    }
+
+    public String getActionCourriel( )
+    {
+        return actionCourriel;
+    }
+
+    public void setActionCourriel( String actionCourriel )
+    {
+        this.actionCourriel = actionCourriel;
+    }
+    
     
 }

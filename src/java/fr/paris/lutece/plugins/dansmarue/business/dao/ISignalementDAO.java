@@ -219,4 +219,12 @@ public interface ISignalementDAO
 	List<Integer> findIdsSingalementForWSPartnerDeamon(int signalementState);
 
     void setDateRejet( int idSignalement, String dateRejet );
+    
+    /**
+     * Récupère l'id du mail du service fait.
+     *
+     * @param long1 the id signalement
+     * @return the id mail service fait
+     */
+    Integer getIdMailServiceFait( Long idSignalement );
 }

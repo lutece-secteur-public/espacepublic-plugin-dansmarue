@@ -60,6 +60,7 @@ import fr.paris.lutece.plugins.dansmarue.service.INumeroSignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.IObservationRejetSignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementSuiviService;
+import fr.paris.lutece.plugins.dansmarue.service.ISignaleurService;
 import fr.paris.lutece.plugins.dansmarue.service.ISiraUserService;
 import fr.paris.lutece.plugins.dansmarue.service.IWorkflowService;
 import fr.paris.lutece.plugins.dansmarue.service.SignalementPlugin;
@@ -80,6 +81,7 @@ import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.business.user.AdminUserHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -240,6 +242,9 @@ public class SignalementService implements ISignalementService
 
     @Inject
     private IArrondissementService              _arrondissementService;
+    
+    @Inject
+    private ISignaleurService                   _signaleurService;
 
     @Override
     public Signalement getSignalement( long lIdSignalement )
@@ -552,6 +557,51 @@ public class SignalementService implements ISignalementService
             // Nombre de photos
             Integer nbPhotos = signalement.getPhotos( ).size( );
             dto.setNbPhotos( nbPhotos );
+            
+            // Présence de photo de service fait
+            boolean isPhotoServiceFait = false;
+            if( signalement.getPhotos( ).size( ) > 0 ) {
+                for(PhotoDMR photo : signalement.getPhotos( )) {
+                    if(photo.getVue( ) == 2) {
+                        isPhotoServiceFait = true;
+                    }
+                }
+            }
+            dto.setPhotoServiceFait( isPhotoServiceFait );
+            
+            // Si service fait, on récupère l'éxécuteur
+            Signaleur  signaleur = _signaleurService.loadByIdSignalement( signalement.getId( ) );
+            String userAccessCode = _signalementWorkflowService.selectUserServiceFait( signalement.getId( ).intValue( ) );    
+            
+            if ( userAccessCode != StringUtils.EMPTY && userAccessCode != null ) {
+                if( userAccessCode.equals( "auto" ) ) {
+                    if ( ( signaleur.getIdTelephone( ) != StringUtils.EMPTY && signaleur.getIdTelephone( ) != null && signaleur.getMail( ) == StringUtils.EMPTY ) ) {
+                        dto.setExecuteurServiceFait( "Usager mobile" );
+                    }               
+                    else {
+                        dto.setExecuteurServiceFait( signaleur.getMail( ) );
+                    }                
+                }
+                else {
+                    dto.setExecuteurServiceFait( AdminUserHome.findUserByLogin( userAccessCode ).getEmail( ) );
+                }
+            }
+            else {
+                dto.setExecuteurServiceFait( StringUtils.EMPTY );
+            }
+            
+            //Info action courriel
+            if( signalement.getCourrielDate( ) != null ) {
+                dto.setActionCourriel( String.format("Destinataire: %s - Expéditeur %s - Date d'envoi: %s", signalement.getCourrielDestinataire( ), signalement.getCourrielExpediteur( ), signalement.getCourrielDate( ) ) );
+            } else {
+                dto.setActionCourriel( "" );
+            }
+            
+            // ID du mail du service fait
+            dto.setIdMailServiceFait( _signalementDAO.getIdMailServiceFait( signalement.getId( ) ) );
+            
+            // Date de la dernière action manuelle
+            dto.setDateDerniereAction( _signalementWorkflowService.getLastHistoryResource( signalement.getId( ).intValue() , Signalement.WORKFLOW_RESOURCE_TYPE,  _signalementWorkflowService.getSignalementWorkflowId( ) ).getCreationDate( ).toString( ) );
             
             // Date de clôture
             String dateSF = signalement.getDateServiceFaitTraitement( );
