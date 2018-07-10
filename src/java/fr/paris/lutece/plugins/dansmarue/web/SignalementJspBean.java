@@ -3334,9 +3334,9 @@ public class SignalementJspBean extends AbstractJspBean
             response.setCharacterEncoding( CSV_ISO );
             writer = new CSVWriter( response.getWriter( ), CSV_SEPARATOR );
 
-            writer.writeNext( new String[] { "Numéro", "Priorité", "Type", "Alias", "Alias mobile", "Direction", "Quartier", "Adresse", "Coordonnée X", "Coordonnée Y", "Arrondissement",
-                    "Secteur d'affectation", "Date de création", "Heure de création", "Etat", "Mail usager", "Commentaire usager", "Nombre de photos", "Date de clôture", "Raisons de rejet",
-                    "Nombre de suivis", "Nombre de félicitations" } );
+            writer.writeNext( new String[] { "Numéro", "Priorité", "Type", "Alias", "Alias mobile", "Direction", "Quartier", "Adresse", "Coordonnée X", "Coordonnée Y", "Arrondissement", "Secteur d'affectation", "Date de création",
+                    "Heure de création", "Etat", "Mail usager", "Commentaire usager", "Nombre de photos", "Date de clôture", "Raisons de rejet", "Nombre de suivis", "Nombre de félicitations", "Présence de photos de service fait",
+                    "Dernière action courriel", "Identifiant type de message service fait", "Nom exécuteur service fait", "Date de dernière prise en compte"} );
             for ( SignalementExportCSVDTO signalementDTO : listeSignalementExportCSVDTO )
             {
                 datas = signalementDTO.getTabAllDatas( );

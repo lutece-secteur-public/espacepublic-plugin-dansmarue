@@ -73,5 +73,10 @@ ALTER TABLE workflow_task_notify_gru_history ADD COLUMN billing_account_sms VARC
 ALTER TABLE workflow_task_notify_gru_cf ADD COLUMN billing_group_sms VARCHAR(255) DEFAULT NULL;
 ALTER TABLE workflow_task_notify_gru_history ADD COLUMN billing_group_sms VARCHAR(255) DEFAULT NULL;
 
+-- Ajout de l'id message  
+ALTER TABLE signalement_workflow_notifuser_multi_contents_value ADD COLUMN id_message int8; 
+ALTER TABLE signalement_signalement ADD COLUMN courriel_destinataire varchar(255); 
+ALTER TABLE signalement_signalement ADD COLUMN courriel_expediteur varchar(255); 
+ALTER TABLE signalement_signalement ADD COLUMN courriel_date timestamp;
 
 

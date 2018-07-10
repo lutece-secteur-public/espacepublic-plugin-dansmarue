@@ -1,5 +1,6 @@
 package fr.paris.lutece.plugins.dansmarue.web;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -322,6 +323,14 @@ public class MailSignalementJspBean extends AbstractJspBean
         // mailItem.getSubject( ), mailItem.getMessage( ), );
         MailService.sendMailMultipartHtml( mailItem.getRecipientsTo( ), null, null, "Mairie de Paris", mailItem.getSenderEmail( ), mailItem.getSubject( ), mailItem.getMessage( ), null,
                 mailItem.getFilesAttachement( ) );
+        
+        //Enregistrement des infos du mail en base
+        Signalement signalement = _signalementService.getSignalement( nIdSignalement );
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        signalement.setCourrielDate( timestamp );
+        signalement.setCourrielDestinataire( mailItem.getRecipientsTo( ) );
+        signalement.setCourrielExpediteur( mailItem.getSenderEmail( ) );
+        _signalementService.update( signalement );
 
         return JSP_MANAGE_SIGNALEMENTS;
     }

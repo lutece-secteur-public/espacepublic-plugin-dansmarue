@@ -65,12 +65,12 @@ public class SignalementDAO implements ISignalementDAO
     private static final String SQL_QUERY_DELETE                                   = "DELETE FROM signalement_signalement WHERE id_signalement = ?";
 
     /** The Constant SQL_QUERY_SELECT. */
-    private static final String SQL_QUERY_SELECT                                   = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, heure_creation, is_doublon, token, service_fait_date_passage, felicitations, date_mise_surveillance, date_rejet FROM signalement_signalement WHERE id_signalement = ?";
+    private static final String SQL_QUERY_SELECT                                   = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, heure_creation, is_doublon, token, service_fait_date_passage, felicitations, date_mise_surveillance, date_rejet, courriel_destinataire, courriel_expediteur, courriel_date FROM signalement_signalement WHERE id_signalement = ?";
 
     /** The Constant SQL_QUERY_SELECT_BY_STATUS. */
     private static final String SQL_QUERY_SELECT_BY_STATUS                         = "SELECT signalement.id_signalement, signalement.suivi, signalement.date_creation, signalement.date_prevue_traitement, signalement.commentaire, signalement.annee,  signalement.mois, signalement.numero, signalement.prefix, signalement.fk_id_priorite,   signalement.fk_id_arrondissement,  signalement.fk_id_type_signalement,  signalement.fk_id_sector,   signalement.is_doublon, signalement.service_fait_date_passage FROM signalement_signalement AS signalement  INNER JOIN workflow_resource_workflow AS resource_workflow ON resource_workflow.id_resource = signalement.id_signalement  INNER JOIN workflow_resource_history AS resource_history ON resource_history.id_resource = signalement.id_signalement INNER JOIN workflow_action AS action ON action.id_action = resource_history.id_action WHERE resource_workflow.resource_type = ''SIGNALEMENT_SIGNALEMENT''  AND resource_history.resource_type = ''SIGNALEMENT_SIGNALEMENT''  AND resource_workflow.id_state = ? AND action.id_state_after = ? AND resource_history.creation_date + ''{0} days''::interval < now();";
     /** The Constant SQL_QUERY_UPDATE. */
-    private static final String SQL_QUERY_UPDATE                                   = "UPDATE signalement_signalement SET id_signalement=?, suivi=?, date_creation=?, date_prevue_traitement=?, commentaire=? , fk_id_priorite=?, fk_id_type_signalement=?, fk_id_arrondissement = ?, fk_id_sector = ?, is_doublon = ?, service_fait_date_passage = ? WHERE id_signalement=?";
+    private static final String SQL_QUERY_UPDATE                                   = "UPDATE signalement_signalement SET id_signalement=?, suivi=?, date_creation=?, date_prevue_traitement=?, commentaire=? , fk_id_priorite=?, fk_id_type_signalement=?, fk_id_arrondissement = ?, fk_id_sector = ?, is_doublon = ?, service_fait_date_passage = ?, courriel_destinataire = ?, courriel_expediteur = ?, courriel_date = ? WHERE id_signalement=?";
 
     /** The Constant SQL_QUERY_SELECT_ALL. */
     private static final String SQL_QUERY_SELECT_ALL                               = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon FROM signalement_signalement";
@@ -209,6 +209,13 @@ public class SignalementDAO implements ISignalementDAO
 
     /** The Constant DISTINCT */
     private static final String SQL_DISTINCT                                       = " DISTINCT ";
+    
+    private static final String SQL_QUERY_ID_MAIL_BY_ID                            = "select value.id_message, history.id_resource from signalement_workflow_notifuser_multi_contents_value value " + 
+                                                                                    "inner join workflow_resource_history history on history.id_history = value.id_history " + 
+                                                                                    "where history.id_resource=? " + 
+                                                                                    "and value.id_history = (select max(h.id_history) from signalement_workflow_notifuser_multi_contents_value v " + 
+                                                                                    "inner join workflow_resource_history h on h.id_history = v.id_history " + 
+                                                                                    "where h.id_resource= ?)";
     
     /** The Constant SQL_QUERY_INSERT_REQUALIFICATION. */
     private static final String SQL_QUERY_INSERT_REQUALIFICATION                   = "INSERT INTO signalement_requalification(id_signalement,id_type_signalement,adresse,id_sector,date_requalification) VALUES (?,?,?,?,?)";
@@ -466,6 +473,10 @@ public class SignalementDAO implements ISignalementDAO
         {
             daoUtil.setDate( nIndex++, null );
         }
+        
+        daoUtil.setString( nIndex++, signalement.getCourrielDestinataire( ) );
+        daoUtil.setString( nIndex++, signalement.getCourrielExpediteur( ) );
+        daoUtil.setTimestamp( nIndex++, signalement.getCourrielDate( ) );
         daoUtil.setLong( nIndex++, signalement.getId( ) );
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -544,6 +555,15 @@ public class SignalementDAO implements ISignalementDAO
             if ( rejet != null )
             {
                 signalement.setDateRejet( DateUtils.getDateFr( rejet ) );
+            }
+            
+            signalement.setCourrielDestinataire( daoUtil.getString( nIndex++ ) );
+            signalement.setCourrielExpediteur( daoUtil.getString( nIndex++ ) );
+            
+            Timestamp courrielDate = daoUtil.getTimestamp( nIndex++ );
+            if ( courrielDate != null )
+            {
+                signalement.setCourrielDate( courrielDate );
             }
 
         }
@@ -2151,6 +2171,23 @@ public class SignalementDAO implements ISignalementDAO
         daoUtil.free( );
       
         return signalementsIds;   
+    }
+
+    @Override
+    public Integer getIdMailServiceFait( Long idSignalement )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_ID_MAIL_BY_ID );
+        daoUtil.setLong( 1, idSignalement );
+        daoUtil.setLong( 2, idSignalement );
+        daoUtil.executeQuery( );
+        Integer idMail = null;
+        while ( daoUtil.next( ) )
+        {
+            idMail = daoUtil.getInt( 1 );
+        }
+
+        daoUtil.free( );
+        return idMail;
     }
     
     @Override

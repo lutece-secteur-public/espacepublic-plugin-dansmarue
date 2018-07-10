@@ -1,5 +1,6 @@
 package fr.paris.lutece.plugins.dansmarue.business.entities;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -106,6 +107,12 @@ public class Signalement
     
     /** The attribute to check if the signalement is a duplicate */
     private boolean _bIsDoublon;
+    
+    private String courrielDestinataire;
+    
+    private String courrielExpediteur;
+    
+    private Timestamp courrielDate;
 
     public void setDirection( Unit direction )
     {
@@ -784,4 +791,36 @@ public class Signalement
     {
         this._dateRejet = dateRejet;
     }
+
+    public String getCourrielDestinataire( )
+    {
+        return courrielDestinataire;
+    }
+
+    public void setCourrielDestinataire( String courrielDestinataire )
+    {
+        this.courrielDestinataire = courrielDestinataire;
+    }
+
+    public String getCourrielExpediteur( )
+    {
+        return courrielExpediteur;
+    }
+
+    public void setCourrielExpediteur( String courrielExpediteur )
+    {
+        this.courrielExpediteur = courrielExpediteur;
+    }
+
+    public Timestamp getCourrielDate( )
+    {
+        return courrielDate;
+    }
+
+    public void setCourrielDate( Timestamp courrielDate )
+    {
+        this.courrielDate = courrielDate;
+    }
+    
+    
 }

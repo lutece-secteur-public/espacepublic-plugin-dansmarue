@@ -224,4 +224,12 @@ public interface ISignalementDAO
     void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector );
 
     List<SignalementRequalification> getRequalification( long lIdSignalement );
+    
+    /**
+     * Récupère l'id du mail du service fait.
+     *
+     * @param long1 the id signalement
+     * @return the id mail service fait
+     */
+    Integer getIdMailServiceFait( Long idSignalement );
 }
