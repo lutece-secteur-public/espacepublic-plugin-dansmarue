@@ -67,5 +67,11 @@ CREATE TABLE signalement_requalification (
 	CONSTRAINT id_signalement_fk FOREIGN KEY(id_signalement) REFERENCES signalement_signalement(id_signalement) ON DELETE CASCADE
 );
 
+/* Mise à jour notify gru */
+ALTER TABLE workflow_task_notify_gru_cf ADD COLUMN billing_account_sms VARCHAR(255) DEFAULT NULL;
+ALTER TABLE workflow_task_notify_gru_history ADD COLUMN billing_account_sms VARCHAR(255) DEFAULT null;
+ALTER TABLE workflow_task_notify_gru_cf ADD COLUMN billing_group_sms VARCHAR(255) DEFAULT NULL;
+ALTER TABLE workflow_task_notify_gru_history ADD COLUMN billing_group_sms VARCHAR(255) DEFAULT NULL;
+
 
 
