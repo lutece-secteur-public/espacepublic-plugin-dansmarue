@@ -2,6 +2,8 @@ package fr.paris.lutece.plugins.dansmarue.business.entities;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
+import fr.paris.lutece.plugins.unittree.modules.sira.business.sector.Sector;
+
 /**
  * The Class SignalementRequalification.
  */
@@ -13,6 +15,10 @@ public class SignalementRequalification
     private String _strAdresse;
     private Integer _nIdSector;
     private String _dateRequalification;
+    private TypeSignalement _typeSignalement;
+    private Sector _sector;
+    private Integer _nIdTask;
+    
     /**
      * @return the nIdSignalement
      */
@@ -82,6 +88,48 @@ public class SignalementRequalification
     public void setDateRequalification( String dateRequalification )
     {
         this._dateRequalification = dateRequalification;
+    }
+    /**
+     * @return the _typeSignalement
+     */
+    public TypeSignalement getTypeSignalement( )
+    {
+        return _typeSignalement;
+    }
+    /**
+     * @param _typeSignalement the _typeSignalement to set
+     */
+    public void setTypeSignalement( TypeSignalement typeSignalement )
+    {
+        this._typeSignalement = typeSignalement;
+    }
+    /**
+     * @return the _sector
+     */
+    public Sector getSector( )
+    {
+        return _sector;
+    }
+    /**
+     * @param _sector the _sector to set
+     */
+    public void setSector( Sector sector )
+    {
+        this._sector = sector;
+    }
+    /**
+     * @return the _nIdTask
+     */
+    public Integer getIdTask( )
+    {
+        return _nIdTask;
+    }
+    /**
+     * @param _nIdTask the _nIdTask to set
+     */
+    public void setIdTask( Integer _nIdTask )
+    {
+        this._nIdTask = _nIdTask;
     }
     
     

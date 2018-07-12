@@ -58,8 +58,6 @@
 	<bean id="dansmarue.numeroSignalementService"
 		class="fr.paris.lutece.plugins.dansmarue.service.impl.NumeroSignalementService"/>
 
-		
-
 	<!-- Declaration des DAO -->
 	<bean id="dansmarue.numeroSignalementDAO"
 		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.NumeroSignalementDAO"/>

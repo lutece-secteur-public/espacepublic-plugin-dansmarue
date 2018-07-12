@@ -35,7 +35,8 @@ package fr.paris.lutece.plugins.dansmarue.web;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.*;
+import java.net.URI;
+import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -115,8 +117,9 @@ import fr.paris.lutece.plugins.unittree.modules.sira.service.sector.ISectorServi
 import fr.paris.lutece.plugins.unittree.modules.sira.service.unit.IUnitSiraService;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
-import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
+import fr.paris.lutece.plugins.workflowcore.service.task.ITask;
+import fr.paris.lutece.plugins.workflowcore.service.task.ITaskService;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.business.user.AdminUserHome;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
@@ -610,6 +613,8 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The _sector service. */
     private ISectorService                _sectorService;
+    
+    private ITaskService                  _taskService = SpringContextService.getBean( "workflow.taskService" ) ;
 
     /** The _arrondissement service. */
     private IArrondissementService        _arrondissementService;
@@ -660,6 +665,7 @@ public class SignalementJspBean extends AbstractJspBean
     private static List<Integer>          GREEN_MARKER_STATES;
     private static List<Integer>          YELLOW_MARKER_STATES;
     private static List<Integer>          ADVANCED_SEARCH_STATES;
+        
 
     @Override
     public void init( HttpServletRequest request, String strRight ) throws AccessDeniedException
@@ -2974,6 +2980,11 @@ public class SignalementJspBean extends AbstractJspBean
         Boolean bHasNext = ( _massSignalementIds != null ) && ( _massSignalementIds.length > 1 );
         request.setAttribute( SignalementConstants.ATTRIBUTE_HAS_NEXT, bHasNext );
 
+        String strIdSignalement = request.getParameter( PARAMETER_SIGNALEMENT_ID );
+        Signalement signalement = _signalementService.getSignalement( Long.parseLong( strIdSignalement ) );        
+
+        Integer nIdWorkflow = _signalementWorkflowService.getSignalementWorkflowId( );
+        
         String homeUrl = getWorkflowReturnURI( request );
 
         if ( request.getParameter( SignalementConstants.PARAMETER_BUTTON_CANCEL ) != null )
@@ -2997,15 +3008,24 @@ public class SignalementJspBean extends AbstractJspBean
 
         String strListActionsRequalification = AppPropertiesService.getProperty( "signalement.idRequalificationAction" );
         List<String> listActionsRequalification = Arrays.asList( strListActionsRequalification.split( "," ) );
+        ITask taskRequalification = null;
 
         if ( listActionsRequalification.contains( strIdAction ) )
-        {
-            String strIdSignalement = request.getParameter( PARAMETER_SIGNALEMENT_ID );
-            Signalement signalement = _signalementService.getSignalement( Long.parseLong( strIdSignalement ) );
-
-            _signalementService.saveRequalification( signalement.getId( ), 
-                    signalement.getTypeSignalement( ).getId( ), signalement.getAdresses( ).get( 0 ).getAdresse( ), 
-                    signalement.getSecteur( ).getIdSector( ) );
+        {            
+            List<ITask> listTask = _taskService.getListTaskByIdAction( Integer.parseInt( strIdAction ), Locale.FRENCH );
+            
+            for( ITask task : listTask ) {
+                if ( "taskSignalementRequalification".equals( task.getTaskType( ).getKey( ) ) ) {
+                    taskRequalification = task;
+                }
+            }
+            
+            if( taskRequalification != null ) {
+                _signalementService.saveRequalification( signalement.getId( ), 
+                        signalement.getTypeSignalement( ).getId( ), signalement.getAdresses( ).get( 0 ).getAdresse( ), 
+                        signalement.getSecteur( ).getIdSector( ), taskRequalification.getId( ) );
+            }
+            
         }
 
         if ( WorkflowService.getInstance( ).canProcessAction( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction, null, request, false ) )
@@ -3051,6 +3071,16 @@ public class SignalementJspBean extends AbstractJspBean
         {
             return AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_ERROR );
         }
+        
+        if ( listActionsRequalification.contains( strIdAction ) )
+        {            
+            Integer nIdHistory = _signalementWorkflowService.getLastHistoryResource( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE, nIdWorkflow ).getId( );
+            
+            if( taskRequalification != null ) {
+                _signalementService.setRequalificationIdHistory( signalement.getId( ), nIdHistory, taskRequalification.getId( ) );
+            }            
+        }
+        
 
         return homeUrl;
     }

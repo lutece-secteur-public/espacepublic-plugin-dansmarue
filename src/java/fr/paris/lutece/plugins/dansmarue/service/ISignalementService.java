@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDashboardFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
+import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementRequalification;
 import fr.paris.lutece.plugins.dansmarue.business.exceptions.AlreadyFollowedException;
 import fr.paris.lutece.plugins.dansmarue.business.exceptions.InvalidStateActionException;
 import fr.paris.lutece.plugins.dansmarue.business.exceptions.NonExistentFollowItem;
@@ -487,5 +488,11 @@ public interface ISignalementService
 
     void setDateRejet( Integer lIdSignalement, String dateRejet );
 
-    void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector );
+    SignalementRequalification getSignalementRequalificationByTaskHistory( int nIdHistory, int id );
+
+    void setRequalificationIdHistory( Long lIdSignalement, int nIdHistory, int idTask );
+
+    void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector, Integer idTask );
+
+    void setRequalificationIdHistoryAndIdTask( Long lIdSignalement, int nIdHistory, int idTask );
 }

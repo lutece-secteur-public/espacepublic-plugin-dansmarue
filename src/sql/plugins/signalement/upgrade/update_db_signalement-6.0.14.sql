@@ -63,7 +63,9 @@ CREATE TABLE signalement_requalification (
 	id_type_signalement bigint,
 	adresse character varying(255),
 	id_sector bigInt,
-	date_requalification timestamp  without time zone;
+	date_requalification timestamp  without time zone,
+	id_task bigint,
+	id_history bigint	
 	CONSTRAINT id_signalement_fk FOREIGN KEY(id_signalement) REFERENCES signalement_signalement(id_signalement) ON DELETE CASCADE
 );
 

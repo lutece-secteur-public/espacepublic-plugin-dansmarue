@@ -44,6 +44,7 @@ import fr.paris.lutece.plugins.dansmarue.business.entities.Priorite;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDashboardFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
+import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementRequalification;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementSuivi;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signaleur;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SiraUser;
@@ -262,9 +263,9 @@ public class SignalementService implements ISignalementService
     }
     
     @Override
-    public void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector )
+    public void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector, Integer idTask )
     {
-        _signalementDAO.saveRequalification( lIdSignalement, idTypeSignalement, adresse, idSector );
+        _signalementDAO.saveRequalification( lIdSignalement, idTypeSignalement, adresse, idSector, idTask );
         
     }
 
@@ -1752,6 +1753,35 @@ public class SignalementService implements ISignalementService
 
         return listHistoryDTO;
 
+    }
+
+    @Override
+    public SignalementRequalification getSignalementRequalificationByTaskHistory( int nIdHistory, int nIdTask )
+    {
+        SignalementRequalification signalementRequalification = _signalementDAO.getSignalementRequalificationByTaskHistory( nIdHistory, nIdTask );
+        
+        if( signalementRequalification.getIdSignalement( ) != null ) {
+            Sector sector = _sectorDAO.load( signalementRequalification.getIdSector( ), null );
+            signalementRequalification.setSector( sector );
+            
+            TypeSignalement typeSignalement = _typeSignalementDAO.findByIdTypeSignalement( signalementRequalification.getIdTypeSignalement( ) );
+            signalementRequalification.setTypeSignalement( typeSignalement );
+        }        
+        
+        return signalementRequalification;
+        
+    }
+    
+    @Override
+    public void setRequalificationIdHistory( Long lIdSignalement, int nIdHistory, int idTask )
+    {       
+        _signalementDAO.updateRequalification( lIdSignalement, idTask, nIdHistory );
+    }
+    
+    @Override
+    public void setRequalificationIdHistoryAndIdTask( Long lIdSignalement, int nIdHistory, int idTask )
+    {       
+        _signalementDAO.updateRequalificationHistoryTask( lIdSignalement, idTask, nIdHistory );
     }
 
 }

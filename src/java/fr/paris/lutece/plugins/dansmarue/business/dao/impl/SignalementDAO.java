@@ -3,13 +3,11 @@ package fr.paris.lutece.plugins.dansmarue.business.dao.impl;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -218,11 +216,20 @@ public class SignalementDAO implements ISignalementDAO
                                                                                     "where h.id_resource= ?)";
     
     /** The Constant SQL_QUERY_INSERT_REQUALIFICATION. */
-    private static final String SQL_QUERY_INSERT_REQUALIFICATION                   = "INSERT INTO signalement_requalification(id_signalement,id_type_signalement,adresse,id_sector,date_requalification) VALUES (?,?,?,?,?)";
+    private static final String SQL_QUERY_INSERT_REQUALIFICATION                   = "INSERT INTO signalement_requalification(id_signalement,id_type_signalement,adresse,id_sector,date_requalification,id_task) VALUES (?,?,?,?,?,?)";
 
     /** The Constant SQL_QUERY_SELECT_REQUALIFICATION. */
     private static final String SQL_QUERY_SELECT_REQUALIFICATION                   = "SELECT * from signalement_requalification where id_signalement = ? ORDER BY date_requalification DESC";
 
+    /** The Constant SQL_QUERY_SELECT_REQUALIFICATION_BY_ID_TASK_HISTORY. */
+    private static final String SQL_QUERY_SELECT_REQUALIFICATION_BY_ID_TASK_HISTORY = "SELECT * from signalement_requalification where id_history = ? and id_task = ?";
+   
+    /** The Constant SQL_QUERY_UPDATE_REQUALIFICATION. */
+    private static final String SQL_QUERY_UPDATE_REQUALIFICATION = "UPDATE signalement_requalification t1 set id_history = ? where t1.id_signalement = ? and t1.id_task = ? and date_requalification = ( select max(t2.date_requalification) from signalement_requalification t2 where t1.id_signalement = t2.id_signalement )";
+   
+    /** The Constant SQL_QUERY_UPDATE_REQUALIFICATION_HISTORY_TASK. */
+    private static final String SQL_QUERY_UPDATE_REQUALIFICATION_HISTORY_TASK = "UPDATE signalement_requalification t1 set id_history = ?, id_task = ? where t1.id_signalement = ? and date_requalification = ( select max(t2.date_requalification) from signalement_requalification t2 where t1.id_signalement = t2.id_signalement )";
+   
     
     /**
      * Makes references between client sort keyword and actual sql joins / columns names.
@@ -2191,7 +2198,7 @@ public class SignalementDAO implements ISignalementDAO
     }
     
     @Override
-    public void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector ) {
+    public void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector, Integer idTask ) {
                 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_REQUALIFICATION );
         daoUtil.setLong( 1, lIdSignalement );
@@ -2199,6 +2206,33 @@ public class SignalementDAO implements ISignalementDAO
         daoUtil.setString( 3, adresse );
         daoUtil.setInt( 4, idSector );
         daoUtil.setTimestamp( 5, new Timestamp( Calendar.getInstance(  ).getTimeInMillis(  ) ) );
+        daoUtil.setInt( 6, idTask );
+        
+        daoUtil.executeUpdate( );
+               
+        daoUtil.free( );
+    }
+    
+    @Override
+    public void updateRequalification( long lIdSignalement, int idTask, int idHistory ) {
+                
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_REQUALIFICATION );
+        daoUtil.setInt( 1, idHistory );
+        daoUtil.setLong( 2, lIdSignalement );
+        daoUtil.setInt( 3, idTask );
+        
+        daoUtil.executeUpdate( );
+               
+        daoUtil.free( );
+    }
+    
+    @Override
+    public void updateRequalificationHistoryTask( long lIdSignalement, int idTask, int idHistory ) {
+                
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_REQUALIFICATION_HISTORY_TASK );
+        daoUtil.setInt( 1, idHistory );
+        daoUtil.setInt( 2, idTask );
+        daoUtil.setLong( 3, lIdSignalement );        
         
         daoUtil.executeUpdate( );
                
@@ -2224,7 +2258,8 @@ public class SignalementDAO implements ISignalementDAO
             signalementRequalification.setIdTypeSignalement( daoUtil.getInt( nIndex++ ) );
             signalementRequalification.setAdresse( daoUtil.getString( nIndex++ ) );
             signalementRequalification.setIdSector( daoUtil.getInt( nIndex++ ) );
-            signalementRequalification.setDateRequalification( DateUtils.getDateFr( daoUtil.getDate( nIndex ) ) );
+            signalementRequalification.setDateRequalification( DateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
+            signalementRequalification.setIdTask( daoUtil.getInt( nIndex ) );
             
             listRequalification.add( signalementRequalification );            
         }
@@ -2232,5 +2267,34 @@ public class SignalementDAO implements ISignalementDAO
         daoUtil.free( );
         
         return listRequalification;
-    }   
+    }
+    
+    @Override
+    public SignalementRequalification getSignalementRequalificationByTaskHistory( int idHistory, int idTask ) {
+        
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_REQUALIFICATION_BY_ID_TASK_HISTORY );
+        daoUtil.setInt( 1, idHistory );
+        daoUtil.setInt( 2, idTask );
+        
+        daoUtil.executeQuery( );
+        
+        SignalementRequalification signalementRequalification = new SignalementRequalification( );
+        
+        int nIndex;
+        
+        while( daoUtil.next( ) ) {
+            nIndex = 1;
+            signalementRequalification = new SignalementRequalification( );
+            signalementRequalification.setIdSignalement( daoUtil.getLong( nIndex++ ) );
+            signalementRequalification.setIdTypeSignalement( daoUtil.getInt( nIndex++ ) );
+            signalementRequalification.setAdresse( daoUtil.getString( nIndex++ ) );
+            signalementRequalification.setIdSector( daoUtil.getInt( nIndex++ ) );
+            signalementRequalification.setDateRequalification( DateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );         
+            signalementRequalification.setIdTask( daoUtil.getInt( nIndex ) );
+        }
+               
+        daoUtil.free( );
+        
+        return signalementRequalification;
+    }
 }

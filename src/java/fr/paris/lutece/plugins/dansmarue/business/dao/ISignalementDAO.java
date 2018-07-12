@@ -221,7 +221,7 @@ public interface ISignalementDAO
 
     void setDateRejet( int idSignalement, String dateRejet );
 
-    void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector );
+    void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector, Integer idTask );
 
     List<SignalementRequalification> getRequalification( long lIdSignalement );
     
@@ -232,4 +232,10 @@ public interface ISignalementDAO
      * @return the id mail service fait
      */
     Integer getIdMailServiceFait( Long idSignalement );
+
+    SignalementRequalification getSignalementRequalificationByTaskHistory( int idHistory, int idTask );
+
+    void updateRequalification( long lIdSignalement, int idTask, int idHistory );
+
+    void updateRequalificationHistoryTask( long lIdSignalement, int idTask, int idHistory );
 }
