@@ -83,3 +83,20 @@ ALTER TABLE signalement_signalement ADD COLUMN courriel_date timestamp;
 
 -- Ajout du témoin d'envoi par WS en base
 ALTER TABLE signalement_signalement ADD COLUMN is_send_ws SMALLINT DEFAULT 0 NOT NULL;
+
+update
+	signalement_signalement
+set
+	is_send_ws = 1
+where
+	fk_id_sector = (
+		select
+			unittree_sector.id_sector
+		from
+			unittree_sector
+		inner join unittree_unit_sector on
+			unittree_unit_sector.id_sector = unittree_sector.id_sector
+		inner join unittree_unit on
+			unittree_unit_sector.id_unit = unittree_unit.id_unit
+			and unittree_unit.label = 'Ramen'
+	)
