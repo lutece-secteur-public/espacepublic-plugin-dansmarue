@@ -63,15 +63,15 @@ public class SignalementDAO implements ISignalementDAO
     private static final String SQL_QUERY_DELETE                                   = "DELETE FROM signalement_signalement WHERE id_signalement = ?";
 
     /** The Constant SQL_QUERY_SELECT. */
-    private static final String SQL_QUERY_SELECT                                   = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, heure_creation, is_doublon, token, service_fait_date_passage, felicitations, date_mise_surveillance, date_rejet, courriel_destinataire, courriel_expediteur, courriel_date FROM signalement_signalement WHERE id_signalement = ?";
+    private static final String SQL_QUERY_SELECT                                   = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, heure_creation, is_doublon, token, service_fait_date_passage, felicitations, date_mise_surveillance, date_rejet, courriel_destinataire, courriel_expediteur, courriel_date, is_send_ws FROM signalement_signalement WHERE id_signalement = ?";
 
     /** The Constant SQL_QUERY_SELECT_BY_STATUS. */
     private static final String SQL_QUERY_SELECT_BY_STATUS                         = "SELECT signalement.id_signalement, signalement.suivi, signalement.date_creation, signalement.date_prevue_traitement, signalement.commentaire, signalement.annee,  signalement.mois, signalement.numero, signalement.prefix, signalement.fk_id_priorite,   signalement.fk_id_arrondissement,  signalement.fk_id_type_signalement,  signalement.fk_id_sector,   signalement.is_doublon, signalement.service_fait_date_passage FROM signalement_signalement AS signalement  INNER JOIN workflow_resource_workflow AS resource_workflow ON resource_workflow.id_resource = signalement.id_signalement  INNER JOIN workflow_resource_history AS resource_history ON resource_history.id_resource = signalement.id_signalement INNER JOIN workflow_action AS action ON action.id_action = resource_history.id_action WHERE resource_workflow.resource_type = ''SIGNALEMENT_SIGNALEMENT''  AND resource_history.resource_type = ''SIGNALEMENT_SIGNALEMENT''  AND resource_workflow.id_state = ? AND action.id_state_after = ? AND resource_history.creation_date + ''{0} days''::interval < now();";
     /** The Constant SQL_QUERY_UPDATE. */
-    private static final String SQL_QUERY_UPDATE                                   = "UPDATE signalement_signalement SET id_signalement=?, suivi=?, date_creation=?, date_prevue_traitement=?, commentaire=? , fk_id_priorite=?, fk_id_type_signalement=?, fk_id_arrondissement = ?, fk_id_sector = ?, is_doublon = ?, service_fait_date_passage = ?, courriel_destinataire = ?, courriel_expediteur = ?, courriel_date = ? WHERE id_signalement=?";
+    private static final String SQL_QUERY_UPDATE                                   = "UPDATE signalement_signalement SET id_signalement=?, suivi=?, date_creation=?, date_prevue_traitement=?, commentaire=? , fk_id_priorite=?, fk_id_type_signalement=?, fk_id_arrondissement = ?, fk_id_sector = ?, is_doublon = ?, service_fait_date_passage = ?, courriel_destinataire = ?, courriel_expediteur = ?, courriel_date = ?, is_send_ws = ? WHERE id_signalement=?";
 
     /** The Constant SQL_QUERY_SELECT_ALL. */
-    private static final String SQL_QUERY_SELECT_ALL                               = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon FROM signalement_signalement";
+    private static final String SQL_QUERY_SELECT_ALL                               = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon, is_send_ws FROM signalement_signalement";
 
     /** The Constant SQL_QUERY_ADD_FILTER_SECTOR_ALLOWED. */
     private static final String SQL_QUERY_ADD_FILTER_SECTOR_ALLOWED                = " fk_id_sector IN (SELECT s.id_sector FROM unittree_sector s INNER JOIN unittree_unit_sector u ON s.id_sector = u.id_sector WHERE u.id_unit in ({0}))";
@@ -423,6 +423,10 @@ public class SignalementDAO implements ISignalementDAO
             {
                 signalement.setDateRejet( DateUtils.getDateFr( rejet ) );
             }
+            signalement.setCourrielDestinataire( daoUtil.getString( nIndex++ ) );
+            signalement.setCourrielExpediteur( daoUtil.getString( nIndex++ ) );
+            signalement.setCourrielDate( daoUtil.getTimestamp( nIndex++ ) );
+            signalement.setSendWS( daoUtil.getBoolean( nIndex++ ) );
 
         }
 
@@ -484,6 +488,7 @@ public class SignalementDAO implements ISignalementDAO
         daoUtil.setString( nIndex++, signalement.getCourrielDestinataire( ) );
         daoUtil.setString( nIndex++, signalement.getCourrielExpediteur( ) );
         daoUtil.setTimestamp( nIndex++, signalement.getCourrielDate( ) );
+        daoUtil.setBoolean( nIndex++, signalement.isSendWS( ) );
         daoUtil.setLong( nIndex++, signalement.getId( ) );
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -1253,6 +1258,7 @@ public class SignalementDAO implements ISignalementDAO
             signalement.setSecteur( sector );
         }
         signalement.setIsDoublon( daoUtil.getBoolean( nIndex++ ) );
+        signalement.setSendWS( daoUtil.getBoolean( nIndex++ ) );
         return signalement;
     }
 

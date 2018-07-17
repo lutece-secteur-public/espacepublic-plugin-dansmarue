@@ -617,10 +617,7 @@ $(document).ready(function() {
 									additionalParameters="title='#i18n{dansmarue.reportingList.alt.view}'"> <i
 									class="glyphicon glyphicon-eye-open"></i> </@a> 
 									
-									<#if map_etats[signalement.id?string] != "Transféré \x00E0 un prestataire" 
-									&& map_etats[signalement.id?string] != "Transféré \x00E0 un tiers"
-									&& map_etats[signalement.id?string] != "Service programmé prestataire"
-									&& map_etats[signalement.id?string] != "Service programmé tiers">
+									<#if !(signalement.isSendWS) >
 										<@a class="btn
 										btn-xs btn-primary" visu=false
 										sector=(signalement.secteur.idSector)!?string
@@ -652,10 +649,7 @@ $(document).ready(function() {
 									
 									</#list> 
 									
-									<#if map_etats[signalement.id?string] != "Transféré \x00E0 un prestataire" 
-									&& map_etats[signalement.id?string] != "Transféré \x00E0 un tiers"
-									&& map_etats[signalement.id?string] != "Service programmé prestataire"
-									&& map_etats[signalement.id?string] != "Service programmé tiers">
+									<#if !(signalement.isSendWS) >
 									<@a class="btn btn-xs btn-danger" visu=false
 									sector=(signalement.secteur.idSector)!?string
 									href="jsp/admin/plugins/signalement/DeleteSignalement.jsp"

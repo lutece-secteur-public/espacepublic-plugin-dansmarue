@@ -35,10 +35,10 @@ public class Signalement
 
     /** The date mise en surveillance. */
     private String                 _dateMiseEnSurveillance;
-    
+
     /** The date rehet. */
     private String                 _dateRejet;
-    
+
     /** The id. */
     private Long                   _lId;
 
@@ -104,15 +104,17 @@ public class Signalement
     private String                 _strHeureServiceFaitTraitement;
 
     private List<ObservationRejet> observationsRejet;
-    
+
     /** The attribute to check if the signalement is a duplicate */
-    private boolean _bIsDoublon;
-    
-    private String courrielDestinataire;
-    
-    private String courrielExpediteur;
-    
-    private Timestamp courrielDate;
+    private boolean                _bIsDoublon;
+
+    private String                 courrielDestinataire;
+
+    private String                 courrielExpediteur;
+
+    private Timestamp              courrielDate;
+
+    private boolean                isSendWS;
 
     public void setDirection( Unit direction )
     {
@@ -769,7 +771,8 @@ public class Signalement
     }
 
     /**
-     * @param _dateMiseEnSurveillance the _dateMiseEnSurveillance to set
+     * @param _dateMiseEnSurveillance
+     *            the _dateMiseEnSurveillance to set
      */
     public void setDateMiseEnSurveillance( String dateMiseEnSurveillance )
     {
@@ -785,7 +788,8 @@ public class Signalement
     }
 
     /**
-     * @param _dateRejet the _dateRejet to set
+     * @param _dateRejet
+     *            the _dateRejet to set
      */
     public void setDateRejet( String dateRejet )
     {
@@ -821,6 +825,21 @@ public class Signalement
     {
         this.courrielDate = courrielDate;
     }
-    
-    
+
+    /**
+     * @return the isSendWS
+     */
+    public boolean isSendWS( )
+    {
+        return isSendWS;
+    }
+
+    /**
+     * @param isSendWS the isSendWS to set
+     */
+    public void setSendWS( boolean isSendWS )
+    {
+        this.isSendWS = isSendWS;
+    }
+
 }
