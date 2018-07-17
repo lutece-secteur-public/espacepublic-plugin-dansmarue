@@ -39,7 +39,7 @@ $(document).ready(function() {
 				<div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
 					<div class="form-group">
 					
-								<#if signalement.isSendWS != 1 >
+								<#if !(signalement.isSendWS) >
 								<@a class="btn
 									btn-xs btn-primary" visu=false
 									sector=(signalement.secteur.idSector)!?string
@@ -64,7 +64,7 @@ $(document).ready(function() {
 										alt="${action.name}" />
 								</a> </#if> </#list> 
 								
-								<#if signalement.isSendWS != 1>
+								<#if !(signalement.isSendWS) >
 								<@a class="btn btn-xs btn-danger" visu=false
 									sector=(signalement.secteur.idSector)!?string
 									href="jsp/admin/plugins/signalement/DeleteSignalement.jsp"

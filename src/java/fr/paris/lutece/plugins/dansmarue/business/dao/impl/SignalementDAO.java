@@ -426,7 +426,7 @@ public class SignalementDAO implements ISignalementDAO
             signalement.setCourrielDestinataire( daoUtil.getString( nIndex++ ) );
             signalement.setCourrielExpediteur( daoUtil.getString( nIndex++ ) );
             signalement.setCourrielDate( daoUtil.getTimestamp( nIndex++ ) );
-            signalement.setSendWS( daoUtil.getBoolean( nIndex++ ) );
+            signalement.setSendWs( daoUtil.getBoolean( nIndex++ ) );
 
         }
 
@@ -488,7 +488,7 @@ public class SignalementDAO implements ISignalementDAO
         daoUtil.setString( nIndex++, signalement.getCourrielDestinataire( ) );
         daoUtil.setString( nIndex++, signalement.getCourrielExpediteur( ) );
         daoUtil.setTimestamp( nIndex++, signalement.getCourrielDate( ) );
-        daoUtil.setBoolean( nIndex++, signalement.isSendWS( ) );
+        daoUtil.setBoolean( nIndex++, signalement.isSendWs( ) );
         daoUtil.setLong( nIndex++, signalement.getId( ) );
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -1258,7 +1258,7 @@ public class SignalementDAO implements ISignalementDAO
             signalement.setSecteur( sector );
         }
         signalement.setIsDoublon( daoUtil.getBoolean( nIndex++ ) );
-        signalement.setSendWS( daoUtil.getBoolean( nIndex++ ) );
+        signalement.setSendWs( daoUtil.getBoolean( nIndex++ ) );
         return signalement;
     }
 

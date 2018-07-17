@@ -1593,7 +1593,7 @@ public class SignalementService implements ISignalementService
                 estAffichable = false;
             }
             if ( ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_TRANSFERE_PRESTATAIRE, -1 ) || state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE, -1 ) )
-                    && listActionsNonAffichablesPrestataire.contains( String.valueOf( action.getId( ) ) ) && signalement.isSendWS( )  )
+                    && listActionsNonAffichablesPrestataire.contains( String.valueOf( action.getId( ) ) ) && signalement.isSendWs( )  )
             {
                 estAffichable = false;
             }

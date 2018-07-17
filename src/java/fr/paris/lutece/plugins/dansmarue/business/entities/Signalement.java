@@ -829,7 +829,7 @@ public class Signalement
     /**
      * @return the isSendWS
      */
-    public boolean isSendWS( )
+    public boolean isSendWs( )
     {
         return isSendWS;
     }
@@ -837,7 +837,7 @@ public class Signalement
     /**
      * @param isSendWS the isSendWS to set
      */
-    public void setSendWS( boolean isSendWS )
+    public void setSendWs( boolean isSendWS )
     {
         this.isSendWS = isSendWS;
     }
