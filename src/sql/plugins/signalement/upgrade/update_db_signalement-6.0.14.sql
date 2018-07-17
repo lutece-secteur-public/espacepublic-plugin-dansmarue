@@ -82,4 +82,4 @@ ALTER TABLE signalement_signalement ADD COLUMN courriel_expediteur varchar(255);
 ALTER TABLE signalement_signalement ADD COLUMN courriel_date timestamp;
 
 -- Ajout du témoin d'envoi par WS en base
-ALTER TABLE signalement_signalement ADD COLUMN is_send_ws BOOLEAN DEFAULT FALSE NOT NULL; 
+ALTER TABLE signalement_signalement ADD COLUMN is_send_ws SMALLINT DEFAULT 0 NOT NULL; 
