@@ -488,7 +488,7 @@ public class SignalementDAO implements ISignalementDAO
         daoUtil.setString( nIndex++, signalement.getCourrielDestinataire( ) );
         daoUtil.setString( nIndex++, signalement.getCourrielExpediteur( ) );
         daoUtil.setTimestamp( nIndex++, signalement.getCourrielDate( ) );
-        daoUtil.setBoolean( nIndex++, signalement.isSendWs( ) );
+        daoUtil.setBoolean( nIndex++, signalement.getIsSendWS( ) );
         daoUtil.setLong( nIndex++, signalement.getId( ) );
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -577,6 +577,7 @@ public class SignalementDAO implements ISignalementDAO
             {
                 signalement.setCourrielDate( courrielDate );
             }
+            signalement.setSendWs( daoUtil.getBoolean( nIndex++ ) );
 
         }
 
