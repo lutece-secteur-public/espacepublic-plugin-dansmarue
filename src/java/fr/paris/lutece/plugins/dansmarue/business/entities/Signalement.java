@@ -114,7 +114,7 @@ public class Signalement
 
     private Timestamp              courrielDate;
 
-    private boolean                isSendWS;
+    private boolean                sendWS;
 
     public void setDirection( Unit direction )
     {
@@ -831,7 +831,7 @@ public class Signalement
      */
     public boolean isSendWs( )
     {
-        return isSendWS;
+        return sendWS;
     }
 
     /**
@@ -839,7 +839,7 @@ public class Signalement
      */
     public void setSendWs( boolean isSendWS )
     {
-        this.isSendWS = isSendWS;
+        this.sendWS = isSendWS;
     }
 
 }
