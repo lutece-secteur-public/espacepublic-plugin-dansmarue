@@ -352,7 +352,7 @@ public class SignalementDashboardJspBean extends AbstractJspBean {
 	  		}
 	  		
 	  		if(dashboardFilter.getPeriodId() == null){
-	  			dashboardFilter.setPeriodId(dashboardPeriodCriterias.get(1).getId().intValue());
+	  			dashboardFilter.setPeriodId(dashboardPeriodCriterias.get(0).getId().intValue());
 	  		}
 	  		
 	  		
