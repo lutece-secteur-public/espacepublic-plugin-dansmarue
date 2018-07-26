@@ -111,6 +111,7 @@ public class SignalementWebService implements ISignalementWebService
         try
         {
             AppLogService.info( "Call web service " +url + " for id anomalie : " + signalement.getId( ));
+            AppLogService.info( "Flux Json : " + jsonFormated);
             result = _wsCaller.callWebService( url, params, _authenticator, values );
         } catch ( Exception e )
         {
