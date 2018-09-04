@@ -38,7 +38,7 @@ import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.dansmarue.utils.ListUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.UnitUtils;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
-import fr.paris.lutece.plugins.unittree.modules.sira.service.sector.ISectorService;
+import fr.paris.lutece.plugins.unittree.modules.dansmarue.service.sector.ISectorService;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.business.rbac.AdminRole;
@@ -158,7 +158,7 @@ public class SignalementDashboardJspBean extends AbstractJspBean {
     this._signalementWorkflowService = (IWorkflowService) SpringContextService
         .getBean("signalement.workflowService");
     this._sectorService = (ISectorService) SpringContextService
-        .getBean("unittree-sira.sectorService");
+        .getBean("unittree-dansmarue.sectorService");
     this._arrondissementService = (IArrondissementService) SpringContextService
         .getBean("signalement.arrondissementService");
     this._signalementViewRoleService = (SignalementViewRoleService) SpringContextService

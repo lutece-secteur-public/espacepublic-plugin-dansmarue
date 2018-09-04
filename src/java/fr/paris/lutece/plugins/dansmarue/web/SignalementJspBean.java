@@ -112,9 +112,9 @@ import fr.paris.lutece.plugins.dansmarue.utils.SignalementUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.TypeSignalementItem;
 import fr.paris.lutece.plugins.leaflet.modules.dansmarue.consts.LeafletDansMaRueConstants;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
-import fr.paris.lutece.plugins.unittree.modules.sira.business.sector.Sector;
-import fr.paris.lutece.plugins.unittree.modules.sira.service.sector.ISectorService;
-import fr.paris.lutece.plugins.unittree.modules.sira.service.unit.IUnitSiraService;
+import fr.paris.lutece.plugins.unittree.modules.dansmarue.business.sector.Sector;
+import fr.paris.lutece.plugins.unittree.modules.dansmarue.service.sector.ISectorService;
+import fr.paris.lutece.plugins.unittree.modules.dansmarue.service.unit.IUnitSiraService;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
@@ -741,13 +741,13 @@ public class SignalementJspBean extends AbstractJspBean
         _signalementWorkflowService = ( IWorkflowService ) SpringContextService.getBean( "signalement.workflowService" );
         _adresseService = ( IAdresseService ) SpringContextService.getBean( "adresseSignalementService" );
         _photoService = ( IPhotoService ) SpringContextService.getBean( "photoService" );
-        _sectorService = ( ISectorService ) SpringContextService.getBean( "unittree-sira.sectorService" );
+        _sectorService = ( ISectorService ) SpringContextService.getBean( "unittree-dansmarue.sectorService" );
         _arrondissementService = ( IArrondissementService ) SpringContextService.getBean( "signalement.arrondissementService" );
         _conseilQuartier = ( IConseilQuartierService ) SpringContextService.getBean( "signalement.conseilQuartierService" );
         _fileMessageCreationService = ( IFileMessageCreationService ) SpringContextService.getBean( "fileMessageCreationService" );
         _signalementViewRoleService = ( SignalementViewRoleService ) SpringContextService.getBean( "signalement.signalementViewRoleService" );
         _domaineFonctionnelService = ( IDomaineFonctionnelService ) SpringContextService.getBean( "domaineFonctionnelService" );
-        _unitSiraService = ( IUnitSiraService ) SpringContextService.getBean( "unittree-sira.unitSiraService" );
+        _unitSiraService = ( IUnitSiraService ) SpringContextService.getBean( "unittree-dansmarue.unitSiraService" );
     }
 
     /**

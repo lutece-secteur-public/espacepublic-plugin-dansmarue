@@ -74,10 +74,10 @@ import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.ImgUtils;
 import fr.paris.lutece.plugins.unittree.business.unit.IUnitDAO;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
-import fr.paris.lutece.plugins.unittree.modules.sira.business.sector.ISectorDAO;
-import fr.paris.lutece.plugins.unittree.modules.sira.business.sector.Sector;
-import fr.paris.lutece.plugins.unittree.modules.sira.service.sector.ISectorService;
-import fr.paris.lutece.plugins.unittree.modules.sira.service.unit.IUnitSiraService;
+import fr.paris.lutece.plugins.unittree.modules.dansmarue.business.sector.ISectorDAO;
+import fr.paris.lutece.plugins.unittree.modules.dansmarue.business.sector.Sector;
+import fr.paris.lutece.plugins.unittree.modules.dansmarue.service.sector.ISectorService;
+import fr.paris.lutece.plugins.unittree.modules.dansmarue.service.unit.IUnitSiraService;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
@@ -204,7 +204,7 @@ public class SignalementService implements ISignalementService
     private ITaskNotificationConfigDAO          _taskNotificationConfigDAO;
 
     @Inject
-    @Named( "unittree-sira.sectorDAO" )
+    @Named( "unittree-dansmarue.sectorDAO" )
     private ISectorDAO                          _sectorDAO;
 
     @Inject
@@ -835,7 +835,7 @@ public class SignalementService implements ISignalementService
     @Override
     public Unit getMajorUnit( Integer idTypeSignalement, Double lng, Double lat )
     {
-        IUnitSiraService unitSiraService = SpringContextService.getBean( "unittree-sira.unitSiraService" );
+        IUnitSiraService unitSiraService = SpringContextService.getBean( "unittree-dansmarue.unitSiraService" );
         List<Unit> listeUnit = unitSiraService.getUnitsLeafsByGeom( lng, lat );
         Unit majorUnit = this.getMajorUnit( listeUnit );
         if ( majorUnit == null )

@@ -26,7 +26,7 @@ import fr.paris.lutece.plugins.dansmarue.service.IWorkflowService;
 import fr.paris.lutece.plugins.dansmarue.service.role.SignalementViewRoleService;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.dansmarue.web.SignalementJspBean;
-import fr.paris.lutece.plugins.unittree.modules.sira.service.sector.ISectorService;
+import fr.paris.lutece.plugins.unittree.modules.dansmarue.service.sector.ISectorService;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -78,7 +78,7 @@ public class SignalementJspBeanTest
         when( SpringContextService.getBean( "signaleurService" ) ).thenReturn( _signaleurService );
         when( SpringContextService.getBean( "prioriteService" ) ).thenReturn( _prioriteService );
         when( SpringContextService.getBean( "unittree.unitService" ) ).thenReturn( _unitService );
-        when( SpringContextService.getBean( "unittree-sira.sectorService" ) ).thenReturn( _sectorService );
+        when( SpringContextService.getBean( "unittree-dansmarue.sectorService" ) ).thenReturn( _sectorService );
         when( SpringContextService.getBean( "adresseSignalementService" ) ).thenReturn( _adresseService );
         when( SpringContextService.getBean( "photoService" ) ).thenReturn( _photoService );
         when( SpringContextService.getBean( "fileMessageCreationService" ) ).thenReturn( _fileMessageCreationService );

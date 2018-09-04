@@ -26,7 +26,7 @@ import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.dansmarue.commons.exceptions.BusinessException;
 import fr.paris.lutece.plugins.dansmarue.utils.ws.IWebServiceCaller;
 import fr.paris.lutece.plugins.dansmarue.utils.ws.WebServiceCaller;
-import fr.paris.lutece.plugins.unittree.modules.sira.business.sector.Sector;
+import fr.paris.lutece.plugins.unittree.modules.dansmarue.business.sector.Sector;
 import fr.paris.lutece.util.httpaccess.HttpAccessException;
 import fr.paris.lutece.util.signrequest.RequestAuthenticator;
 import net.sf.json.JSONArray;

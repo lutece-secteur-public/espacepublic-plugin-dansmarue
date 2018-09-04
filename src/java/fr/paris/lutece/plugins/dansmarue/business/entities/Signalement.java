@@ -9,7 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
-import fr.paris.lutece.plugins.unittree.modules.sira.business.sector.Sector;
+import fr.paris.lutece.plugins.unittree.modules.dansmarue.business.sector.Sector;
 
 /**
  * The Class Signalement.

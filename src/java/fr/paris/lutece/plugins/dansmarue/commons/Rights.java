@@ -4,7 +4,7 @@ import fr.paris.lutece.plugins.dansmarue.service.impl.MappingJspPermission;
 import fr.paris.lutece.plugins.dansmarue.service.impl.PermissionRessourceType;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
-import fr.paris.lutece.plugins.unittree.modules.sira.service.sector.ISectorService;
+import fr.paris.lutece.plugins.unittree.modules.dansmarue.service.sector.ISectorService;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.right.Right;
@@ -61,7 +61,7 @@ public class Rights
     {
         this._request = request;
         this._unitService = (IUnitService) SpringContextService.getBean( "unittree.unitService" );
-        this._sectorService = (ISectorService) SpringContextService.getBean( "unittree-sira.sectorService" );
+        this._sectorService = (ISectorService) SpringContextService.getBean( "unittree-dansmarue.sectorService" );
         HttpSession session = request.getSession( );
         if ( session.getAttribute( PERMISSIONS ) != null )
         {

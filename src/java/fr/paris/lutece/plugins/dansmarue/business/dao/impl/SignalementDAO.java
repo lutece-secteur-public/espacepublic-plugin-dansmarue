@@ -33,7 +33,7 @@ import fr.paris.lutece.plugins.dansmarue.service.dto.DashboardSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DossierSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
-import fr.paris.lutece.plugins.unittree.modules.sira.business.sector.Sector;
+import fr.paris.lutece.plugins.unittree.modules.dansmarue.business.sector.Sector;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.date.DateUtil;

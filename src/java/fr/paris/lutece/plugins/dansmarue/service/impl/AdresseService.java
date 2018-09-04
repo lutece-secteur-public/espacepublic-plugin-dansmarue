@@ -5,8 +5,8 @@ import fr.paris.lutece.plugins.dansmarue.business.dao.IArrondissementDAO;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Adresse;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
 import fr.paris.lutece.plugins.dansmarue.service.IAdresseService;
-import fr.paris.lutece.plugins.unittree.modules.sira.business.sector.ISectorDAO;
-import fr.paris.lutece.plugins.unittree.modules.sira.business.sector.Sector;
+import fr.paris.lutece.plugins.unittree.modules.dansmarue.business.sector.ISectorDAO;
+import fr.paris.lutece.plugins.unittree.modules.dansmarue.business.sector.Sector;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -24,7 +24,7 @@ public class AdresseService implements IAdresseService
     private IArrondissementDAO _arrondissementDAO;
 
     @Inject
-    @Named( "unittree-sira.sectorDAO" )
+    @Named( "unittree-dansmarue.sectorDAO" )
     private ISectorDAO _sectorDAO;
 
     public Long insert( Adresse adresse )
