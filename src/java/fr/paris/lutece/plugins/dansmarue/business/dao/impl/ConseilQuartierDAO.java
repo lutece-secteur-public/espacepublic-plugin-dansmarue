@@ -31,199 +31,193 @@
  *
  * License 1.0
  */
-
 package fr.paris.lutece.plugins.dansmarue.business.dao.impl;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.IConseilQuartierDao;
 import fr.paris.lutece.plugins.dansmarue.business.entities.ConseilQuartier;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-/**
- * This class provides Data Access methods for Quartier objects
- */
+import java.util.ArrayList;
+import java.util.List;
 
+
+/**
+ * This class provides Data Access methods for Neighborhood objects
+ */
 public final class ConseilQuartierDAO implements IConseilQuartierDao
 {
-
     // Constants
-
-    private static final String SQL_QUERY_NEW_PK    = "SELECT max( id_consqrt ) FROM signalement_conseil_quartier";
-    private static final String SQL_QUERY_SELECT    = "SELECT id_consqrt, numero_consqrt, surface, nom_consqrt, numero_arrondissement FROM signalement_conseil_quartier WHERE id_consqrt = ?";
-    private static final String SQL_QUERY_INSERT    = "INSERT INTO signalement_conseil_quartier ( id_consqrt, numero_consqrt, surface, nom_consqrt, numero_arrondissement ) VALUES ( ?, ?, ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE    = "DELETE FROM signalement_conseil_quartier WHERE id_consqrt = ? ";
-    private static final String SQL_QUERY_UPDATE    = "UPDATE signalement_conseil_quartier SET id_consqrt = ?, numero_consqrt = ?, surface = ?, nom_consqrt = ?, numero_arrondissement = ? WHERE id_consqrt = ?";
+    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_consqrt ) FROM signalement_conseil_quartier";
+    private static final String SQL_QUERY_SELECT = "SELECT id_consqrt, numero_consqrt, surface, nom_consqrt, numero_arrondissement FROM signalement_conseil_quartier WHERE id_consqrt = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_conseil_quartier ( id_consqrt, numero_consqrt, surface, nom_consqrt, numero_arrondissement ) VALUES ( ?, ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_conseil_quartier WHERE id_consqrt = ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_conseil_quartier SET id_consqrt = ?, numero_consqrt = ?, surface = ?, nom_consqrt = ?, numero_arrondissement = ? WHERE id_consqrt = ?";
     private static final String SQL_QUERY_SELECTALL = "SELECT id_consqrt, numero_consqrt, surface, nom_consqrt, numero_arrondissement FROM signalement_conseil_quartier order by numero_arrondissement,nom_consqrt asc";
     private static final String SQL_QUERY_SELECT_BY_ADRESSE = "SELECT id_consqrt, numero_consqrt, surface, nom_consqrt, numero_arrondissement from signalement_conseil_quartier where ST_Intersects( ( select ST_Union(geom) from signalement_adresse where id_adresse = ? )::geometry, signalement_conseil_quartier.geom::geometry )";
-    
+
     /**
      * Generates a new primary key
      *
      * @return The new primary key
      */
-
-    public int newPrimaryKey( )
+    private int newPrimaryKey(  )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK );
-        daoUtil.executeQuery( );
+        daoUtil.executeQuery(  );
 
         int nKey;
 
-        if ( !daoUtil.next( ) )
+        if ( !daoUtil.next(  ) )
         {
             // if the table is empty
             nKey = 1;
         }
 
         nKey = daoUtil.getInt( 1 ) + 1;
-        daoUtil.free( );
+        daoUtil.close(  );
 
         return nKey;
     }
 
     /**
-     * Insert a new record in the table.
-     *
-     * @param quartier
-     *            instance of the Quartier object to insert
+     * {@inheritDoc}
      */
-
+    @Override
     public void insert( ConseilQuartier quartier )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT );
 
-        quartier.setIdConsqrt( newPrimaryKey( ) );
+        int nIndex = 1;
 
-        daoUtil.setInt( 1, quartier.getIdConsqrt( ) );
-        daoUtil.setString( 2, quartier.getNumeroConsqrt( ) );
-        daoUtil.setBigDecimal( 3, quartier.getSurface( ) );
-        daoUtil.setString( 4, quartier.getNomConsqrt( ) );
-        daoUtil.setBigDecimal( 5, quartier.getNumeroArrondissement( ) );
+        quartier.setIdConsqrt( newPrimaryKey(  ) );
 
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.setInt( nIndex++, quartier.getIdConsqrt(  ) );
+        daoUtil.setString( nIndex++, quartier.getNumeroConsqrt(  ) );
+        daoUtil.setBigDecimal( nIndex++, quartier.getSurface(  ) );
+        daoUtil.setString( nIndex++, quartier.getNomConsqrt(  ) );
+        daoUtil.setBigDecimal( nIndex, quartier.getNumeroArrondissement(  ) );
+
+        daoUtil.executeUpdate(  );
+        daoUtil.close(  );
     }
 
     /**
-     * Load the data of the quartier from the table
-     *
-     * @param nId
-     *            The identifier of the quartier
-     * @return the instance of the Quartier
+     * {@inheritDoc}
      */
-
+    @Override
     public ConseilQuartier load( int nId )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT );
         daoUtil.setInt( 1, nId );
-        daoUtil.executeQuery( );
+        daoUtil.executeQuery(  );
 
         ConseilQuartier quartier = null;
 
-        if ( daoUtil.next( ) )
+        if ( daoUtil.next(  ) )
         {
-            quartier = new ConseilQuartier( );
+            int nIndex = 1;
 
-            quartier.setIdConsqrt( daoUtil.getInt( 1 ) );
-            quartier.setNumeroConsqrt( daoUtil.getString( 2 ) );
-            quartier.setSurface( daoUtil.getBigDecimal( 3 ) );
-            quartier.setNomConsqrt( daoUtil.getString( 4 ) );
-            quartier.setNumeroArrondissement( daoUtil.getBigDecimal( 5 ) );
+            quartier = new ConseilQuartier(  );
+
+            quartier.setIdConsqrt( daoUtil.getInt( nIndex++ ) );
+            quartier.setNumeroConsqrt( daoUtil.getString( nIndex++ ) );
+            quartier.setSurface( daoUtil.getBigDecimal( nIndex++ ) );
+            quartier.setNomConsqrt( daoUtil.getString( nIndex++ ) );
+            quartier.setNumeroArrondissement( daoUtil.getBigDecimal( nIndex ) );
         }
 
-        daoUtil.free( );
+        daoUtil.close(  );
+
         return quartier;
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ConseilQuartier selectQuartierByAdresse( int nIdAdresse )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_ADRESSE );
         daoUtil.setInt( 1, nIdAdresse );
-        daoUtil.executeQuery( );
+        daoUtil.executeQuery(  );
 
-        ConseilQuartier quartier = new ConseilQuartier( );
+        ConseilQuartier quartier = new ConseilQuartier(  );
 
-        if ( daoUtil.next( ) )
+        if ( daoUtil.next(  ) )
         {
-            quartier.setIdConsqrt( daoUtil.getInt( 1 ) );
-            quartier.setNumeroConsqrt( daoUtil.getString( 2 ) );
-            quartier.setSurface( daoUtil.getBigDecimal( 3 ) );
-            quartier.setNomConsqrt( daoUtil.getString( 4 ) );
-            quartier.setNumeroArrondissement( daoUtil.getBigDecimal( 5 ) );
+            int nIndex = 1;
+
+            quartier.setIdConsqrt( daoUtil.getInt( nIndex++ ) );
+            quartier.setNumeroConsqrt( daoUtil.getString( nIndex++ ) );
+            quartier.setSurface( daoUtil.getBigDecimal( nIndex++ ) );
+            quartier.setNomConsqrt( daoUtil.getString( nIndex++ ) );
+            quartier.setNumeroArrondissement( daoUtil.getBigDecimal( nIndex ) );
         }
 
-        daoUtil.free( );
+        daoUtil.close(  );
+
         return quartier;
     }
 
     /**
-     * Delete a record from the table
-     *
-     * @param nQuartierId
-     *            The identifier of the quartier
+     * {@inheritDoc}
      */
-
+    @Override
     public void delete( int nQuartierId )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE );
         daoUtil.setInt( 1, nQuartierId );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.executeUpdate(  );
+        daoUtil.close(  );
     }
 
     /**
-     * Update the record in the table
-     *
-     * @param quartier
-     *            The reference of the quartier
+     * {@inheritDoc}
      */
-
+    @Override
     public void store( ConseilQuartier quartier )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE );
 
-        daoUtil.setInt( 1, quartier.getIdConsqrt( ) );
-        daoUtil.setString( 2, quartier.getNumeroConsqrt( ) );
-        daoUtil.setBigDecimal( 3, quartier.getSurface( ) );
-        daoUtil.setString( 4, quartier.getNomConsqrt( ) );
-        daoUtil.setBigDecimal( 5, quartier.getNumeroArrondissement( ) );
-        daoUtil.setInt( 6, quartier.getIdConsqrt( ) );
+        int nIndex = 1;
 
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.setInt( nIndex++, quartier.getIdConsqrt(  ) );
+        daoUtil.setString( nIndex++, quartier.getNumeroConsqrt(  ) );
+        daoUtil.setBigDecimal( nIndex++, quartier.getSurface(  ) );
+        daoUtil.setString( nIndex++, quartier.getNomConsqrt(  ) );
+        daoUtil.setBigDecimal( nIndex++, quartier.getNumeroArrondissement(  ) );
+        daoUtil.setInt( nIndex, quartier.getIdConsqrt(  ) );
+
+        daoUtil.executeUpdate(  );
+        daoUtil.close(  );
     }
 
     /**
-     * Load the data of all the quartiers and returns them as a list
-     *
-     * @return The list which contains the data of all the quartiers
+     * {@inheritDoc}
      */
-
     @Override
-    public List<ConseilQuartier> selectQuartiersList( )
+    public List<ConseilQuartier> selectQuartiersList(  )
     {
-        List<ConseilQuartier> quartierList = new ArrayList<ConseilQuartier>( );
+        List<ConseilQuartier> quartierList = new ArrayList<ConseilQuartier>(  );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL );
-        daoUtil.executeQuery( );
+        daoUtil.executeQuery(  );
 
-        while ( daoUtil.next( ) )
+        while ( daoUtil.next(  ) )
         {
-            ConseilQuartier quartier = new ConseilQuartier( );
+            int nIndex = 1;
+            ConseilQuartier quartier = new ConseilQuartier(  );
 
-            quartier.setIdConsqrt( daoUtil.getInt( 1 ) );
-            quartier.setNumeroConsqrt( daoUtil.getString( 2 ) );
-            quartier.setSurface( daoUtil.getBigDecimal( 3 ) );
-            quartier.setNomConsqrt( daoUtil.getString( 4 ) );
-            quartier.setNumeroArrondissement( daoUtil.getBigDecimal( 5 ) );
+            quartier.setIdConsqrt( daoUtil.getInt( nIndex++ ) );
+            quartier.setNumeroConsqrt( daoUtil.getString( nIndex++ ) );
+            quartier.setSurface( daoUtil.getBigDecimal( nIndex++ ) );
+            quartier.setNomConsqrt( daoUtil.getString( nIndex++ ) );
+            quartier.setNumeroArrondissement( daoUtil.getBigDecimal( nIndex ) );
 
             quartierList.add( quartier );
         }
 
-        daoUtil.free( );
+        daoUtil.close(  );
+
         return quartierList;
     }
-
 }

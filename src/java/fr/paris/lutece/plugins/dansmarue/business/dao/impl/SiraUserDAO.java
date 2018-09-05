@@ -37,19 +37,21 @@ import fr.paris.lutece.plugins.dansmarue.business.dao.ISiraUserDAO;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SiraUser;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-public class SiraUserDAO implements ISiraUserDAO {
+public class SiraUserDAO implements ISiraUserDAO
+{
 
-	private static final String SQL_QUERY_NEW_PK = "SELECT nextval('seq_sira_user_id')";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO sira_user(id_sira_user, user_guid, user_udid, user_device, user_email, user_token) VALUES (?, ?, ?, ?, ?,?)";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM sira_user WHERE id_sira_user = ?";
-    private static final String SQL_QUERY_SELECT = "SELECT id_sira_user, user_guid, user_udid, user_device, user_email, user_token FROM sira_user WHERE id_sira_user = ?";
-    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_signaleur SET user_guid=?, user_udid=?, user_device=?, user_email=?, user_token=? WHERE id_sira_user=?";
+    private static final String SQL_QUERY_NEW_PK                   = "SELECT nextval('seq_sira_user_id')";
+    private static final String SQL_QUERY_INSERT                   = "INSERT INTO sira_user(id_sira_user, user_guid, user_udid, user_device, user_email, user_token) VALUES (?, ?, ?, ?, ?,?)";
+    private static final String SQL_QUERY_DELETE                   = "DELETE FROM sira_user WHERE id_sira_user = ?";
+    private static final String SQL_QUERY_SELECT                   = "SELECT id_sira_user, user_guid, user_udid, user_device, user_email, user_token FROM sira_user WHERE id_sira_user = ?";
+    private static final String SQL_QUERY_UPDATE                   = "UPDATE signalement_signaleur SET user_guid=?, user_udid=?, user_device=?, user_email=?, user_token=? WHERE id_sira_user=?";
     private static final String SQL_QUERY_SELECT_BY_GUID_AND_TOKEN = "SELECT id_sira_user, user_guid, user_udid, user_device, user_email, user_token FROM sira_user WHERE user_guid=? AND user_token=?";
-	
+
     /**
      * Generates a new primary key
      * 
-     * @param plugin the plugin
+     * @param plugin
+     *            the plugin
      * @return The new primary key
      */
     private Long newPrimaryKey( )
@@ -62,127 +64,134 @@ public class SiraUserDAO implements ISiraUserDAO {
         {
             nKey = daoUtil.getLong( 1 );
         }
-        daoUtil.free( );
+        daoUtil.close( );
         return nKey;
     }
-    
+
     /**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Long insert(SiraUser siraUser) {
-		 DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT );
-         if ( siraUser.getId( ) == null || siraUser.getId( ) == 0 )
-         {
-        	siraUser.setId( newPrimaryKey( ) );
-         }
-         int nIndex = 1;
-         
-         daoUtil.setLong(nIndex++,siraUser.getId());
-         daoUtil.setString(nIndex++,siraUser.getGuid());
-         daoUtil.setString(nIndex++,siraUser.getUdid());
-         daoUtil.setString(nIndex++,siraUser.getDevice());
-         daoUtil.setString(nIndex++,siraUser.getMail());
-         daoUtil.setString(nIndex++, siraUser.getToken());
-         
-         daoUtil.executeUpdate();
-         
-         daoUtil.free();
-         
-         return siraUser.getId();
-	}
+     * {@inheritDoc}
+     */
+    @Override
+    public Long insert( SiraUser siraUser )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT );
+        if ( siraUser.getId( ) == null || siraUser.getId( ) == 0 )
+        {
+            siraUser.setId( newPrimaryKey( ) );
+        }
+        int nIndex = 1;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void remove(long lId) {
-		DAOUtil daoUtil = new DAOUtil (SQL_QUERY_DELETE);
-		daoUtil.setLong(1, lId);
-		daoUtil.executeUpdate();
-        daoUtil.free();
-	}
+        daoUtil.setLong( nIndex++, siraUser.getId( ) );
+        daoUtil.setString( nIndex++, siraUser.getGuid( ) );
+        daoUtil.setString( nIndex++, siraUser.getUdid( ) );
+        daoUtil.setString( nIndex++, siraUser.getDevice( ) );
+        daoUtil.setString( nIndex++, siraUser.getMail( ) );
+        daoUtil.setString( nIndex++, siraUser.getToken( ) );
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public SiraUser load(long lId) {
-		DAOUtil daoUtil = new DAOUtil (SQL_QUERY_SELECT);
-		
-		int nIndex = 1;
-		
-		daoUtil.setLong(nIndex++, lId);
-		
-		daoUtil.executeQuery();
-		
-		SiraUser siraUser = null;
-		
-		if(daoUtil.next()){
-			nIndex = 1;
-			siraUser = new SiraUser();
-			siraUser.setId(daoUtil.getLong(nIndex++));
-			siraUser.setGuid(daoUtil.getString(nIndex++));
-			siraUser.setUdid(daoUtil.getString(nIndex++));
-			siraUser.setDevice(daoUtil.getString(nIndex++));
-			siraUser.setMail(daoUtil.getString(nIndex++));
-	        siraUser.setToken(daoUtil.getString(nIndex++));
-		}
+        daoUtil.executeUpdate( );
 
-        daoUtil.free();
-		return siraUser;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void update(SiraUser siraUser) {
-		DAOUtil daoUtil = new DAOUtil(SQL_QUERY_UPDATE);
-        
-		int nIndex = 1;
-		
-        daoUtil.setString(nIndex++,siraUser.getGuid());
-        daoUtil.setString(nIndex++,siraUser.getUdid());
-        daoUtil.setString(nIndex++,siraUser.getDevice());
-        daoUtil.setString(nIndex++,siraUser.getMail());
-        daoUtil.setString(nIndex++, siraUser.getToken());
-        
-        //WHERE
-        daoUtil.setLong(nIndex++,siraUser.getId());
-        
-        daoUtil.executeUpdate();
-        daoUtil.free();
-	}
+        daoUtil.close( );
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public SiraUser findByGuidAndToken(String guid, String token) {
-		DAOUtil daoUtil = new DAOUtil(SQL_QUERY_SELECT_BY_GUID_AND_TOKEN);
-		int nIndex = 1;
-		
-		daoUtil.setString(nIndex++, guid);
-		daoUtil.setString(nIndex++, token);
-		
-		daoUtil.executeQuery();
-		
-		SiraUser siraUser = null;
-		if(daoUtil.next()){
-			nIndex = 1;
-			siraUser = new SiraUser();
-			siraUser.setId(daoUtil.getLong(nIndex++));
-			siraUser.setGuid(daoUtil.getString(nIndex++));
-			siraUser.setUdid(daoUtil.getString(nIndex++));
-			siraUser.setDevice(daoUtil.getString(nIndex++));
-			siraUser.setMail(daoUtil.getString(nIndex++));
-			siraUser.setToken(daoUtil.getString(nIndex++));
-		}
-		
-		daoUtil.free();
-		
-		return siraUser;
-	}
+        return siraUser.getId( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void remove( long lId )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE );
+        daoUtil.setLong( 1, lId );
+        daoUtil.executeUpdate( );
+        daoUtil.close( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SiraUser load( long lId )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT );
+
+        int nIndex = 1;
+
+        daoUtil.setLong( nIndex++, lId );
+
+        daoUtil.executeQuery( );
+
+        SiraUser siraUser = null;
+
+        if ( daoUtil.next( ) )
+        {
+            nIndex = 1;
+            siraUser = new SiraUser( );
+            siraUser.setId( daoUtil.getLong( nIndex++ ) );
+            siraUser.setGuid( daoUtil.getString( nIndex++ ) );
+            siraUser.setUdid( daoUtil.getString( nIndex++ ) );
+            siraUser.setDevice( daoUtil.getString( nIndex++ ) );
+            siraUser.setMail( daoUtil.getString( nIndex++ ) );
+            siraUser.setToken( daoUtil.getString( nIndex++ ) );
+        }
+
+        daoUtil.close( );
+        return siraUser;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update( SiraUser siraUser )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE );
+
+        int nIndex = 1;
+
+        daoUtil.setString( nIndex++, siraUser.getGuid( ) );
+        daoUtil.setString( nIndex++, siraUser.getUdid( ) );
+        daoUtil.setString( nIndex++, siraUser.getDevice( ) );
+        daoUtil.setString( nIndex++, siraUser.getMail( ) );
+        daoUtil.setString( nIndex++, siraUser.getToken( ) );
+
+        // WHERE
+        daoUtil.setLong( nIndex++, siraUser.getId( ) );
+
+        daoUtil.executeUpdate( );
+        daoUtil.close( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SiraUser findByGuidAndToken( String guid, String token )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_GUID_AND_TOKEN );
+        int nIndex = 1;
+
+        daoUtil.setString( nIndex++, guid );
+        daoUtil.setString( nIndex++, token );
+
+        daoUtil.executeQuery( );
+
+        SiraUser siraUser = null;
+        if ( daoUtil.next( ) )
+        {
+            nIndex = 1;
+            siraUser = new SiraUser( );
+            siraUser.setId( daoUtil.getLong( nIndex++ ) );
+            siraUser.setGuid( daoUtil.getString( nIndex++ ) );
+            siraUser.setUdid( daoUtil.getString( nIndex++ ) );
+            siraUser.setDevice( daoUtil.getString( nIndex++ ) );
+            siraUser.setMail( daoUtil.getString( nIndex++ ) );
+            siraUser.setToken( daoUtil.getString( nIndex++ ) );
+        }
+
+        daoUtil.close( );
+
+        return siraUser;
+    }
 
 }

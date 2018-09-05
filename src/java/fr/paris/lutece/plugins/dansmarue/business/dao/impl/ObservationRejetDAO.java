@@ -1,3 +1,36 @@
+/*
+ * Copyright (c) 2002-2018, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.dansmarue.business.dao.impl;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.IObservationRejetDAO;
@@ -8,33 +41,33 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ObservationRejetDAO implements IObservationRejetDAO
 {
-    private static final String SQL_QUERY_NEW_PK = "SELECT nextval('seq_signalement_observation_rejet_id_observation_rejet')";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_observation_rejet(id_observation_rejet, libelle, actif, ordre) VALUES (?, ?, ?, ?)";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_observation_rejet WHERE id_observation_rejet=?";
-    private static final String SQL_QUERY_SELECT = "SELECT id_observation_rejet, libelle, actif, ordre FROM signalement_observation_rejet WHERE id_observation_rejet = ?";
-    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_observation_rejet SET id_observation_rejet=?, libelle=?, actif=? WHERE id_observation_rejet = ?";
-    private static final String SQL_QUERY_SELECT_ALL_OBSERVATION_REJET = "SELECT id_observation_rejet, libelle, actif, ordre FROM signalement_observation_rejet ORDER BY ordre";
+    private static final String SQL_QUERY_NEW_PK                             = "SELECT nextval('seq_signalement_observation_rejet_id_observation_rejet')";
+    private static final String SQL_QUERY_INSERT                             = "INSERT INTO signalement_observation_rejet(id_observation_rejet, libelle, actif, ordre) VALUES (?, ?, ?, ?)";
+    private static final String SQL_QUERY_DELETE                             = "DELETE FROM signalement_observation_rejet WHERE id_observation_rejet=?";
+    private static final String SQL_QUERY_SELECT                             = "SELECT id_observation_rejet, libelle, actif, ordre FROM signalement_observation_rejet WHERE id_observation_rejet = ?";
+    private static final String SQL_QUERY_UPDATE                             = "UPDATE signalement_observation_rejet SET id_observation_rejet=?, libelle=?, actif=? WHERE id_observation_rejet = ?";
+    private static final String SQL_QUERY_SELECT_ALL_OBSERVATION_REJET       = "SELECT id_observation_rejet, libelle, actif, ordre FROM signalement_observation_rejet ORDER BY ordre";
     private static final String SQL_QUERY_SELECT_ALL_OBSERVATION_REJET_ACTIF = "SELECT id_observation_rejet, libelle, actif, ordre FROM signalement_observation_rejet WHERE actif=1 ORDER BY ordre";
-    private static final String SQL_QUERY_EXISTS_OBSERVATION_OBJET = "SELECT id_observation_rejet FROM signalement_observation_rejet WHERE libelle=?";
-    private static final String SQL_QUERY_EXISTS_OBSERVATION_OBJET_WITH_ID = "SELECT id_observation_rejet FROM signalement_observation_rejet WHERE libelle=? AND NOT id_observation_rejet=? ";
-    private static final String SQL_QUERY_UPDATE_OBSERVATION_REJET_ORDRE = "UPDATE signalement_observation_rejet SET ordre = ? WHERE id_observation_rejet = ?";
-    private static final String SQL_QUERY_DECREASE_ORDER_OF_NEXT = "UPDATE signalement_observation_rejet SET ordre = ordre-1 WHERE ordre= (? + 1)";
-    private static final String SQL_QUERY_INCREASE_ORDER_OF_PREVIOUS = "UPDATE signalement_observation_rejet SET ordre = ordre+1 WHERE ordre= (? - 1)";
-    private static final String SQL_QUERY_INCREASE_ORDER_OF_ALL_NEXT = "UPDATE signalement_observation_rejet SET ordre = ordre+1 WHERE ordre >= "
-    		+ "(SELECT ordre FROM signalement_observation_rejet WHERE id_observation_rejet=?) AND id_observation_rejet != ?";
-    private static final String SQL_QUERY_DECREASE_ORDER_OF_ALL_NEXT = "UPDATE signalement_observation_rejet SET ordre = ordre-1 WHERE ordre >= "
-    		+ "(SELECT ordre FROM signalement_observation_rejet WHERE id_observation_rejet=?)";
-    private static final String SQL_QUERY_GET_OBSERVATION_REJET_COUNT = "SELECT count(id_observation_rejet) FROM signalement_observation_rejet";
-    
-    private static final String SQL_COUNT_BY_ID_OBSERVATION_REJET = "SELECT count(*) FROM signalement_observation_rejet_signalement WHERE fk_id_observation_rejet = ?";
-    
+    private static final String SQL_QUERY_EXISTS_OBSERVATION_OBJET           = "SELECT id_observation_rejet FROM signalement_observation_rejet WHERE libelle=?";
+    private static final String SQL_QUERY_EXISTS_OBSERVATION_OBJET_WITH_ID   = "SELECT id_observation_rejet FROM signalement_observation_rejet WHERE libelle=? AND NOT id_observation_rejet=? ";
+    private static final String SQL_QUERY_UPDATE_OBSERVATION_REJET_ORDRE     = "UPDATE signalement_observation_rejet SET ordre = ? WHERE id_observation_rejet = ?";
+    private static final String SQL_QUERY_DECREASE_ORDER_OF_NEXT             = "UPDATE signalement_observation_rejet SET ordre = ordre-1 WHERE ordre= (? + 1)";
+    private static final String SQL_QUERY_INCREASE_ORDER_OF_PREVIOUS         = "UPDATE signalement_observation_rejet SET ordre = ordre+1 WHERE ordre= (? - 1)";
+    private static final String SQL_QUERY_INCREASE_ORDER_OF_ALL_NEXT         = "UPDATE signalement_observation_rejet SET ordre = ordre+1 WHERE ordre >= "
+            + "(SELECT ordre FROM signalement_observation_rejet WHERE id_observation_rejet=?) AND id_observation_rejet != ?";
+    private static final String SQL_QUERY_DECREASE_ORDER_OF_ALL_NEXT         = "UPDATE signalement_observation_rejet SET ordre = ordre-1 WHERE ordre >= "
+            + "(SELECT ordre FROM signalement_observation_rejet WHERE id_observation_rejet=?)";
+    private static final String SQL_QUERY_GET_OBSERVATION_REJET_COUNT        = "SELECT count(id_observation_rejet) FROM signalement_observation_rejet";
+
+    private static final String SQL_COUNT_BY_ID_OBSERVATION_REJET            = "SELECT count(*) FROM signalement_observation_rejet_signalement WHERE fk_id_observation_rejet = ?";
+
     /**
      * Generates a new primary key
      * 
-     * @param plugin the plugin
+     * @param plugin
+     *            the plugin
      * @return The new primary key
      */
     private Integer newPrimaryKey( )
@@ -47,15 +80,15 @@ public class ObservationRejetDAO implements IObservationRejetDAO
         {
             nKey = daoUtil.getInt( 1 );
         }
-        daoUtil.free( );
+        daoUtil.close( );
 
         return nKey.intValue( );
     }
 
     /**
-     * Save a new observationRejet
-     * 
+     * {@inheritDoc}
      */
+    @Override
     public Integer insert( ObservationRejet observationRejet )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT );
@@ -67,32 +100,29 @@ public class ObservationRejetDAO implements IObservationRejetDAO
         daoUtil.setLong( nIndex++, observationRejet.getId( ) );
         daoUtil.setString( nIndex++, observationRejet.getLibelle( ) );
         daoUtil.setBoolean( nIndex++, observationRejet.getActif( ) );
-        daoUtil.setLong(nIndex, observationRejet.getOrdre());
+        daoUtil.setLong( nIndex, observationRejet.getOrdre( ) );
         daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.close( );
 
         return observationRejet.getId( );
     }
 
-
     /**
-     * Delete an observationRejet
-     * 
-     * @param lId the observationRejet id
+     * {@inheritDoc}
      */
+    @Override
     public void remove( long lId )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE );
         daoUtil.setLong( 1, lId );
         daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.close( );
     }
 
     /**
-     * Load a observationRejet
-     * 
-     * @param lId the observationRejet id
+     * {@inheritDoc}
      */
+    @Override
     public ObservationRejet load( Integer lId )
     {
         ObservationRejet observationRejet = new ObservationRejet( );
@@ -105,19 +135,18 @@ public class ObservationRejetDAO implements IObservationRejetDAO
             observationRejet.setId( daoUtil.getInt( nIndex++ ) );
             observationRejet.setLibelle( daoUtil.getString( nIndex++ ) );
             observationRejet.setActif( daoUtil.getBoolean( nIndex++ ) );
-            observationRejet.setOrdre(daoUtil.getInt( nIndex++ ));
+            observationRejet.setOrdre( daoUtil.getInt( nIndex++ ) );
         }
 
-        daoUtil.free( );
+        daoUtil.close( );
 
         return observationRejet;
     }
 
     /**
-     * Store a observationRejet
-     * 
-     * @param observationRejet the observationRejet object
+     * {@inheritDoc}
      */
+    @Override
     public void store( ObservationRejet observationRejet )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE );
@@ -125,18 +154,18 @@ public class ObservationRejetDAO implements IObservationRejetDAO
         daoUtil.setLong( nIndex++, observationRejet.getId( ) );
         daoUtil.setString( nIndex++, observationRejet.getLibelle( ) );
         daoUtil.setBoolean( nIndex++, observationRejet.getActif( ) );
-        
-        //WHERE
+
+        // WHERE
         daoUtil.setLong( nIndex++, observationRejet.getId( ) );
 
         daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.close( );
     }
 
     /**
-     * Return all ObservationRejet
-     * @return a list of ObservationRejet
+     * {@inheritDoc}
      */
+    @Override
     public List<ObservationRejet> getAllObservationRejet( Plugin plugin )
     {
 
@@ -152,20 +181,20 @@ public class ObservationRejetDAO implements IObservationRejetDAO
             observationRejet.setId( daoUtil.getInt( nIndex++ ) );
             observationRejet.setLibelle( daoUtil.getString( nIndex++ ) );
             observationRejet.setActif( daoUtil.getBoolean( nIndex++ ) );
-            observationRejet.setOrdre( daoUtil.getInt( nIndex++ ));
+            observationRejet.setOrdre( daoUtil.getInt( nIndex++ ) );
             listResult.add( observationRejet );
         }
 
-        daoUtil.free( );
+        daoUtil.close( );
 
         return listResult;
 
     }
 
     /**
-     * Return all ObservationRejet actifs
-     * @return a list of ObservationRejet actifs
+     * {@inheritDoc}
      */
+    @Override
     public List<ObservationRejet> getAllObservationRejetActif( )
     {
 
@@ -181,20 +210,20 @@ public class ObservationRejetDAO implements IObservationRejetDAO
             observationRejet.setId( daoUtil.getInt( nIndex++ ) );
             observationRejet.setLibelle( daoUtil.getString( nIndex++ ) );
             observationRejet.setActif( daoUtil.getBoolean( nIndex++ ) );
-            observationRejet.setOrdre( daoUtil.getInt( nIndex++ ));
+            observationRejet.setOrdre( daoUtil.getInt( nIndex++ ) );
             listResult.add( observationRejet );
         }
 
-        daoUtil.free( );
+        daoUtil.close( );
 
         return listResult;
 
     }
 
     /**
-     * Check if the observationRejet already exists
-     * @return boolean
+     * {@inheritDoc}
      */
+    @Override
     public boolean existsObservationRejet( ObservationRejet observationRejet )
     {
         boolean existsObservationRejet = false;
@@ -206,13 +235,11 @@ public class ObservationRejetDAO implements IObservationRejetDAO
             daoUtil = new DAOUtil( SQL_QUERY_EXISTS_OBSERVATION_OBJET_WITH_ID );
             daoUtil.setString( 1, observationRejet.getLibelle( ) );
             daoUtil.setLong( 2, observationRejet.getId( ) );
-        }
-        else
+        } else
         {
             daoUtil = new DAOUtil( SQL_QUERY_EXISTS_OBSERVATION_OBJET );
             daoUtil.setString( 1, observationRejet.getLibelle( ) );
         }
-
 
         daoUtil.executeQuery( );
 
@@ -221,116 +248,124 @@ public class ObservationRejetDAO implements IObservationRejetDAO
             existsObservationRejet = true;
         }
 
-        daoUtil.free( );
+        daoUtil.close( );
 
         return existsObservationRejet;
     }
-    
-    /**
-     * Decreases the order of the next rejet
-     * @param observationRejet
-     */
-    public void decreaseOrdreOfNextRejet(ObservationRejet observationRejet){
-    	DAOUtil daoUtil;
-    	if(observationRejet.getOrdre() != null){
-    		int nIndex=1;
-    		daoUtil = new DAOUtil(SQL_QUERY_DECREASE_ORDER_OF_NEXT);
-    		daoUtil.setInt(nIndex++, observationRejet.getOrdre());
-        	daoUtil.executeUpdate();
-        	daoUtil.free();
-    	}
-    }
-    
-    /**
-     * Increases the order of the previous rejet
-     * @param observationRejet
-     */
-    public void increaseOrdreOfPreviousRejet(ObservationRejet observationRejet){
-    	DAOUtil daoUtil;
-    	if(observationRejet.getOrdre() != null){
-    		int nIndex=1;
-    		daoUtil = new DAOUtil(SQL_QUERY_INCREASE_ORDER_OF_PREVIOUS);
-    		daoUtil.setInt(nIndex++, observationRejet.getOrdre());
-        	daoUtil.executeUpdate();
-        	daoUtil.free();
-    	}
-    }
-    
-    /**
-     * Updates an observation rejet order, by its id
-     * @param observationRejet containing the id
-     */
-    public void updateObservationRejetOrdre(ObservationRejet observationRejet){
-    	DAOUtil daoUtil = new DAOUtil(SQL_QUERY_UPDATE_OBSERVATION_REJET_ORDRE);
-    	int nIndex = 1;
-    	daoUtil.setInt(nIndex++, observationRejet.getOrdre());
-    	daoUtil.setInt(nIndex++, observationRejet.getId());
-    	daoUtil.executeUpdate();
-    }
-    
-    /**
-     * Increases all the next orders
-     * @param nIdObservationRejet
-     */
-    public void increaseOrdreOfAllNext(int nIdObservationRejet){
-    	DAOUtil daoUtil = new DAOUtil(SQL_QUERY_INCREASE_ORDER_OF_ALL_NEXT);
-		int nIndex=1;
-		daoUtil.setInt(nIndex++, nIdObservationRejet);
-		daoUtil.setInt(nIndex++, nIdObservationRejet);
-    	daoUtil.executeUpdate();
-    	daoUtil.free();
-    }
-    
-    /**
-     * Decreases all the next orders
-     * @param nIdObservationRejet
-     */
-    public void decreaseOrdreOfAllNext(int nIdObservationRejet){
-    	DAOUtil daoUtil = new DAOUtil(SQL_QUERY_DECREASE_ORDER_OF_ALL_NEXT);
-		int nIndex=1;
-		daoUtil.setInt(nIndex++, nIdObservationRejet);
-    	daoUtil.executeUpdate();
-    	daoUtil.free();
-	}
-    
-    /**
-     * Returns the number of observation rejet existing
-     * @return
-     */
-    public int getObservationRejetCount(){
-    	DAOUtil daoUtil = new DAOUtil(SQL_QUERY_GET_OBSERVATION_REJET_COUNT);
-    	daoUtil.executeQuery();
-    	int observationRejetCount = 0;
-    	if ( daoUtil.next( ) )
-        {
-            int nIndex = 1;
-            observationRejetCount = daoUtil.getInt(nIndex++);
-            
-        }
-    	daoUtil.free();
-    	return observationRejetCount;
-    }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public int countByIdObservationRejet(int idObservationRejet){
-    	DAOUtil daoUtil = new DAOUtil(SQL_COUNT_BY_ID_OBSERVATION_REJET);
-    	int nIndex = 1;
-    	daoUtil.setInt(nIndex, idObservationRejet);
-    	daoUtil.executeQuery();
-    	int observationRejetCount = 0;
-    	if ( daoUtil.next( ) )
+    public void decreaseOrdreOfNextRejet( ObservationRejet observationRejet )
+    {
+        DAOUtil daoUtil;
+        if ( observationRejet.getOrdre( ) != null )
+        {
+            int nIndex = 1;
+            daoUtil = new DAOUtil( SQL_QUERY_DECREASE_ORDER_OF_NEXT );
+            daoUtil.setInt( nIndex++, observationRejet.getOrdre( ) );
+            daoUtil.executeUpdate( );
+            daoUtil.close( );
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void increaseOrdreOfPreviousRejet( ObservationRejet observationRejet )
+    {
+        DAOUtil daoUtil;
+        if ( observationRejet.getOrdre( ) != null )
+        {
+            int nIndex = 1;
+            daoUtil = new DAOUtil( SQL_QUERY_INCREASE_ORDER_OF_PREVIOUS );
+            daoUtil.setInt( nIndex++, observationRejet.getOrdre( ) );
+            daoUtil.executeUpdate( );
+            daoUtil.close( );
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updateObservationRejetOrdre( ObservationRejet observationRejet )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_OBSERVATION_REJET_ORDRE );
+        int nIndex = 1;
+        daoUtil.setInt( nIndex++, observationRejet.getOrdre( ) );
+        daoUtil.setInt( nIndex++, observationRejet.getId( ) );
+        daoUtil.executeUpdate( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void increaseOrdreOfAllNext( int nIdObservationRejet )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INCREASE_ORDER_OF_ALL_NEXT );
+        int nIndex = 1;
+        daoUtil.setInt( nIndex++, nIdObservationRejet );
+        daoUtil.setInt( nIndex++, nIdObservationRejet );
+        daoUtil.executeUpdate( );
+        daoUtil.close( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void decreaseOrdreOfAllNext( int nIdObservationRejet )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DECREASE_ORDER_OF_ALL_NEXT );
+        int nIndex = 1;
+        daoUtil.setInt( nIndex++, nIdObservationRejet );
+        daoUtil.executeUpdate( );
+        daoUtil.close( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getObservationRejetCount( )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_GET_OBSERVATION_REJET_COUNT );
+        daoUtil.executeQuery( );
+        int observationRejetCount = 0;
+        if ( daoUtil.next( ) )
+        {
+            int nIndex = 1;
+            observationRejetCount = daoUtil.getInt( nIndex++ );
+
+        }
+        daoUtil.close( );
+        return observationRejetCount;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int countByIdObservationRejet( int idObservationRejet )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_COUNT_BY_ID_OBSERVATION_REJET );
+        int nIndex = 1;
+        daoUtil.setInt( nIndex, idObservationRejet );
+        daoUtil.executeQuery( );
+        int observationRejetCount = 0;
+        if ( daoUtil.next( ) )
         {
             nIndex = 1;
-            observationRejetCount = daoUtil.getInt(nIndex++);
-            
+            observationRejetCount = daoUtil.getInt( nIndex++ );
+
         }
-    	daoUtil.free();
-    	return observationRejetCount;
-    	
+        daoUtil.close( );
+        return observationRejetCount;
+
     }
-    
-    
+
 }

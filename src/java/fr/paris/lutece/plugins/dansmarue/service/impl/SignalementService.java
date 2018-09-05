@@ -1154,12 +1154,6 @@ public class SignalementService implements ISignalementService
         }
     }
 
-    @Override
-    public boolean hasSignalementForRoadMap( List<Integer> listSectorId )
-    {
-        return _signalementDAO.hasSignalementForRoadMap( listSectorId );
-    }
-
     /**
      * Get the informations of a signalement by its token
      * 

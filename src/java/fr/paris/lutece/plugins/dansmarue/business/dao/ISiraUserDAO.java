@@ -35,43 +35,50 @@ package fr.paris.lutece.plugins.dansmarue.business.dao;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.SiraUser;
 
-public interface ISiraUserDAO {
-	/**
-	 * Inserts into the database a new sira user
-	 * @param siraUser the sira user to insert
-	 * @return
-	 */
-	 public Long insert( SiraUser siraUser );
+public interface ISiraUserDAO
+{
+    /**
+     * Inserts into the database a new sira user
+     * 
+     * @param siraUser
+     *            the sira user to insert
+     * @return the sira user id
+     */
+    public Long insert( SiraUser siraUser );
 
-	 /**
-	  * Removes from the data base a sira user
-	  * @param lId the id of the sira user to remove
-	  */
-	 public void remove( long lId );
+    /**
+     * Removes from the data base a sira user
+     * 
+     * @param lId
+     *            the id of the sira user to remove
+     */
+    public void remove( long lId );
 
-	 /**
-	  * Loads a sira user from its id 
-	  * @param lId the id of the sira user to load
-	  * @return
-	  * 	  The sira user matching the id
-	  * 	  null otherwise
-	  */
-	 public SiraUser load( long lId );
+    /**
+     * Loads a sira user from its id
+     * 
+     * @param lId
+     *            the id of the sira user to load
+     * @return The sira user matching the id null otherwise
+     */
+    public SiraUser load( long lId );
 
-     /**
+    /**
      * Updates a SiraUser
      * 
-     * @param siraUser the sira user to update
+     * @param siraUser
+     *            the sira user to update
      */
-     void update( SiraUser siraUser );
-     
-     /**
-      * Finds a sira user from its guid and udid
-      * @param guid the mon compte user id
-      * @param token the user token
-      * @return
-      * 	   The user matching those ids
-      * 		null otherwise
-      */
-     SiraUser findByGuidAndToken( String guid, String token);
+    void update( SiraUser siraUser );
+
+    /**
+     * Finds a sira user from its guid and udid
+     * 
+     * @param guid
+     *            the mon compte user id
+     * @param token
+     *            the user token
+     * @return The user matching those ids null otherwise
+     */
+    SiraUser findByGuidAndToken( String guid, String token );
 }

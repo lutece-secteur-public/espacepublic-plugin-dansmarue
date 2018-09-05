@@ -1,3 +1,36 @@
+/*
+ * Copyright (c) 2002-2018, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.dansmarue.business.dao;
 
 import java.util.List;
@@ -11,231 +44,348 @@ import fr.paris.lutece.plugins.dansmarue.service.dto.DashboardSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DossierSignalementDTO;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
-
 public interface ISignalementDAO
 {
 
     /**
-     * Inserts a signalement.
+     * Inserts a report.
      * 
-     * @param signalement the signalement
-     * @return the generated signalement id
+     * @param signalement
+     *            the report
+     * @return the generated report id
      */
     Long insert( Signalement signalement );
 
     /**
-     * Removes a signalement.
+     * Removes a report.
      * 
-     * @param lId the id
+     * @param lId
+     *            the id
      */
     void remove( long lId );
 
     /**
-     * Load a signalement by its id.
+     * Load a report by its id.
      * 
-     * @param lId the "signalement" id
-     * @return the signalement
+     * @param lId
+     *            the report id
+     * @return the report
      */
     Signalement load( long lId );
 
+    /**
+     * Returns a list of reports according to the search parameters contained in the filter
+     * 
+     * @param filter
+     *            the request based filter
+     * @param paginationProperties
+     *            the pagination
+     * @param plugin
+     *            the plugin
+     * @return a list of reports
+     * 
+     */
     List<Signalement> findByFilter( SignalementFilter filter, PaginationProperties paginationProperties, Plugin plugin );
 
     /**
-     * Load a signalement by its id.
+     * Load a report by its id.
      * 
-     * @param nId the signalement id
-     * @return the signalement
+     * @param nId
+     *            the report id
+     * @return the report
      */
     Signalement loadById( long nId );
 
     /**
-     * Update a signalement
+     * Update a report
      * 
-     * @param signalement the signalement to update
+     * @param signalement
+     *            the report to update
      */
     void update( Signalement signalement );
 
     /**
-     * Load all signalement with columns : Priorité, Type, Direction, Adresse,
-     * Date de création, Etat.
+     * Load all report with columns : Priorité, Type, Direction, Adresse, Date de création, Etat.
      * 
-     * @return all the signalements
+     * @return all the reports
      */
     List<Signalement> getAllSignalement( );
-    
+
     /**
-     * Gets the signalements by status id.
+     * Gets the reports by status id.
      * 
-     * @param statusId the status id
-     * @param limit time limit before archiving
-     * @return the signalements list
+     * @param statusId
+     *            the status id
+     * @param limit
+     *            time limit before archiving
+     * @return the reports list
      */
     List<Signalement> getSignalementsArchivableByStatusId( Integer statusId, Integer limit );
 
     /**
-     * Load all id signalement.
+     * Load all reports ids.
      * 
-     * @return the list of all id signalement
+     * @return the list of all reports ids
      */
     List<Integer> getAllIdSignalement( );
 
     /**
-     * Add one to a signalement's suivi
+     * Add one to a report's follow
      * 
-     * @param nIdSignalement the signalement id
+     * @param nIdSignalement
+     *            the report id
      */
     void incrementeSuiviByIdSignalement( Integer nIdSignalement );
-    
+
     /**
-     * Retrieves one to a signalement's suivi
+     * Retrieves one to a report's follow
      * 
-     * @param nIdSignalement the signalement id
+     * @param nIdSignalement
+     *            the report id
      */
     void decrementSuiviByIdSignalement( Integer nIdSignalement );
 
     /**
-     * Select all the signalement for a given point and a radius.
+     * Select all the reports for a given point and a radius.
      * 
-     * @param lat the lat
-     * @param lng the lng
-     * @param radius the radius
-     * @param listStatus the list status
-     * @return a list of all the id signalement in the given parameter
+     * @param lat
+     *            the lat
+     * @param lng
+     *            the lng
+     * @param radius
+     *            the radius
+     * @param listStatus
+     *            the list status
+     * @return a list of all the reports id in the given parameter
      */
     List<Integer> findAllSignalementInPerimeter( Double lat, Double lng, Integer radius, List<Integer> listStatus );
 
     /**
-     * Select all the signalement for a given point and a radius.
+     * Select all the reports for a given point and a radius.
      * 
-     * @param lat the lat
-     * @param lng the lng
-     * @param radius the radius
-     * @param listStatus the list status
-     * @return a list of all the id signalement in the given parameter
+     * @param lat
+     *            the lat
+     * @param lng
+     *            the lng
+     * @param radius
+     *            the radius
+     * @param listStatus
+     *            the list status
+     * @return a list of all the reports ids in the given parameter
      */
-    List<DossierSignalementDTO> findAllSignalementInPerimeterWithDTO( Double lat, Double lng, Integer radius,
-            List<Integer> listStatus );
+    List<DossierSignalementDTO> findAllSignalementInPerimeterWithDTO( Double lat, Double lng, Integer radius, List<Integer> listStatus );
 
     /**
-     * Get the distance between 2 signalements in meters.
+     * Get the distance between 2 reports in meters.
      * 
-     * @param lat1 the lat1
-     * @param lng1 the lng1
-     * @param lat2 the lat2
-     * @param lng2 the lng2
+     * @param lat1
+     *            the lat1
+     * @param lng1
+     *            the lng1
+     * @param lat2
+     *            the lat2
+     * @param lng2
+     *            the lng2
      * @return the distance in meter (Integer)
      */
     Integer getDistanceBetweenSignalement( double lat1, double lng1, double lat2, double lng2 );
 
+    /**
+     * Returns all the reports linked to a selected phone number
+     * 
+     * @param idTelephone
+     *            the phone id
+     * @return list of reports
+     */
     List<Integer> findByIdTelephone( String idTelephone );
 
-    boolean hasSignalementForRoadMap( List<Integer> listSectorId );
-
     /**
-     * Get a signalement by a token
-     * @param token the token
-     * @param plugin the plugin
-     * @return the signalement if exists or null
+     * Get a reports by a token
+     * 
+     * @param token
+     *            the token
+     * @param plugin
+     *            the plugin
+     * @return the report if exists or null
      */
     Signalement getSignalementByToken( String token, Plugin plugin );
-    
+
+    /**
+     * Returns a geom
+     * 
+     * @param dLatLambert
+     *            the latitude
+     * @param dLngLambert
+     *            the longitude
+     * @return a double array
+     */
     Double[] getGeomFromLambertToWgs84( Double dLatLambert, Double dLngLambert );
 
     /**
      * Count the number of results for a given query
-     * @param filter the signalementfilter
+     * 
+     * @param filter
+     *            the signalementfilter
      * @return the query
      */
     Integer countIdSignalementByFilter( SignalementFilter filter, Plugin plugin );
 
     /**
      * Build the query to count the number of results for a given query
-     * @param filter the signalementfilter
+     * 
+     * @param filter
+     *            the signalementfilter
      * @return the query
      */
     String buildSQLQueryForCount( SignalementFilter filter );
 
     /**
-     * Insert a message creation signalement (linked with notification user task
-     * workflow)
-     * @param messageCreation the default message send to user when creating a
-     *            signalement
+     * Insert a message creation report (linked with notification user task workflow)
+     * 
+     * @param messageCreation
+     *            the default message send to user when creating a report
      */
     void insertMessageCreationSignalement( String messageCreation );
 
     /**
-     * Update the message creation signalement (linked with notification user
-     * task
-     * workflow)
-     * @param messageCreation the default message send to user when creating a
-     *            signalement
+     * Update the message creation report (linked with notification user task workflow)
+     * 
+     * @param messageCreation
+     *            the default message send to user when creating a report
      */
     void updateMessageCreationSignalement( String messageCreation );
 
     /**
-     * Load the message creation signalement (linked with notification user
-     * task workflow)
-     * @return the message creation signalement
+     * Load the message creation report (linked with notification user task workflow)
+     * 
+     * @return the message creation report
      */
     String loadMessageCreationSignalement( );
 
     /**
-     * Remove the message creation signalement (linked with notification user
-     * task workflow)
+     * Remove the message creation report (linked with notification user task workflow)
      */
     void removeMessageCreationSignalement( );
 
     /**
-     * Increments the number of congratulations for this signalement
-     * @param idSignalement the signalement id, to increment
+     * Increments the number of congratulations for this report
+     * 
+     * @param idSignalement
+     *            the report id, to increment
      */
-	void incrementFelicitationsByIdSignalement(int idSignalement);
-	
-	/**
-	 * Filters signalement by dashboard criterias
-	 * @return 
-	 */
-	List<DashboardSignalementDTO> findByDashboardFilter( SignalementDashboardFilter filter, Plugin pluginSignalement );
+    void incrementFelicitationsByIdSignalement( int idSignalement );
 
-	/**
-     * Build the query to get the signalement  ids matching the filter
-     * @param filter the signalementfilter
+    /**
+     * Filters reports by dashboard criterias
+     * 
+     * @return list of dashboard reports
+     */
+    List<DashboardSignalementDTO> findByDashboardFilter( SignalementDashboardFilter filter, Plugin pluginSignalement );
+
+    /**
+     * Build the query to get the reports ids matching the filter
+     * 
+     * @param filter
+     *            the signalementfilter
      * @return the query
      */
-	List<Integer> getIdsSignalementByFilter(SignalementFilter filter, Plugin plugin);
-	
-	/**
-	 * Execute Query to add dateMiseEnSurveillance for this signalement
-	 * @param idSignalement the signalement id
-	 * @param dateMiseEnSurveillance the date
-	 */
-	void addMiseEnSurveillanceDate(int idSignalement, String dateMiseEnSurveillance);
-	
-	/**
-	 * Find ids signalements canditate for WebServicePartnerDeamon
-	 * @param signalementState
-	 *            the signalement state
-	 * @return list id signalement find.
-	 */
-	List<Integer> findIdsSingalementForWSPartnerDeamon(int signalementState);
+    List<Integer> getIdsSignalementByFilter( SignalementFilter filter, Plugin plugin );
 
+    /**
+     * Execute Query to add a monitoring date for this report
+     * 
+     * @param idSignalement
+     *            the report id
+     * @param dateMiseEnSurveillance
+     *            the monitoring date
+     */
+    void addMiseEnSurveillanceDate( int idSignalement, String dateMiseEnSurveillance );
+
+    /**
+     * Find reports ids canditate for WebServicePartnerDeamon
+     * 
+     * @param signalementState
+     *            the report state
+     * @return list of reports ids.
+     */
+    List<Integer> findIdsSingalementForWSPartnerDeamon( int signalementState );
+
+    /**
+     * Add a rejection date to the report
+     * 
+     * @param idSignalement
+     *            the rpeort id
+     * @param dateRejet
+     *            the rejection date
+     */
     void setDateRejet( int idSignalement, String dateRejet );
 
+    /**
+     * Save the requalification of a report
+     * 
+     * @param lIdSignalement
+     *            the report id
+     * @param idTypeSignalement
+     *            the report type id
+     * @param adresse
+     *            the report address
+     * @param idSector
+     *            the report sector
+     * @param idTask
+     *            the workflow task id
+     */
     void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector, Integer idTask );
 
-    List<SignalementRequalification> getRequalification( long lIdSignalement );
-    
     /**
-     * Récupère l'id du mail du service fait.
+     * Returns a list of requalification entries for a report, if it has been requalified
+     * 
+     * @param lIdSignalement
+     *            the report id
+     * @return a list of requalification entries
+     */
+    List<SignalementRequalification> getRequalification( long lIdSignalement );
+
+    /**
+     * Returns the mail id of the service done.
      *
-     * @param long1 the id signalement
-     * @return the id mail service fait
+     * @param long1
+     *            the report id
+     * @return the service done mail id
      */
     Integer getIdMailServiceFait( Long idSignalement );
 
+    /**
+     * Returns a requalification object by history and task ids
+     * 
+     * @param idHistory
+     *            the workflow history id
+     * @param idTask
+     *            the workflow task id
+     * @return the requalification object
+     */
     SignalementRequalification getSignalementRequalificationByTaskHistory( int idHistory, int idTask );
 
+    /**
+     * Update the requalification
+     * 
+     * @param lIdSignalement
+     *            the report id
+     * @param idTask
+     *            the workflow task id
+     * @param idHistory
+     *            the workflow history id
+     */
     void updateRequalification( long lIdSignalement, int idTask, int idHistory );
 
+    /**
+     * Update the requalification history task
+     * 
+     * @param lIdSignalement
+     *            the report id
+     * @param idTask
+     *            the workflow task id
+     * @param idHistory
+     *            the workflow history id
+     */
     void updateRequalificationHistoryTask( long lIdSignalement, int idTask, int idHistory );
 }

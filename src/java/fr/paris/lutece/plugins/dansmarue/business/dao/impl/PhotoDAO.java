@@ -1,3 +1,36 @@
+/*
+ * Copyright (c) 2002-2018, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.dansmarue.business.dao.impl;
 
 import java.util.ArrayList;
@@ -42,16 +75,12 @@ public class PhotoDAO implements IPhotoDAO
         {
             nKey = daoUtil.getLong( 1 );
         }
-        daoUtil.free( );
+        daoUtil.close( );
         return nKey;
     }
 
     /**
-     * Save a new photo.
-     *
-     * @param photo
-     *            the photo
-     * @return the long
+     * {@inheritDoc}
      */
     @Override
     public Long insert( PhotoDMR photo )
@@ -100,16 +129,13 @@ public class PhotoDAO implements IPhotoDAO
         }
 
         daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.close( );
 
         return photo.getId( );
     }
 
     /**
-     * Delete an photo
-     *
-     * @param lId
-     *            the photo id
+     * {@inheritDoc}
      */
     @Override
     public void remove( long lId )
@@ -117,15 +143,11 @@ public class PhotoDAO implements IPhotoDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE );
         daoUtil.setLong( 1, lId );
         daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.close( );
     }
 
     /**
-     * Load a photo.
-     *
-     * @param lId
-     *            the photo id
-     * @return the photo
+     * {@inheritDoc}
      */
     @Override
     public PhotoDMR load( long lId )
@@ -148,17 +170,13 @@ public class PhotoDAO implements IPhotoDAO
             photo.getSignalement( ).setId( daoUtil.getLong( nIndex++ ) );
         }
 
-        daoUtil.free( );
+        daoUtil.close( );
 
         return photo;
     }
 
     /**
-     * Load a photo with the id of the signalement.
-     *
-     * @param signalementId
-     *            the signalement id
-     * @return the photo
+     * {@inheritDoc}
      */
     @Override
     public PhotoDMR loadByIdSignalement( long signalementId )
@@ -185,16 +203,13 @@ public class PhotoDAO implements IPhotoDAO
             photo.setSignalement( signalement );
         }
 
-        daoUtil.free( );
+        daoUtil.close( );
 
         return photo;
     }
 
     /**
-     * Store a photo
-     *
-     * @param photo
-     *            the photo object
+     * {@inheritDoc}
      */
     @Override
     public void store( PhotoDMR photo )
@@ -212,15 +227,11 @@ public class PhotoDAO implements IPhotoDAO
         daoUtil.setLong( nIndex++, photo.getId( ) );
 
         daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.close( );
     }
 
     /**
-     * Load the data of the image from the table.
-     *
-     * @param nIdPhoto
-     *            the photo id
-     * @return the image resource
+     * {@inheritDoc}
      */
     @Override
     public ImageResource loadPhoto( int nIdPhoto )
@@ -237,11 +248,14 @@ public class PhotoDAO implements IPhotoDAO
             image.setMimeType( daoUtil.getString( 2 ) );
         }
 
-        daoUtil.free( );
+        daoUtil.close( );
 
         return image;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ImageResource loadPhotoThumbnail( int nIdPhoto )
     {
@@ -257,18 +271,13 @@ public class PhotoDAO implements IPhotoDAO
             image.setMimeType( daoUtil.getString( 2 ) );
         }
 
-        daoUtil.free( );
+        daoUtil.close( );
 
         return image;
     }
 
     /**
-     * Find photos for a Signalement id
-     *
-     * @param lIdSignalement
-     *            the signalement id
-     * @return list of photos
-     *
+     * {@inheritDoc}
      */
     @Override
     public List<PhotoDMR> findBySignalementId( long lIdSignalement )
@@ -280,7 +289,7 @@ public class PhotoDAO implements IPhotoDAO
 
         daoUtil.executeQuery( );
 
-        // Pour chaque resultat retourne
+        // For each result returned
         while ( daoUtil.next( ) )
         {
             PhotoDMR photo = new PhotoDMR( );
@@ -295,18 +304,13 @@ public class PhotoDAO implements IPhotoDAO
             result.add( photo );
         }
 
-        daoUtil.free( );
+        daoUtil.close( );
 
         return result;
     }
 
     /**
-     * Find photos for a Signalement id with photo content
-     *
-     * @param lIdSignalement
-     *            the signalement id
-     * @return list of photos
-     *
+     * {@inheritDoc}
      */
     @Override
     public List<PhotoDMR> findWithFullPhotoBySignalementId( long lIdSignalement )
@@ -318,7 +322,7 @@ public class PhotoDAO implements IPhotoDAO
 
         daoUtil.executeQuery( );
 
-        // Pour chaque resultat retourne
+        // For each result returned
         while ( daoUtil.next( ) )
         {
             PhotoDMR photo = new PhotoDMR( );
@@ -339,7 +343,7 @@ public class PhotoDAO implements IPhotoDAO
             result.add( photo );
         }
 
-        daoUtil.free( );
+        daoUtil.close( );
 
         return result;
     }

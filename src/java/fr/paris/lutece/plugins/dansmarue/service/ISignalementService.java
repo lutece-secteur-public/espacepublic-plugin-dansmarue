@@ -223,8 +223,6 @@ public interface ISignalementService
      */
     Unit getMajorUnit( Integer idTypeSignalement, Double lng, Double lat );
 
-    boolean hasSignalementForRoadMap( List<Integer> listSectorId );
-
     /**
      * Get the informations of a signalement by its token
      * 

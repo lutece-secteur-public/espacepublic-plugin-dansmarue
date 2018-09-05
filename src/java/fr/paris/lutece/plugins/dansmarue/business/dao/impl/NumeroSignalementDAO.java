@@ -40,112 +40,125 @@ import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-public class NumeroSignalementDAO implements INumeroSignalementDAO{
+public class NumeroSignalementDAO implements INumeroSignalementDAO
+{
 
-	  
-    private static final String SELECT_NUMBER_LOCKED = "SELECT numero FROM signalement_numero_signalement WHERE mois = ? AND annee = ? FOR UPDATE";
-	private static final String UPDATE_INCREMENT_NUMBER = "UPDATE signalement_numero_signalement SET numero = numero + 1 WHERE mois = ? AND annee = ?";
-	private static final String INSERT_NEW_COMBINATION = "INSERT INTO signalement_numero_signalement(mois,annee,numero) VALUES (?,?,?)";
-	
-	
-	@Override
-	public synchronized Long findByMonthYear(String strMonth, int nYear) {
-		//Checks if the line already exists
-		Long dossierNumber = null;
-		
-		dossierNumber = getNumber(strMonth, nYear);
-		
-		//Line does not exists, creating a new one
-		if(dossierNumber == null){
-			try{
-				insertNewCombinationLine(strMonth, nYear);
-			}catch(AppException ex){
-				AppLogService.error("Erreurs lors de l'initialisation d'une ligne de numero signalement_numero_signalement : " + ex.getMessage());
-			}
-			dossierNumber = getNumber( strMonth, nYear);
-		}
-		
-		if(dossierNumber != null){
-			incrementNumber(strMonth, nYear);
-		}else{
-			throw new AppException("Erreur lors de la generation du numero de signalement");
-		}
-		
-		return dossierNumber;
-	}
+    private static final String SELECT_NUMBER_LOCKED    = "SELECT numero FROM signalement_numero_signalement WHERE mois = ? AND annee = ? FOR UPDATE";
+    private static final String UPDATE_INCREMENT_NUMBER = "UPDATE signalement_numero_signalement SET numero = numero + 1 WHERE mois = ? AND annee = ?";
+    private static final String INSERT_NEW_COMBINATION  = "INSERT INTO signalement_numero_signalement(mois,annee,numero) VALUES (?,?,?)";
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized Long findByMonthYear( String strMonth, int nYear )
+    {
+        // Checks if the line already exists
+        Long dossierNumber = null;
 
-	/**
-	 * Inserts a new combination line
-	 * @param strMonth
-	 * 			Month value
-	 * @param nYear
-	 * 			Year
-	 */
-	private void insertNewCombinationLine(String strMonth, int nYear) throws AppException {
-		DAOUtil daoUtil = new DAOUtil(INSERT_NEW_COMBINATION);
-		int nIndex = 1;
-		daoUtil.setString(nIndex++, strMonth);
-		daoUtil.setInt(nIndex++, nYear);
-		daoUtil.setLong(nIndex++, SignalementConstants.START_SIGNALEMENT_NUMERO);
-		
-		daoUtil.executeUpdate();
-		
-		daoUtil.free();
-	}
+        dossierNumber = getNumber( strMonth, nYear );
 
+        // Line does not exists, creating a new one
+        if ( dossierNumber == null )
+        {
+            try
+            {
+                insertNewCombinationLine( strMonth, nYear );
+            } catch ( AppException ex )
+            {
+                AppLogService.error( "Erreurs lors de l'initialisation d'une ligne de numero signalement_numero_signalement : " + ex.getMessage( ), ex );
+            }
+            dossierNumber = getNumber( strMonth, nYear );
+        }
 
-	/**
-	 * Gets the next number to use based on the given combination
-	 * @param strMonth
-	 * 			Month value
-	 * @param nYear
-	 * 			Year
-	 * @return
-	 * 		The next dossier number
-	 * 		Null if combination line does not exists
-	 */
-	private Long getNumber(String strMonth, int nYear) {
-		DAOUtil daoUtil = new DAOUtil(SELECT_NUMBER_LOCKED);
-		
-		fillDAOWithCombination(strMonth, nYear, daoUtil);
-		
-		daoUtil.executeQuery();
-		
-		Long dossierNumber= null;
-		
-		if(daoUtil.next()){
-			int nIndex = 1;
-			dossierNumber = daoUtil.getLong(nIndex++);
-		}
-		daoUtil.free();
-		return dossierNumber;
-	}
-	
-	/**
-	 * Increments the number for a given combination
-	 * @param strMonth
-	 * 			Month value
-	 * @param nYear
-	 * 			Year
-	 */
-	private void incrementNumber(String strMonth, int nYear) {
-		DAOUtil daoUtil = new DAOUtil(UPDATE_INCREMENT_NUMBER);
-		fillDAOWithCombination(strMonth, nYear, daoUtil);
-		daoUtil.executeUpdate();
-		daoUtil.free();
-	}
+        if ( dossierNumber != null )
+        {
+            incrementNumber( strMonth, nYear );
+        } else
+        {
+            throw new AppException( "Erreur lors de la generation du numero de signalement" );
+        }
 
-	/**
-	 * Fills the dao with the required parameters
-	 * @param strMonth
-	 * @param nYear
-	 * @param daoUtil
-	 */
-	private void fillDAOWithCombination(String strMonth, int nYear, DAOUtil daoUtil) {
-		int nIndex = 1;
-		daoUtil.setString(nIndex++, strMonth);
-		daoUtil.setInt(nIndex++, nYear);
-	}
+        return dossierNumber;
+    }
+
+    /**
+     * Inserts a new combination line
+     * 
+     * @param strMonth
+     *            Month value
+     * @param nYear
+     *            Year
+     */
+    private void insertNewCombinationLine( String strMonth, int nYear )
+    {
+        DAOUtil daoUtil = new DAOUtil( INSERT_NEW_COMBINATION );
+        int nIndex = 1;
+        daoUtil.setString( nIndex++, strMonth );
+        daoUtil.setInt( nIndex++, nYear );
+        daoUtil.setLong( nIndex++, SignalementConstants.START_SIGNALEMENT_NUMERO );
+
+        daoUtil.executeUpdate( );
+
+        daoUtil.close( );
+    }
+
+    /**
+     * Gets the next number to use based on the given combination
+     * 
+     * @param strMonth
+     *            Month value
+     * @param nYear
+     *            Year
+     * @return The next file number Null if combination line does not exists
+     */
+    private Long getNumber( String strMonth, int nYear )
+    {
+        DAOUtil daoUtil = new DAOUtil( SELECT_NUMBER_LOCKED );
+
+        fillDAOWithCombination( strMonth, nYear, daoUtil );
+
+        daoUtil.executeQuery( );
+
+        Long dossierNumber = null;
+
+        if ( daoUtil.next( ) )
+        {
+            int nIndex = 1;
+            dossierNumber = daoUtil.getLong( nIndex++ );
+        }
+        daoUtil.close( );
+        return dossierNumber;
+    }
+
+    /**
+     * Increments the number for a given combination
+     * 
+     * @param strMonth
+     *            Month value
+     * @param nYear
+     *            Year
+     */
+    private void incrementNumber( String strMonth, int nYear )
+    {
+        DAOUtil daoUtil = new DAOUtil( UPDATE_INCREMENT_NUMBER );
+        fillDAOWithCombination( strMonth, nYear, daoUtil );
+        daoUtil.executeUpdate( );
+        daoUtil.close( );
+    }
+
+    /**
+     * Fills the dao with the required parameters
+     * 
+     * @param strMonth
+     * @param nYear
+     * @param daoUtil
+     */
+    private void fillDAOWithCombination( String strMonth, int nYear, DAOUtil daoUtil )
+    {
+        int nIndex = 1;
+        daoUtil.setString( nIndex++, strMonth );
+        daoUtil.setInt( nIndex++, nYear );
+    }
 
 }
