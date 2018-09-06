@@ -1,3 +1,36 @@
+/*
+ * Copyright (c) 2002-2018, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.dansmarue.business.entities;
 
 import java.sql.Timestamp;
@@ -21,100 +54,100 @@ public class Signalement
     /** Workflow resource type. */
     public static final String     WORKFLOW_RESOURCE_TYPE       = "SIGNALEMENT_SIGNALEMENT";
 
-    /** The adresses. */
-    private List<Adresse>          _adresses                    = new ArrayList<Adresse>( );
+    /** The addresses. */
+    private List<Adresse>          _listAdresses                = new ArrayList<>( );
 
-    /** The arrondissement. */
+    /** The districts. */
     private Arrondissement         _arrondissement;
 
-    /** The date creation. */
-    private String                 _dateCreation;
+    /** The creation date. */
+    private String                 _strDateCreation;
 
-    /** The _heure creation. */
+    /** The creation hour. */
     private Date                   _heureCreation;
 
-    /** The date mise en surveillance. */
-    private String                 _dateMiseEnSurveillance;
+    /** The monitoring date. */
+    private String                 _strDateMiseEnSurveillance;
 
-    /** The date rehet. */
-    private String                 _dateRejet;
+    /** The reject date. */
+    private String                 _strDateRejet;
 
     /** The id. */
-    private Long                   _lId;
+    private Long                   _id;
 
-    /** The annee. */
+    /** The year. */
     private int                    _nAnnee;
 
-    /** The numero. */
+    /** The number. */
     private int                    _nNumero;
 
-    /** The suivi. */
+    /** The follow. */
     private int                    _nSuivi;
 
     /** The congratulation */
     private int                    _nFelicitations;
 
     /** The photos. */
-    private List<PhotoDMR>         _photos                      = new ArrayList<PhotoDMR>( );
+    private List<PhotoDMR>         _listPhotos                  = new ArrayList<>( );
 
-    /** The priorite. */
+    /** The priorities. */
     private Priorite               _priorite;
 
-    /** The secteur. */
+    /** The sector. */
     private Sector                 _secteur;
 
-    /** The signaleurs list. */
-    private List<Signaleur>        _signaleurs                  = new ArrayList<Signaleur>( );
+    /** The reporters list. */
+    private List<Signaleur>        _listSignaleurs              = new ArrayList<>( );
 
-    /** The commentaire. */
+    /** The commentary. */
     private String                 _strCommentaire;
 
-    /** The commentaire programmation. */
+    /** The scheduling commentary. */
     private String                 _strCommentaireProgrammation = "";
 
-    /** The date prevue traitement. */
+    /** The scheduled treatment date. */
     private String                 _strDatePrevueTraitement;
 
-    /** The mois. */
+    /** The month. */
     private String                 _strMois;
 
     /** The prefix. */
     private String                 _strPrefix;
 
-    /** The type signalement. */
+    /** The reporting type. */
     private TypeSignalement        _typeSignalement;
 
     /** The unit. */
     private Unit                   _unit                        = new Unit( );
 
-    /** direction */
+    /** board */
     private Unit                   _direction;
 
     /** token */
     private String                 _strToken;
 
     /**
-     * the date of passage
+     * the passage date
      */
     private String                 _strDateServiceFaitTraitement;
 
     /**
-     * the time of passage
+     * the passage hour
      */
     private String                 _strHeureServiceFaitTraitement;
 
-    private List<ObservationRejet> observationsRejet;
+    private List<ObservationRejet> _listObservationsRejet;
 
-    /** The attribute to check if the signalement is a duplicate */
+    /** The attribute to check if the report is a duplicate */
     private boolean                _bIsDoublon;
 
-    private String                 courrielDestinataire;
+    private String                 _strCourrielDestinataire;
 
-    private String                 courrielExpediteur;
+    private String                 _strCourrielExpediteur;
 
-    private Timestamp              courrielDate;
+    private Timestamp              _courrielDate;
 
-    private boolean                isSendWS;
+    private boolean                _bIsSendWS;
 
     public void setDirection( Unit direction )
     {
@@ -127,12 +160,12 @@ public class Signalement
     }
 
     /**
-     * Generer lien google map.
+     * Generate google map link
      *
      * @param result
      *            the result
      * @param adresse
-     *            the adresse
+     *            the address
      */
     private void genererLienGoogleMap( StringBuilder result, Adresse adresse )
     {
@@ -149,19 +182,19 @@ public class Signalement
     }
 
     /**
-     * Gets the adresses.
+     * Gets the addresses.
      *
-     * @return the adresses
+     * @return the addresses
      */
     public List<Adresse> getAdresses( )
     {
-        return _adresses;
+        return _listAdresses;
     }
 
     /**
-     * Gets the annee.
+     * Gets the year.
      *
-     * @return the annee
+     * @return the year
      */
     public int getAnnee( )
     {
@@ -169,9 +202,9 @@ public class Signalement
     }
 
     /**
-     * Gets the arrondissement.
+     * Gets the district.
      *
-     * @return the arrondissement
+     * @return the district
      */
     public Arrondissement getArrondissement( )
     {
@@ -179,9 +212,9 @@ public class Signalement
     }
 
     /**
-     * Gets the commentaire.
+     * Gets the commentary.
      *
-     * @return the commentaire
+     * @return the commentary
      */
     public String getCommentaire( )
     {
@@ -189,9 +222,9 @@ public class Signalement
     }
 
     /**
-     * Gets the commentaire programmation.
+     * Gets the scheduling commentary.
      *
-     * @return the commentaire programmation
+     * @return the scheduling commentary
      */
     public String getCommentaireProgrammation( )
     {
@@ -199,19 +232,19 @@ public class Signalement
     }
 
     /**
-     * Gets the date creation.
+     * Gets the creation date.
      *
-     * @return the date creation
+     * @return the creation date
      */
     public String getDateCreation( )
     {
-        return _dateCreation;
+        return _strDateCreation;
     }
 
     /**
-     * Gets the date prevue traitement.
+     * Gets the scheduled treatement date.
      *
-     * @return the date prevue traitement
+     * @return the scheduled treatment date
      */
     public String getDatePrevueTraitement( )
     {
@@ -224,9 +257,9 @@ public class Signalement
     }
 
     /**
-     * Gets the heure creation.
+     * Gets the creation hour.
      *
-     * @return the heureCreation
+     * @return the creation hour
      */
     public Date getHeureCreation( )
     {
@@ -240,18 +273,18 @@ public class Signalement
      */
     public Long getId( )
     {
-        return _lId;
+        return _id;
     }
 
     /**
-     * Gets the list adresses.
+     * Gets the addresses list.
      *
-     * @return the list adresses
+     * @return the addresses list
      */
     public String getListAdresses( )
     {
         StringBuilder result = new StringBuilder( "" );
-        for ( Adresse adresse : _adresses )
+        for ( Adresse adresse : _listAdresses )
         {
 
             genererLienGoogleMap( result, adresse );
@@ -260,9 +293,9 @@ public class Signalement
     }
 
     /**
-     * Gets the mois.
+     * Gets the month.
      *
-     * @return the mois
+     * @return the month
      */
     public String getMois( )
     {
@@ -270,9 +303,9 @@ public class Signalement
     }
 
     /**
-     * Gets the numero.
+     * Gets the number.
      *
-     * @return the numero
+     * @return the number
      */
     public int getNumero( )
     {
@@ -280,9 +313,9 @@ public class Signalement
     }
 
     /**
-     * Gets the numero signalement.
+     * Gets the report number.
      *
-     * @return the numeroSignalement
+     * @return the report number
      */
     public String getNumeroSignalement( )
     {
@@ -296,7 +329,7 @@ public class Signalement
      */
     public List<PhotoDMR> getPhotos( )
     {
-        return _photos;
+        return _listPhotos;
     }
 
     /**
@@ -310,9 +343,9 @@ public class Signalement
     }
 
     /**
-     * Gets the priorite.
+     * Gets the priorities.
      *
-     * @return the priorite
+     * @return the priorities
      */
     public Priorite getPriorite( )
     {
@@ -320,9 +353,9 @@ public class Signalement
     }
 
     /**
-     * Gets the priorite name.
+     * Gets the priorities name.
      *
-     * @return the priorite name
+     * @return the priorities name
      */
     public String getPrioriteName( )
     {
@@ -330,9 +363,9 @@ public class Signalement
     }
 
     /**
-     * Gets the secteur.
+     * Gets the sector.
      *
-     * @return the secteur
+     * @return the sector
      */
     public Sector getSecteur( )
     {
@@ -340,13 +373,13 @@ public class Signalement
     }
 
     /**
-     * Gets the signaleurs.
+     * Gets the reporters.
      *
-     * @return the signaleurs
+     * @return the reporters
      */
     public List<Signaleur> getSignaleurs( )
     {
-        return _signaleurs;
+        return _listSignaleurs;
     }
 
     /**
@@ -365,9 +398,9 @@ public class Signalement
     }
 
     /**
-     * Gets the type signalement.
+     * Gets the reporting type.
      *
-     * @return the type signalement
+     * @return the reporting type
      */
     public TypeSignalement getTypeSignalement( )
     {
@@ -395,21 +428,21 @@ public class Signalement
     }
 
     /**
-     * Sets the adresses.
+     * Sets the addresses.
      *
      * @param pAdresses
-     *            the adresses to set
+     *            the addresses to set
      */
     public void setAdresses( List<Adresse> pAdresses )
     {
-        _adresses = pAdresses;
+        _listAdresses = pAdresses;
     }
 
     /**
-     * Sets the annee.
+     * Sets the year.
      *
      * @param annee
-     *            the new annee
+     *            the new year
      */
     public void setAnnee( int annee )
     {
@@ -417,10 +450,10 @@ public class Signalement
     }
 
     /**
-     * Sets the arrondissement.
+     * Sets the district.
      *
      * @param arrondissement
-     *            the new arrondissement
+     *            the new district
      */
     public void setArrondissement( Arrondissement arrondissement )
     {
@@ -428,10 +461,10 @@ public class Signalement
     }
 
     /**
-     * Sets the commentaire.
+     * Sets the commentary.
      *
      * @param commentaire
-     *            the new commentaire
+     *            the new commentary
      */
     public void setCommentaire( String commentaire )
     {
@@ -439,10 +472,10 @@ public class Signalement
     }
 
     /**
-     * Sets the commentaire programmation.
+     * Sets the scheduling commentary.
      *
      * @param commentaireProgrammation
-     *            the new commentaire programmation
+     *            the new scheduling commentary
      */
     public void setCommentaireProgrammation( String commentaireProgrammation )
     {
@@ -450,21 +483,21 @@ public class Signalement
     }
 
     /**
-     * Sets the date creation.
+     * Sets the creation date.
      *
      * @param dateCreation
-     *            the new date creation
+     *            the new creation date
      */
     public void setDateCreation( String dateCreation )
     {
-        _dateCreation = dateCreation;
+        _strDateCreation = dateCreation;
     }
 
     /**
-     * Sets the date prevue traitement.
+     * Sets the scheduled treatment date.
      *
      * @param datePrevueTraitement
-     *            the new date prevue traitement
+     *            the new scheduled treatment date
      */
     public void setDatePrevueTraitement( String datePrevueTraitement )
     {
@@ -472,10 +505,10 @@ public class Signalement
     }
 
     /**
-     * Sets the heure creation.
+     * Sets the creation hour.
      *
      * @param heureCreation
-     *            the heureCreation to set
+     *            the creation hour
      */
     public void setHeureCreation( Date heureCreation )
     {
@@ -490,14 +523,14 @@ public class Signalement
      */
     public void setId( Long id )
     {
-        _lId = id;
+        _id = id;
     }
 
     /**
-     * Sets the mois.
+     * Sets the month.
      *
      * @param mois
-     *            the new mois
+     *            the new month
      */
     public void setMois( String mois )
     {
@@ -505,10 +538,10 @@ public class Signalement
     }
 
     /**
-     * Sets the numero.
+     * Sets the number.
      *
      * @param numero
-     *            the new numero
+     *            the new number
      */
     public void setNumero( int numero )
     {
@@ -523,7 +556,7 @@ public class Signalement
      */
     public void setPhotos( List<PhotoDMR> pPhotos )
     {
-        _photos = pPhotos;
+        _listPhotos = pPhotos;
     }
 
     /**
@@ -538,10 +571,10 @@ public class Signalement
     }
 
     /**
-     * Sets the priorite.
+     * Sets the priorities.
      *
      * @param priorite
-     *            the new priorite
+     *            the new priorities
      */
     public void setPriorite( Priorite priorite )
     {
@@ -549,10 +582,10 @@ public class Signalement
     }
 
     /**
-     * Sets the secteur.
+     * Sets the sector.
      *
      * @param secteur
-     *            the new secteur
+     *            the new sector
      */
     public void setSecteur( Sector secteur )
     {
@@ -560,21 +593,21 @@ public class Signalement
     }
 
     /**
-     * Sets the signaleurs.
+     * Sets the reporters.
      *
      * @param pSignaleurs
-     *            the signaleurs to set
+     *            the reporters to set
      */
     public void setSignaleurs( List<Signaleur> pSignaleurs )
     {
-        _signaleurs = pSignaleurs;
+        _listSignaleurs = pSignaleurs;
     }
 
     /**
-     * Sets the type signalement.
+     * Sets the reporting type.
      *
      * @param typeSignalement
-     *            the new type signalement
+     *            the new reporting type
      */
     public void setTypeSignalement( TypeSignalement typeSignalement )
     {
@@ -604,10 +637,10 @@ public class Signalement
     }
 
     /**
-     * Sets is doublon
+     * Sets is duplicate
      *
      * @param bIsDoublon
-     *            true if the signalement is duplicate
+     *            true if the report is duplicate
      */
     public void setIsDoublon( boolean bIsDoublon )
     {
@@ -615,9 +648,9 @@ public class Signalement
     }
 
     /**
-     * Check if the signalement is duplicated.
+     * Check if the report is duplicated.
      *
-     * @return true, if is doublon
+     * @return true, if is duplicate
      */
     public boolean isDoublon( )
     {
@@ -635,38 +668,38 @@ public class Signalement
     }
 
     /**
-     * Sets the adresses form.
+     * Sets the addresses form.
      *
      * @param index
      *            index
      * @param adresse
-     *            the adresse
+     *            the addresses
      */
     public void setAdressesForm( int index, Adresse adresse )
     {
-        while ( index >= _adresses.size( ) )
+        while ( index >= _listAdresses.size( ) )
         {
-            _adresses.add( new Adresse( ) );
+            _listAdresses.add( new Adresse( ) );
         }
 
-        _adresses.add( index, adresse );
+        _listAdresses.add( index, adresse );
     }
 
     /**
-     * Gets the adresses form.
+     * Gets the addresses form.
      *
      * @param index
      *            index
-     * @return Adresse
+     * @return addresses
      */
     public Adresse getAdressesForm( int index )
     {
-        while ( index >= _adresses.size( ) )
+        while ( index >= _listAdresses.size( ) )
         {
-            _adresses.add( new Adresse( ) );
+            _listAdresses.add( new Adresse( ) );
         }
 
-        return _adresses.get( index );
+        return _listAdresses.get( index );
     }
 
     /**
@@ -727,28 +760,28 @@ public class Signalement
     /**
      * Getter for the observationRejet List
      *
-     * @return List of obervsation rejet
+     * @return List of reject observation
      */
     public List<ObservationRejet> getObservationsRejet( )
     {
-        return observationsRejet;
+        return _listObservationsRejet;
     }
 
     /**
      * Setter for the observationRejet list
      *
      * @param observationsRejet
-     *            The observationRejet of this signalement
+     *            The reject observation for this report
      */
     public void setObservationsRejet( List<ObservationRejet> observationsRejet )
     {
-        this.observationsRejet = observationsRejet;
+        this._listObservationsRejet = observationsRejet;
     }
 
     /**
-     * Getter for the id reference for web service
+     * Getter for the reference id for web service
      *
-     * @return the id reference for web service
+     * @return the reference id for web service
      */
     public String getSignalementReference( )
     {
@@ -767,16 +800,16 @@ public class Signalement
      */
     public String getDateMiseEnSurveillance( )
     {
-        return _dateMiseEnSurveillance;
+        return _strDateMiseEnSurveillance;
     }
 
     /**
-     * @param _dateMiseEnSurveillance
+     * @param _strDateMiseEnSurveillance
      *            the _dateMiseEnSurveillance to set
      */
     public void setDateMiseEnSurveillance( String dateMiseEnSurveillance )
     {
-        this._dateMiseEnSurveillance = dateMiseEnSurveillance;
+        this._strDateMiseEnSurveillance = dateMiseEnSurveillance;
     }
 
     /**
@@ -784,46 +817,46 @@ public class Signalement
      */
     public String getDateRejet( )
     {
-        return _dateRejet;
+        return _strDateRejet;
     }
 
     /**
-     * @param _dateRejet
-     *            the _dateRejet to set
+     * @param _strDateRejet
+     *            the reject date
      */
     public void setDateRejet( String dateRejet )
     {
-        this._dateRejet = dateRejet;
+        this._strDateRejet = dateRejet;
     }
 
     public String getCourrielDestinataire( )
     {
-        return courrielDestinataire;
+        return _strCourrielDestinataire;
     }
 
     public void setCourrielDestinataire( String courrielDestinataire )
     {
-        this.courrielDestinataire = courrielDestinataire;
+        this._strCourrielDestinataire = courrielDestinataire;
     }
 
     public String getCourrielExpediteur( )
     {
-        return courrielExpediteur;
+        return _strCourrielExpediteur;
     }
 
     public void setCourrielExpediteur( String courrielExpediteur )
     {
-        this.courrielExpediteur = courrielExpediteur;
+        this._strCourrielExpediteur = courrielExpediteur;
     }
 
     public Timestamp getCourrielDate( )
     {
-        return courrielDate;
+        return _courrielDate;
     }
 
     public void setCourrielDate( Timestamp courrielDate )
     {
-        this.courrielDate = courrielDate;
+        this._courrielDate = courrielDate;
     }
 
     /**
@@ -831,15 +864,16 @@ public class Signalement
      */
     public boolean getIsSendWS( )
     {
-        return isSendWS;
+        return _bIsSendWS;
     }
 
     /**
-     * @param isSendWS the isSendWS to set
+     * @param isSendWS
+     *            the isSendWS to set
      */
     public void setSendWs( boolean isSendWS )
     {
-        this.isSendWS = isSendWS;
+        this._bIsSendWS = isSendWS;
     }
 
 }

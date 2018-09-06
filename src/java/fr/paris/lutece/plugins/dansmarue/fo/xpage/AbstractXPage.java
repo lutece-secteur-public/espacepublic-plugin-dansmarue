@@ -1,4 +1,3 @@
-
 /*
 *
 *  * Copyright (c) 2002-2017, Mairie de Paris
@@ -63,52 +62,50 @@ import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.util.ErrorMessage;
 
-public class AbstractXPage extends MVCApplication {
-	
-	//PAGES
-	protected static final String PAGE_PORTAL = "Portal.jsp?page=";
-	protected static final String PAGE_PORTAL_FULL = "jsp/site/Portal.jsp?page=";
-	
-	//XPAGE NAMES
-	protected static final String XPAGE_DANSMARUE = "dansmarue";
-	protected static final String XPAGE_DOUBLONS = "doublons";
-	public static final String XPAGE_SUIVI = "suivi";
-	
-	
-	//URLS
-	protected static final String URL_ACCUEIL = "jsp/site/Portal.jsp?page=accueil";
-	
-	
-	//MARKS    
-	protected static final String MARK_BASE_URL = "base_url";
-    protected static final String MARK_WRAPPER_WARNINGS = "wrapper_warnings";
-	protected static final String MARK_MAP_ERRORS = "map_errors";
-	protected static final String MARK_ERRORS = "errors";
+public class AbstractXPage extends MVCApplication
+{
 
-    
-    protected static final SignalementService signalementService = SpringContextService.getBean("signalementService");
-    protected static final TypeSignalementService typeSignalementService = SpringContextService.getBean("typeSignalementService");
-    protected static final PrioriteService prioriteService = SpringContextService.getBean("prioriteService");
-	protected static final DansMaRueUploadHandler dansmarueUploadHandler = SpringContextService.getBean("dansmarueUploadHandler");
-	protected static final SignalementSuiviService signalementSuiviService = SpringContextService.getBean("signalementSuiviService");
-    
-    
-	private Map<String, List<ErrorMessage>> mapErrors                              = new HashMap<>( );
-	
-	/**
-     * Default contrusteur
+    private static final String                    PARAMETER_TOKEN         = "token";
+    // PAGES
+    protected static final String                  PAGE_PORTAL             = "Portal.jsp?page=";
+    protected static final String                  PAGE_PORTAL_FULL        = "jsp/site/Portal.jsp?page=";
+
+    // XPAGE NAMES
+    protected static final String                  XPAGE_DANSMARUE         = "dansmarue";
+    protected static final String                  XPAGE_DOUBLONS          = "doublons";
+    public static final String                     XPAGE_SUIVI             = "suivi";
+
+    // URLS
+    protected static final String                  URL_ACCUEIL             = "jsp/site/Portal.jsp?page=accueil";
+
+    // MARKS
+    protected static final String                  MARK_BASE_URL           = "base_url";
+    protected static final String                  MARK_WRAPPER_WARNINGS   = "wrapper_warnings";
+    protected static final String                  MARK_MAP_ERRORS         = "map_errors";
+    protected static final String                  MARK_ERRORS             = "errors";
+
+    protected static final SignalementService      signalementService      = SpringContextService.getBean( "signalementService" );
+    protected static final TypeSignalementService  typeSignalementService  = SpringContextService.getBean( "typeSignalementService" );
+    protected static final PrioriteService         prioriteService         = SpringContextService.getBean( "prioriteService" );
+    protected static final DansMaRueUploadHandler  dansmarueUploadHandler  = SpringContextService.getBean( "dansmarueUploadHandler" );
+    protected static final SignalementSuiviService signalementSuiviService = SpringContextService.getBean( "signalementSuiviService" );
+
+    private Map<String, List<ErrorMessage>>        mapErrors               = new HashMap<>( );
+
+    /**
+     * Default constructor
      */
     public AbstractXPage( )
     {
         super( );
 
-        // Enregistrement des Converters
+        // Converter Registration
         ConvertUtilsBean convertUtilsBean = BeanUtilsBean.getInstance( ).getConvertUtils( );
 
-        // Re-définition du converter des Integer pour avoir null à la place de 0 si la valeur n'existe pas
+        // Re-definition of the Integer converter to have null instead of 0 if the value does not exist        
         convertUtilsBean.register( new IntegerConverter( null ), Integer.class );
     }
-    
+
     /**
      * Redirect home
      *
@@ -159,7 +156,7 @@ public class AbstractXPage extends MVCApplication {
      */
     protected void setToken( final HttpServletRequest request, final String token )
     {
-        request.getSession( ).setAttribute( "token", token );
+        request.getSession( ).setAttribute( PARAMETER_TOKEN, token );
     }
 
     /**
@@ -171,7 +168,7 @@ public class AbstractXPage extends MVCApplication {
      */
     protected String getToken( final HttpServletRequest request )
     {
-        return ( String ) request.getSession( ).getAttribute( "token" );
+        return ( String ) request.getSession( ).getAttribute( PARAMETER_TOKEN );
     }
 
     /**
@@ -180,7 +177,7 @@ public class AbstractXPage extends MVCApplication {
      */
     protected void removeToken( final HttpServletRequest request )
     {
-        request.getSession( ).removeAttribute( "token" );
+        request.getSession( ).removeAttribute( PARAMETER_TOKEN );
     }
 
     /**
@@ -222,7 +219,6 @@ public class AbstractXPage extends MVCApplication {
         return user;
 
     }
-    
 
     /**
      * Add an error message. The error message must NOT be an I18n key.
@@ -247,7 +243,7 @@ public class AbstractXPage extends MVCApplication {
         }
 
         errorMessages.add( mvcMessage );
-        super.addError( strMessage ); // Backward compatibility
+        super.addError( strMessage );
     }
 
     /**
@@ -264,7 +260,7 @@ public class AbstractXPage extends MVCApplication {
     {
         addError( strField, I18nService.getLocalizedString( strMessageKey, locale ) );
     }
-    
+
     /**
      * {@inheritDoc }
      */

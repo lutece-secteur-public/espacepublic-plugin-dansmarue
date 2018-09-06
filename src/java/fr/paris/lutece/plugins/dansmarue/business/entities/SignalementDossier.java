@@ -33,32 +33,28 @@
  */
 package fr.paris.lutece.plugins.dansmarue.business.entities;
 
-/**
- * Classe permettant la récupération des id des ressources (dossier/signalement) ainsi que leur type (S signalement, T dossier rendez-vous, C dossier clandestin, W dossier internet)
- *
- */
 public class SignalementDossier
 {
-    private Integer _id;
-    private String  _type;
+    private Integer _nId;
+    private String  _strType;
 
     public Integer getId( )
     {
-        return _id;
+        return _nId;
     }
 
     public String getType( )
     {
-        return _type;
+        return _strType;
     }
 
     public void setId( Integer id )
     {
-        _id = id;
+        _nId = id;
     }
 
     public void setType( String type )
     {
-        _type = type;
+        _strType = type;
     }
 }

@@ -33,23 +33,15 @@
  */
 package fr.paris.lutece.plugins.dansmarue.commons.dao;
 
-
-
-
-/**
- * Bean used for storing pagination properties (first and last result requested)
- * 
- * @author abataille
- */
 public class PaginationPropertiesImpl implements PaginationProperties
 {
-    private int firstResult;
+    private int _nFirstResult;
 
-    private int pageSize;
+    private int _nPageSize;
 
-    private int itemsPerPage;
+    private int _nItemsPerPage;
 
-    private int pageIndex;
+    private int _nPageIndex;
 
     /**
      * Creates a new PaginationPropertiesImpl.java object.
@@ -61,38 +53,41 @@ public class PaginationPropertiesImpl implements PaginationProperties
 
     /**
      * Creates a new PaginationPropertiesImpl.java object.
+     * 
      * @param firstResult
      * @param pageSize
      */
     public PaginationPropertiesImpl( int firstResult, int pageSize, int itemsPerPage, int pageIndex )
     {
         super( );
-        this.firstResult = firstResult;
-        this.pageSize = pageSize;
-        this.itemsPerPage = itemsPerPage;
-        this.pageIndex = pageIndex;
+        this._nFirstResult = firstResult;
+        this._nPageSize = pageSize;
+        this._nItemsPerPage = itemsPerPage;
+        this._nPageIndex = pageIndex;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.stock.commons.dao.PaginationProperties#getFirstResult()
      */
     public int getFirstResult( )
     {
-        return this.firstResult;
+        return this._nFirstResult;
     }
 
     public int getPageSize( )
     {
-        return this.pageSize;
+        return this._nPageSize;
     }
 
     public int getItemsPerPage( )
     {
-        return this.itemsPerPage;
+        return this._nItemsPerPage;
     }
 
     public int getPageIndex( )
     {
-        return this.pageIndex;
+        return this._nPageIndex;
     }
 }

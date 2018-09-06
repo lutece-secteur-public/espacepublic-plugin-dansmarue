@@ -40,11 +40,6 @@ import java.util.List;
 
 import fr.paris.lutece.plugins.dansmarue.commons.Order;
 
-/**
- *
- * CategoryFilter
- *
- */
 public class SignalementFilter implements Serializable
 {
     private static final long     serialVersionUID = 1L;
@@ -63,39 +58,38 @@ public class SignalementFilter implements Serializable
     private String                _strDateBegin;
     private String                _strDateEnd;
     private int                   _nIdEtat;
-    private List<EtatSignalement> _etats;
+    private List<EtatSignalement> _listEtats;
     private List<Integer>         _listIdSecteurAutorises;
     private List<Integer>         _listIdUnit;
     private List<Integer>         _listIdCategories;
     private List<Integer>         _listIdQuartier;
 
     private boolean               _bOrderAsc;
-    private List<Order>           _orders          = new ArrayList<Order>( );
-    
-    
+    private List<Order>           _listOrders      = new ArrayList<>( );
+
     /**
-     * Init empty list for signalement filter to avoid
-     * Null Pointer Exception.
+     * Init empty list for report filter to avoid Null Pointer Exception.
      */
-    public void initEmptyList() {
+    public void initEmptyList( )
+    {
         _listIdTypeSignalements = Collections.emptyList( );
         _listIdArrondissements = Collections.emptyList( );
-        _etats = Collections.emptyList( );
+        _listEtats = Collections.emptyList( );
         _listIdSecteurAutorises = Collections.emptyList( );
         _listIdUnit = Collections.emptyList( );
         _listIdCategories = Collections.emptyList( );
         _listIdQuartier = Collections.emptyList( );
-        _orders = Collections.emptyList( );
+        _listOrders = Collections.emptyList( );
     }
 
     public List<EtatSignalement> getEtats( )
     {
-        return _etats;
+        return _listEtats;
     }
 
     public void setEtats( List<EtatSignalement> etats )
     {
-        _etats = etats;
+        _listEtats = etats;
     }
 
     public List<Integer> getListIdSecteurAutorises( )
@@ -126,7 +120,7 @@ public class SignalementFilter implements Serializable
      */
     public List<Order> getOrders( )
     {
-        return _orders;
+        return _listOrders;
     }
 
     /**
@@ -137,7 +131,7 @@ public class SignalementFilter implements Serializable
      */
     public void setOrders( List<Order> orders )
     {
-        _orders = orders;
+        _listOrders = orders;
     }
 
     public int getIdTypeSignalement( )
@@ -160,7 +154,7 @@ public class SignalementFilter implements Serializable
 
     /**
      * @param listIdTypeSignalements
-     *            the listIdTypeSignalement to set
+     *            the list of reporting type ids to set
      */
     public void setListIdTypeSignalements( List<Integer> listIdTypeSignalements )
     {
@@ -185,7 +179,7 @@ public class SignalementFilter implements Serializable
     }
 
     /**
-     * @return the adresse
+     * @return the address
      */
     public String getAdresse( )
     {
@@ -194,7 +188,7 @@ public class SignalementFilter implements Serializable
 
     /**
      * @param pAdresse
-     *            the adresse to set
+     *            the address to set
      */
     public void setAdresse( String pAdresse )
     {
@@ -219,7 +213,7 @@ public class SignalementFilter implements Serializable
     }
 
     /**
-     * @return the commentaire
+     * @return the commentary
      */
     public String getCommentaire( )
     {
@@ -228,7 +222,7 @@ public class SignalementFilter implements Serializable
 
     /**
      * @param pCommentaire
-     *            the commentaire to set
+     *            the commentary to set
      */
     public void setCommentaire( String pCommentaire )
     {
@@ -278,7 +272,7 @@ public class SignalementFilter implements Serializable
     }
 
     /**
-     * @return the numero
+     * @return the number
      */
     public String getNumero( )
     {
@@ -287,7 +281,7 @@ public class SignalementFilter implements Serializable
 
     /**
      * @param pNumero
-     *            the numero to set
+     *            the number to set
      */
     public void setNumero( String pNumero )
     {
@@ -346,9 +340,9 @@ public class SignalementFilter implements Serializable
         return _listIdCategories;
     }
 
-    public void setListIdCategories( List<Integer> _listIdCategories )
+    public void setListIdCategories( List<Integer> listIdCategories )
     {
-        this._listIdCategories = _listIdCategories;
+        this._listIdCategories = listIdCategories;
     }
 
     public void setIdDomaine( int nIdDomaine )
@@ -366,9 +360,9 @@ public class SignalementFilter implements Serializable
         return _listIdQuartier;
     }
 
-    public void setListIdQuartier( List<Integer> _listIdQuartier )
+    public void setListIdQuartier( List<Integer> listIdQuartier )
     {
-        this._listIdQuartier = _listIdQuartier;
+        this._listIdQuartier = listIdQuartier;
     }
 
     public List<Integer> getListIdUnit( )
@@ -376,9 +370,9 @@ public class SignalementFilter implements Serializable
         return _listIdUnit;
     }
 
-    public void setListIdUnit( List<Integer> _listIdUnit )
+    public void setListIdUnit( List<Integer> listIdUnit )
     {
-        this._listIdUnit = _listIdUnit;
+        this._listIdUnit = listIdUnit;
     }
 
 }

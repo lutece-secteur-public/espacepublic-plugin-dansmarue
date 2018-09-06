@@ -4,7 +4,7 @@
 	<!-- Plugin Informations -->
 	<name>signalement</name>
 	<class>fr.paris.lutece.plugins.dansmarue.service.SignalementPlugin</class>
-	<version>6.0.5</version>
+	<version>6.1.0</version>
 	<description>signalement.plugin.description</description>
 	<documentation />
 	<installation />

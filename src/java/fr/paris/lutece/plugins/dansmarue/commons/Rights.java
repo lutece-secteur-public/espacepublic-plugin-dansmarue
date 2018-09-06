@@ -22,52 +22,52 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-
 public class Rights
 {
 
-    public static final String PERMISSIONS = "PERMISSIONS";
-    public static final String PERMISSIONS_SECTEURS = "PERMISSIONS_SECTEURS";
+    public static final String       PERMISSIONS                 = "PERMISSIONS";
+    public static final String       PERMISSIONS_SECTEURS        = "PERMISSIONS_SECTEURS";
 
-    private static final String PERMISSION_JOKER = "*";
-    
-    public static final String RIGHT_SIGNALEMENT_DASHBOARD= "SIGNALEMENT_DASHBOARD";
+    private static final String      PERMISSION_JOKER            = "*";
+
+    public static final String       RIGHT_SIGNALEMENT_DASHBOARD = "SIGNALEMENT_DASHBOARD";
 
     /** The unit service. */
-    private IUnitService _unitService;
+    private IUnitService             _unitService;
 
     /** The sector service. */
-    private ISectorService _sectorService;
+    private ISectorService           _sectorService;
 
     /**
-     * Requète http
+     * HttpRequest
      */
-    private HttpServletRequest _request;
+    private HttpServletRequest       _request;
     /**
-     * Liste des permissions de l'utilisateur récupéré en session
+     * List of user permissions retrieved in session
      */
     private HashMap<String, Boolean> _permissionsCache;
     /**
-     * Liste des permissions sur les secteurs de l'utilisateur
+     * List of permissions on user's sectors
      */
     private HashMap<String, Boolean> _permissionsSecteurCache;
 
     /**
-     * Initialise les droits : récupère les listes de permissions dans la
-     * session
-     * @param request requète http
+     * Initialize the rights: retrieve the permission lists in the session
+     * 
+     * @param request
+     *            HttpRequest
      */
+    @SuppressWarnings( "unchecked" )
     public void init( HttpServletRequest request )
     {
         this._request = request;
-        this._unitService = (IUnitService) SpringContextService.getBean( "unittree.unitService" );
-        this._sectorService = (ISectorService) SpringContextService.getBean( "unittree-dansmarue.sectorService" );
+        this._unitService = ( IUnitService ) SpringContextService.getBean( "unittree.unitService" );
+        this._sectorService = ( ISectorService ) SpringContextService.getBean( "unittree-dansmarue.sectorService" );
         HttpSession session = request.getSession( );
         if ( session.getAttribute( PERMISSIONS ) != null )
         {
-            _permissionsCache = (HashMap<String, Boolean>) session.getAttribute( PERMISSIONS );
-        }
-        else
+            _permissionsCache = ( HashMap<String, Boolean> ) session.getAttribute( PERMISSIONS );
+        } else
         {
             _permissionsCache = new HashMap<String, Boolean>( );
             session.setAttribute( PERMISSIONS, _permissionsCache );
@@ -75,9 +75,8 @@ public class Rights
         }
         if ( session.getAttribute( PERMISSIONS_SECTEURS ) != null )
         {
-            _permissionsSecteurCache = (HashMap<String, Boolean>) session.getAttribute( PERMISSIONS_SECTEURS );
-        }
-        else
+            _permissionsSecteurCache = ( HashMap<String, Boolean> ) session.getAttribute( PERMISSIONS_SECTEURS );
+        } else
         {
             _permissionsSecteurCache = new HashMap<String, Boolean>( );
             session.setAttribute( PERMISSIONS_SECTEURS, _permissionsSecteurCache );
@@ -86,27 +85,29 @@ public class Rights
     }
 
     /**
-     * Renvoie si l'utilisateur possède la permission passée en paramètre
-     * @param ressourceType type de ressource (use case)
-     * @param permission clé de la permission
-     * @param secteur secteur dont il faut vérifier la
-     *            permission
-     * @return autorisé ou pas
+     * Returns if the user has the permission passed in parameter
+     * 
+     * @param ressourceType
+     *            the resource type
+     * @param permission
+     *            permission key
+     * @param secteur
+     *            sector which needs a permission
+     * @return allow or not
      */
     public boolean estAutorise( String ressourceType, String permission, String secteur )
     {
         HttpSession session = _request.getSession( );
-        Map<String, Boolean> permissionsCache = (Map<String, Boolean>) session.getAttribute( PERMISSIONS );
+        @SuppressWarnings( "unchecked" )
+        Map<String, Boolean> permissionsCache = ( Map<String, Boolean> ) session.getAttribute( PERMISSIONS );
         String clePermission = ressourceType + permission;
         Boolean autorise = estAutoriseSecteur( secteur );
         if ( autorise )
         {
             Boolean autorisePermission = permissionsCache.get( clePermission );
             if ( autorisePermission == null )
-            //Pas en cache
             {
-                autorisePermission = RBACService.isAuthorized( ressourceType, RBAC.WILDCARD_RESOURCES_ID, permission,
-                        AdminUserService.getAdminUser( _request ) );
+                autorisePermission = RBACService.isAuthorized( ressourceType, RBAC.WILDCARD_RESOURCES_ID, permission, AdminUserService.getAdminUser( _request ) );
                 permissionsCache.put( clePermission, autorisePermission );
             }
             autorise &= autorisePermission;
@@ -115,21 +116,20 @@ public class Rights
     }
 
     /**
-     * Renvoie si l'utilisateur est autorisé à accéder à la jsp passée en
-     * paramètre.
-     * Utilise le mapping jsp : permission pour déterminer l'autorisation.
-     * @param jsp url de la jsp
-     * @return autorisé ou non
+     * Returns whether the user is allowed to access the jsp passed as a parameter. Uses jsp mapping: permission to determine authorization.
+     * 
+     * @param jsp
+     *            jsp url
+     * @return allow or not
      */
     public boolean estAutoriseJsp( String jsp )
     {
-        final int LONG_PREFIX_CHEMIN = 30; //Longueur jsp/admin/plugins/signalement/
+        final int LONG_PREFIX_CHEMIN = 30;
         Boolean autorise = false;
-        if ( jsp.equals( "#" ) || jsp.equals( PERMISSION_JOKER ) )
+        if ( "#".equals( jsp ) || PERMISSION_JOKER.equals( jsp ) )
         {
             autorise = true;
-        }
-        else
+        } else
         {
             if ( jsp.length( ) > LONG_PREFIX_CHEMIN )
             {
@@ -138,10 +138,8 @@ public class Rights
             PermissionRessourceType permissionRessource = MappingJspPermission.MAPPING_JSP_PERMISSIONS.get( jsp );
             if ( permissionRessource != null )
             {
-                autorise = estAutorise( permissionRessource.getRessourceType( ), permissionRessource.getPermission( ),
-                        PERMISSION_JOKER );
-            }
-            else
+                autorise = estAutorise( permissionRessource.getRessourceType( ), permissionRessource.getPermission( ), PERMISSION_JOKER );
+            } else
             {
                 autorise = false;
             }
@@ -150,10 +148,11 @@ public class Rights
     }
 
     /**
-     * Vérifie que l'utilisateur est autorisé sur le secteur passé en
-     * paramètre
-     * @param secteur le secteur
-     * @return autorisé ou non
+     * Check that the user is authorized on the sector passed in parameter
+     * 
+     * @param secteur
+     *            the sector
+     * @return allow or not
      */
     public boolean estAutoriseSecteur( String secteur )
     {
@@ -161,38 +160,34 @@ public class Rights
         if ( PERMISSION_JOKER.equals( secteur ) )
         {
             autorise = true;
-        }
-        else
+        } else
         {
             HttpSession session = _request.getSession( );
-            Map<String, Boolean> permissionsSecteursCache = (Map<String, Boolean>) session
-                    .getAttribute( PERMISSIONS_SECTEURS );
+            @SuppressWarnings( "unchecked" )
+            Map<String, Boolean> permissionsSecteursCache = ( Map<String, Boolean> ) session.getAttribute( PERMISSIONS_SECTEURS );
 
             // get the courant user
             AdminUser adminUser = AdminUserService.getAdminUser( this._request );
-            
+
             Boolean autorisePermission = permissionsSecteursCache.get( secteur );
             if ( autorisePermission == null )
-            //Pas en cache
+            // Pas en cache
             {
                 // get the unit for the courant user
                 List<Unit> listUnits = _unitService.getUnitsByIdUser( adminUser.getUserId( ), false );
 
-                if ( listUnits == null || listUnits.size( ) == 0 )
+                if ( listUnits == null || listUnits.isEmpty( ) )
                 {
                     autorise = false;
-                }
-                else
+                } else
                 {
                     Integer nCourantSector = 0;
                     try
                     {
                         nCourantSector = Integer.parseInt( secteur );
-                    }
-                    catch ( NumberFormatException e )
+                    } catch ( NumberFormatException e )
                     {
-                        return AdminMessageService.getMessageUrl( _request, SignalementConstants.MESSAGE_ERROR_OCCUR,
-                                AdminMessage.TYPE_STOP ) != null;
+                        return AdminMessageService.getMessageUrl( _request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP ) != null;
                     }
 
                     for ( Unit userUnit : listUnits )
@@ -211,45 +206,51 @@ public class Rights
                         }
                     }
                 }
-            }
-            else
+            } else
             {
                 autorise = autorisePermission;
             }
         }
         return autorise;
     }
-    
+
     /**
-     * Vérifie si l'utilisateur possède au moins l'une des permissions passées en paramètre
+     * Checks if the user has at least one of the permissions passed in parameter
+     * 
      * @param ressourceType
+     *            the resource type
      * @param permissions
+     *            the permission
      * @param secteur
-     * @return
+     *            the sector
+     * @return allow or not
      */
-    public boolean hasAutorisation(String ressourceType, List<String> permissions, String secteur){
-    	boolean estAutorise = false;
-    	for(String permission : permissions){
-    		estAutorise = estAutorise(ressourceType,permission,secteur);
-    		if(estAutorise){
-    			return estAutorise;
-    		}
-    	}
-    	return estAutorise;
+    public boolean hasAutorisation( String ressourceType, List<String> permissions, String secteur )
+    {
+        boolean estAutorise = false;
+        for ( String permission : permissions )
+        {
+            estAutorise = estAutorise( ressourceType, permission, secteur );
+            if ( estAutorise )
+            {
+                return estAutorise;
+            }
+        }
+        return estAutorise;
     }
-    
+
     /**
-     * Vérifie si l'utilisateur possède le droit passé en paramètre
+     * Checks if the user has the right passed in parameter
+     * 
      * @param right
-     * 		  Le droit à vérifier
-     * @return
-     * 		  true si le droit est présent
-     * 		  false sinon
+     *            the right to check
+     * @return true if has right, otherwise false
      */
-    public boolean hasRight(String right){
-    	AdminUser adminUser = AdminUserService.getAdminUser( this._request );
-    	Map<String,Right> rights = adminUser.getRights();
-    	return rights.containsKey(right);
+    public boolean hasRight( String right )
+    {
+        AdminUser adminUser = AdminUserService.getAdminUser( this._request );
+        Map<String, Right> rights = adminUser.getRights( );
+        return rights.containsKey( right );
     }
-    
+
 }

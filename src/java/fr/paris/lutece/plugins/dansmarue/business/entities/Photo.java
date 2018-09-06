@@ -41,41 +41,39 @@ import fr.paris.lutece.util.url.UrlItem;
 
 public class Photo
 {
-    public static final Integer VUE_D_ENSEMBLE  = 1;
-    public static final Integer VUE_DETAILLE    = 0;
-    private Long                _lId;
+    public static final Integer OVERVIEW        = 1;
+    public static final Integer DETAILED_VIEW   = 0;
+    private Long                _id;
     private ImageResource       _image          = null;
     private ImageResource       _imageThumbnail = new ImageResource( );
-    // private Signalement _signalement;
     private String              _strDate;
     private Integer             _nVue;
     private String              _strImageUrl;
     private String              _strImageThumbnailUrl;
 
-	
-	public Photo( )
+    public Photo( )
     {
 
     }
-	
-    public Photo( Long _lId, ImageResource _image, ImageResource _imageThumbnail, String _date, Integer _nVue )
+
+    public Photo( Long id, ImageResource image, ImageResource imageThumbnail, String date, Integer vue )
     {
         super( );
-        this._lId = _lId;
-        this._image = _image;
-        this._imageThumbnail = _imageThumbnail;
-        this._strDate = _date;
-        this._nVue = _nVue;
+        this._id = id;
+        this._image = image;
+        this._imageThumbnail = imageThumbnail;
+        this._strDate = date;
+        this._nVue = vue;
     }
 
     public Long getId( )
     {
-        return _lId;
+        return _id;
     }
 
     public void setId( Long id )
     {
-        _lId = id;
+        _id = id;
     }
 
     public ImageResource getImage( )
@@ -87,40 +85,46 @@ public class Photo
     {
         _image = image;
     }
-    
-    public void setImageUrl( String _imageUrl ) {
-        _strImageUrl = _imageUrl;
+
+    public void setImageUrl( String imageUrl )
+    {
+        _strImageUrl = imageUrl;
     }
 
     public String getImageUrl( )
     {
-        if ( _strImageUrl == null ) {
+        if ( _strImageUrl == null )
+        {
             String strResourceType = ( ( ImageResourceProvider ) SpringContextService.getBean( "signalement.imageService" ) ).getResourceTypeId( );
             UrlItem url = new UrlItem( Parameters.IMAGE_SERVLET );
             url.addParameter( Parameters.RESOURCE_TYPE, strResourceType );
-            url.addParameter( Parameters.RESOURCE_ID, Long.toString( _lId ) );
+            url.addParameter( Parameters.RESOURCE_ID, Long.toString( _id ) );
             return url.getUrlWithEntity( );
-        } else {
+        } else
+        {
             return _strImageUrl;
         }
     }
-    
-    public void setImageThumbnailUrl( String _imageThumbnailUrl ) {
-        _strImageThumbnailUrl = _imageThumbnailUrl;
+
+    public void setImageThumbnailUrl( String imageThumbnailUrl )
+    {
+        _strImageThumbnailUrl = imageThumbnailUrl;
     }
 
     public String getImageThumbnailUrl( )
     {
-        if ( _strImageThumbnailUrl == null) {
+        if ( _strImageThumbnailUrl == null )
+        {
             String strResourceType = ( ( ImageResourceProvider ) SpringContextService.getBean( "signalement.imageThumbnailService" ) ).getResourceTypeId( );
             UrlItem url = new UrlItem( Parameters.IMAGE_SERVLET );
             url.addParameter( Parameters.RESOURCE_TYPE, strResourceType );
-            url.addParameter( Parameters.RESOURCE_ID, Long.toString( _lId ) );
+            url.addParameter( Parameters.RESOURCE_ID, Long.toString( _id ) );
             return url.getUrlWithEntity( );
-        } else {
+        } else
+        {
             return _strImageThumbnailUrl;
         }
-        
+
     }
 
     public void setMimeType( String strMimeType )
@@ -134,18 +138,18 @@ public class Photo
     }
 
     /**
-     * Sets the image thumbnail.
+     * Sets the thumbnailed image.
      *
      * @param imageContent
-     *            the new image thumbnail
+     *            the new image thumbnailed image
      */
-    public void setImageThumbnail( ImageResource _imageResource )
+    public void setImageThumbnail( ImageResource imageResource )
     {
-        _imageThumbnail.setImage( _imageResource.getImage( ) );
+        _imageThumbnail.setImage( imageResource.getImage( ) );
     }
 
     /**
-     * @return the _imageThumbnail
+     * @return the thumbnailed image
      */
     public ImageResource getImageThumbnail( )
     {

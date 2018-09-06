@@ -69,8 +69,8 @@ public class TypeSignalement implements RBACResource
     @Transient
     private Integer            _nIdCategory;
 
-    private String             alias;
-    private String             aliasMobile;
+    private String             _strAlias;
+    private String             _strAliasMobile;
 
     public int getOrdre( )
     {
@@ -218,9 +218,9 @@ public class TypeSignalement implements RBACResource
         return _nIdCategory;
     }
 
-    public void setIdCategory( Integer _nIdCategory )
+    public void setIdCategory( Integer nIdCategory )
     {
-        this._nIdCategory = _nIdCategory;
+        this._nIdCategory = nIdCategory;
     }
 
     /**
@@ -247,7 +247,7 @@ public class TypeSignalement implements RBACResource
      */
     public String getAlias( )
     {
-        return alias;
+        return _strAlias;
     }
 
     /**
@@ -258,7 +258,7 @@ public class TypeSignalement implements RBACResource
      */
     public void setAlias( String alias )
     {
-        this.alias = alias;
+        this._strAlias = alias;
     }
 
     /**
@@ -268,9 +268,9 @@ public class TypeSignalement implements RBACResource
      */
     public String getAliasDefault( )
     {
-        if ( StringUtils.isNotEmpty( alias ) )
+        if ( StringUtils.isNotEmpty( _strAlias ) )
         {
-            return alias;
+            return _strAlias;
         }
 
         return getLibelle( );
@@ -283,7 +283,7 @@ public class TypeSignalement implements RBACResource
      */
     public String getAliasMobile( )
     {
-        return aliasMobile;
+        return _strAliasMobile;
     }
 
     /**
@@ -294,7 +294,7 @@ public class TypeSignalement implements RBACResource
      */
     public void setAliasMobile( String aliasMobile )
     {
-        this.aliasMobile = aliasMobile;
+        this._strAliasMobile = aliasMobile;
     }
 
     /**
@@ -304,9 +304,9 @@ public class TypeSignalement implements RBACResource
      */
     public String getAliasMobileDefault( )
     {
-        if ( StringUtils.isNotEmpty( aliasMobile ) )
+        if ( StringUtils.isNotEmpty( _strAliasMobile ) )
         {
-            return aliasMobile;
+            return _strAliasMobile;
         }
 
         return getLibelle( );

@@ -35,33 +35,25 @@ package fr.paris.lutece.plugins.dansmarue.commons;
 
 import java.io.Serializable;
 
-/**
- * Check if a string match to the specified pattern
- * 
- * @author abataille
- */
-/**
- * Check if a string match to the specified pattern
- * 
- * @author abataille
- */
-public class Order implements Serializable {
+public class Order implements Serializable
+{
 
     /**
      * serialVersionUID.
      */
-    private static final long serialVersionUID = -887656883773949701L;
+    private static final long   serialVersionUID = -887656883773949701L;
 
-    private static final String DESC = "DESC";
+    private static final String DESC             = "DESC";
 
-    private static final String ASC = "ASC";
+    private static final String ASC              = "ASC";
 
-    private String _strName;
+    private String              _strName;
 
     // ASC or DESC
-    private String _strOrder;
-    
-    public Order( ) {
+    private String              _strOrder;
+
+    public Order( )
+    {
         // Empty constructor for Json Mapping
     }
 
@@ -71,18 +63,23 @@ public class Order implements Serializable {
         this._strOrder = order;
     }
 
-    public Order(String name, boolean bIsAsc) {
+    public Order( String name, boolean bIsAsc )
+    {
         _strName = name;
-        if (bIsAsc) {
+        if ( bIsAsc )
+        {
             _strOrder = ASC;
-        } else {
+        } else
+        {
             _strOrder = DESC;
         }
     }
+
     /**
      * @return the name
      */
-    public String getName() {
+    public String getName( )
+    {
         return this._strName;
     }
 
@@ -90,14 +87,16 @@ public class Order implements Serializable {
      * @param pName
      *            the name to set
      */
-    public void setName(String pName) {
+    public void setName( String pName )
+    {
         this._strName = pName;
     }
 
     /**
      * @return the order
      */
-    public String getOrder() {
+    public String getOrder( )
+    {
         return this._strOrder;
     }
 
@@ -105,7 +104,8 @@ public class Order implements Serializable {
      * @param pOrder
      *            the order to set
      */
-    public void setOrder(String pOrder) {
+    public void setOrder( String pOrder )
+    {
         this._strOrder = pOrder;
     }
 

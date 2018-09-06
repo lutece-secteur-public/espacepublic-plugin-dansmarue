@@ -35,18 +35,14 @@ package fr.paris.lutece.plugins.dansmarue.commons;
 
 import java.util.ArrayList;
 
-
-/**
- * Extension de l'objet ArrayList pour fournir des informations supplémentaires
- * @param <E> le type de l'entité
- */
 public class ResultList<E> extends ArrayList<E>
 {
     private int totalResult;
 
     /**
-     * Retourne le nombre total de résultats
-     * @return le nombre total de résultats
+     * Returns the total number of results
+     * 
+     * @return the total number of results
      */
     public int getTotalResult( )
     {
@@ -54,8 +50,10 @@ public class ResultList<E> extends ArrayList<E>
     }
 
     /**
-     * Initialise le nombre total de résultats
-     * @param totalResult le nombre total de résultats
+     * Initialize the total number of results
+     * 
+     * @param totalResult
+     *            the total number of results
      */
     public void setTotalResult( int totalResult )
     {

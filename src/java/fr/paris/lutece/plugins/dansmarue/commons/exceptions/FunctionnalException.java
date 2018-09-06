@@ -36,30 +36,25 @@ package fr.paris.lutece.plugins.dansmarue.commons.exceptions;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * DOCUMENT ME!
- *
- * @author abataille
- */
 public class FunctionnalException extends RuntimeException
 {
 
-    private Object bean;
+    private Object              bean;
 
-    private Map<String,Object> additionalParameters;
-    
+    private Map<String, Object> additionalParameters;
+
     public FunctionnalException( Object bean )
     {
         this.bean = bean;
-        this.setAdditionalParameters(new HashMap<String,Object>());
+        this.setAdditionalParameters( new HashMap<String, Object>( ) );
     }
 
-    public FunctionnalException( Object bean, Map<String,Object> additionalParameters )
+    public FunctionnalException( Object bean, Map<String, Object> additionalParameters )
     {
         this.bean = bean;
         this.additionalParameters = additionalParameters;
     }
-    
+
     /**
      * @return the bean
      */
@@ -69,7 +64,8 @@ public class FunctionnalException extends RuntimeException
     }
 
     /**
-     * @param bean the bean to set
+     * @param bean
+     *            the bean to set
      */
     public void setBean( Object bean )
     {
@@ -79,16 +75,19 @@ public class FunctionnalException extends RuntimeException
     /**
      * @return the aditionnal parameters
      */
-	public Map<String,Object> getAdditionalParameters() {
-		return additionalParameters;
-	}
+    public Map<String, Object> getAdditionalParameters( )
+    {
+        return additionalParameters;
+    }
 
-	/**
-	 * 
-	 * @param additionnalParameters the additional parameters to add
-	 */
-	public void setAdditionalParameters(Map<String,Object> additionnalParameters) {
-		this.additionalParameters = additionnalParameters;
-	}
+    /**
+     * 
+     * @param additionnalParameters
+     *            the additional parameters to add
+     */
+    public void setAdditionalParameters( Map<String, Object> additionnalParameters )
+    {
+        this.additionalParameters = additionnalParameters;
+    }
 
 }

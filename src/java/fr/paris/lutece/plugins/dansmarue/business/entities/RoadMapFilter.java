@@ -40,44 +40,21 @@ import java.util.List;
 
 import fr.paris.lutece.plugins.dansmarue.commons.Order;
 
-/**
- * The Class RoadMapFilter. Defines parameters of road map list query.
- */
 public class RoadMapFilter implements Serializable
 {
-    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
-
-    /** The afficher signalements du jour. */
-    private Boolean           _afficherSignalementsDuJour;
-
-    /** The _b order asc. */
+    private Boolean           _bAfficherSignalementsDuJour;
     private boolean           _bOrderAsc;
     private Date              _heureDebutService;
-
-    /** The _n id sector. */
     private Integer           _nIdSector;
-
-    /** The _n id service. */
     private Integer           _nIdService;
-
-    /** The _order. */
     private Order             _order;
-
-    /** The _str ddate. */
     private String            _strDdate;
-
-    /** The _str id unit. */
     private List<Integer>     _listIdSector;
 
-    /**
-     * Gets the afficher signalements du jour.
-     *
-     * @return the afficher signalements du jour
-     */
     public Boolean getAfficherSignalementsDuJour( )
     {
-        return _afficherSignalementsDuJour;
+        return _bAfficherSignalementsDuJour;
     }
 
     /**
@@ -178,15 +155,9 @@ public class RoadMapFilter implements Serializable
         return _bOrderAsc;
     }
 
-    /**
-     * Sets the afficher signalements du jour.
-     *
-     * @param afficherSignalementsDuJour
-     *            the new afficher signalements du jour
-     */
     public void setAfficherSignalementsDuJour( Boolean afficherSignalementsDuJour )
     {
-        _afficherSignalementsDuJour = afficherSignalementsDuJour;
+        _bAfficherSignalementsDuJour = afficherSignalementsDuJour;
     }
 
     /**

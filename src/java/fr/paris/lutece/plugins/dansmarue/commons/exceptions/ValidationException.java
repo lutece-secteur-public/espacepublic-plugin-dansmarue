@@ -41,18 +41,12 @@ import java.util.Locale;
 
 import javax.validation.ConstraintViolation;
 
-
-/**
- * ValidationException!
- *
- */
 public class ValidationException extends FunctionnalException
 {
-    
-    
-    private static final long serialVersionUID = 1L;
-    
-    public static final String VALIDATION_ERROR = I18nService.getLocalizedString( "validation.erreur", Locale.getDefault( ) );
+
+    private static final long            serialVersionUID = 1L;
+
+    public static final String           VALIDATION_ERROR = I18nService.getLocalizedString( "validation.erreur", Locale.getDefault( ) );
     private List<ConstraintViolation<?>> constraintViolationList;
 
     public ValidationException( Object bean, ConstraintViolation<?> constraintViolation )
@@ -77,7 +71,8 @@ public class ValidationException extends FunctionnalException
     }
 
     /**
-     * @param constraintViolationList the constraintViolationList to set
+     * @param constraintViolationList
+     *            the constraintViolationList to set
      */
     public void setConstraintViolationList( List<ConstraintViolation<?>> constraintViolationList )
     {
@@ -89,15 +84,16 @@ public class ValidationException extends FunctionnalException
         this.constraintViolationList.add( constraintViolation );
     }
 
-    public String getMessage() {
-        StringBuilder sbMessage = new StringBuilder();
+    public String getMessage( )
+    {
+        StringBuilder sbMessage = new StringBuilder( );
         sbMessage.append( VALIDATION_ERROR );
-        if(constraintViolationList != null){
+        if ( constraintViolationList != null )
+        {
             for ( ConstraintViolation<?> constraintViolation : constraintViolationList )
             {
-                sbMessage.append( System.getProperty( "line.separator" ) ).append( "Valeur '" )
-                        .append( constraintViolation.getInvalidValue( )
-                        ).append("' incorrecte pour '").append(constraintViolation.getPropertyPath()).append( "' : " ).append(constraintViolation.getMessage());
+                sbMessage.append( System.getProperty( "line.separator" ) ).append( "Valeur '" ).append( constraintViolation.getInvalidValue( ) ).append( "' incorrecte pour '" )
+                        .append( constraintViolation.getPropertyPath( ) ).append( "' : " ).append( constraintViolation.getMessage( ) );
             }
         }
         return sbMessage.toString( );

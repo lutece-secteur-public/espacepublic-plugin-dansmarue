@@ -38,100 +38,115 @@ import java.util.Map;
 
 import fr.paris.lutece.portal.service.i18n.I18nService;
 
-
-/**
- * Exception métier
- * 
- */
 public class BusinessException extends FunctionnalException
 {
     private static final long serialVersionUID = -615983331551016543L;
-    private String _code;
-    private String[] _arguments;
+    private String            _strCode;
+    private String[]          _strArguments;
 
     /**
-     * Constructeur de l'exception
-     * @param code Le code de l'exception
+     * Exception constructor
+     * 
+     * @param code
+     *            Exception code
      */
     public BusinessException( Object bean, String code )
     {
         super( bean );
-        this._code = code;
+        this._strCode = code;
     }
 
     /**
-     * Constructeur de l'exception
-     * @param additionalParameters les paramètres additionels de l'exception
-     * @param code Le code de l'exception
+     * Exception constructor
+     * 
+     * @param additionalParameters
+     *            Additional Exception Parameters
+     * @param code
+     *            Exception code
      */
-    public BusinessException(Object bean, Map<String,Object> additionalParameters, String code){
-    	super(bean,additionalParameters);
-    	this._code = code;
+    public BusinessException( Object bean, Map<String, Object> additionalParameters, String code )
+    {
+        super( bean, additionalParameters );
+        this._strCode = code;
     }
 
     /**
-     * Constructeur de l'exception
-     * @param additionalParameters les paramètres additionels de l'exception
-     * @param code Le code de l'exception
-     * @param arguments Les arguments de l'exception
+     * Exception constructor
+     * 
+     * @param additionalParameters
+     *            Additional Exception Parameters
+     * @param code
+     *            Exception code
+     * @param arguments
+     *            Exception arguments
      */
-    public BusinessException(Object bean, Map<String,Object> additionalParameters, String code, String... arguments){
-    	super(bean,additionalParameters);
-    	this._code = code;
+    public BusinessException( Object bean, Map<String, Object> additionalParameters, String code, String... arguments )
+    {
+        super( bean, additionalParameters );
+        this._strCode = code;
     }
-    
+
     /**
-     * Constructeur de l'exception
-     * @param code Le code de l'exception
-     * @param arguments Les arguments de l'exception
+     * Exception constructor
+     * 
+     * @param code
+     *            Exception code
+     * @param arguments
+     *            Exception arguments
      */
     public BusinessException( Object bean, String code, String... arguments )
     {
         super( bean );
-        this._code = code;
-        this._arguments = arguments;
+        this._strCode = code;
+        this._strArguments = arguments;
     }
 
     /**
-     * Récupère le code de l'exception
-     * @return le code de l'exception
+     * Get the exception code
+     * 
+     * @return Exception code
      */
     public String getCode( )
     {
-        return _code;
+        return _strCode;
     }
 
     /**
-     * Initialise le code de l'exception
-     * @param code le code de l'exception
+     * Initialize the exception code
+     * 
+     * @param code
+     *            Exception code
      */
     public void setCode( String code )
     {
-        this._code = code;
+        this._strCode = code;
     }
 
     /**
-     * Récupère les argumentes de l'exception
-     * @return les arguments de l'exception
+     * Get the exception arguments
+     * 
+     * @return exception arguments
      */
     public String[] getArguments( )
     {
-        return _arguments;
+        return _strArguments;
     }
 
     /**
-     * Initialise les arguments de l'exception
-     * @param arguments les arguments de l'exception
+     * Initialize the exception arguments
+     * 
+     * @param arguments
+     *            exception arguments
      */
     public void setArguments( String[] arguments )
     {
-        _arguments = arguments;
+        _strArguments = arguments;
     }
 
     /**
-     * Constructeur de message d'erreur à partir d'une {@link BusinessException}
-     * @return Le tableau de {@link String} contenant les clés i18n des messages
-     *         d'erreurs
+     *  Error message builder from a {@link BusinessException}
+     * 
+     * @return The {@link String} array containing the i18n keys of the error messages
      */
     public String getMessage( )
     {
@@ -139,8 +154,7 @@ public class BusinessException extends FunctionnalException
         if ( this.getArguments( ) != null && this.getArguments( ).length > 0 )
         {
             errorMessage = I18nService.getLocalizedString( this.getCode( ), this.getArguments( ), Locale.getDefault( ) );
-        }
-        else
+        } else
         {
             errorMessage = I18nService.getLocalizedString( this.getCode( ), Locale.getDefault( ) );
         }

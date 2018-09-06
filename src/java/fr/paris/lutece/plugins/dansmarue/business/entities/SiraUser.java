@@ -33,86 +33,116 @@
  */
 package fr.paris.lutece.plugins.dansmarue.business.entities;
 
-public class SiraUser {
-	
-	private Long id;
-	private String guid;
-	private String mail;
-	private String udid;
-	private String device;
-	private String token;
-	
-	/**
-	 * @return the guid
-	 */
-	public String getGuid() {
-		return guid;
-	}
-	/**
-	 * @param guid the guid to set
-	 */
-	public void setGuid(String guid) {
-		this.guid = guid;
-	}
-	/**
-	 * @return the mail
-	 */
-	public String getMail() {
-		return mail;
-	}
-	/**
-	 * @param mail the mail to set
-	 */
-	public void setMail(String mail) {
-		this.mail = mail;
-	}
-	/**
-	 * @return the udid
-	 */
-	public String getUdid() {
-		return udid;
-	}
-	/**
-	 * @param udid the udid to set
-	 */
-	public void setUdid(String udid) {
-		this.udid = udid;
-	}
-	/**
-	 * @return the device
-	 */
-	public String getDevice() {
-		return device;
-	}
-	/**
-	 * @param device the device to set
-	 */
-	public void setDevice(String device) {
-		this.device = device;
-	}
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
-	/**
-	 * @return the token
-	 */
-	public String getToken() {
-		return token;
-	}
-	/**
-	 * @param token the token to set
-	 */
-	public void setToken(String token) {
-		this.token = token;
-	}
-	
+public class SiraUser
+{
+
+    private Long   _id;
+    private String _strGuid;
+    private String _strMail;
+    private String _strUdid;
+    private String _strDevice;
+    private String _strToken;
+
+    /**
+     * @return the guid
+     */
+    public String getGuid( )
+    {
+        return _strGuid;
+    }
+
+    /**
+     * @param guid
+     *            the guid to set
+     */
+    public void setGuid( String guid )
+    {
+        this._strGuid = guid;
+    }
+
+    /**
+     * @return the mail
+     */
+    public String getMail( )
+    {
+        return _strMail;
+    }
+
+    /**
+     * @param mail
+     *            the mail to set
+     */
+    public void setMail( String mail )
+    {
+        this._strMail = mail;
+    }
+
+    /**
+     * @return the udid
+     */
+    public String getUdid( )
+    {
+        return _strUdid;
+    }
+
+    /**
+     * @param udid
+     *            the udid to set
+     */
+    public void setUdid( String udid )
+    {
+        this._strUdid = udid;
+    }
+
+    /**
+     * @return the device
+     */
+    public String getDevice( )
+    {
+        return _strDevice;
+    }
+
+    /**
+     * @param device
+     *            the device to set
+     */
+    public void setDevice( String device )
+    {
+        this._strDevice = device;
+    }
+
+    /**
+     * @return the id
+     */
+    public Long getId( )
+    {
+        return _id;
+    }
+
+    /**
+     * @param id
+     *            the id to set
+     */
+    public void setId( Long id )
+    {
+        this._id = id;
+    }
+
+    /**
+     * @return the token
+     */
+    public String getToken( )
+    {
+        return _strToken;
+    }
+
+    /**
+     * @param token
+     *            the token to set
+     */
+    public void setToken( String token )
+    {
+        this._strToken = token;
+    }
+
 }

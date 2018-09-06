@@ -30,111 +30,125 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * License 1.0
- */ 
+ */
 package fr.paris.lutece.plugins.dansmarue.business.entities;
 
 import java.math.BigDecimal;
 
 /**
- * This is the business class for the object Quartier
- */ 
+ * This is the business class for the object neighborhood
+ */
 public class ConseilQuartier
 {
-    // Variables declarations 
-    private int _nIdConsqrt;
-    private String _strNumeroConsqrt;
-    private BigDecimal _Surface;
-    private String _strNomConsqrt;
-    private BigDecimal _NumeroArrondissement;
-    
-    
-       /**
-        * Returns the IdConsqrt
-        * @return The IdConsqrt
-        */ 
-    public int getIdConsqrt()
+    // Variables declarations
+    private int        _nIdConsqrt;
+    private String     _strNumeroConsqrt;
+    private BigDecimal _surface;
+    private String     _strNomConsqrt;
+    private BigDecimal _numeroArrondissement;
+
+    /**
+     * Returns the IdConsqrt
+     * 
+     * @return The IdConsqrt
+     */
+    public int getIdConsqrt( )
     {
         return _nIdConsqrt;
     }
-    
-       /**
-        * Sets the IdConsqrt
-        * @param nIdConsqrt The IdConsqrt
-        */ 
+
+    /**
+     * Sets the IdConsqrt
+     * 
+     * @param nIdConsqrt
+     *            The IdConsqrt
+     */
     public void setIdConsqrt( int nIdConsqrt )
     {
         _nIdConsqrt = nIdConsqrt;
     }
-    
-       /**
-        * Returns the NumeroConsqrt
-        * @return The NumeroConsqrt
-        */ 
-    public String getNumeroConsqrt()
+
+    /**
+     * Returns the NumeroConsqrt
+     * 
+     * @return The NumeroConsqrt
+     */
+    public String getNumeroConsqrt( )
     {
         return _strNumeroConsqrt;
     }
-    
-       /**
-        * Sets the NumeroConsqrt
-        * @param strNumeroConsqrt The NumeroConsqrt
-        */ 
+
+    /**
+     * Sets the NumeroConsqrt
+     * 
+     * @param strNumeroConsqrt
+     *            The NumeroConsqrt
+     */
     public void setNumeroConsqrt( String strNumeroConsqrt )
     {
         _strNumeroConsqrt = strNumeroConsqrt;
     }
-    
-       /**
-        * Returns the Surface
-        * @return The Surface
-        */ 
-    public BigDecimal getSurface()
+
+    /**
+     * Returns the Surface
+     * 
+     * @return The Surface
+     */
+    public BigDecimal getSurface( )
     {
-        return _Surface;
+        return _surface;
     }
-    
-       /**
-        * Sets the Surface
-        * @param Surface The Surface
-        */ 
-    public void setSurface( BigDecimal Surface )
+
+    /**
+     * Sets the Surface
+     * 
+     * @param Surface
+     *            The Surface
+     */
+    public void setSurface( BigDecimal surface )
     {
-        _Surface = Surface;
+        _surface = surface;
     }
-    
-       /**
-        * Returns the NomConsqrt
-        * @return The NomConsqrt
-        */ 
-    public String getNomConsqrt()
+
+    /**
+     * Returns the NomConsqrt
+     * 
+     * @return The NomConsqrt
+     */
+    public String getNomConsqrt( )
     {
         return _strNomConsqrt;
     }
-    
-       /**
-        * Sets the NomConsqrt
-        * @param strNomConsqrt The NomConsqrt
-        */ 
+
+    /**
+     * Sets the NomConsqrt
+     * 
+     * @param strNomConsqrt
+     *            The NomConsqrt
+     */
     public void setNomConsqrt( String strNomConsqrt )
     {
         _strNomConsqrt = strNomConsqrt;
     }
-    
-       /**
-        * Returns the NumeroArrondissement
-        * @return The NumeroArrondissement
-        */ 
-    public BigDecimal getNumeroArrondissement()
+
+    /**
+     * Returns the NumeroArrondissement
+     * 
+     * @return The NumeroArrondissement
+     */
+    public BigDecimal getNumeroArrondissement( )
     {
-        return _NumeroArrondissement;
+        return _numeroArrondissement;
     }
-    
-       /**
-        * Sets the NumeroArrondissement
-        * @param NumeroArrondissement The NumeroArrondissement
-        */ 
-    public void setNumeroArrondissement( BigDecimal NumeroArrondissement )
+
+    /**
+     * Sets the NumeroArrondissement
+     * 
+     * @param NumeroArrondissement
+     *            The NumeroArrondissement
+     */
+    public void setNumeroArrondissement( BigDecimal numeroArrondissement )
     {
-        _NumeroArrondissement = NumeroArrondissement;
+        _numeroArrondissement = numeroArrondissement;
     }
- }
+}

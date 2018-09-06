@@ -35,19 +35,15 @@ package fr.paris.lutece.plugins.dansmarue.business.entities;
 
 import fr.paris.lutece.plugins.workflowcore.business.config.TaskConfig;
 
-/**
- * NotificationSignalementUserTaskConfig class
- * 
- */
 public class NotificationSignalementUserMultiContents extends TaskConfig
 {
     private Integer _nIdTask;
     private Long    _nIdMessage;
-    private String _strSubject;
-    private String _strSender;
-    private String _strTitle;
-    private String _strMessage;
-    
+    private String  _strSubject;
+    private String  _strSender;
+    private String  _strTitle;
+    private String  _strMessage;
+
     /**
      * @return the _nIdTask
      */
@@ -55,13 +51,16 @@ public class NotificationSignalementUserMultiContents extends TaskConfig
     {
         return _nIdTask;
     }
+
     /**
-     * @param _nIdTask the _nIdTask to set
+     * @param _nIdTask
+     *            the _nIdTask to set
      */
     public void setIdTask( Integer nIdTask )
     {
         this._nIdTask = nIdTask;
     }
+
     /**
      * @return the _nIdMessage
      */
@@ -69,13 +68,16 @@ public class NotificationSignalementUserMultiContents extends TaskConfig
     {
         return _nIdMessage;
     }
+
     /**
-     * @param _nIdMessage the _nIdMessage to set
+     * @param _nIdMessage
+     *            the _nIdMessage to set
      */
     public void setIdMessage( Long nIdMessage )
     {
         this._nIdMessage = nIdMessage;
     }
+
     /**
      * @return the _strSubject
      */
@@ -83,13 +85,16 @@ public class NotificationSignalementUserMultiContents extends TaskConfig
     {
         return _strSubject;
     }
+
     /**
-     * @param _strSubject the _strSubject to set
+     * @param _strSubject
+     *            the _strSubject to set
      */
     public void setSubject( String strSubject )
     {
         this._strSubject = strSubject;
     }
+
     /**
      * @return the _strSender
      */
@@ -97,13 +102,16 @@ public class NotificationSignalementUserMultiContents extends TaskConfig
     {
         return _strSender;
     }
+
     /**
-     * @param _strSender the _strSender to set
+     * @param _strSender
+     *            the _strSender to set
      */
     public void setSender( String strSender )
     {
         this._strSender = strSender;
     }
+
     /**
      * @return the _strTitle
      */
@@ -111,13 +119,16 @@ public class NotificationSignalementUserMultiContents extends TaskConfig
     {
         return _strTitle;
     }
+
     /**
-     * @param _strTitle the _strTitle to set
+     * @param _strTitle
+     *            the _strTitle to set
      */
     public void setTitle( String strTitle )
     {
         this._strTitle = strTitle;
     }
+
     /**
      * @return the _strMessage
      */
@@ -125,14 +136,14 @@ public class NotificationSignalementUserMultiContents extends TaskConfig
     {
         return _strMessage;
     }
+
     /**
-     * @param _strMessage the _strMessage to set
+     * @param _strMessage
+     *            the _strMessage to set
      */
     public void setMessage( String strMessage )
     {
         this._strMessage = strMessage;
     }
-    
-    
-    
+
 }
