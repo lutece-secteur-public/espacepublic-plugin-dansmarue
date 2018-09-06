@@ -38,15 +38,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -57,29 +54,29 @@ import fr.paris.lutece.util.httpaccess.HttpAccessException;
 import fr.paris.lutece.util.signrequest.NoSecurityAuthenticator;
 import fr.paris.lutece.util.signrequest.RequestAuthenticator;
 import fr.paris.lutece.util.signrequest.RequestHashAuthenticator;
-
+import net.sf.json.JSONObject;
 
 /**
  * WebServiceCaller
  */
 public class WebServiceCaller implements IWebServiceCaller
 {
-    private static final String MARK_JSON_STREAM = "jsonStream";
-    private static final String PARAMETER_TYPE_FORM = "application/x-www-form-urlencoded";
-    private static final String MARK_CONTENT_TYPE = "Content-Type";
-    private static final String PARAMETER_METHOD = "POST";
+    private static final String MARK_JSON_STREAM         = "jsonStream";
+    private static final String PARAMETER_TYPE_FORM      = "application/x-www-form-urlencoded";
+    private static final String MARK_CONTENT_TYPE        = "Content-Type";
+    private static final String PARAMETER_METHOD         = "POST";
     private static final String PARAMETER_LINE_SEPARATOR = System.getProperty( "line.separator" );
-    private static final String PROPERTY_TRACE_ENABLED = "signalement.trace.webservices.calls.enabled";
-    private static final String PROPERTY_AUTH_SECRET = "signalement.trace.webservices.secret";
+    private static final String PROPERTY_TRACE_ENABLED   = "signalement.trace.webservices.calls.enabled";
+    private static final String PROPERTY_AUTH_SECRET     = "signalement.trace.webservices.secret";
 
-    private static Logger LOGGER = Logger.getLogger( WebServiceCaller.class );
+    private static final Logger LOGGER                   = Logger.getLogger( WebServiceCaller.class );
 
     @Override
-    public String postJSON( String strUrl, JSONObject json ) throws MalformedURLException, IOException
+    public String postJSON( String strUrl, JSONObject json ) throws IOException
     {
         LOGGER.debug( "Send to " + strUrl + " : " + json.toString( ) );
         URL url = new URL( strUrl );
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection( );
+        HttpURLConnection conn = ( HttpURLConnection ) url.openConnection( );
         conn.setDoOutput( true );
         conn.setRequestMethod( PARAMETER_METHOD );
         conn.setRequestProperty( MARK_CONTENT_TYPE, PARAMETER_TYPE_FORM );
@@ -110,7 +107,9 @@ public class WebServiceCaller implements IWebServiceCaller
 
     /**
      * Enclose json data with param name use by REST api
-     * @param json the json object to send
+     * 
+     * @param json
+     *            the json object to send
      * @return the post data
      */
     private String wrapJsonToPostData( JSONObject json )
@@ -119,8 +118,7 @@ public class WebServiceCaller implements IWebServiceCaller
     }
 
     @Override
-    public String callWebService( String strUrl, Map<String, List<String>> params, RequestAuthenticator authenticator,
-            List<String> listElements ) throws HttpAccessException
+    public String callWebService( String strUrl, Map<String, List<String>> params, RequestAuthenticator authenticator, List<String> listElements ) throws HttpAccessException
     {
         String strResponse = StringUtils.EMPTY;
 
@@ -132,6 +130,7 @@ public class WebServiceCaller implements IWebServiceCaller
 
     /**
      * Ask the properties service to know if trace is enabled
+     * 
      * @return boolean if enable, false otherwise
      */
     public boolean isTraceEnabled( )
@@ -141,14 +140,18 @@ public class WebServiceCaller implements IWebServiceCaller
 
     /**
      * Trace the web service call
-     * @param strUrl The WS URI
-     * @param mapParameters The parameters
-     * @param authenticator The Request Authenticator
-     * @param listElements The list of elements to use to build the signature
+     * 
+     * @param strUrl
+     *            The WS URI
+     * @param mapParameters
+     *            The parameters
+     * @param authenticator
+     *            The Request Authenticator
+     * @param listElements
+     *            The list of elements to use to build the signature
      * @return The trace
      */
-    protected String trace( String strUrl, Map<String, List<String>> mapParameters, RequestAuthenticator authenticator,
-            List<String> listElements )
+    protected String trace( String strUrl, Map<String, List<String>> mapParameters, RequestAuthenticator authenticator, List<String> listElements )
     {
         StringBuilder sbTrace = new StringBuilder( );
         sbTrace.append( PARAMETER_LINE_SEPARATOR + " ---------------------- WebService Call -------------------" );
@@ -165,8 +168,7 @@ public class WebServiceCaller implements IWebServiceCaller
 
             for ( String strValue : values )
             {
-                sbTrace.append( PARAMETER_LINE_SEPARATOR + "   " ).append( strParameter ).append( ":" )
-                        .append( strValue );
+                sbTrace.append( PARAMETER_LINE_SEPARATOR + "   " ).append( strParameter ).append( ":" ).append( strValue );
             }
         }
 
@@ -180,25 +182,22 @@ public class WebServiceCaller implements IWebServiceCaller
 
         if ( authenticator instanceof RequestHashAuthenticator )
         {
-            RequestHashAuthenticator auth = (RequestHashAuthenticator) authenticator;
+            RequestHashAuthenticator auth = ( RequestHashAuthenticator ) authenticator;
             String strTimestamp = "" + new Date( ).getTime( );
-            String strSecret = AppPropertiesService.getProperty(PROPERTY_AUTH_SECRET);
-            String strSignature = auth.buildSignature( listElements, strTimestamp, strSecret);
+            String strSecret = AppPropertiesService.getProperty( PROPERTY_AUTH_SECRET );
+            String strSignature = auth.buildSignature( listElements, strTimestamp, strSecret );
             sbTrace.append( PARAMETER_LINE_SEPARATOR + " Request Authenticator : RequestHashAuthenticator" );
             sbTrace.append( PARAMETER_LINE_SEPARATOR + " Timestamp sample : " ).append( strTimestamp );
             sbTrace.append( PARAMETER_LINE_SEPARATOR + " Signature for this timestamp : " ).append( strSignature );
-        }
-        else if ( authenticator instanceof NoSecurityAuthenticator )
+        } else if ( authenticator instanceof NoSecurityAuthenticator )
         {
             sbTrace.append( PARAMETER_LINE_SEPARATOR + " No request authentification" );
-        }
-        else
+        } else
         {
             sbTrace.append( PARAMETER_LINE_SEPARATOR + " Unknown Request authenticator" );
         }
 
-        sbTrace.append( PARAMETER_LINE_SEPARATOR
-                + " --------------------------------------------------------------------" );
+        sbTrace.append( PARAMETER_LINE_SEPARATOR + " --------------------------------------------------------------------" );
 
         return sbTrace.toString( );
     }

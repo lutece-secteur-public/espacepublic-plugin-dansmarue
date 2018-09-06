@@ -37,7 +37,6 @@ import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 
 import java.util.Comparator;
 
-
 /**
  * DateComparator Class
  * 
@@ -53,11 +52,10 @@ public class DirectionComparator implements Comparator<Signalement>
 
         Integer ret;
 
-        if ( _order.equals( "true" ) )
+        if ( "true".equals( _order ) )
         {
             ret = direction1.compareTo( direction2 );
-        }
-        else
+        } else
         {
             ret = direction2.compareTo( direction1 );
         }

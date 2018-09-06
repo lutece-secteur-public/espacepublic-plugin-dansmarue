@@ -46,16 +46,13 @@ import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
 
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.date.DateUtil;
 
-/**
- * Classe utilitaire pour la manipulation des dates
- *
- */
 public final class DateUtils
 {
+    private static final int             YEAR_1900                               = 1900;
     private static SimpleDateFormat      _sdfAnnee;
-    // index pour les triples champs de recherche par date (entre le -date 0- et le -date 1- ou le -date 2-)
     public static final int              DATE_CRITERE_ENTRE_LE                   = 0;
     public static final int              DATE_CRITERE_ET_LE                      = 1;
     public static final int              DATE_CRITERE_OU_LE                      = 2;
@@ -69,27 +66,35 @@ public final class DateUtils
     public static final SimpleDateFormat XML_DATE_FORMAT                         = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ss'Z'" );
 
     /**
-     * Convertis une date depuis le format dd/MM/yyyy vers le format dd-MM-yyyy.
+     * Empty constructor
+     */
+    private DateUtils( )
+    {
+        // Constructor
+    }
+
+    /**
+     * Convert a date from the dd/MM/yyyyy format to the dd-MM-yyyyy format.
      * 
      * @param dateAnglaise
-     *            date au format dd/MM/yyyy
-     * @return date au format dd-MM-yyyy
+     *            date in dd/MM/yyyyyy format
+     * @return date in dd-MM-yyyyyy format
      * @throws ParseException
-     *             lancé si la date en entrée n'est pas valide.
+     *             throws if the entry date is not valid.
      */
     public static String converteDateAnglais( String dateAnglaise ) throws ParseException
     {
         SimpleDateFormat sdf = new SimpleDateFormat( "dd-MM-yyyy" );
-        SimpleDateFormat sdf2 = new SimpleDateFormat( "dd/MM/yyyy" );
+        SimpleDateFormat sdf2 = new SimpleDateFormat( DATE_FR );
         return sdf.format( sdf2.parse( dateAnglaise ) );
     }
 
     /**
-     * Retourne l'année d'une date
+     * Returns a date year
      * 
      * @param date
      *            date
-     * @return année
+     * @return year
      */
     public static synchronized String getAnnee( Date date )
     {
@@ -101,9 +106,9 @@ public final class DateUtils
     }
 
     /**
-     * Retourne l'année en cours
+     * Returns the current year
      * 
-     * @return l'année en cours
+     * @return current year
      */
     public static int getAnneeEnCours( )
     {
@@ -121,9 +126,9 @@ public final class DateUtils
     }
 
     /**
-     * Retourne la date du jour
+     * Returns the current date
      * 
-     * @return la date du jour
+     * @return the current date
      */
     public static Timestamp getCurrentDate( )
     {
@@ -131,9 +136,9 @@ public final class DateUtils
     }
 
     /**
-     * renvoie la date courante.
+     * Returns the current date
      *
-     * @return la date courante
+     * @return the current date
      */
     public static String getCurrentDateString( )
     {
@@ -141,11 +146,11 @@ public final class DateUtils
     }
 
     /**
-     * renvoie la date courante
+     * Returns the current date
      * 
      * @param strPattern
-     *            Le format de la date courante
-     * @return la date courante
+     *            the current date format
+     * @return the current date
      */
     public static String getCurrentDateString( String strPattern )
     {
@@ -163,37 +168,35 @@ public final class DateUtils
     {
         Calendar calendar = Calendar.getInstance( );
         calendar.setTime( new Date( ) );
-        calendar.set( Calendar.YEAR, 1900 );
+        calendar.set( Calendar.YEAR, YEAR_1900 );
         calendar.set( Calendar.MONTH, Calendar.JANUARY );
         calendar.set( Calendar.DAY_OF_MONTH, 1 );
         return new Timestamp( calendar.getTimeInMillis( ) );
     }
 
     /**
-     * Renvoie la date sous le format défini par strPattern
+     * Returns the date in the format defined by strPattern
      * 
      * @param date
-     *            la date
+     *            date
      * @param strPattern
-     *            le format souhaite de la date
-     * @return la date sous forme EEEE dd MMMM yyyy
+     *            the desired format for the date
+     * @return the date in EEEE dd MMMMM yyyyy format
      */
     public static String getDate( Date date, String strPattern )
     {
         SimpleDateFormat dateFormat = new SimpleDateFormat( strPattern, Locale.FRENCH );
-        String strDate = dateFormat.format( date );
-
-        return strDate;
+        return dateFormat.format( date );
     }
 
     /**
-     * Transfome une date en format string de type dd/MM/yyyy en objet Timestamp
+     * Transforms a date in string format of type dd/MM/yyyyyy to Timestamp object
      * 
      * @param strDate
-     *            Date à transformer
+     *            Date to be transformed
      * @param isStartOfDayHour
-     *            TRUE si l'heure doit etre 00h01 FALSE si l'heure doit etre 23H59
-     * @return objet Timestamp correspondant à la date donnée en paramètre
+     *            TRUE if the time is to be 00:01 FALSE if the time is to be 23:59
+     * @return objet Timestamp corresponding to the date given in parameter
      */
     public static Timestamp getDate( String strDate, boolean isStartOfDayHour )
     {
@@ -231,19 +234,17 @@ public final class DateUtils
             caldate.set( Calendar.SECOND, caldate.getActualMaximum( Calendar.SECOND ) );
         }
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
-
-        return timeStamp;
+        return new Timestamp( caldate.getTimeInMillis( ) );
     }
 
     /**
-     * Renvoie un timestamp dont l'heure doit etre 00h01 FALSE si l'heure doit etre 23H59
+     * Returns a timestamp whose time must be 00:01 FALSE if the time must be 23:59
      * 
      * @param date
-     *            Date à transformer
+     *            Date to be transformed
      * @param isStartOfDayHour
-     *            true si l'heure doit etre 00h01 FALSE si l'heure doit etre 23H59
-     * @return objet Timestamp correspondant à la date donnée en paramètre
+     *            true if the time is to be 00h01 FALSE if the time is to be 23h59
+     * @return objet Timestamp corresponding to the date given in parameter
      */
     public static Timestamp getDate( Timestamp date, boolean isStartOfDayHour )
     {
@@ -263,26 +264,22 @@ public final class DateUtils
             caldate.set( Calendar.SECOND, caldate.getActualMaximum( Calendar.SECOND ) );
         }
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
-
-        return timeStamp;
+        return new Timestamp( caldate.getTimeInMillis( ) );
     }
 
     /**
-     * Renvoie la date sous le format défini par strPattern
+     * Returns the date in the format defined by strPattern
      * 
      * @param date
-     *            la date
+     *            the date
      * @param strPattern
-     *            le format souhaite de la date
-     * @return la date sous forme EEEE dd MMMM yyyy
+     *            the format wishes from the date
+     * @return the date in EEEE dd MMMMM yyyyy format
      */
     public static String getDate( Timestamp date, String strPattern )
     {
         SimpleDateFormat dateFormat = new SimpleDateFormat( strPattern, Locale.FRENCH );
-        String strDate = dateFormat.format( date );
-
-        return strDate;
+        return dateFormat.format( date );
     }
 
     /**
@@ -302,11 +299,11 @@ public final class DateUtils
     }
 
     /**
-     * Transfome une date en format string de type HH:mm en objet date
+     * Transforms a date in string format of type HH:mm into a date object
      * 
      * @param strHour
-     *            Date à transformer
-     * @return objet date correspondant à la date donnée en paramètre
+     *            Date to be transformed
+     * @return objet date corresponding to the date given in parameter
      */
     public static Timestamp getHour( String strHour )
     {
@@ -379,11 +376,11 @@ public final class DateUtils
     }
 
     /**
-     * Retourne l'année d'une date
+     * Returns the year of a date
      * 
      * @param date
      *            date
-     * @return année
+     * @return year
      */
     public static String getMois( Date date )
     {
@@ -522,10 +519,10 @@ public final class DateUtils
      */
     public static boolean validateDate( String date )
     {
-        SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy" );
+        SimpleDateFormat sdf = new SimpleDateFormat( DATE_FR );
         boolean hasError = true;
 
-        if ( !date.equals( "" ) )
+        if ( !"".equals( date ) )
         {
             try
             {
@@ -537,6 +534,7 @@ public final class DateUtils
                 c.getTime( );
             } catch ( Exception ex )
             {
+                AppLogService.error( ex.getMessage( ), ex );
                 hasError = false;
             }
         }
@@ -545,13 +543,13 @@ public final class DateUtils
     }
 
     /**
-     * vérifie un trigramme de dates entre le ... et le ... ou le.
+     * checks a trigram of dates between the... and the... or the.
      *
      * @param dateEffetRecherche
      *            the date effet recherche
      * @param obligatoire
-     *            si obligatoire est à true la méthode vérifiera aussi si au moins une valeur est saisie.
-     * @return true si les dates sont valides (et éventuellement qu'une date est saisie).
+     *            if mandatory is true the method will also check if at least one value is entered.
+     * @return true if the dates are valid (and if a date is entered).
      */
     public static boolean valideDateEntreLeEtLeOuLe( List<String> dateEffetRecherche, boolean obligatoire )
     {
@@ -603,10 +601,10 @@ public final class DateUtils
     }
 
     /**
-     * Vérifie que l'heure est bien au format HH:mm.
+     * Checks that the time is in HH:mm format.
      *
      * @param sHeure
-     *            string heure
+     *            string hour
      * @return true, if successful
      */
     public static boolean verifierHeure( String sHeure )
@@ -631,14 +629,6 @@ public final class DateUtils
             }
         }
         return false;
-    }
-
-    /**
-     * Constructeur vide
-     */
-    private DateUtils( )
-    {
-        // rien
     }
 
     /**
@@ -670,8 +660,7 @@ public final class DateUtils
         Calendar cal2 = Calendar.getInstance( );
         cal1.setTime( date1 );
         cal2.setTime( date2 );
-        return ( cal1.get( Calendar.HOUR_OF_DAY ) >= cal2.get( Calendar.HOUR_OF_DAY ) )
-                && ( cal1.get( Calendar.MINUTE ) >= cal2.get( Calendar.MINUTE ) );
+        return ( cal1.get( Calendar.HOUR_OF_DAY ) >= cal2.get( Calendar.HOUR_OF_DAY ) ) && ( cal1.get( Calendar.MINUTE ) >= cal2.get( Calendar.MINUTE ) );
     }
 
     /**

@@ -38,7 +38,7 @@ package fr.paris.lutece.plugins.dansmarue.util.constants;
  */
 public final class LibrarySiraConstants
 {
-    // Methodes WS
+    // WebService links
     public static final String PROPERTY_REST_RAMEN_URL                           = "ramen-rest-url";
     public static final String PROPERTY_REST_DMR_URL                             = "dmr-rest-url";
 
@@ -50,7 +50,7 @@ public final class LibrarySiraConstants
     public static final String REST_GET_SERVICE_BY_ID                            = "getServiceById";
     public static final String REST_GET_ALL_TYPE_OBJECT_ACTIFS                   = "getAllTypeObjetActifs";
     public static final String REST_NATURE_BY_TYPE_OBJECT                        = "getNatureByTypeObjetId";
-    
+
     public static final String REST_TYPE_SIGNALEMENT_SERVICE                     = "getAllSousTypeSignalementCascade";
     public static final String REST_LIST_SIGNALEMENT_DOSSIER_SERVICE             = "getListSignalementDossierByParam";
     public static final String REST_GET_SIGNALEMENT_BY_ID                        = "getSignalementById";

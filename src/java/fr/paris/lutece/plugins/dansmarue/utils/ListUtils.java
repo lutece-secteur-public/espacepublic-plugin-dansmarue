@@ -1,20 +1,5 @@
-package fr.paris.lutece.plugins.dansmarue.utils;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
-import org.apache.log4j.Logger;
-
 /*
- * Copyright (c) 2002-2010, Mairie de Paris
+ * Copyright (c) 2002-2018, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,27 +31,46 @@ import org.apache.log4j.Logger;
  *
  * License 1.0
  */
+package fr.paris.lutece.plugins.dansmarue.utils;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
+import org.apache.log4j.Logger;
 
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
-
-/**
- * Utilitaire servant à la manipulation des listes
- * 
- */
 public final class ListUtils
 {
 
-    private static final Logger LOGGER = Logger.getLogger( ListUtils.class );
+    private static final String ERROR_LIST_CREATION     = "Erreur lors de la création d'une liste pour combo : ";
+    private static final Logger LOGGER                  = Logger.getLogger( ListUtils.class );
     private static final String PROPERTY_LIST_SEPARATOR = ";";
-    private static final String PROPERTY_LIST_COMA = ",";
+    private static final String PROPERTY_LIST_COMA      = ",";
+
+    /**
+     * Instantiates a new list utils.
+     */
+    private ListUtils( )
+    {
+        // does nothing
+    }
 
     /**
      * Return.
      * 
-     * @param propertyKey the property key
+     * @param propertyKey
+     *            the property key
      * @return the property list
      */
     public static List<String> getPropertyList( String propertyKey )
@@ -84,22 +88,17 @@ public final class ListUtils
     }
 
     /**
-     * Conversion d'une liste de type {@link List} vers une
-     * {@link ReferenceList}
+     * Conversion of a list of type {@link List} to a {@link ReferenceList}
      * 
      * @param list
-     *            la liste à convertir
+     *            the list to be converted
      * @param key
-     *            la valeur de la propriété du bean servant de clé dans la
-     *            {@link ReferenceList}
+     *            the value of the bean property used as a key in the {@link ReferenceList}
      * @param value
-     *            la valeur de la propriété du bean servant de valeur dans la
-     *            {@link ReferenceList}
+     *            the value of the bean property used as a value in the {@link ReferenceList}
      * @param firstItem
-     *            valeur de la première ligne dans la {@link ReferenceList}
-     *            (exemple, en vue d'afficher la ReferenceList dans une liste
-     *            déroulante : " -- Sélectionnez une valeur --").
-     * @return La {@link ReferenceList} peuplée avec les données de la Liste
+     *            value of the first line in the {@link ReferenceList} (example, to display the ReferenceList in a drop-down list:" -- Select a value --").
+     * @return The {@link ReferenceList} populated with data from the List
      */
     public static ReferenceList toReferenceList( List<?> list, String key, String value, String firstItem )
     {
@@ -107,18 +106,19 @@ public final class ListUtils
     }
 
     /**
-     * Conversion d'une liste de type {@link List} vers une.
+     * Conversion of a list of type {@link List} to a {@link ReferenceList}
      * 
-     * @param list la liste à convertir
-     * @param key la valeur de la propriété du bean servant de clé dans la
-     * @param value la valeur de la propriété du bean servant de valeur dans la
-     * @param firstItem valeur de la première ligne dans la
-     *            {@link ReferenceList} (exemple, en vue d'afficher la
-     *            ReferenceList dans une liste
-     *            déroulante : " -- Sélectionnez une valeur --").
-     * @param sort if true reference list twill be sorted
-     * @return La {@link ReferenceList} peuplée avec les données de la Liste
-     *         {@link ReferenceList} {@link ReferenceList} {@link ReferenceList}
+     * @param list
+     *            the list to be converted
+     * @param key
+     *            the value of the bean property used as a key in the {@link ReferenceList}
+     * @param value
+     *            the value of the bean property used as a value in the {@link ReferenceList}
+     * @param firstItem
+     *            value of the first line in the {@link ReferenceList} (example, to display the ReferenceList in a drop-down list:" -- Select a value --").
+     * @param sort
+     *            if the list has to be sorted
+     * @return The {@link ReferenceList} populated with data from the List
      */
     public static ReferenceList toReferenceList( List<?> list, String key, String value, String firstItem, boolean sort )
     {
@@ -153,46 +153,42 @@ public final class ListUtils
                 };
                 Collections.sort( referenceList, fct );
             }
-        }
-        catch ( IllegalAccessException e )
+        } catch ( IllegalAccessException e )
         {
-            LOGGER.warn( "Erreur lors de la création d'une liste pour combo : " + e.getMessage( ), e );
-        }
-        catch ( InvocationTargetException e )
+            LOGGER.warn( ERROR_LIST_CREATION + e.getMessage( ), e );
+        } catch ( InvocationTargetException e )
         {
-            LOGGER.warn( "Erreur lors de la création d'une liste pour combo : " + e.getMessage( ), e );
-        }
-        catch ( NoSuchMethodException e )
+            LOGGER.warn( ERROR_LIST_CREATION + e.getMessage( ), e );
+        } catch ( NoSuchMethodException e )
         {
-            LOGGER.warn( "Erreur lors de la création d'une liste pour combo : " + e.getMessage( ), e );
-        }
-        catch ( Exception e )
+            LOGGER.warn( ERROR_LIST_CREATION + e.getMessage( ), e );
+        } catch ( Exception e )
         {
-            LOGGER.warn( "Erreur lors de la création d'une liste pour combo : " + e.getMessage( ), e );
+            LOGGER.warn( ERROR_LIST_CREATION + e.getMessage( ), e );
         }
 
         return referenceList;
     }
 
     /**
-     * Remove every elements from a reference list that are NOT contained in a
-     * given list.
-     * @param refList The list ro filter
-     * @param listId The list of ids to retain in the reference list
-     * @param bKeepFirstItem True to keep the first item, false to keep it only
-     *            ifs code match any item of the id list.
-     * @return a new list with only the items of the referenceList which ids are
-     *         in the parameter list. Note that a new list is created, but items
-     *         are NOT duplicated !
+     * Remove every elements from a reference list that are NOT contained in a given list.
+     * 
+     * @param refList
+     *            The list ro filter
+     * @param listId
+     *            The list of ids to retain in the reference list
+     * @param bKeepFirstItem
+     *            True to keep the first item, false to keep it only ifs code match any item of the id list.
+     * @return a new list with only the items of the referenceList which ids are in the parameter list. Note that a new list is created, but items are NOT duplicated !
      */
     public static ReferenceList retainReferenceList( ReferenceList refList, List<Integer> listId, boolean bKeepFirstItem )
     {
         ReferenceList filterList = new ReferenceList( );
-        if ( listId == null || listId.size( ) == 0 )
+        if ( listId == null || listId.isEmpty( ) )
         {
             return refList;
         }
-        List<String> listCode = new ArrayList<String>( );
+        List<String> listCode = new ArrayList<>( );
         for ( Integer nId : listId )
         {
             listCode.add( Integer.toString( nId ) );
@@ -217,36 +213,34 @@ public final class ListUtils
     }
 
     /**
-     * Instantiates a new list utils.
-     */
-    private ListUtils( )
-    {
-        // does nothing
-    }
-    
-    /**
      * Converts an array of string, to a list of int
+     * 
      * @param array
      * @return
      */
-    public static List<Integer> getListOfIntFromStrArray(String[] array){
-    	if(null == array){
-    		return null;
-    	}
-    	List<Integer> intList = new ArrayList<Integer>();
-    	for(String value:array){
-    		Integer intValue = NumberUtils.toInt(value);
-    		if(intValue >= 0){
-    			intList.add(intValue);
-    		}
-    	}
-    	return intList;
+    public static List<Integer> getListOfIntFromStrArray( String[] array )
+    {
+        if ( null == array )
+        {
+            return null;
+        }
+        List<Integer> intList = new ArrayList<Integer>( );
+        for ( String value : array )
+        {
+            Integer intValue = NumberUtils.toInt( value );
+            if ( intValue >= 0 )
+            {
+                intList.add( intValue );
+            }
+        }
+        return intList;
     }
-    
+
     /**
      * Return.
      * 
-     * @param propertyKey the property key
+     * @param propertyKey
+     *            the property key
      * @return the property list
      */
     public static List<Integer> getPropertyListInt( String propertyKey )
@@ -255,14 +249,13 @@ public final class ListUtils
         if ( property != null )
         {
             String[] items = property.split( PROPERTY_LIST_COMA );
-            List<String> itemsAsList = Arrays.asList(items);
+            List<String> itemsAsList = Arrays.asList( items );
             if ( items != null )
             {
-                return itemsAsList.stream().map(Integer::valueOf).collect(Collectors.toList());
+                return itemsAsList.stream( ).map( Integer::valueOf ).collect( Collectors.toList( ) );
             }
         }
         return null;
     }
 
-    
 }
