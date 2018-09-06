@@ -34,14 +34,12 @@
 package fr.paris.lutece.plugins.dansmarue.utils.ws;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.json.JSONObject;
 import fr.paris.lutece.util.httpaccess.HttpAccessException;
 import fr.paris.lutece.util.signrequest.RequestAuthenticator;
-
+import net.sf.json.JSONObject;
 
 /**
  * WebServiceCaller Interface
@@ -50,15 +48,20 @@ public interface IWebServiceCaller
 {
     /**
      * This method calls Rest WS to do an action
-     * @param url the url
-     * @param params the params to pass in the post
-     * @param authenticator The request authenticator
-     * @param listElements the list of elements to include in the signature
+     * 
+     * @param url
+     *            the url
+     * @param params
+     *            the params to pass in the post
+     * @param authenticator
+     *            The request authenticator
+     * @param listElements
+     *            the list of elements to include in the signature
      * @return the response as a string
-     * @throws HttpAccessException the exception if there is a problem
+     * @throws HttpAccessException
+     *             the exception if there is a problem
      */
-    String callWebService( String url, Map<String, List<String>> params, RequestAuthenticator authenticator,
-        List<String> listElements ) throws HttpAccessException;
-    
-    String postJSON(String strUrl, JSONObject json) throws MalformedURLException,IOException;
+    String callWebService( String url, Map<String, List<String>> params, RequestAuthenticator authenticator, List<String> listElements ) throws HttpAccessException;
+
+    String postJSON( String strUrl, JSONObject json ) throws IOException;
 }

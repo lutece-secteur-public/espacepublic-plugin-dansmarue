@@ -88,14 +88,14 @@ public final class SignalementConstants
     public static final String       ATTRIBUTE_SESSION_LIST_RESTRICTED_TYPE_SIGNALEMENT     = "signalement_list_restricted_type_signalement";
     public static final String       ATTRIBUTE_SESSION_LIST_RESTRICTED_CATEGORY_SIGNALEMENT = "signalement_list_restricted_category_signalement";
 
-    // pour les lists
+    // for lists
     public static final String       REFERENCE_LIST_ID                                      = "id";
     public static final String       REFERENCE_LIST_LIBELLE                                 = "libelle";
 
     // google maps
     public static final String       GOOGLE_MAPS_API_KEY                                    = AppPropertiesService.getProperty( "signalement.maps.key" );
 
-    // achive
+    // archive
     public static final String       ARCHIVE_LIMIT                                          = "signalement.archive.limit";
 
     // images resizing
@@ -113,14 +113,14 @@ public final class SignalementConstants
     public static final String       UNIT_DEVE                                              = AppPropertiesService.getProperty( "signalement.unit.deve" );
     public static final Integer      UNIT_DPE                                               = AppPropertiesService.getPropertyInt( "signalement.unit.dpe", -1 );
     public static final Integer      UNIT_RAMEN                                             = AppPropertiesService.getPropertyInt( "signalement.unit.ramen", -1 );
-    
-    // type signalement keys definitions
+
+    // reporting types keys definitions
     public static final String       TYPE_SIGNALEMENT_ENCOMBRANT                            = "signalement.typeSignalement.encombrant";
 
-    // inc version type signalement
+    // reporting types inc version
     public static final String       INC_VERSION_TYPE_SIGNALEMENT                           = "signalement.inc.typeSignalement";
 
-    // Préfixes des signalements
+    // Report prefixes
     public static final String       SIGNALEMENT_PREFIX_IOS                                 = AppPropertiesService.getProperty( "signalement.prefix.origin.ios" );
     public static final String       SIGNALEMENT_PREFIX_ANDROID                             = AppPropertiesService.getProperty( "signalement.prefix.origin.android" );
     public static final String       SIGNALEMENT_PREFIX_TELESERVICE                         = AppPropertiesService.getProperty( "signalement.prefix.origin.teleservice" );
@@ -129,10 +129,10 @@ public final class SignalementConstants
     public static final List<String> SIGNALEMENT_PREFIXES                                   = SignalementUtils.getProperties( SIGNALEMENT_PREFIX_KEY );
 
     public static final int          START_SIGNALEMENT_NUMERO                               = 1;
-    
-    //Action workflow
-    public static final String      ID_ACTION_TRANSFERT_PARTNER                            = "signalement.daemon.idAction.transfert.partner";
-    public static final String      ID_ACTION_DAEMON_SIGNALEMENT_DONE                      = "signalement.daemon.idAction.done"; 
+
+    // workflow action
+    public static final String       ID_ACTION_TRANSFERT_PARTNER                            = "signalement.daemon.idAction.transfert.partner";
+    public static final String       ID_ACTION_DAEMON_SIGNALEMENT_DONE                      = "signalement.daemon.idAction.done";
 
     /**
      * Utility class - empty constructor
