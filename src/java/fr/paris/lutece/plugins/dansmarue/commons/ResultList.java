@@ -37,7 +37,8 @@ import java.util.ArrayList;
 
 public class ResultList<E> extends ArrayList<E>
 {
-    private int totalResult;
+    private static final long serialVersionUID = 7990665032081947290L;
+    private int               totalResult;
 
     /**
      * Returns the total number of results

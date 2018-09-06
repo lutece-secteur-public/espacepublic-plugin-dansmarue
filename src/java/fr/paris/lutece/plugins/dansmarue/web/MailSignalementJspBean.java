@@ -1,8 +1,40 @@
+/*
+ * Copyright (c) 2002-2018, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.dansmarue.web;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +70,12 @@ import fr.paris.lutece.util.url.UrlItem;
 
 public class MailSignalementJspBean extends AbstractJspBean
 {
+
+    private static final long   serialVersionUID                  = -5382654434035169932L;
+
+    // CONSTANTS
+    private static final String LINE_SEPARATOR                    = "<br />";
+    private static final String RECIPIENT_SEPARATOR               = ";";
 
     // TEMPLATES
     private static final String TEMPLATE_MANAGE_MAIL              = "admin/plugins/signalement/manage_mail.html";
@@ -76,10 +114,6 @@ public class MailSignalementJspBean extends AbstractJspBean
     private static final String MESSAGE_MAIL_LINK                 = "Lien accessible pour concessionnaire";
     private static final String MESSAGE_MAIL_BONJOUR              = "Bonjour, ";
 
-    // CONSTANTS
-    private final static String LINE_SEPARATOR                    = "<br />";
-    private final static String RECIPIENT_SEPARATOR               = ";";
-
     // MEMBERS VARIABLES
     private ISignalementService _signalementService;
     private IPhotoService       _photoService;
@@ -109,7 +143,7 @@ public class MailSignalementJspBean extends AbstractJspBean
     }
 
     /**
-     * Initialize the signalemnet DAO
+     * Initialize the report DAO
      */
     private void initServices( )
     {
@@ -126,7 +160,7 @@ public class MailSignalementJspBean extends AbstractJspBean
      * @throws AccessDeniedException
      *             the access denied exception
      */
-    public String getManageMail( HttpServletRequest request ) throws AccessDeniedException
+    public String getManageMail( HttpServletRequest request )
     {
         Map<String, Object> model = new HashMap<String, Object>( );
 
@@ -160,7 +194,7 @@ public class MailSignalementJspBean extends AbstractJspBean
 
                 List<Signaleur> signaleurs = signalement.getSignaleurs( );
 
-                StringBuffer strBuff = new StringBuffer( );
+                StringBuilder strBuff = new StringBuilder( );
 
                 // Bonjour
                 strBuff.append( MESSAGE_MAIL_BONJOUR + LINE_SEPARATOR );
@@ -168,9 +202,9 @@ public class MailSignalementJspBean extends AbstractJspBean
                 // case number
                 strBuff.append( LINE_SEPARATOR + MESSAGE_MAIL_NUMBER_SIGNALEMENT + " : " + signalement.getNumeroSignalement( ) );
 
-                // date_creation                 
+                // date_creation
                 strBuff.append( LINE_SEPARATOR + MESSAGE_MAIL_DATE_CREATION + " : Le " + signalement.getDateCreation( ) + " à " + DateUtils.getHourFr( signalement.getHeureCreation( ) ) );
-                
+
                 // mail
                 if ( !signaleurs.isEmpty( ) && !signaleurs.get( 0 ).getMail( ).isEmpty( ) )
                 {
@@ -205,22 +239,20 @@ public class MailSignalementJspBean extends AbstractJspBean
                 }
 
                 // Link to the consultation page with BO account
-                strBuff.append( LINE_SEPARATOR + LINE_SEPARATOR + MESSAGE_MAIL_LINK_WITH_ACCOUNT + " : <a href=\"" 
-                        + this.getLinkConsultationWithAcc( signalement, request ) + signalement.getId( ) + "\">" 
-                        + this.getLinkConsultationWithAcc( signalement, request ) + signalement.getId( ) + "</a>" );
-                
+                strBuff.append( LINE_SEPARATOR + LINE_SEPARATOR + MESSAGE_MAIL_LINK_WITH_ACCOUNT + " : <a href=\"" + this.getLinkConsultationWithAcc( ) + signalement.getId( ) + "\">"
+                        + this.getLinkConsultationWithAcc( ) + signalement.getId( ) + "</a>" );
+
                 // Link to the consultation page user
-                strBuff.append( LINE_SEPARATOR + LINE_SEPARATOR + MESSAGE_MAIL_LINK + " : <a href=\"" 
-                        + this.getLinkConsultation( signalement, request ) + signalement.getToken( ) + "\">" 
-                        + this.getLinkConsultation( signalement, request ) + signalement.getToken( ) + "</a>" );
+                strBuff.append( LINE_SEPARATOR + LINE_SEPARATOR + MESSAGE_MAIL_LINK + " : <a href=\"" + this.getLinkConsultation( ) + signalement.getToken( ) + "\">" + this.getLinkConsultation( )
+                        + signalement.getToken( ) + "</a>" );
 
                 mailItem.setMessage( strBuff.toString( ) );
                 mailItem.setSubject( PARAMETER_SUBJECT );
             }
 
         }
-        
-        AdminUser user = getUser(  );
+
+        AdminUser user = getUser( );
 
         model.put( MARK_SENDER_MAIL, user.getEmail( ) );
         model.put( PARAMETER_SIGNALEMENT_ID, nIdCase );
@@ -270,7 +302,7 @@ public class MailSignalementJspBean extends AbstractJspBean
 
         if ( strWantPhotosInEmail != null )
         {
-            if ( strWantPhotosInEmail.equals( PARAMETER_ON ) )
+            if ( PARAMETER_ON.equals( strWantPhotosInEmail ) )
             {
                 List<PhotoDMR> photos = _photoService.findWithFullPhotoBySignalementId( nIdSignalement );
 
@@ -286,11 +318,10 @@ public class MailSignalementJspBean extends AbstractJspBean
                     if ( photo.getVue( ) == 1 )
                     {
                         files.add( new FileAttachment( "VueEnsemble." + imgExtention, photo.getImage( ).getImage( ), photo.getImage( ).getMimeType( ) ) );
-                    } 
-                    else if ( photo.getVue( ) == 0 )
+                    } else if ( photo.getVue( ) == 0 )
                     {
                         files.add( new FileAttachment( "VueDetaillee." + imgExtention, photo.getImage( ).getImage( ), photo.getImage( ).getMimeType( ) ) );
-                    }else
+                    } else
                     {
                         files.add( new FileAttachment( "ServiceFait." + imgExtention, photo.getImage( ).getImage( ), photo.getImage( ).getMimeType( ) ) );
                     }
@@ -304,9 +335,9 @@ public class MailSignalementJspBean extends AbstractJspBean
         // Try to validate fields of the form
         try
         {
-            this.valideFormFields( request, mailItem );
+            this.valideFormFields( mailItem );
 
-            // Check format email expediteur
+            // Check format sender email
             EmailValidator emailValidator = new EmailValidator( );
 
             if ( !emailValidator.isValid( mailItem.getSenderEmail( ), null ) )
@@ -319,14 +350,12 @@ public class MailSignalementJspBean extends AbstractJspBean
         }
 
         // Send the mail
-        // MailService.sendMailHtml( mailItem.getRecipientsTo( ), mailItem.getSenderEmail( ), "",
-        // mailItem.getSubject( ), mailItem.getMessage( ), );
         MailService.sendMailMultipartHtml( mailItem.getRecipientsTo( ), null, null, "Mairie de Paris", mailItem.getSenderEmail( ), mailItem.getSubject( ), mailItem.getMessage( ), null,
                 mailItem.getFilesAttachement( ) );
-        
-        //Enregistrement des infos du mail en base
+
+        // Recording of email information in the database
         Signalement signalement = _signalementService.getSignalement( nIdSignalement );
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        Timestamp timestamp = new Timestamp( System.currentTimeMillis( ) );
         signalement.setCourrielDate( timestamp );
         signalement.setCourrielDestinataire( mailItem.getRecipientsTo( ) );
         signalement.setCourrielExpediteur( mailItem.getSenderEmail( ) );
@@ -341,7 +370,7 @@ public class MailSignalementJspBean extends AbstractJspBean
      * @param request
      *            the request
      */
-    private void valideFormFields( HttpServletRequest request, MailItem mailItem )
+    private void valideFormFields( MailItem mailItem )
     {
         // Check empty fields
         if ( StringUtils.isBlank( mailItem.getRecipientsTo( ) ) )
@@ -369,8 +398,8 @@ public class MailSignalementJspBean extends AbstractJspBean
             }
         }
     }
-    
-    private String getLinkConsultationWithAcc( Signalement signalement, HttpServletRequest request )
+
+    private String getLinkConsultationWithAcc( )
     {
         UrlItem urlItem;
 
@@ -379,7 +408,7 @@ public class MailSignalementJspBean extends AbstractJspBean
         return urlItem.getUrl( );
     }
 
-    private String getLinkConsultation( Signalement signalement, HttpServletRequest request )
+    private String getLinkConsultation( )
     {
         UrlItem urlItem;
 

@@ -1,3 +1,36 @@
+/*
+ * Copyright (c) 2002-2018, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.dansmarue.web;
 
 import java.util.HashMap;
@@ -36,77 +69,74 @@ import fr.paris.lutece.util.beanvalidation.ValidationError;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
-
 /**
- * This class provides the user interface to manage form features ( manage,
- * create, modify, remove)
+ * This class provides the user interface to manage form features ( manage, create, modify, remove)
  */
 
 public class DomaineFonctionnelJspBean extends AbstractJspBean
 {
 
-    //MESSAGES
-    private static final String MESSAGE_CONFIRMATION_DELETE_DOMAINE_FONCTIONNEL = "dansmarue.message.domainefonctionnel.delete.confirmation";
-    private static final String MESSAGE_TITLE_DELETE_DOMAINE_FONCTIONNEL = "dansmarue.messagetitle.domainefonctionnel.delete.confirmation";
-//    private static final String MESSAGE_ERROR_OBSERVATION_CANT_BE_REMOVED = "dansmarue.message.domaineFonctionnel.error.used";
-    
+    private static final long          serialVersionUID                                = 6689540999532217301L;
+    // MESSAGES
+    private static final String        MESSAGE_CONFIRMATION_DELETE_DOMAINE_FONCTIONNEL = "dansmarue.message.domainefonctionnel.delete.confirmation";
+    private static final String        MESSAGE_TITLE_DELETE_DOMAINE_FONCTIONNEL        = "dansmarue.messagetitle.domainefonctionnel.delete.confirmation";
+
     // PARAMETERS
-    private static final String PARAMETER_DOMAINE_FONCTIONNEL_ID = "domaine_fonctionnel_id";
-    private static final String PARAMETER_ARRONDISSEMENTS = "arrondissements";
-    private static final String PARAMETER_QUARTIERS = "conseilQuartier";
-    private static final String PARAMETER_CATEGORIES = "categories";
-    private static final String PARAMETER_UNITS = "units";
-    
-    //JSP
-    private static final String JSP_MANAGE_DOMAINE_FONCTIONNEL = "jsp/admin/plugins/signalement/ManageDomaineFonctionnel.jsp";
-    private static final String JSP_DELETE_DOMAINE_FONCTIONNEL = "jsp/admin/plugins/signalement/DoDeleteDomaineFonctionnel.jsp";
-    private static final String JSP_SAVE_DOMAINE_FONCTIONNEL = "SaveDomaineFonctionnel.jsp";
-    private static final String JSP_MODIFY_DOMAINE_FONCTIONNEL = "ModifyDomaineFonctionnel.jsp";
+    private static final String        PARAMETER_DOMAINE_FONCTIONNEL_ID                = "domaine_fonctionnel_id";
+    private static final String        PARAMETER_ARRONDISSEMENTS                       = "arrondissements";
+    private static final String        PARAMETER_QUARTIERS                             = "conseilQuartier";
+    private static final String        PARAMETER_CATEGORIES                            = "categories";
+    private static final String        PARAMETER_UNITS                                 = "units";
 
-    //RIGHT
-    public static final String RIGHT_MANAGE_DOMAINE_FONCTIONNEL = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
+    // JSP
+    private static final String        JSP_MANAGE_DOMAINE_FONCTIONNEL                  = "jsp/admin/plugins/signalement/ManageDomaineFonctionnel.jsp";
+    private static final String        JSP_DELETE_DOMAINE_FONCTIONNEL                  = "jsp/admin/plugins/signalement/DoDeleteDomaineFonctionnel.jsp";
+    private static final String        JSP_SAVE_DOMAINE_FONCTIONNEL                    = "SaveDomaineFonctionnel.jsp";
+    private static final String        JSP_MODIFY_DOMAINE_FONCTIONNEL                  = "ModifyDomaineFonctionnel.jsp";
 
-    //CONSTANTS
-    public static final String ERROR_OCCUR = "error";
+    // RIGHT
+    public static final String         RIGHT_MANAGE_DOMAINE_FONCTIONNEL                = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
 
-    //Markers
-    private static final String MARK_DOMAINE_FONCTIONNEL_LIST = "domaine_fonctionnel_list";
-    private static final String MARK_DOMAINE_FONCTIONNEL = "domaine_fonctionnel";
-    private static final String MARK_ARRONDISSEMENT_LIST = "arrondissement_list";
-    private static final String MARK_QUARTIER_LIST = "quartier_list";
-    private static final String MARK_ARRONDISSEMENT_LIST_SIZE = "arrondissement_list_size";
-    private static final String MARK_CATEGORY_LIST = "category_list";
-    private static final String MARK_CATEGORY_LIST_SIZE = "category_list_size";
-    private static final String MARK_UNIT_TREE = "unit_tree";
-    private static final String MARK_UNIT_LIST_SIZE = "unit_list_size";
-    
+    // CONSTANTS
+    public static final String         ERROR_OCCUR                                     = "error";
 
-    //TEMPLATES
-    private static final String TEMPLATE_MANAGE_DOMAINE_FONCTIONNEL = "admin/plugins/signalement/manage_domaine_fonctionnel.html";
-    private static final String TEMPLATE_SAVE_DOMAINE_FONCTIONNEL = "admin/plugins/signalement/save_domaine_fonctionnel.html";
-    private static final String TEMPLATE_MODIFY_DOMAINE_FONCTIONNEL = "admin/plugins/signalement/modify_domaine_fonctionnel.html";
+    // Markers
+    private static final String        MARK_DOMAINE_FONCTIONNEL_LIST                   = "domaine_fonctionnel_list";
+    private static final String        MARK_DOMAINE_FONCTIONNEL                        = "domaine_fonctionnel";
+    private static final String        MARK_ARRONDISSEMENT_LIST                        = "arrondissement_list";
+    private static final String        MARK_QUARTIER_LIST                              = "quartier_list";
+    private static final String        MARK_ARRONDISSEMENT_LIST_SIZE                   = "arrondissement_list_size";
+    private static final String        MARK_CATEGORY_LIST                              = "category_list";
+    private static final String        MARK_CATEGORY_LIST_SIZE                         = "category_list_size";
+    private static final String        MARK_UNIT_TREE                                  = "unit_tree";
+    private static final String        MARK_UNIT_LIST_SIZE                             = "unit_list_size";
+
+    // TEMPLATES
+    private static final String        TEMPLATE_MANAGE_DOMAINE_FONCTIONNEL             = "admin/plugins/signalement/manage_domaine_fonctionnel.html";
+    private static final String        TEMPLATE_SAVE_DOMAINE_FONCTIONNEL               = "admin/plugins/signalement/save_domaine_fonctionnel.html";
+    private static final String        TEMPLATE_MODIFY_DOMAINE_FONCTIONNEL             = "admin/plugins/signalement/modify_domaine_fonctionnel.html";
 
     // SERVICES
     private IDomaineFonctionnelService _domaineFonctionnelService;
-    private IArrondissementService _arrondissementService;
-    private IConseilQuartierService _quartierService;
-    private ITypeSignalementService _typeSignalementService;
-    private IUnitService _unitService = SpringContextService.getBean( IUnitService.BEAN_UNIT_SERVICE );
+    private IArrondissementService     _arrondissementService;
+    private IConseilQuartierService    _quartierService;
+    private ITypeSignalementService    _typeSignalementService;
+    private IUnitService               _unitService                                    = SpringContextService.getBean( IUnitService.BEAN_UNIT_SERVICE );
 
-    //PROPERTIES
-    private static final String PROPERTY_DOMAINE_ARRONDISSEMENT_SELECT_SIZE = AppPropertiesService.getProperty("signalement.domaine.select.arrondissement.list.size");
-    private static final String PROPERTY_DOMAINE_UNIT_SELECT_SIZE = AppPropertiesService.getProperty("signalement.domaine.select.unit.list.size");
-    private static final String PROPERTY_DOMAINE_CATEGORIE_SELECT_SIZE = AppPropertiesService.getProperty("signalement.domaine.select.categorie.list.size");
-    private static final Integer PROPERTY_DOMAINE_UNIT_DEPTH = AppPropertiesService.getPropertyInt("signalement.domaine.unit.depth", 0);
-    
+    // PROPERTIES
+    private static final String        PROPERTY_DOMAINE_ARRONDISSEMENT_SELECT_SIZE     = AppPropertiesService.getProperty( "signalement.domaine.select.arrondissement.list.size" );
+    private static final String        PROPERTY_DOMAINE_UNIT_SELECT_SIZE               = AppPropertiesService.getProperty( "signalement.domaine.select.unit.list.size" );
+    private static final String        PROPERTY_DOMAINE_CATEGORIE_SELECT_SIZE          = AppPropertiesService.getProperty( "signalement.domaine.select.categorie.list.size" );
+    private static final Integer       PROPERTY_DOMAINE_UNIT_DEPTH                     = AppPropertiesService.getPropertyInt( "signalement.domaine.unit.depth", 0 );
+
     @Override
     public void init( HttpServletRequest request, String strRight ) throws AccessDeniedException
     {
         super.init( request, strRight );
-        _domaineFonctionnelService = (IDomaineFonctionnelService) SpringContextService.getBean( "domaineFonctionnelService" );
-        _arrondissementService = (IArrondissementService) SpringContextService.getBean("signalement.arrondissementService");
-        _quartierService = (IConseilQuartierService) SpringContextService.getBean("signalement.conseilQuartierService");
-        _typeSignalementService = (ITypeSignalementService) SpringContextService.getBean("typeSignalementService");
+        _domaineFonctionnelService = ( IDomaineFonctionnelService ) SpringContextService.getBean( "domaineFonctionnelService" );
+        _arrondissementService = ( IArrondissementService ) SpringContextService.getBean( "signalement.arrondissementService" );
+        _quartierService = ( IConseilQuartierService ) SpringContextService.getBean( "signalement.conseilQuartierService" );
+        _typeSignalementService = ( ITypeSignalementService ) SpringContextService.getBean( "typeSignalementService" );
     }
 
     /**
@@ -131,7 +161,9 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
 
     /**
      * Delete a DomaineFonctionnel
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return redirection url
      */
     public String doDeleteDomaineFonctionnel( HttpServletRequest request )
@@ -144,12 +176,10 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
         try
         {
             nIdDomaineFonctionnel = Integer.parseInt( strDomaineFonctionnelId );
-        }
-        catch ( NumberFormatException e )
+        } catch ( NumberFormatException e )
         {
 
-            return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR,
-                    AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
         }
 
         _domaineFonctionnelService.remove( nIdDomaineFonctionnel );
@@ -161,7 +191,8 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
     /**
      * Returns the confirmation message to delete a DomaineFonctionnel
      * 
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the html code message
      */
     public String getDeleteDomaineFonctionnel( HttpServletRequest request )
@@ -176,25 +207,24 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
         try
         {
             nIdDomaineFonctionnel = Integer.parseInt( strIdDomaineFonctionnel );
-        }
-        catch ( NumberFormatException e )
+        } catch ( NumberFormatException e )
         {
-            return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR,
-                    AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
         }
 
         Map<String, Object> urlParam = new HashMap<String, Object>( );
         urlParam.put( PARAMETER_DOMAINE_FONCTIONNEL_ID, nIdDomaineFonctionnel );
 
-        return AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_DELETE_DOMAINE_FONCTIONNEL, null,
-                MESSAGE_CONFIRMATION_DELETE_DOMAINE_FONCTIONNEL, JSP_DELETE_DOMAINE_FONCTIONNEL, "_self",
+        return AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_DELETE_DOMAINE_FONCTIONNEL, null, MESSAGE_CONFIRMATION_DELETE_DOMAINE_FONCTIONNEL, JSP_DELETE_DOMAINE_FONCTIONNEL, "_self",
                 AdminMessage.TYPE_CONFIRMATION, urlParam, strJspBack );
 
     }
 
     /**
      * Returns the form for DomaineFonctionnel creation
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return HTML Form
      */
 
@@ -212,24 +242,24 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
 
         if ( ve != null )
         {
-            domaineFonctionnel = (DomaineFonctionnel) ve.getBean( );
+            domaineFonctionnel = ( DomaineFonctionnel ) ve.getBean( );
             model.put( ERROR_OCCUR, getHtmlError( ve ) );
         }
 
-        List<Arrondissement> arrondissementList = _arrondissementService.getAllArrondissement();
-        List<TypeSignalement> categoryList = _typeSignalementService.getAllTypeSignalementWithoutParent();
-        
-        UnitNode root = new UnitNode(_unitService.getRootUnit(false));
-        UnitUtils.buildTree(root,PROPERTY_DOMAINE_UNIT_DEPTH);
-        
-        model.put(MARK_QUARTIER_LIST, _quartierService.selectQuartiersList( ));
-        model.put(MARK_UNIT_TREE, root);
-        model.put(MARK_UNIT_LIST_SIZE, PROPERTY_DOMAINE_UNIT_SELECT_SIZE);
-        model.put(MARK_ARRONDISSEMENT_LIST, arrondissementList);
-        model.put(MARK_ARRONDISSEMENT_LIST_SIZE, PROPERTY_DOMAINE_ARRONDISSEMENT_SELECT_SIZE);
-        model.put(MARK_CATEGORY_LIST, categoryList);
-        model.put(MARK_CATEGORY_LIST_SIZE, PROPERTY_DOMAINE_CATEGORIE_SELECT_SIZE);
-        
+        List<Arrondissement> arrondissementList = _arrondissementService.getAllArrondissement( );
+        List<TypeSignalement> categoryList = _typeSignalementService.getAllTypeSignalementWithoutParent( );
+
+        UnitNode root = new UnitNode( _unitService.getRootUnit( false ) );
+        UnitUtils.buildTree( root, PROPERTY_DOMAINE_UNIT_DEPTH );
+
+        model.put( MARK_QUARTIER_LIST, _quartierService.selectQuartiersList( ) );
+        model.put( MARK_UNIT_TREE, root );
+        model.put( MARK_UNIT_LIST_SIZE, PROPERTY_DOMAINE_UNIT_SELECT_SIZE );
+        model.put( MARK_ARRONDISSEMENT_LIST, arrondissementList );
+        model.put( MARK_ARRONDISSEMENT_LIST_SIZE, PROPERTY_DOMAINE_ARRONDISSEMENT_SELECT_SIZE );
+        model.put( MARK_CATEGORY_LIST, categoryList );
+        model.put( MARK_CATEGORY_LIST_SIZE, PROPERTY_DOMAINE_CATEGORIE_SELECT_SIZE );
+
         model.put( MARK_DOMAINE_FONCTIONNEL, domaineFonctionnel );
 
         HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_SAVE_DOMAINE_FONCTIONNEL, getLocale( ), model );
@@ -239,7 +269,9 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
 
     /**
      * Returns the form for DomaineFonctionnel modification
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return HTML Form
      */
 
@@ -257,11 +289,9 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
         try
         {
             nIdDomaineFonctionnel = Integer.parseInt( strIdDomaineFonctionnel );
-        }
-        catch ( NumberFormatException e )
+        } catch ( NumberFormatException e )
         {
-            return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR,
-                    AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
         }
 
         domaineFonctionnel = _domaineFonctionnelService.getById( nIdDomaineFonctionnel );
@@ -270,24 +300,24 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
         FunctionnalException ve = getErrorOnce( request );
         if ( ve != null )
         {
-            domaineFonctionnel = (DomaineFonctionnel) ve.getBean( );
-            model.put( "error", getHtmlError( ve ) );
+            domaineFonctionnel = ( DomaineFonctionnel ) ve.getBean( );
+            model.put( ERROR_OCCUR, getHtmlError( ve ) );
         }
 
-        List<Arrondissement> arrondissementList = _arrondissementService.getAllArrondissement();
-        List<TypeSignalement> categoryList = _typeSignalementService.getAllTypeSignalementWithoutParent();
-       
-        UnitNode root = new UnitNode(_unitService.getRootUnit(false));
-        UnitUtils.buildTree(root,PROPERTY_DOMAINE_UNIT_DEPTH);
-        
-        model.put(MARK_UNIT_TREE, root);
-        model.put(MARK_UNIT_LIST_SIZE, PROPERTY_DOMAINE_UNIT_SELECT_SIZE);
-        model.put(MARK_ARRONDISSEMENT_LIST, arrondissementList);
-        model.put(MARK_QUARTIER_LIST, _quartierService.selectQuartiersList( ));
-        model.put(MARK_ARRONDISSEMENT_LIST_SIZE, PROPERTY_DOMAINE_ARRONDISSEMENT_SELECT_SIZE);
-        model.put(MARK_CATEGORY_LIST, categoryList);
-        model.put(MARK_CATEGORY_LIST_SIZE, PROPERTY_DOMAINE_CATEGORIE_SELECT_SIZE);
-        
+        List<Arrondissement> arrondissementList = _arrondissementService.getAllArrondissement( );
+        List<TypeSignalement> categoryList = _typeSignalementService.getAllTypeSignalementWithoutParent( );
+
+        UnitNode root = new UnitNode( _unitService.getRootUnit( false ) );
+        UnitUtils.buildTree( root, PROPERTY_DOMAINE_UNIT_DEPTH );
+
+        model.put( MARK_UNIT_TREE, root );
+        model.put( MARK_UNIT_LIST_SIZE, PROPERTY_DOMAINE_UNIT_SELECT_SIZE );
+        model.put( MARK_ARRONDISSEMENT_LIST, arrondissementList );
+        model.put( MARK_QUARTIER_LIST, _quartierService.selectQuartiersList( ) );
+        model.put( MARK_ARRONDISSEMENT_LIST_SIZE, PROPERTY_DOMAINE_ARRONDISSEMENT_SELECT_SIZE );
+        model.put( MARK_CATEGORY_LIST, categoryList );
+        model.put( MARK_CATEGORY_LIST_SIZE, PROPERTY_DOMAINE_CATEGORIE_SELECT_SIZE );
+
         model.put( MARK_DOMAINE_FONCTIONNEL, domaineFonctionnel );
 
         HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_MODIFY_DOMAINE_FONCTIONNEL, getLocale( ), model );
@@ -297,7 +327,9 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
 
     /**
      * Modify a DomaineFonctionnel
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return redirection url
      */
 
@@ -307,44 +339,34 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
         {
             return doGoBack( request );
         }
-
-        String strIdDomaineFonctionnel = request.getParameter( PARAMETER_DOMAINE_FONCTIONNEL_ID );
-        int nIdDomaineFonctionnel = 0;
-
-        try
-        {
-            nIdDomaineFonctionnel = Integer.parseInt( strIdDomaineFonctionnel );
-        }
-        catch ( NumberFormatException e )
-        {
-            return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR,
-                    AdminMessage.TYPE_STOP );
-        }
-
         DomaineFonctionnel domaineFonctionnel = new DomaineFonctionnel( );
         populate( domaineFonctionnel, request );
 
-        String[] arrondissements = request.getParameterValues(PARAMETER_ARRONDISSEMENTS);
-        String[] categories = request.getParameterValues(PARAMETER_CATEGORIES);
-        String[] units = request.getParameterValues(PARAMETER_UNITS);
-        String[] quartiers = request.getParameterValues(PARAMETER_QUARTIERS);
-        
-        if(!ArrayUtils.isEmpty(arrondissements)){
-        	List<Integer> arrondissementList = ListUtils.getListOfIntFromStrArray(arrondissements);
-        	domaineFonctionnel.setArrondissementsIds(arrondissementList);
+        String[] arrondissements = request.getParameterValues( PARAMETER_ARRONDISSEMENTS );
+        String[] categories = request.getParameterValues( PARAMETER_CATEGORIES );
+        String[] units = request.getParameterValues( PARAMETER_UNITS );
+        String[] quartiers = request.getParameterValues( PARAMETER_QUARTIERS );
+
+        if ( !ArrayUtils.isEmpty( arrondissements ) )
+        {
+            List<Integer> arrondissementList = ListUtils.getListOfIntFromStrArray( arrondissements );
+            domaineFonctionnel.setArrondissementsIds( arrondissementList );
         }
-        if(!ArrayUtils.isEmpty(quartiers)){
-            domaineFonctionnel.setQuartiersIds(ListUtils.getListOfIntFromStrArray(quartiers));
+        if ( !ArrayUtils.isEmpty( quartiers ) )
+        {
+            domaineFonctionnel.setQuartiersIds( ListUtils.getListOfIntFromStrArray( quartiers ) );
         }
-        if(!ArrayUtils.isEmpty(categories)){
-        	List<Integer> categoryList = ListUtils.getListOfIntFromStrArray(categories);
-        	domaineFonctionnel.setTypesSignalementIds(categoryList);
+        if ( !ArrayUtils.isEmpty( categories ) )
+        {
+            List<Integer> categoryList = ListUtils.getListOfIntFromStrArray( categories );
+            domaineFonctionnel.setTypesSignalementIds( categoryList );
         }
-        if(!ArrayUtils.isEmpty(units)){
-        	List<Integer> unidsIds = ListUtils.getListOfIntFromStrArray(units);
-        	domaineFonctionnel.setUnitIds(unidsIds);
+        if ( !ArrayUtils.isEmpty( units ) )
+        {
+            List<Integer> unidsIds = ListUtils.getListOfIntFromStrArray( units );
+            domaineFonctionnel.setUnitIds( unidsIds );
         }
-        
+
         // Controls mandatory fields
         List<ValidationError> errors = validate( domaineFonctionnel, "" );
         if ( errors.isEmpty( ) )
@@ -352,15 +374,13 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
             try
             {
                 _domaineFonctionnelService.store( domaineFonctionnel );
-            }
-            catch ( BusinessException e )
+            } catch ( BusinessException e )
             {
                 UrlItem url = new UrlItem( JSP_MODIFY_DOMAINE_FONCTIONNEL );
                 url.addParameter( PARAMETER_DOMAINE_FONCTIONNEL_ID, domaineFonctionnel.getId( ) );
                 return manageFunctionnalException( request, e, url.getUrl( ) );
             }
-        }
-        else
+        } else
         {
             return AdminMessageService.getMessageUrl( request, Messages.MESSAGE_INVALID_ENTRY, errors );
         }
@@ -371,15 +391,14 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
 
     /**
      * Save a DomaineFonctionnel
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return redirection url
      * @throws ValidationException
      */
-    public String doSaveDomaineFonctionnel( HttpServletRequest request ) throws ValidationException
+    public String doSaveDomaineFonctionnel( HttpServletRequest request )
     {
-
-        FunctionnalException ve = getErrorOnce( request );
-
         if ( StringUtils.isNotBlank( request.getParameter( "cancel" ) ) )
         {
             return doGoBack( request );
@@ -388,27 +407,31 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
         DomaineFonctionnel domaineFonctionnel = new DomaineFonctionnel( );
         populate( domaineFonctionnel, request );
 
-        String[] arrondissements = request.getParameterValues(PARAMETER_ARRONDISSEMENTS);
-        String[] categories = request.getParameterValues(PARAMETER_CATEGORIES);
-        String[] units = request.getParameterValues(PARAMETER_UNITS);
-        String[] quartiers = request.getParameterValues(PARAMETER_QUARTIERS);
-        
-        if(!ArrayUtils.isEmpty(quartiers)){
-            domaineFonctionnel.setQuartiersIds(ListUtils.getListOfIntFromStrArray(quartiers));
+        String[] arrondissements = request.getParameterValues( PARAMETER_ARRONDISSEMENTS );
+        String[] categories = request.getParameterValues( PARAMETER_CATEGORIES );
+        String[] units = request.getParameterValues( PARAMETER_UNITS );
+        String[] quartiers = request.getParameterValues( PARAMETER_QUARTIERS );
+
+        if ( !ArrayUtils.isEmpty( quartiers ) )
+        {
+            domaineFonctionnel.setQuartiersIds( ListUtils.getListOfIntFromStrArray( quartiers ) );
         }
-        if(!ArrayUtils.isEmpty(arrondissements)){
-        	List<Integer> arrondissementList = ListUtils.getListOfIntFromStrArray(arrondissements);
-        	domaineFonctionnel.setArrondissementsIds(arrondissementList);
+        if ( !ArrayUtils.isEmpty( arrondissements ) )
+        {
+            List<Integer> arrondissementList = ListUtils.getListOfIntFromStrArray( arrondissements );
+            domaineFonctionnel.setArrondissementsIds( arrondissementList );
         }
-        if(!ArrayUtils.isEmpty(categories)){
-        	List<Integer> categoryList = ListUtils.getListOfIntFromStrArray(categories);
-        	domaineFonctionnel.setTypesSignalementIds(categoryList);
+        if ( !ArrayUtils.isEmpty( categories ) )
+        {
+            List<Integer> categoryList = ListUtils.getListOfIntFromStrArray( categories );
+            domaineFonctionnel.setTypesSignalementIds( categoryList );
         }
-        if(!ArrayUtils.isEmpty(units)){
-        	List<Integer> unitsIds = ListUtils.getListOfIntFromStrArray(units);
-        	domaineFonctionnel.setUnitIds(unitsIds);
+        if ( !ArrayUtils.isEmpty( units ) )
+        {
+            List<Integer> unitsIds = ListUtils.getListOfIntFromStrArray( units );
+            domaineFonctionnel.setUnitIds( unitsIds );
         }
-        
+
         // Controls mandatory fields
         List<ValidationError> errors = validate( domaineFonctionnel, "" );
         if ( errors.isEmpty( ) )
@@ -416,14 +439,12 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
             try
             {
                 _domaineFonctionnelService.insert( domaineFonctionnel );
-            }
-            catch ( BusinessException e )
+            } catch ( BusinessException e )
             {
                 UrlItem url = new UrlItem( JSP_SAVE_DOMAINE_FONCTIONNEL );
                 return manageFunctionnalException( request, e, url.getUrl( ) );
             }
-        }
-        else
+        } else
         {
             return AdminMessageService.getMessageUrl( request, Messages.MESSAGE_INVALID_ENTRY, errors );
         }
@@ -434,15 +455,16 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
 
     /**
      * Return the url of the JSP which called the last action
-     * @param request The Http request
+     * 
+     * @param request
+     *            The Http request
      * @return The url of the last JSP
      */
     private String doGoBack( HttpServletRequest request )
     {
         String strJspBack = request.getParameter( SignalementConstants.MARK_JSP_BACK );
 
-        return StringUtils.isNotBlank( strJspBack ) ? ( AppPathService.getBaseUrl( request ) + strJspBack )
-                : AppPathService.getBaseUrl( request ) + JSP_MANAGE_DOMAINE_FONCTIONNEL;
+        return StringUtils.isNotBlank( strJspBack ) ? ( AppPathService.getBaseUrl( request ) + strJspBack ) : AppPathService.getBaseUrl( request ) + JSP_MANAGE_DOMAINE_FONCTIONNEL;
 
     }
 

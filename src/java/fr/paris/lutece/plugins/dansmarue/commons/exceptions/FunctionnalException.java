@@ -38,21 +38,22 @@ import java.util.Map;
 
 public class FunctionnalException extends RuntimeException
 {
+    private static final long serialVersionUID = 7260516599116118558L;
 
-    private Object              bean;
+    private Object              _bean;
 
-    private Map<String, Object> additionalParameters;
+    private Map<String, Object> _additionalParameters;
 
     public FunctionnalException( Object bean )
     {
-        this.bean = bean;
+        this._bean = bean;
         this.setAdditionalParameters( new HashMap<String, Object>( ) );
     }
 
     public FunctionnalException( Object bean, Map<String, Object> additionalParameters )
     {
-        this.bean = bean;
-        this.additionalParameters = additionalParameters;
+        this._bean = bean;
+        this._additionalParameters = additionalParameters;
     }
 
     /**
@@ -60,7 +61,7 @@ public class FunctionnalException extends RuntimeException
      */
     public Object getBean( )
     {
-        return bean;
+        return _bean;
     }
 
     /**
@@ -69,7 +70,7 @@ public class FunctionnalException extends RuntimeException
      */
     public void setBean( Object bean )
     {
-        this.bean = bean;
+        this._bean = bean;
     }
 
     /**
@@ -77,7 +78,7 @@ public class FunctionnalException extends RuntimeException
      */
     public Map<String, Object> getAdditionalParameters( )
     {
-        return additionalParameters;
+        return _additionalParameters;
     }
 
     /**
@@ -87,7 +88,7 @@ public class FunctionnalException extends RuntimeException
      */
     public void setAdditionalParameters( Map<String, Object> additionnalParameters )
     {
-        this.additionalParameters = additionnalParameters;
+        this._additionalParameters = additionnalParameters;
     }
 
 }

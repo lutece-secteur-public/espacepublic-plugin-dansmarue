@@ -34,16 +34,11 @@
 package fr.paris.lutece.plugins.dansmarue.upload.handler;
 
 import java.io.IOException;
-import java.nio.file.FileVisitOption;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -54,7 +49,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -246,27 +240,6 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
         }
     }
 
-    @SuppressWarnings( "unused" )
-    private void loadFilesFromDisk( HttpSession session, final Map<String, List<FileItem>> mapUpload )
-    {
-        String directoryFilesPath = FilenameUtils.concat( getUploadDirectory( ), getIdInSession( session ) );
-        if ( directoryFilesPath != null )
-        {
-            Path pathUpload = Paths.get( directoryFilesPath );
-            if ( Files.exists( pathUpload ) )
-            {
-                try
-                {
-                    Files.walkFileTree( pathUpload, EnumSet.noneOf( FileVisitOption.class ), 2, simpleFileVisitor( mapUpload ) );
-                } catch ( IOException e )
-                {
-                    LOGGER.error( "Erreur lors de la lecture des fichiers présents sur le disque dans " + pathUpload.toString( ), e );
-                }
-            }
-        }
-
-    }
-
     private void remove( String strFieldName, HttpSession session, int nIndex, List<FileItem> uploadedFiles )
     {
         if ( ( uploadedFiles != null ) && !uploadedFiles.isEmpty( ) && ( uploadedFiles.size( ) > nIndex ) )
@@ -289,42 +262,6 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
             }
         }
         return false;
-    }
-
-    private SimpleFileVisitor<Path> simpleFileVisitor( final Map<String, List<FileItem>> mapUpload )
-    {
-        return new SimpleFileVisitor<Path>( )
-        {
-            private String currentDir;
-
-            @Override
-            public FileVisitResult preVisitDirectory( Path dir, BasicFileAttributes attrs ) throws IOException
-            {
-                currentDir = dir.getName( dir.getNameCount( ) - 1 ).toString( );
-                return FileVisitResult.CONTINUE;
-            }
-
-            @Override
-            public FileVisitResult visitFile( Path file, BasicFileAttributes attrs ) throws IOException
-            {
-                if ( !attrs.isDirectory( ) )
-                {
-                    FileItem fileItem = new DiskFileItemFactory( ).createItem( currentDir, Files.probeContentType( file ), false, FilenameUtils.getName( file.getFileName( ).toString( ) ) );
-                    Files.copy( file, fileItem.getOutputStream( ) );
-                    List<FileItem> listFileItem;
-                    if ( mapUpload.get( currentDir ) != null )
-                    {
-                        listFileItem = mapUpload.get( currentDir );
-                    } else
-                    {
-                        listFileItem = new ArrayList<>( );
-                    }
-                    listFileItem.add( fileItem );
-                    mapUpload.put( currentDir, listFileItem );
-                }
-                return FileVisitResult.CONTINUE;
-            }
-        };
     }
 
     public abstract String getIdInSession( HttpSession session );

@@ -47,19 +47,19 @@ public class ValidationException extends FunctionnalException
     private static final long            serialVersionUID = 1L;
 
     public static final String           VALIDATION_ERROR = I18nService.getLocalizedString( "validation.erreur", Locale.getDefault( ) );
-    private List<ConstraintViolation<?>> constraintViolationList;
+    private List<ConstraintViolation<?>> _constraintViolationList;
 
     public ValidationException( Object bean, ConstraintViolation<?> constraintViolation )
     {
         super( bean );
-        constraintViolationList = new ArrayList<ConstraintViolation<?>>( );
-        constraintViolationList.add( constraintViolation );
+        _constraintViolationList = new ArrayList<ConstraintViolation<?>>( );
+        _constraintViolationList.add( constraintViolation );
     }
 
     public ValidationException( Object bean )
     {
         super( bean );
-        constraintViolationList = new ArrayList<ConstraintViolation<?>>( );
+        _constraintViolationList = new ArrayList<ConstraintViolation<?>>( );
     }
 
     /**
@@ -67,7 +67,7 @@ public class ValidationException extends FunctionnalException
      */
     public List<ConstraintViolation<?>> getConstraintViolationList( )
     {
-        return constraintViolationList;
+        return _constraintViolationList;
     }
 
     /**
@@ -76,21 +76,21 @@ public class ValidationException extends FunctionnalException
      */
     public void setConstraintViolationList( List<ConstraintViolation<?>> constraintViolationList )
     {
-        this.constraintViolationList = constraintViolationList;
+        this._constraintViolationList = constraintViolationList;
     }
 
     public void addConstraintViolation( ConstraintViolation<?> constraintViolation )
     {
-        this.constraintViolationList.add( constraintViolation );
+        this._constraintViolationList.add( constraintViolation );
     }
 
     public String getMessage( )
     {
         StringBuilder sbMessage = new StringBuilder( );
         sbMessage.append( VALIDATION_ERROR );
-        if ( constraintViolationList != null )
+        if ( _constraintViolationList != null )
         {
-            for ( ConstraintViolation<?> constraintViolation : constraintViolationList )
+            for ( ConstraintViolation<?> constraintViolation : _constraintViolationList )
             {
                 sbMessage.append( System.getProperty( "line.separator" ) ).append( "Valeur '" ).append( constraintViolation.getInvalidValue( ) ).append( "' incorrecte pour '" )
                         .append( constraintViolation.getPropertyPath( ) ).append( "' : " ).append( constraintViolation.getMessage( ) );

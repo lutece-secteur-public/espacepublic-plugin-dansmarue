@@ -134,6 +134,15 @@ public final class SignalementConstants
     public static final String       ID_ACTION_TRANSFERT_PARTNER                            = "signalement.daemon.idAction.transfert.partner";
     public static final String       ID_ACTION_DAEMON_SIGNALEMENT_DONE                      = "signalement.daemon.idAction.done";
 
+    // State id
+    public static final Integer      ID_STATE_NOUVEAU                                       = AppPropertiesService.getPropertyInt( "signalement.idStateNouveau", -1 );
+    public static final Integer      ID_STATE_A_TRAITER                                     = AppPropertiesService.getPropertyInt( "signalement.idStateATraiter", -1 );
+    public static final Integer      ID_STATE_PROGRAMME                                     = AppPropertiesService.getPropertyInt( "signalement.idStateProgramme", -1 );
+    public static final Integer      ID_STATE_A_FAIRE_TERRAIN                               = AppPropertiesService.getPropertyInt( "signalement.idStateAFaireTerrain", -1 );
+    public static final Integer      ID_STATE_A_FAIRE_BUREAU                                = AppPropertiesService.getPropertyInt( "signalement.idStateAFaireBureau", -1 );
+    public static final Integer      ID_STATE_TRANSFERE_PRESTATAIRE                         = AppPropertiesService.getPropertyInt( "signalement.idStateTransferePrestataire", -1 );
+    public static final Integer      ID_STATE_PROGRAMME_PRESTATAIRE                         = AppPropertiesService.getPropertyInt( "signalement.idStateServiceProgrammePrestataire", -1 );
+
     /**
      * Utility class - empty constructor
      */

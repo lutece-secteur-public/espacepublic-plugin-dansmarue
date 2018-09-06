@@ -8,6 +8,6 @@
 <%
 signalementUnit.init( request, ReferentielJspBean.RIGHT_MANAGE_REFERENTIEL );
 %>
-<%= signalementUnit.getManageSignalementUnit( request ) %>
+<%= signalementUnit.getManageSignalementUnit( ) %>
 
 <%@ include file="../../AdminFooter.jsp"%>

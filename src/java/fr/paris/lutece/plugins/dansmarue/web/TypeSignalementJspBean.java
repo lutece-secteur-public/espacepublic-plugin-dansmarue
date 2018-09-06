@@ -1,3 +1,36 @@
+/*
+ * Copyright (c) 2002-2018, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.dansmarue.web;
 
 import java.util.Collection;
@@ -34,64 +67,65 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
-
 public class TypeSignalementJspBean extends AbstractJspBean
 {
-    //RIGHT
-    public static final String RIGHT_MANAGE_TYPE_SIGNALEMENT = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
+    private static final String     ID_TYPE_SIGNALEMENT_PARENT                   = "idTypeSignalementParent";
 
-    //Markers
-    private static final String MARK_TYPE_SIGNALEMENT_LIST = "typesignalement_list";
-    private static final String MARK_TYPE_SIGNALEMENT_ID = "typesignalement_id";
-    private static final String MARK_TYPE_SIGNALEMENT = "typesignalement";
-    private static final String MARK_UNIT_LIST = "unit_list";
-    private static final String MARK_TYPE_SIGNALEMENT_PARENT_ID = "typesignalementparent_id";
-    private static final String MARK_NO_SOUS_TYPE = "nosoustype";
-    private static final String MARK_TYPE_SIGNALEMENT_LIBELLE = "typesignalement_libelle";
-    private static final String MARK_IMAGE_ADDRESS = "image_address";
+    private static final long       serialVersionUID                             = 600249327679754376L;
 
-    //CONSTANTS
-    private static final String EMPTY_STRING = "";
+    // RIGHT
+    public static final String      RIGHT_MANAGE_TYPE_SIGNALEMENT                = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
 
-    //Messages
-    private static final String MESSAGE_TITLE_DELETE_TYPE_SIGNALEMENT = "dansmarue.message.deletetypesignalement.confirmation";
-    private static final String MESSAGE_CONFIRMATION_DELETE_TYPE_SIGNALEMENT = "dansmarue.messagetitle.deletetypesignalement.confirmation";
-    private static final String MESSAGE_ERROR_IS_USED_IN_SIGNALEMENT = "dansmarue.message.deletetypesignalement.error.isusedinsignalement";
-    private static final String MESSAGE_ERROR_HAS_SOUS_TYPES = "dansmarue.message.deletetypesignalement.error.hassoustypes";
-    private static final String MESSAGE_ERROR_LIBELLE_NULL = "dansmarue.message.modifyTypeSignalement.error.libelleNull";
-    private static final String MESSAGE_ERROR_IMAGE_TYPE_SIGNALEMENT_NULL = "dansmarue.message.error.typeSignalementImageNull";
+    // Markers
+    private static final String     MARK_TYPE_SIGNALEMENT_LIST                   = "typesignalement_list";
+    private static final String     MARK_TYPE_SIGNALEMENT_ID                     = "typesignalement_id";
+    private static final String     MARK_TYPE_SIGNALEMENT                        = "typesignalement";
+    private static final String     MARK_UNIT_LIST                               = "unit_list";
+    private static final String     MARK_TYPE_SIGNALEMENT_PARENT_ID              = "typesignalementparent_id";
+    private static final String     MARK_NO_SOUS_TYPE                            = "nosoustype";
+    private static final String     MARK_TYPE_SIGNALEMENT_LIBELLE                = "typesignalement_libelle";
+    private static final String     MARK_IMAGE_ADDRESS                           = "image_address";
+
+    // CONSTANTS
+    private static final String     EMPTY_STRING                                 = "";
+
+    // Messages
+    private static final String     MESSAGE_TITLE_DELETE_TYPE_SIGNALEMENT        = "dansmarue.message.deletetypesignalement.confirmation";
+    private static final String     MESSAGE_CONFIRMATION_DELETE_TYPE_SIGNALEMENT = "dansmarue.messagetitle.deletetypesignalement.confirmation";
+    private static final String     MESSAGE_ERROR_IS_USED_IN_SIGNALEMENT         = "dansmarue.message.deletetypesignalement.error.isusedinsignalement";
+    private static final String     MESSAGE_ERROR_HAS_SOUS_TYPES                 = "dansmarue.message.deletetypesignalement.error.hassoustypes";
+    private static final String     MESSAGE_ERROR_LIBELLE_NULL                   = "dansmarue.message.modifyTypeSignalement.error.libelleNull";
 
     // JSP
-    private static final String JSP_MANAGE_TYPE_SIGNALEMENT = "jsp/admin/plugins/signalement/ManageTypeSignalement.jsp";
-    private static final String JSP_MANAGE_TYPE_SIGNALEMENT_SHORT = "ManageTypeSignalement.jsp";
-    private static final String JSP_MODIFY_TYPE_SIGNALEMENT = "ModifyTypeSignalement.jsp";
-    private static final String JSP_SAVE_TYPE_SIGNALEMENT = "SaveTypeSignalement.jsp";
-    private static final String JSP_DELETE_TYPE_SIGNALEMENT = "jsp/admin/plugins/signalement/DoDeleteTypeSignalement.jsp";
+    private static final String     JSP_MANAGE_TYPE_SIGNALEMENT                  = "jsp/admin/plugins/signalement/ManageTypeSignalement.jsp";
+    private static final String     JSP_MANAGE_TYPE_SIGNALEMENT_SHORT            = "ManageTypeSignalement.jsp";
+    private static final String     JSP_MODIFY_TYPE_SIGNALEMENT                  = "ModifyTypeSignalement.jsp";
+    private static final String     JSP_SAVE_TYPE_SIGNALEMENT                    = "SaveTypeSignalement.jsp";
+    private static final String     JSP_DELETE_TYPE_SIGNALEMENT                  = "jsp/admin/plugins/signalement/DoDeleteTypeSignalement.jsp";
 
-    //Parameters
-    private static final String PARAMETER_TYPE_SIGNALEMENT_ID = "typesignalement_id";
-    private static final String PARAMETER_TYPE_SIGNALEMENT_PARENT_ID = "typesignalementparent_id";
-    private static final String PARAMETER_ACTION = "action";
-    private static final String ACTION_MONTER = "monter";
-    private static final String ACTION_DESCENDRE = "descendre";
-    private static final String PARAMETER_IMAGE = "image";
+    // Parameters
+    private static final String     PARAMETER_TYPE_SIGNALEMENT_ID                = "typesignalement_id";
+    private static final String     PARAMETER_TYPE_SIGNALEMENT_PARENT_ID         = "typesignalementparent_id";
+    private static final String     PARAMETER_ACTION                             = "action";
+    private static final String     ACTION_MONTER                                = "monter";
+    private static final String     ACTION_DESCENDRE                             = "descendre";
+    private static final String     PARAMETER_IMAGE                              = "image";
 
-    //TEMPLATES
-    private static final String TEMPLATE_MANAGE_TYPE_SIGNALEMENT = "admin/plugins/signalement/manage_typesignalement.html";
-    private static final String TEMPLATE_MODIFY_TYPE_SIGNALEMENT = "admin/plugins/signalement/modify_typesignalement.html";
-    private static final String TEMPLATE_SAVE_TYPE_SIGNALEMENT = "admin/plugins/signalement/save_typesignalement.html";
+    // TEMPLATES
+    private static final String     TEMPLATE_MANAGE_TYPE_SIGNALEMENT             = "admin/plugins/signalement/manage_typesignalement.html";
+    private static final String     TEMPLATE_MODIFY_TYPE_SIGNALEMENT             = "admin/plugins/signalement/modify_typesignalement.html";
+    private static final String     TEMPLATE_SAVE_TYPE_SIGNALEMENT               = "admin/plugins/signalement/save_typesignalement.html";
 
     // SERVICES
-    private ITypeSignalementService _typeSignalementService = (ITypeSignalementService) SpringContextService
-            .getBean( "typeSignalementService" );
-    private IUnitService _unitService = (IUnitService) SpringContextService.getBean( "unittree.unitService" );
+    private ITypeSignalementService _typeSignalementService                      = ( ITypeSignalementService ) SpringContextService.getBean( "typeSignalementService" );
+    private IUnitService            _unitService                                 = ( IUnitService ) SpringContextService.getBean( "unittree.unitService" );
 
     /**
-     * Get the manage type signalement page
+     * Get the manage reporting type page
      * 
      * @param request
      *            the request
-     * @return the page with type signalement list
+     * @return the page with reporting type list
      */
     public String getManageTypeSignalement( HttpServletRequest request )
     {
@@ -99,31 +133,28 @@ public class TypeSignalementJspBean extends AbstractJspBean
         Collection<TypeSignalement> listeTypeSignalement;
         String strIdTypeSignalement = request.getParameter( PARAMETER_TYPE_SIGNALEMENT_ID );
         String action = request.getParameter( PARAMETER_ACTION );
-        
-        //Affichage de la page principale des types de signalement
+
+        // Display of the main page of the types of reports
         if ( strIdTypeSignalement == null )
         {
             listeTypeSignalement = _typeSignalementService.getAllTypeSignalementWithoutParent( );
-            // Remplace "SEJ" (idUnit=94) par "DEVE" (idUnit=1) les types d'incidents rattaches a DEVE devant aller dans SEJ
+            // Replaces "SEJ" (idUnit=94) by "DEVE" (idUnit=1) the types of incidents related to DEVE to go into SEJ
             this.changeLabelUnitSEJintoDEVE( listeTypeSignalement );
             model.put( MARK_TYPE_SIGNALEMENT_LIST, listeTypeSignalement );
-        }
-        //Affichage des sous-types d'un type (dont l'id est en parametre de la requete))
-        else{
+        } else
+        {
+            // Display of subtypes of a type (whose id is in the query parameter))
 
             Integer idTypeSignalement = Integer.parseInt( strIdTypeSignalement );
 
-            //ACTION_MONTER
-            if(action != null)
+            // ACTION_MONTER
+            if ( action != null )
             {
                 if ( action.equals( ACTION_MONTER ) )
                 {
-                    TypeSignalement typeSignalement = _typeSignalementService
-                            .findByIdTypeSignalement( idTypeSignalement );
-                    int nIdTypeSignalementOrdreInferieur = _typeSignalementService
-                            .getIdTypeSignalementOrdreInferieur( typeSignalement );
-                    TypeSignalement typeSignalementOrdreInferieur = _typeSignalementService
-                            .findByIdTypeSignalement( nIdTypeSignalementOrdreInferieur );
+                    TypeSignalement typeSignalement = _typeSignalementService.findByIdTypeSignalement( idTypeSignalement );
+                    int nIdTypeSignalementOrdreInferieur = _typeSignalementService.getIdTypeSignalementOrdreInferieur( typeSignalement );
+                    TypeSignalement typeSignalementOrdreInferieur = _typeSignalementService.findByIdTypeSignalement( nIdTypeSignalementOrdreInferieur );
 
                     if ( nIdTypeSignalementOrdreInferieur > 0 )
                     {
@@ -137,7 +168,7 @@ public class TypeSignalementJspBean extends AbstractJspBean
 
                     UrlItem url = new UrlItem( JSP_MANAGE_TYPE_SIGNALEMENT_SHORT );
                     TypeSignalement typeSignalementParent = _typeSignalementService.getParent( typeSignalement.getId( ) );
-                    
+
                     if ( typeSignalementParent != null )
                     {
                         url.addParameter( PARAMETER_TYPE_SIGNALEMENT_ID, typeSignalementParent.getId( ) );
@@ -145,17 +176,12 @@ public class TypeSignalementJspBean extends AbstractJspBean
 
                     return url.getUrl( );
 
-
-                }
-                else if ( action.equals( ACTION_DESCENDRE ) )
-                //ACTION_DESCENDRE
+                } else if ( action.equals( ACTION_DESCENDRE ) )
+                // ACTION_DESCENDRE
                 {
-                    TypeSignalement typeSignalement = _typeSignalementService
-                            .findByIdTypeSignalement( idTypeSignalement );
-                    int nIdTypeSignalementOrdreSuperieur = _typeSignalementService
-                            .getIdTypeSignalementOrdreSuperieur( typeSignalement );
-                    TypeSignalement typeSignalementOrdreSuperieur = _typeSignalementService
-                            .findByIdTypeSignalement( nIdTypeSignalementOrdreSuperieur );
+                    TypeSignalement typeSignalement = _typeSignalementService.findByIdTypeSignalement( idTypeSignalement );
+                    int nIdTypeSignalementOrdreSuperieur = _typeSignalementService.getIdTypeSignalementOrdreSuperieur( typeSignalement );
+                    TypeSignalement typeSignalementOrdreSuperieur = _typeSignalementService.findByIdTypeSignalement( nIdTypeSignalementOrdreSuperieur );
 
                     if ( nIdTypeSignalementOrdreSuperieur > 0 )
                     {
@@ -167,8 +193,7 @@ public class TypeSignalementJspBean extends AbstractJspBean
                     }
 
                     UrlItem url = new UrlItem( JSP_MANAGE_TYPE_SIGNALEMENT_SHORT );
-                    TypeSignalement typeSignalementParent = _typeSignalementService
-                            .getParent( typeSignalement.getId( ) );
+                    TypeSignalement typeSignalementParent = _typeSignalementService.getParent( typeSignalement.getId( ) );
 
                     if ( typeSignalementParent != null )
                     {
@@ -178,21 +203,19 @@ public class TypeSignalementJspBean extends AbstractJspBean
                     return url.getUrl( );
 
                 }
-            }
-            else
+            } else
             {
                 model.put( MARK_TYPE_SIGNALEMENT_ID, strIdTypeSignalement );
                 TypeSignalement typeSignalement = _typeSignalementService.findByIdTypeSignalement( idTypeSignalement );
                 model.put( MARK_TYPE_SIGNALEMENT_LIBELLE, typeSignalement.getLibelle( ) );
                 Integer nIdTypeSignalement = Integer.parseInt( strIdTypeSignalement );
                 listeTypeSignalement = _typeSignalementService.getAllSousTypeSignalement( nIdTypeSignalement );
-                // Remplace "SEJ" (idUnit=94) par "DEVE" (idUnit=1) les types d'incidents rattaches a DEVE devant aller dans SEJ
+                // Replaces "SEJ" (idUnit=94) by "DEVE" (idUnit=1) the types of incidents related to DEVE to go into SEJ
                 this.changeLabelUnitSEJintoDEVE( listeTypeSignalement );
                 model.put( MARK_TYPE_SIGNALEMENT_LIST, listeTypeSignalement );
 
             }
 
-        
         }
 
         HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_MANAGE_TYPE_SIGNALEMENT, getLocale( ), model );
@@ -202,7 +225,9 @@ public class TypeSignalementJspBean extends AbstractJspBean
 
     /**
      * Replace "SEJ" (idUnit=94) with "DEVE" (idUnit=1)
-     * @param listeTypeSignalement the list of signalement type
+     * 
+     * @param listeTypeSignalement
+     *            the list of reporting types
      */
     private void changeLabelUnitSEJintoDEVE( Collection<TypeSignalement> listeTypeSignalement )
     {
@@ -213,8 +238,7 @@ public class TypeSignalementJspBean extends AbstractJspBean
         {
             idSEJ = Integer.valueOf( AppPropertiesService.getProperty( SignalementConstants.UNIT_ATELIER_JARDINAGE ) );
             idDEVE = Integer.valueOf( SignalementConstants.UNIT_DEVE );
-        }
-        catch ( NumberFormatException e )
+        } catch ( NumberFormatException e )
         {
             idSEJ = -1;
             idDEVE = -1;
@@ -231,8 +255,10 @@ public class TypeSignalementJspBean extends AbstractJspBean
     }
 
     /**
-     * Returns the form for TypeSignalement creation
-     * @param request The HTTP request
+     * Returns the form for reporting type creation
+     * 
+     * @param request
+     *            The HTTP request
      * @return HTML Form
      */
 
@@ -257,7 +283,7 @@ public class TypeSignalementJspBean extends AbstractJspBean
 
         if ( ve != null )
         {
-            typeSignalement = (TypeSignalement) ve.getBean( );
+            typeSignalement = ( TypeSignalement ) ve.getBean( );
             model.put( "error", getHtmlError( ve ) );
             nIdTypeSignalementParent = typeSignalement.getIdTypeSignalementParent( );
         }
@@ -266,8 +292,7 @@ public class TypeSignalementJspBean extends AbstractJspBean
 
         model.put( MARK_TYPE_SIGNALEMENT_PARENT_ID, nIdTypeSignalementParent );
 
-        ReferenceList listeUnits = ListUtils.toReferenceList( _unitService.getUnitsFirstLevel( false ), "idUnit",
-                "label", "" );
+        ReferenceList listeUnits = ListUtils.toReferenceList( _unitService.getUnitsFirstLevel( false ), "idUnit", "label", "" );
         SignalementUtils.changeUnitDEVEIntoSEJ( listeUnits );
 
         model.put( MARK_UNIT_LIST, listeUnits );
@@ -278,9 +303,10 @@ public class TypeSignalementJspBean extends AbstractJspBean
     }
 
     /**
-     * Save a type signalement
+     * Save a reporting type
      * 
-     * @param request The HTTP request
+     * @param request
+     *            The HTTP request
      * @return redirection url
      */
     public String doSaveTypeSignalement( HttpServletRequest request )
@@ -288,9 +314,9 @@ public class TypeSignalementJspBean extends AbstractJspBean
         if ( StringUtils.isNotBlank( request.getParameter( "cancel" ) ) )
         {
             UrlItem urlItem = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_MANAGE_TYPE_SIGNALEMENT );
-            if ( !request.getParameter( "idTypeSignalementParent" ).equals( "0" ) )
+            if ( !"0".equals( request.getParameter( ID_TYPE_SIGNALEMENT_PARENT ) ) )
             {
-                urlItem.addParameter( PARAMETER_TYPE_SIGNALEMENT_ID, request.getParameter( "idTypeSignalementParent" ) );
+                urlItem.addParameter( PARAMETER_TYPE_SIGNALEMENT_ID, request.getParameter( ID_TYPE_SIGNALEMENT_PARENT ) );
             }
 
             return urlItem.getUrl( );
@@ -299,11 +325,11 @@ public class TypeSignalementJspBean extends AbstractJspBean
         TypeSignalement typeSignalement = new TypeSignalement( );
         populate( typeSignalement, request );
 
-        MultipartHttpServletRequest multiPartRequest = (MultipartHttpServletRequest) request;
+        MultipartHttpServletRequest multiPartRequest = ( MultipartHttpServletRequest ) request;
         FileItem imageSource = multiPartRequest.getFile( PARAMETER_IMAGE );
         String strImageName = FileUploadService.getFileNameOnly( imageSource );
 
-        //image traitement 
+        // image treatement
         byte[] baImageSource = imageSource.get( );
 
         ImageResource image = new ImageResource( );
@@ -313,8 +339,7 @@ public class TypeSignalementJspBean extends AbstractJspBean
             image.setImage( baImageSource );
             image.setMimeType( imageSource.getContentType( ) );
             typeSignalement.setImage( image );
-        }
-        else
+        } else
         {
             typeSignalement.setImage( null );
             typeSignalement.setImageUrl( EMPTY_STRING );
@@ -322,9 +347,6 @@ public class TypeSignalementJspBean extends AbstractJspBean
 
         try
         {
-            // Controls mandatory fields
-            //validate( typeSignalement );
-
             if ( typeSignalement.getUnit( ).getIdUnit( ) == -1 )
             {
                 typeSignalement.getUnit( ).setIdUnit( 0 );
@@ -343,13 +365,11 @@ public class TypeSignalementJspBean extends AbstractJspBean
 
                 if ( !( typeSignalement.getOrdre( ) > 0 ) )
                 {
-                    Integer maxOrderToSet = _typeSignalementService
-                            .getMaximumOrderInHierarchyTypeSignalement( typeSignalementParent );
+                    Integer maxOrderToSet = _typeSignalementService.getMaximumOrderInHierarchyTypeSignalement( typeSignalementParent );
                     if ( maxOrderToSet != null )
                     {
                         typeSignalement.setOrdre( maxOrderToSet + 1 );
-                    }
-                    else
+                    } else
                     {
                         typeSignalement.setOrdre( 1 );
                     }
@@ -357,8 +377,7 @@ public class TypeSignalementJspBean extends AbstractJspBean
                 }
 
                 _typeSignalementService.insert( typeSignalement );
-            }
-            else
+            } else
             {
 
                 if ( !( typeSignalement.getOrdre( ) > 0 ) )
@@ -367,8 +386,7 @@ public class TypeSignalementJspBean extends AbstractJspBean
                     if ( maxOrderToSet != null )
                     {
                         typeSignalement.setOrdre( maxOrderToSet + 1 );
-                    }
-                    else
+                    } else
                     {
                         typeSignalement.setOrdre( 1 );
                     }
@@ -379,27 +397,27 @@ public class TypeSignalementJspBean extends AbstractJspBean
 
             updateActifForParentsAndChildren( typeSignalement );
 
-        }
-        catch ( FunctionnalException e )
+        } catch ( FunctionnalException e )
         {
             return manageFunctionnalException( request, e, JSP_SAVE_TYPE_SIGNALEMENT );
         }
 
         UrlItem urlItem = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_MANAGE_TYPE_SIGNALEMENT );
-        if ( !request.getParameter( "idTypeSignalementParent" ).equals( "0" ) )
+        if ( !"0".equals( request.getParameter( ID_TYPE_SIGNALEMENT_PARENT ) ) )
         {
-            urlItem.addParameter( PARAMETER_TYPE_SIGNALEMENT_ID, request.getParameter( "idTypeSignalementParent" ) );
+            urlItem.addParameter( PARAMETER_TYPE_SIGNALEMENT_ID, request.getParameter( ID_TYPE_SIGNALEMENT_PARENT ) );
         }
 
         return urlItem.getUrl( );
     }
 
     /**
-     * Returns the form for TypeSignalement modification
-     * @param request The HTTP request
+     * Returns the form for reporting type modification
+     * 
+     * @param request
+     *            The HTTP request
      * @return HTML Form
      */
-
     public String getModifyTypeSignalement( HttpServletRequest request )
     {
 
@@ -414,11 +432,9 @@ public class TypeSignalementJspBean extends AbstractJspBean
         try
         {
             nIdTypeSignalement = Integer.parseInt( strIdTypeSignalement );
-        }
-        catch ( NumberFormatException e )
+        } catch ( NumberFormatException e )
         {
-            return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR,
-                    AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
         }
 
         String strResourceType = ImageObjetService.getInstance( ).getResourceTypeId( );
@@ -436,12 +452,11 @@ public class TypeSignalementJspBean extends AbstractJspBean
         FunctionnalException ve = getErrorOnce( request );
         if ( ve != null )
         {
-            typeSignalement = (TypeSignalement) ve.getBean( );
+            typeSignalement = ( TypeSignalement ) ve.getBean( );
             model.put( "error", getHtmlError( ve ) );
         }
 
-        ReferenceList listeUnits = ListUtils.toReferenceList( _unitService.getUnitsFirstLevel( false ), "idUnit",
-                "label", "" );
+        ReferenceList listeUnits = ListUtils.toReferenceList( _unitService.getUnitsFirstLevel( false ), "idUnit", "label", "" );
         SignalementUtils.changeUnitDEVEIntoSEJ( listeUnits );
 
         model.put( MARK_UNIT_LIST, listeUnits );
@@ -455,14 +470,21 @@ public class TypeSignalementJspBean extends AbstractJspBean
         return getAdminPage( t.getHtml( ) );
     }
 
+    /**
+     * Update the reporting type
+     * 
+     * @param request
+     *            The HTTP request
+     * @return HTML Form
+     */
     public String doModifyTypeSignalement( HttpServletRequest request )
     {
         if ( StringUtils.isNotBlank( request.getParameter( "cancel" ) ) )
         {
             UrlItem urlItem = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_MANAGE_TYPE_SIGNALEMENT );
-            if ( !request.getParameter( "idTypeSignalementParent" ).equals( "0" ) )
+            if ( !"0".equals( request.getParameter( ID_TYPE_SIGNALEMENT_PARENT ) ) )
             {
-                urlItem.addParameter( PARAMETER_TYPE_SIGNALEMENT_ID, request.getParameter( "idTypeSignalementParent" ) );
+                urlItem.addParameter( PARAMETER_TYPE_SIGNALEMENT_ID, request.getParameter( ID_TYPE_SIGNALEMENT_PARENT ) );
             }
 
             return urlItem.getUrl( );
@@ -471,11 +493,11 @@ public class TypeSignalementJspBean extends AbstractJspBean
         TypeSignalement typeSignalement = new TypeSignalement( );
         populate( typeSignalement, request );
 
-        MultipartHttpServletRequest multiPartRequest = (MultipartHttpServletRequest) request;
+        MultipartHttpServletRequest multiPartRequest = ( MultipartHttpServletRequest ) request;
         FileItem imageSource = multiPartRequest.getFile( PARAMETER_IMAGE );
         String strImageName = FileUploadService.getFileNameOnly( imageSource );
 
-        //image traitement 
+        // image treatement
         byte[] baImageSource = imageSource.get( );
 
         ImageResource image = new ImageResource( );
@@ -485,17 +507,13 @@ public class TypeSignalementJspBean extends AbstractJspBean
             image.setImage( baImageSource );
             image.setMimeType( imageSource.getContentType( ) );
             typeSignalement.setImage( image );
-        }
-        else
+        } else
         {
             typeSignalement.setImage( null );
             typeSignalement.setImageUrl( EMPTY_STRING );
         }
         try
         {
-            // Controls mandatory fields
-            //validate( typeSignalement );
-
             if ( typeSignalement.getUnit( ).getIdUnit( ) == -1 )
             {
                 typeSignalement.getUnit( ).setIdUnit( 0 );
@@ -513,17 +531,14 @@ public class TypeSignalementJspBean extends AbstractJspBean
                 typeSignalement.setTypeSignalementParent( typeSignalementParent );
 
                 _typeSignalementService.update( typeSignalement );
-            }
-            else
+            } else
             {
                 _typeSignalementService.updateWithoutParent( typeSignalement );
             }
 
-
             updateActifForParentsAndChildren( typeSignalement );
 
-        }
-        catch ( FunctionnalException e )
+        } catch ( FunctionnalException e )
         {
             UrlItem urlItem = new UrlItem( JSP_MODIFY_TYPE_SIGNALEMENT );
             urlItem.addParameter( PARAMETER_TYPE_SIGNALEMENT_ID, typeSignalement.getId( ) );
@@ -539,10 +554,10 @@ public class TypeSignalementJspBean extends AbstractJspBean
     }
 
     /**
-     * Si le type signalement est actif, mettre tous ses parents actifs
-     * Si le type signalement est mis inactif, mettre inactif tous ses enfants,
-     * et ses parents ne possédant pas de sous-types actifs
-     * @param typeSignalement
+     * If the report type is active, put all parents active If the report type is put inactive, put all children inactive, and parents who do not have active subtypes
+     * 
+     * @param report
+     *            type
      */
     private void updateActifForParentsAndChildren( TypeSignalement typeSignalement )
     {
@@ -550,47 +565,45 @@ public class TypeSignalementJspBean extends AbstractJspBean
         boolean typeActif = typeSignalement.getActif( );
         TypeSignalement typeSignalementTemp = typeSignalement;
 
-        //Traitement des enfants
+        // children treatment
         if ( !typeActif )
         {
-            //Desactivation des enfants
+            // Deactivation of children
             _typeSignalementService.disableChildren( typeSignalement );
         }
 
-        //Traitement des parents
+        // parents treatment
         while ( possedeParent && _typeSignalementService.getParent( typeSignalementTemp.getId( ) ) != null )
         {
-            //Si le parent n'est pas la racine <==> le parent du parent != null
+            // If the parent is not the root <===> the parent of the parent != null
             if ( _typeSignalementService.getParent( typeSignalementTemp.getId( ) ).getId( ) != null )
             {
-                //typeSignalementTemp deviens son parent
+                // typeSignalementTemp becomes its parent
                 typeSignalementTemp = _typeSignalementService.getParent( typeSignalementTemp.getId( ) );
-                //Si on a choisi de mettre le signalement actif
+                // If you have chosen to put the report on active
                 if ( typeActif )
                 {
-                    //Si le parent est inactif : on l'active
+                    // If the parent is inactive: it is activated
                     if ( !typeSignalementTemp.getActif( ) )
                     {
                         typeSignalementTemp.setActif( true );
                         if ( _typeSignalementService.getParent( typeSignalementTemp.getId( ) ) != null )
                         {
                             _typeSignalementService.update( typeSignalementTemp );
-                        }
-                        else
+                        } else
                         {
                             _typeSignalementService.updateWithoutParent( typeSignalementTemp );
                         }
                     }
-                }
-                //Si on a choisi de mettre le signalement inactif
-                else
+                } else
                 {
-                    if ( typeSignalementTemp.getActif( ) ) //Si le parent est actif
+                    // If you have chosen to inactivate the report
+                    if ( typeSignalementTemp.getActif( ) )
                     {
-                        //check si tous ses sous-types sont inactifs : si oui on le met inactif
+
+                        // if the parent is still active, check if all its subtypes are inactive: if so, put it inactive
                         boolean allInactifs = true;
-                        List<TypeSignalement> listeSousTypes = _typeSignalementService
-                                .getAllSousTypeSignalement( typeSignalementTemp.getId( ) );
+                        List<TypeSignalement> listeSousTypes = _typeSignalementService.getAllSousTypeSignalement( typeSignalementTemp.getId( ) );
                         for ( TypeSignalement type : listeSousTypes )
                         {
                             if ( type.getActif( ) )
@@ -598,23 +611,21 @@ public class TypeSignalementJspBean extends AbstractJspBean
                                 allInactifs = false;
                             }
                         }
-                        //On le met inactif sauf si c'est la racine
+                        // We put it inactive unless it's the root.
                         if ( allInactifs )
                         {
                             typeSignalementTemp.setActif( false );
                             if ( _typeSignalementService.getParent( typeSignalementTemp.getId( ) ) != null )
                             {
                                 _typeSignalementService.update( typeSignalementTemp );
-                            }
-                            else
+                            } else
                             {
                                 _typeSignalementService.updateWithoutParent( typeSignalementTemp );
                             }
                         }
                     }
                 }
-            }
-            else
+            } else
             {
                 possedeParent = false;
             }
@@ -622,9 +633,10 @@ public class TypeSignalementJspBean extends AbstractJspBean
     }
 
     /**
-     * Returns the confirmation message to delete a type signalement
+     * Returns the confirmation message to delete a report type
      * 
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the html code message
      */
     public String getDeleteTypeSignalement( HttpServletRequest request )
@@ -639,33 +651,27 @@ public class TypeSignalementJspBean extends AbstractJspBean
         try
         {
             nIdTypeSignalement = Integer.parseInt( strTypeSignalement );
-        }
-        catch ( NumberFormatException e )
+        } catch ( NumberFormatException e )
         {
-            return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR,
-                    AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
         }
 
         Map<String, Object> urlParam = new HashMap<String, Object>( );
         urlParam.put( PARAMETER_TYPE_SIGNALEMENT_ID, nIdTypeSignalement );
         urlParam.put( PARAMETER_TYPE_SIGNALEMENT_PARENT_ID, request.getParameter( PARAMETER_TYPE_SIGNALEMENT_PARENT_ID ) );
 
-        //Supprimer le type de signalement s'il n'a pas de sous-types et qu'il n'est pas rattaché à un signalement
+        // Delete the report typeif it does not have subtypes and is not linked to an alert
         if ( _typeSignalementService.getAllSousTypeSignalement( nIdTypeSignalement ).isEmpty( ) )
         {
             if ( !( _typeSignalementService.findByIdSignalement( nIdTypeSignalement ) ) )
             {
-                return AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_DELETE_TYPE_SIGNALEMENT, null,
-                        MESSAGE_CONFIRMATION_DELETE_TYPE_SIGNALEMENT, JSP_DELETE_TYPE_SIGNALEMENT, "_self",
+                return AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_DELETE_TYPE_SIGNALEMENT, null, MESSAGE_CONFIRMATION_DELETE_TYPE_SIGNALEMENT, JSP_DELETE_TYPE_SIGNALEMENT, "_self",
                         AdminMessage.TYPE_CONFIRMATION, urlParam, strJspBack );
-            }
-            else
+            } else
             {
-                return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_IS_USED_IN_SIGNALEMENT,
-                        AdminMessage.TYPE_STOP );
+                return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_IS_USED_IN_SIGNALEMENT, AdminMessage.TYPE_STOP );
             }
-        }
-        else
+        } else
         {
             return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_HAS_SOUS_TYPES, AdminMessage.TYPE_STOP );
         }
@@ -673,8 +679,10 @@ public class TypeSignalementJspBean extends AbstractJspBean
     }
 
     /**
-     * Delete a type signalement
-     * @param request The HTTP request
+     * Delete a report type
+     * 
+     * @param request
+     *            The HTTP request
      * @return redirection url
      */
     public String doDeleteTypeSignalement( HttpServletRequest request )
@@ -687,67 +695,44 @@ public class TypeSignalementJspBean extends AbstractJspBean
         try
         {
             nIdTypeSignalement = Integer.parseInt( strIdTypeSignalement );
-        }
-        catch ( NumberFormatException e )
+        } catch ( NumberFormatException e )
         {
 
-            return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR,
-                    AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
         }
 
-        //mise a false d'actif et update afin de réutiliser la méthode updateActifForParentsAndChildren
+        // setting active to false and update in order to reuse the method updateActifForParentsAndChildren
         TypeSignalement typeSignalement = _typeSignalementService.getByIdTypeSignalement( nIdTypeSignalement );
         typeSignalement.setActif( false );
         TypeSignalement typeSignalementParent = _typeSignalementService.getParent( typeSignalement.getId( ) );
-        if (  typeSignalementParent != null )
+        if ( typeSignalementParent != null )
         {
             _typeSignalementService.update( typeSignalement );
-        }
-        else
+        } else
         {
             _typeSignalementService.updateWithoutParent( typeSignalement );
         }
         updateActifForParentsAndChildren( typeSignalement );
 
-        //get the minimum order after a given order to update after deleting a type signalement
-        Integer minimumOrderAfterThisOrderInHierarchy = _typeSignalementService.getMinimumOrderAfterGivenOrder(
-                typeSignalement.getOrdre( ), typeSignalementParent );
+        // get the minimum order after a given order to update after deleting a report type
+        Integer minimumOrderAfterThisOrderInHierarchy = _typeSignalementService.getMinimumOrderAfterGivenOrder( typeSignalement.getOrdre( ), typeSignalementParent );
 
         _typeSignalementService.delete( nIdTypeSignalement );
-        
 
-        //after deleting the type signalement we update the others one's orders to order - 1 (except if it was the last one)
+        // after deleting the report type we update the others one's orders to order - 1 (except if it was the last one)
         if ( minimumOrderAfterThisOrderInHierarchy != null )
         {
-            _typeSignalementService.updateOrderSuperiorAfterDeletingTypeSignalement( typeSignalement.getOrdre( ),
-                    typeSignalementParent );
+            _typeSignalementService.updateOrderSuperiorAfterDeletingTypeSignalement( typeSignalement.getOrdre( ), typeSignalementParent );
         }
-        
+
         UrlItem urlItem = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_MANAGE_TYPE_SIGNALEMENT );
         if ( StringUtils.isNotBlank( request.getParameter( PARAMETER_TYPE_SIGNALEMENT_PARENT_ID ) ) )
         {
-            urlItem.addParameter( PARAMETER_TYPE_SIGNALEMENT_ID,
-                    request.getParameter( PARAMETER_TYPE_SIGNALEMENT_PARENT_ID ) );
+            urlItem.addParameter( PARAMETER_TYPE_SIGNALEMENT_ID, request.getParameter( PARAMETER_TYPE_SIGNALEMENT_PARENT_ID ) );
         }
 
         return urlItem.getUrl( );
 
     }
-
-    /**
-     * Return the url of the JSP which called the last action
-     * 
-     * @param request
-     *            The Http request
-     * @return The url of the last JSP
-     */
-    private String doGoBack( HttpServletRequest request )
-    {
-        String strJspBack = request.getParameter( SignalementConstants.MARK_JSP_BACK );
-
-        return StringUtils.isNotBlank( strJspBack ) ? ( AppPathService.getBaseUrl( request ) + strJspBack )
-                : AppPathService.getBaseUrl( request ) + JSP_MANAGE_TYPE_SIGNALEMENT;
-    }
-
 
 }

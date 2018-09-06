@@ -9,6 +9,6 @@ referentielSignalement.init( request, referentielSignalement.RIGHT_MANAGE_REFERE
 <%@ page errorPage="../../ErrorPage.jsp"%>
 <jsp:include page="../../AdminHeader.jsp" />
 
-<%= referentielSignalement.getManageReferentiel( request ) %>
+<%= referentielSignalement.getManageReferentiel( ) %>
 
 <%@ include file="../../AdminFooter.jsp"%>

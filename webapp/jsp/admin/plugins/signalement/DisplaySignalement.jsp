@@ -10,7 +10,7 @@
 
 <% 
 signalementdisplay.init( request,  "SIGNALEMENT_DISPLAY");
-signalementdisplay.checkUserDomains(request);
+signalementdisplay.checkUserDomains( );
 %>
 <%@ page errorPage="../../ErrorPage.jsp"%>
 <jsp:include page="../../AdminHeader.jsp" />
