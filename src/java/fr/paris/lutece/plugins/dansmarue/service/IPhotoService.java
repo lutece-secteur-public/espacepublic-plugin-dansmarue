@@ -79,7 +79,7 @@ public interface IPhotoService
     /**
      * Load a photo with the id of the report.
      *
-     * @param signalementId
+     * @param lId
      *            the report id
      * @return the photo
      */

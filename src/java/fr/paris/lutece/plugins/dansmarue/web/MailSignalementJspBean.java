@@ -157,8 +157,6 @@ public class MailSignalementJspBean extends AbstractJspBean
      * @param request
      *            the request
      * @return html of the manage mail page
-     * @throws AccessDeniedException
-     *             the access denied exception
      */
     public String getManageMail( HttpServletRequest request )
     {
@@ -272,6 +270,7 @@ public class MailSignalementJspBean extends AbstractJspBean
      * Send a mail with informations of the form
      * 
      * @param request
+     *            the HttpServletRequest
      * @return url to go
      */
     public String doSendMail( HttpServletRequest request )

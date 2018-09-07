@@ -38,24 +38,24 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 public interface IDashboardPeriodDAO
 {
     /**
      * Generates a new primary key
      *
-     * @param plugin
-     *            the plugin
      * @return The new primary key
      */
-    Long newPrimaryKey(  );
+    Long newPrimaryKey( );
 
     /**
      * Inserts into the database a new dashboard period
      *
      * @param dashboardPeriod
      *            the dashboard period to insert
-     * @return  the dashboard period id
+     * 
+     * @param plugin
+     *            the plugin
+     * @return the dashboard period id
      */
     public Long insert( DashboardPeriod dashboardPeriod, Plugin plugin );
 
@@ -64,6 +64,9 @@ public interface IDashboardPeriodDAO
      *
      * @param lId
      *            the id of the dashboard period to remove
+     * 
+     * @param plugin
+     *            the plugin
      */
     public void remove( long lId, Plugin plugin );
 
@@ -81,6 +84,9 @@ public interface IDashboardPeriodDAO
      *
      * @param dashboardPeriod
      *            the dashboard period element to update
+     * 
+     * @param plugin
+     *            the plugin
      */
     void update( DashboardPeriod dashboardPeriod, Plugin plugin );
 
@@ -89,12 +95,12 @@ public interface IDashboardPeriodDAO
      *
      * @return List of dashboard perido criterias
      */
-    List<DashboardPeriod> getDashboardPeriodCriterias(  );
+    List<DashboardPeriod> getDashboardPeriodCriterias( );
 
     /**
      * Get all dashboard periods
      *
      * @return List of all dashboard periods
      */
-    List<DashboardPeriod> getAllDashboardPeriods(  );
+    List<DashboardPeriod> getAllDashboardPeriods( );
 }

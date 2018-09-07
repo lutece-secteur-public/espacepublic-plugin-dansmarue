@@ -78,6 +78,7 @@ public interface IAdresseService
      * 
      * @param lId
      *            the report id
+     * @return the address
      */
     Adresse loadByIdSignalement( long lId );
 

@@ -38,23 +38,25 @@ public class PermissionRessourceType
     /**
      * Permission key
      */
-    private String permission;
+    private String _strPermission;
     /**
      * Resource type key
      */
-    private String ressourceType;
+    private String _strResourceType;
 
     /**
      * Creates a new PermissionTypeRessource.java object.
      * 
-     * @param ressourceType
+     * @param resourceType
+     *            the resourceType
      * @param permission
+     *            the permission
      */
-    public PermissionRessourceType( String ressourceType, String permission )
+    public PermissionRessourceType( String resourceType, String permission )
     {
         super( );
-        this.ressourceType = ressourceType;
-        this.permission = permission;
+        this._strResourceType = resourceType;
+        this._strPermission = permission;
     }
 
     /**
@@ -63,7 +65,7 @@ public class PermissionRessourceType
      */
     public void setPermission( String permission )
     {
-        this.permission = permission;
+        this._strPermission = permission;
     }
 
     /**
@@ -71,16 +73,16 @@ public class PermissionRessourceType
      */
     public String getPermission( )
     {
-        return permission;
+        return _strPermission;
     }
 
     /**
-     * @param ressourceType
-     *            the ressourceType to set
+     * @param resourceType
+     *            the resourceType to set
      */
-    public void setRessourceType( String ressourceType )
+    public void setResourceType( String resourceType )
     {
-        this.ressourceType = ressourceType;
+        this._strResourceType = resourceType;
     }
 
     /**
@@ -88,6 +90,6 @@ public class PermissionRessourceType
      */
     public String getRessourceType( )
     {
-        return ressourceType;
+        return _strResourceType;
     }
 }

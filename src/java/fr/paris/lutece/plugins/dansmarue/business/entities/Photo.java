@@ -140,7 +140,7 @@ public class Photo
     /**
      * Sets the thumbnailed image.
      *
-     * @param imageContent
+     * @param imageResource
      *            the new image thumbnailed image
      */
     public void setImageThumbnail( ImageResource imageResource )

@@ -95,10 +95,16 @@ public class AbstractJspBean extends PluginAdminPageJspBean
     /**
      * Return a paginator for the view using parameter in http request
      * 
+     * @param <T>
+     *            This is the type parameter
      * @param request
      *            http request
      * @param list
      *            bean list to paginate
+     * @param jspUrl
+     *            the jsp Url
+     * @param totalResult
+     *            the total result
      * @return paginator
      */
     protected <T> LocalizedDelegatePaginator<T> getPaginator( HttpServletRequest request, ResultList<T> list, String jspUrl, int totalResult )
@@ -133,10 +139,15 @@ public class AbstractJspBean extends PluginAdminPageJspBean
      * Init the jspBean
      * 
      * @param request
+     *            the HTTpServletRequest
      * @param strRight
+     *            the right
      * @param keyResourceType
+     *            the resource type
      * @param permission
+     *            the permission
      * @throws AccessDeniedException
+     *             Throws AccessDeniedException
      */
     public void init( HttpServletRequest request, String strRight, String keyResourceType, String permission ) throws AccessDeniedException
     {
@@ -226,7 +237,7 @@ public class AbstractJspBean extends PluginAdminPageJspBean
     /**
      * Return html code for error message
      * 
-     * @param ve
+     * @param e
      *            validation exception
      * @return html
      */
@@ -288,8 +299,13 @@ public class AbstractJspBean extends PluginAdminPageJspBean
     }
 
     /**
+     * Check if the sector is allowed
      * 
+     * @param request
+     *            the HttpServletRequest
      * @param idSecteur
+     *            the sector id
+     * @return true if the sector is allowed
      */
     protected boolean estAutoriseSecteur( HttpServletRequest request, String idSecteur )
     {

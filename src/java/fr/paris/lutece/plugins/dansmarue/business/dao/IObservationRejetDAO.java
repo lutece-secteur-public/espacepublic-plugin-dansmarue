@@ -45,6 +45,7 @@ public interface IObservationRejetDAO
      * Save a new reject observation
      * 
      * @param observationRejet
+     *            the reject observation
      * @return observationRejet id
      */
     public Integer insert( ObservationRejet observationRejet );
@@ -86,7 +87,8 @@ public interface IObservationRejetDAO
     /**
      * Check if the observationRejet already exists
      * 
-     * @parama observationRejet the observationRejet object
+     * @param observationRejet
+     *            the observationRejet object
      * @return boolean
      */
     public boolean existsObservationRejet( ObservationRejet observationRejet );
@@ -128,6 +130,7 @@ public interface IObservationRejetDAO
      * Increases all the next orders
      * 
      * @param nIdObservationRejet
+     *            the reject observation id
      */
     void increaseOrdreOfAllNext( int nIdObservationRejet );
 
@@ -135,6 +138,7 @@ public interface IObservationRejetDAO
      * Decreases all the next orders
      * 
      * @param nIdObservationRejet
+     *            the reject observation id
      */
     void decreaseOrdreOfAllNext( int nIdObservationRejet );
 

@@ -313,7 +313,6 @@ public class ObservationRejetJspBean extends AbstractJspBean
      * @param request
      *            The HTTP request
      * @return redirection url
-     * @throws ValidationException
      */
     public String doSaveObservationRejet( HttpServletRequest request )
     {
@@ -365,6 +364,7 @@ public class ObservationRejetJspBean extends AbstractJspBean
      * Increase the reject observation order
      * 
      * @param request
+     *            the HttpServletRequest
      * @return The url of the last JSP
      */
     public String doIncreaseObservationRejetOrder( HttpServletRequest request )
@@ -379,7 +379,8 @@ public class ObservationRejetJspBean extends AbstractJspBean
      * Decrease the reject observation order
      * 
      * @param request
-     * @returnThe url of the last JSP
+     *            the HttpServletRequest
+     * @return The url of the last JSP
      */
     public String doDecreaseObservationRejetOrder( HttpServletRequest request )
     {

@@ -42,8 +42,6 @@ public interface IObservationRejetService
     /**
      * Return all reject observation
      * 
-     * @param plugin
-     *            the plugin
      * @return a list of ObservationRejet
      */
     List<ObservationRejet> getAllObservationRejet( );
@@ -60,14 +58,14 @@ public interface IObservationRejetService
      * Save a new reject observation
      * 
      * @param observationRejet
-     * @return observationRejet id
+     *            the reject observation
      */
     void doSaveObservationRejet( ObservationRejet observationRejet );
 
     /**
      * Load a reject observation
      * 
-     * @param lId
+     * @param nIdObservationRejet
      *            the observationRejet id
      * @return a reject observation
      */
@@ -102,6 +100,7 @@ public interface IObservationRejetService
      * Increases all the next orders
      * 
      * @param nIdObservationRejet
+     *            the reject observation id
      */
     void increaseOrdreOfAllNext( int nIdObservationRejet );
 
@@ -109,13 +108,14 @@ public interface IObservationRejetService
      * Decreases all the next orders
      * 
      * @param nIdObservationRejet
+     *            the reject observation id
      */
     void decreaseOrdreOfAllNext( int nIdObservationRejet );
 
     /**
      * Counts the number of time the reject observation has been used
      * 
-     * @param idObservationRejet
+     * @param nIdObservationRejet
      *            the id of reject observation to get the use count
      * @return the number of reject observation uses
      */

@@ -44,103 +44,61 @@ public class NotificationSignalementUserMultiContents extends TaskConfig
     private String  _strTitle;
     private String  _strMessage;
 
-    /**
-     * @return the _nIdTask
-     */
     public int getIdTask( )
     {
         return _nIdTask;
     }
 
-    /**
-     * @param _nIdTask
-     *            the _nIdTask to set
-     */
     public void setIdTask( Integer nIdTask )
     {
         this._nIdTask = nIdTask;
     }
 
-    /**
-     * @return the _nIdMessage
-     */
     public Long getIdMessage( )
     {
         return _nIdMessage;
     }
 
-    /**
-     * @param _nIdMessage
-     *            the _nIdMessage to set
-     */
     public void setIdMessage( Long nIdMessage )
     {
         this._nIdMessage = nIdMessage;
     }
 
-    /**
-     * @return the _strSubject
-     */
     public String getSubject( )
     {
         return _strSubject;
     }
 
-    /**
-     * @param _strSubject
-     *            the _strSubject to set
-     */
     public void setSubject( String strSubject )
     {
         this._strSubject = strSubject;
     }
 
-    /**
-     * @return the _strSender
-     */
     public String getSender( )
     {
         return _strSender;
     }
 
-    /**
-     * @param _strSender
-     *            the _strSender to set
-     */
     public void setSender( String strSender )
     {
         this._strSender = strSender;
     }
 
-    /**
-     * @return the _strTitle
-     */
     public String getTitle( )
     {
         return _strTitle;
     }
 
-    /**
-     * @param _strTitle
-     *            the _strTitle to set
-     */
     public void setTitle( String strTitle )
     {
         this._strTitle = strTitle;
     }
 
-    /**
-     * @return the _strMessage
-     */
     public String getMessage( )
     {
         return _strMessage;
     }
 
-    /**
-     * @param _strMessage
-     *            the _strMessage to set
-     */
     public void setMessage( String strMessage )
     {
         this._strMessage = strMessage;

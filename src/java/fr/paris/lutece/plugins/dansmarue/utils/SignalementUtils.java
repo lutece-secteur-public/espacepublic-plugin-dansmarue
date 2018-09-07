@@ -73,7 +73,7 @@ public final class SignalementUtils
     /**
      * Gets the plugin
      * 
-     * @return
+     * @return the plugin
      */
     public static Plugin getPlugin( )
     {
@@ -82,7 +82,9 @@ public final class SignalementUtils
 
     /**
      * Populate a bean, launch a {@link AppException} in case of error
-     * 
+     *
+     * @param <T>
+     *            This is the type parameter
      * @param bean
      *            the bean
      * @param request
@@ -212,18 +214,20 @@ public final class SignalementUtils
     /**
      * Checks wether the prefix belongs to reporting type
      * 
-     * @param prefixe
+     * @param prefix
+     *            the prefix
      * @return a boolean
      */
-    public static boolean isTypeSignalement( String prefixe )
+    public static boolean isTypeSignalement( String prefix )
     {
-        return SignalementConstants.SIGNALEMENT_PREFIXES.contains( prefixe );
+        return SignalementConstants.SIGNALEMENT_PREFIXES.contains( prefix );
     }
 
     /**
      * Returns all the properties matching the prefix
      * 
      * @param prefix
+     *            the prefix
      * @return a boolean
      */
     public static List<String> getProperties( String prefix )

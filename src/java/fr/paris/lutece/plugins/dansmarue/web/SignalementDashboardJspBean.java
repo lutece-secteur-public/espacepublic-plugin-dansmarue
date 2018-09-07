@@ -215,6 +215,8 @@ public class SignalementDashboardJspBean extends AbstractJspBean
      * View for the report management dashboard
      * 
      * @param request
+     *            the HttpServletRequest
+     * @return the dashboard view
      */
     public String doGetManageSignalementDashboard( HttpServletRequest request )
     {
@@ -586,8 +588,9 @@ public class SignalementDashboardJspBean extends AbstractJspBean
      * Redirects to manage reports page, with reports list
      * 
      * @param request
-     * @throws IOException
+     *            the HttpServletRequest
      * @throws AccessDeniedException
+     *             throws AccessDeniedException
      */
     public void redirectToManageSignalement( HttpServletRequest request ) throws AccessDeniedException
     {

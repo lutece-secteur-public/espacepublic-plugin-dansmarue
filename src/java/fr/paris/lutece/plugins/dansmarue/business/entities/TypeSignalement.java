@@ -223,11 +223,6 @@ public class TypeSignalement implements RBACResource
         this._nIdCategory = nIdCategory;
     }
 
-    /**
-     * Retrieves the root (category) for the type
-     *
-     * @return
-     */
     @JsonIgnore
     public TypeSignalement getRoot( )
     {
@@ -261,11 +256,6 @@ public class TypeSignalement implements RBACResource
         this._strAlias = alias;
     }
 
-    /**
-     * Returns the default Libelle if no alias is set
-     *
-     * @return
-     */
     public String getAliasDefault( )
     {
         if ( StringUtils.isNotEmpty( _strAlias ) )
@@ -297,11 +287,6 @@ public class TypeSignalement implements RBACResource
         this._strAliasMobile = aliasMobile;
     }
 
-    /**
-     * Returns the default Libelle if no alias mobile is set
-     *
-     * @return
-     */
     public String getAliasMobileDefault( )
     {
         if ( StringUtils.isNotEmpty( _strAliasMobile ) )

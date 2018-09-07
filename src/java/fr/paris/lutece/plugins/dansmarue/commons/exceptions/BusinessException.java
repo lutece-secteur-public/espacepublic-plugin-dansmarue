@@ -47,6 +47,8 @@ public class BusinessException extends FunctionnalException
     /**
      * Exception constructor
      * 
+     * @param bean
+     *            the bean object
      * @param code
      *            Exception code
      */
@@ -59,6 +61,8 @@ public class BusinessException extends FunctionnalException
     /**
      * Exception constructor
      * 
+     * @param bean
+     *            the bean object
      * @param additionalParameters
      *            Additional Exception Parameters
      * @param code
@@ -73,6 +77,8 @@ public class BusinessException extends FunctionnalException
     /**
      * Exception constructor
      * 
+     * @param bean
+     *            the bean object
      * @param additionalParameters
      *            Additional Exception Parameters
      * @param code
@@ -89,6 +95,8 @@ public class BusinessException extends FunctionnalException
     /**
      * Exception constructor
      * 
+     * @param bean
+     *            the bean object
      * @param code
      *            Exception code
      * @param arguments
@@ -144,7 +152,7 @@ public class BusinessException extends FunctionnalException
     }
 
     /**
-     *  Error message builder from a {@link BusinessException}
+     * Error message builder from a {@link BusinessException}
      * 
      * @return The {@link String} array containing the i18n keys of the error messages
      */

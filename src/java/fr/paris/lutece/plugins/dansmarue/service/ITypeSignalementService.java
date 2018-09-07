@@ -302,6 +302,8 @@ public interface ITypeSignalementService
      * 
      * @param typeSignalementParent
      *            the parent report type
+     * @param order
+     *            the order
      * @return the minimum order
      */
     Integer getMinimumOrderAfterGivenOrder( Integer order, TypeSignalement typeSignalementParent );
@@ -328,8 +330,8 @@ public interface ITypeSignalementService
     /**
      * Load the report type image
      * 
-     * @param nKey
-     *            the id of the report type image
+     * @param nIdTypeSignalement
+     *            the id of the report type
      * @return the image object
      */
     ImageResource getImageResource( int nIdTypeSignalement );

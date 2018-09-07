@@ -55,7 +55,13 @@ public class PaginationPropertiesImpl implements PaginationProperties
      * Creates a new PaginationPropertiesImpl.java object.
      * 
      * @param firstResult
+     *            the first result
      * @param pageSize
+     *            the page size
+     * @param itemsPerPage
+     *            the number of item per page
+     * @param pageIndex
+     *            the page index
      */
     public PaginationPropertiesImpl( int firstResult, int pageSize, int itemsPerPage, int pageIndex )
     {
@@ -66,11 +72,6 @@ public class PaginationPropertiesImpl implements PaginationProperties
         this._nPageIndex = pageIndex;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see fr.paris.lutece.plugins.stock.commons.dao.PaginationProperties#getFirstResult()
-     */
     public int getFirstResult( )
     {
         return this._nFirstResult;

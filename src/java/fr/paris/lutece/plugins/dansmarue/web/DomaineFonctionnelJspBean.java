@@ -395,7 +395,6 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
      * @param request
      *            The HTTP request
      * @return redirection url
-     * @throws ValidationException
      */
     public String doSaveDomaineFonctionnel( HttpServletRequest request )
     {

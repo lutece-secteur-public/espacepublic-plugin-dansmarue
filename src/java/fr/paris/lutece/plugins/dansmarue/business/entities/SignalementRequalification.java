@@ -75,7 +75,7 @@ public class SignalementRequalification
     }
 
     /**
-     * @param _nIdTypeSignalement
+     * @param nIdTypeSignalement
      *            the _nIdTypeSignalement to set
      */
     public void setIdTypeSignalement( Integer nIdTypeSignalement )
@@ -92,7 +92,7 @@ public class SignalementRequalification
     }
 
     /**
-     * @param _strAdresse
+     * @param strAdresse
      *            the _strAdresse to set
      */
     public void setAdresse( String strAdresse )
@@ -109,7 +109,7 @@ public class SignalementRequalification
     }
 
     /**
-     * @param _nIdSector
+     * @param nIdSector
      *            the _nIdSector to set
      */
     public void setIdSector( Integer nIdSector )
@@ -126,7 +126,7 @@ public class SignalementRequalification
     }
 
     /**
-     * @param _dateRequalification
+     * @param dateRequalification
      *            the _dateRequalification to set
      */
     public void setDateRequalification( String dateRequalification )
@@ -143,7 +143,7 @@ public class SignalementRequalification
     }
 
     /**
-     * @param _typeSignalement
+     * @param typeSignalement
      *            the _typeSignalement to set
      */
     public void setTypeSignalement( TypeSignalement typeSignalement )
@@ -160,7 +160,7 @@ public class SignalementRequalification
     }
 
     /**
-     * @param _sector
+     * @param sector
      *            the _sector to set
      */
     public void setSector( Sector sector )
@@ -177,7 +177,7 @@ public class SignalementRequalification
     }
 
     /**
-     * @param _nIdTask
+     * @param nIdTask
      *            the _nIdTask to set
      */
     public void setIdTask( Integer nIdTask )

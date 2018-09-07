@@ -100,6 +100,7 @@ public class MasseDeletesAction extends AbstractPluginAction<SignalementFields> 
      *            the report session fields
      * @return The action result
      * @throws AccessDeniedException
+     *             Throws an accessDeniedException
      */
     public IPluginActionResult process( HttpServletRequest request, HttpServletResponse response, AdminUser adminUser, SignalementFields sessionFields ) throws AccessDeniedException
     {

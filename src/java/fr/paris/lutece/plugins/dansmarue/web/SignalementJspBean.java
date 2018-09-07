@@ -714,6 +714,7 @@ public class SignalementJspBean extends AbstractJspBean
      * Check the user functional domains
      * 
      * @throws AccessDeniedException
+     *             throws AccessDeniedException
      */
     public void checkUserDomains( ) throws AccessDeniedException
     {
@@ -1399,10 +1400,11 @@ public class SignalementJspBean extends AbstractJspBean
     }
 
     /**
-     * Cette methode return true si une ressource n apas l etat A traiter, Nouveau our Service Programmer
+     * This method return true if a resource does not have the state to be processed, New or Service Programmer
      *
      * @param idRessource
-     * @return
+     *            the resource id
+     * @return true if the report is not in one of the 3 states above
      */
     public String isMassServiceFait( int[] idRessource )
     {
@@ -2699,8 +2701,6 @@ public class SignalementJspBean extends AbstractJspBean
      * @param response
      *            the response
      * @return the i plugin action result
-     * @throws AccessDeniedException
-     *             the access denied exception
      */
     public IPluginActionResult processActionServicefait( HttpServletRequest request, HttpServletResponse response )
     {
@@ -3544,8 +3544,6 @@ public class SignalementJspBean extends AbstractJspBean
      * @param request
      *            The Http request
      * @return the html code message
-     * @throws AccessDeniedException
-     *             If the current user is not authorized to access this feature
      */
     public String getMassDeleteSignalement( HttpServletRequest request )
     {
@@ -3901,6 +3899,7 @@ public class SignalementJspBean extends AbstractJspBean
      * @param response
      *            HTTPServletResponse
      * @throws IOException
+     *             throws IOException
      */
     public void getDomain( HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
@@ -4028,10 +4027,11 @@ public class SignalementJspBean extends AbstractJspBean
      * Returns a json, containing all domains, with their criteria
      *
      * @param request
+     *            the HttpServletRequest
      * @param response
+     *            the HttpServletResponse
      * @throws IOException
-     * @throws JsonMappingException
-     * @throws JsonGenerationException
+     *             throws IOException
      */
     public void initDomains( HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
@@ -4168,7 +4168,8 @@ public class SignalementJspBean extends AbstractJspBean
      * Gets all Sectors based on Units
      *
      * @param listUnits
-     * @return
+     *            the units list
+     * @return a sector list
      */
     public List<Sector> getSectorsByUnits( List<Unit> listUnits )
     {
@@ -4255,7 +4256,7 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * List of states available for filtering
      *
-     * @return
+     * @return a state list
      */
     private List<State> getListeEtats( )
     {
@@ -4295,10 +4296,11 @@ public class SignalementJspBean extends AbstractJspBean
      * FInds all the units matchings the localization and within the specified radius
      *
      * @param request
+     *            the HttpServletRequest
      * @param response
+     *            the HttpServletResponse
      * @throws IOException
-     * @throws JsonMappingException
-     * @throws JsonGenerationException
+     *             throws IOException
      */
     public void getSectorsByGeomAndUnits( HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
@@ -4387,9 +4389,12 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Get as json all reports in purpose to display them as marker on the map
      *
+     * @param request
+     *            the HttpServletRequest
+     * @param response
+     *            the HttpServletResponse
      * @throws IOException
-     * @throws JsonMappingException
-     * @throws JsonGenerationException
+     *             throws IOException
      */
     public void getSignalementsJsonForMap( HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
@@ -4483,7 +4488,7 @@ public class SignalementJspBean extends AbstractJspBean
      *            the report filter
      * @param availableArrondissementIds
      *            the available districts ids
-     * @return
+     * @return true if the user has selected advanced criterias
      */
     private boolean hasCriteresAvances( SignalementFilter filter, List<Integer> availableArrondissementIds )
     {

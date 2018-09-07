@@ -45,6 +45,8 @@ public interface ISignalementUnitDAO
      * 
      * @param unitSignalement
      *            the report unit
+     * @param plugin
+     *            the plugin
      * @return the report unit id
      */
     Integer insert( SignalementUnit unitSignalement, Plugin plugin );

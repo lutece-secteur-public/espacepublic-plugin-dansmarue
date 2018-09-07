@@ -250,8 +250,10 @@ public interface ISignalementService
      * @param idTypeSignalement
      *            the report id to load
      * @param lng
+     *            the longitude
      * @param lat
-     * @return
+     *            the latitude
+     * @return the parent unit
      */
     Unit getMajorUnit( Integer idTypeSignalement, Double lng, Double lat );
 
@@ -259,6 +261,7 @@ public interface ISignalementService
      * Get the informations of a report by its token
      * 
      * @param token
+     *            the report token
      * @return report
      */
     Signalement getSignalementByToken( String token );
@@ -333,6 +336,7 @@ public interface ISignalementService
      * Replace the current state to a more explicit one for front office
      * 
      * @param stateOfSignalement
+     *            the current state of the report
      * @return the new state
      */
     String changeToGoodStateForSuivi( State stateOfSignalement );
@@ -440,6 +444,7 @@ public interface ISignalementService
      * Filters report by the criterias defined in dashboard
      * 
      * @param filter
+     *            the report filter
      * @return a list of report for dashboard
      */
     List<DashboardSignalementDTO> findByDashboardFilter( SignalementDashboardFilter filter );
@@ -475,7 +480,7 @@ public interface ISignalementService
      *            workflow type
      * @param user
      *            user to check
-     * @return
+     * @return a list with all possible actions
      */
     Collection<Action> getListActionsByIdSignalementAndUser( int nIdSignalement, int workflowId, AdminUser user );
 
@@ -504,6 +509,8 @@ public interface ISignalementService
      * 
      * @param reference
      *            Id of the report reference
+     * @param signalement
+     *            the report
      * @return the report id reference
      */
     String getSignalementReference( String reference, Signalement signalement );
@@ -514,6 +521,7 @@ public interface ISignalementService
      * @param nIdSignalement
      *            Id of the report reference
      * @param dateMiseEnSurveillance
+     *            the monitoring date
      */
     void doMettreSousSurveillance( int nIdSignalement, String dateMiseEnSurveillance );
 
@@ -531,7 +539,7 @@ public interface ISignalementService
     /**
      * Add a rejection date to the report
      * 
-     * @param idSignalement
+     * @param lIdSignalement
      *            the report id
      * @param dateRejet
      *            the rejection date
@@ -541,23 +549,24 @@ public interface ISignalementService
     /**
      * Returns a requalification object by history and task ids
      * 
-     * @param idHistory
+     * @param nIdHistory
      *            the workflow history id
      * @param idTask
      *            the workflow task id
      * @return the requalification object
      */
-    SignalementRequalification getSignalementRequalificationByTaskHistory( int nIdHistory, int id );
+    SignalementRequalification getSignalementRequalificationByTaskHistory( int nIdHistory, int idTask );
 
     /**
      * Update the requalification
      * 
      * @param lIdSignalement
      *            the report id
+     * @param nIdHistory
+     *            the workflow history id
      * @param idTask
      *            the workflow task id
-     * @param idHistory
-     *            the workflow history id
+     * 
      */
     void setRequalificationIdHistory( Long lIdSignalement, int nIdHistory, int idTask );
 
@@ -582,12 +591,13 @@ public interface ISignalementService
      * 
      * @param lIdSignalement
      *            the report id
-     * @param idTask
-     *            the workflow task id
      * @param idHistory
      *            the workflow history id
+     * @param idTask
+     *            the workflow task id
+     * 
      */
-    void setRequalificationIdHistoryAndIdTask( Long lIdSignalement, int nIdHistory, int idTask );
+    void setRequalificationIdHistoryAndIdTask( Long lIdSignalement, int idHistory, int idTask );
 
     /**
      * Gets the letter by month.

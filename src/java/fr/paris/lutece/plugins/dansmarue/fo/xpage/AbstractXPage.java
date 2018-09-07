@@ -65,6 +65,7 @@ import fr.paris.lutece.util.ErrorMessage;
 public class AbstractXPage extends MVCApplication
 {
 
+    private static final long                      serialVersionUID        = 1723850575195580846L;
     private static final String                    PARAMETER_TOKEN         = "token";
     // PAGES
     protected static final String                  PAGE_PORTAL             = "Portal.jsp?page=";
@@ -102,7 +103,7 @@ public class AbstractXPage extends MVCApplication
         // Converter Registration
         ConvertUtilsBean convertUtilsBean = BeanUtilsBean.getInstance( ).getConvertUtils( );
 
-        // Re-definition of the Integer converter to have null instead of 0 if the value does not exist        
+        // Re-definition of the Integer converter to have null instead of 0 if the value does not exist
         convertUtilsBean.register( new IntegerConverter( null ), Integer.class );
     }
 
@@ -162,9 +163,7 @@ public class AbstractXPage extends MVCApplication
     /**
      * @param request
      *            http request
-     * @param token
-     *            {@link String} token
-     * @return {@link String}
+     * @return {@link String} the token
      */
     protected String getToken( final HttpServletRequest request )
     {

@@ -226,6 +226,8 @@ public interface ISignalementDAO
      * 
      * @param filter
      *            the signalementfilter
+     * @param plugin
+     *            the plugin
      * @return the query
      */
     Integer countIdSignalementByFilter( SignalementFilter filter, Plugin plugin );
@@ -276,9 +278,13 @@ public interface ISignalementDAO
     void incrementFelicitationsByIdSignalement( int idSignalement );
 
     /**
-     * Filters reports by dashboard criterias
+     * Find the report to display in the dashboard
      * 
-     * @return list of dashboard reports
+     * @param filter
+     *            the report filter
+     * @param pluginSignalement
+     *            the plugin
+     * @return the dashboard report list
      */
     List<DashboardSignalementDTO> findByDashboardFilter( SignalementDashboardFilter filter, Plugin pluginSignalement );
 
@@ -287,6 +293,8 @@ public interface ISignalementDAO
      * 
      * @param filter
      *            the signalementfilter
+     * @param plugin
+     *            the plugin
      * @return the query
      */
     List<Integer> getIdsSignalementByFilter( SignalementFilter filter, Plugin plugin );
@@ -348,7 +356,7 @@ public interface ISignalementDAO
     /**
      * Returns the mail id of the service done.
      *
-     * @param long1
+     * @param idSignalement
      *            the report id
      * @return the service done mail id
      */

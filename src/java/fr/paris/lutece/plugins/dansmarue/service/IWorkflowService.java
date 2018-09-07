@@ -49,8 +49,6 @@ public interface IWorkflowService
     /**
      * Returns DansMaRue workflow id
      * 
-     * @param plugin
-     *            the plugin
      * @return DansMaRue workflow id
      */
     Integer getSignalementWorkflowId( );
@@ -58,10 +56,8 @@ public interface IWorkflowService
     /**
      * Update DansMaRue workflow id
      * 
-     * @param nId
+     * @param nIdWorkflow
      *            DansMaRue workflow id
-     * @param plugin
-     *            le plugin
      */
     void setSignalementWorkflowId( Integer nIdWorkflow );
 
@@ -72,8 +68,6 @@ public interface IWorkflowService
      *            the state before processing
      * @param idStateAfter
      *            the state after processing
-     * @param plugin
-     *            the plugin
      * @return The id of the action -1 if not found
      */
     int selectIdActionByStates( int idStateBefore, int idStateAfter );
@@ -138,5 +132,5 @@ public interface IWorkflowService
      *            a list of service done tasks
      * @return a map of tasks id and messages associated with the task
      */
-    Map<Integer, List<NotificationSignalementUserMultiContents>> selectMessageServiceFaitPresta( String strIdAction );
+    Map<Integer, List<NotificationSignalementUserMultiContents>> selectMessageServiceFaitPresta( String listTaskPrestaServiceFait );
 }

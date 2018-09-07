@@ -102,7 +102,7 @@ public class ConseilQuartier
     /**
      * Sets the Surface
      * 
-     * @param Surface
+     * @param surface
      *            The Surface
      */
     public void setSurface( BigDecimal surface )
@@ -144,7 +144,7 @@ public class ConseilQuartier
     /**
      * Sets the NumeroArrondissement
      * 
-     * @param NumeroArrondissement
+     * @param numeroArrondissement
      *            The NumeroArrondissement
      */
     public void setNumeroArrondissement( BigDecimal numeroArrondissement )

@@ -44,6 +44,10 @@ public interface IDomaineFonctionnelDAO
      * Inserts into the database, the functional domain
      * 
      * @param domaineFonctionnel
+     *            the functional domain
+     * 
+     * @param plugin
+     *            the plugin
      * @return the functional domain id
      */
     Integer insert( DomaineFonctionnel domaineFonctionnel, Plugin plugin );

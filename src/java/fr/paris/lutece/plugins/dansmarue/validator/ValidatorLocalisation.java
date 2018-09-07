@@ -68,7 +68,8 @@ public class ValidatorLocalisation
      * Retrieves from the request, the coordinates, then check if inside Paris
      * 
      * @param request
-     * @return
+     *            the HTTPServletRequest
+     * @return true if inside Paris
      */
     public boolean validate( HttpServletRequest request )
     {
@@ -92,8 +93,10 @@ public class ValidatorLocalisation
      * Checks if coordinates are inside Paris
      * 
      * @param dLat
+     *            the latitude
      * @param dLng
-     * @return
+     *            the longitude
+     * @return true if in Paris
      */
     public boolean validate( Double dLat, Double dLng )
     {

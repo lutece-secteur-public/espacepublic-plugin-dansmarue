@@ -46,6 +46,8 @@ public interface IObservationRejetSignalementService
      *            The report id
      * @param idRaisonRejet
      *            The reject id
+     * @param observationRejetComment
+     *            the reject observation comment
      */
     void insert( int idSignalement, Integer idRaisonRejet, String observationRejetComment );
 

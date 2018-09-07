@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.dansmarue.service;
 import java.util.List;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.DomaineFonctionnel;
-import fr.paris.lutece.portal.service.plugin.Plugin;
 
 public interface IDomaineFonctionnelService
 {
@@ -44,6 +43,7 @@ public interface IDomaineFonctionnelService
      * Inserts into the database, the functional domain
      * 
      * @param domaineFonctionnel
+     *            the functional domain
      * @return the functional domain id
      */
     Integer insert( DomaineFonctionnel domaineFonctionnel );

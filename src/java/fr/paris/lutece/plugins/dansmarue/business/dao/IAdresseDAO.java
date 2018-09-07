@@ -37,29 +37,66 @@ import fr.paris.lutece.plugins.dansmarue.business.entities.Adresse;
 
 import java.util.List;
 
-
 public interface IAdresseDAO
 {
-    public Long insert( Adresse adresse );
+    /**
+     * Save a new address
+     *
+     * @param address
+     *            the address
+     * @return the address id
+     */
+    public Long insert( Adresse address );
 
+    /**
+     * Delete an address
+     *
+     * @param lId
+     *            the address id
+     */
     public void remove( long lId );
 
+    /**
+     * Load a address
+     *
+     * @param lId
+     *            the address id
+     * @return the address
+     */
     public Adresse load( long lId );
 
-    public void store( Adresse adresse );
+    /**
+     * Store an address
+     *
+     * @param address
+     *            the address object
+     */
+    public void store( Adresse address );
 
+    /**
+     * Find address for a report id
+     *
+     * @param lIdSignalement
+     *            the report id
+     * @return list of address
+     *
+     */
     List<Adresse> findBySignalementId( long lIdSignalement );
 
     /**
-     * Load an adresse by its Id signalement
+     * Load an address by its Id report
      *
-     * @param lId the signalement id
+     * @param lId
+     *            the report id
+     * @return the address
      */
     Adresse loadByIdSignalement( long lId );
 
     /**
      * Update an adresse
      *
+     * @param adresse
+     *            the address
      */
     void update( Adresse adresse );
 }

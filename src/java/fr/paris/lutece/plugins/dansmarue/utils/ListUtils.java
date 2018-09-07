@@ -216,7 +216,8 @@ public final class ListUtils
      * Converts an array of string, to a list of int
      * 
      * @param array
-     * @return
+     *            an array of string
+     * @return an integer list
      */
     public static List<Integer> getListOfIntFromStrArray( String[] array )
     {

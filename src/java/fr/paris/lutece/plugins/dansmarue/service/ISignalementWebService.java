@@ -51,7 +51,9 @@ public interface ISignalementWebService
      *            the ws url
      * @return the return of the call, fail or success
      * @throws UnsupportedEncodingException
+     *             throws UnsupportedEncodingException
      * @throws BusinessException
+     *             throws BusinessException
      */
     String sendByWS( Signalement signalement, String url ) throws UnsupportedEncodingException;
 

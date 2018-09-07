@@ -296,6 +296,8 @@ public interface ITypeSignalementDAO
      * 
      * @param typeSignalementParent
      *            the parent report type
+     * @param order
+     *            the order
      * @return the minimum order
      */
     Integer getMinimumOrderAfterGivenOrder( Integer order, TypeSignalement typeSignalementParent );
@@ -327,20 +329,33 @@ public interface ITypeSignalementDAO
     double findLastVersionTypeSignalement( );
 
     /**
-     * Save a new report type Alias
+     * Insert the report type alias
      * 
+     * @param typeSignalement
+     *            the report type object
+     * @param plugin
+     *            the plugin
+     * @return the report alias id
      */
     Integer insertAlias( TypeSignalement typeSignalement, Plugin plugin );
 
     /**
-     * Updates a report type Alias
+     * Update the report type alias
      * 
+     * @param typeSignalement
+     *            the report type object
+     * @param plugin
+     *            the plugin
      */
     void updateAlias( TypeSignalement typeSignalement, Plugin plugin );
 
     /**
-     * Delete a report type Alias
+     * Delete the report type alias
      * 
+     * @param idTypeSignalement
+     *            the report type id
+     * @param plugin
+     *            the plugin
      */
     void deleteAlias( Integer idTypeSignalement, Plugin plugin );
 

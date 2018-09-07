@@ -42,7 +42,7 @@ public interface ISiraUserService
      * 
      * @param siraUser
      *            the sira user to insert
-     * @return
+     * @return the sira user id
      */
     public Long insert( SiraUser siraUser );
 
@@ -86,6 +86,7 @@ public interface ISiraUserService
      * Insert into database a sira user if does not exists
      * 
      * @param siraUser
+     *            the sira user
      */
     void createUser( SiraUser siraUser );
 }
