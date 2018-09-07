@@ -40,38 +40,31 @@ import fr.paris.lutece.plugins.dansmarue.business.entities.Photo;
 import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 
-/**
- * Contains data about signalement or dossier for RoadMap table.
- */
 public class SignalementDossierDTO
 {
     private Date         _dateCreation;
     private Date         _dateDebutService;
     private Date         _heureCreation;
     private Date         _heureDebutService;
-    private Integer      _id;
+    private Integer      _nId;
     private List<Action> _listActions;
     private List<Photo>  _photos;
     private String       _strAdresse;
     private String       _strNumRessource;
-    private String       _type;
+    private String       _strType;
 
     public String getAdresse( )
     {
         return _strAdresse;
     }
 
-    /**
-     *
-     * @return true if dateCreation is afert dateDeb
-     */
     public boolean getEstBleue( )
     {
         boolean datesNotNulls = ( _dateCreation != null ) && ( _dateDebutService != null );
         boolean heuresNotNulls = ( _heureCreation != null ) && ( _heureDebutService != null );
 
-        return datesNotNulls && heuresNotNulls && ( _dateCreation.after( _dateDebutService )
-                || ( DateUtils.sameDate( _dateCreation, _dateDebutService ) && DateUtils.sameHourOrAfter( _heureCreation, _heureDebutService ) ) );
+        return datesNotNulls && heuresNotNulls
+                && ( _dateCreation.after( _dateDebutService ) || ( DateUtils.sameDate( _dateCreation, _dateDebutService ) && DateUtils.sameHourOrAfter( _heureCreation, _heureDebutService ) ) );
     }
 
     public Date getHeureCreation( )
@@ -79,9 +72,6 @@ public class SignalementDossierDTO
         return _heureCreation;
     }
 
-    /**
-     * @return the heureDebutService
-     */
     public Date getHeureDebutService( )
     {
         return _heureDebutService;
@@ -89,7 +79,7 @@ public class SignalementDossierDTO
 
     public Integer getId( )
     {
-        return _id;
+        return _nId;
     }
 
     public List<Action> getListActions( )
@@ -97,9 +87,6 @@ public class SignalementDossierDTO
         return _listActions;
     }
 
-    /**
-     * @return the photos
-     */
     public String getListPhotos( )
     {
         StringBuilder listURLPhotos = new StringBuilder( "" );
@@ -108,7 +95,7 @@ public class SignalementDossierDTO
         {
             for ( Photo photo : getPhotos( ) )
             {
-                if ( !photo.getImageUrl( ).equals( "" ) )
+                if ( !"".equals( photo.getImageUrl( ) ) )
                 {
                     listURLPhotos.append( "<img width=\"100\" src='" + photo.getImageUrl( ) + "' /> &nbsp;" );
                 }
@@ -130,7 +117,7 @@ public class SignalementDossierDTO
 
     public String getType( )
     {
-        return _type;
+        return _strType;
     }
 
     public void setAdresse( String adresse )
@@ -158,10 +145,6 @@ public class SignalementDossierDTO
         _heureCreation = heureCreation;
     }
 
-    /**
-     * @param heureDebutService
-     *            the heureDebutService to set
-     */
     public void setHeureDebutService( Date heureDebutService )
     {
         _heureDebutService = heureDebutService;
@@ -169,7 +152,7 @@ public class SignalementDossierDTO
 
     public void setId( Integer id )
     {
-        _id = id;
+        _nId = id;
     }
 
     public void setListActions( List<Action> listActions )
@@ -189,6 +172,6 @@ public class SignalementDossierDTO
 
     public void setType( String type )
     {
-        _type = type;
+        _strType = type;
     }
 }

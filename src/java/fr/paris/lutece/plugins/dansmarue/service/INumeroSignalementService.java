@@ -39,14 +39,14 @@ package fr.paris.lutece.plugins.dansmarue.service;
  */
 public interface INumeroSignalementService
 {
-	/**
-	 * Retrieves the next number to use as a file name
-	 * @param strMonth
-	 * 			Month letter
-	 * @param nYear
-	 * 			Year
-	 * @return
-	 * 			The next number that can be used for this combination
-	 */
-	public Long findByMonthYear(String strMonth, int nYear);
+    /**
+     * Retrieves the next number to use as a file name
+     * 
+     * @param strMonth
+     *            Month letter
+     * @param nYear
+     *            Year
+     * @return The next number that can be used for this combination
+     */
+    public Long findByMonthYear( String strMonth, int nYear );
 }

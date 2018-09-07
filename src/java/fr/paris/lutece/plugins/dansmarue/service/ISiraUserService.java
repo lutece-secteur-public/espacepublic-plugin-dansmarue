@@ -35,49 +35,57 @@ package fr.paris.lutece.plugins.dansmarue.service;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.SiraUser;
 
-public interface ISiraUserService {
-	/**
-	 * Inserts into the database a new sira user
-	 * @param siraUser the sira user to insert
-	 * @return
-	 */
-	 public Long insert( SiraUser siraUser );
+public interface ISiraUserService
+{
+    /**
+     * Inserts into the database a new sira user
+     * 
+     * @param siraUser
+     *            the sira user to insert
+     * @return
+     */
+    public Long insert( SiraUser siraUser );
 
-	 /**
-	  * Removes from the data base a sira user
-	  * @param lId the id of the sira user to remove
-	  */
-	 public void remove( long lId );
+    /**
+     * Removes from the data base a sira user
+     * 
+     * @param lId
+     *            the id of the sira user to remove
+     */
+    public void remove( long lId );
 
-	 /**
-	  * Loads a sira user from its id 
-	  * @param lId the id of the sira user to load
-	  * @return
-	  * 	  The sira user matching the id
-	  * 	  null otherwise
-	  */
-	 public SiraUser load( long lId );
+    /**
+     * Loads a sira user from its id
+     * 
+     * @param lId
+     *            the id of the sira user to load
+     * @return The sira user matching the id null otherwise
+     */
+    public SiraUser load( long lId );
 
-     /**
+    /**
      * Updates a SiraUser
      * 
-     * @param siraUser the sira user to update
+     * @param siraUser
+     *            the sira user to update
      */
-     void update( SiraUser siraUser );
-     
-     /**
-      * Finds a sira user from its guid and udid
-      * @param guid the mon compte user id
-      * @param udid the device id
-      * @return
-      * 	   The user matching those ids
-      * 		null otherwise
-      */
-     SiraUser findByGuidAndToken( String guid, String udid);
-     
-     /**
-      * Insert into database a sira user if does not exists
-      * @param siraUser
-      */
-     void createUser( SiraUser siraUser );
+    void update( SiraUser siraUser );
+
+    /**
+     * Finds a sira user from its guid and udid
+     * 
+     * @param guid
+     *            the mon compte user id
+     * @param udid
+     *            the device id
+     * @return The user matching those ids null otherwise
+     */
+    SiraUser findByGuidAndToken( String guid, String udid );
+
+    /**
+     * Insert into database a sira user if does not exists
+     * 
+     * @param siraUser
+     */
+    void createUser( SiraUser siraUser );
 }

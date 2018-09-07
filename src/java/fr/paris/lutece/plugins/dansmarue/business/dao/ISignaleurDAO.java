@@ -93,7 +93,7 @@ public interface ISignaleurDAO
     Signaleur loadByIdSignalement( long lId );
 
     /**
-     * Upadate a reporter
+     * Update a reporter
      * 
      * @param signaleur
      *            the reporter to update

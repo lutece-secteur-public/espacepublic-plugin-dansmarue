@@ -42,22 +42,23 @@ import fr.paris.lutece.plugins.dansmarue.commons.exceptions.FunctionnalException
  * IDepotService
  *
  */
-public interface IDepotService {
-	/**
-	 * Do create a depot
-	 * 
-	 * @param request
-	 *            the HTTP request
-	 * @param resourceId
-	 *            the original resource id
-	 */
-	void doCreate(HttpServletRequest request, int resourceId);
+public interface IDepotService
+{
+    /**
+     * Do create a depot
+     * 
+     * @param request
+     *            the HTTP request
+     * @param resourceId
+     *            the original resource id
+     */
+    void doCreate( HttpServletRequest request, int resourceId );
 
-	/**
-	 * Do validate a depot
-	 * 
-	 * @param request
-	 *            the HTTP request
-	 */
-	void doValidate(HttpServletRequest request) throws FunctionnalException;
+    /**
+     * Do validate a depot
+     * 
+     * @param request
+     *            the HTTP request
+     */
+    void doValidate( HttpServletRequest request ) throws FunctionnalException;
 }

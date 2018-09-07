@@ -52,6 +52,7 @@ public interface IDomaineFonctionnelDAO
      * Gets the next id
      * 
      * @param plugin
+     *            the plugin
      * @return The new primary key
      */
     Integer newPrimaryKey( Plugin plugin );
@@ -60,6 +61,7 @@ public interface IDomaineFonctionnelDAO
      * Removes a functional domain
      * 
      * @param lId
+     *            the domain id
      */
     void remove( long lId );
 
@@ -73,9 +75,10 @@ public interface IDomaineFonctionnelDAO
     DomaineFonctionnel getById( Integer lId );
 
     /**
-     * Updates a functional domain
+     * Inserts or Updates a functional domain
      * 
      * @param domaineFonctionnel
+     *            the functional domain object
      */
     void store( DomaineFonctionnel domaineFonctionnel );
 
@@ -90,6 +93,7 @@ public interface IDomaineFonctionnelDAO
      * Gets all districts ids linked to this domain
      * 
      * @param idDomaine
+     *            the domain id
      * @return list of districts ids linked to this domain
      */
     List<Integer> getArrondissementsIdsByDomaineId( int idDomaine );
@@ -107,6 +111,7 @@ public interface IDomaineFonctionnelDAO
      * Gets all reporting types ids linked to this domain
      * 
      * @param idDomaine
+     *            the domain id
      * @return list of reporting types id linked to this domain
      */
     List<Integer> getTypesSignalementIdsByDomaineId( int idDomaine );
@@ -115,6 +120,7 @@ public interface IDomaineFonctionnelDAO
      * Gets all units linked to this domain
      * 
      * @param idDomaine
+     *            the domain id
      * @return list of units id linked to this domain
      */
     List<Integer> getUnitsIdsByDomaineId( int idDomaine );

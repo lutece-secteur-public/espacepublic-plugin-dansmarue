@@ -9,7 +9,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-
 public class ArrondissementService implements IArrondissementService
 {
     @Inject
@@ -17,28 +16,35 @@ public class ArrondissementService implements IArrondissementService
     private IArrondissementDAO _arrondissementDAO;
 
     /**
-     * Get all arrondissement
-     * @return the list of all arrondissement
+     * {@inheritDoc}
      */
+    @Override
     public List<Arrondissement> getAllArrondissement( )
     {
         return _arrondissementDAO.getAllArrondissement( );
     }
 
     /**
-     * Get the correct arrondissement for a given geometry
-     * @return the list of all arrondissement
+     * {@inheritDoc}
      */
+    @Override
     public Arrondissement getArrondissementByGeom( double lng, double lat )
     {
         return this._arrondissementDAO.getArrondissementByGeom( lng, lat );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<Integer> getArrondissementsInSector( List<Integer> sectors )
     {
         return _arrondissementDAO.getArrondissementsInSector( sectors );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Arrondissement getByIdArrondissement( int nIdArrondissement )
     {

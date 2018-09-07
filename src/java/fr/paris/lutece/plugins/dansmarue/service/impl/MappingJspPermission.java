@@ -38,60 +38,55 @@ import fr.paris.lutece.plugins.dansmarue.service.role.SignalementResourceIdServi
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
- * Classe permettant de faire le mapping entre les jsp et leur permission
- * associ�e.
+ * Class allowing to do the mapping between jsp and their associated permission.
  * 
  */
 public class MappingJspPermission
 {
 
     public static final Map<String, PermissionRessourceType> MAPPING_JSP_PERMISSIONS;
+
+    /**
+     * Private constructor
+     */
+    private MappingJspPermission( )
+    {
+        // Constructor
+    }
+
     static
     {
         MAPPING_JSP_PERMISSIONS = new HashMap<String, PermissionRessourceType>( );
 
-        MAPPING_JSP_PERMISSIONS.put( "ManageReferentiel.jsp", new PermissionRessourceType(
-                SignalementResourceIdService.KEY_ID_RESOURCE,
-                SignalementResourceIdService.PERMISSION_GESTION_REFERENTIEL ) );
+        MAPPING_JSP_PERMISSIONS.put( "ManageReferentiel.jsp",
+                new PermissionRessourceType( SignalementResourceIdService.KEY_ID_RESOURCE, SignalementResourceIdService.PERMISSION_GESTION_REFERENTIEL ) );
 
-        MAPPING_JSP_PERMISSIONS.put( "ManageSignalement.jsp", new PermissionRessourceType(
-                SignalementResourceIdService.KEY_ID_RESOURCE,
-                SignalementResourceIdService.PERMISSION_RECHERCHER_SIGNALEMENT ) );
+        MAPPING_JSP_PERMISSIONS.put( "ManageSignalement.jsp",
+                new PermissionRessourceType( SignalementResourceIdService.KEY_ID_RESOURCE, SignalementResourceIdService.PERMISSION_RECHERCHER_SIGNALEMENT ) );
 
-        MAPPING_JSP_PERMISSIONS.put( "SaveSignalement.jsp", new PermissionRessourceType(
- SignalementResourceIdService.KEY_ID_RESOURCE,
-                SignalementResourceIdService.PERMISSION_CREATION_SIGNALEMENT ) );
+        MAPPING_JSP_PERMISSIONS.put( "SaveSignalement.jsp", new PermissionRessourceType( SignalementResourceIdService.KEY_ID_RESOURCE, SignalementResourceIdService.PERMISSION_CREATION_SIGNALEMENT ) );
 
-        MAPPING_JSP_PERMISSIONS.put( "DoSaveSignalement.jsp", new PermissionRessourceType(
- SignalementResourceIdService.KEY_ID_RESOURCE,
-                SignalementResourceIdService.PERMISSION_CREATION_SIGNALEMENT ) );
+        MAPPING_JSP_PERMISSIONS.put( "DoSaveSignalement.jsp",
+                new PermissionRessourceType( SignalementResourceIdService.KEY_ID_RESOURCE, SignalementResourceIdService.PERMISSION_CREATION_SIGNALEMENT ) );
 
-        MAPPING_JSP_PERMISSIONS.put( "ModifySignalement.jsp", new PermissionRessourceType(
-                SignalementResourceIdService.KEY_ID_RESOURCE,
-                SignalementResourceIdService.PERMISSION_MODIFICATION_SIGNALEMENT ) );
+        MAPPING_JSP_PERMISSIONS.put( "ModifySignalement.jsp",
+                new PermissionRessourceType( SignalementResourceIdService.KEY_ID_RESOURCE, SignalementResourceIdService.PERMISSION_MODIFICATION_SIGNALEMENT ) );
 
-        MAPPING_JSP_PERMISSIONS.put( "DoModifySignalement.jsp", new PermissionRessourceType(
-                SignalementResourceIdService.KEY_ID_RESOURCE,
-                SignalementResourceIdService.PERMISSION_MODIFICATION_SIGNALEMENT ) );
+        MAPPING_JSP_PERMISSIONS.put( "DoModifySignalement.jsp",
+                new PermissionRessourceType( SignalementResourceIdService.KEY_ID_RESOURCE, SignalementResourceIdService.PERMISSION_MODIFICATION_SIGNALEMENT ) );
 
-        MAPPING_JSP_PERMISSIONS.put( "ViewSignalement.jsp", new PermissionRessourceType(
-                SignalementResourceIdService.KEY_ID_RESOURCE,
-                SignalementResourceIdService.PERMISSION_CONSULTATION_SIGNALEMENT ) );
+        MAPPING_JSP_PERMISSIONS.put( "ViewSignalement.jsp",
+                new PermissionRessourceType( SignalementResourceIdService.KEY_ID_RESOURCE, SignalementResourceIdService.PERMISSION_CONSULTATION_SIGNALEMENT ) );
 
-        MAPPING_JSP_PERMISSIONS.put( "DoCreateMailSignalement.jsp", new PermissionRessourceType(
-                SignalementResourceIdService.KEY_ID_RESOURCE,
-                SignalementResourceIdService.PERMISSION_ENVOI_MAIL_SIGNALEMENT ) );
+        MAPPING_JSP_PERMISSIONS.put( "DoCreateMailSignalement.jsp",
+                new PermissionRessourceType( SignalementResourceIdService.KEY_ID_RESOURCE, SignalementResourceIdService.PERMISSION_ENVOI_MAIL_SIGNALEMENT ) );
 
-        MAPPING_JSP_PERMISSIONS.put( "DeleteSignalement.jsp", new PermissionRessourceType(
-                SignalementResourceIdService.KEY_ID_RESOURCE,
-                SignalementResourceIdService.PERMISSION_SUPPRIMER_SIGNALEMENT ) );
+        MAPPING_JSP_PERMISSIONS.put( "DeleteSignalement.jsp",
+                new PermissionRessourceType( SignalementResourceIdService.KEY_ID_RESOURCE, SignalementResourceIdService.PERMISSION_SUPPRIMER_SIGNALEMENT ) );
 
-        MAPPING_JSP_PERMISSIONS.put( "DoDeleteSignalement.jsp", new PermissionRessourceType(
-                SignalementResourceIdService.KEY_ID_RESOURCE,
-                SignalementResourceIdService.PERMISSION_SUPPRIMER_SIGNALEMENT ) );
-        
+        MAPPING_JSP_PERMISSIONS.put( "DoDeleteSignalement.jsp",
+                new PermissionRessourceType( SignalementResourceIdService.KEY_ID_RESOURCE, SignalementResourceIdService.PERMISSION_SUPPRIMER_SIGNALEMENT ) );
 
     }
 }

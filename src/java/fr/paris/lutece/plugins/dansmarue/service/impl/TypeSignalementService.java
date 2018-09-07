@@ -1,4 +1,36 @@
-
+/*
+ * Copyright (c) 2002-2018, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.dansmarue.service.impl;
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,43 +52,58 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
-
 /**
  * The Class TypeSignalementService.
  */
 public class TypeSignalementService implements ITypeSignalementService
 {
 
-    //MESSAGES
-    private static final String MESSAGE_ERROR_TYPE_SIGNALEMENT_MUST_BE_UNIQUE = "dansmarue.message.errortypesignalement.alreadyexists";
+    // MESSAGES
+    private static final String MESSAGE_ERROR_TYPE_SIGNALEMENT_MUST_BE_UNIQUE     = "dansmarue.message.errortypesignalement.alreadyexists";
     private static final String MESSAGE_ERROR_TYPE_NON_ACTIF_RATTACHE_A_DIRECTION = "dansmarue.message.errortypesignalement.actifwithnounit";
 
     @Inject
     private ITypeSignalementDAO _typesignalementDAO;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<TypeSignalement> getAllTypeSignalement( )
     {
         return _typesignalementDAO.getAllTypeSignalement( );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<TypeSignalement> getAll( )
     {
         return _typesignalementDAO.getAll( );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<TypeSignalement> getAllSousTypeSignalement( Integer nIdTypeSignalement )
     {
         return _typesignalementDAO.getAllSousTypeSignalement( nIdTypeSignalement );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public List<TypeSignalement> getAllSousTypeSignalementActifs(Integer nIdTypeSignalement){
-    	return _typesignalementDAO.getAllSousTypeSignalementActifs( nIdTypeSignalement );
+    public List<TypeSignalement> getAllSousTypeSignalementActifs( Integer nIdTypeSignalement )
+    {
+        return _typesignalementDAO.getAllSousTypeSignalementActifs( nIdTypeSignalement );
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TypeSignalement getByIdTypeSignalement( Integer lIdTypeSignalement )
     {
@@ -64,18 +111,27 @@ public class TypeSignalementService implements ITypeSignalementService
         return _typesignalementDAO.load( lIdTypeSignalement, plugin );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<TypeSignalement> getAllTypeSignalementWithoutChildren( )
     {
         return _typesignalementDAO.getAllTypeSignalementWithoutChildren( );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<TypeSignalement> getAllTypeSignalementWithoutParent( )
     {
         return _typesignalementDAO.getAllTypeSignalementWithoutParent( );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Integer insert( TypeSignalement typeSignalement )
     {
@@ -89,8 +145,7 @@ public class TypeSignalementService implements ITypeSignalementService
         {
 
             // we test if the chosen order is superior to the last one, if it's that, we change this order to the max one + 1
-            Integer maxOrderInTypeSignalement = _typesignalementDAO
-                    .getMaximumOrderInHierarchyTypeSignalement( typeSignalement.getTypeSignalementParent( ) );
+            Integer maxOrderInTypeSignalement = _typesignalementDAO.getMaximumOrderInHierarchyTypeSignalement( typeSignalement.getTypeSignalementParent( ) );
             if ( typeSignalement.getOrdre( ) > maxOrderInTypeSignalement )
             {
                 typeSignalement.setOrdre( maxOrderInTypeSignalement + 1 );
@@ -100,26 +155,25 @@ public class TypeSignalementService implements ITypeSignalementService
             if ( existsOrdre( typeSignalement.getOrdre( ), typeSignalement.getTypeSignalementParent( ) ) )
             {
 
-                _typesignalementDAO.updateOrderGreaterThan( typeSignalement.getOrdre( ),
-                        typeSignalement.getTypeSignalementParent( ) );
+                _typesignalementDAO.updateOrderGreaterThan( typeSignalement.getOrdre( ), typeSignalement.getTypeSignalementParent( ) );
 
             }
-            //then we insert the new type signalement
-            Integer idTypeSignalement =  _typesignalementDAO.insert( typeSignalement, plugin );
-            _typesignalementDAO.insertAlias(typeSignalement, plugin );
-            //Refresh the view with the new type
-            _typesignalementDAO.refreshViewTypesWithParentsLinks();
+            // then we insert the new report type
+            Integer idTypeSignalement = _typesignalementDAO.insert( typeSignalement, plugin );
+            _typesignalementDAO.insertAlias( typeSignalement, plugin );
+            // Refresh the view with the new type
+            _typesignalementDAO.refreshViewTypesWithParentsLinks( );
             return idTypeSignalement;
-        }
-        else
+        } else
         {
             throw new BusinessException( typeSignalement, MESSAGE_ERROR_TYPE_SIGNALEMENT_MUST_BE_UNIQUE );
         }
 
-
-
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Integer insertWithoutParent( TypeSignalement typeSignalement )
     {
@@ -146,18 +200,20 @@ public class TypeSignalementService implements ITypeSignalementService
                 _typesignalementDAO.updateOrderGreaterThan( typeSignalement.getOrdre( ), null );
             }
 
-            //then we insert the new type signalement
-            int returnCode =  _typesignalementDAO.insertWithoutParent( typeSignalement, plugin );
-            //Refresh the view with the new type
-            _typesignalementDAO.refreshViewTypesWithParentsLinks();
+            // then we insert the new report type
+            int returnCode = _typesignalementDAO.insertWithoutParent( typeSignalement, plugin );
+            // Refresh the view with the new type
+            _typesignalementDAO.refreshViewTypesWithParentsLinks( );
             return returnCode;
-        }
-        else
+        } else
         {
             throw new BusinessException( typeSignalement, MESSAGE_ERROR_TYPE_SIGNALEMENT_MUST_BE_UNIQUE );
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TypeSignalement getParent( Integer nIdTypeSignalement )
     {
@@ -165,6 +221,9 @@ public class TypeSignalementService implements ITypeSignalementService
         return _typesignalementDAO.getParent( nIdTypeSignalement, plugin );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update( TypeSignalement typeSignalement )
     {
@@ -179,18 +238,21 @@ public class TypeSignalementService implements ITypeSignalementService
         if ( !existsSaveTypeSignalement( typeSignalement ) )
         {
             _typesignalementDAO.store( typeSignalement, plugin );
-            _typesignalementDAO.deleteAlias(typeSignalement.getId(), plugin);
-            if(noSousType){
-            	_typesignalementDAO.insertAlias(typeSignalement, plugin);
+            _typesignalementDAO.deleteAlias( typeSignalement.getId( ), plugin );
+            if ( noSousType )
+            {
+                _typesignalementDAO.insertAlias( typeSignalement, plugin );
             }
-            _typesignalementDAO.refreshViewTypesWithParentsLinks();
-        }
-        else
+            _typesignalementDAO.refreshViewTypesWithParentsLinks( );
+        } else
         {
             throw new BusinessException( typeSignalement, MESSAGE_ERROR_TYPE_SIGNALEMENT_MUST_BE_UNIQUE );
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateWithoutParent( TypeSignalement typeSignalement )
     {
@@ -206,54 +268,72 @@ public class TypeSignalementService implements ITypeSignalementService
         if ( !existsSaveTypeSignalement( typeSignalement ) )
         {
             _typesignalementDAO.updateWithoutParent( typeSignalement, plugin );
-            _typesignalementDAO.deleteAlias(typeSignalement.getId(), plugin);
-            if(noSousType){
-            	_typesignalementDAO.insertAlias(typeSignalement, plugin);
+            _typesignalementDAO.deleteAlias( typeSignalement.getId( ), plugin );
+            if ( noSousType )
+            {
+                _typesignalementDAO.insertAlias( typeSignalement, plugin );
             }
-            _typesignalementDAO.refreshViewTypesWithParentsLinks();
-        }
-        else
+            _typesignalementDAO.refreshViewTypesWithParentsLinks( );
+        } else
         {
             throw new BusinessException( typeSignalement, MESSAGE_ERROR_TYPE_SIGNALEMENT_MUST_BE_UNIQUE );
         }
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean existsSaveTypeSignalement( TypeSignalement typeSignalement )
     {
         return _typesignalementDAO.existsSaveTypeSignalement( typeSignalement );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TypeSignalement findByIdTypeSignalement( Integer nIdTypeSignalement )
     {
         return _typesignalementDAO.findByIdTypeSignalement( nIdTypeSignalement );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete( Integer nIdTypeSignalement )
     {
         Plugin plugin = PluginService.getPlugin( SignalementPlugin.PLUGIN_NAME );
-        _typesignalementDAO.deleteAlias(nIdTypeSignalement, plugin);
+        _typesignalementDAO.deleteAlias( nIdTypeSignalement, plugin );
         _typesignalementDAO.remove( nIdTypeSignalement, plugin );
 
-        //Refresh the view without the type
-        _typesignalementDAO.refreshViewTypesWithParentsLinks();
+        // Refresh the view without the type
+        _typesignalementDAO.refreshViewTypesWithParentsLinks( );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean findByIdSignalement( Integer nIdSignalement )
     {
         return _typesignalementDAO.findByIdSignalement( nIdSignalement );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TypeSignalement getTypeSignalement( Integer nId )
     {
         return _typesignalementDAO.getTypeSignalement( nId );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void disableChildren( TypeSignalement typeSignalement )
     {
@@ -266,6 +346,9 @@ public class TypeSignalementService implements ITypeSignalementService
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<TypeSignalement> getAllTypeSignalementActifLinkedToUnit( )
     {
@@ -281,11 +364,14 @@ public class TypeSignalementService implements ITypeSignalementService
 
         return listResult;
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<TypeSignalement> getAllTypeSignalementActif( )
     {
-        List<TypeSignalement> typeSignalementList =  _typesignalementDAO.getAllTypeSignalementEvenWithoutUnit();
+        List<TypeSignalement> typeSignalementList = _typesignalementDAO.getAllTypeSignalementEvenWithoutUnit( );
         List<TypeSignalement> listResult = new ArrayList<TypeSignalement>( );
         for ( TypeSignalement type : typeSignalementList )
         {
@@ -297,7 +383,10 @@ public class TypeSignalementService implements ITypeSignalementService
 
         return listResult;
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<TypeSignalement> getAllTypeSignalementLinkedToUnit( )
     {
@@ -314,6 +403,9 @@ public class TypeSignalementService implements ITypeSignalementService
         return listResult;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void getAllSousTypeSignalementCascade( Integer typeSignalementId, List<TypeSignalement> listeTypeSignalement )
     {
@@ -329,6 +421,9 @@ public class TypeSignalementService implements ITypeSignalementService
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<TypeSignalementDTO> getTypeSignalementTree( boolean actif )
     {
@@ -341,12 +436,10 @@ public class TypeSignalementService implements ITypeSignalementService
             try
             {
                 BeanUtils.copyProperties( dest, typeSignalement );
-            }
-            catch ( IllegalAccessException e )
+            } catch ( IllegalAccessException e )
             {
                 AppLogService.error( e );
-            }
-            catch ( InvocationTargetException e )
+            } catch ( InvocationTargetException e )
             {
                 AppLogService.error( e );
             }
@@ -362,9 +455,10 @@ public class TypeSignalementService implements ITypeSignalementService
     /**
      * Fill dest with childs cascade.
      * 
-     * @param parentType id true return only actives types, else return all
-     *            types.
-     * @param actif the actif
+     * @param parentType
+     *            id true return only actives types, else return all types.
+     * @param actif
+     *            the actif
      */
     private void fillDestWithChildsCascade( TypeSignalementDTO parentType, boolean actif )
     {
@@ -376,12 +470,10 @@ public class TypeSignalementService implements ITypeSignalementService
             try
             {
                 BeanUtils.copyProperties( dest, typeSignalement );
-            }
-            catch ( IllegalAccessException e )
+            } catch ( IllegalAccessException e )
             {
                 AppLogService.error( e );
-            }
-            catch ( InvocationTargetException e )
+            } catch ( InvocationTargetException e )
             {
                 AppLogService.error( e );
             }
@@ -393,17 +485,27 @@ public class TypeSignalementService implements ITypeSignalementService
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TypeSignalement getTypeSignalementByIdWithParents( Integer nIdTypeSignalement )
     {
         return this._typesignalementDAO.getTypeSignalementByIdWithParents( nIdTypeSignalement );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int getIdTypeSignalementOrdreInferieur( TypeSignalement typeSignalement )
     {
         return _typesignalementDAO.getIdTypeSignalementOrdreInferieur( typeSignalement );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateOrdre( TypeSignalement typeSignalement )
     {
@@ -411,31 +513,46 @@ public class TypeSignalementService implements ITypeSignalementService
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getIdTypeSignalementOrdreSuperieur( TypeSignalement typeSignalement )
     {
         return _typesignalementDAO.getIdTypeSignalementOrdreSuperieur( typeSignalement );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean existsOrdre( int ordre, TypeSignalement typeSignalementParent )
     {
         return _typesignalementDAO.existsOrdre( ordre, typeSignalementParent );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateOrderGreaterThan( Integer ordre, TypeSignalement typeSignalementParent )
     {
         _typesignalementDAO.updateOrderGreaterThan( ordre, typeSignalementParent );
-        
+
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Integer getMinimumOrderAfterGivenOrder( Integer order, TypeSignalement typeSignalementParent )
     {
         return _typesignalementDAO.getMinimumOrderAfterGivenOrder( order, typeSignalementParent );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateOrderSuperiorAfterDeletingTypeSignalement( Integer order, TypeSignalement typeSignalementParent )
     {
@@ -443,44 +560,48 @@ public class TypeSignalementService implements ITypeSignalementService
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Integer getMaximumOrderInHierarchyTypeSignalement( TypeSignalement typeSignalementParent )
     {
         return _typesignalementDAO.getMaximumOrderInHierarchyTypeSignalement( typeSignalementParent );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ImageResource getImageResource( int nKey )
     {
         return _typesignalementDAO.loadImage( nKey );
     }
-    
 
     /**
-     * Method to get the last type signalement version 
-     * @return last type signalement version
-     */
-    public double findLastVersionTypeSignalement(  )
-    {
-    	return _typesignalementDAO.findLastVersionTypeSignalement(  );
-    }
-    
-    /**
-     * Gets all the type signalement root (level 0, without parent) which are actif
-     * @return
-     */
-    public List<TypeSignalement> getAllTypeSignalementActifWithoutParent( ){
-    	return _typesignalementDAO.getAllTypeSignalementActifWithoutParent();
-    }
-    
-    /**
-     * Retrieves a category id, of a type signalement id
-     * @param idTypeSignalement
-     * @return
-     * 		The id of the category of the type signalement
-     * 		-1 if not found
+     * {@inheritDoc}
      */
     @Override
-    public int getCategoryFromTypeId(Integer idTypeSignalement){
-    	return _typesignalementDAO.getCategoryFromTypeId(idTypeSignalement);
+    public double findLastVersionTypeSignalement( )
+    {
+        return _typesignalementDAO.findLastVersionTypeSignalement( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<TypeSignalement> getAllTypeSignalementActifWithoutParent( )
+    {
+        return _typesignalementDAO.getAllTypeSignalementActifWithoutParent( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getCategoryFromTypeId( Integer idTypeSignalement )
+    {
+        return _typesignalementDAO.getCategoryFromTypeId( idTypeSignalement );
     }
 }

@@ -1,6 +1,37 @@
+/*
+ * Copyright (c) 2002-2018, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.dansmarue.service.role;
-
-// Start of user code for imports
 
 import fr.paris.lutece.portal.service.rbac.Permission;
 import fr.paris.lutece.portal.service.rbac.ResourceIdService;
@@ -10,33 +41,24 @@ import fr.paris.lutece.util.ReferenceList;
 
 import java.util.Locale;
 
-
-// End of user code for imports
-
-/**
- * SignalementResourceIdService
- */
 public class SignalementResourceIdService extends ResourceIdService
 {
-    public static final String KEY_ID_RESOURCE = "GESTION_DES_SIGNALEMENTS";
-    public static final String PERMISSION_GESTION_REFERENTIEL = "GESTION_REFERENTIEL";
-    public static final String PERMISSION_RECHERCHER_SIGNALEMENT = "RECHERCHER_SIGNALEMENT";
-    public static final String PERMISSION_CREATION_SIGNALEMENT = "CREATION_SIGNALEMENT";
-    public static final String PERMISSION_MODIFICATION_SIGNALEMENT = "MODIFICATION_SIGNALEMENT";
-    public static final String PERMISSION_CONSULTATION_SIGNALEMENT = "CONSULTATION_SIGNALEMENT";
-    public static final String PERMISSION_ENVOI_MAIL_SIGNALEMENT = "ENVOI_MAIL_SIGNALEMENT";
-    public static final String PERMISSION_SUPPRIMER_SIGNALEMENT = "SUPPRESSION_SIGNALEMENT";
-    public static final String EXPORTER_SIGNALEMENT = "EXPORTER_SIGNALEMENT";
-    public static final String SUPPRIMER_SIGNALEMENT_MASSE = "SUPPRIMER_SIGNALEMENT_MASSE";
-    public static final String TRAITEMENT_MASSE = "TRAITEMENT_MASSE";
+    public static final String  KEY_ID_RESOURCE                     = "GESTION_DES_SIGNALEMENTS";
+    public static final String  PERMISSION_GESTION_REFERENTIEL      = "GESTION_REFERENTIEL";
+    public static final String  PERMISSION_RECHERCHER_SIGNALEMENT   = "RECHERCHER_SIGNALEMENT";
+    public static final String  PERMISSION_CREATION_SIGNALEMENT     = "CREATION_SIGNALEMENT";
+    public static final String  PERMISSION_MODIFICATION_SIGNALEMENT = "MODIFICATION_SIGNALEMENT";
+    public static final String  PERMISSION_CONSULTATION_SIGNALEMENT = "CONSULTATION_SIGNALEMENT";
+    public static final String  PERMISSION_ENVOI_MAIL_SIGNALEMENT   = "ENVOI_MAIL_SIGNALEMENT";
+    public static final String  PERMISSION_SUPPRIMER_SIGNALEMENT    = "SUPPRESSION_SIGNALEMENT";
+    public static final String  EXPORTER_SIGNALEMENT                = "EXPORTER_SIGNALEMENT";
+    public static final String  SUPPRIMER_SIGNALEMENT_MASSE         = "SUPPRIMER_SIGNALEMENT_MASSE";
+    public static final String  TRAITEMENT_MASSE                    = "TRAITEMENT_MASSE";
 
-    private static final String PROPERTY_LABEL_RESOURCE_TYPE = "dansmarue.rbac.resourceType.label.gestionDesSignalements";
+    private static final String PROPERTY_LABEL_RESOURCE_TYPE        = "dansmarue.rbac.resourceType.label.gestionDesSignalements";
 
-    // Start of user code for specific constants
-
-    // End of user code for specific constants
     /**
-     * Cr�� une nouvelle instance de SignalementResourceIdService
+     * Creates a new instance of ReportingResourceIdService
      */
     public SignalementResourceIdService( )
     {
@@ -44,7 +66,7 @@ public class SignalementResourceIdService extends ResourceIdService
     }
 
     /**
-     * Enregistre les ressources Lutece
+     * Logs Lutece resources
      */
     public void register( )
     {
@@ -100,19 +122,21 @@ public class SignalementResourceIdService extends ResourceIdService
         p.setPermissionKey( TRAITEMENT_MASSE );
         p.setPermissionTitleKey( "dansmarue.rbac.permission.label.gestiondessignalements.traitementmasse" );
         rt.registerPermission( p );
-        
+
         p = new Permission( );
         p.setPermissionKey( SUPPRIMER_SIGNALEMENT_MASSE );
         p.setPermissionTitleKey( "dansmarue.rbac.permission.label.gestiondessignalements.suppressionsignalementmasse" );
         rt.registerPermission( p );
-        
+
         ResourceTypeManager.registerResourceType( rt );
     }
 
     /**
-     * Retourne une liste d'identifiants de resource ou null
-     * @param locale La locale courante
-     * @return Une liste d'id de resource
+     * Returns a list of resource identifiers or null
+     * 
+     * @param locale
+     *            The current locale
+     * @return A list of resource ids
      */
     public ReferenceList getResourceIdList( Locale locale )
     {
@@ -120,10 +144,13 @@ public class SignalementResourceIdService extends ResourceIdService
     }
 
     /**
-     * retourne le titre de la resource sp�cifi�e par son ID ou null
-     * @param strId L'id de la resource
-     * @param locale La locale courante
-     * @return Le titre de la resource sp�cifi�e
+     * Returns the title of the resource specified by its ID or null
+     * 
+     * @param strId
+     *            The resource id
+     * @param locale
+     *            The current locale
+     * @return The title of the specified resource
      */
     public String getTitle( String strId, Locale locale )
     {

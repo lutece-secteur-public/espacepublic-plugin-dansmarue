@@ -314,7 +314,7 @@ public interface ISignalementDAO
      * Add a rejection date to the report
      * 
      * @param idSignalement
-     *            the rpeort id
+     *            the report id
      * @param dateRejet
      *            the rejection date
      */

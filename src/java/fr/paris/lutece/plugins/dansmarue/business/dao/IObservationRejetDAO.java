@@ -116,7 +116,7 @@ public interface IObservationRejetDAO
     void decreaseOrdreOfNextRejet( ObservationRejet observationRejet );
 
     /**
-     * Increases the order of the next reject
+     * Increases the order of the previous reject
      * 
      * @param observationRejet
      *            the observationRejet object

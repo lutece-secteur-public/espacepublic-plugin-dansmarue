@@ -1,68 +1,115 @@
 package fr.paris.lutece.plugins.dansmarue.service;
 
+/*
+ * Copyright (c) 2002-2018, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 import java.util.List;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.DomaineFonctionnel;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
-public interface IDomaineFonctionnelService {
-	/**
-	 * Inserts into the database, the domaineFonctionnel
-	 * @param domaineFonctionnel
-	 * @return
-	 */
-    Integer insert( DomaineFonctionnel domaineFonctionnel );
-    
+public interface IDomaineFonctionnelService
+{
     /**
-     * Removes a domaine fonctionnel
+     * Inserts into the database, the functional domain
+     * 
+     * @param domaineFonctionnel
+     * @return the functional domain id
+     */
+    Integer insert( DomaineFonctionnel domaineFonctionnel );
+
+    /**
+     * Removes a functional domain
+     * 
      * @param lId
+     *            the domain id
      */
     void remove( long lId );
-    
+
     /**
-     * Loads a domaine fonctionnel
-     * @param lId the id of the domaine to load
-     * @return
+     * Loads a functional domain
+     * 
+     * @param lId
+     *            the id of the domain to load
+     * @return a functional domain
      */
     DomaineFonctionnel getById( Integer lId );
-    
+
     /**
-     * Updates a domaine fonctionnel
+     * Inserts or Updates a functional domain
+     * 
      * @param domaineFonctionnel
+     *            the functional domain object
      */
     void store( DomaineFonctionnel domaineFonctionnel );
 
     /**
-     * Gets all domaines fonctionnel
-     * @return
+     * Gets all functional domains
+     * 
+     * @return list of functional domains
      */
-	List<DomaineFonctionnel> getAllDomainesFonctionnel();
+    List<DomaineFonctionnel> getAllDomainesFonctionnel( );
 
-	/**
-	 * Gets all arrondissement ids linked to this domain
-	 * @param idDomaine
-	 * @return
-	 */
-	List<Integer> getArrondissementsIdsByDomaineId(int idDomaine);
-	
-	/**
-	 * Gets all types signalement ids linked to this domain
-	 * @param idDomaine
-	 * @return
-	 */
-	List<Integer> getTypesSignalementIdsByDomaineId(int idDomaine);
-
-	/**
-     * Gets all domaines fonctionnel, with Arrondissements, Entites, Category as objects
-     * types anomalie
-     * @return
+    /**
+     * Gets all districts ids linked to this domain
+     * 
+     * @param idDomaine
+     *            the domain id
+     * @return list of districts ids linked to this domain
      */
-	List<DomaineFonctionnel> getAllDomainesFonctionnelWithData();
+    List<Integer> getArrondissementsIdsByDomaineId( int idDomaine );
 
-	/**
-	 * Gets all domaines wich are active
-	 * @return the list of domains which are active
-	 */
-	List<DomaineFonctionnel> getAllDomainesFonctionnelActifs();
-	
+    /**
+     * Gets all reporting types ids linked to this domain
+     * 
+     * @param idDomaine
+     *            the domain id
+     * @return list of reporting types id linked to this domain
+     */
+    List<Integer> getTypesSignalementIdsByDomaineId( int idDomaine );
+
+    /**
+     * Gets all functional domain, with District, Entities, Category as objects defect types
+     * 
+     * @return list of domains
+     */
+    List<DomaineFonctionnel> getAllDomainesFonctionnelWithData( );
+
+    /**
+     * Gets all active domains
+     * 
+     * @return list of active domains
+     */
+    List<DomaineFonctionnel> getAllDomainesFonctionnelActifs( );
+
 }

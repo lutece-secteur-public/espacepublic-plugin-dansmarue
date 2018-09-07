@@ -59,9 +59,16 @@ public class AndroidPushService
     private static final String MARK_NOTIFICATION    = "notification";
     private static final String MARK_AUTHORIZATION   = "Authorization";
 
+    /**
+     * Private constructor
+     */
+    private AndroidPushService( )
+    {
+        // Constructor
+    }
+
     public static void sendPush( String userToken, String title, String content, Map<String, String> payload )
     {
-        String response = null;
         String gcmApiKey = AppPropertiesService.getProperty( PROPERTY_GCM_API_KEY );
         String fcmUrl = AppPropertiesService.getProperty( PROPERTY_FCM_URL );
         try
@@ -90,7 +97,7 @@ public class AndroidPushService
             Map<String, String> headersRequest = new HashMap<>( );
             headersRequest.put( MARK_AUTHORIZATION, "key=" + gcmApiKey );
 
-            response = httpAccess.doPostJSON( fcmUrl, message.toString( ), headersRequest, null );
+            httpAccess.doPostJSON( fcmUrl, message.toString( ), headersRequest, null );
 
         } catch ( Exception ex )
         {

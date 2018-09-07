@@ -44,7 +44,6 @@ import fr.paris.lutece.plugins.unittree.service.unit.IUnitUserAttributeService;
 import fr.paris.lutece.plugins.unittree.web.unit.IUnitAttributeComponent;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-
 /**
  *
  * UnitAttributeManager
@@ -55,65 +54,77 @@ public final class DepotManager
     /**
      * Private constructor
      */
-    private DepotManager(  )
+    private DepotManager( )
     {
     }
 
     /**
      * Get the list of unit user depot components
+     * 
      * @return a list of {@link IUnitAttributeComponent}
      */
-    public static List<IDepotComponent> getListUnitAttributeComponents(  )
+    public static List<IDepotComponent> getListUnitAttributeComponents( )
     {
         return SpringContextService.getBeansOfType( IDepotComponent.class );
     }
 
     /**
      * Fill the model for the unit user attribute component
-     * @param request the HTTP request
-     * @param signalement the signalement
-     * @param model the model
-     * @param strMark the marker
+     * 
+     * @param request
+     *            the HTTP request
+     * @param signalement
+     *            the report
+     * @param model
+     *            the model
+     * @param strMark
+     *            the marker
      */
     public static void fillModel( HttpServletRequest request, Signalement signalement, Map<String, Object> model, String strMark )
     {
-        for ( IDepotComponent component : getListUnitAttributeComponents(  ) )
+        for ( IDepotComponent component : getListUnitAttributeComponents( ) )
         {
             component.fillModel( request, signalement, model );
         }
 
-        model.put( strMark, getListUnitAttributeComponents(  ) );
+        model.put( strMark, getListUnitAttributeComponents( ) );
     }
 
     /**
      * Get the list of unit user attribute services
+     * 
      * @return a list of {@link IUnitUserAttributeService}
      */
-    public static List<IDepotService> getListUnitAttributeService(  )
+    public static List<IDepotService> getListUnitAttributeService( )
     {
         return SpringContextService.getBeansOfType( IDepotService.class );
     }
 
     /**
      * Do create the additional attributes of the given unit
-     * @param request the HTTP request
-     * @param resourceId the original resource id
+     * 
+     * @param request
+     *            the HTTP request
+     * @param resourceId
+     *            the original resource id
      */
     public static void doCreate( HttpServletRequest request, int resourceId )
     {
-        for ( IDepotService service : getListUnitAttributeService(  ) )
+        for ( IDepotService service : getListUnitAttributeService( ) )
         {
             service.doCreate( request, resourceId );
         }
     }
-    
+
     /**
      * Do create the additional attributes of the given unit
-     * @param request the HTTP request
+     * 
+     * @param request
+     *            the HTTP request
      */
     public static void doValidate( HttpServletRequest request )
     {
-        for ( IDepotService service : getListUnitAttributeService(  ) )
+        for ( IDepotService service : getListUnitAttributeService( ) )
         {
             service.doValidate( request );
         }

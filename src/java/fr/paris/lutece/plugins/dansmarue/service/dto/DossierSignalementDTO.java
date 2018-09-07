@@ -33,164 +33,138 @@
  */
 package fr.paris.lutece.plugins.dansmarue.service.dto;
 
-import java.util.List;
-
-/**
- *
- * This DTO is used in the Signalement Front Office Step 2 This library allows module-formengine-signalement to have access to plugin-ramen methods
- *
- */
-
 public class DossierSignalementDTO
 {
-    private Long                id;
-    private String              adresse;
-    private String              dateCreation;
-    private String              commentaire;
-    private String              heureCreation;
-    private List<EncombrantDTO> encombrants;
-    private String              type;
-    private String              imgUrl;
-    private double              lat;
-    private double              lng;
-    private Integer             distance;
-    private String              prefix;
-    private Integer             idCategory;
+    private Long    _id;
+    private String  _strAdresse;
+    private String  _strDateCreation;
+    private String  _strCommentaire;
+    private String  _strHeureCreation;
+    private String  _strType;
+    private String  _strImgUrl;
+    private double  _lat;
+    private double  _lng;
+    private Integer _nDistance;
+    private String  _strPrefix;
+    private Integer _nIdCategory;
 
     public Long getId( )
     {
-        return id;
+        return _id;
     }
 
     public void setId( Long id )
     {
-        this.id = id;
+        this._id = id;
     }
 
     public String getAdresse( )
     {
-        return adresse;
+        return _strAdresse;
     }
 
     public void setAdresse( String adresse )
     {
-        this.adresse = adresse;
+        this._strAdresse = adresse;
     }
 
     public String getDateCreation( )
     {
-        return dateCreation;
+        return _strDateCreation;
     }
 
     public void setDateCreation( String dateCreation )
     {
-        this.dateCreation = dateCreation;
+        this._strDateCreation = dateCreation;
     }
 
     public String getHeureCreation( )
     {
-        return heureCreation;
+        return _strHeureCreation;
     }
 
     public void setHeureCreation( String heureCreation )
     {
-        this.heureCreation = heureCreation;
-    }
-
-    public List<EncombrantDTO> getEncombrants( )
-    {
-        return encombrants;
-    }
-
-    public void setEncombrants( List<EncombrantDTO> encombrants )
-    {
-        this.encombrants = encombrants;
+        this._strHeureCreation = heureCreation;
     }
 
     public String getType( )
     {
-        return type;
+        return _strType;
     }
 
     public void setType( String type )
     {
-        this.type = type;
+        this._strType = type;
     }
 
     public String getImgUrl( )
     {
-        return imgUrl;
+        return _strImgUrl;
     }
 
     public void setImgUrl( String imgUrl )
     {
-        this.imgUrl = imgUrl;
+        this._strImgUrl = imgUrl;
     }
 
     public Integer getDistance( )
     {
-        return distance;
+        return _nDistance;
     }
 
     public void setDistance( Integer distance )
     {
-        this.distance = distance;
+        this._nDistance = distance;
     }
 
     public double getLat( )
     {
-        return lat;
+        return _lat;
     }
 
     public void setLat( double lat )
     {
-        this.lat = lat;
+        this._lat = lat;
     }
 
     public double getLng( )
     {
-        return lng;
+        return _lng;
     }
 
     public void setLng( double lng )
     {
-        this.lng = lng;
+        this._lng = lng;
     }
 
     public String getCommentaire( )
     {
-        return commentaire;
+        return _strCommentaire;
     }
 
     public void setCommentaire( String commentaire )
     {
-        this.commentaire = commentaire;
+        this._strCommentaire = commentaire;
     }
 
-    /**
-     * @return the prefix
-     */
     public String getPrefix( )
     {
-        return prefix;
+        return _strPrefix;
     }
 
-    /**
-     * @param strPrefix
-     *            the prefix to set
-     */
     public void setPrefix( String strPrefix )
     {
-        prefix = strPrefix;
+        _strPrefix = strPrefix;
     }
 
     public Integer getIdCategory( )
     {
-        return idCategory;
+        return _nIdCategory;
     }
 
     public void setIdCategory( Integer idCategory )
     {
-        this.idCategory = idCategory;
+        this._nIdCategory = idCategory;
     }
 }

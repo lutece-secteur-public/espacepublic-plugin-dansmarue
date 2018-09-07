@@ -33,24 +33,20 @@
  */
 package fr.paris.lutece.plugins.dansmarue.service.impl;
 
-/**
- * Conteneur de permission / type de ressource.
- * 
- * @author aBataille
- */
 public class PermissionRessourceType
 {
     /**
-     * Cl� de la permission
+     * Permission key
      */
     private String permission;
     /**
-     * Cl� du type de ressource (use case).
+     * Resource type key
      */
     private String ressourceType;
 
     /**
      * Creates a new PermissionTypeRessource.java object.
+     * 
      * @param ressourceType
      * @param permission
      */
@@ -62,7 +58,8 @@ public class PermissionRessourceType
     }
 
     /**
-     * @param permission the permission to set
+     * @param permission
+     *            the permission to set
      */
     public void setPermission( String permission )
     {
@@ -78,7 +75,8 @@ public class PermissionRessourceType
     }
 
     /**
-     * @param ressourceType the ressourceType to set
+     * @param ressourceType
+     *            the ressourceType to set
      */
     public void setRessourceType( String ressourceType )
     {

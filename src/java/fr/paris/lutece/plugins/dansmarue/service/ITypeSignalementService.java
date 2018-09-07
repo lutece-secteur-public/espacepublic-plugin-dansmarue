@@ -1,3 +1,36 @@
+/*
+ * Copyright (c) 2002-2018, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.dansmarue.service;
 
 import java.util.List;
@@ -12,121 +45,175 @@ import fr.paris.lutece.portal.service.image.ImageResource;
 public interface ITypeSignalementService
 {
     /**
-     * Return all type signalement
-     *
-     * @return a list of type signalement
+     * Return all report types
+     * 
+     * @return a list of report types
      */
     List<TypeSignalement> getAllTypeSignalement( );
 
     /**
-     * Return all type signalement which are in active state
-     *
-     * @return a list of type signalement which are in active state
+     * Return all active report types
+     * 
+     * @return a list of active report types
      */
     List<TypeSignalement> getAllTypeSignalementActif( );
 
     /**
-     * Get a type signalement by his Id.
-     *
+     * Load the report type.
+     * 
      * @param nIdTypeSignalement
-     *            the type signalement id
-     * @return a type signalement
+     *            the report type id
+     * @return an instance of {@link TypeSignalement}
      */
     TypeSignalement getByIdTypeSignalement( Integer nIdTypeSignalement );
 
+    /**
+     * Gets the all report type without children.
+     * 
+     * @return the all report type without children
+     */
     List<TypeSignalement> getAllTypeSignalementWithoutChildren( );
 
+    /**
+     * all report types.
+     * 
+     * @return all report types.
+     */
     List<TypeSignalement> getAll( );
 
     /**
-     * Gets the all sous type signalement.
-     *
+     * Gets the all report sub types.
+     * 
      * @param nIdTypeSignalement
-     *            the n id type signalement
-     * @return the all sous type signalement
+     *            the report type id
+     * @return all report sub types by id.
      */
     List<TypeSignalement> getAllSousTypeSignalement( Integer nIdTypeSignalement );
 
     /**
-     * Gets the all sous type signalement which are active.
-     *
+     * Gets the all report sub types which are active.
+     * 
      * @param nIdTypeSignalement
-     *            the n id type signalement
-     * @return the all sous type signalement
+     *            the report type id
+     * @return the all report sub types
      */
     List<TypeSignalement> getAllSousTypeSignalementActifs( Integer nIdTypeSignalement );
 
+    /**
+     * Gets the all report types without parent.
+     * 
+     * @return all report types without parent.
+     */
     List<TypeSignalement> getAllTypeSignalementWithoutParent( );
 
     /**
-     * Gets all the type signalement root (level 0, without parent) which are actif
+     * Gets the all active report types without parent.
      * 
-     * @return
+     * @return all active report types without parent.
      */
     List<TypeSignalement> getAllTypeSignalementActifWithoutParent( );
 
+    /**
+     * Insert a new report type.
+     * 
+     * @param typeSignalement
+     *            the report type
+     * @return the new primary key
+     */
     Integer insert( TypeSignalement typeSignalement );
 
+    /**
+     * Gets the direct parent of a report type.
+     * 
+     * @param nIdTypeSignalement
+     *            the report type id
+     * @return the direct parent of a report type.
+     */
     TypeSignalement getParent( Integer nIdTypeSignalement );
 
     /**
-     * Gets the type signalement by id with parents.
-     *
+     * Returns a report sub type by id
+     * 
      * @param nIdTypeSignalement
-     *            the id type signalement
-     * @return the type signalement by id with parents
+     *            the report type id
+     * @return the report type object
      */
-
     TypeSignalement getTypeSignalementByIdWithParents( Integer nIdTypeSignalement );
 
+    /**
+     * Updates a report type
+     * 
+     * @param typeSignalement
+     *            the report type
+     */
     void update( TypeSignalement typeSignalement );
 
+    /**
+     * Check if a report type exists and adds it if not.
+     * 
+     * @param typeSignalement
+     *            the report type
+     * @return true if report type already exists.
+     */
     boolean existsSaveTypeSignalement( TypeSignalement typeSignalement );
 
     /**
-     * Get a typesignalement linked to a signalement.
-     *
-     * @param lIdTypeSignalement
-     *            the type signalement id
-     * @return the type signalement
+     * Get a report types linked to a report.
+     * 
+     * @param nIdTypeSignalement
+     *            the report type id
+     * @return the report types linked to a report.
      */
-    TypeSignalement findByIdTypeSignalement( Integer lIdTypeSignalement );
+    TypeSignalement findByIdTypeSignalement( Integer nIdTypeSignalement );
 
+    /**
+     * Remove a unit.
+     * 
+     * @param nIdTypeSignalement
+     *            the report type id
+     */
     void delete( Integer nIdTypeSignalement );
 
     /**
-     * Verify if the type signalement is used in a signalement before delete.
-     *
+     * Find by report id.
+     * 
      * @param nIdSignalement
-     *            the signalement id
-     * @return true if found.
+     *            the report id
+     * @return true, if successful the report is linked to a type.
      */
     boolean findByIdSignalement( Integer nIdSignalement );
 
+    /**
+     * Gets a report type by its id
+     * 
+     * @param nId
+     *            report type id
+     * @return the report type
+     */
     TypeSignalement getTypeSignalement( Integer nId );
 
     /**
-     * update a root type signalement.
-     *
+     * update a root report type.
+     * 
      * @param typeSignalement
-     *            the type signalement
+     *            the report type
      */
     void updateWithoutParent( TypeSignalement typeSignalement );
 
     /**
-     * insert a type signalement as a root.
-     *
+     * insert a report type as a root.
+     * 
      * @param typeSignalement
-     *            the type signalement
-     * @return the insert object id
+     *            the report type
+     * @return the report type id
      */
     Integer insertWithoutParent( TypeSignalement typeSignalement );
 
     /**
-     * disable (put active=false) all children of typeSignalement.
+     * disable (put active=false) all children of the report type.
      *
      * @param typeSignalement
-     *            the type signalement
+     *            the report type
      */
     void disableChildren( TypeSignalement typeSignalement );
 
@@ -138,7 +225,7 @@ public interface ITypeSignalementService
     List<TypeSignalement> getAllTypeSignalementActifLinkedToUnit( );
 
     /**
-     * Get all typeSignalement with no children and linked to a unit
+     * Get all report types with no children and linked to a unit
      * 
      * @return the list
      */
@@ -148,51 +235,118 @@ public interface ITypeSignalementService
      * Gets the all sub types . Like getAllSousType returns also sub sub types and so on.
      *
      * @param typeSignalementId
-     *            the type signalement id
+     *            the report types
      * @param listeTypeSignalement
-     *            the liste type signalement
+     *            the list of report types
      */
     void getAllSousTypeSignalementCascade( Integer typeSignalementId, List<TypeSignalement> listeTypeSignalement );
 
     /**
-     * Gets the type signalement tree.
+     * Gets the report types tree.
      *
      * @param actif
-     *            if true only actives signalement are returned, if not all of them are returned
-     * @return a tree of type signalement
+     *            if true only actives report types are returned, if not all of them are returned
+     * @return a tree of report types
      */
     List<TypeSignalementDTO> getTypeSignalementTree( boolean actif );
 
+    /**
+     * Returns a report id with the minimal order
+     * 
+     * @param typeSignalement
+     *            the report type object
+     * @return the report type with the minimal order
+     */
     int getIdTypeSignalementOrdreInferieur( TypeSignalement typeSignalement );
 
+    /**
+     * Returns a report id with the maximal order
+     * 
+     * @param typeSignalement
+     *            the report type object
+     * @return the report type with the maximal order
+     */
     int getIdTypeSignalementOrdreSuperieur( TypeSignalement typeSignalement );
 
+    /**
+     * Change the order of a report type
+     * 
+     * @param typeSignalement
+     *            the report type object
+     */
     void updateOrdre( TypeSignalement typeSignalement );
 
+    /**
+     * Check if an order exists
+     * 
+     * @param ordre
+     *            the order
+     * @param typeSignalementParent
+     *            the parent report type object
+     * @return a boolean
+     */
     boolean existsOrdre( int ordre, TypeSignalement typeSignalementParent );
 
+    /**
+     * Update the order
+     * 
+     * @param ordre
+     *            the order
+     * @param typeSignalementParent
+     *            the parent report type object
+     */
     void updateOrderGreaterThan( Integer ordre, TypeSignalement typeSignalementParent );
 
+    /**
+     * Returns the minimum order in hierarchy of a report type family
+     * 
+     * @param typeSignalementParent
+     *            the parent report type
+     * @return the minimum order
+     */
     Integer getMinimumOrderAfterGivenOrder( Integer order, TypeSignalement typeSignalementParent );
 
+    /**
+     * Returns the maximum order in hierarchy of a report type family
+     * 
+     * @param typeSignalementParent
+     *            the parent report type
+     * @return the maximum order
+     */
     Integer getMaximumOrderInHierarchyTypeSignalement( TypeSignalement typeSignalementParent );
 
+    /**
+     * Update the order of the report types if one is delete in the tree
+     * 
+     * @param order
+     *            the order
+     * @param typeSignalementParent
+     *            the parent report type
+     */
     void updateOrderSuperiorAfterDeletingTypeSignalement( Integer order, TypeSignalement typeSignalementParent );
 
+    /**
+     * Load the report type image
+     * 
+     * @param nKey
+     *            the id of the report type image
+     * @return the image object
+     */
     ImageResource getImageResource( int nIdTypeSignalement );
 
     /**
-     * Method to get the last type signalement version
+     * Method to get the last report type version
      * 
-     * @return last type signalement version
+     * @return last report type version
      */
     double findLastVersionTypeSignalement( );
 
     /**
-     * Retrieves a category id, of a type signalement id
+     * Retrieves a category id, of a report type id
      * 
      * @param idTypeSignalement
-     * @return The id of the category of the type signalement -1 if not found
+     *            the report type id
+     * @return The id of the category of the report type -1 if not found
      */
     int getCategoryFromTypeId( Integer idTypeSignalement );
 

@@ -160,7 +160,7 @@ public interface ITypeSignalementDAO
     TypeSignalement getParent( Integer nIdTypeSignalement, Plugin plugin );
 
     /**
-     * Adds a report type
+     * Updates a report type
      * 
      * @param typeSignalement
      *            the report type
@@ -240,7 +240,7 @@ public interface ITypeSignalementDAO
      * 
      * @param typeSignalement
      *            the report type object
-     * @return
+     * @return the report type with the minimal order
      */
     int getIdTypeSignalementOrdreInferieur( TypeSignalement typeSignalement );
 
@@ -249,7 +249,7 @@ public interface ITypeSignalementDAO
      * 
      * @param typeSignalement
      *            the report type object
-     * @return
+     * @return the report type with the maximal order
      */
     int getIdTypeSignalementOrdreSuperieur( TypeSignalement typeSignalement );
 

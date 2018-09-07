@@ -55,7 +55,7 @@ public interface IDashboardPeriodDAO
      *
      * @param dashboardPeriod
      *            the dashboard period to insert
-     * @return
+     * @return  the dashboard period id
      */
     public Long insert( DashboardPeriod dashboardPeriod, Plugin plugin );
 

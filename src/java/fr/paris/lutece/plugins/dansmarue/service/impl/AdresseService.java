@@ -1,3 +1,36 @@
+/*
+ * Copyright (c) 2002-2018, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.dansmarue.service.impl;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.IAdresseDAO;
@@ -11,13 +44,12 @@ import fr.paris.lutece.plugins.unittree.modules.dansmarue.business.sector.Sector
 import javax.inject.Inject;
 import javax.inject.Named;
 
-
 public class AdresseService implements IAdresseService
 {
 
     @Inject
     @Named( "signalementAdresseDAO" )
-    private IAdresseDAO _adresseSignalementDAO;
+    private IAdresseDAO        _adresseSignalementDAO;
 
     @Inject
     @Named( "signalement.arrondissementDAO" )
@@ -25,24 +57,40 @@ public class AdresseService implements IAdresseService
 
     @Inject
     @Named( "unittree-dansmarue.sectorDAO" )
-    private ISectorDAO _sectorDAO;
+    private ISectorDAO         _sectorDAO;
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Long insert( Adresse adresse )
     {
         return _adresseSignalementDAO.insert( adresse );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void remove( long lId )
     {
         _adresseSignalementDAO.remove( lId );
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Adresse load( long lId )
     {
         return _adresseSignalementDAO.load( lId );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void store( Adresse adresse )
     {
         _adresseSignalementDAO.store( adresse );
@@ -50,37 +98,45 @@ public class AdresseService implements IAdresseService
     }
 
     /**
-     * Load an adresse by its Id signalement
-     * 
-     * @param lId the signalement id
+     * {@inheritDoc}
      */
+    @Override
     public Adresse loadByIdSignalement( long lId )
     {
         return _adresseSignalementDAO.loadByIdSignalement( lId );
     }
 
     /**
-     * Update an adresse
-     * 
+     * {@inheritDoc}
      */
+    @Override
     public void update( Adresse adresse )
     {
         _adresseSignalementDAO.update( adresse );
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Arrondissement getArrondissementByGeom( Double lng, Double lat )
     {
         return this._arrondissementDAO.getArrondissementByGeom( lng, lat );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Sector getSecteurByGeomAndTypeSignalement( Double lng, Double lat, Integer idTypeSignalement )
     {
         return this._sectorDAO.getSectorByGeomAndTypeSignalement( lng, lat, idTypeSignalement );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Sector getSectorByGeomAndIdUnitParent( Double lng, Double lat, Integer idUnitParent )
     {

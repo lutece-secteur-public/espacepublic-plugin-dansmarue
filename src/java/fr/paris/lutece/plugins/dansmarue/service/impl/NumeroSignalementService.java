@@ -39,14 +39,18 @@ import javax.inject.Named;
 import fr.paris.lutece.plugins.dansmarue.business.dao.INumeroSignalementDAO;
 import fr.paris.lutece.plugins.dansmarue.service.INumeroSignalementService;
 
-
-public class NumeroSignalementService implements INumeroSignalementService {
-	@Inject
+public class NumeroSignalementService implements INumeroSignalementService
+{
+    @Inject
     @Named( "dansmarue.numeroSignalementDAO" )
     private INumeroSignalementDAO _numeroSignalementDAO;
 
-	@Override
-	public Long findByMonthYear(String strMonth, int nYear) {
-		return _numeroSignalementDAO.findByMonthYear(strMonth, nYear);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Long findByMonthYear( String strMonth, int nYear )
+    {
+        return _numeroSignalementDAO.findByMonthYear( strMonth, nYear );
+    }
 }

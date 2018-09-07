@@ -143,6 +143,11 @@ public final class SignalementConstants
     public static final Integer      ID_STATE_TRANSFERE_PRESTATAIRE                         = AppPropertiesService.getPropertyInt( "signalement.idStateTransferePrestataire", -1 );
     public static final Integer      ID_STATE_PROGRAMME_PRESTATAIRE                         = AppPropertiesService.getPropertyInt( "signalement.idStateServiceProgrammePrestataire", -1 );
 
+    // Photo view
+    public static final Integer      OVERVIEW                                               = 1;
+    public static final Integer      DETAILED_VIEW                                          = 0;
+    public static final Integer      SERVICE_DONE_VIEW                                      = 2;
+
     /**
      * Utility class - empty constructor
      */

@@ -39,53 +39,68 @@ import fr.paris.lutece.plugins.dansmarue.business.dao.ISiraUserDAO;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SiraUser;
 import fr.paris.lutece.plugins.dansmarue.service.ISiraUserService;
 
-public class SiraUserService implements ISiraUserService {
+public class SiraUserService implements ISiraUserService
+{
 
-	@Inject
-	private ISiraUserDAO _siraUserDAO;
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Long insert(SiraUser siraUser) {
-		return _siraUserDAO.insert(siraUser);
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void remove(long lId) {
-		_siraUserDAO.remove(lId);		
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public SiraUser load(long lId) {
-		return _siraUserDAO.load(lId);
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void update(SiraUser siraUser) {
-		_siraUserDAO.update(siraUser);
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public SiraUser findByGuidAndToken(String guid, String token) {
-		return _siraUserDAO.findByGuidAndToken(guid, token);
-	}
-	
-	@Override
-	public void createUser(SiraUser siraUser) {
-		SiraUser siraUserFound = findByGuidAndToken(siraUser.getGuid(), siraUser.getToken());
-		if(null == siraUserFound){
-			insert(siraUser);
-		}
-	}
+    @Inject
+    private ISiraUserDAO _siraUserDAO;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Long insert( SiraUser siraUser )
+    {
+        return _siraUserDAO.insert( siraUser );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void remove( long lId )
+    {
+        _siraUserDAO.remove( lId );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SiraUser load( long lId )
+    {
+        return _siraUserDAO.load( lId );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update( SiraUser siraUser )
+    {
+        _siraUserDAO.update( siraUser );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SiraUser findByGuidAndToken( String guid, String token )
+    {
+        return _siraUserDAO.findByGuidAndToken( guid, token );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void createUser( SiraUser siraUser )
+    {
+        SiraUser siraUserFound = findByGuidAndToken( siraUser.getGuid( ), siraUser.getToken( ) );
+        if ( null == siraUserFound )
+        {
+            insert( siraUser );
+        }
+    }
 
 }

@@ -1,16 +1,37 @@
+/*
+ * Copyright (c) 2002-2018, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.dansmarue.service.impl;
-
-import fr.paris.lutece.plugins.dansmarue.business.dao.IWorkflowDAO;
-import fr.paris.lutece.plugins.dansmarue.business.entities.NotificationSignalementUserMultiContents;
-import fr.paris.lutece.plugins.dansmarue.service.IWorkflowService;
-import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
-import fr.paris.lutece.plugins.workflowcore.service.task.ITask;
-import fr.paris.lutece.plugins.workflowcore.service.task.ITaskService;
-import fr.paris.lutece.plugins.workflowcore.service.task.TaskService;
-import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
-import fr.paris.lutece.util.sql.DAOUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +42,15 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.plugins.dansmarue.business.dao.IWorkflowDAO;
+import fr.paris.lutece.plugins.dansmarue.business.entities.NotificationSignalementUserMultiContents;
+import fr.paris.lutece.plugins.dansmarue.service.IWorkflowService;
+import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
+import fr.paris.lutece.plugins.workflowcore.service.task.ITask;
+import fr.paris.lutece.plugins.workflowcore.service.task.ITaskService;
+import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 public class WorkflowService extends AbstractCacheableService implements IWorkflowService
 {
@@ -58,10 +88,10 @@ public class WorkflowService extends AbstractCacheableService implements IWorkfl
         return nIdWorkflow;
     }
 
-    @Override
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setSignalementWorkflowId( Integer nIdWorkflow )
     {
         _workflowDAO.updateWorkflowId( nIdWorkflow, null );
@@ -127,32 +157,41 @@ public class WorkflowService extends AbstractCacheableService implements IWorkfl
         return _workflowDAO.selectUserServiceFait( idResource );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int selectIdActionByStates( int idStateBefore, int idStateAfter )
     {
         return _workflowDAO.selectIdActionByStates( idStateBefore, idStateAfter, null );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Map<Integer,List<NotificationSignalementUserMultiContents>> selectMessageServiceFaitPresta( String strIdAction )
-    {        
+    public Map<Integer, List<NotificationSignalementUserMultiContents>> selectMessageServiceFaitPresta( String strIdAction )
+    {
         String strListTaskPrestaServiceFait = AppPropertiesService.getProperty( "signalement.task.presta.message.service.fait" );
-        List<String> listTaskPrestaServiceFait =  Arrays.asList( strListTaskPrestaServiceFait.split( "," ) );
+        List<String> listTaskPrestaServiceFait = Arrays.asList( strListTaskPrestaServiceFait.split( "," ) );
         List<String> listTaskPrestaServiceFaitToReturn = new ArrayList<>( );
-        
-        if( StringUtils.EMPTY.equals( strIdAction ) ) {
+
+        if ( StringUtils.EMPTY.equals( strIdAction ) )
+        {
             List<ITask> listActionTasks = _taskService.getListTaskByIdAction( Integer.parseInt( strIdAction ), Locale.FRENCH );
-            for( ITask task : listActionTasks ) {
+            for ( ITask task : listActionTasks )
+            {
                 String idTask = Integer.toString( task.getId( ) );
-                if ( listTaskPrestaServiceFait.contains( idTask ) ) {
+                if ( listTaskPrestaServiceFait.contains( idTask ) )
+                {
                     listTaskPrestaServiceFaitToReturn.add( idTask );
                 }
-            }            
-        } else {
-            listTaskPrestaServiceFaitToReturn = listTaskPrestaServiceFait;            
+            }
+        } else
+        {
+            listTaskPrestaServiceFaitToReturn = listTaskPrestaServiceFait;
         }
-        
-        
+
         return _workflowDAO.selectMessageServiceFaitPresta( listTaskPrestaServiceFaitToReturn );
     }
 }

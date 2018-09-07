@@ -41,7 +41,6 @@ import fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-
 /**
  * SignalementPlugin
  */
@@ -56,14 +55,13 @@ public class SignalementPlugin extends PluginDefaultImplementation
     public void init( )
     {
         ImageObjetService.init( );
-        ImageResourceManager.registerProvider( (ImageResourceProvider) SpringContextService
-                .getBean( "signalement.imageService" ) );
-        ImageResourceManager.registerProvider( (ImageResourceProvider) SpringContextService
-                .getBean( "signalement.imageThumbnailService" ) );
+        ImageResourceManager.registerProvider( ( ImageResourceProvider ) SpringContextService.getBean( "signalement.imageService" ) );
+        ImageResourceManager.registerProvider( ( ImageResourceProvider ) SpringContextService.getBean( "signalement.imageThumbnailService" ) );
     }
 
     /**
      * Get dao plugin
+     * 
      * @return the dao plugin
      */
     public static Plugin getPlugin( )
