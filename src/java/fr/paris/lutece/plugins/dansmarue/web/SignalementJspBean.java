@@ -2046,7 +2046,7 @@ public class SignalementJspBean extends AbstractJspBean
                 int moisSignalement = DateUtils.getMoisInt( dateDay );
 
                 // associate the month with a letter (A for january, B for february...)
-                signalement.setMois( SignalementService.getLetterByMonth( moisSignalement ) );
+                signalement.setMois( _signalementService.getLetterByMonth( moisSignalement ) );
 
                 // prefix for the report number
                 signalement.setPrefix( SignalementConstants.SIGNALEMENT_PREFIX_BACKOFFICE );
