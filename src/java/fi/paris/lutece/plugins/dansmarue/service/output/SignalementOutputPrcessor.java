@@ -67,26 +67,20 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-
 public class SignalementOutputPrcessor extends OperatorProcessor
 {
     // MESSAGES
-    private static final String MESSAGE_ERROR_NO_SECTOR = "dansmarue.message.error.aucunSecteur";
-    private static final int TOKEN_NB_RANDOM_CHAR = 100;
-    protected static final SignalementService signalementService = SpringContextService.getBean( "signalementService" );
-    protected static final TypeSignalementService typeSignalementService = SpringContextService.getBean( 
-            "typeSignalementService" );
-    protected static final PrioriteService prioriteService = SpringContextService.getBean( "prioriteService" );
-    protected static final DansMaRueUploadHandler dansmarueUploadHandler = SpringContextService.getBean( 
-            "dansmarueUploadHandler" );
-    protected static final SignalementSuiviService signalementSuiviService = SpringContextService.getBean( 
-            "signalementSuiviService" );
-    protected static final ArrondissementService arrondissementService = SpringContextService.getBean( 
-            "signalement.arrondissementService" );
+    private static final String                    MESSAGE_ERROR_NO_SECTOR = "dansmarue.message.error.aucunSecteur";
+    private static final int                       TOKEN_NB_RANDOM_CHAR    = 100;
+    protected static final SignalementService      signalementService      = SpringContextService.getBean( "signalementService" );
+    protected static final TypeSignalementService  typeSignalementService  = SpringContextService.getBean( "typeSignalementService" );
+    protected static final PrioriteService         prioriteService         = SpringContextService.getBean( "prioriteService" );
+    protected static final DansMaRueUploadHandler  dansmarueUploadHandler  = SpringContextService.getBean( "dansmarueUploadHandler" );
+    protected static final SignalementSuiviService signalementSuiviService = SpringContextService.getBean( "signalementSuiviService" );
+    protected static final ArrondissementService   arrondissementService   = SpringContextService.getBean( "signalement.arrondissementService" );
 
     @Override
-    public void process( PDFOperator operator, List<COSBase> arguments )
-        throws IOException
+    public void process( PDFOperator operator, List<COSBase> arguments ) throws IOException
     {
         // Auto-generated method stub
     }
@@ -102,21 +96,20 @@ public class SignalementOutputPrcessor extends OperatorProcessor
      */
     public boolean sauvegarderSignalement( Signalement demandeSignalement, LuteceUser user )
     {
-        List<Adresse> adresses = new ArrayList<Adresse>(  );
-        Adresse adresse = demandeSignalement.getAdresses(  ).get( 0 );
+        List<Adresse> adresses = new ArrayList<Adresse>( );
+        Adresse adresse = demandeSignalement.getAdresses( ).get( 0 );
         adresses.add( adresse );
 
-        Arrondissement arrondissement = arrondissementService.getArrondissementByGeom( adresse.getLng(  ),
-                adresse.getLat(  ) );
+        Arrondissement arrondissement = arrondissementService.getArrondissementByGeom( adresse.getLng( ), adresse.getLat( ) );
 
         demandeSignalement.setArrondissement( arrondissement );
 
-        Calendar calendarInstance = Calendar.getInstance(  );
+        Calendar calendarInstance = Calendar.getInstance( );
         demandeSignalement.setAnnee( calendarInstance.get( Calendar.YEAR ) );
 
-        demandeSignalement.setMois( SignalementService.getLetterByMonth( calendarInstance.get( Calendar.MONTH ) ) );
+        demandeSignalement.setMois( signalementService.getLetterByMonth( calendarInstance.get( Calendar.MONTH ) ) );
 
-        demandeSignalement.setDateCreation( new SimpleDateFormat( "dd/MM/yyyy" ).format( calendarInstance.getTime(  ) ) );
+        demandeSignalement.setDateCreation( new SimpleDateFormat( "dd/MM/yyyy" ).format( calendarInstance.getTime( ) ) );
 
         demandeSignalement.setPrefix( SignalementConstants.SIGNALEMENT_PREFIX_TELESERVICE );
 
@@ -126,10 +119,9 @@ public class SignalementOutputPrcessor extends OperatorProcessor
         try
         {
             StringBuilder token = new StringBuilder( RandomStringUtils.randomAlphanumeric( TOKEN_NB_RANDOM_CHAR ) );
-            token.append( new Date(  ).getTime(  ) );
-            demandeSignalement.setToken( new String( DigestUtils.md5DigestAsHex( token.toString(  ).getBytes( "UTF-8" ) ) ) );
-        }
-        catch ( UnsupportedEncodingException e )
+            token.append( new Date( ).getTime( ) );
+            demandeSignalement.setToken( new String( DigestUtils.md5DigestAsHex( token.toString( ).getBytes( "UTF-8" ) ) ) );
+        } catch ( UnsupportedEncodingException e )
         {
             AppLogService.error( e );
 
@@ -138,14 +130,14 @@ public class SignalementOutputPrcessor extends OperatorProcessor
 
         try
         {
-            if ( demandeSignalement.getId(  ) != null )
+            if ( demandeSignalement.getId( ) != null )
             {
                 demandeSignalement.setId( null );
                 adresse.setId( null );
 
-                if ( null != demandeSignalement.getPhotos(  ) )
+                if ( null != demandeSignalement.getPhotos( ) )
                 {
-                    for ( PhotoDMR photo : demandeSignalement.getPhotos(  ) )
+                    for ( PhotoDMR photo : demandeSignalement.getPhotos( ) )
                     {
                         if ( photo != null )
                         {
@@ -159,13 +151,11 @@ public class SignalementOutputPrcessor extends OperatorProcessor
 
             if ( null != user )
             {
-                signalementService.addFollower( signalementId, user.getName(  ), "",
-                    user.getUserInfo( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL ), "", "", true );
+                signalementService.addFollower( signalementId, user.getName( ), "", user.getUserInfo( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL ), "", "", true );
             }
-        }
-        catch ( BusinessException e )
+        } catch ( BusinessException e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
             throw new BusinessException( demandeSignalement, MESSAGE_ERROR_NO_SECTOR );
         }
 
@@ -173,10 +163,10 @@ public class SignalementOutputPrcessor extends OperatorProcessor
     }
 
     /**
-     * Save signalement coming from WebService. Prepars a demandeSignalement to be saved.
+     * Save report coming from WebService. Prepars a demandeSignalement to be saved.
      *
      * @param demandeSignalement
-     *            the demande signalement
+     *            the report demande
      * @param userName
      *            the user name
      * @param userMail
@@ -185,34 +175,32 @@ public class SignalementOutputPrcessor extends OperatorProcessor
      */
     public boolean sauvegarderSignalementFromWS( Signalement demandeSignalement, String userName, String userMail )
     {
-        List<Adresse> adresses = new ArrayList<Adresse>(  );
-        Adresse adresse = demandeSignalement.getAdresses(  ).get( 0 );
+        List<Adresse> adresses = new ArrayList<Adresse>( );
+        Adresse adresse = demandeSignalement.getAdresses( ).get( 0 );
         adresses.add( adresse );
 
-        Arrondissement arrondissement = arrondissementService.getArrondissementByGeom( adresse.getLng(  ),
-                adresse.getLat(  ) );
+        Arrondissement arrondissement = arrondissementService.getArrondissementByGeom( adresse.getLng( ), adresse.getLat( ) );
 
         demandeSignalement.setArrondissement( arrondissement );
 
-        Calendar calendarInstance = Calendar.getInstance(  );
+        Calendar calendarInstance = Calendar.getInstance( );
         demandeSignalement.setAnnee( calendarInstance.get( Calendar.YEAR ) );
 
-        demandeSignalement.setMois( SignalementService.getLetterByMonth( calendarInstance.get( Calendar.MONTH ) ) );
+        demandeSignalement.setMois( signalementService.getLetterByMonth( calendarInstance.get( Calendar.MONTH ) ) );
 
-        demandeSignalement.setDateCreation( new SimpleDateFormat( "dd/MM/yyyy" ).format( calendarInstance.getTime(  ) ) );
+        demandeSignalement.setDateCreation( new SimpleDateFormat( "dd/MM/yyyy" ).format( calendarInstance.getTime( ) ) );
 
         demandeSignalement.setPrefix( SignalementConstants.SIGNALEMENT_PREFIX_TELESERVICE );
 
         demandeSignalement.setIsDoublon( false );
 
-        // Creation of the unique token for the signalement
+        // Creation of the unique token for the report
         try
         {
             StringBuilder token = new StringBuilder( RandomStringUtils.randomAlphanumeric( TOKEN_NB_RANDOM_CHAR ) );
-            token.append( new Date(  ).getTime(  ) );
-            demandeSignalement.setToken( new String( DigestUtils.md5DigestAsHex( token.toString(  ).getBytes( "UTF-8" ) ) ) );
-        }
-        catch ( UnsupportedEncodingException e )
+            token.append( new Date( ).getTime( ) );
+            demandeSignalement.setToken( new String( DigestUtils.md5DigestAsHex( token.toString( ).getBytes( "UTF-8" ) ) ) );
+        } catch ( UnsupportedEncodingException e )
         {
             AppLogService.error( e );
 
@@ -221,14 +209,14 @@ public class SignalementOutputPrcessor extends OperatorProcessor
 
         try
         {
-            if ( demandeSignalement.getId(  ) != null )
+            if ( demandeSignalement.getId( ) != null )
             {
                 demandeSignalement.setId( null );
                 adresse.setId( null );
 
-                if ( null != demandeSignalement.getPhotos(  ) )
+                if ( null != demandeSignalement.getPhotos( ) )
                 {
-                    for ( PhotoDMR photo : demandeSignalement.getPhotos(  ) )
+                    for ( PhotoDMR photo : demandeSignalement.getPhotos( ) )
                     {
                         if ( photo != null )
                         {
@@ -244,10 +232,9 @@ public class SignalementOutputPrcessor extends OperatorProcessor
             {
                 signalementService.addFollower( signalementId, userName, "", userMail, "", "", true );
             }
-        }
-        catch ( BusinessException e )
+        } catch ( BusinessException e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
             throw new BusinessException( demandeSignalement, MESSAGE_ERROR_NO_SECTOR );
         }
 
