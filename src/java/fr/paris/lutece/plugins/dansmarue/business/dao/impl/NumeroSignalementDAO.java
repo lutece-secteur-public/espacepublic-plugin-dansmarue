@@ -66,7 +66,7 @@ public class NumeroSignalementDAO implements INumeroSignalementDAO
                 insertNewCombinationLine( strMonth, nYear );
             } catch ( AppException ex )
             {
-                AppLogService.error( "Erreurs lors de l'initialisation d'une ligne de numero signalement_numero_signalement : " + ex.getMessage( ), ex );
+                AppLogService.error( "Error when initializing a number line signalement_numero_signalement : " + ex.getMessage( ), ex );
             }
             dossierNumber = getNumber( strMonth, nYear );
         }
@@ -76,7 +76,7 @@ public class NumeroSignalementDAO implements INumeroSignalementDAO
             incrementNumber( strMonth, nYear );
         } else
         {
-            throw new AppException( "Erreur lors de la generation du numero de signalement" );
+            throw new AppException( "Error when generating the report number" );
         }
 
         return dossierNumber;

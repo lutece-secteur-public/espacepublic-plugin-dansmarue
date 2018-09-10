@@ -101,7 +101,7 @@ public class AndroidPushService
 
         } catch ( Exception ex )
         {
-            LOGGER.error( "Erreur lors de l'appel au WS de push android", ex );
+            LOGGER.error( "Error when calling the Android push WS", ex );
         }
     }
 

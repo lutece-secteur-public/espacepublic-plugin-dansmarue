@@ -52,7 +52,7 @@ public class WebServicePartnerDaemon extends Daemon
     // Properties
     private static final String ID_STATE_ECHEC_WS           = "signalement.idStateEchecEnvoiWS";
     private static final String ID_STATE_SERVICE_FAIT       = "signalement.idStateServiceFait";
-    // maximum amount of defected treated by the daemon at once
+    // maximum amount of anomalies treated by the daemon at once
     private static final String MAX_ANOMALIES_TRAITED       = "signalement.daemon.maxAnomalies.traited";
 
     // service

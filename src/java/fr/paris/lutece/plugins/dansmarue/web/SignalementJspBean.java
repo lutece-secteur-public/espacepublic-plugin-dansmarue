@@ -3974,7 +3974,7 @@ public class SignalementJspBean extends AbstractJspBean
             domFonc.setQuartierRefList( ListUtils.retainReferenceList( quartierRefList, domFonc.getQuartiersIds( ), false ) );
         }
 
-        // Defect types
+        // Anomaly types
         if ( CollectionUtils.isEmpty( domFonc.getTypesSignalementIds( ) ) )
         {
             domFonc.setTypesAnomalieRefList( emptyList );
@@ -4050,7 +4050,7 @@ public class SignalementJspBean extends AbstractJspBean
         // Neighborhoods
         ReferenceList quartierRefList = ListUtils.toReferenceList( _conseilQuartier.selectQuartiersList( ), "idConsqrt", "nomConsqrt", null );
 
-        // Defect types
+        // Anomaly types
         typesAnomalies = _typeSignalementService.getAllTypeSignalementActif( );
 
         ReferenceItem defaultItem = new ReferenceItem( );
@@ -4112,7 +4112,7 @@ public class SignalementJspBean extends AbstractJspBean
                     domFonc.setQuartierRefList( ListUtils.retainReferenceList( quartierRefList, domFonc.getQuartiersIds( ), false ) );
                 }
 
-                // Defect types
+                // Anomaly types
                 if ( CollectionUtils.isEmpty( domFonc.getTypesSignalementIds( ) ) )
                 {
                     domFonc.setTypesAnomalieRefList( emptyList );
@@ -4398,7 +4398,7 @@ public class SignalementJspBean extends AbstractJspBean
      */
     public void getSignalementsJsonForMap( HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
-        // Executes only if defect count < max results
+        // Executes only if nomaly count < max results
         int maxResults = AppPropertiesService.getPropertyInt( PROPERTY_MAP_MAX_RESULTS, 0 );
         if ( ( anomaliesCount != null ) && ( anomaliesCount > maxResults ) )
         {

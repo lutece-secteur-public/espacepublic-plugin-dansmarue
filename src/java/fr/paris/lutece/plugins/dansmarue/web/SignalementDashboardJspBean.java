@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.dansmarue.web;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -349,7 +348,7 @@ public class SignalementDashboardJspBean extends AbstractJspBean
             dashboardFilter = new SignalementDashboardFilter( );
             populate( dashboardFilter, request );
 
-            // Search for defects
+            // Search for anomalies
             Integer idUnit = dashboardFilter.getUnitId( );
             Integer userIdUnit = userUnits.get( 0 ).getIdUnit( );
 
@@ -437,7 +436,7 @@ public class SignalementDashboardJspBean extends AbstractJspBean
 
             List<State> stateList = ( List<State> ) fr.paris.lutece.portal.service.workflow.WorkflowService.getInstance( ).getAllStateByWorkflow( ID_WORKFLOW_SIGNALEMENT, adminUser );
 
-            // State -> Period (Allocation) -> defect ids
+            // State -> Period (Allocation) -> anomaly ids
             dashboard = new LinkedHashMap<>( );
             String strDashboardStates = AppPropertiesService.getProperty( PROPERTY_DASHBOARD_STATES );
             String strPlannedStates = AppPropertiesService.getProperty( PROPERTY_DASHBOARD_PLANNED );

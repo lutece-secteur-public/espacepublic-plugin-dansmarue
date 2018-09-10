@@ -53,7 +53,7 @@ import fr.paris.lutece.util.ReferenceList;
 public final class ListUtils
 {
 
-    private static final String ERROR_LIST_CREATION     = "Erreur lors de la création d'une liste pour combo : ";
+    private static final String ERROR_LIST_CREATION     = "Error when creating a combo list: ";
     private static final Logger LOGGER                  = Logger.getLogger( ListUtils.class );
     private static final String PROPERTY_LIST_SEPARATOR = ";";
     private static final String PROPERTY_LIST_COMA      = ",";

@@ -100,7 +100,7 @@ public class SignalementWebService implements ISignalementWebService
             response = new JSONObject( );
             response.accumulate( TAG_REQUEST, REQUEST_METHOD_ADD );
             JSONObject error = new JSONObject( );
-            error.accumulate( "error", "erreur lors du contact avec " + url );
+            error.accumulate( "error", "Error when contacting " + url );
             response.accumulate( "answer", error );
         } catch ( UnsupportedEncodingException e )
         {
@@ -108,7 +108,7 @@ public class SignalementWebService implements ISignalementWebService
             response = new JSONObject( );
             response.accumulate( TAG_REQUEST, REQUEST_METHOD_ADD );
             JSONObject error = new JSONObject( );
-            error.accumulate( "error", "erreur d'encoding" );
+            error.accumulate( "error", "Encoding error" );
             response.accumulate( "answer", error );
         }
 

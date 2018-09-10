@@ -87,7 +87,7 @@ public class DomaineFonctionnel implements RBACResource
     @Transient
     private ReferenceList      _categoriesRefList;
 
-    /** The defect types ref list. */
+    /** The anomaly types ref list. */
     @Transient
     private ReferenceList      _typesAnomalieRefList;
 

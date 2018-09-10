@@ -99,7 +99,7 @@ public interface IDomaineFonctionnelService
     List<Integer> getTypesSignalementIdsByDomaineId( int idDomaine );
 
     /**
-     * Gets all functional domain, with District, Entities, Category as objects defect types
+     * Gets all functional domain, with District, Entities, Category as objects anomaly types
      * 
      * @return list of domains
      */

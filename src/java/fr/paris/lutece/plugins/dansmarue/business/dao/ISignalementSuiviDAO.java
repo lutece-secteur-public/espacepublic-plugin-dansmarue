@@ -76,7 +76,7 @@ public interface ISignalementSuiviDAO
     void update( SignalementSuivi signalementSuivi );
 
     /**
-     * Search all users which subscribed to this defect
+     * Search all users which subscribed to this anomaly
      * 
      * @param idSignalement
      *          the report id
