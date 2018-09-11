@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Plugin dansmarue</title>
+    </properties>
+    <body>
+        <section name="Plugin dansmarue">
+         
+            <subsection name="Description">
+                <p>This plugin allows to manage all the transmitted reports.</p>
+            </subsection>
+           
+        </section>
+    </body>
+</document>
