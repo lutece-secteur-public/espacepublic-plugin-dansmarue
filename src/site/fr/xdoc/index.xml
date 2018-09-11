@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Plugin dansmarue</title>
+    </properties>
+    <body>
+        <section name="Plugin dansmarue">
+         
+            <subsection name="Description">
+                <p>Ce plugin permet de gérer tous les signalements transmis.</p>
+            </subsection>
+           
+        </section>
+    </body>
+</document>
