@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>lutece-global-pom</artifactId>
+        <groupId>fr.paris.lutece.tools</groupId>
+        <version>3.0.3</version>
+	</parent>
+
+	<artifactId>plugin-dansmarue</artifactId>
+	<packaging>lutece-plugin</packaging>
+	<version>6.1.0-SNAPSHOT</version>
+	<name>plugin Dans Ma Rue (BO signalement)</name>
+
+	<distributionManagement>
+		<repository>
+			<id>lutece_releases_repository</id>
+			<url>http://dev.lutece.paris.fr/tmma_nexus/content/repositories/releases/</url>
+		</repository>
+
+		<snapshotRepository>
+			<uniqueVersion>true</uniqueVersion>
+			<id>lutece_snapshots_repository</id>
+			<url>http://dev.lutece.paris.fr/tmma_nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
+	<repositories>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>lutece ville</id>
+			<name>luteceRepositoryVille</name>
+			<url>http://dev.lutece.paris.fr/nexus/content/groups/maven_repository/</url>
+		</repository>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>lutece</id>
+			<name>luteceRepository</name>
+			<url>http://dev.lutece.paris.fr/tmma_nexus/content/repositories/releases/</url>
+		</repository>
+		<repository>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<id>luteceSnapshot</id>
+			<name>luteceSnapshot</name>
+			<url>http://dev.lutece.paris.fr/tmma_nexus/content/repositories/snapshots/</url>
+		</repository>
+	</repositories>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>fr.paris.lutece</groupId>
+				<artifactId>lutece-core</artifactId>
+				<version>6.1.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>1.2.13</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>fr.paris.lutece</groupId>
+			<artifactId>lutece-core</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>fr.paris.lutece.plugins</groupId>
+					<artifactId>library-lutece-unit-testing</artifactId>
+				</exclusion>
+
+				<exclusion>
+					<groupId>javassist</groupId>
+					<artifactId>javassist</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>fr.paris.lutece.plugins</groupId>
+			<artifactId>plugin-unittree</artifactId>
+			<version>2.1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>fr.paris.lutece.plugins</groupId>
+			<artifactId>module-unittree-signalement</artifactId>
+			<version>6.1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.paris.lutece.plugins</groupId>
+			<artifactId>module-leaflet-dansmarue</artifactId>
+			<version>6.1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.paris.lutece.plugins</groupId>
+			<artifactId>library-freemarker</artifactId>
+      		<version>1.2.1</version>
+    	</dependency> 
+		<dependency>
+			<groupId>fr.paris.lutece.plugins</groupId>
+			<artifactId>plugin-asynchronousupload</artifactId>
+			<version>1.0.5</version>
+			<type>lutece-plugin</type>
+		</dependency>
+		<dependency>
+			<groupId>fr.paris.lutece.plugins</groupId>
+			<artifactId>library-image</artifactId>
+			<version>1.0.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>fr.paris.lutece.plugins</groupId>
+			<artifactId>library-httpaccess</artifactId>
+			<version>2.4.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>fr.paris.lutece.plugins</groupId>
+			<artifactId>library-signrequest</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>${powermock.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>${powermock.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<properties>
+		<componentName>signalement</componentName>
+		<jiraProjectName>PLUGINSIGNALEMENT</jiraProjectName>
+		<jiraComponentId>10653</jiraComponentId>
+		<mockito.version>1.9.5</mockito.version>
+		<powermock.version>1.5.1</powermock.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<sonar.language>java</sonar.language>
+		<sonar.sources>src/java</sonar.sources>
+		<sonar.tests>src/test/java</sonar.tests>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<java.source.version>1.8</java.source.version>
+	</properties>
+
+	<build>
+		<plugins>
+		
+		<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-release-plugin</artifactId>
+			  <version>2.5.3</version>
+			  <configuration combine.self="override">
+				<tagNameFormat>plugin-dansmarue-@{project.version}</tagNameFormat>
+			  </configuration>
+		 </plugin> 
+		
+		 <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.4.201502262128</version>
+				<executions>
+					<execution>
+						<id>pre-unit-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<destFile>../target/coverage-reports/jacoco-unit.exec</destFile>
+							<append>true</append>
+						</configuration>
+					</execution>
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>../target/coverage-reports/jacoco-unit.exec</dataFile>
+							<outputDirectory>../target/coverage-reports/jacoco-ut</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<scm>
+        <connection>scm:git:http://gestionversion.acn/applications_lutece/plugin-dansmarue.git</connection>
+        <developerConnection>scm:git:http://gestionversion.acn/applications_lutece/plugin-dansmarue.git</developerConnection>
+        <url>http://gestionversion.acn/applications_lutece/plugin-dansmarue.git</url>
+		<tag>plugin-dansmarue-6.0.2</tag>
+    </scm>
+	<groupId>fr.paris.lutece.plugins</groupId>
+</project>

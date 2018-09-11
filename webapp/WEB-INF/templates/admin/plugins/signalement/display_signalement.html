@@ -1,0 +1,818 @@
+<#include "macro/commons_signalement.html" />
+<@leaflet_map_includes/>
+<@leaflet_cluster_includes/>
+<@adresse_autocomplete_includes/>
+<@simpleModal modal_id="map-modal" text=i18n("dansmarue.map.max.results.execeeded",map_max_results)/>
+
+<link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
+<script type="text/javascript" src="js/sira.js"></script>
+
+<script type="text/javascript">
+
+$.ajaxSetup({ cache: false });
+
+function getSigMarkers(){
+	var markers = L.markerClusterGroup();
+	$("#map_canvas").addClass("hidden");
+	$.get( "jsp/admin/plugins/signalement/DoGetSignalementsJsonForDisplayMap.jsp", function( data ) {
+	  data.forEach(function(signalement){
+		var marker = L.marker([signalement.lat,signalement.lng], {icon: eval(signalement.iconName)});
+		marker.bindPopup(signalement.tooltip);
+		marker.on('mouseover',function(){this.openPopup()});
+		marker.on('mouseout',function(){this.closePopup()});
+		marker.on('click',function(){window.open("jsp/admin/plugins/signalement/ViewSignalement.jsp?signalement_id=" + signalement.idSignalement);});
+		markers.addLayer(marker);
+	  });
+	  leafletmap.addLayer(markers);
+	  $("#map_spinner").addClass("hidden");
+	  $("#map_canvas").removeClass("hidden");
+	});
+	
+}
+</script>
+
+<script type="text/javascript">
+var domains = new Array();
+
+$(document).ready(function(){
+	$(".display-advanced-search").click(function(){
+		$(".advanced-search-block").toggleClass("hidden");
+	});
+	
+	<#if has_advanced_criterias>
+	$(".advanced-search-block").toggleClass("hidden");
+	</#if>
+
+	$("#display-map-btn").click(function(){
+		$(".map_item").removeClass("hidden");
+		$("#list-block").addClass("hidden");
+	});
+	
+	$("#display-list-btn").click(function(){
+		$(".map_item").addClass("hidden");
+		$("#list-block").removeClass("hidden");
+	});
+	
+	<#if ((paginator.itemsCount) <= map_max_results)>
+	$.getScript("jsp/admin/plugins/signalement/DoGetMap.jsp", function(data){
+		initLeafletMap("map_canvas");
+		getSigMarkers();
+		$(".map_item").addClass("hidden");
+	});
+	</#if>
+	
+	var filterDomain = $("#idDomaine").attr("filter");
+	var filterTypeSignalement = $("#typeSignalements").attr("filter");
+	var filterDirection = $("#idDirection").attr("filter");
+	var filterSector = $("#idSector").attr("filter");
+	var filterArrondissements = [${(filter.listIdArrondissements!)?join(",")}];
+	var filterQuartier = [${(filter.listIdQuartier!)?join(",")}];
+	var filterIdDomaine = ${(filter.idDomaine)!};
+	
+	jQuery.ajax({
+		url :"jsp/admin/plugins/signalement/DoInitDomainsAjax.jsp",
+		async:false,
+		data: {idDomaine: filterIdDomaine},
+		success : function(data) { 
+			if(data != undefined){
+				var domain;
+				data.forEach(function(element,index,array){
+					if(element.id == filterDomain){
+						domain = element;
+						$("#idDomaine").append($('<option selected></option>').val(element.id).html(element.libelle).attr("id",element.id));
+					}else{
+						$("#idDomaine").append($('<option></option>').val(element.id).html(element.libelle).attr("id",element.id));
+					}
+					domains.push(element);
+				});
+				if(undefined == domain){
+					domain = data[0];
+				}
+				updateFiltersFromDomain(domain.id,false);
+				
+				// Replace by the filter value
+				// Types
+				var typesSignalement = domain.typesAnomalieRefList;
+				typesSignalement.forEach(function(type){
+					if(type.code == filterTypeSignalement){
+						$("#typeSignalements").val(type.name);
+					}
+				});
+				$("#typeSignalements").removeAttr("filter");
+				
+				//Arrondissements
+				filterArrondissements.forEach(function(idArrondissement){
+					$("input[type='checkbox'][name='listIdArrondissementsParam'][value='"+idArrondissement+"']").attr("checked","true");
+					$("input[type='checkbox'][name='listIdArrondissementsParam'][value='"+idArrondissement+"']").parent().addClass("active");
+				});
+
+				//Quartier
+				filterQuartier.forEach(function(idQuartier){
+					$('#conseilQuartier').find('[value='+idQuartier+']').prop('selected', true)
+					$("#conseilQuartier").selectpicker('refresh')
+				});
+			}
+		},
+		error:function (xhr, ajaxOptions, thrownError){
+			alert(thrownError); 
+		}   
+	});
+	
+	$("#idDomaine").change(function(){
+		var idDomain = $(this).val();
+		updateFiltersFromDomain(idDomain,true);
+	});
+	
+	$("#idDirection").change(function(){
+        updateSectorList($("#idDirection").val(), $("#idDomaine").val());
+        return false;
+    });	
+	
+	$.getScript("jsp/admin/plugins/leaflet/DoGetAutocomplete.jsp", function(data){
+		addAutocomplete("filter_adresse",null);
+	});
+	
+});
+
+function getDomainById(idDomain){
+	var searchedDomain = null;
+	domains.forEach(function(domain){
+		if(domain.id.toString() == idDomain){
+			searchedDomain = domain;
+		}
+	});
+	return searchedDomain;
+}
+
+function updateFiltersFromDomain(idDomaine,reset){
+	$(".overlay").show()
+	jQuery.ajax({
+		url :"jsp/admin/plugins/signalement/DoGetDomainAjax.jsp",
+		data: {idDomaine: idDomaine},
+		async:false,
+		success : function(domain) { 
+			$("#idDirection, #idSector, #checkbox_arrondissement").html("");
+			if(reset){
+				deleteFields(true);
+			}
+			// Arrondissements
+		   var arrondissements = domain.arrondissementsRefList;
+		   if(undefined != arrondissements && arrondissements.length > 0){
+			   arrondissements.forEach(function(element,index,array){
+				 $("#checkbox_arrondissement").append('\
+					<label class="btn btn-checkbox">\
+						<input type="checkbox" name="listIdArrondissementsParam" value="' + element.code +'">'+ element.name +'</input>\
+					</label>');
+			   });
+		   }else{
+			   $("#checkbox_arrondissement").append("#i18n{dansmarue.reportingList.listEmpty}");
+		   }
+		   
+			// Quartier
+		   var quartiers = domain.quartierRefList;
+		   if(undefined != quartiers && quartiers.length > 0){
+			   quartiers.forEach(function(element,index,array){
+				 $('#conseilQuartier').append($('<option>', {value: element.code,text: element.name}));
+			   });
+		   }
+		   $("#conseilQuartier").selectpicker('refresh');
+
+		   <#--// Categories
+		   var categories = domain.categoriesRefList;
+		   if(undefined != categories && categories.length > 0){
+			   categories.forEach(function(element,index,array){
+				 $("#categoryCheckboxes").append('\
+					<label class="btn btn-checkbox">\
+						<input type="checkbox" name="category" value="' + element.code +'">'+ element.name +'</input>\
+					</label>');
+			   });
+		   }else{
+			   $("#categoryCheckboxes").append("#i18n{dansmarue.reportingList.listEmpty}");
+		   }-->
+		   
+		   // Directions
+		   var directions = domain.directionsRefList;
+		   initSelectFromArray($("#idDirection"),directions);
+		   
+		   // Secteurs
+		   var secteurs = domain.secteursRefList;
+		   initSelectFromArray($("#idSector"),secteurs);
+		   
+		   // Types anomalie
+		   var typesAnomalie = domain.typesAnomalieRefList;
+		   var autocomplete = $("#typeSignalements").autocomplete({
+				source: function(request,response){
+					<#--var categories = $("input[name='category']:checked").map(function(){
+					  return $(this).val();
+					}).get();-->
+					
+					var resultList = new Array();
+					typesAnomalie.forEach(function(element){
+						<#--if(categories != undefined && categories.length > 0 && categories.indexOf(element.idCategory.toString()) == -1){
+							return;
+						}-->
+						if(element.name.toLowerCase().indexOf(request.term.toLowerCase()) != -1){
+							var resultItem = new Object();
+							resultItem.label = element.name;
+							resultItem.value = element.name;
+							resultItem.id = element.code;
+							resultList.push(resultItem);
+						}
+					});
+					response(resultList);
+				},
+				select: function(event,ui){ $('#idTypeSignalement').val(ui.item.id)}
+			});
+		   
+		   $("#typeSignalements").on("keyup", function(event,ui) {
+				   $('#idTypeSignalement').val("");
+		    });
+		},
+		error:function (xhr, ajaxOptions, thrownError){
+			alert(thrownError); 
+		}   
+	});
+	$(".overlay").hide()
+}
+
+function initSelectFromArray(selector,refList){
+	var filterValue = selector.attr("filter");
+	selector.removeAttr("filter");
+	if(undefined != refList && refList.length > 0){
+		refList.forEach(function(element,index,array){
+			if(element.code == filterValue){
+				selector.append($('<option selected></option>').val(element.code).html(element.name).attr("id",element.code));
+			}else{
+				selector.append($('<option></option>').val(element.code).html(element.name).attr("id",element.code));
+			}
+		});
+	}else{
+		selector.append("#i18n{dansmarue.reportingList.listEmpty}");
+	}
+}
+
+
+</script>
+
+<script type="text/javascript">
+// Update the Sector List with selected Unit (direction)
+function updateSectorList(idDirection, idDomaine){
+    if( idDirection != "")
+    {
+		if(idDirection >= 0){
+			jQuery.ajax( {
+				url :"jsp/admin/plugins/signalement/DoGetSectorListByIdDirectionForDisplayAjax.jsp",
+				data: {
+					direction_id: idDirection,
+					idDomaine: idDomaine
+				},
+				success : function(data) { 
+					var text = "";
+					if(!(data.secteur_list === void 0))
+					{
+						var secteurs = data.secteur_list || [];
+						var selectSecteurs = $("#idSector");
+						selectSecteurs.empty();
+						if (secteurs.length > 0) {
+							$.each(secteurs, function(index, secteur){
+									var option = $("<option />").attr("value", secteur.id).text(secteur.value);
+									if ($("#idSelectedSector").val() == secteur.id){
+										option.attr("selected", "selected");
+									}                                   
+									selectSecteurs.append(option);
+							});     
+						}
+					}
+				},
+				error:function (xhr, ajaxOptions, thrownError){
+				}   
+			});
+		}else{
+			var domain = getDomainById($("#idDomaine").val());
+			var secteurs = domain.secteursRefList;
+			initSelectFromArray($("#idSector"),secteurs);
+		}
+    }
+}
+</script>
+<link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
+<link rel="stylesheet" href="js/jquery/plugins/autocomplete/jquery.autocomplete.css" type="text/css" media="screen, projection" />
+<#-- javascript --> <#-- cartographie : -->
+	
+
+<!--  Overriding Boostrap (otherwise the active page, is overlapping the autocomplete list-->
+<style>
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 20;
+    opacity: 1;
+    transition: opacity .3s .5s;
+	display: none;
+}
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute; 
+}
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+<div class="overlay">
+	<div class="loader"></div>
+</div>
+<div id="manage-signalement" class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<div class="box box-info">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{dansmarue.reportingList.title}</h3>
+			</div>
+
+			<div class="box-body">
+				<fieldset>
+					<form class="form-horizontal"
+						action="jsp/admin/plugins/signalement/DisplaySignalement.jsp"
+						method="post" name="form">
+
+						<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+							<div class="form-group">
+								<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+									for="filter_type">#i18n{dansmarue.reportingList.domaine} :
+								</label><span id="firt_filter"></span>
+								<div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">	
+										<select id="idDomaine" class="form-control
+										input-sm" name="idDomaine" filter="${(filter.idDomaine)!}" ></select>							
+								</div>
+							</div>
+							<#--<div class="form-group">
+								<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+									for="filter_type">#i18n{dansmarue.reportingList.category} :
+								</label><span id="firt_filter"></span>
+								<div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">	
+									<div id="categoryCheckboxes" data-toggle="buttons">		
+									</div>									
+								</div>
+							</div>-->
+							<div class="form-group">
+								<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+									for="filter_type">#i18n{dansmarue.reportingList.type} :
+								</label><span id="firt_filter"></span>
+								<div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">	
+									<input  class="form-control input-sm" id="typeSignalements" value="${idTypeSignalement!}" filter="${(filter.idTypeSignalement)!}" type="text" placeholder="" maxlength="255"/>
+									<input id="idTypeSignalement" name="idTypeSignalement" value="${(filter.idTypeSignalement)!}" type="hidden" />											
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+									for="filter_numero">#i18n{dansmarue.reportingList.number}
+									: </label>
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<input type="text" value="${filter.numero!}"
+										class="form-control input-sm" name="numero" id="filter_numero"
+										maxlength="255" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+									for="filter_direction">#i18n{dansmarue.reportingList.direction}
+									: </label>
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<select id="idDirection" class="form-control
+									input-sm" name="idDirection" filter="${(filter.idDirection)!}"  ></select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+									for="filter_secteur">#i18n{dansmarue.reportingList.entite}
+									: </label>
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<select id="idSector" class="form-control
+										input-sm" name="idSector" filter="${(filter.idSector)!}"  ></select>
+									<noscript>
+										<button class="btn btn-primary btn-sm" type="submit"
+											name="updateSectorsWithDirection">
+											#i18n{dansmarue.commons.refresh}</button>
+									</noscript>
+								</div>
+								<input type="hidden" value="${filter.idSector!}"
+									class="<@inputStyle />" name="idSelectedSector"
+									id="idSelectedSector" />
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+							<div class="form-group">
+								<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+									for="filter_dateBegin">
+									#i18n{dansmarue.reportingList.creationDate} : </label>
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<div class="input-daterange">
+										<div class="col-xs-1">
+											#i18n{dansmarue.reportingList.from}</div>
+										<div class="col-xs-3 ">
+											<div class="input-group">
+												<div class="input-group-addon">
+													<span class="glyphicon glyphicon-calendar"></span>
+												</div>
+												<input class="form-control input-sm" type="text"
+													value="${filter.dateBegin!}" name="dateBegin"
+													id="filter_dateBegin" maxlength="10" />
+											</div>
+										</div>
+									</div>
+									<div class="input-daterange">
+										<div class="col-xs-1">#i18n{dansmarue.reportingList.to}
+										</div>
+										<div class="col-xs-3">
+											<div class="input-group">
+												<div class="input-group-addon">
+													<span class="glyphicon glyphicon-calendar"></span>
+												</div>
+												<input class="form-control input-sm" type="text"
+													value="${filter.dateEnd!}" name="dateEnd"
+													id="filter_dateEnd" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+									for="filter_typecase">
+									#i18n{dansmarue.reportingList.etat}</label>
+								<div id="checkbox_etat" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" data-toggle="buttons">
+									<#list etat_list as etat>
+									<label class="btn btn-checkbox<#list filter.etats as
+											filterEtat> <#if etat.id == filterEtat.id > active
+											</#if> </#list><#if advanced_searched_states?seq_contains(etat.id)> hidden advanced-search-block</#if>"><input type="checkbox" id="etat${etat.id}" name="etat${etat.id}" value="true"<#list filter.etats as
+											filterEtat> <#if etat.id == filterEtat.id > checked="checked"
+											</#if> </#list> />${etat.name!}</label>
+									</#list>
+								</div>
+							</div>
+						</div>
+						<!-- Advanced search -->
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="row hidden advanced-search-block">
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+									<div class="form-group">
+										<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+											for="filter_adresse">#i18n{dansmarue.reportingList.adress}
+											</label>
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+											<input type="text" value="${filter.adresse!}"
+												class="form-control input-sm" name="adresse"
+												id="filter_adresse" maxlength="255" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+											for="filter_mail">#i18n{dansmarue.reportingList.mail}
+										</label>
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+											<input type="text" value="${filter.mail!}"
+												class="form-control input-sm" name="mail" id="filter_mail"
+												maxlength="255" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+											for="filter_commentaire">#i18n{dansmarue.reportingList.comment}
+										</label>
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+											<input type="text" value="${filter.commentaire!}"
+												class="form-control input-sm" name="commentaire"
+												id="filter_commentaire" maxlength="255" />
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+									<div class="form-group">
+										<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+											for="filter_arrondissement">#i18n{dansmarue.reportingList.arrondissement}
+										</label>
+											
+										<div id="checkbox_arrondissement" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" data-toggle="buttons">
+											
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+									<div class="form-group">
+										<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+											for="filter_quartier">#i18n{dansmarue.reportingList.quartier}
+										</label>
+										<div id="" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" data-toggle="buttons">
+											<select name="listIdQuartierParam"  id="conseilQuartier" class="selectpicker show-menu-arrow form-control" data-width="300px" data-size="10" multiple data-actions-box="true" data-live-search="true">
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="text-center">
+							<div class="form-group">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<span class="advanced-search-block display-advanced-search">#i18n{dansmarue.reportingList.displayAdvancedSearch}</span>
+									<span class="advanced-search-block hidden display-advanced-search">#i18n{dansmarue.reportingList.hideAdvancedSearch}</span>
+								</div>
+							</div>
+							<style>
+								
+							</style>
+							<div class="form-group">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<button type="submit" class="btn btn-paris btn-red btn-lg"
+										id="search-button" name="search">
+										#i18n{dansmarue.reportingList.search}
+									</button>
+									<button type="button" class="btn btn-paris btn-blue btn-lg"
+										id="re-init-button" onclick="deleteFields(false)">
+										#i18n{dansmarue.reportingList.reInitChamps}
+									</button>
+
+								</div>
+							</div>
+						</div>
+					</form>
+				</fieldset>
+			<#if ((paginator.itemsCount) <= map_max_results)>
+			<fieldset>
+				<div class="row">
+					<div id="toggle-map-btns" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="btn-group" data-toggle="buttons">
+						  <label class="btn toggle-map-btns"  id="display-map-btn">
+							<input type="radio" name="options" autocomplete="off"><img id="map-icon" class="svg toggle-icon" src="images/admin/skin/plugins/signalement/map-icon.svg"/><label>Carte</label>
+						  </label>
+						  <label class="btn toggle-map-btns active"  id="display-list-btn">
+							<input type="radio" name="options"  autocomplete="off" checked><img id="list-icon" class="svg toggle-icon" src="images/admin/skin/plugins/signalement/list-icon.svg"/><label>Liste</label>
+						  </label>
+						</div>
+						<div id="map_nb_result_div" class="map_item pull-right hidden">
+							<label class="label-title">#i18n{dansmarue.reportingList.search.results} : </label><span> ${(paginator.itemsCount)} #i18n{dansmarue.reportingList.present.anomalies}</span>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset id="map-block" class="map_item">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div id="map_spinner" class="text-center"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i><br/>#i18n{dansmarue.map.loading}</div>
+						<div id="map_canvas" style="height:400px;z-index:1;">
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			<#else>
+				<fieldset>
+				<div class="row">
+					<div id="toggle-map-btns" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="btn-group">
+						  <button class="btn toggle-map-btns" data-toggle="modal" data-target="#map-modal"><img id="map-icon" class="svg toggle-icon" src="images/admin/skin/plugins/signalement/map-icon.svg"/><label>Carte</label></button>
+						  <button class="btn toggle-map-btns active"><img id="list-icon" class="svg toggle-icon" src="images/admin/skin/plugins/signalement/list-icon.svg"/><label>Liste</label></button>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			</#if>
+			<fieldset id="list-block">
+				<@paginationSig paginator=paginator combo=1 />
+				<form action="jsp/admin/plugins/signalement/ProcessAction.jsp"
+					method="post">
+					<div class="pull-left">
+						<!-- export en input pour r�cup�rer les dossiers coch�s -->
+						<@estAutoriseMacro ressourceType="GESTION_DES_SIGNALEMENTS"
+						permission="EXPORTER_SIGNALEMENT">
+						<button type="submit" value="exportcsvdisplay"
+							title="#i18n{dansmarue.caseList.ExportSignalement}"
+							name="exportcsvdisplay" class="btn btn-xs btn-primary">
+							<i class="glyphicon glyphicon-save"></i>
+						</button>
+						</@estAutoriseMacro>
+					</div>
+					<br />
+					<br />
+					<table id="table-signalements"  class="table table-condensed">
+						<thead>
+							<tr>
+								<@hasAutorisationMacro ressourceType="GESTION_DES_SIGNALEMENTS"
+								permissions=["TRAITEMENT_MASSE","SUPPRIMER_SIGNALEMENT_MASSE"]>
+								<th><input type="checkbox" name="selectAll" id="selectAll"
+									value="selectAll"
+									title="#i18n{dansmarue.reportingList.alt.selectAll}" /></th> </@hasAutorisationMacro>
+								<th>#i18n{dansmarue.reportingList.actions}</th>
+								<th>#i18n{dansmarue.reportingList.photo}</th>
+								<th><@sort
+									jsp_url="jsp/admin/plugins/signalement/DisplaySignalement.jsp"
+									attribute="signalement.suivi"/>#i18n{dansmarue.reportingList.nbfollowers}</th>
+								<th><@sort
+									jsp_url="jsp/admin/plugins/signalement/DisplaySignalement.jsp"
+									attribute="signaleur.mail"/>#i18n{dansmarue.reportingList.mail}</th>
+								<th><@sort
+									jsp_url="jsp/admin/plugins/signalement/DisplaySignalement.jsp"
+									attribute="numSignalement"/>#i18n{dansmarue.reportingList.number}</th>
+								<th><@sort
+									jsp_url="jsp/admin/plugins/signalement/DisplaySignalement.jsp"
+									attribute="priorite.libelle"/>#i18n{dansmarue.reportingList.priority}</th>
+								<th><@sort
+									jsp_url="jsp/admin/plugins/signalement/DisplaySignalement.jsp"
+									attribute="type.libelle"/>#i18n{dansmarue.reportingList.type}</th>
+								<th><@sort
+									jsp_url="jsp/admin/plugins/signalement/DisplaySignalement.jsp"
+									attribute="direction_unit.label"/>#i18n{dansmarue.reportingList.direction}</th>
+								<th><@sort
+									jsp_url="jsp/admin/plugins/signalement/DisplaySignalement.jsp"
+									attribute="adr.adresse"/>#i18n{dansmarue.reportingList.adress}</th>
+								<th><@sort
+									jsp_url="jsp/admin/plugins/signalement/DisplaySignalement.jsp"
+									attribute="signalement.commentaire"/>#i18n{dansmarue.reportingList.comment}</th>
+								<th><@sort
+									jsp_url="jsp/admin/plugins/signalement/DisplaySignalement.jsp"
+									attribute="signalement.date_creation"/>#i18n{dansmarue.reportingList.creationDate}</th>
+								<th>#i18n{dansmarue.reportingList.etat}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<#if signalement_list?has_content> <#list signalement_list as
+							signalement>
+							<tr id="ancre-signalement-${signalement.id}"
+								class="signalement-list-element">
+								<@hasAutorisationMacro ressourceType="GESTION_DES_SIGNALEMENTS"
+								permissions=["TRAITEMENT_MASSE","SUPPRIMER_SIGNALEMENT_MASSE"]>
+								<td class="signalement-checkbox"><input type="checkbox"
+									name="signalement_id" value="${signalement.id}"
+									title="#i18n{dansmarue.reportingList.alt.select}" /></td>
+								</@hasAutorisationMacro>
+								<td class="signalement-actions"><@a class="btn btn-xs
+									btn-primary" visu=false
+									href="jsp/admin/plugins/signalement/ViewSignalement.jsp"
+									params="?signalement_id=${signalement.id}&from_page=display_page"
+									additionalParameters="title='#i18n{dansmarue.reportingList.alt.view}'"> <i
+									class="glyphicon glyphicon-eye-open"></i> </@a> <a
+									class="btn btn-xs btn-primary"
+									title="#i18n{dansmarue.reportingList.alt.history}"
+									href="jsp/admin/plugins/signalement/ViewHistory.jsp?signalement_id=${signalement.id}&from_page=display_page">
+										<i class="glyphicon glyphicon-book"></i>
+								</a>
+								</td>
+								<td class="signalement-photo"><#if
+									signalement.photos?has_content> <img
+									src="${signalement.photos[0].imageThumbnailUrl}" width="100" />
+									</#if>
+								</td>
+								<td class="signalement-vote">${signalement.suivi!}</td>
+								<td class="signalement-mail">${(signalement.signaleurs[0].mail)!}</td> 
+								<td class="signalement-id"><@a class="link" visu=true
+									href="jsp/admin/plugins/signalement/ViewSignalement.jsp"
+									params="?signalement_id=${signalement.id}">${signalement.numeroSignalement!}</@a></td>
+								<td class="signalement-priorite">${signalement.prioriteName!}</td>
+								<td class="signalement-type">${signalement.type!}</td>
+								<td class="signalement-direction">${(signalement.directionSector.label)!}</td>
+								<td class="signalement-address"><@a visu=true
+									href="jsp/admin/plugins/signalement/ViewSignalement.jsp"
+									params="?signalement_id=${signalement.id}&from_page=display_page">${signalement.adresses[0].adresse!}</@a></td>
+								<td class="signalement-comment">${signalement.commentaire!}</td>
+								<td class="signalement-date">${signalement.dateCreation!}</td>
+								<td class="signalement-etat">${map_etats[signalement.id?string]!}</td>
+							</tr>
+							</#list> <#else>
+							<tr>
+								<td colspan="12">
+									#i18n{dansmarue.reportingList.messageNoResult}</td>
+							</tr>
+							</#if>
+						</tbody>
+					</table>
+					<div class="pull-left">
+						<!-- export en input pour r�cup�rer les dossiers coch�s -->
+						<@estAutoriseMacro ressourceType="GESTION_DES_SIGNALEMENTS"
+						permission="EXPORTER_SIGNALEMENT">
+						<button type="submit" value="exportcsvdisplay"
+							title="#i18n{dansmarue.caseList.ExportSignalement}"
+							name="exportcsvdisplay" class="btn btn-xs btn-primary">
+							<i class="glyphicon glyphicon-save"></i>
+						</button>
+						</@estAutoriseMacro> 
+					</div>
+				</form>
+				<@paginationSig paginator=paginator combo=1 />
+			</fieldset>
+		</div>
+	</div>
+</div>
+</div>
+<@getDatePickerRangeBootstrap language="${locale.language!}" />
+
+<script type="text/javascript">
+	var idEtatsDefault = new Array();
+	<#list etats_default as etat_id>idEtatsDefault.push('etat${etat_id}');</#list>
+
+    $("#selectAll").change(  function() {
+        if ( this.checked )
+        {
+            // select all
+            $("input[name='signalement_id']").prop( "checked", "checked");
+        }
+        else
+        {
+            $("input[name='signalement_id']").prop( "checked", "");
+        }
+    });
+    
+    function deleteFields(isReset)
+    {
+        //$('#idTypeSignalement option:selected').removeAttr('selected');
+       // $('#idTypeSignalement option:first').attr("selected", "selected");
+       	$("#idTypeSignalement").val('');
+       	$("#typeSignalements").val('');
+        $("#filter_numero").val('');
+        $('#idDirection option:selected').removeAttr('selected');
+        $('#idDirection option:first').attr("selected", "selected");
+        $('#idSector option:selected').removeAttr('selected');
+        $('#idSector option:first').attr("selected", "selected");
+        updateSectorList("0");
+        $("#filter_adresse").val('');
+        $("#filter_mail").val('');
+        $("#filter_commentaire").val('');
+        $("#filter_dateBegin").val('');
+        $("#filter_dateEnd").val('');
+
+		isReset ? $("#conseilQuartier option").remove() : $("#conseilQuartier").selectpicker('val', '');
+       
+        $("#conseilQuartier").selectpicker('refresh');
+        
+// 		$("#categoryCheckboxes .btn-checkbox").removeClass("active");
+// 		$("input[name='category']").attr('checked',false);
+		
+		$("#checkbox_arrondissement input:checkbox").attr('checked',false);
+		$("#checkbox_arrondissement label").removeClass("active");
+		
+        $("#checkbox_etat input:checkbox").attr('checked',false);
+		$("#checkbox_etat label").removeClass("active");
+		$("#checkbox_etat input:checkbox").each(function(index,data){
+	       	var dataId = $(data).attr('id');
+			if(idEtatsDefault.indexOf(dataId) > -1){
+				$(data).parent().addClass("active");
+				data.checked= true;
+			}
+       	});
+		 
+    }
+</script>
+
+<script src="js/jquery.cookie.js"></script>
+
+<script>
+$(window).load(function() {
+    var doneOnce = false;
+    if(/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())){
+        $("#album-button").show().click(function() {
+            if(!doneOnce) {
+                $("td.signalement-photo>img").each(function() {
+                    var idImg = $(this).attr("src").split("id=")[1];
+                    var strUrlImg = "image?resource_type=photo_signalement&id=" + idImg;
+                    var offsetMiniature = $(this).offset().top;
+                    $("<img src='"+strUrlImg+"' id='grande"+idImg+"' style='max-width:900px' alt='Cliquer pour revenir aux actions'>").appendTo($('body')).click(function() {
+                        $('html, body').animate({scrollTop:offsetMiniature});
+                    });
+                    
+                    $(this).click(function() {
+                        var idImg = $(this).attr("src").split("id=")[1];
+                        var offsetGrandeImage = $("#grande"+idImg).offset().top; 
+                        $('html, body').animate({scrollTop:offsetGrandeImage});
+                    });
+                });
+                doneOnce = true;
+            }
+            $('html, body').animate({scrollTop:$("#main-footer").offset().top});
+        });
+    }
+});
+
+</script>

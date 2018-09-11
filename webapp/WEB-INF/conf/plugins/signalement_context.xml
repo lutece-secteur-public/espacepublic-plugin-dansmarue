@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+	<tx:annotation-driven />
+	<context:annotation-config />
+
+
+	<!-- Declaration des Service -->
+	<bean id="observationRejetService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.ObservationRejetService" />
+	<bean id="prioriteService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.PrioriteService" />
+	<bean id="typeSignalementService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.TypeSignalementService" />
+	<bean id="signaleurService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.SignaleurService" />
+	<bean id="adresseSignalementService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.AdresseService" />
+	<bean id="photoService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.PhotoService" />
+	<bean id="signalementService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.SignalementService" />
+	<bean id="signalement.workflowService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.WorkflowService" />
+	<bean id="signalement.arrondissementService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.ArrondissementService" />
+	<bean id="signalement.conseilQuartierService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.ConseilQuartierService" />		
+	<bean id="fileMessageCreationService"
+		class="fr.paris.lutece.plugins.dansmarue.service.FileMessageCreationService" />
+	<bean id="signalement.signalementViewRoleService"
+		class="fr.paris.lutece.plugins.dansmarue.service.role.SignalementViewRoleService" />
+	<bean id="domaineFonctionnelService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.DomaineFonctionnelService" />
+	<bean id="signalementUnitService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.SignalementUnitService" />
+	<bean id="siraUserService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.SiraUserService" />
+	<bean id="signalementSuiviService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.SignalementSuiviService" />
+	<bean id="signalement.dashboardPeriodService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.DashboardPeriodService"/>
+	<bean id="signalement.dashboardUserPreferencesService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.DashboardUserPreferencesService"/>
+	<bean id="observationRejetSignalementService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.ObservationRejetSignalementService"/>
+	<bean id="dmrRoadMapService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.DmrRoadMapService"/>
+	<bean id="dansmarue.numeroSignalementService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.NumeroSignalementService"/>
+
+	<!-- Declaration des DAO -->
+	<bean id="dansmarue.numeroSignalementDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.NumeroSignalementDAO"/>
+	<bean id="observationRejetDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.ObservationRejetDAO" />
+	<bean id="prioriteDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.PrioriteDAO" />
+	<bean id="typeSignalementDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.TypeSignalementDAO" />
+	<bean id="signaleurDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.SignaleurDAO" />
+	<bean id="signalementAdresseDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.AdresseDAO" />
+	<bean id="signalement.arrondissementDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.ArrondissementDAO" />
+	<bean id="signalement.conseilQuartierDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.ConseilQuartierDAO" />
+	<bean id="photoDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.PhotoDAO" />
+	<bean id="signalementDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.SignalementDAO" />
+	<bean id="signalement.workflowDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.WorkflowDAO" />
+	<bean id="signalement.viewRoleDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.ViewRoleDAO" />
+	<bean id="taskNotificationConfigDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.TaskNotificationConfigDAO"/>
+	<bean id="signalement.domaineFonctionnelDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.DomaineFonctionnelDAO" />
+	<bean id="signalement.signalementUnitDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.SignalementUnitDAO" />
+	<bean id="siraUserDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.SiraUserDAO" />
+	<bean id="signalementSuiviDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.SignalementSuiviDAO" />
+	<bean id="signalement.dashboardPeriodDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.DashboardPeriodDAO" />
+	<bean id="signalement.dashboardUserPreferencesDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.DashboardUserPreferencesDAO" />
+	<bean id="observationRejetSignalementDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.ObservationRejetSignalementDAO" />
+	<bean id="signalement.roadMapDAO" class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.RoadMapDAO" />
+		
+	<!-- image services -->
+	<bean id="signalement.imageService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.ImageService" />
+	<bean id="signalement.imageThumbnailService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.ImageThumbnailService" />
+
+	<!-- WS context -->
+
+	<bean id="signalement.signalementWebService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.SignalementWebService" />
+	<bean id="signalement.webServiceCaller"
+		class="fr.paris.lutece.plugins.dansmarue.utils.ws.WebServiceCaller" />
+
+	<!-- action suppression -->
+	<bean id="signalement.masseDeletes"
+		class="fr.paris.lutece.plugins.dansmarue.service.actions.MasseDeletesAction" />
+	
+
+	<!-- Upload photo -->
+	<bean class="fr.paris.lutece.plugins.dansmarue.upload.handler.DansMaRueUploadHandler" id="dansmarueUploadHandler" />
+	
+	 <!-- SITE PROPERTIES -->
+    <bean id="signalement.sitePropertiesGroup" class="fr.paris.lutece.portal.service.site.properties.SitePropertiesGroup" >
+        <property name="nameKey"><value>dansmarue.site_properties.name</value></property>
+        <property name="descriptionKey"><value>dansmarue.site_properties.description</value></property>
+        <property name="keysPrefix"><value>dansmarue.site_property.</value></property>
+    </bean>
+</beans>
+
+ 	

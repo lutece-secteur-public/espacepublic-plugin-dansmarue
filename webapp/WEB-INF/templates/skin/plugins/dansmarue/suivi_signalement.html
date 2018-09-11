@@ -1,0 +1,117 @@
+<@header/>
+<section id="page_confirmation">
+	<form id="form" class="form" name="dansmarue"
+			  action="jsp/site/Portal.jsp?page=dansmarue"
+			  method="post">
+
+	<@descriptionSteps/>
+	<@mobileDescription/>
+		<div class="horizontal-steps">
+			<@rowPreviousStepLocalisation />
+			<@rowPreviousStepDoublons />
+			<@rowPreviousStepCategorie />
+			<@rowPreviousStepFinalisation />
+			 <!--STEP ACTIVE-->
+            <div class="step active">
+                <div class="headline">
+                    <div class="container">
+                        <h2 class="title">
+                            <img src="images/image-DMR/step-5.png" alt="pictogramme etape numero 5 - non active">
+                            <span>Confirmation et suivi de votre demande</span>
+                        </h2>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="priorite-etape5">
+                            <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+
+                                <img src="images/image-DMR/pictoetape5.png" alt="icone mon compte" width="65px" height="65px">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="precisions-etape5">
+                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                <p class="info-sup">#i18n{dansmarue.etape.suivi.precision.utilisez}<strong> #i18n{dansmarue.etape.suivi.precision.compte}</strong> #i18n{dansmarue.etape.suivi.precision.explication}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <#if not_signed_in?? && not_signed_in == true>
+	                <div class="container">
+	                    <div class="row">
+	                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	                            <button class="btn btn-center register compte">#i18n{dansmarue.etape.suivi.inscris}</button>
+	                        </div>
+	                    </div>
+	                    <div class="row">
+	                        <div class="col-md-12 text-center">
+	                            <img src="images/image-DMR/ou.png" alt="ou" class="ou" width="49px" height="49px">
+	                        </div>
+	                    </div>
+	                </div>
+                </#if>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 newsletter">
+							<#if not_signed_in?? && not_signed_in == true>
+								<p class="info-sup">#i18n{dansmarue.etape.suivi.nocompte.email}</p>
+							<#else>
+								<br/>
+							</#if>
+                            <@checkForErrors key="email">
+                            <p class="champs-adresse">Adresse mail</p>
+                            <div class="form-group">
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+										<input type="email" class="form-control" name="email" value="${email!}">
+									</div>
+								</div>
+                            </div>
+                            </@checkForErrors>
+							<@printError key="email"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <img src="images/image-DMR/ou.png" alt="ou" class="ou" width="49px" height="49px">
+                        </div>
+                    </div>
+                </div>
+               <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <p class="nomail">#i18n{dansmarue.etape.suivi.nocompte.noemail}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-center continue" name="action_validate_signalement" role="button">valider
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div><!--fin step active-->
+<@conditionGeneral/>
+</div>
+</form>
+</section>
+
+<#if not_signed_in?? && not_signed_in == true>
+<script type="text/javascript">
+	$(".register").click(function(e){
+		e.preventDefault();
+		var href = encodeURIComponent(window.location.href);
+		displayCreateAccountPage( href );
+	});
+</script>
+</#if>
+
+<script type="text/javascript">
+$(window).scrollTop($('.step.active').offset().top);
+</script>

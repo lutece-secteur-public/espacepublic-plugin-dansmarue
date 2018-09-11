@@ -1,0 +1,249 @@
+<link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
+<section id="dashboard">
+	<#-- Criteres de recherche -->
+	<form method="post" action="jsp/admin/plugins/signalement/ManageSignalementDashboard.jsp">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div class="form-group">
+					<label>#i18n{dansmarue.dashboard.criterias.period}</label>
+					<div data-toggle="buttons">
+						<#list period_criterias as period_criteria>
+							<label class="btn btn-radio 
+								<#if (filter.periodId)!?c == period_criteria.code>
+									active
+								</#if>
+							"><input 
+							<#if (filter.periodId)!?c == period_criteria.code>
+								checked
+							</#if> 
+							 type="radio" name="periodId" value="${period_criteria.code}">${period_criteria.name}</label>
+						</#list>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<#if visible_units?has_content && user_unit_tree?has_content>
+				<div class="form-group">
+					<label>#i18n{dansmarue.dashboard.criterias.unit}</label>
+					<@buildTree node=user_unit_tree depth=0/>
+				</div>
+			</#if>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<span id="other-criterias-label" class="expandable collapsed" 
+					data-toggle="collapse" data-target="#other-criterias" aria-expanded="true" aria-controls="other-criterias">
+					<label>#i18n{dansmarue.dashboard.criterias.others}</label>
+				</span>
+				<div id="other-criterias" class="collapse">
+					<div class="form-group">
+							<label>#i18n{dansmarue.dashboard.criterias.arrondissements}</label>
+							<div id="arrondissementCheckboxes" data-toggle="buttons">		
+								<#list arrondissement_list as arrondissement>
+									<label class="btn btn-checkbox
+									<#if (filter.arrondissementIds)?has_content && filter.arrondissementIds?seq_contains(arrondissement.code?number)>
+										active
+									</#if>
+									"><input
+									<#if (filter.arrondissementIds)?has_content && filter.arrondissementIds?seq_contains(arrondissement.code?number)>
+										checked
+									</#if>
+									type="checkbox" name="arrondissementIds" value="${arrondissement.code}">${arrondissement.name}</label>
+								</#list>
+							</div>
+					</div>
+					<div class="form-group">
+						<label>#i18n{dansmarue.dashboard.criterias.categories}</label>
+						<div id="categoryCheckboxes" data-toggle="buttons">		
+							<#list category_list as category>
+								<label class="btn btn-checkbox
+								<#if (filter.categoryIds)?has_content && filter.categoryIds?seq_contains(category.code?number)>
+									active
+								</#if>
+								"><input
+								<#if (filter.categoryIds)?has_content && filter.categoryIds?seq_contains(category.code?number)>
+									checked
+								</#if>
+								type="checkbox" name="categoryIds" value="${category.code}">${category.name}</label>
+							</#list>
+						</div>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" name="depth" value="${(filter.depth)!}">
+		</div>
+		
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<button class="btn btn-paris btn-blue btn-lg" type="submit" name="action" value="search">Rechercher</button>
+			</div>
+		</div>
+		
+	</form>
+	<#-- Tableau de bord -->
+	<div class="dashboard-result">
+		<#-- Etats affichés -->
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-offset-1 col-md-10 col-lg-offset-1 col-lg-10">
+				<@displayStatePeriods list_entry=displayed_states_list collapsed=false/>
+			</div>
+		</div>
+	</div>
+</section>
+
+<#macro buildTree node depth>
+	<#if depth == 0 && visible_units?seq_contains(node.unit.idUnit)>
+		<div depth="0">
+			<label unit-id="${node.unit.idUnit}" class="btn 
+			<#if (filter.unitId)! == node.unit.idUnit>
+				active chosen-unit
+			</#if> 
+			btn-radio"><input type="radio" 
+			<#if (filter.unitId)! == node.unit.idUnit>
+				checked
+			</#if> 
+			name="unitId" value="${node.unit.idUnit}">${node.unit.label}</label>
+		</div>
+	</#if>
+	<div parent-id="${node.unit.idUnit}" depth="${depth+1}">
+		<#if (node.subUnits?has_content)>
+			<hr/>
+		</#if>
+		<#list node.subUnits as subNode>
+			<#if visible_units?seq_contains(subNode.unit.idUnit)>
+				<label unit-id="${subNode.unit.idUnit}"  class="btn btn-radio
+					<#if (filter.unitId)! == subNode.unit.idUnit>
+						active chosen-unit
+					</#if> 
+				"><input 
+				<#if (filter.unitId)! == subNode.unit.idUnit>
+					checked
+				</#if> 
+				type="radio" name="unitId" value="${subNode.unit.idUnit}">${subNode.unit.label}</label>
+			</#if>
+		</#list>
+	</div>
+	<#list node.subUnits as subNode>
+		<@buildTree node=subNode depth=depth+1/>
+	</#list>
+</#macro>
+
+<#macro displayStatePeriods list_entry collapsed=true>
+	<#assign index = 1/>
+	<#list list_entry as entry>
+		<#assign state = entry.key/>
+		<#assign mapPeriod = entry.value/>
+		
+		<#assign nbAnos = 0/>
+		<#list mapPeriod as period, listAnomalies>
+			<#assign nbAnos = (nbAnos + listAnomalies?size) />
+		</#list>
+		
+		<#if nbAnos != 0>
+		
+			<#-- Création de nouvelle ligne -->
+			<#if index == 1>			
+				<div class="row state-row">
+			</#if>
+			
+			<#-- Nouvelle colonne -->
+			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 state-block">
+			<#-- Header constitue des states -->
+				<form method="post" action="jsp/admin/plugins/signalement/ManageSignalementDashboard.jsp">
+						<input type="hidden" name="action" value="updateUserDashboardPreferences"/>
+						<input type="hidden" name="state_id" value="${state.id}"/>
+						<input type="hidden" name="display" value="false"/>
+					<div class="row state-header">
+						<button type="submit" >
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 state-block-content" >
+							${state.name}
+							<br/>							
+							${nbAnos}
+							<br/>
+						</div>
+						</button>
+					</div>
+				</form>
+				<#-- Elements de repartition -->
+				<div id="state-${state.id}" class="row">
+				<#list mapPeriod as period, listAnomalies>
+					<form class="repartition-wrapper"  method="post" action="jsp/admin/plugins/signalement/ManageSignalementDashboard.jsp">
+						<input type="hidden" name="selectedState" value="${state.id}">
+						<input type="hidden" name="selectedPeriod" value="${period.id}">
+						<input type="hidden" name="action" value="manageSignalement">
+						<button type="submit">
+							<div class="repartition-block">
+								${period.libelle}
+								<br/>
+								${listAnomalies?size}
+							</div> 
+						</button>	
+					</form>
+						<!--<#list listAnomalies as anomalie>${anomalie},</#list> -->
+				</#list>
+				</div>
+			</div>
+			<#if index == 6 || entry?is_last>
+				</div>
+				<#assign index = 1/>
+			<#else>
+				<#assign index = index+1/>
+			</#if>		
+		</#if>		
+	</#list>
+</#macro>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		<#if (filter.arrondissementIds)?has_content || (filter.categoryIds)?has_content>
+			$("#other-criterias-label").click();
+		</#if>
+	
+		var filterDepth = $("input[name='depth']").val();
+	
+		//Hiding sub units
+		$("div").filter(function(){
+			return $(this).attr("depth") >= filterDepth ;
+		}).hide();
+		
+		$(".chosen-unit").parent().show();
+		
+		$("label[unit-id]").on("click",function(){
+			var unitId = $(this).attr("unit-id");
+			var depth = $(this).parent().attr("depth");
+			
+			$("input[name='depth']").val(depth);
+			
+			//Hiding sub units
+			$("div").filter(function(){
+				return $(this).attr("depth") > depth;
+			}).hide();
+			
+			//Removing active from current and higher depth
+			$("div").filter(function(){
+				return $(this).attr("depth") >= depth;
+			}).find("label").removeClass("active");
+			
+			$("div").filter(function(){
+				return $(this).attr("depth") != depth;
+			}).find("label > input[type='radio']").removeProp("checked");
+			
+			$(this).find("input[type='radio']").prop("checked","true");
+			
+			//Setting as active
+			$(this).addClass("active");
+			
+			//Showing sub units
+			$("div").filter(function(){
+				return $(this).attr("parent-id") == unitId;
+			}).show();
+		});
+		
+	});
+	
+	
+</script>

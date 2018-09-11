@@ -1,0 +1,46 @@
+<div class="container">
+	<div class="row-fluid">
+		<legend>
+			#i18n{dansmarue.page.signalement.addPhotoSignalement.title} </legend>
+		<div class="bg-danger">${error!}</div>
+		<form class="form-horizontal" method="post"
+			enctype="multipart/form-data"
+			action="jsp/admin/plugins/signalement/DoSavePhotoToSignalement.jsp">
+			<input type="hidden" id="jsp_back" name="jsp_back"
+				value="${jsp_back!}" />
+			<div class="form-group">
+				<label class="<@labelStyle />">
+					#i18n{dansmarue.saveSignalement.photo} * : </label>
+				<div class="<@inputStyle />">
+					<input type="file" id="photo" name="photo" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="<@labelStyle />"> &nbsp; </label>
+				<div class="<@checkboxStyle />">
+					<!-- VuePhoto 1 for ensemble, 0 for près  -->
+					<label class="radio-inline"> <input class="radio"
+						type="radio" name="vuePhoto" id="vuePhoto" value="1" checked />
+						#i18n{dansmarue.saveSignalement.vueEnsemble}
+					</label> <label class="radio-inline"> <input class="radio"
+						type="radio" name="vuePhoto" id="vuePhoto" value="0" />
+						#i18n{dansmarue.saveSignalement.vuePres}
+					</label>
+				</div>
+			</div>
+			<div class="form-actions">
+				<input type="hidden" value="${signalement_id!}"
+					name="signalement_id" />
+				<button class="btn btn-primary btn-sm" type="submit"
+					name="saveAddPhoto">
+					<i class="glyphicon glyphicon-ok"></i>
+					#i18n{dansmarue.addPhotoSignalement.save}
+				</button>
+				<button class="btn btn-sm" type="submit" name="cancelAddPhoto" value="0">
+					<i class="glyphicon glyphicon-remove-circle"></i>
+					#i18n{dansmarue.addPhotoSignalement.cancel}
+				</button>
+			</div>
+		</form>
+	</div>
+</div>

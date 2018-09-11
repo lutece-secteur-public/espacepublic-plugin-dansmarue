@@ -1,0 +1,195 @@
+<#-- Gestion des permissions --> <#macro a href params="" id="" class=""
+target="" style="" visu=false permission="*" ressourceType="*"
+sector="*" additionalParameters=""> <#if
+rights.estAutorise(ressourceType, permission, sector) &&
+rights.estAutoriseJsp(href)>
+<a href="${href}${params}"<#if id?has_content> id="${id}"
+	</#if> class="${class}" <#if target?has_content> target="${target}"
+	</#if> <#if style?has_content> style="${style}" </#if>
+	${additionalParameters}> <#nested> </a>
+<#elseif visu> <#nested> </#if> </#macro> <#macro estAutoriseMacro
+permission="*" ressourceType="*" sector="*"> <#if
+rights.estAutorise(ressourceType, permission, sector)> <#nested> </#if>
+</#macro>
+<#macro hasAutorisationMacro
+permissions="*" ressourceType="*" sector="*"> <#if
+rights.hasAutorisation(ressourceType, permissions, sector)> <#nested> </#if>
+</#macro>
+
+
+<#macro inputUnitTree node parentLabel="" depth=0 domaine_fonctionnel={}>
+	<#if node?has_content>
+		<#if depth gt 0>
+		<div>
+			<option value="${node.unit.idUnit}"
+			<#if (domaine_fonctionnel.unitIds)?has_content>
+				<#if domaine_fonctionnel.unitIds?seq_contains(node.unit.idUnit)>
+					selected
+				</#if>
+			</#if>
+			
+			>${getNodeLabel(node.unit.label,parentLabel)}</option>
+		</div>
+		</#if>
+		<#list node.subUnits as subNode>
+			<#if depth gt 0>
+				<@inputUnitTree node=subNode parentLabel=getNodeLabel(node.unit.label,parentLabel) depth=depth+1 domaine_fonctionnel=domaine_fonctionnel/>
+			<#else>
+				<@inputUnitTree node=subNode depth=depth+1 domaine_fonctionnel=domaine_fonctionnel/>
+			</#if>
+		</#list>
+		<#assign label=""/>
+	</#if>
+</#macro>
+
+<#function getNodeLabel nodeLabel parentLabel="">
+	<#assign label=""/>
+	<#if parentLabel?has_content>
+		<#assign label= label + parentLabel + " - "/>
+	</#if>
+	<#return label + nodeLabel/>
+</#function>
+
+
+<#macro paginationSig paginator combo=0 form=1 nb_items_per_page=nb_items_per_page showcount=1 showall=0>
+		<div id="signalement-paginator" class="pull-right">
+			<#if form == 1 >
+				<form method="post" class="paginator-items-count form-inline">
+			</#if>
+			<@paginationItemCountSig paginator=paginator combo=combo nb_items_per_page=nb_items_per_page showcount=showcount showall=showall/>
+			<#if form == 1 >
+				</form>
+			</#if>
+			<#if (paginator.pagesCount > 1) >
+				<@paginationPageLinksSig paginator=paginator />
+			</#if>
+		</div>
+ </#macro>
+ 
+ <#macro paginationPageLinksSig paginator >
+<#assign nbLinkPagesToDisplay = 10 />
+<#assign offsetPrev = nbLinkPagesToDisplay / 2 />
+<#assign offsetNext = nbLinkPagesToDisplay / 2 />
+<#if ( paginator.pageCurrent <= nbLinkPagesToDisplay - offsetPrev )>
+	<#assign offsetPrev = paginator.pageCurrent - 1 />
+	<#assign offsetNext = nbLinkPagesToDisplay - offsetPrev />
+<#elseif ( paginator.pageCurrent + offsetNext > paginator.pagesCount )>
+	<#assign offsetNext = paginator.pagesCount - paginator.pageCurrent />
+	<#assign offsetPrev = nbLinkPagesToDisplay - offsetNext />
+</#if>
+<ul class="pagination pagination-sm">
+<#if ( paginator.pageCurrent - offsetPrev > 1 )>
+	<li>
+		<a href="${paginator.firstPageLink?xhtml}">
+			${paginator.labelFirst}
+		</a>
+	</li>
+</#if>
+<#if (paginator.pageCurrent > 1) >
+	<li class="previous">
+		<a href="${paginator.previousPageLink?xhtml}">
+			&lt;
+		</a>
+	</li>
+<#else>
+	<li class="disabled">
+		<a href="${paginator.firstPageLink?xhtml}">&lt;</a>
+	</li>
+</#if>
+<#if ( paginator.pageCurrent - offsetPrev > 1 )>
+	<li>
+		<a href="${(paginator.pagesLinks?first).url?xhtml}"><strong>...</strong></a>
+	</li>
+</#if>
+<#list paginator.pagesLinks as link>
+	<#if ( link.index == paginator.pageCurrent )>
+		<li class="active">
+			<a href="${link.url?xhtml}">${link.name}</a>
+		</li>
+	<#else>
+		<li>
+			<a href="${link.url?xhtml}">${link.name}</a>
+		</li>
+	</#if>
+</#list>
+<#if ( paginator.pageCurrent + offsetNext < paginator.pagesCount )>
+	<li>
+		<a href="${(paginator.pagesLinks?last).url?xhtml}"><strong>...</strong></a>
+	</li>
+</#if>
+<#if (paginator.pageCurrent < paginator.pagesCount) >
+	<li class="next">
+		<a href="${paginator.nextPageLink?xhtml}">
+			&gt;
+		</a>
+	</li>
+	<#if ( paginator.pageCurrent + offsetNext < paginator.pagesCount )>
+		<li class="next">
+			<a href="${paginator.lastPageLink?xhtml}">
+				${paginator.labelLast}
+			</a>
+		</li>
+	</#if>
+<#else>
+	<li class="disabled">
+		<a href="${paginator.lastPageLink?xhtml}">&gt;</a>
+	</li>
+</#if>
+</ul>
+ </#macro>
+ 
+ <#macro paginationItemCountSig paginator combo=0 nb_items_per_page=nb_items_per_page showcount=1 showall=0>
+<#-- Display item count -->
+<#if showcount == 1 >
+<span class="showcount">
+	<#if (paginator.labelItemCount)?? && paginator.labelItemCount?has_content><label class="label-title">#i18n{dansmarue.reportingList.search.results} : </label><span> ${(paginator.itemsCount)} #i18n{dansmarue.reportingList.present.anomalies}</span></#if>
+</span>
+</#if>
+ <#-- Display combo -->
+<#if combo == 1 >
+  <@paginationComboSig paginator=paginator nb_items_per_page=nb_items_per_page showall=showall />
+</#if>
+
+</#macro>
+
+<#macro paginationComboSig paginator nb_items_per_page=nb_items_per_page showall=0>
+  <label class="label-title">#i18n{dansmarue.reportingList.anomalies.per.page}</label>
+  <div class="input-group">
+	  <select data-max-item="${paginator.itemsCount}" class="input-xs" name="${paginator.itemsPerPageParameterName}" id="${paginator.itemsPerPageParameterName}" title="${paginator.labelItemCountPerPage}">
+  		<#list [ "10" , "20" , "50" , "100" ] as nb>
+  			<#if nb_items_per_page = nb >
+  				<option selected="selected" value="${nb}">${nb}</option>
+  			<#else>
+  				<option value="${nb}">${nb}</option>
+  			</#if>
+  		</#list>
+  		<#if showall ==1>
+  			<#if paginator.itemsCount &gt; 100 >
+  				<option <#if nb_items_per_page?number = paginator.itemsCount?number >selected="selected"</#if> value="${paginator.itemsCount}" class="${nb_items_per_page}">#i18n{portal.util.labelAll}</option>
+  			</#if>
+  		</#if>
+	  </select>
+	  <span class="input-group-btn">
+		<button class="btn btn-default btn-xs" type="submit" title="#i18n{portal.util.labelRefresh}">
+			<i class="fa fa-repeat"></i>
+		</button>
+	</span>
+</div>
+</#macro>
+
+<#macro simpleModal modal_id text>
+	<div class="modal fade" id="${modal_id}" tabindex="-1" role="dialog" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        ${text}
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</#macro>

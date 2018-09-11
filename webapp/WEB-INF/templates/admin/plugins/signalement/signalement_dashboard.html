@@ -1,0 +1,60 @@
+<div class="panel-content">
+	<ul style="list-style-type: none; margin: 0; padding: 0;">
+		<#if
+		rights.estAutoriseJsp("jsp/admin/plugins/signalement/ManageSignalement.jsp")>
+		<!-- Rechercher un signalement-->
+		<li><a
+			href="jsp/admin/plugins/signalement/ManageSignalement.jsp?plugin_name=signalement">
+				<img hspace="15" align="left"
+				src="images/admin/skin/plugins/signalement/carte-go-to.png"
+				width="40px"
+				alt="#i18n{dansmarue.dashboard.searchSignalement.title}"
+				title="#i18n{dansmarue.dashboard.searchSignalement.title}" />
+		</a> <b><a
+				href="jsp/admin/plugins/signalement/ManageSignalement.jsp?plugin_name=signalement">#i18n{dansmarue.dashboard.searchSignalement.title}</a></b>
+
+			<p>#i18n{dansmarue.dashboard.searchSignalement.description}</p></li>
+		</#if> <#if
+		rights.estAutoriseJsp("jsp/admin/plugins/signalement/SaveSignalement.jsp")>
+		<!-- Créer un signalement -->
+		<li><a href="jsp/admin/plugins/signalement/SaveSignalement.jsp">
+				<img hspace="15" align="left"
+				src="images/admin/skin/plugins/signalement/carte-add.png"
+				width="40px"
+				alt="#i18n{dansmarue.dashboard.createSignalement.title}"
+				title="#i18n{dansmarue.dashboard.createSignalement.title}" />
+		</a> <b><a href="jsp/admin/plugins/signalement/SaveSignalement.jsp">#i18n{dansmarue.dashboard.createSignalement.title}</a></b>
+
+			<p>#i18n{dansmarue.dashboard.createSignalement.description}</p></li>
+		</#if>
+		<#if
+		rights.estAutoriseJsp("jsp/admin/plugins/signalement/ManageReferentiel.jsp")>
+		<!-- Administrer le référentiel -->
+		<li><a
+			href="jsp/admin/plugins/signalement/ManageReferentiel.jsp?plugin_name=signalement">
+				<img hspace="15" align="left"
+				src="images/admin/skin/plugins/signalement/system-config.png"
+				width="40px" alt="#i18n{dansmarue.dashboard.adminReferentiel.title}"
+				title="#i18n{dansmarue.dashboard.adminReferentiel.title}" />
+		</a> <b><a
+				href="jsp/admin/plugins/signalement/ManageReferentiel.jsp?plugin_name=signalement">#i18n{dansmarue.dashboard.adminReferentiel.title}</a></b>
+
+			<p>#i18n{dansmarue.dashboard.adminReferentiel.description}</p></li> </#if>
+		<#if rights.hasRight("SIGNALEMENT_DASHBOARD")>
+		<!-- Tableau de bord -->
+		<li>
+			<a
+				href="jsp/admin/plugins/signalement/ManageSignalementDashboard.jsp?plugin_name=signalement">
+					<img hspace="15" align="left"
+					src="images/admin/skin/plugins/signalement/system-config.png"
+					width="40px" alt="#i18n{dansmarue.dashboard.adminReferentiel.title}"
+					title="#i18n{dansmarue.dashboard.adminReferentiel.title}" />
+			</a>
+			<b>
+				<a href="jsp/admin/plugins/signalement/ManageSignalementDashboard.jsp?plugin_name=signalement">#i18n{dansmarue.dashboard.dashboardSignalement.title}</a>
+			</b>
+			<p>#i18n{dansmarue.dashboard.dashboardSignalement.description}</p>
+		</li>
+		</#if>
+	</ul>
+</div>
