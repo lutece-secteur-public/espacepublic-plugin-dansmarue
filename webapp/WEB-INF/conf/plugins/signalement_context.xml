@@ -52,9 +52,7 @@
 	<bean id="signalement.dashboardUserPreferencesService"
 		class="fr.paris.lutece.plugins.dansmarue.service.impl.DashboardUserPreferencesService"/>
 	<bean id="observationRejetSignalementService"
-		class="fr.paris.lutece.plugins.dansmarue.service.impl.ObservationRejetSignalementService"/>
-	<bean id="dmrRoadMapService"
-		class="fr.paris.lutece.plugins.dansmarue.service.impl.DmrRoadMapService"/>
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.ObservationRejetSignalementService"/>	
 	<bean id="dansmarue.numeroSignalementService"
 		class="fr.paris.lutece.plugins.dansmarue.service.impl.NumeroSignalementService"/>
 
@@ -99,7 +97,6 @@
 		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.DashboardUserPreferencesDAO" />
 	<bean id="observationRejetSignalementDAO"
 		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.ObservationRejetSignalementDAO" />
-	<bean id="signalement.roadMapDAO" class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.RoadMapDAO" />
 		
 	<!-- image services -->
 	<bean id="signalement.imageService"

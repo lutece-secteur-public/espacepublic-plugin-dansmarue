@@ -1450,7 +1450,6 @@ INSERT INTO core_datastore (entity_key,entity_value) VALUES
 INSERT INTO core_datastore (entity_key,entity_value) VALUES 
 ('mylutece.portal.authentication.required','false')
 ,('core.advanced_parameters.email_pattern_verify_by','')
-,('core.advanced_parameters.email_pattern','^[\w_.\-!\#\$\%\&\'\*\+\/\=\?\^\`\{\}\|\~]+@[\w_.\-]+\.[\w]+$')
 ,('piwik.site_property.server.http.url','https://piwik.apps.paris.fr/piwik/')
 ,('piwik.site_property.server.https.url','https://piwik.apps.paris.fr/piwik/')
 ,('piwik.site_property.widget.auth.token','ec26b24ba6a05fcc883f50a2a8742c90&')

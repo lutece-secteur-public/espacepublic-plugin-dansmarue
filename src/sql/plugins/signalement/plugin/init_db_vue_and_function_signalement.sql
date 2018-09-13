@@ -26,3 +26,6 @@ CREATE MATERIALIZED VIEW v_signalement_type_signalement_with_parents_links AS
     liens_signalement.is_parent_a_category,
     liens_signalement.actif
    FROM signalementgettypesignalementhierarchy() liens_signalement(id_type_signalement, id_parent, actif, is_parent_a_category);
+   
+INSERT INTO core_datastore (entity_key,entity_value) VALUES 
+('core.advanced_parameters.email_pattern','^[\w_.\-!\#\$\%\&\''\*\+\/\=\?\^\`\{\}\|\~]+@[\w_.\-]+\.[\w]+$')

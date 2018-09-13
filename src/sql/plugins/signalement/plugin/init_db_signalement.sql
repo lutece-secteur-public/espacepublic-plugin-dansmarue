@@ -1184,6 +1184,10 @@ INSERT INTO profile_profile
 (profile_key, profile_description)
 VALUES('ADMIN', 'Administrateur');
 
+INSERT INTO profile_user
+(profile_key, id_user)
+VALUES('ADMIN', 1);
+
 
 -----------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------- SECONDE PART - DMR tables -------------------------------------------------------
