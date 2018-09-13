@@ -1,1 +1,0 @@
-ALTER TABLE signalement_signaleur ALTER COLUMN id_telephone TYPE character varying(41);
