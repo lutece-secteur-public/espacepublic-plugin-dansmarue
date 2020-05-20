@@ -1,0 +1,140 @@
+<@header/>
+<@adresse_autocomplete_includes/>
+<@leaflet_map_includes/> 
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#map_canvas").show();
+		
+		var lng = $("#lng").val();
+		var lat = $("#lat").val();
+		
+		$.getScript("jsp/site/plugins/signalement/DoGetMap.jsp", function(data){
+			initLeafletMap("map_canvas");
+			if(undefined != lng && lng.length > 0 && undefined != lat && lat.length > 0){
+				zoomTo(lat,lng);
+				dragMarker(lat,lng, "#lat", "#lng");	
+			} 
+		});
+		
+		$.getScript("jsp/site/plugins/leaflet/DoGetAutocomplete.jsp", function(data){
+			addAutocomplete("adresse",adressSelectCallback);
+		});
+		
+		$("#adresse").on("input",function(){
+			if($("#lng").val().length > 0){
+				$("#lng").val("");
+				$("#lat").val("");
+				removeMap(); 
+				initLeafletMap("map_canvas");
+			}
+		});
+		
+		$("input[value='Rechercher']").hide();
+		
+	});
+	
+	function adressSelectCallback(item){
+		var coordPoint = new Proj4js.Point(item.lng,item.lat);
+		Proj4js.transform(projSourceMapSRID, projDestSRID, coordPoint);
+		$("#lng").val(coordPoint.x);
+		$("#lat").val(coordPoint.y);
+		zoomTo(coordPoint.y,coordPoint.x);
+		dragMarker(coordPoint.y,coordPoint.x, "#lat", "#lng");
+		$(".group-address .error-block").removeClass("error-block");
+		$(".group-address .errorDesc").remove();
+	}	
+</script>
+<section id="page_accueil">
+<form id="form" class="form" name="dansmarue"
+			  action="jsp/site/Portal.jsp?page=dansmarue"
+			  method="post" novalidate>
+<@descriptionSteps/>
+<@mobileDescription/>
+	<div class="horizontal-steps">
+		<div class="step active" >
+		<@stepActive step="1" etape="localisation"/>
+		<@mentionObligatoire/>
+			<div class="container">
+				<div class="content">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group group-address">
+                            <@checkForErrors key="adresse">
+                                <label for="loc" class="champs-adresse">#i18n{dansmarue.input.localisation}</label>
+                                <input type="text" class="form-control" id="adresse" name="adresse" value="${(adresse.adresse)!}"/>
+                            </@checkForErrors>
+							<@printError key="adresse"/>
+                            </div>
+
+                        </div>
+                        <div class="col-md-offset-2 col-md-6 col-sm-6 col-xs-12">
+                        	<@infobulle text="#i18n{dansmarue.input.localisation.infobulle}"/>
+                        </div>    
+                    </div>
+                </div>
+            </div>
+			<div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+					<div style="display:none">
+						<div class="coordinates">
+							<div class="formengine-element">
+								<span class="formengine-label"><label for="lng"> :</label></span><span class="formengine-field"><input value="${(adresse.lng?c)!}" id="lng" name="lng" type="input"></span>
+							</div>
+							<div class="formengine-element">
+								<span class="formengine-label"><label for="lat"> :</label></span><span class="formengine-field"><input value="${(adresse.lat?c)!}" id="lat" name="lat" type="input"></span>
+							</div>
+							<div class="formengine-element">
+								<span class="formengine-label"><label for="lngAddress"> :</label></span><span class="formengine-field"><input value="" id="lngAddress" name="lngAddress" type="text"></span>
+							</div>
+							<div class="formengine-element">
+								<span class="formengine-label"><label for="latAddress"> :</label></span><span class="formengine-field"><input value="" id="latAddress" name="latAddress" type="text"></span>
+							</div>
+						</div>
+					</div>
+					<noscript>	
+						<input type="hidden" name="withoutJS" value="true" />
+						<input type="submit" class="btn" name="action_search_address" value="#i18n{dansmarue.rechercher}"/>
+					</noscript>
+					<div>
+						<#if proposedAddresses!?has_content && (proposedAddresses!?size > 0)>
+							<select name="validAddress" style="width: auto;">
+								<#list proposedAddresses as paddress>
+									<option value="${paddress.libelleTypo} / ${paddress.x} / ${paddress.y}"> 
+										${paddress.libelleTypo}
+									</option>
+								</#list> 
+							</select>
+							<input type="submit" name="action_validate_address" value="Valider" style="display:inline-block;">
+						</#if>
+							<#if noValidAddresses!?has_content>
+								#i18n{ramen.accessibility.noValidAddresses}
+						</#if>
+					</div>	
+					<div style="z-index:0;display:none;" class="map" id="map_canvas"></div>
+					<br/>
+						<div style="overflow: hidden;width:100%">
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-center continue" name="action_validate_address" role="button" >#i18n{dansmarue.continuer}
+                             <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+		</div>
+		<@stepInactive step="2" etape="enregistre"/>
+		<@stepInactive step="3" etape="categorie"/>
+		<@stepInactive step="4" etape="finalisation"/>
+		<@stepInactive step="5" etape="confirmation"/>
+	</div>
+<@conditionGeneral/>
+</form>
+</section>

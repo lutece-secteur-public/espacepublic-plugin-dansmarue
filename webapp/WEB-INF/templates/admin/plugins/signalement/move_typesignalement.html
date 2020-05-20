@@ -1,0 +1,250 @@
+<link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
+<script src="js/sweetalert.min.js"></script>
+<div class="row">
+	<legend>#i18n{dansmarue.listtypesignalement.deplacement.titre}</legend>
+	<#if lvl1?has_content && lvl1?size !=0>
+	<div id="deplacerTypeAno">
+		<div>
+			<button id="deplier" type="button" class="btn btn-default btn-sm">#i18n{dansmarue.listtypesignalement.deplacement.deplier}</button>
+			<button id="replier" type="button" class="btn btn-default btn-sm">#i18n{dansmarue.listtypesignalement.deplacement.replier}</button>
+		</div>
+		<br>
+		<div id="listeTypeSignalement">
+			<#list lvl1 as typesignalementLvl1>
+				<span>
+					<p class="lvl1"> 
+					<#if typesignalementLvl1.listChild?has_content && typesignalementLvl1.listChild?size !=0>
+						<span class="toggle" onclick="toggleSousType(${typesignalementLvl1.id})">
+							<span class="glyphicon glyphicon-menu-down"></span>
+							${typesignalementLvl1.libelle}
+						</span>
+					<#else>
+						${typesignalementLvl1.libelle}
+					</#if>
+					<#if typesignalementLvl1.nbSousNiveau!=2 >
+						<button type="button" class="btn btn-default btn-sm" onclick="showPopUp(${typesignalementLvl1.id}, '${typesignalementLvl1.libelle?js_string}', ${typesignalementLvl1.nbSousNiveau}, ${typesignalementLvl1.niveau})">
+				          <span class="glyphicon glyphicon-pencil"></span> #i18n{dansmarue.listtypesignalement.deplacement.deplacer} 
+				        </button>
+				    </#if>
+					</p>
+					<#list typesignalementLvl1.listChild as typesignalementLvl2>
+						<span class="lvl2 ${typesignalementLvl1.id}">
+							<#if typesignalementLvl2.listChild?has_content && typesignalementLvl2.listChild?size !=0>
+								<span class="toggle" onclick="toggleSousType(${typesignalementLvl2.id})">
+								<span class="glyphicon glyphicon-menu-down"></span>
+								${typesignalementLvl2.libelle}
+								</span>
+							<#else>
+								${typesignalementLvl2.libelle}
+							</#if>
+							<button type="button" class="btn btn-default btn-sm" onclick="showPopUp(${typesignalementLvl2.id}, '${typesignalementLvl2.libelle?js_string}', ${typesignalementLvl2.nbSousNiveau}, ${typesignalementLvl2.niveau})">
+					          <span class="glyphicon glyphicon-pencil"></span> #i18n{dansmarue.listtypesignalement.deplacement.deplacer} 
+					        </button>
+		 			        <br> 
+							<#list typesignalementLvl2.listChild as typesignalementLvl3>
+								<span class="lvl3 ${typesignalementLvl2.id}">${typesignalementLvl3.libelle}
+								<button type="button" class="btn btn-default btn-sm" onclick="showPopUp(${typesignalementLvl3.id}, '${typesignalementLvl3.libelle?js_string}, ${typesignalementLvl3.nbSousNiveau}, ${typesignalementLvl3.niveau}')">
+						          <span class="glyphicon glyphicon-pencil"></span> #i18n{dansmarue.listtypesignalement.deplacement.deplacer} 
+						        </button>
+								<br> </span>
+							</#list>
+						</span>
+					</#list>
+				</span>
+			</#list>
+		</div>
+	</div>
+	<#else> #i18n{dansmarue.listtypesignalement.notypesignalement} </#if>
+</div> 
+
+<div id="popupChoixPosition">
+	<div id="headerPopUp" class="sticky">
+		<span id="closePopup" class="glyphicon glyphicon-remove" onclick="closePopup()"></span>
+		<div id="divChoixType">
+			<h3>#i18n{dansmarue.listtypesignalement.deplacement.type.select} <span id='choixType'></span></h3>
+		</div>
+		<hr>
+	</div>
+	<div id="contentPopUp">
+		<span class="lvl0"> Racine 
+			<button type="button" class="btn btn-default btn-sm choixLvl1" onclick="updateTypeSignalement(0, false)">
+	          #i18n{dansmarue.listtypesignalement.deplacement.type.deplacer.ici}
+	        </button> 
+	    </span>
+		<#list lvl1 as typesignalementLvl1>
+			<span>
+				<p class="lvl1"> 
+				<#if typesignalementLvl1.listChild?has_content && typesignalementLvl1.listChild?size !=0>
+					<span class="toggle" onclick="toggleSousType('popin${typesignalementLvl1.id}')">
+						<span class="glyphicon glyphicon-menu-down"></span>
+						${typesignalementLvl1.libelle} 
+					</span>
+				<#else>
+					${typesignalementLvl1.libelle} 
+				</#if>
+				<button type="button" class="btn btn-default btn-sm choixLvl2"  
+				<#if typesignalementLvl1.listChild?has_content && typesignalementLvl1.listChild?size !=0>
+					onclick="updateTypeSignalement(${typesignalementLvl1.id}, false)">
+				<#else>
+					onclick="updateTypeSignalement(${typesignalementLvl1.id}, true)">
+				</#if>
+		          #i18n{dansmarue.listtypesignalement.deplacement.type.deplacer.ici}
+		        </button> 
+				</p>
+				<#list typesignalementLvl1.listChild as typesignalementLvl2>
+					<span class="lvl2 popin${typesignalementLvl1.id}">
+						<#if typesignalementLvl2.listChild?has_content && typesignalementLvl2.listChild?size !=0>
+							<span class="toggle" onclick="toggleSousType('popin${typesignalementLvl2.id}')">
+							<span class="glyphicon glyphicon-menu-down"></span>
+							${typesignalementLvl2.libelle} 
+							</span>
+						<#else>
+							${typesignalementLvl2.libelle} 
+						</#if>
+						<button type="button" class="btn btn-default btn-sm choixLvl3"  
+						<#if typesignalementLvl2.listChild?has_content && typesignalementLvl2.listChild?size !=0>
+							onclick="updateTypeSignalement(${typesignalementLvl2.id}, false)">
+						<#else>
+							onclick="updateTypeSignalement(${typesignalementLvl2.id}, true)">
+						</#if>
+				          #i18n{dansmarue.listtypesignalement.deplacement.type.deplacer.ici}
+				        </button> 
+	 			        <br> 
+						<#list typesignalementLvl2.listChild as typesignalementLvl3>
+							<span class="lvl3 popin${typesignalementLvl2.id}">${typesignalementLvl3.libelle} 
+							<br> </span>
+						</#list>
+					</span>
+				</#list>
+			</span>
+		</#list>
+	</div>
+</div>
+<div style="display: none;" id="messageSuppression">#dskey{sitelabels.site_property.message.typologie.validation.suppression}</div>
+<div class="loader"></div>
+<div class="overlay"></div>
+
+<script>
+var isPopHide = true;
+var idSelectionne;
+var idSelectionneIsLastLevel;
+function toggleSousType(id) {
+	$( "."+id ).toggle();	
+}
+
+//Affichage de la popup
+function showPopUp(id, typeSignalementLibelle, nbSousNiveau, niveau) {
+	isPopHide = false;
+	$("#popupChoixPosition").fadeIn();
+	$(".overlay").fadeIn();
+	$("#choixType").html(typeSignalementLibelle);
+	idSelectionne = id;
+	idSelectionneIsLastLevel=(nbSousNiveau==0 || !nbSousNiveau || niveau==3);
+	
+	//Affichage des boutons de selection en fonction des RG DMR-1205
+	if(niveau === 1) {
+		if(nbSousNiveau === 1) {
+			affichageSelectionType(false, true, false);
+		} else if(nbSousNiveau === 0) {
+			affichageSelectionType(false, true, true);
+		}
+	} else if (niveau === 2) {
+		if(nbSousNiveau === 1) {
+			affichageSelectionType(true, true, false);
+		} else if(nbSousNiveau === 0) {
+			affichageSelectionType(true, true, true);
+		}
+	} else if (niveau === 3) {
+		affichageSelectionType(true, true, true);
+	}
+}
+
+//Affichage des boutons de selection du nouvel emplacement
+function affichageSelectionType(affichageLvl1, affichageLvl2, affichageLvl3) {
+	$(".choixLvl1").toggle(affichageLvl1);
+	$(".choixLvl2").toggle(affichageLvl2);
+	$(".choixLvl3").toggle(affichageLvl3);
+}
+
+function updateTypeSignalement( idParentSelectionne, isLastLevel ) {
+	//Si le type de signalement déplacé passe d'un dernier niveau à un niveau avec des enfants, alors ses messages 
+	//de service fait seront supprimés
+	if(idParentSelectionne!=idSelectionne) {
+		if(idSelectionneIsLastLevel && !isLastLevel) {
+			//Affichage d'un message de confirmation de suppression des messages
+			swal({
+				  title: "Confirmation",
+				  text: $("#messageSuppression").text(),
+				  icon: "warning",
+				  buttons: true,
+				  dangerMode: true,
+				})
+				.then((willDelete) => {
+				  if (willDelete) {
+					  doUpdateTypeSignalement(idParentSelectionne, true);
+				  } 
+				});
+		}
+		else {
+			doUpdateTypeSignalement(idParentSelectionne, false);
+		}
+	} else {
+		swal ( "Erreur" ,  "Veuillez choisir un type différent de celui sélectionné" ,  "error" );
+	}
+}
+
+function doUpdateTypeSignalement(idParentSelectionne, doSuppressionMessageTypologie){
+	$(".loader").css("display", "block");	
+	$(".overlay").css('z-index', 30);
+	$.get( "jsp/admin/plugins/signalement/DoMoveTypeSignalement.jsp", 
+	{ idSelectionne: idSelectionne, idParentSelectionne: idParentSelectionne, doSuppressionMessageTypologie: doSuppressionMessageTypologie }, 
+	function( data ) {
+		$(".loader").css("display", "none");	
+		swal("Mise à jour OK", "Rechargement de la page", "success");
+		location.reload();
+	  }).fail(function() {
+		  //Pop up d'erreur
+		  swal ( "Erreur" ,  "La mise à jour a échouée" ,  "error" );
+		  $(".loader").css("display", "none");	
+		  $(".overlay").css('z-index', 20);
+	  });
+}
+
+//Fermeture de la popup en cas de clique hors de la popup
+$(document).mouseup(function (e){
+	if(!isPopHide) {
+		var container = $("#popupChoixPosition");
+		if (!container.is(e.target) && container.has(e.target).length === 0 && $(".overlay").zIndex()===20){
+			closePopup();
+		}
+	}
+});
+
+//Fermeture de la popup
+function closePopup() {
+	$("#popupChoixPosition").fadeOut();
+	$( ".overlay" ).fadeOut();
+	$("#popupChoixPosition .lvl2").hide();
+	$("#popupChoixPosition .lvl3").hide();
+	$("#popupChoixPosition").scrollTop(0);
+	isPopHide = true;
+}
+
+//Déplier la liste
+$('#deplier').click(function() {
+	$("#listeTypeSignalement .lvl2").show();
+	$("#listeTypeSignalement .lvl3").show();
+});
+
+//Replier la liste
+$('#replier').click(function() {
+	$("#listeTypeSignalement .lvl2").hide();
+	$("#listeTypeSignalement .lvl3").hide();
+});
+
+//Fix header popup
+$("#popupChoixPosition").scroll(function() {
+	$("#headerPopUp").addClass("sticky");
+}); 
+
+</script>

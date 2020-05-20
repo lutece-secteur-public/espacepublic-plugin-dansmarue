@@ -1,0 +1,76 @@
+<link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
+<script src="js/sweetalert.min.js"></script>
+<div class="row">
+	<legend>
+		#i18n{dansmarue.messageTypeSignalement.edit.name} 
+	</legend>
+	<form class="form-horizontal" method="post"
+					action="jsp/admin/plugins/signalement/DoSaveMessageTypeSignalement.jsp">
+		<input type="hidden" id="origin" name="origin" value="save" />
+		<#if errors?has_content>
+			<#list errors as error> 		                
+				<p>${error.message}</p> 		        
+			</#list>
+		</#if>
+		<div class="col-xs-12 col-sm-12 col-md-12">
+			<div class="form-group">
+				<label class="<@labelStyle />" for="fkIdTypeSignalement">#i18n{dansmarue.messageTypeSignalement.manage.type}
+					* : </label>
+				<div class="<@inputStyle />" style="text-align:left">
+					<select name="fkIdTypeSignalement" class="selectpicker show-menu-arrow form-control" data-width="300px" data-size="10" data-actions-box="true" data-live-search="true">
+					<#list list_type as typeSignalement>
+						<option value="${typeSignalement.id!}">${typeSignalement.formatTypeSignalement!}</option>
+					</#list>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-12">
+			<div class="form-group">
+				<label class="<@labelStyle />" for="typeMessage">#i18n{dansmarue.messageTypeSignalement.edit.typeMessage}
+					* : </label>
+				<div class="<@inputStyle />">
+					<input type="text" class="form-control input-sm" id="typeMessage"
+						name="typeMessage" value=""/>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-12">
+			<div class="form-group">
+				<label class="<@labelStyle />" for="contenuMessage">#i18n{dansmarue.messageTypeSignalement.edit.message.content}
+					* : </label>
+				<div class="<@inputStyle />">
+					<textarea rows="10" cols="100" id="contenuMessage" name="contenuMessage" class="richtext">
+					</textarea>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-12">
+			<div class="form-group">
+				<label class="<@labelStyle />" for="actif">#i18n{dansmarue.messageTypeSignalement.manage.actif}
+					* :</label>
+				<div class="<@inputStyle />">
+					<input class="checkbox" type="checkbox" name="actif">
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-12">
+			<div class="form-group">
+				<div
+					class="col-xs-12 col-sm-offset-3 col-sm-6 col-md-offset-3 col-md-6">
+					<button type="submit" value="#i18n{dansmarue.commons.save}"
+						name="#i18n{dansmarue.commons.save}"
+						class="btn btn-primary btn-sm" tabindex="3">
+						<i class="glyphicon glyphicon-ok"></i>
+						#i18n{dansmarue.commons.save}
+					</button>
+					<a class="btn btn-default btn-sm" href="jsp/admin/plugins/signalement/ManageMessageTypeSignalement.jsp">
+						<i class="glyphicon glyphicon-remove-circle"></i>
+						#i18n{dansmarue.commons.cancel}
+					</a>
+				</div>
+			</div>
+		</div>
+	</form>
+</div> 
+<#include "/admin/util/editor/editor.html" /> <@initEditor />

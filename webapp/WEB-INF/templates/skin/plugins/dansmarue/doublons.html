@@ -1,0 +1,114 @@
+<@header/>
+<section id="page_doublons">
+		<@descriptionSteps/>
+		<@mobileDescription/>
+		<div class="horizontal-steps">
+			<@rowPreviousStepLocalisation/>
+			
+			<div class="step active">
+				<@stepActive step="2" etape="enregistre"/>
+				<#if list_doublons?has_content>
+				<div class="container">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <p class="info-remarque">#i18n{dansmarue.etape.doublons.confirm}</p>
+                        </div>
+                    </div>
+                </div>
+			                                            
+                <div class="container">
+                    <div class="row">
+                        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+								<#list list_doublons as doublon>
+								<#if doublon?is_first>
+								<div class="item active">
+									<div class="bloc-remarque">
+                                        <div class="col-md-offset-2 col-md-2">
+                                            <img src=${(doublon.imgUrl)!} alt="Photo remarque" class="middle-tab-mob" height="180" width="230">
+                                        </div>
+                                        <div class="col-md-offset-1 col-md-7 space-img">
+											<h2 class="title-remarque">Type d'anomalie : <#if doublon.type ?has_content>${(doublon.type)!}<#else> #i18n{dansmarue.etape.doublons.title.dossier.ramen} </#if></h2>
+                                            <p class="info-title-remarque">${(doublon.adresse)!}<br/>#i18n{dansmarue.etape.doublons.declaree}${(doublon.dateCreation)!} #i18n{dansmarue.etape.doublons.a} ${(doublon.heureCreation)!}<br/>${(doublon.distance)!} m <br/><#if doublon.encombrants ?has_content><#list doublon.encombrants as list_encombrant>  ${(list_encombrant.libelleTypeObjet)!}: ${(list_encombrant.quantite)!}  </#list></#if>	</p>
+                                            <#if doublon.type ?has_content><a class="suivi-btn" href="jsp/site/Portal.jsp?page=dansmarue&action=validate_suivi_signalement&signalementId=${(doublon.id)!}"><button type="button" class="btn btn-title-remarque">#i18n{dansmarue.suivre.anomalie}</button></a></#if>
+                                        </div>
+                                    </div>
+                                </div>
+								<#else>
+								<div class="item">
+									<div class="bloc-remarque">
+                                        <div class="col-md-offset-2 col-md-2">
+                                            <img src=${(doublon.imgUrl)!} alt="Photo remarque" class="middle-tab-mob" height="180" width="230">
+                                        </div>
+                                        <div class="col-md-offset-1 col-md-7 space-img">
+                                            <h2 class="title-remarque">Type d'anomalie : <#if doublon.type ?has_content>${(doublon.type)!}<#else> #i18n{dansmarue.etape.doublons.title.dossier.ramen} </#if></h2>
+                                            <p class="info-title-remarque">
+                                            	${(doublon.adresse)!} <br />
+                                            	#i18n{dansmarue.etape.doublons.declaree}${(doublon.dateCreation)!} #i18n{dansmarue.etape.doublons.a} ${(doublon.heureCreation)!} <br />
+                                            	${(doublon.distance)!} m <br />
+                                            	<#if doublon.encombrants ?has_content><#list doublon.encombrants as list_encombrant>  ${(list_encombrant.libelleTypeObjet)!}: ${(list_encombrant.quantite)!}  </#list></#if>	
+
+                                            </p>
+                                            <#if doublon.type ?has_content><a class="suivi-btn" href="jsp/site/Portal.jsp?page=dansmarue&action=validate_suivi_signalement&signalementId=${(doublon.id)!}"><button type="button" class="btn btn-title-remarque">#i18n{dansmarue.suivre.anomalie}</button></a></#if>
+                                        </div>
+                                    </div>
+                                </div>
+								</#if>
+							   	</#list>
+                        </div>
+						     <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                                <img src="images/image-DMR/chevron-left.png" alt="Chevron gauche">
+                            </a>
+                            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                                <img src="images/image-DMR/chevron-right.png" alt="Chevron droit">
+                            </a>
+                 	</div>
+                </div>
+				</div>
+				<#else>
+				<div class="container">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+							<p class="info-title-remarque"> #i18n{dansmarue.etape.doublons.none}</p>
+						</div>
+					</div>
+				</div>
+				</#if>
+				<form id="form" class="form" name="dansmarue"
+			  		action="jsp/site/Portal.jsp?page=dansmarue"
+			 			 method="post">
+					<div class="container">
+                		<div class="row">
+                   			<div class="col-md-12">
+                        		<button type="submit" class="btn btn-center continue" name="action_validate_doublons" role="button" >#i18n{dansmarue.continuer}
+                             		<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+                        		</button>
+                    		</div>
+                		</div>
+            		</div>
+            	</form>
+			</div>
+		<@stepInactive step="3" etape="categorie"/>
+		<@stepInactive step="4" etape="finalisation"/>
+		<@stepInactive step="5" etape="confirmation"/>
+		</div>
+		<@conditionGeneral/>
+</section>
+
+<script src="js/jquery/plugins/jquery-1.11.3.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/plugins/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/plugins/dansmarue/dansmarue.js" type="text/javascript" charset="utf-8"></script>
+
+<#if not_signed_in?? && not_signed_in == true>
+<script type="text/javascript">
+	$("a.suivi-btn").click(function(e){
+		e.preventDefault();
+		var href = encodeURIComponent("${base_url}" + $(this).attr("href"));
+		displayCreateAccountPage( href );
+	});
+</script>
+</#if>
+
+<script type="text/javascript">
+$(window).scrollTop($('.step.active').offset().top);
+</script>

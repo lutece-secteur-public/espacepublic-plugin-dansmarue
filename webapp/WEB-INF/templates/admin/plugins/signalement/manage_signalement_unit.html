@@ -1,0 +1,128 @@
+<link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<div class="box box-info">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{dansmarue.signalementunit.manage.name}</h3>
+			</div>
+			<div class="box-body">
+				<form class="form-horizontal" method="post"
+					action="jsp/admin/plugins/signalement/DoSaveSignalementUnit.jsp">
+					<input type="hidden" id="jsp_back" name="jsp_back"
+								value="${jsp_back!}" />
+					<div id="unit_tree" class="btn-group">
+						<@displayManageSignalementUnit node=unit_tree/>
+					</div>
+					<div class="col-xs-12 col-sm-12 col-md-12">
+						<div class="form-group">
+							<div
+								class="col-xs-12 col-sm-offset-3 col-sm-6 col-md-offset-3 col-md-6">
+								<button type="submit" value="#i18n{dansmarue.commons.save}"
+									name="#i18n{dansmarue.commons.save}"
+									class="btn btn-primary btn-sm" tabindex="3">
+									<i class="glyphicon glyphicon-ok"></i>
+									#i18n{dansmarue.commons.save}
+								</button>
+								<button type="submit" value="#i18n{dansmarue.commons.cancel}"
+									name="cancel" class="btn btn-default btn-sm">
+									<i class="glyphicon glyphicon-remove-circle"></i>
+									#i18n{dansmarue.commons.cancel}
+								</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<#macro displayManageSignalementUnit node>
+	<#if node?has_content>
+		<#if node.subUnits?has_content><ul></#if>
+		<li><a>${node.unit.label}</a><span data-toggle="buttons"><label onclick="updateVisibilities(this)" visibility-button class="btn btn-checkbox
+		<#if visible_units_list?seq_contains(node.unit.idUnit)>
+			active
+		</#if>
+		"><input name="visible_units" type="checkbox" value="${node.unit.idUnit}"
+		<#if visible_units_list?seq_contains(node.unit.idUnit)>
+			checked
+		</#if>
+		>
+		<#if visible_units_list?seq_contains(node.unit.idUnit)>
+			#i18n{dansmarue.field.signalementunit.visible}
+		<#else>
+			#i18n{dansmarue.field.signalementunit.notvisible}
+		</#if>
+		</input></label></span><#if node.subUnits?has_content><ul>
+			<#list node.subUnits as subNode>
+				<@displayManageSignalementUnit node=subNode/>
+			</#list></ul>
+		</#if></li>
+		<#if node.subUnits?has_content></ul></#if>
+	</#if>
+</#macro>
+<script src="js/jquery/plugins/ui/jstree/jquery.jstree.js" type="text/javascript"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#unit_tree").jstree();
+	});
+	function updateVisibilityLabel(item){
+		var checkboxHtml = $(item).find("input");
+		if($(item).hasClass("active")){
+			$(item).html("#i18n{dansmarue.field.signalementunit.visible}");
+			checkboxHtml.prop("checked","true");
+		}else{
+			$(item).html("#i18n{dansmarue.field.signalementunit.notvisible}");
+			checkboxHtml.removeProp("checked");
+		}
+		checkboxHtml.prependTo($(item));
+	}
+	
+	var clickedItem = null;
+	
+	function updateVisibilities(item){
+		clickedItem = item;
+		var parent = $(item).parent().parent();
+		var isActive = true;
+		//switching off from active
+		if($(item).hasClass("active")){
+			isActive = false;
+		}
+		var checkboxHtml = $(item).find("input");
+		if(isActive){
+			$(item).html("#i18n{dansmarue.field.signalementunit.visible}");
+		}else{
+			$(item).html("#i18n{dansmarue.field.signalementunit.notvisible}");
+		}
+		checkboxHtml.prependTo($(item));
+		
+		//Mise à jour des sous noeuds
+		parent.find("span > label").each(function(){
+			if(clickedItem != this){
+				if(isActive){
+					$(this).addClass("active");
+				}else{
+					$(this).removeClass("active");
+				}
+				updateVisibilityLabel(this);
+			}
+		});
+		updateActiveUnits(item);
+	}
+	
+function updateActiveUnits(currentItem){
+	$("label[visibility-button]").each(function(){
+		if(currentItem != this){
+			if($(this).parent().parent().find("ul label").length > 0){
+				if($(this).parent().parent().find("ul label:contains('#i18n{dansmarue.field.signalementunit.visible}')").length > 0){
+					$(this).addClass("active");
+				}else{
+					$(this).removeClass("active");
+				}
+				updateVisibilityLabel(this);
+			}
+		}
+	});
+}
+</script>

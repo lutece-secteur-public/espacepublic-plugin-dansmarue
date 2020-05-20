@@ -1,0 +1,283 @@
+<#include "macro/commons_signalement.html" />
+<link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
+<script src="js/sweetalert.min.js"></script>
+<@getDatePickerRangeBootstrap language="${locale.language!}" />
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<div class="box box-info">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{dansmarue.manageServiceFaitMasse.name} </h3>
+			</div>
+			<div class="box-body">
+				<div class="col-sm-12">
+					<div class="col-sm-8 text-center font-italic text-primary">
+						<h4> #i18n{dansmarue.manageServiceFaitMasse.aide} </h4>
+					</div>
+					<br><br><br><br>
+					<div class="col-sm-6 col-sm-offset-2"><label >#i18n{dansmarue.manageServiceFaitMasse.label.recherche}</label></div>
+					<br><br>
+					<@tform id='search' method='post' action='jsp/admin/plugins/signalement/ManageServiceFaitMasse.jsp'>
+						<!-- Date de création -->
+						<div class="row">
+							<div class="form-group col-sm-8">
+								<label class="<@labelStyle />" for="type">#i18n{dansmarue.reportingList.creationDate}</label>
+								<div class="input-daterange">
+									<div class="col-xs-1"> #i18n{dansmarue.reportingList.from}</div>
+									<div class="col-xs-3 ">
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="glyphicon glyphicon-calendar"></span>
+											</div>
+											<input class="form-control input-sm" type="text" name="dateBegin" id="filter_dateBegin" maxlength="10" value="${filter.dateBegin!}"/>
+										</div>
+									</div>
+								</div>
+								<div class="input-daterange">
+									<div class="col-xs-1">#i18n{dansmarue.reportingList.to} </div>
+									<div class="col-xs-3">
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="glyphicon glyphicon-calendar"></span>
+											</div>
+											<input class="form-control input-sm" type="text" name="dateEnd"	id="filter_dateEnd" value="${filter.dateEnd!}" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Etats -->
+						<div class="row">
+							<div class="form-group col-sm-8">
+								<label class="<@labelStyle />" for="commentaire">#i18n{dansmarue.manageServiceFaitMasse.label.etat}</label>
+								<div class="col-sm-8">
+									<div id="etatsCheckboxes" data-toggle="buttons">
+										<#if list_state?has_content>		
+											<#list list_state as state>
+												<label class="btn btn-checkbox <#if (filter.idEtats)?has_content && filter.idEtats?seq_contains(state.id)>active</#if> ">
+												<input type="checkbox" name="idEtats" value="${state.id}"<#if (filter.idEtats)?has_content && filter.idEtats?seq_contains(state.id)>checked</#if>>
+													${state.name}
+												</label>
+											</#list>
+										</#if>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Types -->
+						<div class="row">
+							<div class="form-group col-sm-8">
+								<label class="<@labelStyle />" for="type">#i18n{dansmarue.messageTypeSignalement.manage.type} :</label>
+								<div class="col-sm-6" style="text-align:left">
+									<select name="type"  id="type" class="selectpicker show-menu-arrow form-control" data-actions-box="true" data-live-search="true">
+										<#list list_type as type>
+											<option value="${type.id}">${type.libelle}</option>
+										</#list>
+									</select>
+								</div>
+								<div>
+									<span id="ajouterType" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i> #i18n{dansmarue.commons.ajouter}</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Types ajoutés-->
+						<div class="row">
+							<div class="form-group col-sm-12">
+								<label class="<@labelStyle />" for="type">#i18n{dansmarue.manageServiceFaitMasse.label.type.ajoute} :</label>
+								<br><br>
+								<div>
+									<table class="table table-striped table-condensed" id="typesAjoutes">
+										<tr>
+											<th>#i18n{dansmarue.commons.libelle}</th>
+											<th></th>
+										</tr>
+										
+										<#list list_type as type>
+											<#if (filter.idTypeSignalements)?has_content && filter.idTypeSignalements?seq_contains(type.id)>
+												<tr id="typeAdd${type.id}">
+													<td>
+														<input name='idTypeSignalements' type='hidden' value=${type.id}>${type.libelle}
+													</td>
+														<td class='text-right'>
+														<i onclick='supprimerType(${type.id})' class='glyphicon glyphicon-trash btn btn-danger btn-sm'></i>
+													</td>
+												</tr>
+											</#if>
+											
+										</#list>
+										
+									</table>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Bouttons formulaire -->
+						<div class="row">
+							<div class="form-group col-sm-12 text-center" >
+								<div class="form-group">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<button type="submit" class="btn btn-paris btn-red btn-lg"
+											id="search-button" name='action_search'>
+											#i18n{dansmarue.rechercher}
+										</button>
+										<button type="button" class="btn btn-paris btn-blue btn-lg"
+											id="re-init-button" onclick="deleteFields()">
+											#i18n{dansmarue.reportingList.reInitChamps}
+										</button>
+										<button type="button" class="btn btn-paris btn-blue btn-lg" id="retour">
+											<a style="color:white;" href="jsp/admin/plugins/signalement/ManageReferentiel.jsp?plugin_name=signalement">
+											#i18n{dansmarue.retour}
+											</a>
+										</button>
+			
+									</div>
+								</div>
+							</div>
+						</div>
+					</@tform>
+					<br><br><br>
+					
+					<!-- Rapport sur la répartition  -->
+					<#if repartition?? && repartition?has_content>
+						<hr style="border-top: 2px solid #eee;">
+						<@tform id='execute' method='post' action='jsp/admin/plugins/signalement/ManageServiceFaitMasse.jsp'>
+							<!-- Tableau de répartition -->
+							<div class="row">
+								<div class="form-group col-sm-12">
+									<div class="col-sm-6 col-sm-offset-2"><label >#i18n{dansmarue.manageServiceFaitMasse.label.recherche.resultat}</label></div>
+									<br><br>
+									<div>
+										<table class="table table-striped table-condensed" id="typesAjoutes">
+											<tr>
+												<th>#i18n{dansmarue.manageServiceFaitMasse.label.type.select}</th>
+												<th class="text-center">#i18n{dansmarue.manageServiceFaitMasse.label.ano.cible}</th>
+											</tr>
+											<#list repartition as libelleType, nbSignalement>
+												<tr>
+													<td>
+														${libelleType}
+													</td>
+													<td class="text-center">
+														${nbSignalement}
+													</td>
+												</tr>
+											</#list>
+										</table>
+									</div>
+								</div>
+							</div>
+							<hr style="border-top: 2px solid #eee;">
+							<!--  Paramètres d'exécution -->
+							<div class="row">
+								<div class="form-group col-sm-12">
+									<div class="col-sm-6 col-sm-offset-2"><label >#i18n{dansmarue.manageServiceFaitMasse.label.parametre}</label></div>
+								</div>
+							</div>
+							<!-- Commentaire -->
+							<div class="row">
+								<div class="form-group col-sm-8">
+									<label class="<@labelStyle />" for="commentaire">#i18n{dansmarue.manageServiceFaitMasse.label.commentaire}</label>
+									<div class="col-sm-8">
+										<input class="form-control" id="commentaire" name="commentaire" type="text" value="#i18n{dansmarue.manageServiceFaitMasse.commentaire}" />
+									</div>
+								</div>
+							</div>
+							<!-- Etats -->
+							<div class="row">
+								<div class="form-group col-sm-8">
+									<label class="<@labelStyle />" for="etatCible">#i18n{dansmarue.manageServiceFaitMasse.label.etat.cible}</label>
+									<div class="col-sm-8">
+										<div id="etatCibleCheckboxes">
+											<label class="btn btn-checkbox active" id="labelEtatCible">
+												<input disabled="disabled" style="position: absolute; clip: rect(0,0,0,0);" type="checkbox" name="etatCible" checked>#i18n{dansmarue.manageServiceFaitMasse.label.service.fait}
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Bouttons de confirmation -->
+							<div class="row">
+								<div class="form-group col-sm-12 text-center" >
+									<div class="form-group">
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+											<button class="btn btn-paris btn-red btn-lg"
+												id="execute-button" name=''>
+												#i18n{dansmarue.manageServiceFaitMasse.label.lancer.traitement}
+											</button>
+											<button class="btn btn-paris btn-red btn-lg" type='submit'
+												id="action_executeServiceFait" name='action_executeServiceFait' style="display:none;"> 
+											</button>
+											<button type="button" class="btn btn-paris btn-blue btn-lg" id="retour">
+												<a style="color:white;" href="jsp/admin/plugins/signalement/ManageReferentiel.jsp?plugin_name=signalement">
+												#i18n{dansmarue.retour}
+												</a>
+											</button>
+				
+										</div>
+									</div>
+								</div>
+							</div>
+						</@tform>
+					<#elseif repartition?? && !repartition?has_content>
+						<div class="form-group col-sm-12">
+							<div class="text-center"><label >#i18n{dansmarue.manageServiceFaitMasse.label.noresult}</label></div>
+						</div>
+					</#if>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+var commentaire;
+
+$( document ).ready(function() {
+	commentaire = $("#commentaire").val();
+});
+
+
+$( "#ajouterType" ).click(function() {
+	var idTypeSelect = $("#type option:selected").val();
+	var libelle = $("#type option:selected").text();
+	
+	
+	if($("#typeAdd"+idTypeSelect).length == 0) {
+		$("#typesAjoutes").append( "<tr id=typeAdd"+idTypeSelect+"><td><input name='idTypeSignalements' type='hidden' value="+idTypeSelect+">"+libelle+"</td><td class='text-right'><i onclick='supprimerType("+idTypeSelect+")' class='glyphicon glyphicon-trash btn btn-danger btn-sm'></i></td></tr>" );	
+	}
+});
+
+function supprimerType(idType) {
+	$("#typeAdd"+idType).remove();
+}
+
+function deleteFields()
+{
+   	$("#filter_dateBegin").val('');
+   	$("#filter_dateEnd").val('');
+    $("#commentaire").val(commentaire);
+    $("#etatsCheckboxes input:checkbox").attr('checked',false);
+	$("#etatsCheckboxes label").removeClass("active");
+    $("tr[id^=typeAdd]").remove();
+}
+
+$('#execute-button').click(function(event){
+	event.preventDefault();
+	swal({
+	  title: "Attention",
+	  text: "Vous allez effectuer une action service fait en masse, voulez vous continuer ?",
+	  icon: "warning",
+	  buttons: true,
+	  dangerMode: true,
+	})
+	.then((doValidate) => {
+	  if (doValidate) {
+		  $('#action_executeServiceFait').click();
+		  return true;
+	  } 
+	});
+});
+
+</script>

@@ -1,0 +1,121 @@
+<#include "macro/commons_signalement.html" />
+<link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<div class="box box-info">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{dansmarue.manageServiceFaitMasse.label.rapport} </h3>
+			</div>
+			<div class="box-body">
+				<div class="col-sm-12">
+					<!-- Dates sélectionnées -->
+					<div class="row">
+						<div class="form-group col-sm-10">
+							<div class="col-sm-2"><label class="control-label" for="type">#i18n{dansmarue.reportingList.creationDate}: </label></div>
+							<div class="input-daterange">
+								<div class="col-xs-1"> #i18n{dansmarue.reportingList.from}</div>
+								<div class="col-xs-3 ">
+									${filter.dateBegin!}
+								</div>
+							</div>
+							<br>
+							<div class="input-daterange">
+								<div class="col-xs-1">#i18n{dansmarue.reportingList.to} </div>
+								<div class="col-xs-3 ">
+									${filter.dateEnd!}
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Etats sélectionnées -->
+					<div class="row">
+						<div class="form-group col-sm-10">
+							<div class="col-sm-2"><label class="control-label" for="type">#i18n{dansmarue.manageServiceFaitMasse.label.etat.select}:</label></div>
+							<#if list_state?has_content>
+								<#list list_state as state> ${state.name!} <#if state?counter != (list_state?size)> - </#if> </#list>
+							</#if>
+						</div>
+					</div>
+					<!-- Tableau de répartition -->
+					<div class="row">
+						<div class="form-group col-sm-12">
+							<br><br>
+							<div>
+								<table class="table table-striped table-condensed" id="typesAjoutes">
+									<tr>
+										<th>#i18n{dansmarue.manageServiceFaitMasse.label.type.select}</th>
+										<th class="text-center">#i18n{dansmarue.manageServiceFaitMasse.label.nb.ano.traite}</th>
+										<th class="text-center">#i18n{dansmarue.manageServiceFaitMasse.label.nb.ano.non.traite}</th>
+										<th class="text-center">#i18n{dansmarue.manageServiceFaitMasse.label.nb.ano}</th>
+									</tr>
+									<#list repartition as libelleType, nbSignalement>
+										<tr>
+											<td>
+												${libelleType}
+											</td>
+											<td class="text-center">
+												<#if isExecutionOk> ${nbSignalement} <#else> 0 </#if>
+											</td>
+											<td class="text-center">
+												<#if !isExecutionOk> ${nbSignalement} <#else> 0 </#if>
+											</td>
+											<td class="text-center">
+												<#if isExecutionOk> ${nbSignalement} </#if>
+											</td>
+										</tr>
+									</#list>
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- Bouttons de confirmation -->
+					<div class="row">
+						<div class="form-group col-sm-12 text-center" >
+							<div class="form-group">
+									<a style="color:white;" href="jsp/admin/plugins/signalement/ManageReferentiel.jsp?plugin_name=signalement">
+										<button type="button" class="btn btn-paris btn-blue btn-lg" id="retour">#i18n{dansmarue.retour}</button>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+var commentaire;
+
+$( document ).ready(function() {
+	commentaire = $("#commentaire").val();
+});
+
+
+$( "#ajouterType" ).click(function() {
+	var idTypeSelect = $("#type option:selected").val();
+	var libelle = $("#type option:selected").text();
+	
+	
+	if($("#typeAdd"+idTypeSelect).length == 0) {
+		$("#typesAjoutes").append( "<tr id=typeAdd"+idTypeSelect+"><td><input name='idTypeSignalements' type='hidden' value="+idTypeSelect+">"+libelle+"</td><td class='text-right'><i onclick='supprimerType("+idTypeSelect+")' class='glyphicon glyphicon-trash btn btn-danger btn-sm'></i></td></tr>" );	
+	}
+});
+
+function supprimerType(idType) {
+	$("#typeAdd"+idType).remove();
+}
+
+function deleteFields()
+{
+   	$("#filter_dateBegin").val('');
+   	$("#filter_dateEnd").val('');
+    $("#commentaire").val(commentaire);
+    $("#etatsCheckboxes input:checkbox").attr('checked',false);
+	$("#etatsCheckboxes label").removeClass("active");
+    $("tr[id^=typeAdd]").remove();
+}
+
+</script>

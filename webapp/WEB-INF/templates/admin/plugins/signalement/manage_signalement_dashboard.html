@@ -1,0 +1,479 @@
+<link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
+<section id="dashboard">
+	<!-- Critères de recherche -->
+	<form method="post" action="jsp/admin/plugins/signalement/ManageSignalementDashboard.jsp">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div class="form-group">
+					<label>#i18n{dansmarue.dashboard.criterias.period}</label>
+					<div data-toggle="buttons">
+						<label class="btn btn-radio <#if filter.periodId?? && (filter.periodId==2)>active</#if>">
+							<input type="radio" name="periodId" value="2" <#if filter.periodId?? && (filter.periodId==2)>checked</#if>>
+							#i18n{dansmarue.dashboard.criterias.period.30jours}
+						</label>
+						<label class="btn btn-radio <#if filter.periodId?? && (filter.periodId==1)>active</#if>">
+							<input type="radio" name="periodId" value="1" <#if filter.periodId?? && (filter.periodId==1)>checked</#if>>
+							#i18n{dansmarue.dashboard.criterias.period.90jours}
+						</label>
+						<label class="btn btn-radio <#if filter.periodId?? && (filter.periodId==0)>active</#if>">
+							<input type="radio" name="periodId" value="0" <#if filter.periodId?? && (filter.periodId==0)>checked</#if>>
+							#i18n{dansmarue.dashboard.criterias.period.180jours}
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div class="form-group">
+					<label>#i18n{dansmarue.dashboard.criterias.unit}</label>
+					<#list 0..maxDepth as depth>
+						<@entite user_unit_tree=user_unit_tree depth=depth/>
+					</#list>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<span id="other-criterias-label" class="expandable collapsed" 
+					data-toggle="collapse" data-target="#other-criterias" aria-expanded="true" aria-controls="other-criterias">
+					<label>#i18n{dansmarue.dashboard.criterias.others}</label>
+				</span>
+				<div id="other-criterias" class="collapse">
+					<div class="form-group">
+							<label>#i18n{dansmarue.dashboard.criterias.arrondissements}</label>
+							<div id="arrondissementCheckboxes" data-toggle="buttons">
+								<#if arrondissement_list?has_content>		
+									<#list arrondissement_list as arrondissement>
+										<label class="btn btn-checkbox
+										<#if (filter.arrondissementIds)?has_content && filter.arrondissementIds?seq_contains(arrondissement.id)>
+											active
+										</#if>
+										"><input 
+										<#if (filter.arrondissementIds)?has_content && filter.arrondissementIds?seq_contains(arrondissement.id)>
+											checked
+										</#if>
+										type="checkbox" name="arrondissementIds" value="${arrondissement.id}">
+											${arrondissement.numero}
+										</label>
+									</#list>
+								</#if>
+							</div>
+					</div>
+					<div class="form-group">
+						<label>#i18n{dansmarue.dashboard.criterias.categories}</label>
+						<div id="categoryCheckboxes" data-toggle="buttons">		
+							<#list 0..2 as depthCategory>
+								<@typeCategorie category_list=category_list depthCategory=depthCategory/>
+							</#list>
+						</div>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" name="depth" id="depth" value="${(filter.depth)!}">
+			<input type="hidden" name="depthCategory" id="depthCategory" value="${(filter.depthCategory)!}">
+			<input type="hidden" name="categoryParentId" id="categoryParentId" value="${(filter.categoryParentId)!}">
+		</div>
+		
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<button class="btn btn-paris btn-blue btn-lg" type="submit" name="action" value="search">Rechercher</button>
+			</div>
+		</div>
+	</form>
+	
+	<!-- Résultats -->
+	<div class="dashboard-result">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-offset-3 col-md-6 col-lg-offset-3 col-lg-6">
+				<!-- Tableau 1 -->
+				<@tableau states_list=states_list_1/>
+				
+				<br><br><br><br>
+				
+				<!-- Tableau 2 -->
+				<@tableau states_list=states_list_2/>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<#macro tableau states_list>
+	<div class="row state-row">
+		<#list states_list as state>
+			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 state-block">
+				<#assign isStateAffiche=false>
+				<!-- Itération sur la map <statut, <tranche, nbSignalement>> -->
+				<#list signalements_list as statutSignalement, listByTranche>
+					<#if statutSignalement?number==state>	
+						<#assign isStateAffiche=true>
+					
+						<!-- On stock les valeurs dans des tableaux -->
+						<#assign listTranche=[]>
+						<#assign listNbSignalement=[]>
+						<!-- Nb total de signalement pour le statut -->
+						<#assign nbTotalSignalement=0>
+						
+						<#list listByTranche as tranche, nbSignalement>
+							<#assign listTranche = listTranche + [tranche] />
+							<#assign listNbSignalement = listNbSignalement + [nbSignalement] />
+							<#assign nbTotalSignalement = nbTotalSignalement + nbSignalement />
+						</#list>
+												
+						<!-- Entete de la colonne -->
+						<form method="post" action="jsp/admin/plugins/signalement/ManageSignalementDashboard.jsp">
+							<input type="hidden" name="action" value="manageSignalement"/>
+							<input type="hidden" name="selectedState" value="${state}"/>
+							<div class="row state-header">
+								<button type="submit">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 state-block-content">
+									<@findState idState=state/>
+									<br>							
+									${nbTotalSignalement}
+									<br>
+								</div>
+								</button>
+							</div>
+						</form>
+						
+						<!-- Contenu de la colonne -->
+						<div id="state-${state}" class="row tabColonne">
+							<!-- Comme on ne peut pas récupérer une valeur via la clé, on itere sur le tableau -->
+							<#list 0..2 as i>
+								<#assign listNbSignalementSize=listNbSignalement?size>
+								<#if listTranche?seq_contains(i)>
+									<#-- Signalements présents pour cette tranche -->
+									<#list listTranche as tranche>
+										<#if tranche==i>
+										<#assign nbSignalement=0>
+											<#if tranche==1  && (listNbSignalementSize > 1) && listNbSignalement[tranche?counter]??>
+												<!-- Pour la tranche -10j, on additionne avec la tranche -48h-->
+												<#assign nbSignalement = listNbSignalement[tranche?counter -1] + listNbSignalement[tranche?counter]>
+											<#else>
+												<#assign nbSignalement = listNbSignalement[tranche?counter -1]>
+											</#if>
+											<@fillCell tranche=tranche state=state nbSignalement=nbSignalement state=state/> 
+										</#if> 
+									</#list>
+								<#else>
+									<#-- Pas de signalement pour cette tranche -->
+									<#assign nbSignalement=0>
+									<#if i == 1 && listNbSignalementSize?? && (listNbSignalementSize > 1)>
+										<!-- Pour la tranche -10j, on additionne avec la tranche -48h-->
+										<#assign nbSignalement=listNbSignalement[listNbSignalementSize-1]>
+									</#if>
+									<@fillCell tranche=i state=state nbSignalement=nbSignalement state=state/>
+								</#if>
+							</#list>
+						</div>
+					</#if>
+				</#list> 
+				<!-- Si pas de signalement pour le statut, ajout d'une colonne vide -->
+				<#if !isStateAffiche>
+					<!-- Entete de la colonne -->
+					<form method="post" action="jsp/admin/plugins/signalement/ManageSignalementDashboard.jsp">
+						<div class="row state-header">
+							<button type="submit">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 state-block-content">
+								<@findState idState=state/>
+								<br>							
+								0
+								<br>
+							</div>
+							</button>
+						</div>
+					</form>
+					
+					<!-- Contenu de la colonne -->
+					<div id="state-${state}" class="row tabColonne">
+						<#list 0..2 as i>
+							<@fillCell tranche=i state=state nbSignalement=0 state=state/>
+						</#list>
+					</div>
+				</#if>
+			</div>
+		</#list>
+	</div>
+</#macro>
+
+
+<!-- Contenu des cellules du tableau en fct de la tranche et du statut -->
+<#macro fillCell tranche state nbSignalement state>
+	<#if state!=9 && state!=21>
+		<#if tranche==0>
+			<@fillCellWithText text="#i18n{dansmarue.dashboard.tranche0}" nbSignalement=nbSignalement tranche=tranche state=state/>
+		<#elseif tranche==1>
+			<@fillCellWithText text="#i18n{dansmarue.dashboard.tranche1}" nbSignalement=nbSignalement tranche=tranche state=state/>
+		<#elseif tranche==2>
+			<@fillCellWithText text="#i18n{dansmarue.dashboard.tranche2}" nbSignalement=nbSignalement tranche=tranche state=state/>
+		</#if>
+	<#else>
+		<#if tranche==0>
+			<@fillCellWithText text="#i18n{dansmarue.dashboard.service.programme.tranche0}" nbSignalement=nbSignalement tranche=tranche state=state/>
+		<#elseif tranche==1>
+			<@fillCellWithText text="#i18n{dansmarue.dashboard.service.programme.tranche1}" nbSignalement=nbSignalement tranche=tranche state=state/>
+		<#elseif tranche==2>
+			<@fillCellWithText text="#i18n{dansmarue.dashboard.service.programme.tranche2}" nbSignalement=nbSignalement tranche=tranche state=state/>
+		</#if>
+	</#if>
+</#macro>
+
+<#macro fillCellWithText text nbSignalement tranche state>
+	<form class="repartition-wrapper" method="post" action="jsp/admin/plugins/signalement/ManageSignalementDashboard.jsp">
+		<input type="hidden" name="action" value="manageSignalement"/>
+		<input type="hidden" name="selectedTranche" value="${tranche}"/>
+		<input type="hidden" name="selectedState" value="${state}"/>
+		<button type="submit">
+			<div class="repartition-block">
+				${text}
+				<br>							
+				${nbSignalement}
+				<br>
+			</div>
+		</button>
+	</form>
+</#macro>
+
+<#macro findState idState>
+	<#list states_list as state>
+		<#if state.id == idState>
+			${state.name}
+		</#if>	
+	</#list>
+</#macro>
+
+<#macro entite user_unit_tree depth>
+	<div depth="${depth}">
+		<#list user_unit_tree as unit>
+			<#if unit.depth == depth>
+				<label unit-id="${unit.idUnit}" class="btn btn-radio 
+				<#if (filter.unitId)! == unit.idUnit>
+					active chosen-unit
+				</#if>
+				" parent-id="${unit.idParent}" depth="${depth}">
+					<input type="radio" name="unitId" value="${unit.idUnit}"
+					<#if (filter.unitId)! == unit.idUnit>
+						checked
+					</#if>
+					>${unit.label}
+				</label>
+			</#if>
+		</#list>
+		<hr/>
+	</div>
+</#macro>
+
+<#macro typeCategorie category_list depthCategory>
+	<div depthCategory="${depthCategory}">
+		<#list category_list as category>
+			<#if category.depth == depthCategory>
+				<label 
+				<#-- On flag la category à isVisible si elle est affectée à l'entité parent de l'user. Si l'user est admin, on flag toutes les catégories -->
+				<#if (entiteParentUser == category.idUnit || entiteParentUser lt 0)> isVisible="true" </#if>
+				category-id="${category.id}" class="btn btn-radio 
+				<#if (filter.categoryIds)?has_content && filter.categoryIds?seq_contains(category.id)>
+					active
+				</#if>
+				" parent-id="${category.idParent}" depthCategory="${depthCategory}">
+					<input type="radio" name="categoryId" value="${category.id}"
+					<#if (filter.categoryIds)?has_content && filter.categoryIds?seq_contains(category.id)>
+						checked
+					</#if>
+					>${category.libelle}
+				</label>
+			</#if>
+		</#list>
+		<hr/>
+	</div>
+</#macro>
+
+<script>
+$(document).ready(function(){
+	
+	/*** Unit ***/
+	var filterDepth = ${(filter.depth)!};
+	//On cache les sub units de niveau inférieur à celui du filtre
+	$("div").filter(function(){
+		return $(this).attr("depth") > filterDepth ;
+	}).hide();
+	
+	//On n'affiche que l'unit selectionnée
+	var parentIdSelect = $(".chosen-unit").attr("parent-id")
+	$('div[depth="'+filterDepth+'"] label[parent-id!="'+parentIdSelect+'"]').hide()
+	
+	//On cache les catégories de niveau inférieur à celui du filtre 
+	var filterDepthCategory = ${(filter.depthCategory)!};
+	$("div").filter(function(){
+		return $(this).attr("depthcategory") > filterDepthCategory ;
+	}).hide();
+	
+	
+	/*** Category ***/
+	//On cache toutes les catégories
+	$("label").filter(function(){
+		return $(this).attr("category-id");
+	}).hide();
+	
+	//Récupération des types de dernier niveau affectés à l'entité de l'utilisateur (car seul le type de dernier niveau est affecté à l'entité)
+	var labelToShow = $("label").filter(function(){
+        return $(this).attr("isVisible");
+    });
+
+	for(let i = 0; i < labelToShow.length; i++){
+		var isTypeParent = false;
+		
+		//Parent
+		var parentId = labelToShow[i].getAttribute("parent-id");
+		
+		//Ajout de l'attribut isVisible aux parents pour les afficher
+		while(!isTypeParent) {
+			
+			
+			if( parentId > 0 ) {
+				var labelParent = $("label[category-id="+parentId+"]")[0];
+				labelParent.setAttribute("isVisible", "true");
+				
+				//MAJ parent
+				parentId = labelParent.getAttribute("parent-id");
+				
+				if(parentId == 0) {
+					isTypeParent = true;
+				}
+			} else {
+				isTypeParent = true;
+			}
+		}
+	}
+	
+	//Affichage des catégories visibles
+	$("label").filter(function(){
+        return $(this).attr("isVisible") ;
+    }).show();
+	
+	//Hide des catégories de meme niveau n'ayant pas le même parent que celle sélectionnée 
+	$("label").filter(function(){
+        return filterDepthCategory > 0 && filterDepthCategory == $(this).attr("depthcategory") && $(this).attr("parent-id") != $("#categoryParentId").val() ;
+    }).hide();
+	
+	//Hide des catégories de niveau 1 n'étant pas de la même famille du parent de celle sélectionnée
+	if ( filterDepthCategory == 2 ) {
+		var categoryParent = $("label[category-id="+$("#categoryParentId").val()+"]")[0].getAttribute("parent-id");
+		
+		$("label").filter(function(){
+	        return $(this).attr("depthcategory") == 1 && $(this).attr("parent-id") != categoryParent ;
+	    }).hide();
+	}
+	
+	
+	
+});
+
+//Clique sur une entité
+$("label[unit-id]").mouseup(function() {
+	var unitId = $(this).attr("unit-id");
+	var depth = $(this).attr("depth");
+	
+	$("#depth").val(depth);
+	
+	//Si il y a une sous entité, affichage de la div la contenant
+	if($("label[unit-id]").filter(function(){
+		return $(this).attr("parent-id") == unitId;
+		}).length>0) {
+		$("div").filter(function(){
+			return $(this).attr("depth") == (parseInt(depth)+1);
+		}).show();
+		
+		//Hide de toutes les sous entités 
+		$("label[unit-id]").filter(function(){
+			return $(this).attr("depth") > (parseInt(depth));
+		}).hide();
+		
+		//Affichage des sous entités de l'entité selectionnée
+		$("label[unit-id]").filter(function(){
+			return $(this).attr("parent-id") == unitId;
+		}).show();
+	} else {
+		//Sinon on cache la div
+		$("div").filter(function(){
+			return $(this).attr("depth") > (parseInt(depth));
+		}).hide();
+	}
+
+	//On cache les entités qui ont plus de 1 niveau d'écart
+	$("div").filter(function(){
+		return $(this).attr("depth") >= (parseInt(depth)+2);
+	}).hide();
+	
+	$("div").filter(function(){
+		return $(this).attr("depth") >= depth;
+	}).find("label[unit-id]").removeClass("active");
+	
+	$(this).addClass("active");
+});
+
+
+
+//Clique sur une catégorie
+$("label[category-id]").mouseup(function() {
+	var categoryId = $(this).attr("category-id");
+	
+	//Désélection de la catégorie de 1er niveau + hide des sous niveaux
+	if(this.classList.contains("active") && $(this).attr("depthcategory")) {
+		setTimeout(function(){
+			$("[category-id="+categoryId+"]").removeClass("active");
+			$("[category-id="+categoryId+"]").children().prop( "checked", false );
+			
+			$("label").filter(function(){
+		        return $(this).attr("depthcategory") > 0;
+		    }).hide();
+			
+		},0);
+	} else {
+		
+		var depthcategory = $(this).attr("depthcategory");
+		
+		//On set la valeur du filtre pour la recherche
+		$("#depthCategory").val(depthcategory);
+		
+		//Si il y a une sous catégorie, affichage de la div la contenant
+		if($("label[category-id]").filter(function(){
+			return $(this).attr("parent-id") == categoryId;
+			}).length>0) {
+			$("div").filter(function(){
+				return $(this).attr("depthcategory") == (parseInt(depthcategory)+1);
+			}).show();
+			
+			//Hide de toutes les sous catégorie 
+			$("label[category-id]").filter(function(){
+				return $(this).attr("depthcategory") > (parseInt(depthcategory));
+			}).hide();
+			
+			//Affichage des sous catégorie de la catégorie selectionnée
+			$("label[category-id]").filter(function(){
+				return $(this).attr("parent-id") == categoryId && $(this).attr("isVisible");
+			}).show();
+		} else {
+			//Sinon on cache la div
+			$("div").filter(function(){
+				return $(this).attr("depthcategory") > (parseInt(depthcategory));
+			}).hide();
+		}
+	
+		//On cache les catégorie qui ont plus de 1 niveau d'écart
+		$("div").filter(function(){
+			return $(this).attr("depthcategory") >= (parseInt(depth)+2);
+		}).hide();
+		
+		$("div").filter(function(){
+			return $(this).attr("depthcategory") >= depth;
+		}).find("label[category-id]").removeClass("active");
+		
+		$(this).addClass("active");
+	}
+});
+
+
+</script>

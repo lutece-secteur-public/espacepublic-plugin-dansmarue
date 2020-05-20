@@ -1,0 +1,222 @@
+<#-- Script repris sur Davanne -->
+<#macro labelStyle> control-label col-xs-12 col-sm-3 col-md-3
+</#macro>
+<#macro inputStyle> control-label col-xs-12 col-sm-8 col-md-6
+</#macro>
+<#macro selectStyle> control-label col-xs-12 col-sm-6 col-md-6
+</#macro>
+<#macro checkboxStyle> col-xs-12 col-sm-9 col-md-9 </#macro>
+<#macro radioStyle> col-xs-12 col-sm-9 col-md-9 </#macro>
+<#macro label_2> control-label col-xs-12 col-sm-6 col-md-6 </#macro>
+<#macro modalImage>
+	<script type="text/javascript">
+	var vues = [];
+	var imageUrl = [];
+	var idVueSelect;
+	
+		$(document).ready(function(){
+			var rotation = 0;
+			$("#imageModal").on("show.bs.modal",function(event){
+				var imgSrc = event.relatedTarget.getAttribute('image-url');
+				var idSignalement = event.relatedTarget.getAttribute('id-signalement');
+				
+				//Récupération de la vue selectionnée
+				idVueSelect = event.relatedTarget.getAttribute('id-vue');
+				
+				//Récupération des vues et des imagesUrl
+				vues = [];
+				imageUrl = [];
+				for(let photo of document.querySelectorAll("[id='"+idSignalement+"'] > [id-vue]")) {
+					vues.push(photo.getAttribute('id-vue'));
+					imageUrl.push(photo.getAttribute('image-url'));
+				  }
+				
+				var indexPhoto = vues.indexOf(idVueSelect);
+				toggleFleche(indexPhoto, imageUrl.length);
+				
+				$("#modal-img").attr("src",imgSrc);
+				$("#modal-img").hide();
+				$(".modal-dialog").css({'transform': ''});
+				rotation = 0;
+			});
+			
+			$('#imageModal').on('shown.bs.modal', function (event) {
+				var imgWidth = $(this).find("#modal-img")[0].width;
+				var imgHeight = $(this).find("#modal-img")[0].height;
+				var height=imgHeight;
+				var width=imgWidth;
+				if(imgWidth > window.innerWidth*0.8){
+					width = "80vw";
+				}
+				$(this).find('.modal-dialog').css({
+					width:width
+				});
+				
+				if(imgHeight > window.innerHeight*0.8){
+					height = "80vh";
+				}
+				$(this).find('.modal-body').css({
+					height: height
+				});
+				
+				$("#modal-img").show();
+			});
+			
+			$( "#rotationHoraire" ).click(function() {
+				rotation = rotation + 90;
+				$(".modal-dialog").css({'transform': 'rotate('+rotation+'deg)'});
+			});
+			
+			$( "#rotationAntiHoraire" ).click(function() {
+				rotation = rotation - 90;
+				$(".modal-dialog").css({'transform': 'rotate('+rotation+'deg)'});
+			});
+			
+			$( "#right" ).click(function() {
+				goRight();
+			});
+			
+			$( "#left" ).click(function() {
+				goLeft() 
+			});
+			
+			//Gestion du chgt d'image via les fleches du clavier
+			document.onkeydown = function(e) {
+			    switch (e.keyCode) {
+			        case 37:
+			        	if(!$( "#left" ).is(":hidden") ) {
+			        		goLeft() 
+			        	}
+			            break;
+			        case 39:
+			        	if(!$( "#right" ).is(":hidden") ) {
+			        		goRight();
+			        	}
+			            break;
+			    }
+			};
+			
+			//Défilement des images vers la gauche
+			function goLeft() {
+				var indexPhoto = vues.indexOf(idVueSelect);
+				indexPhoto--;
+				idVueSelect=vues[indexPhoto];
+				$("#modal-img").attr("src",imageUrl[indexPhoto]);
+				
+				setHeightAndWhidth()
+				toggleFleche(indexPhoto, imageUrl.length);
+			}
+			
+			//Défilement des images vers la droite
+			function goRight() {
+				var indexPhoto = vues.indexOf(idVueSelect);
+				indexPhoto++;
+				idVueSelect=vues[indexPhoto];
+				$("#modal-img").attr("src",imageUrl[indexPhoto]);
+				
+				setHeightAndWhidth()
+				toggleFleche(indexPhoto, imageUrl.length);
+			}
+			
+			//Redimenssionnement du modal en fct de l'image
+			function setHeightAndWhidth() {
+				var imgWidth = $("#modal-img")[0].width;
+				var imgHeight = $("#modal-img")[0].height;
+				var height=imgHeight;
+				var width=imgWidth;
+				
+				if(imgWidth > window.innerWidth*0.8){
+					width = "80vw";
+				}
+				
+				if(imgHeight > window.innerHeight*0.8){
+					height = "80vh";
+				}				
+				
+				$(".modal-dialog").css({width:width});
+				$(".modal-body").css({height:height});
+			}
+			
+			//Affichage ou non des fleches de défilements
+			function toggleFleche(indexPhoto, imageUrlLength) {
+				//Gestion fleche gauche
+				if(indexPhoto <= 0 ) {
+					$( "#left" ).hide();
+				} else {
+					$( "#left" ).show();
+				}
+				
+				//Gestion fleche droite
+				if(indexPhoto >= (imageUrlLength -1)) {
+					$( "#right" ).hide();
+				} else {
+					$( "#right" ).show();
+				}
+				
+				//Affichage texte
+				if(idVueSelect == 0) {
+					$("#texte-image").html("#i18n{dansmarue.saveSignalement.vuePres}")
+				} else if (idVueSelect == 1) {
+					$("#texte-image").html("#i18n{dansmarue.saveSignalement.vueEnsemble}")
+				} else if (idVueSelect == 2) {
+					$("#texte-image").html("#i18n{dansmarue.saveSignalement.serviceFait}")
+				}
+			}
+			
+		});
+		
+	</script>
+	<link href="css/modal_image.css" rel="stylesheet">
+	<div class="modal fade" id="imageModal" tabindex="-1" role="dialog">
+	  <div id="texte-image"></div>	
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-body">
+	        <img id="modal-img" src=""></img>
+	      </div>
+	    </div>
+	  </div>
+	  <div id="menu-rotation">
+		  	<span id="left"><span class="glyphicon glyphicon-arrow-left"></span></span>
+			<span id="rotationHoraire"><span class="glyphicon glyphicon-repeat"></span></span>
+			<span id="rotationAntiHoraire"><span id="flipped" class="glyphicon glyphicon-repeat"></span></span>
+			<span id="right"><span class="glyphicon glyphicon-arrow-right"></span></span>
+		</div>	
+	</div>
+	
+	<style>
+		#flipped {
+			-moz-transform: scaleX(-1);
+			-o-transform: scaleX(-1);
+			-webkit-transform: scaleX(-1);
+			transform: scaleX(-1);
+			filter: FlipH;
+			-ms-filter: "FlipH";
+		}
+		
+		#menu-rotation{
+			margin: auto;
+			width: 50%;
+			text-align: center;
+			cursor: pointer;
+		}
+		
+		#texte-image{
+			margin: auto;
+			width: 50%;
+			text-align: center;
+			font-size: 21px;
+			color: white;
+			font-weight: bolder;
+			margin-top: 20px;
+		}
+		
+		.glyphicon.glyphicon-repeat, .glyphicon-arrow-left, .glyphicon-arrow-right {
+			font-size: 50px;
+			color:#959595;
+		}
+	
+	</style>
+	
+	
+</#macro>

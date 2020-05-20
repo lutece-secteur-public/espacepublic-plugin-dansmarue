@@ -1,0 +1,365 @@
+<@getDatePickerRangeBootstrap language="${locale.language!}" />
+<link rel="stylesheet" type="text/css"
+	href="js/jquery/plugins/ui/css/jquery-ui.css" />
+
+<@adresse_autocomplete_includes/>
+<@leaflet_map_includes/> 
+<@modalImage/>
+	
+<script type="text/javascript">
+// initialisation de la map
+ $(document).ready(function() {
+	
+	var lng = $("#lng").val();
+	var lat = $("#lat").val();
+	
+	$.getScript("jsp/admin/plugins/signalement/DoGetMap.jsp", function(data){
+		initLeafletMap("map_canvas");
+		if(undefined != lng && lng.length > 0 && undefined != lat && lat.length > 0){
+			zoomTo(lat,lng);	
+			dragMarker(lat,lng, "#lat", "#lng");	
+		} 
+	});
+	
+	$.getScript("jsp/admin/plugins/leaflet/DoGetAutocomplete.jsp", function(data){
+		addAutocomplete("adresse",adressSelectCallback);
+	});
+	
+	
+	//reinit fields
+	$("#adresse").on("input",function(){
+		if($("#lng").val().length > 0){
+			$("#lng").val("");
+			$("#lat").val("");
+			removeMap(); 
+			initLeafletMap("map_canvas");
+		}
+	});
+	
+	<#if type_list?has_content && type_list?size != 0> 
+		var types = new Array();
+		<#list type_list as type>
+			types.push("${type.name?js_string}");
+		</#list>
+		$("#typeSignalements").autocomplete({
+			source: types,
+			select: function(event,ui){ $('#typeSignalements').val(ui.item.value);initType();}
+		});
+	</#if>
+
+	 <#if photos?has_content && photos?size==2>
+		$('button[name="addPhotoModif"]').attr("disabled","disabled")
+	 </#if>
+	
+});
+
+	function initType(){
+		var valeurChoisie = $('#typeSignalements').val();
+		valeurChoisie = valeurChoisie.replace(/"/g, '\\"');
+	    var listeOption = $('#idTypeSignalement');
+	    var elementOfListe = $(listeOption).find('option[value="' + valeurChoisie + '"]');
+	    var valeurAsoumettre = elementOfListe.attr('id');
+	    $('#typeSignalement').val(valeurAsoumettre);
+	    
+	    console.log("Valeur"+valeurAsoumettre);
+	}
+	
+	function adressSelectCallback(item){
+		var coordPoint = new Proj4js.Point(item.lng,item.lat);
+		Proj4js.transform(projSourceMapSRID, projDestSRID, coordPoint);
+		$("#lng").val(coordPoint.x);
+		$("#lat").val(coordPoint.y);
+		zoomTo(coordPoint.y,coordPoint.x);
+		dragMarker(coordPoint.y,coordPoint.x, "#lat", "#lng");	
+	}	
+
+</script>
+
+<style>
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+ </style>
+<div class="container">
+	<div class="row-fluid">
+		<legend> 
+			<#if signalement.id?has_content && signalement.id &gt; 0 > 
+				#i18n{dansmarue.page.signalement.modify.title} 
+			<#else>
+				#i18n{dansmarue.page.signalement.create.title} 
+			</#if>
+		</legend>
+	</div>
+	<form class="form-horizontal" role="form" method="POST"
+		enctype="multipart/form-data"
+		action="jsp/admin/plugins/signalement/DoSaveSignalement.jsp">
+		<div class="row">
+			<fieldset>
+				<#if !(noErrorToDisplay!?has_content)> ${error!} </#if> 
+				<input type="hidden" id="jsp_back" name="jsp_back" value="${jsp_back!}" />
+				<input type="hidden" id="lng" name="lng"<#if
+				(signalement.adresses[0].lng)!?has_content>value="${(signalement.adresses[0].lng)!?c}"</#if>
+				/> <input type="hidden" id="lat" name="lat"<#if
+				(signalement.adresses[0].lat)!?has_content>value="${(signalement.adresses[0].lat)!?c}"</#if>
+				/> <input type="hidden" id="lngAddress" name="lngAddress"<#if
+				(signalement.adresses[0].lngAddress)!?has_content>value="${(signalement.adresses[0].lngAddress)!?c}"</#if>
+				/> <input type="hidden" id="latAddress" name="latAddress"<#if
+				(signalement.adresses[0].latAddress)!?has_content>value="${(signalement.adresses[0].latAddress)!?c}"</#if>
+				/>
+	
+				<div class="col-xs-12 col-sm-6 col-md-6">
+					<!-- NUMERO -->
+					<#if signalement.id?has_content && signalement.id &gt; 0 >
+					<div class="form-group">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.viewSignalement.numero}">#i18n{dansmarue.viewSignalement.numero}
+							:</label>
+						<div class="<@inputStyle />">
+							${signalement.prefix!}${signalement.annee!}${signalement.mois!}${signalement.numero!}
+						</div>
+					</div>
+					</#if>
+	
+					<!-- ETAT -->
+					<#if signalement.id?has_content && signalement.id &gt; 0 >
+					<div class="form-group">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.viewSignalement.etat}">#i18n{dansmarue.viewSignalement.etat}
+							:</label>
+						<div class="<@inputStyle />">${(stateSignalement.name)!}</div>
+					</div>
+					</#if>
+					
+					<!-- Date programmation -->
+					<#if (signalement.datePrevueTraitement)! != "">
+						<div class="form-group">
+							<label class="<@labelStyle />"
+								for="#i18n{dansmarue.viewSignalement.dateProgrammation}">
+								#i18n{dansmarue.viewSignalement.dateProgrammation} </label>
+							<div class="<@inputStyle /> input-daterange">
+								<input class="form-control input-sm" type="text"
+									value="${signalement.datePrevueTraitement!}" name="datePrevueTraitement"
+									id="datePrevueTraitement" maxlength="10" />
+							</div> 
+						</div>
+					</#if>
+	
+					<!-- PRIORITE -->
+					<div class="form-group">
+						<label class="<@labelStyle />" for="priorite"<#if
+							signalement.id?has_content && signalement.id &gt; 0 >
+							class="shiftLabelSignalement"
+							</#if>>#i18n{dansmarue.saveSignalement.priorite} * :</label>
+						<div class="<@selectStyle />"><#if priorite_list?has_content &&
+							priorite_list?size != 0> <@comboWithParams
+							additionalParameters="class='form-control input-sm'"
+							name="priorite" default_value="${(signalement.priorite.id)!}"
+							items=priorite_list /> </#if></div>
+					</div>
+	
+					<!-- TYPE SIGNALEMENT -->
+					<div class="form-group">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.saveSignalement.type}"<#if
+							signalement.id?has_content && signalement.id &gt; 0 >
+							class="shiftLabelSignalement"
+							</#if>>#i18n{dansmarue.saveSignalement.type} * :</label>
+							
+						<!-- <div class="<@selectStyle />">-->
+						
+						<div class="<@inputStyle />">
+							<#if signalement.id?has_content &&
+							signalement.id &gt; 0 > ${type.formatTypeSignalement} <#else> 
+							<#if type_list?has_content && type_list?size != 0> 
+							
+								<input  class="form-control input-sm" id="typeSignalements" type="text" placeholder="" maxlength="255" oninput='initType();'>
+								<input id="typeSignalement" name="typeSignalement" type="hidden" value=" ">
+								<datalist id="idTypeSignalement">											
+											<#list type_list as type>
+												<option id="${type.code}" value="${type.name}">${type.name}</option>
+											</#list>
+								</datalist>	
+								
+								
+										
+								</#if> </#if>
+						</div>
+					</div>
+	
+					<!-- ADRESSE -->
+					<div class="form-group">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.saveSignalement.adresse}"<#if
+							signalement.id?has_content && signalement.id &gt; 0 >
+							class="shiftLabelSignalement"
+							</#if>>#i18n{dansmarue.saveSignalement.adresse} * :</label>
+						<div class="<@inputStyle />">
+							<#if signalement.id?has_content && signalement.id &gt; 0 >
+							<#if adresse.adresse?has_content>${adresse.adresse}</#if> <#else> <input id="longitude" type="hidden"
+								name="adressesForm[0].lng"<#if
+							(signalement.adresses[0].lng)!?has_content>value="${(signalement.adresses[0].lng)!?c}"</#if>
+							/> <input id="latitude" type="hidden" name="adressesForm[0].lat"<#if
+							(signalement.adresses[0].lat)!?has_content>value="${(signalement.adresses[0].lat)!?c}"</#if>
+							/> <input type="text" id="adresse" name="adresse"
+								class="form-control input-sm"
+								value="${(signalement.adressesForm[0].adresse)!}" maxlength="255" />
+							</#if>
+							<!-- load address for accessibility (compare previous address with actual) -->
+							<#if !(signalement.id?has_content)> <input type="hidden"
+								id="adresseLoad" name="adresseLoad"
+								value="${signalement.adresses[0].adresse!}"
+								class="form-control input-sm" maxlength="80" />
+							</#if>
+						</div>
+					</div>
+	
+	
+					<!-- MAIL -->
+					<div class="form-group">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.saveSignalement.mail}"<#if
+							signalement.id?has_content && signalement.id &gt; 0 >
+							class="shiftLabelSignalement"
+							</#if>>#i18n{dansmarue.saveSignalement.mail} : </label>
+						<div class="<@inputStyle />">
+							<input type="text" id="mail" value="${(signaleur.mail)!}"
+								name="mail" class="form-control input-sm" maxlength="255" />
+						</div>
+					</div>
+					<!-- PRECISION LOCALISATION -->
+					<div class="form-group">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.saveSignalement.precisionLocalisation}">#i18n{dansmarue.saveSignalement.precisionLocalisation}
+							: </label>
+						<div class="<@inputStyle />">
+							<input type="text" id="precisionLocalisation"
+								value="${(adresse.precisionLocalisation)!}"
+								name="precisionLocalisation" class="form-control input-sm"
+								maxlength="155" />
+						</div>
+					</div>
+	
+					<!-- COMMENTAIRE -->
+					<div class="form-group">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.saveSignalement.commentaire}">#i18n{dansmarue.saveSignalement.commentaire}
+							: </label>
+						<div class="<@inputStyle />">
+							<input type="text" id="commentaire"
+								value="${(signalement.commentaire)!}" name="commentaire"
+								class="form-control input-sm" maxlength="155" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="<@labelStyle />" for="commentaireAgentTerrain">#i18n{dansmarue.saveSignalement.commentaireAgentTerrain}:
+						</label>
+						<div class="<@inputStyle />">
+							<textarea rows="5" style="width: 100%" id="commentaireAgentTerrain" name="commentaireAgentTerrain">${signalement.commentaireAgentTerrain!}</textarea>
+						</div>
+					</div>
+					<!-- RAISON REJET -->
+					<#if (signalement.observationRejet.libelle)! != "">
+					<div class="form-group">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.saveSignalement.commentaireRejet}">#i18n{dansmarue.saveSignalement.commentaireRejet}:
+						</label>
+						<div class="<@inputStyle />">
+							${signalement.observationRejet.libelle }</div>
+					</div>
+					</#if>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-6">
+					<#assign index = 1>
+					<!-- PHOTOS -->
+					<#if signalement.id?has_content && signalement.id &gt; 0 > <#if
+					photos?has_content> <#list photos as photo> <#if photo.imageUrl !=
+					"">
+					<table summary="data table"
+						class="table table-striped table-condensed">
+						<tbody>
+							<tr>
+								<td><label class="<@labelStyle />" for="image${index}">
+										#i18n{dansmarue.saveSignalement.photo} n&deg;${index}
+										<#if photo.vue == 1> (#i18n{dansmarue.saveSignalement.vueEnsemble})
+										<#elseif photo.vue == 0> (#i18n{dansmarue.saveSignalement.vuePres})
+										<#else> (#i18n{dansmarue.saveSignalement.serviceFait}) 
+										</#if> :</label></td>
+								<td>
+								<span id='${signalement.id}'>
+									<a href='#' data-toggle="modal" data-target="#imageModal" image-url='${photo.imageUrl}' id-signalement='${signalement.id}' id-vue='${photo.vue}'>
+										<img src='${photo.imageUrl}' style="max-width: 500px" />
+									</a>
+								</span>
+								</td>
+								<td><label class="<@labelStyle />" for="deletePhoto">
+										&nbsp; </label> <a class="btn btn-danger btn-sm"
+									alt="#i18n{dansmarue.deletePhotoSignalement.title}"
+									title="#i18n{dansmarue.deletePhotoSignalement.title}"
+									href="jsp/admin/plugins/signalement/DeletePhotoSignalement.jsp?signalement_id=${(signalement.id)!}&photo_id=${(photo.id)!}">
+										<i class="glyphicon glyphicon-trash"></i>
+								</a></td>
+							</tr>
+						</tbody>
+					</table>
+					<#assign index = index + 1> </#if> </#list> </#if> <#else>
+					<div class="form-group">
+						<label class="<@labelStyle />" for="image">#i18n{dansmarue.saveSignalement.vueEnsemble}:
+						</label>
+						<div class="<@inputStyle />">
+							<input type="file" id="photoEnsemble" name="photoEnsemble" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="<@labelStyle />" for="image">#i18n{dansmarue.saveSignalement.vuePres}
+							: </label>
+						<div class="<@inputStyle />">
+							<input type="file" id="photoPres" name="photoPres" />
+						</div>
+					</div>
+					</#if> 
+					<#assign index = index - 1> 
+					<#if !signalement.id?has_content>
+						<div id="map_canvas" style="z-index:1" class="map"></div>
+					</#if>
+				</div>
+			</fieldset>
+			<fieldset>
+				<#if !signalement.id?has_content>
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<div class="form-group">
+						<label class="<@labelStyle />" for="messageForUser">#i18n{dansmarue.saveSignalement.messageForUser}:
+						</label>
+						<div class="<@inputStyle />">
+							<textarea name="message" id="" rows="5" cols="80">${messageForUser!}</textarea>
+						</div>
+					</div>
+				</div>
+				</#if> 
+				<input type="hidden" value="${(signalement.id)!}"
+					name="signalement_id" /> <input type="hidden"
+					value="${(adresse.id)!}" name="adresse_id" /> <input type="hidden"
+					value="${(signaleur.id)!}" name="signaleur_id" /> <input
+					type="hidden" value="${(type.id)!}" name="typesignalement_id" /> <input
+					type="hidden" value="${index!}" name="nbPhotos" />
+				<div class="text-center">
+					<button type="submit" name="#i18n{dansmarue.saveSignalement.save}"
+						class="btn btn-paris btn-red btn-lg">
+						#i18n{dansmarue.saveSignalement.save}
+					</button>
+					<button type="submit" name="cancel" class="btn btn-paris btn-blue btn-lg">
+						#i18n{dansmarue.saveSignalement.cancel}
+					</button>
+					<#if signalement.id?has_content && signalement.id &gt; 0 >
+					<button type="submit" name="addPhotoModif"
+						class="btn btn-paris btn-blue btn-lg">
+						#i18n{dansmarue.addPhotoSignalement.title}
+					</button>
+					</#if>
+				</div>
+			</fieldset>
+		</div>
+	</form>
+</div>
+<#include "/admin/util/editor/editor.html" /> <@initEditor />

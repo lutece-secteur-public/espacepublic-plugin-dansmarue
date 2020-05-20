@@ -1,0 +1,113 @@
+<#include "macro/commons_signalement.html" />
+<script src="js/sweetalert.min.js"></script>
+<style>
+
+.swal-modal {
+	padding-left: 20px !important;
+}
+
+.swal-icon {
+	float: left !important;
+}
+
+.swal-title {
+	float: left !important;
+}
+
+
+.swal-text {
+	float: left;
+	width: 80%;
+}
+</style>
+
+<!-- Dashbord DansMaRue -->
+<div class="col-sm-12">
+	<div class="box box-solid box-info">
+		<div class="box-header">
+			<h3 class="box-title">#i18n{dansmarue.adminDashboard.pageTitle}</h3>
+			<div class="box-tools">
+				<button class="btn btn-box-tool" data-widget="collapse">
+					<i class="fa fa-minus"></i>
+				</button>
+				<button class="btn btn-box-tool" data-widget="remove">
+					<i class="fa fa-times"></i>
+				</button>
+			</div>
+		</div>
+	
+		<div class="box-body"><#include "signalement_dashboard.html" /></div>
+		<!-- /.box-body -->
+	
+		<div class="box-footer text-center">
+			<a href="${url}"> #i18n{dansmarue.adminDashboard.pageTitle} <i
+				class="fa fa-arrow-circle-right"></i>
+			</a>
+		</div>
+		<!-- /.box-footer-->
+	</div>
+</div>
+
+<!-- Dashboard video -->
+<div class="col-sm-12">
+	<div class="box box-solid box-info">
+		<div class="box-header">
+			<h3 class="box-title">#i18n{dansmarue.adminDashboard.pageTitleVideo}</h3>
+			<div class="box-tools">
+				<button class="btn btn-box-tool" data-widget="collapse">
+					<i class="fa fa-minus"></i>
+				</button>
+				<button class="btn btn-box-tool" data-widget="remove">
+					<i class="fa fa-times"></i>
+				</button>
+			</div>
+		</div>
+	
+		<div class="box-body"><#include "signalement_dashboard_video.html" /></div>
+	</div>
+</div>
+
+<!-- Dashboard profil -->
+<div class="col-sm-12">
+	<div class="box box-solid box-info">
+		<div class="box-header">
+			<h3 class="box-title">#i18n{dansmarue.adminDashboard.pageTitleProfil}</h3>
+			<div class="box-tools">
+				<button class="btn btn-box-tool" data-widget="collapse">
+					<i class="fa fa-minus"></i>
+				</button>
+				<button class="btn btn-box-tool" data-widget="remove">
+					<i class="fa fa-times"></i>
+				</button>
+			</div>
+		</div>
+	
+		<div class="box-body"><#include "signalement_dashboard_profil.html" /></div>
+	</div>
+</div>
+
+<script>
+
+$( document ).ready(function() {
+	//Affichage d'une popup d'avertissement si le navigateur n'est pas firefox
+	//Si la popup n'as pas été affichée 
+	if (sessionStorage.getItem('showpopup') !== 'true') {
+		var sBrowser, sUsrAg = navigator.userAgent;
+		//Test si le navigateur est firefox
+		if (sUsrAg.indexOf("Firefox") == -1){
+			//Affichage de la popup
+			swal({
+			  title: "Information",
+			  text: "Le site est optimisé pour le navigateur Firefox.\nL'utilisation d'un autre navigateur peut empêcher l’accès à certaines fonctionnalités.",
+			  icon: "info",
+			  button: "Ok",
+			});
+			//Stockage dans la session du navigateur
+			sessionStorage.setItem('showpopup','true');
+		}
+	}
+});
+
+
+
+</script>

@@ -1,0 +1,230 @@
+<div class="container">
+	<div class="row-fluid">
+		<legend> #i18n{dansmarue.history.title}
+			${signalement.prefix}${signalement.annee}${signalement.mois}${signalement.numero}
+		</legend>
+	</div>
+	<form class="form-horizontal"
+		action="${back_url}#ancre-signalement-${signalement.id}"
+		method="get">
+		<div class="row">
+			<fieldset>
+				<div class="form-group">
+					<div class="col-xs-6 col-sm-6 col-md-6">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.saveSignalement.priorite}">
+							#i18n{dansmarue.saveSignalement.priorite} : </label>
+						<div class="<@inputStyle />">
+							${signalement.priorite.libelle}
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-xs-6 col-sm-6 col-md-6">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.viewSignalement.numero}">
+							#i18n{dansmarue.viewSignalement.numero} : </label>
+						<div class="<@inputStyle />">
+							${signalement.prefix}${signalement.annee}${signalement.mois}${signalement.numero}
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-xs-6 col-sm-6 col-md-6">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.saveSignalement.type}">
+							#i18n{dansmarue.saveSignalement.type} : </label>
+						<div class="<@inputStyle />">
+							${signalement.type}</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-xs-6 col-sm-6 col-md-6">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.viewSignalement.service}">
+							#i18n{dansmarue.viewSignalement.service} : </label>
+						<div class="<@inputStyle />">
+							${signalement.directionSector.label}</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-xs-6 col-sm-6 col-md-6">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.viewSignalement.service}">
+							#i18n{dansmarue.saveSignalement.adresse} : </label>
+						<div class="<@inputStyle />">
+							${adresse.adresse}</div>
+					</div>
+				</div>
+				<#if signaleur.mail?has_content>
+				<div class="form-group">
+					<div class="col-xs-6 col-sm-6 col-md-6">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.saveSignalement.mail}">
+							#i18n{dansmarue.saveSignalement.mail} : </label>
+						<div class="<@inputStyle />">
+						${signaleur.mail}</div>
+					</div>
+				</div>
+				</#if>
+				<#if signalement.commentaire?has_content>
+				<div class="form-group">
+					<div class="col-xs-6 col-sm-6 col-md-6">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.saveSignalement.commentaire}">
+							#i18n{dansmarue.saveSignalement.commentaire} : </label>
+						<div class="<@inputStyle />">
+							${signalement.commentaire}</div>
+					</div>
+				</div>
+				</#if> 
+				<#if signalement.commentaireProgrammation != "">
+				<div class="form-group">
+					<div class="col-xs-6 col-sm-6 col-md-6">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.viewSignalement.commentaireProgrammation}">
+							#i18n{dansmarue.viewSignalement.commentaireProgrammation} : </label>
+						<div class="<@inputStyle />">
+							${signalement.commentaireProgrammation}</div>
+					</div>
+				</div>
+				</#if>
+				<!-- RAISON REJET -->
+				<#if (signalement.observationRejet.libelle)! != "">
+				<div class="col-xs-6 col-sm-6 col-md-6">
+					<div class="form-group">
+						<label class="<@labelStyle />" for="#i18n{dansmarue.viewSignalement.commentaireRejet}">
+							#i18n{dansmarue.viewSignalement.commentaireRejet} : 
+						</label>
+						<div class="<@inputStyle />">
+							${signalement.observationRejet.libelle}
+						</div>
+					</div>
+				</div>
+				</#if> 
+				<#if photos?has_content> 
+					<#assign index = 1> 
+					<#list photos as photo> 
+						<#if photo.imageUrl != "">
+							<#if photo.vue == 0 >
+							
+								<div class="form-group">
+									<div class="col-xs-6 col-sm-6 col-md-6">
+										<label class="<@labelStyle />" for="image">
+											#i18n{dansmarue.saveSignalement.photo} #i18n{dansmarue.saveSignalement.VueEnsemble} : 
+										</label>
+										
+										<div class="<@inputStyle />">
+											<span id='${signalement.id}'>
+												<a href='#' data-toggle="modal" data-target="#imageModal" id-signalement='${signalement.id}' id-vue='${photo.vue}' image-url='${photo.imageUrl}'>
+													<img style="max-width: 100px" src='${photo.imageUrl}' />
+												</a>
+											</span>
+										</div>
+									</div>
+								</div>
+							<#elseif photo.vue == 1>
+							
+								<div class="form-group">
+									<div class="col-xs-6 col-sm-6 col-md-6">
+										<label class="<@labelStyle />" for="image">
+											#i18n{dansmarue.saveSignalement.photo} #i18n{dansmarue.saveSignalement.vuePres} : 
+										</label>
+										
+										<div class="<@inputStyle />">
+											<span id='${signalement.id}'>
+												<a href='#' data-toggle="modal" data-target="#imageModal" id-signalement='${signalement.id}' id-vue='${photo.vue}' image-url='${photo.imageUrl}'>
+													<img style="max-width: 100px" src='${photo.imageUrl}' />
+												</a>
+											</span>
+											<#assign index = index + 1>
+											
+										</div>
+									</div>
+								</div>
+							<#else>
+							
+								<div class="form-group">
+									<div class="col-xs-6 col-sm-6 col-md-6">
+										<label class="<@labelStyle />" for="image">
+											#i18n{dansmarue.saveSignalement.photo.done} 
+										</label>
+										
+										<div class="<@inputStyle />">
+											<span id='${signalement.id}'>
+												<a href='#' data-toggle="modal" data-target="#imageModal" id-signalement='${signalement.id}' id-vue='${photo.vue}' image-url='${photo.imageUrl}'>
+													<img style="max-width: 100px" src='${photo.imageUrl}' />
+												</a>
+											</span>
+											<#assign index = index + 1>
+											
+										</div>
+									</div>
+								</div>
+								
+							</#if>
+						</#if>
+					</#list>
+				</#if>			
+				<div class="form-group">
+					<div class="col-xs-6 col-sm-6 col-md-6">
+						<label class="<@labelStyle />" for="#i18n{dansmarue.viewSignalement.etat}">
+							#i18n{dansmarue.viewSignalement.etat} : 
+						</label>
+						<div class="<@inputStyle />">
+							${stateSignalement.name}
+						</div>
+					</div>
+				</div>
+				<#if signalement.commentaireAgentTerrain?has_content>
+					<div class="form-group">
+						<div class="col-xs-6 col-sm-6 col-md-6">
+							<label class="<@labelStyle />" for="#i18n{dansmarue.viewSignalement.etat}">
+								#i18n{dansmarue.saveSignalement.commentaireAgentTerrain} : 
+							</label>
+							<div class="<@inputStyle />">
+								${signalement.commentaireAgentTerrain}
+							</div>
+						</div>
+					</div>
+				</#if>
+				<#if (signalement.datePrevueTraitement)! != "">
+					<div class="form-group">
+					
+						<div class="col-xs-6 col-sm-6 col-md-6">
+							<label class="<@labelStyle />" for="#i18n{dansmarue.viewSignalement.dateProgrammation}">
+								#i18n{dansmarue.viewSignalement.dateProgrammation} :
+							</label>
+							<div class="<@inputStyle />">
+								${signalement.datePrevueTraitement}
+							</div>
+						</div>
+					</div>
+					</#if>
+				<#if stateSignalement.id == serviceFaitValue && serviceFaitUser != "">
+					<div class="form-group">
+						<div class="col-xs-6 col-sm-6 col-md-6">
+							<label class="<@labelStyle />" for="#i18n{dansmarue.viewSignalement.service.fait}">
+								#i18n{dansmarue.viewSignalement.service.fait}
+							</label>
+							<div class="<@inputStyle />">
+								${serviceFaitUser}
+							</div>
+						</div>
+					</div>
+				</#if>	
+			</fieldset>
+		</div>
+		<br />
+		<div>${historiqueHtml}</div>
+		<div class="text-center">
+			<div class="form-actions">
+				<button type="submit" class="btn btn-lg btn-paris btn-blue">
+					<i class="glyphicon glyphicon-search"></i>
+					#i18n{dansmarue.retour}
+				</button>
+			</div>
+		</div>
+	</form>
+</div>
+<@modalImage/>

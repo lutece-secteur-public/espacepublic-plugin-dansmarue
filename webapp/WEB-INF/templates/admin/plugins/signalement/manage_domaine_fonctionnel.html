@@ -1,0 +1,47 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<div class="box box-info">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{dansmarue.domainefonctionnel.manage.name}</h3>
+				<span class="pull-right"> <a
+					href="jsp/admin/plugins/signalement/SaveDomaineFonctionnel.jsp"
+					class="btn btn-sm btn-primary"> <i
+						class="glyphicon glyphicon-plus"></i>
+						#i18n{dansmarue.commons.ajouter}
+				</a>
+				</span>
+			</div>
+
+			<div class="box-body">
+				<#if domaine_fonctionnel_list?has_content &&
+				domaine_fonctionnel_list?size != 0>
+				<table class="table table-striped table-condensed">
+					<tr>
+						<th>#i18n{dansmarue.commons.libelle}</th>
+						<th>#i18n{dansmarue.commons.actif}</th>
+						<th>#i18n{dansmarue.commons.actions}</th>
+					</tr>
+
+					<#list domaine_fonctionnel_list as domaine_fonctionnel>
+					<tr>
+						<td>${domaine_fonctionnel.libelle}</td>
+						<td>${domaine_fonctionnel.actif?string("#i18n{dansmarue.commons.oui}","#i18n{dansmarue.commons.non}")}</td>
+						<td><a class="btn btn-primary btn-sm"
+							alt="#i18n{dansmarue.commons.modifier}"
+							title="#i18n{dansmarue.commons.modifier}"
+							href="jsp/admin/plugins/signalement/ModifyDomaineFonctionnel.jsp?domaine_fonctionnel_id=${domaine_fonctionnel.id}">
+								<i class="glyphicon glyphicon-edit"></i>
+						</a> <a class="btn btn-danger btn-sm"
+							alt="#i18n{dansmarue.commons.supprimer}"
+							title="#i18n{dansmarue.commons.supprimer}"
+							href="jsp/admin/plugins/signalement/DeleteDomaineFonctionnel.jsp?domaine_fonctionnel_id=${domaine_fonctionnel.id}">
+								<i class="glyphicon glyphicon-trash"></i>
+						</a></td>
+					</tr>
+					</#list>
+				</table>
+				<br /> <#else> #i18n{dansmarue.commons.liste.vide} </#if>
+			</div>
+		</div>
+	</div>
+</div>

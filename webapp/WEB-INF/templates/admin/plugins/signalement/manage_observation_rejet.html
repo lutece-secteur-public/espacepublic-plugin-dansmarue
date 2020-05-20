@@ -1,0 +1,59 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<div class="box box-info">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{dansmarue.observationRejet.manage.name}</h3>
+				<span class="pull-right"> <a
+					href="jsp/admin/plugins/signalement/SaveObservationRejet.jsp"
+					class="btn btn-sm btn-primary"> <i
+						class="glyphicon glyphicon-plus"></i>
+						#i18n{dansmarue.commons.ajouter}
+				</a>
+				</span>
+			</div>
+
+			<div class="box-body">
+				<#if observation_rejet_list?has_content &&
+				observation_rejet_list?size != 0>
+				<table class="table table-striped table-condensed">
+					<tr>
+						<th>#i18n{dansmarue.commons.modifierOrdre}</th>
+						<th>#i18n{dansmarue.commons.libelle}</th>
+						<th>#i18n{dansmarue.commons.actif}</th>
+						<th>#i18n{dansmarue.commons.ordre}</th>
+						<th>#i18n{dansmarue.commons.actions}</th>
+					</tr>
+
+					<#list observation_rejet_list as observation_rejet>
+					<tr>
+						<td><a alt="#i18n{dansmarue.listtypesignalement.flechehaut.alt}"
+							title="#i18n{dansmarue.listtypesignalement.flechehaut.title}"
+							href="jsp/admin/plugins/signalement/DoDecreaseObservationRejetOrder.jsp?id=${observation_rejet.id}&ordre=${observation_rejet.ordre}">
+								<i class="glyphicon glyphicon-arrow-up"></i>
+						</a> <a alt="#i18n{dansmarue.listtypesignalement.flechebas.alt}"
+							title="#i18n{dansmarue.listtypesignalement.flechebas.title}"
+							href="jsp/admin/plugins/signalement/DoIncreaseObservationRejetOrder.jsp?id=${observation_rejet.id}&ordre=${observation_rejet.ordre}">
+								<i class="glyphicon glyphicon-arrow-down"></i>
+						</a></td>
+						<td>${observation_rejet.libelle}</td>
+						<td>${observation_rejet.actif?string("#i18n{dansmarue.commons.oui}","#i18n{dansmarue.commons.non}")}</td>
+						<td>${observation_rejet.ordre!}</td>
+						<td><a class="btn btn-primary btn-sm"
+							alt="#i18n{dansmarue.commons.modifier}"
+							title="#i18n{dansmarue.commons.modifier}"
+							href="jsp/admin/plugins/signalement/ModifyObservationRejet.jsp?observation_rejet_id=${observation_rejet.id}">
+								<i class="glyphicon glyphicon-edit"></i>
+						</a> <a class="btn btn-danger btn-sm"
+							alt="#i18n{dansmarue.commons.supprimer}"
+							title="#i18n{dansmarue.commons.supprimer}"
+							href="jsp/admin/plugins/signalement/DeleteObservationRejet.jsp?observation_rejet_id=${observation_rejet.id}">
+								<i class="glyphicon glyphicon-trash"></i>
+						</a></td>
+					</tr>
+					</#list>
+				</table>
+				<br /> <#else> #i18n{dansmarue.commons.liste.vide} </#if>
+			</div>
+		</div>
+	</div>
+</div>

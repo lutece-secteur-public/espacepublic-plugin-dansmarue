@@ -1,0 +1,267 @@
+<@leaflet_map_includes/> 
+<#include "macro/commons_signalement.html" />
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+	$.getScript("jsp/admin/plugins/signalement/DoGetMap.jsp", function(data){
+		initLeafletMap("map_view");
+		var lat = $("#latitude").val();
+		var lng = $("#longitude").val();
+		var etatSignalementId = ${stateSignalement.id};
+
+		//Si � Service fait �, � Archiv� �, � Sous surveillance � , � Rejet� � -> puce vert 
+		if(etatSignalementId===10 || etatSignalementId===12 || etatSignalementId===22 || etatSignalementId===11 ) {
+			zoomToWithEtat(lat,lng, "greenIcon");
+		} else if (etatSignalementId===9 || etatSignalementId===21) {
+			//Si � Service programm� �, � Service programm� tiers � -> puce jaune
+			zoomToWithEtat(lat,lng, "yellowIcon");
+		} else {
+			//Sinon, puce rouge
+			zoomToWithEtat(lat,lng, "redIcon");
+		}
+	});
+});
+
+</script>
+<link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
+
+<div id="view-signalement" class="container">
+	<div class="row-fluid">
+		<legend> #i18n{dansmarue.page.signalement.view.title} </legend>
+		<div class="bg-danger">${error!}</div>
+	</div>
+	<form class="form-horizontal"
+		action="${back_url}#ancre-signalement-${signalement.id}"
+		method="get">
+		<div class="row">
+			<fieldset>
+				<div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+					<div class="form-group">
+					
+								<#if !(signalement.isSendWS) >
+								<@a class="btn
+									btn-xs btn-primary" visu=false
+									sector=(signalement.secteur.idSector)!?string
+									href="jsp/admin/plugins/signalement/ModifySignalement.jsp"
+									params="?signalement_id=${signalement.id}"
+									additionalParameters="title='#i18n{dansmarue.reportingList.alt.modify}'">
+									<i class="glyphicon glyphicon-edit"></i> </@a> 
+								</#if>
+									
+								<a class="btn btn-xs btn-primary"
+									title="#i18n{dansmarue.reportingList.alt.history}"
+									href="jsp/admin/plugins/signalement/ViewHistory.jsp?signalement_id=${signalement.id}">
+										<i class="glyphicon glyphicon-book"></i>
+								</a>
+									<#-- actions du workflow --> <#list possible_actions as action>
+									<#if
+									rights.estAutorise("*","*",(signalement.secteur.idSector)!?string)>
+									<a title="${action.name}"
+									href="jsp/admin/plugins/signalement/ProcessAction.jsp?action_id=${action.id}&amp;signalement_id=${signalement.id}">
+										<img width="24px"
+										src="image?resource_type=workflow_icon_img&id=${action.icon.id}"
+										alt="${action.name}" />
+								</a> </#if> </#list> 
+								
+								<#if !(signalement.isSendWS) >
+								<@a class="btn btn-xs btn-danger" visu=false
+									sector=(signalement.secteur.idSector)!?string
+									href="jsp/admin/plugins/signalement/DeleteSignalement.jsp"
+									params="?signalement_id=${signalement.id}"
+									additionalParameters="title='#i18n{dansmarue.commons.supprimer}'">
+									<i class="glyphicon glyphicon-trash"></i> </@a> 
+								</#if>
+								
+								<@a class="btn
+									btn-xs btn-primary" visu=false
+									sector=(signalement.secteur.idSector)!?string
+									href="jsp/admin/plugins/signalement/DoCreateMailSignalement.jsp"
+									params="?signalement_id=${signalement.id}"
+									additionalParameters="title='#i18n{dansmarue.commons.mail}'"> <i
+									class="glyphicon glyphicon-envelope"></i> </@a>
+					</div>
+				</div>
+				<div class="col-xs-6 col-sm-6 col-md-6">
+					<div class="form-group">
+						<label class="<@labelStyle />">
+							#i18n{dansmarue.viewSignalement.numero} </label>
+						<div class="control-label col-xs-12 col-sm-8 col-md-6">
+							${signalement.prefix}${signalement.annee}${signalement.mois}${signalement.numero}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="<@labelStyle />">
+							#i18n{dansmarue.viewSignalement.etat} </label>
+						<div class="control-label col-xs-12 col-sm-8 col-md-6">
+							${stateSignalement.name}</div>
+					</div>
+					<#if (signalement.datePrevueTraitement)! != "">
+						<div class="form-group">
+							<label class="<@labelStyle />"
+								for="#i18n{dansmarue.viewSignalement.dateProgrammation}">
+								#i18n{dansmarue.viewSignalement.dateProgrammation} </label>
+							<div class="control-label col-xs-12 col-sm-8 col-md-6">
+								${signalement.datePrevueTraitement}</div>
+						</div>
+					</#if>
+					<div class="form-group">
+						<label class="<@labelStyle />">
+							#i18n{dansmarue.saveSignalement.priorite} </label>
+						<div class="control-label col-xs-12 col-sm-8 col-md-6">
+							${signalement.priorite.libelle}</div>
+					</div>
+					<div class="form-group">
+						<label class="<@labelStyle />">
+							#i18n{dansmarue.saveSignalement.type} </label>
+						<div class="control-label col-xs-12 col-sm-8 col-md-6"><#if
+							signalement.type?has_content> ${signalement.type!} <#else >
+							&nbsp; </#if></div>
+					</div>
+					<#if adresse.adresse?has_content>
+						<div class="form-group">
+							<label class="<@labelStyle />">
+								#i18n{dansmarue.saveSignalement.adresse} </label>
+							<div class="control-label col-xs-12 col-sm-8 col-md-6">
+								${adresse.adresse} <br /> <a
+									href="https://www.google.fr/maps?layer=c&z=17&cbp=0,0,0,0,0&cbll=${(adresse.lat)!?c},${(adresse.lng)!?c}&q=${adresse.adresse}"
+									target="sv"> (Street View) </a> <a
+									href="http://www.openstreetmap.org/?mlat=${(adresse.lat)!?c}&mlon=${(adresse.lng)!?c}#map=18/${(adresse.lat)!?c}/${(adresse.lng)!?c}"
+									target="osm"> (OpenStreetMap) </a>
+							</div>
+							<input id="longitude" type="hidden" name="adresse.lng" 	value="${(adresse.lng)!?c}" />
+							<input id="latitude" type="hidden" name="adresse.lat" value="${(adresse.lat)!?c}" />
+						</div>
+					</#if>
+					<div class="form-group">
+						<label class="<@labelStyle />">
+							#i18n{dansmarue.viewSignalement.direction} </label>
+						<div class="control-label col-xs-12 col-sm-8 col-md-6">
+							${signalement.directionSector.label}
+						</div>
+					</div>
+					<#if signaleur.mail?has_content>
+					<div class="form-group">
+						<label class="<@labelStyle />">
+							#i18n{dansmarue.saveSignalement.mail} </label>
+						<div class="control-label col-xs-12 col-sm-8 col-md-6">
+							${signaleur.mail}</div>
+					</div>
+					</#if> <#if adresse.precisionLocalisation?has_content>
+					<div class="form-group">
+						<label class="<@labelStyle />">
+							#i18n{dansmarue.saveSignalement.precisionLocalisation} </label>
+						<div class="control-label col-xs-12 col-sm-8 col-md-6">
+							${adresse.precisionLocalisation}</div>
+					</div>
+					</#if> <#if signalement.commentaire?has_content>
+					<div class="form-group">
+						<label class="<@labelStyle />">
+							#i18n{dansmarue.saveSignalement.commentaire} </label>
+						<div class="control-label col-xs-12 col-sm-8 col-md-6">
+							${signalement.commentaire}</div>
+					</div>
+					</#if>
+					<#if signalement.commentaireAgentTerrain?has_content>
+						<div class="form-group">
+							<label class="<@labelStyle />">
+								#i18n{dansmarue.saveSignalement.commentaireAgentTerrain} </label>
+							<div class="control-label col-xs-12 col-sm-8 col-md-6">
+								${signalement.commentaireAgentTerrain}</div>
+						</div>
+					</#if>
+					<div class="form-group">
+						<label class="<@labelStyle />">
+							#i18n{dansmarue.viewSignalement.dateCreation} </label>
+						<div class="control-label col-xs-12 col-sm-8 col-md-6">
+							${signalement.dateCreation} ${signalement.heureCreation?string["HH:mm"]}
+						</div>
+					</div>
+					<#if photos?has_content>
+						<#assign index = 1>
+						<#list photos as photo> 
+							<#if photo.imageUrl != "" && photo.vue == 0>  
+								<div class="form-group">
+									<label class="<@labelStyle />" for="image">
+										#i18n{dansmarue.saveSignalement.vuePres}
+									</label>
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<span id='${signalement.id}'>
+											<a href='#' data-toggle="modal" data-target="#imageModal" id-vue='${photo.vue}' id-signalement='${signalement.id}' image-url='${photo.imageUrl}'>
+												<img src='${photo.imageUrl}' style="max-width: 150px" />
+											</a>
+										</span>
+										<#assign index = index + 1>
+									</div>
+								</div>
+							<#elseif photo.imageUrl != "" && photo.vue == 1>
+								<div class="form-group">
+									<label class="<@labelStyle />" for="image">
+										#i18n{dansmarue.saveSignalement.vueEnsemble}
+									</label>
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<span id='${signalement.id}'>
+											<a href='#' data-toggle="modal" data-target="#imageModal" id-vue='${photo.vue}' id-signalement='${signalement.id}' image-url='${photo.imageUrl}'>
+												<img src='${photo.imageUrl}' style="max-width: 150px" />
+											</a>
+										</span>
+										<#assign index = index + 1>
+									</div>
+								</div>
+							<#elseif photo.imageUrl != "" && photo.vue == 2>  
+								<div class="form-group">
+									<label class="<@labelStyle />" for="image">
+										#i18n{dansmarue.saveSignalement.photo.done}
+									</label>
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<span id='${signalement.id}'>
+											<a href='#' data-toggle="modal" data-target="#imageModal" id-vue='${photo.vue}' id-signalement='${signalement.id}' image-url='${photo.imageUrl}'>
+												<img src='${photo.imageUrl}' style="max-width: 150px" />
+											</a>
+										</span>
+										<#assign index = index + 1>
+									</div>
+								</div>
+							</#if>
+						</#list>
+					</#if>
+					<div class="form-group">
+						<label class="<@labelStyle />">
+							#i18n{dansmarue.viewSignalement.nbSuivis} </label>
+						<div class="control-label col-xs-12 col-sm-8 col-md-6">
+							${signalement.suivi}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="<@labelStyle />">
+							#i18n{dansmarue.viewSignalement.nbCongratulations} </label>
+						<div class="control-label col-xs-12 col-sm-8 col-md-6">
+							${signalement.felicitations}
+						</div>
+					</div>
+					<!-- RAISON REJET -->
+					<#if (signalement.observationRejet.libelle)! != "">
+					<div class="form-group">
+						<label class="<@labelStyle />"
+							for="#i18n{dansmarue.viewSignalement.commentaireRejet}">
+							#i18n{dansmarue.viewSignalement.commentaireRejet} </label>
+						<div class="control-label col-xs-12 col-sm-8 col-md-6">
+							${signalement.observationRejet.libelle}</div>
+					</div>
+					</#if>
+				</div>
+				<div class="col-xs-6 col-sm-6 col-md-6">
+					<div id="map_view" class="map"></div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<div class="text-center">
+					<button type="submit" class="btn btn-paris btn-blue btn-lg">
+						#i18n{dansmarue.retour.title}
+					</button>
+				</div>
+			</fieldset>
+		</div>
+	</form>
+</div>
+<@modalImage/>

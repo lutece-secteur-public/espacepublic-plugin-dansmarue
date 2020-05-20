@@ -1,0 +1,128 @@
+<link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
+<script src="js/sweetalert.min.js"></script>
+<div class="row">
+	<div style="display: none;" id="messageSuppression">#dskey{sitelabels.site_property.message.typologie.validation.suppression.ajout}</div>
+	<legend>
+		<#if typesignalement_id?has_content && typesignalement_id?length != 0>
+			<#if typesignalementparent_id?has_content && typesignalementparent_id?length != 0>
+				<a style="color:rgb(12,81,138)" href="jsp/admin/plugins/signalement/ManageTypeSignalement.jsp?typesignalement_id=${typesignalementparent_id}">
+					#i18n{dansmarue.adminFeature.sousTypeSignalementManagement.name}
+					${typesignalement_libelle!} 
+				</a>
+			<#else>
+				<a style="color:rgb(12,81,138)" href="jsp/admin/plugins/signalement/ManageTypeSignalement.jsp">
+					#i18n{dansmarue.adminFeature.sousTypeSignalementManagement.name}
+					${typesignalement_libelle!} 
+				</a>
+			</#if>			
+		<#else>
+		#i18n{dansmarue.adminFeature.typeSignalementManagement.name} </#if> <span
+			class="pull-right">
+			<div style="display: flex">
+				<form action="jsp/admin/plugins/signalement/ExportTypeAno.jsp" method="post" style="padding-right: 15px;">
+					<button type="submit" value="exportcsv" title="Exporter en csv" name="exportcsv" class="btn btn-sm btn-primary">
+						<i class="glyphicon glyphicon-download"></i>
+						#i18n{dansmarue.listtypesignalement.addntypesignalement.export}
+					</button>
+				</form>
+				<form action="jsp/admin/plugins/signalement/SaveTypeSignalement.jsp"
+					method="get" id="formSaveType">
+					<button type="submit" class="btn btn-sm btn-primary">
+						<i class="glyphicon glyphicon-plus"></i>
+						#i18n{dansmarue.listtypesignalement.addntypesignalement.title}
+					</button>
+					<#if typesignalement_id?has_content && typesignalement_id?length !=
+					0> <input type="hidden" name="typesignalementparent_id"
+						value="${typesignalement_id!}" /> </#if>
+				</form>
+			</div>
+		</span>
+	</legend>
+	<#if typesignalement_list?has_content && typesignalement_list?size !=0>
+	<table class="table table-striped table-condensed">
+		<tr>
+			<th>#i18n{dansmarue.commons.modifierOrdre}</th>
+			<th>#i18n{dansmarue.listtypesignalement.typeobjetsignalement.label}</th>
+			<th>#i18n{dansmarue.listtypesignalement.alias.label}</th>
+			<th>#i18n{dansmarue.listtypesignalement.alias.mobile.label}</th>
+			<th>#i18n{dansmarue.commons.actif}</th>
+			<th>#i18n{dansmarue.commons.ordre}</th>
+			<th>#i18n{dansmarue.listtypesignalement.actions.label}</th>
+		</tr>
+
+		<#list typesignalement_list as typesignalement>
+		<tr>
+			<td><a alt="#i18n{dansmarue.listtypesignalement.flechehaut.alt}"
+				title="#i18n{dansmarue.listtypesignalement.flechehaut.title}"
+				href="jsp/admin/plugins/signalement/ManageTypeSignalement.jsp?typesignalement_id=${typesignalement.id}&action=monter">
+					<i class="glyphicon glyphicon-arrow-up"></i>
+			</a> <a alt="#i18n{dansmarue.listtypesignalement.flechebas.alt}"
+				title="#i18n{dansmarue.listtypesignalement.flechebas.title}"
+				href="jsp/admin/plugins/signalement/ManageTypeSignalement.jsp?typesignalement_id=${typesignalement.id}&action=descendre">
+					<i class="glyphicon glyphicon-arrow-down"></i>
+			</a></td>
+			<td><#if typesignalement.unit.idUnit?has_content &&
+				typesignalement.unit.idUnit?number != 0> ${typesignalement.libelle}
+				- ${typesignalement.unit.label!} <#else> ${typesignalement.libelle}
+				</#if></td>
+			<td>${(typesignalement.alias)!}</td>
+			<td>${(typesignalement.aliasMobile)!}</td>
+			<#if typesignalement.actif>
+			<td>#i18n{dansmarue.listtypesignalement.actif.yes}</td> <#else>
+			<td>#i18n{dansmarue.listtypesignalement.actif.no}</td> </#if>
+			<td>${typesignalement.ordre}</td>
+			<td><#if typesignalement.unit.idUnit?number = 0> <a
+				class="btn btn-primary btn-sm"
+				alt="#i18n{dansmarue.listtypesignalement.soustypesignalement.alt}"
+				title="#i18n{dansmarue.listtypesignalement.soustypesignalement.title}"
+				href="jsp/admin/plugins/signalement/ManageTypeSignalement.jsp?typesignalement_id=${typesignalement.id}">
+					<i class="glyphicon glyphicon-folder-open"></i>
+			</a> </#if> <a class="btn btn-primary btn-sm"
+				alt="#i18n{dansmarue.listtypesignalement.modifytypesignalement.alt}"
+				title="#i18n{dansmarue.listtypesignalement.modifytypesignalement.title}"
+				href="jsp/admin/plugins/signalement/ModifyTypeSignalement.jsp?typesignalement_id=${typesignalement.id}">
+					<i class="glyphicon glyphicon-edit"></i>
+			</a> <a class="btn btn-danger btn-sm"
+				alt="#i18n{dansmarue.listtypesignalement.deletetypesignalement.alt}"
+				title="#i18n{dansmarue.listtypesignalement.deletetypesignalement.title}"
+				href="jsp/admin/plugins/signalement/DeleteTypeSignalement.jsp?typesignalement_id=${typesignalement.id}&typesignalementparent_id=${typesignalement_id!}">
+					<i class="glyphicon glyphicon-trash"></i>
+			</a>
+			</td>
+		</tr>
+		</#list>
+	</table>
+	<#else> #i18n{dansmarue.listtypesignalement.notypesignalement} </#if>
+</div> 
+
+<script>
+var isVerificationMessage = false;
+$('#formSaveType').submit(function( event ) {
+	if(!isVerificationMessage) {
+		if(${typesignalement_list?has_content?c} && ${typesignalement_list?size}!=0) {
+			isVerificationMessage = true;
+			return
+		} else {
+			//Si il n'y a pas de type, c'est qu'on ajoute un sous niveau
+			//-> Affichage du message de confirmation de suppression des messages liés à la typologie
+			event.preventDefault();
+			isVerificationMessage = true;
+			//Affichage d'un message de confirmation de suppression des messages
+			swal({
+			  title: "Confirmation",
+			  text: $("#messageSuppression").text(),
+			  icon: "warning",
+			  buttons: true,
+			  dangerMode: true,
+			})
+			.then((willDelete) => {
+			  if (willDelete) {
+				  $('#formSaveType').submit();
+			  } else {
+				  isVerificationMessage = false;
+			  }
+			});
+		}
+	}
+});
+</script>

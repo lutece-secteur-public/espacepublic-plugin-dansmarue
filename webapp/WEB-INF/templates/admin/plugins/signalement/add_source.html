@@ -1,0 +1,54 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<div class="box box-info">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{dansmarue.source.label.ajout} </h3>
+			</div>
+			<div class="box-body">
+				<@tform id='addSource' method='post' action='jsp/admin/plugins/signalement/ManageTypeSignalementBySource.jsp'>
+				<div class="row">
+					<div class="form-group col-sm-8">
+						<label class="<@labelStyle />" for="libelle">#i18n{dansmarue.commons.libelle}</label>
+						<div class="col-sm-8">
+							<input required="required"  class="form-control" id="libelle" name="libelle" type="text" />
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col-sm-8">
+						<label class="<@labelStyle />" for="description">#i18n{dansmarue.manageTypeSignalement.source.libelleDescription.label}</label>
+						<div class="col-sm-8">
+							<input required="required"  class="form-control" id="description" name="description" type="text" />
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col-sm-8">
+						<label class="<@labelStyle />" for="commentaire">#i18n{dansmarue.manageTypeSignalement.source.libelleCommentaire.label}</label>
+						<div class="col-sm-8">
+							<input required="required"  class="form-control" id="commentaire" name="commentaire" type="text" />
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col-sm-8 text-center" >
+						<div class="form-group">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								<button type="submit" class="btn btn-paris btn-red btn-lg"
+									id="search-button" name='action_doAddSource'>
+									#i18n{dansmarue.valider}
+								</button>
+								<a style="color:white;" href="jsp/admin/plugins/signalement/ManageTypeSignalementBySource.jsp">
+									<button type="button" class="btn btn-paris btn-blue btn-lg" id="retour">
+										#i18n{dansmarue.retour}
+									</button>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				</@tform>
+			</div>
+		</div>
+	</div>
+</div>

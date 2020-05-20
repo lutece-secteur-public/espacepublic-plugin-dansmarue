@@ -1,0 +1,59 @@
+<link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
+<script src="js/sweetalert.min.js"></script>
+<div class="row">
+	<legend>
+		#i18n{dansmarue.messageTypeSignalement.manage.name} <span
+			class="pull-right">
+			<div style="display: flex"">
+				<form action="jsp/admin/plugins/signalement/ExportMessageTypologie.jsp" method="post" style="padding-right: 15px;">
+					<button type="submit" value="exportcsv" title="Exporter en csv" name="exportcsv" class="btn btn-sm btn-primary">
+						<i class="glyphicon glyphicon-download"></i>
+						#i18n{dansmarue.listtypesignalement.addntypesignalement.export}
+					</button>
+				</form>
+				<form action="jsp/admin/plugins/signalement/SaveMessageTypeSignalement.jsp"
+					method="get">
+					<button type="submit" class="btn btn-sm btn-primary">
+						<i class="glyphicon glyphicon-plus"></i>
+						#i18n{dansmarue.messageTypeSignalement.manage.ajout}
+					</button>
+				</form>
+			</div>
+		</span>
+	</legend>
+	
+	<table class="table table-striped table-condensed">
+		<tr>
+			<th>#i18n{dansmarue.messageTypeSignalement.manage.type}</th>
+			<th>#i18n{dansmarue.messageTypeSignalement.manage.nbMessage}</th>
+			<th>#i18n{dansmarue.messageTypeSignalement.manage.actif}</th>
+			<th>#i18n{dansmarue.messageTypeSignalement.manage.action}</th>
+		</tr>
+
+		<#list list_type as typesignalement>
+			<tr>
+				<td>${typesignalement.libelle!}</td>
+				<td>${typesignalement.nbMessages!}</td>
+				<#if typesignalement.actif>
+					<td>#i18n{dansmarue.listtypesignalement.actif.yes}</td> 
+				<#else>
+					<td>#i18n{dansmarue.listtypesignalement.actif.no}</td> 
+				</#if>
+				<td>
+					<a class="btn btn-primary btn-sm"
+						alt="#i18n{dansmarue.listtypesignalement.modifytypesignalement.alt}"
+						title="#i18n{dansmarue.listtypesignalement.modifytypesignalement.title}"
+						href="jsp/admin/plugins/signalement/ModifyMessageTypeSignalement.jsp?typesignalement_id=${typesignalement.id}">
+							<i class="glyphicon glyphicon-edit"></i>
+					</a> 
+					<a class="btn btn-danger btn-sm"
+						alt="#i18n{dansmarue.listtypesignalement.deletetypesignalement.alt}"
+						title="#i18n{dansmarue.listtypesignalement.deletetypesignalement.title}"
+						href="jsp/admin/plugins/signalement/DeleteAllMessagesTypeSignalement.jsp?typesignalement_id=${typesignalement.id}">
+							<i class="glyphicon glyphicon-trash"></i>
+					</a>
+				</td>
+			</tr>
+		</#list>
+	</table>
+</div> 

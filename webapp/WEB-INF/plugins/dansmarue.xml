@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?><plug-in>
+
+	<!-- Plugin Informations -->
+	<name>signalement</name>
+	<class>fr.paris.lutece.plugins.dansmarue.service.SignalementPlugin</class>
+	<version>6.4.3</version>
+	<description>signalement.plugin.description</description>
+	<documentation/>
+	<installation/>
+	<changes/>
+	<user-guide/>
+	<provider>signalement.plugin.provider</provider>
+	<provider-url>http://lutece.paris.fr</provider-url>
+	<icon-url>images/admin/skin/plugins/signalement/signalement.png</icon-url>
+	<copyright>Copyright 2001-2012 Mairie de Paris</copyright>
+	<core-version-dependency>
+		<min-core-version>6.0.1</min-core-version>
+		<max-core-version/>
+	</core-version-dependency>
+	<db-pool-required>1</db-pool-required>
+
+	<freemarker-macro-files>
+		<freemarker-macro-file>/macroV5.html</freemarker-macro-file>
+		<freemarker-macro-file>/common/plugins/dansmarue/commons.html</freemarker-macro-file>
+	</freemarker-macro-files>
+
+	<!--Administration interface parameters -->
+	<admin-features>
+		<admin-feature>
+			<feature-id>SIGNALEMENT_MANAGEMENT</feature-id>
+			<feature-title>dansmarue.adminFeature.signalementManagement.name</feature-title>
+			<feature-description>dansmarue.adminFeature.signalementManagement.description</feature-description>
+			<feature-level>2</feature-level>
+			<feature-url>jsp/admin/plugins/signalement/ManageSignalement.jsp</feature-url>
+			<feature-icon-url>images/admin/skin/plugins/signalement/dossier.png</feature-icon-url>
+		</admin-feature>
+		<admin-feature>
+			<feature-id>REFERENTIEL_MANAGEMENT_SIGNALEMENT</feature-id>
+			<feature-title>dansmarue.adminFeature.referentielmanagement.name</feature-title>
+			<feature-description>dansmarue.adminFeature.referentielmanagement.description</feature-description>
+			<feature-level>2</feature-level>
+			<feature-url>jsp/admin/plugins/signalement/ManageReferentiel.jsp</feature-url>
+			<feature-icon-url>images/admin/skin/plugins/signalement/dossier.png</feature-icon-url>
+		</admin-feature>
+		<admin-feature>
+			<feature-id>SIGNALEMENT_DISPLAY</feature-id>
+			<feature-title>dansmarue.adminFeature.signalementdisplay.name</feature-title>
+			<feature-description>dansmarue.adminFeature.signalementdisplay.description</feature-description>
+			<feature-level>2</feature-level>
+			<feature-url>jsp/admin/plugins/signalement/DisplaySignalement.jsp</feature-url>
+			<feature-icon-url>images/admin/skin/plugins/signalement/dossier.png</feature-icon-url>
+		</admin-feature>
+		<admin-feature>
+			<feature-id>SIGNALEMENT_DASHBOARD</feature-id>
+			<feature-title>dansmarue.adminFeature.signalementDashboard.name</feature-title>
+			<feature-description>dansmarue.adminFeature.signalementDashboard.description</feature-description>
+			<feature-level>2</feature-level>
+			<feature-url>jsp/admin/plugins/signalement/ManageSignalementDashboard.jsp</feature-url>
+			<feature-icon-url>images/admin/skin/plugins/signalement/dossier.png</feature-icon-url>
+		</admin-feature>
+	</admin-features>
+
+	<!-- RBAC -->
+	<rbac-resource-types>
+		<rbac-resource-type>
+			<rbac-resource-type-class>
+				fr.paris.lutece.plugins.dansmarue.service.role.SignalementResourceIdService
+			</rbac-resource-type-class>
+		</rbac-resource-type>
+		<rbac-resource-type>
+			<rbac-resource-type-class>
+				fr.paris.lutece.plugins.dansmarue.service.role.TypeSignalementResourceIdService
+			</rbac-resource-type-class>
+		</rbac-resource-type>
+		<rbac-resource-type>
+			<rbac-resource-type-class>
+				fr.paris.lutece.plugins.dansmarue.service.role.ArrondissementSignalementResourceIdService
+			</rbac-resource-type-class>
+		</rbac-resource-type>
+		<rbac-resource-type>
+			<rbac-resource-type-class>
+				fr.paris.lutece.plugins.dansmarue.service.role.DomaineFonctionnelSignalementResourceIdService
+			</rbac-resource-type-class>
+		</rbac-resource-type>
+	</rbac-resource-types>
+
+	<!-- Dashboard components -->
+	<dashboard-components>
+		<dashboard-component>
+			<dashboard-component-name>SIGNALEMENT</dashboard-component-name>
+			<dashboard-component-class>fr.paris.lutece.plugins.dansmarue.web.SignalementDashboardComponent</dashboard-component-class>
+			<dashboard-feature-right>SIGNALEMENT_MANAGEMENT</dashboard-feature-right>
+		</dashboard-component>
+	</dashboard-components>
+	
+	<!-- Daemons -->
+	<daemons>
+	 <daemon>
+	  <daemon-id>webservicePartnerDaemon</daemon-id>
+	  <daemon-name>dansmarue.deamon.webservicepartnerdaemon.name</daemon-name>
+	  <daemon-description>dansmarue.deamon.webservicepartnerdaemon.description</daemon-description>
+	  <daemon-class>fr.paris.lutece.plugins.dansmarue.service.deamon.WebServicePartnerDaemon</daemon-class>
+	 </daemon>
+	 <daemon>
+	  <daemon-id>rattrapageAdressesDaemon</daemon-id>
+	  <daemon-name>dansmarue.deamon.rattrapageAdresses.name</daemon-name>
+	  <daemon-description>dansmarue.deamon.rattrapageAdresses.description</daemon-description>
+	  <daemon-class>fr.paris.lutece.plugins.dansmarue.service.deamon.RattrapageAdressesDaemon</daemon-class>
+	 </daemon>
+	 <daemon>
+	  <daemon-id>rattrapageAnosSansEtatDaemon</daemon-id>
+	  <daemon-name>dansmarue.deamon.rattrapageAnosSansEtat.name</daemon-name>
+	  <daemon-description>dansmarue.deamon.rattrapageAnosSansEtat.description</daemon-description>
+	  <daemon-class>fr.paris.lutece.plugins.dansmarue.service.deamon.RattrapageAnosSansEtatDaemon</daemon-class>
+	 </daemon>
+	 <daemon>
+	  <daemon-id>suppressionPhotosDaemon</daemon-id>
+	  <daemon-name>dansmarue.daemon.suppressionPhotos.name</daemon-name>
+	  <daemon-description>dansmarue.daemon.suppressionPhotos.description</daemon-description>
+	  <daemon-class>fr.paris.lutece.plugins.dansmarue.service.deamon.SuppressionPhotosDaemon</daemon-class>
+	 </daemon>	 
+	</daemons>
+	
+	<admin-javascript-files>
+        <admin-javascript-file>js/bootstrap-datepicker.js</admin-javascript-file>
+        <admin-javascript-file>js/locales/bootstrap-datepicker.fr.js</admin-javascript-file>
+        <admin-javascript-file>js/bootstrap-select.js</admin-javascript-file>
+        <admin-javascript-file>js/admin_sira.js</admin-javascript-file>
+    </admin-javascript-files>
+</plug-in>
