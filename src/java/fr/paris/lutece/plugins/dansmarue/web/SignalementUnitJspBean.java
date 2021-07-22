@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -63,50 +63,62 @@ public class SignalementUnitJspBean extends AbstractJspBean
 {
 
     /** The Constant serialVersionUID. */
-    private static final long       serialVersionUID                 = 3660192401536428781L;
+    private static final long serialVersionUID = 3660192401536428781L;
 
     /** The Constant PARAMETER_VISIBLE_UNITS. */
     // PARAMETERS
-    private static final String     PARAMETER_VISIBLE_UNITS          = "visible_units";
+    private static final String PARAMETER_VISIBLE_UNITS = "visible_units";
 
     /** The Constant JSP_MANAGE_SIGNALEMENT_UNIT. */
     // JSP
-    private static final String     JSP_MANAGE_SIGNALEMENT_UNIT      = "jsp/admin/plugins/signalement/ManageSignalementUnit.jsp";
+    private static final String JSP_MANAGE_SIGNALEMENT_UNIT = "jsp/admin/plugins/signalement/ManageSignalementUnit.jsp";
 
     /** The Constant RIGHT_MANAGE_DOMAINE_FONCTIONNEL. */
     // RIGHT
-    public static final String      RIGHT_MANAGE_DOMAINE_FONCTIONNEL = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
+    public static final String RIGHT_MANAGE_DOMAINE_FONCTIONNEL = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
 
     /** The Constant ERROR_OCCUR. */
     // CONSTANTS
-    public static final String      ERROR_OCCUR                      = "error";
+    public static final String ERROR_OCCUR = "error";
 
     /** The Constant MARK_UNIT_TREE. */
     // Markers
-    private static final String     MARK_UNIT_TREE                   = "unit_tree";
+    private static final String MARK_UNIT_TREE = "unit_tree";
 
     /** The Constant MARK_VISIBLE_UNITS_LIST. */
-    private static final String     MARK_VISIBLE_UNITS_LIST          = "visible_units_list";
+    private static final String MARK_VISIBLE_UNITS_LIST = "visible_units_list";
 
     /** The Constant TEMPLATE_MANAGE_SIGNALEMENT_UNIT. */
     // TEMPLATES
-    private static final String     TEMPLATE_MANAGE_SIGNALEMENT_UNIT = "admin/plugins/signalement/manage_signalement_unit.html";
+    private static final String TEMPLATE_MANAGE_SIGNALEMENT_UNIT = "admin/plugins/signalement/manage_signalement_unit.html";
 
     /** The signalement unit service. */
     // SERVICES
     private transient ISignalementUnitService _signalementUnitService;
 
     /** The unit service. */
-    private transient IUnitService            _unitService                     = SpringContextService.getBean( IUnitService.BEAN_UNIT_SERVICE );
+    private transient IUnitService _unitService = SpringContextService.getBean( IUnitService.BEAN_UNIT_SERVICE );
 
-    /* (non-Javadoc)
+    /**
+     * Inits the.
+     *
+     * @param request
+     *            the request
+     * @param strRight
+     *            the str right
+     * @throws AccessDeniedException
+     *             the access denied exception
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.dansmarue.web.AbstractJspBean#init(javax.servlet.http.HttpServletRequest, java.lang.String)
      */
     @Override
     public void init( HttpServletRequest request, String strRight ) throws AccessDeniedException
     {
         super.init( request, strRight );
-        _signalementUnitService = ( ISignalementUnitService ) SpringContextService.getBean( "signalementUnitService" );
+        _signalementUnitService = (ISignalementUnitService) SpringContextService.getBean( "signalementUnitService" );
     }
 
     /**
@@ -132,7 +144,8 @@ public class SignalementUnitJspBean extends AbstractJspBean
     /**
      * Save all SignalementUnit.
      *
-     * @param request            The HTTP request
+     * @param request
+     *            The HTTP request
      * @return redirection url
      */
 
@@ -144,8 +157,8 @@ public class SignalementUnitJspBean extends AbstractJspBean
             return doGoBack( request );
         }
 
-        String[] visibleUnitsIds = request.getParameterValues( PARAMETER_VISIBLE_UNITS );
-        List<Integer> visibleInitsIdsList = new ArrayList<Integer>( );
+        String [ ] visibleUnitsIds = request.getParameterValues( PARAMETER_VISIBLE_UNITS );
+        List<Integer> visibleInitsIdsList = new ArrayList<>( );
         if ( !ArrayUtils.isEmpty( visibleUnitsIds ) )
         {
             visibleInitsIdsList = ListUtils.getListOfIntFromStrArray( visibleUnitsIds );
@@ -157,14 +170,16 @@ public class SignalementUnitJspBean extends AbstractJspBean
     /**
      * Return the url of the JSP which called the last action.
      *
-     * @param request            The Http request
+     * @param request
+     *            The Http request
      * @return The url of the last JSP
      */
     private String doGoBack( HttpServletRequest request )
     {
         String strJspBack = request.getParameter( SignalementConstants.MARK_JSP_BACK );
 
-        return StringUtils.isNotBlank( strJspBack ) ? ( AppPathService.getBaseUrl( request ) + strJspBack ) : AppPathService.getBaseUrl( request ) + JSP_MANAGE_SIGNALEMENT_UNIT;
+        return StringUtils.isNotBlank( strJspBack ) ? ( AppPathService.getBaseUrl( request ) + strJspBack )
+                : ( AppPathService.getBaseUrl( request ) + JSP_MANAGE_SIGNALEMENT_UNIT );
 
     }
 

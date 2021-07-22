@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48,22 +48,22 @@ public class DashboardPeriodDAO implements IDashboardPeriodDAO
 {
 
     /** The Constant SQL_QUERY_NEW_PK. */
-    private static final String SQL_QUERY_NEW_PK                = "SELECT nextval('seq_signalement_dashboard_period_id')";
+    private static final String SQL_QUERY_NEW_PK = "SELECT nextval('seq_signalement_dashboard_period_id')";
 
     /** The Constant SQL_QUERY_INSERT. */
-    private static final String SQL_QUERY_INSERT                = "INSERT INTO signalement_dashboard_period(id_period, libelle, lower_bound, higher_bound, unit, category, ordre) VALUES (?,?,?,?,?,?,?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_dashboard_period(id_period, libelle, lower_bound, higher_bound, unit, category, ordre) VALUES (?,?,?,?,?,?,?)";
 
     /** The Constant SQL_QUERY_DELETE. */
-    private static final String SQL_QUERY_DELETE                = "DELETE FROM signalement_dashboard_period WHERE id_period = ?";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_dashboard_period WHERE id_period = ?";
 
     /** The Constant SQL_QUERY_SELECT. */
-    private static final String SQL_QUERY_SELECT                = "SELECT id_period, libelle, lower_bound, higher_bound, unit, category, ordre FROM signalement_dashboard_period WHERE id_period = ?";
+    private static final String SQL_QUERY_SELECT = "SELECT id_period, libelle, lower_bound, higher_bound, unit, category, ordre FROM signalement_dashboard_period WHERE id_period = ?";
 
     /** The Constant SQL_QUERY_UPDATE. */
-    private static final String SQL_QUERY_UPDATE                = "UPDATE signalement_dashboard_period SET libelle=?, lower_bound=?, higher_bound=?, unit=?, category=?, ordre=? WHERE id_period=?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_dashboard_period SET libelle=?, lower_bound=?, higher_bound=?, unit=?, category=?, ordre=? WHERE id_period=?";
 
     /** The Constant SQL_QUERY_DASHBOARD_CRITERIAS. */
-    private static final String SQL_QUERY_DASHBOARD_CRITERIAS   = "SELECT id_period, libelle, lower_bound, higher_bound, unit, category, ordre FROM signalement_dashboard_period WHERE category is null"
+    private static final String SQL_QUERY_DASHBOARD_CRITERIAS = "SELECT id_period, libelle, lower_bound, higher_bound, unit, category, ordre FROM signalement_dashboard_period WHERE category is null"
             + " ORDER BY ordre";
 
     /** The Constant SQL_QUERY_ALL_DASHBOARD_PERIODS. */
@@ -150,8 +150,8 @@ public class DashboardPeriodDAO implements IDashboardPeriodDAO
             dashboardPeriod = new DashboardPeriod( );
             dashboardPeriod.setId( daoUtil.getLong( nIndex++ ) );
             dashboardPeriod.setLibelle( daoUtil.getString( nIndex++ ) );
-            dashboardPeriod.setLowerBound( ( Integer ) daoUtil.getObject( nIndex++ ) );
-            dashboardPeriod.setHigherBound( ( Integer ) daoUtil.getObject( nIndex++ ) );
+            dashboardPeriod.setLowerBound( (Integer) daoUtil.getObject( nIndex++ ) );
+            dashboardPeriod.setHigherBound( (Integer) daoUtil.getObject( nIndex++ ) );
             dashboardPeriod.setUnit( daoUtil.getString( nIndex++ ) );
             dashboardPeriod.setCategory( daoUtil.getString( nIndex++ ) );
             dashboardPeriod.setOrdre( daoUtil.getInt( nIndex ) );
@@ -201,8 +201,8 @@ public class DashboardPeriodDAO implements IDashboardPeriodDAO
             DashboardPeriod dashboardPeriod = new DashboardPeriod( );
             dashboardPeriod.setId( daoUtil.getLong( nIndex++ ) );
             dashboardPeriod.setLibelle( daoUtil.getString( nIndex++ ) );
-            dashboardPeriod.setLowerBound( ( Integer ) daoUtil.getObject( nIndex++ ) );
-            dashboardPeriod.setHigherBound( ( Integer ) daoUtil.getObject( nIndex++ ) );
+            dashboardPeriod.setLowerBound( (Integer) daoUtil.getObject( nIndex++ ) );
+            dashboardPeriod.setHigherBound( (Integer) daoUtil.getObject( nIndex++ ) );
             dashboardPeriod.setUnit( daoUtil.getString( nIndex++ ) );
             dashboardPeriod.setCategory( daoUtil.getString( nIndex++ ) );
             dashboardPeriod.setOrdre( daoUtil.getInt( nIndex ) );
@@ -231,8 +231,8 @@ public class DashboardPeriodDAO implements IDashboardPeriodDAO
             DashboardPeriod dashboardPeriod = new DashboardPeriod( );
             dashboardPeriod.setId( daoUtil.getLong( nIndex++ ) );
             dashboardPeriod.setLibelle( daoUtil.getString( nIndex++ ) );
-            dashboardPeriod.setLowerBound( ( Integer ) daoUtil.getObject( nIndex++ ) );
-            dashboardPeriod.setHigherBound( ( Integer ) daoUtil.getObject( nIndex++ ) );
+            dashboardPeriod.setLowerBound( (Integer) daoUtil.getObject( nIndex++ ) );
+            dashboardPeriod.setHigherBound( (Integer) daoUtil.getObject( nIndex++ ) );
             dashboardPeriod.setUnit( daoUtil.getString( nIndex++ ) );
             dashboardPeriod.setCategory( daoUtil.getString( nIndex++ ) );
             dashboardPeriod.setOrdre( daoUtil.getInt( nIndex ) );

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48,7 +48,8 @@ public class ValidatorFinalisation
     /**
      * Validate.
      *
-     * @param request the request
+     * @param request
+     *            the request
      * @return true, if successful
      */
     public boolean validate( HttpServletRequest request )

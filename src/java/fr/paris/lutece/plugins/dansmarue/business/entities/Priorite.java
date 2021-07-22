@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,10 +40,10 @@ public class Priorite
 {
 
     /** The id. */
-    private Long    _id;
+    private Long _id;
 
     /** The str libelle. */
-    private String  _strLibelle;
+    private String _strLibelle;
 
     /** The n ordre priorite. */
     private Integer _nOrdrePriorite;
@@ -61,7 +61,8 @@ public class Priorite
     /**
      * Sets the ordre priorite.
      *
-     * @param ordrePriorite the ordre priorite
+     * @param ordrePriorite
+     *            the ordre priorite
      * @return the integer
      */
     public Integer setOrdrePriorite( Integer ordrePriorite )
@@ -83,7 +84,8 @@ public class Priorite
     /**
      * Sets the id.
      *
-     * @param id the new id
+     * @param id
+     *            the new id
      */
     public void setId( long id )
     {
@@ -103,7 +105,8 @@ public class Priorite
     /**
      * Sets the libelle.
      *
-     * @param libelle the new libelle
+     * @param libelle
+     *            the new libelle
      */
     public void setLibelle( String libelle )
     {

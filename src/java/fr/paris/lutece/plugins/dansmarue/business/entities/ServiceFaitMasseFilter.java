@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,19 +45,19 @@ public class ServiceFaitMasseFilter implements Serializable
     private static final long serialVersionUID = 3607921200266975320L;
 
     /** The str date begin. */
-    private String            _strDateBegin;
+    private String _strDateBegin;
 
     /** The str date end. */
-    private String            _strDateEnd;
+    private String _strDateEnd;
 
     /** The str commentaire. */
-    private String            _strCommentaire;
+    private String _strCommentaire;
 
     /** The id etats. */
-    private Integer[]         _idEtats;
+    private Integer [ ] _idEtats;
 
     /** The id type signalements. */
-    private Integer[]         _idTypeSignalements;
+    private Integer [ ] _idTypeSignalements;
 
     /**
      * Gets the id type signalements.
@@ -65,7 +65,7 @@ public class ServiceFaitMasseFilter implements Serializable
      * @return the idTypeSignalement
      */
 
-    public Integer[] getIdTypeSignalements( )
+    public Integer [ ] getIdTypeSignalements( )
     {
         return _idTypeSignalements;
     }
@@ -77,7 +77,7 @@ public class ServiceFaitMasseFilter implements Serializable
      *            the new id type signalements
      */
 
-    public void setIdTypeSignalements( Integer[] idTypeSignalements )
+    public void setIdTypeSignalements( Integer [ ] idTypeSignalements )
     {
         _idTypeSignalements = idTypeSignalements;
     }
@@ -95,7 +95,8 @@ public class ServiceFaitMasseFilter implements Serializable
     /**
      * Sets the date begin.
      *
-     * @param pDateBegin            the DateBegin to set
+     * @param pDateBegin
+     *            the DateBegin to set
      */
     public void setDateBegin( String pDateBegin )
     {
@@ -115,7 +116,8 @@ public class ServiceFaitMasseFilter implements Serializable
     /**
      * Sets the date end.
      *
-     * @param pDateEnd            the DateEnd to set
+     * @param pDateEnd
+     *            the DateEnd to set
      */
     public void setDateEnd( String pDateEnd )
     {
@@ -127,7 +129,7 @@ public class ServiceFaitMasseFilter implements Serializable
      *
      * @return the list id type etats
      */
-    public Integer[] getIdEtats( )
+    public Integer [ ] getIdEtats( )
     {
         return _idEtats;
     }
@@ -138,7 +140,7 @@ public class ServiceFaitMasseFilter implements Serializable
      * @param idEtats
      *            the new id etats
      */
-    public void setIdEtats( Integer[] idEtats )
+    public void setIdEtats( Integer [ ] idEtats )
     {
         _idEtats = idEtats;
     }

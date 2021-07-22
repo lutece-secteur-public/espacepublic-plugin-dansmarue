@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,33 +50,33 @@ public class AndroidPushService
 {
 
     /** The Constant LOGGER. */
-    private static final Logger LOGGER               = Logger.getLogger( AndroidPushService.class );
+    private static final Logger LOGGER = Logger.getLogger( AndroidPushService.class );
 
     /** The Constant PROPERTY_GCM_API_KEY. */
     // PROPERTIES
     private static final String PROPERTY_GCM_API_KEY = "signalement.gcm.api.key";
 
     /** The Constant PROPERTY_FCM_URL. */
-    private static final String PROPERTY_FCM_URL     = "signalement.fcm.url";
+    private static final String PROPERTY_FCM_URL = "signalement.fcm.url";
 
     /** The Constant MARK_TO. */
     // MARKS
-    private static final String MARK_TO              = "to";
+    private static final String MARK_TO = "to";
 
     /** The Constant MARK_BODY. */
-    private static final String MARK_BODY            = "body";
+    private static final String MARK_BODY = "body";
 
     /** The Constant MARK_TITLE. */
-    private static final String MARK_TITLE           = "title";
+    private static final String MARK_TITLE = "title";
 
     /** The Constant MARK_DATA. */
-    private static final String MARK_DATA            = "data";
+    private static final String MARK_DATA = "data";
 
     /** The Constant MARK_NOTIFICATION. */
-    private static final String MARK_NOTIFICATION    = "notification";
+    private static final String MARK_NOTIFICATION = "notification";
 
     /** The Constant MARK_AUTHORIZATION. */
-    private static final String MARK_AUTHORIZATION   = "Authorization";
+    private static final String MARK_AUTHORIZATION = "Authorization";
 
     /**
      * Private constructor.
@@ -89,10 +89,14 @@ public class AndroidPushService
     /**
      * Send push.
      *
-     * @param userToken the user token
-     * @param title the title
-     * @param content the content
-     * @param payload the payload
+     * @param userToken
+     *            the user token
+     * @param title
+     *            the title
+     * @param content
+     *            the content
+     * @param payload
+     *            the payload
      */
     public static void sendPush( String userToken, String title, String content, Map<String, String> payload )
     {
@@ -127,7 +131,7 @@ public class AndroidPushService
             httpAccess.doPostJSON( fcmUrl, message.toString( ), headersRequest, null );
 
         }
-        catch ( Exception ex )
+        catch( Exception ex )
         {
             LOGGER.error( "Error when calling the Android push WS", ex );
         }

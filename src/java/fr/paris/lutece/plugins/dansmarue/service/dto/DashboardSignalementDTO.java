@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,13 +42,13 @@ public class DashboardSignalementDTO
 {
 
     /** The n id signalement. */
-    private Integer   _nIdSignalement;
+    private Integer _nIdSignalement;
 
     /** The creation date. */
     private LocalDate _creationDate;
 
     /** The n id status. */
-    private Integer   _nIdStatus;
+    private Integer _nIdStatus;
 
     /** The date prevue traitement. */
     private LocalDate _datePrevueTraitement;
@@ -69,7 +69,8 @@ public class DashboardSignalementDTO
     /**
      * Sets the id signalement.
      *
-     * @param idSignalement the new id signalement
+     * @param idSignalement
+     *            the new id signalement
      */
     public void setIdSignalement( Integer idSignalement )
     {
@@ -89,7 +90,8 @@ public class DashboardSignalementDTO
     /**
      * Sets the creation date.
      *
-     * @param creationDate the new creation date
+     * @param creationDate
+     *            the new creation date
      */
     public void setCreationDate( LocalDate creationDate )
     {
@@ -109,7 +111,8 @@ public class DashboardSignalementDTO
     /**
      * Sets the id status.
      *
-     * @param idStatus the new id status
+     * @param idStatus
+     *            the new id status
      */
     public void setIdStatus( Integer idStatus )
     {
@@ -129,7 +132,8 @@ public class DashboardSignalementDTO
     /**
      * Sets the date prevue traitement.
      *
-     * @param datePrevueTraitement the new date prevue traitement
+     * @param datePrevueTraitement
+     *            the new date prevue traitement
      */
     public void setDatePrevueTraitement( LocalDate datePrevueTraitement )
     {
@@ -149,7 +153,8 @@ public class DashboardSignalementDTO
     /**
      * Sets the date mise en surveillance.
      *
-     * @param dateMiseEnSurveillance the new date mise en surveillance
+     * @param dateMiseEnSurveillance
+     *            the new date mise en surveillance
      */
     public void setDateMiseEnSurveillance( LocalDate dateMiseEnSurveillance )
     {

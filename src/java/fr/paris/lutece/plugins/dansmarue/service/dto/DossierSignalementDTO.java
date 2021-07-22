@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,37 +40,37 @@ public class DossierSignalementDTO
 {
 
     /** The id. */
-    private Long    _id;
+    private Long _id;
 
     /** The str adresse. */
-    private String  _strAdresse;
+    private String _strAdresse;
 
     /** The str date creation. */
-    private String  _strDateCreation;
+    private String _strDateCreation;
 
     /** The str commentaire. */
-    private String  _strCommentaire;
+    private String _strCommentaire;
 
     /** The str heure creation. */
-    private String  _strHeureCreation;
+    private String _strHeureCreation;
 
     /** The str type. */
-    private String  _strType;
+    private String _strType;
 
     /** The str img url. */
-    private String  _strImgUrl;
+    private String _strImgUrl;
 
     /** The lat. */
-    private double  _lat;
+    private double _lat;
 
     /** The lng. */
-    private double  _lng;
+    private double _lng;
 
     /** The n distance. */
     private Integer _nDistance;
 
     /** The str prefix. */
-    private String  _strPrefix;
+    private String _strPrefix;
 
     /** The n id category. */
     private Integer _nIdCategory;
@@ -88,7 +88,8 @@ public class DossierSignalementDTO
     /**
      * Sets the id.
      *
-     * @param id the new id
+     * @param id
+     *            the new id
      */
     public void setId( Long id )
     {
@@ -108,7 +109,8 @@ public class DossierSignalementDTO
     /**
      * Sets the adresse.
      *
-     * @param adresse the new adresse
+     * @param adresse
+     *            the new adresse
      */
     public void setAdresse( String adresse )
     {
@@ -128,7 +130,8 @@ public class DossierSignalementDTO
     /**
      * Sets the date creation.
      *
-     * @param dateCreation the new date creation
+     * @param dateCreation
+     *            the new date creation
      */
     public void setDateCreation( String dateCreation )
     {
@@ -148,7 +151,8 @@ public class DossierSignalementDTO
     /**
      * Sets the heure creation.
      *
-     * @param heureCreation the new heure creation
+     * @param heureCreation
+     *            the new heure creation
      */
     public void setHeureCreation( String heureCreation )
     {
@@ -168,7 +172,8 @@ public class DossierSignalementDTO
     /**
      * Sets the type.
      *
-     * @param type the new type
+     * @param type
+     *            the new type
      */
     public void setType( String type )
     {
@@ -188,7 +193,8 @@ public class DossierSignalementDTO
     /**
      * Sets the img url.
      *
-     * @param imgUrl the new img url
+     * @param imgUrl
+     *            the new img url
      */
     public void setImgUrl( String imgUrl )
     {
@@ -208,7 +214,8 @@ public class DossierSignalementDTO
     /**
      * Sets the distance.
      *
-     * @param distance the new distance
+     * @param distance
+     *            the new distance
      */
     public void setDistance( Integer distance )
     {
@@ -228,7 +235,8 @@ public class DossierSignalementDTO
     /**
      * Sets the lat.
      *
-     * @param lat the new lat
+     * @param lat
+     *            the new lat
      */
     public void setLat( double lat )
     {
@@ -248,7 +256,8 @@ public class DossierSignalementDTO
     /**
      * Sets the lng.
      *
-     * @param lng the new lng
+     * @param lng
+     *            the new lng
      */
     public void setLng( double lng )
     {
@@ -268,7 +277,8 @@ public class DossierSignalementDTO
     /**
      * Sets the commentaire.
      *
-     * @param commentaire the new commentaire
+     * @param commentaire
+     *            the new commentaire
      */
     public void setCommentaire( String commentaire )
     {
@@ -288,7 +298,8 @@ public class DossierSignalementDTO
     /**
      * Sets the prefix.
      *
-     * @param strPrefix the new prefix
+     * @param strPrefix
+     *            the new prefix
      */
     public void setPrefix( String strPrefix )
     {
@@ -308,7 +319,8 @@ public class DossierSignalementDTO
     /**
      * Sets the id category.
      *
-     * @param idCategory the new id category
+     * @param idCategory
+     *            the new id category
      */
     public void setIdCategory( Integer idCategory )
     {

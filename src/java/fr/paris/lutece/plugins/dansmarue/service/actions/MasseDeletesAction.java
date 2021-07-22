@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,11 +53,11 @@ public class MasseDeletesAction extends AbstractPluginAction<SignalementFields> 
 
     /** The Constant ACTION_NAME. */
     // ACTIONS
-    private static final String ACTION_NAME                           = "Mass Delete Actions";
+    private static final String ACTION_NAME = "Mass Delete Actions";
 
     /** The Constant JSP_ACTION_MASS_DELETE. */
     // JSP
-    private static final String JSP_ACTION_MASS_DELETE                = "jsp/admin/plugins/signalement/MassDeleteSignalement.jsp";
+    private static final String JSP_ACTION_MASS_DELETE = "jsp/admin/plugins/signalement/MassDeleteSignalement.jsp";
 
     // PARAMETERS
     /** the button is an image so the name is .x or .y */
@@ -66,9 +66,12 @@ public class MasseDeletesAction extends AbstractPluginAction<SignalementFields> 
     /**
      * Fill the model.
      *
-     * @param request            the HttpServletRequest
-     * @param adminUser            the user
-     * @param model            the model
+     * @param request
+     *            the HttpServletRequest
+     * @param adminUser
+     *            the user
+     * @param model
+     *            the model
      */
     @Override
     public void fillModel( HttpServletRequest request, AdminUser adminUser, Map<String, Object> model )
@@ -79,7 +82,8 @@ public class MasseDeletesAction extends AbstractPluginAction<SignalementFields> 
     /**
      * Returns if the action is triggered.
      *
-     * @param request            the HttpServletRequest
+     * @param request
+     *            the HttpServletRequest
      * @return if the button was clicked
      */
     @Override
@@ -91,15 +95,21 @@ public class MasseDeletesAction extends AbstractPluginAction<SignalementFields> 
     /**
      * Process the delete action.
      *
-     * @param request            the HttpServletRequest
-     * @param response            the HttpServletResponse
-     * @param adminUser            the user
-     * @param sessionFields            the report session fields
+     * @param request
+     *            the HttpServletRequest
+     * @param response
+     *            the HttpServletResponse
+     * @param adminUser
+     *            the user
+     * @param sessionFields
+     *            the report session fields
      * @return The action result
-     * @throws AccessDeniedException             Throws an accessDeniedException
+     * @throws AccessDeniedException
+     *             Throws an accessDeniedException
      */
     @Override
-    public IPluginActionResult process( HttpServletRequest request, HttpServletResponse response, AdminUser adminUser, SignalementFields sessionFields ) throws AccessDeniedException
+    public IPluginActionResult process( HttpServletRequest request, HttpServletResponse response, AdminUser adminUser, SignalementFields sessionFields )
+            throws AccessDeniedException
     {
         IPluginActionResult actionResult = new DefaultPluginActionResult( );
         actionResult.setRedirect( AppPathService.getBaseUrl( request ) + JSP_ACTION_MASS_DELETE );

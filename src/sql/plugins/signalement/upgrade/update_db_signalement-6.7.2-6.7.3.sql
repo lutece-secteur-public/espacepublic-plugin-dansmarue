@@ -1,0 +1,2 @@
+INSERT INTO core_datastore(entity_key,entity_value) VALUES ('sitelabels.site_property.message.url.sondage.demande','enquetes-paris.fr/surveyserver/s/enquetes-paris2/SN_DANS_MA_RUE/SN_DANS_MA_RUE_post-demande.htm');
+INSERT INTO core_datastore(entity_key,entity_value) VALUES ('sitelabels.site_property.message.url.sondage.sevice','enquetes-paris.fr/surveyserver/s/enquetes-paris2/SN_DANS_MA_RUE/SN_DANS_MA_RUE_post-service.htm');

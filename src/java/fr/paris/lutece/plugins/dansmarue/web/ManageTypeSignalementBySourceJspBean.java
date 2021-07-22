@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,78 +57,79 @@ public class ManageTypeSignalementBySourceJspBean extends AbstractJspBean
 {
 
     /** The Constant serialVersionUID. */
-    private static final long       serialVersionUID                           = 1L;
+    private static final long serialVersionUID = 1L;
 
     /** The Constant RIGHT_MANAGE_TYPE_SIGNALEMENT. */
     // RIGHT
-    public static final String      RIGHT_MANAGE_TYPE_SIGNALEMENT              = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
+    public static final String RIGHT_MANAGE_TYPE_SIGNALEMENT = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
 
     /** The Constant MARK_LIST_TYPE_SIGNALEMENT. */
-    private static final String     MARK_LIST_TYPE_SIGNALEMENT                 = "list_type";
+    private static final String MARK_LIST_TYPE_SIGNALEMENT = "list_type";
 
     /** The Constant MARK_LIST_TYPE_SIGNALEMENT_SOURCE. */
-    private static final String     MARK_LIST_TYPE_SIGNALEMENT_SOURCE          = "list_type_source";
+    private static final String MARK_LIST_TYPE_SIGNALEMENT_SOURCE = "list_type_source";
 
     /** The Constant MARK_LIST_SOURCE. */
-    private static final String     MARK_LIST_SOURCE                           = "list_source";
+    private static final String MARK_LIST_SOURCE = "list_source";
 
     /** The Constant MARK_SOURCE. */
-    private static final String     MARK_SOURCE                                = "source";
+    private static final String MARK_SOURCE = "source";
 
     /** The Constant TEMPLATE_MANAGE_TYPE_SIGNALEMENT_BY_SOURCE. */
     // TEMPLATES
-    private static final String     TEMPLATE_MANAGE_TYPE_SIGNALEMENT_BY_SOURCE = "admin/plugins/signalement/manage_typesignalement_by_source.html";
+    private static final String TEMPLATE_MANAGE_TYPE_SIGNALEMENT_BY_SOURCE = "admin/plugins/signalement/manage_typesignalement_by_source.html";
 
     /** The Constant TEMPLATE_MANAGE_SOURCE. */
-    private static final String     TEMPLATE_MANAGE_SOURCE                     = "admin/plugins/signalement/manage_source.html";
+    private static final String TEMPLATE_MANAGE_SOURCE = "admin/plugins/signalement/manage_source.html";
 
     /** The Constant TEMPLATE_ADD_SOURCE. */
-    private static final String     TEMPLATE_ADD_SOURCE                        = "admin/plugins/signalement/add_source.html";
+    private static final String TEMPLATE_ADD_SOURCE = "admin/plugins/signalement/add_source.html";
 
     /** The Constant PARAMETER_MARK_TYPE_SIGNALEMENT_ID. */
     // PARAMETERS
-    private static final String     PARAMETER_MARK_TYPE_SIGNALEMENT_ID         = "typesignalement_id";
+    private static final String PARAMETER_MARK_TYPE_SIGNALEMENT_ID = "typesignalement_id";
 
     /** The Constant PARAMETER_MARK_SOURCE_ID. */
-    private static final String     PARAMETER_MARK_SOURCE_ID                   = "source_id";
+    private static final String PARAMETER_MARK_SOURCE_ID = "source_id";
 
     /** The type signalement service. */
     // SERVICES
-    private transient ITypeSignalementService _typeSignalementService                    = SpringContextService.getBean( "typeSignalementService" );
+    private transient ITypeSignalementService _typeSignalementService = SpringContextService.getBean( "typeSignalementService" );
 
     /** The Constant VIEW_MANAGE_MESSAGES. */
     // Views
-    private static final String     VIEW_MANAGE_MESSAGES                       = "manageMessages";
+    private static final String VIEW_MANAGE_MESSAGES = "manageMessages";
 
     /** The Constant VIEW_MANAGE_MESSAGES_BY_SOURCE. */
-    private static final String     VIEW_MANAGE_MESSAGES_BY_SOURCE             = "manageMessagesBySource";
+    private static final String VIEW_MANAGE_MESSAGES_BY_SOURCE = "manageMessagesBySource";
 
     /** The Constant VIEW_ADD_SOURCE. */
-    private static final String     VIEW_ADD_SOURCE                            = "addSource";
+    private static final String VIEW_ADD_SOURCE = "addSource";
 
     /** The Constant ACTION_ADD_SOURCE. */
     // Actions
-    private static final String     ACTION_ADD_SOURCE                          = "doAddSource";
+    private static final String ACTION_ADD_SOURCE = "doAddSource";
 
     /** The Constant ACTION_REMOVE_SOURCE. */
-    private static final String     ACTION_REMOVE_SOURCE                       = "doRemoveSource";
+    private static final String ACTION_REMOVE_SOURCE = "doRemoveSource";
 
     /** The Constant ACTION_ADD_TYPE_TO_SOURCE. */
-    private static final String     ACTION_ADD_TYPE_TO_SOURCE                  = "doAddTypeToSource";
+    private static final String ACTION_ADD_TYPE_TO_SOURCE = "doAddTypeToSource";
 
     /** The Constant ACTION_REMOVE_TYPE_FROM_SOURCE. */
-    private static final String     ACTION_REMOVE_TYPE_FROM_SOURCE             = "doRemoveTypeFromSource";
+    private static final String ACTION_REMOVE_TYPE_FROM_SOURCE = "doRemoveTypeFromSource";
 
     /** The Constant ACTION_MODIFY_SOURCE. */
-    private static final String     ACTION_MODIFY_SOURCE                       = "doModifySource";
+    private static final String ACTION_MODIFY_SOURCE = "doModifySource";
 
     /** The n id source. */
-    private Integer                 _nIdSource;
+    private Integer _nIdSource;
 
     /**
      * Gets the manage message type signalement.
      *
-     * @param request the request
+     * @param request
+     *            the request
      * @return the manage message type signalement
      */
     @View( value = VIEW_MANAGE_MESSAGES, defaultView = true )
@@ -191,7 +192,7 @@ public class ManageTypeSignalementBySourceJspBean extends AbstractJspBean
             _typeSignalementService.insertTypeSignalementSource( nIdTypeSignalement, nIdSource );
             _nIdSource = nIdSource;
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
             return AdminMessageService.getMessageUrl( request, "dansmarue.manageTypeSignalement.source.erreur", AdminMessage.TYPE_STOP );
         }
@@ -219,7 +220,7 @@ public class ManageTypeSignalementBySourceJspBean extends AbstractJspBean
             _typeSignalementService.removeTypeSignalementSource( nIdTypeSignalement, nIdSource );
             _nIdSource = nIdSource;
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
             return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
         }
@@ -274,7 +275,7 @@ public class ManageTypeSignalementBySourceJspBean extends AbstractJspBean
             nIdSource = Integer.parseInt( request.getParameter( PARAMETER_MARK_SOURCE_ID ) );
             _typeSignalementService.removeSource( nIdSource );
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
             return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
         }
@@ -285,7 +286,8 @@ public class ManageTypeSignalementBySourceJspBean extends AbstractJspBean
     /**
      * Do modify source.
      *
-     * @param request the request
+     * @param request
+     *            the request
      * @return the string
      */
     @Action( ACTION_MODIFY_SOURCE )

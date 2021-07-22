@@ -1,0 +1,78 @@
+<#macro modal_transfert_fdt>
+	<!-- Modal transfert fdt-->
+	<div class="modal fade" id="transfertFDTModal" tabindex="-1" role="dialog" aria-labelledby="transfertFDTModal" aria-hidden="true">
+	  <div class="modal-dialog" role="document"> 
+	    <div class="modal-content">
+	      <@tform method='post' action='jsp/admin/plugins/signalement/TransfertFeuilleDeTournee.jsp' id='form-transfert'>
+	      <div class="modal-header">
+	        <h3 class="modal-title">#i18n{dansmarue.tournee.transfert.fdt.title}</h3>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+					<span class="blueDmr"><label for="destinataires">#i18n{dansmarue.tournee.pdf.param.destinataires}</label></span>
+					<span class="greyDmr"><br>#i18n{dansmarue.tournee.pdf.param.destinataires.help}</span>
+				</div> 
+				<div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
+					<br>
+					<textarea id="destinatairesTransfert" name="destinatairesTransfert" rows="2" cols="60" ></textarea>
+				</div>
+			</div>
+			<br><br>
+	      </div>
+	      <div class="modal-footer">
+		    <@button class="btn btn-paris btn-red" type='submit' params='onclick="return checkMailDestinatairesTransfert();"' name='export' title='Transf&eacute;rer' />
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+	      </div>
+	      </@tform>
+	    </div>
+	  </div>
+	</div>
+	
+	<script>
+		/* Ajout du l'id feuille de tournée au formulaire */
+		function addTransfertFeuilleDeTourneeId( feuilleDeTourneeId) {
+			feuilleDeTourneeId
+			$( "#idFeuilleDeTournee" ).remove();
+			var inputPageIndex = $("<input>").attr({"type":"hidden","name":"idFeuilleDeTournee", "id":"idFeuilleDeTournee"}).val(feuilleDeTourneeId);
+			$('#form-transfert').append(inputPageIndex);
+		}
+		
+		function checkMailDestinatairesTransfert() {
+		    var isValid = true;
+			var destinatairesList = $( "#destinatairesTransfert" ).val();
+			var divError = $("<div>").attr({"id":"errorMailDestinataire"}).css('color','red').text('format d\'email invalide');
+			if (destinatairesList.trim().length > 0) {
+			  if(destinatairesList.includes(',')) {
+			    destinatairesList.split(',').forEach(function(email){
+				  if(!checkMail(email)) {
+				    isValid = false;
+				  }
+				});
+			  } else {
+			    isValid = checkMail(destinatairesList)
+			  }
+			}
+			
+			if(isValid) {
+			  $("#errorMailDestinataire").remove();
+			  $("button.close").click();
+			  return true;
+			} else {
+			  $("#errorMailDestinataire").remove();
+			  $( "#destinatairesTransfert" ).parent().append(divError);
+			  return false;
+			}
+		}
+		
+		function checkMail(email) {
+		  if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)){
+			return (true)
+		  }
+		  return false;
+		}
+	</script>
+</#macro>

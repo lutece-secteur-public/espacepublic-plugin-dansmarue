@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,16 +42,16 @@ public class MessageTypologieExport
 {
 
     /** The str type message. */
-    private String  _strTypeMessage;
+    private String _strTypeMessage;
 
     /** The str contenu message. */
-    private String  _strContenuMessage;
+    private String _strContenuMessage;
 
     /** The n fk id type signalement. */
     private Integer _nFkIdTypeSignalement;
 
     /** The str libelle type signalement. */
-    private String  _strLibelleTypeSignalement;
+    private String _strLibelleTypeSignalement;
 
     /** The b actif. */
     private boolean _bActif;
@@ -72,7 +72,8 @@ public class MessageTypologieExport
     /**
      * Sets the type message.
      *
-     * @param _strTypeMessage the new type message
+     * @param _strTypeMessage
+     *            the new type message
      */
     public void setTypeMessage( String _strTypeMessage )
     {
@@ -92,7 +93,8 @@ public class MessageTypologieExport
     /**
      * Sets the contenu message.
      *
-     * @param _strContenuMessage the new contenu message
+     * @param _strContenuMessage
+     *            the new contenu message
      */
     public void setContenuMessage( String _strContenuMessage )
     {
@@ -112,7 +114,8 @@ public class MessageTypologieExport
     /**
      * Sets the fk id type signalement.
      *
-     * @param _nFkIdTypeSignalement the new fk id type signalement
+     * @param _nFkIdTypeSignalement
+     *            the new fk id type signalement
      */
     public void setFkIdTypeSignalement( Integer _nFkIdTypeSignalement )
     {
@@ -132,7 +135,8 @@ public class MessageTypologieExport
     /**
      * Sets the actif.
      *
-     * @param actif the new actif
+     * @param actif
+     *            the new actif
      */
     public void setActif( boolean actif )
     {
@@ -152,7 +156,8 @@ public class MessageTypologieExport
     /**
      * Sets the nb message.
      *
-     * @param _nNbMessage the new nb message
+     * @param _nNbMessage
+     *            the new nb message
      */
     public void setNbMessage( Integer _nNbMessage )
     {
@@ -164,10 +169,13 @@ public class MessageTypologieExport
      *
      * @return the tab all datas
      */
-    public String[] getTabAllDatas( )
+    public String [ ] getTabAllDatas( )
     {
-        return new String[] { Objects.toString( getLibelleTypeSignalement( ), "" ), Objects.toString( getTypeMessage( ), "" ),
-                Objects.toString( getContenuMessage( ), "" ).replaceAll( "<p>", "" ).replaceAll( "</p>", "" ), Objects.toString( getNbMessage( ), "" ), getActif( ) ? "oui" : "non" };
+        return new String [ ] {
+                Objects.toString( getLibelleTypeSignalement( ), "" ), Objects.toString( getTypeMessage( ), "" ),
+                Objects.toString( getContenuMessage( ), "" ).replace( "<p>", "" ).replace( "</p>", "" ), Objects.toString( getNbMessage( ), "" ),
+                getActif( ) ? "oui" : "non"
+        };
 
     }
 
@@ -184,7 +192,8 @@ public class MessageTypologieExport
     /**
      * Sets the libelle type signalement.
      *
-     * @param _strLibelleTypeSignalement the new libelle type signalement
+     * @param _strLibelleTypeSignalement
+     *            the new libelle type signalement
      */
     public void setLibelleTypeSignalement( String _strLibelleTypeSignalement )
     {

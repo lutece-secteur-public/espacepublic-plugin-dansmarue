@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,16 +43,16 @@ public class ConseilQuartier
 
     /** The n id consqrt. */
     // Variables declarations
-    private int        _nIdConsqrt;
+    private int _nIdConsqrt;
 
     /** The str numero consqrt. */
-    private String     _strNumeroConsqrt;
+    private String _strNumeroConsqrt;
 
     /** The surface. */
     private BigDecimal _surface;
 
     /** The str nom consqrt. */
-    private String     _strNomConsqrt;
+    private String _strNomConsqrt;
 
     /** The numero arrondissement. */
     private BigDecimal _numeroArrondissement;
@@ -70,7 +70,8 @@ public class ConseilQuartier
     /**
      * Sets the IdConsqrt.
      *
-     * @param nIdConsqrt            The IdConsqrt
+     * @param nIdConsqrt
+     *            The IdConsqrt
      */
     public void setIdConsqrt( int nIdConsqrt )
     {
@@ -90,7 +91,8 @@ public class ConseilQuartier
     /**
      * Sets the NumeroConsqrt.
      *
-     * @param strNumeroConsqrt            The NumeroConsqrt
+     * @param strNumeroConsqrt
+     *            The NumeroConsqrt
      */
     public void setNumeroConsqrt( String strNumeroConsqrt )
     {
@@ -110,7 +112,8 @@ public class ConseilQuartier
     /**
      * Sets the Surface.
      *
-     * @param surface            The Surface
+     * @param surface
+     *            The Surface
      */
     public void setSurface( BigDecimal surface )
     {
@@ -130,7 +133,8 @@ public class ConseilQuartier
     /**
      * Sets the NomConsqrt.
      *
-     * @param strNomConsqrt            The NomConsqrt
+     * @param strNomConsqrt
+     *            The NomConsqrt
      */
     public void setNomConsqrt( String strNomConsqrt )
     {
@@ -150,7 +154,8 @@ public class ConseilQuartier
     /**
      * Sets the NumeroArrondissement.
      *
-     * @param numeroArrondissement            The NumeroArrondissement
+     * @param numeroArrondissement
+     *            The NumeroArrondissement
      */
     public void setNumeroArrondissement( BigDecimal numeroArrondissement )
     {

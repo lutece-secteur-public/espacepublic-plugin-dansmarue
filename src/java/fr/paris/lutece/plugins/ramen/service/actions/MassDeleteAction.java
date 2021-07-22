@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,18 +53,31 @@ public class MassDeleteAction extends AbstractPluginAction<DossierFields> implem
 
     /** The Constant ACTION_NAME. */
     // ACTIONS
-    private static final String ACTION_NAME                           = "Mass Delete Actions";
+    private static final String ACTION_NAME = "Mass Delete Actions";
 
     /** The Constant JSP_ACTION_MASS_DELETE. */
     // JSP
-    private static final String JSP_ACTION_MASS_DELETE                = "jsp/admin/plugins/ramen/MassDeleteDossier.jsp";
+    private static final String JSP_ACTION_MASS_DELETE = "jsp/admin/plugins/ramen/MassDeleteDossier.jsp";
 
     // PARAMETERS
     /** the button is an image so the name is .x or .y */
     private static final String PARAMETER_BUTTON_MASS_DELETE_ACTION_X = "mass_delete";
 
-    /* (non-Javadoc)
-     * @see fr.paris.lutece.portal.web.pluginaction.IPluginAction#fillModel(javax.servlet.http.HttpServletRequest, fr.paris.lutece.portal.business.user.AdminUser, java.util.Map)
+    /**
+     * Fill model.
+     *
+     * @param request
+     *            the request
+     * @param adminUser
+     *            the admin user
+     * @param model
+     *            the model
+     */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.paris.lutece.portal.web.pluginaction.IPluginAction#fillModel(javax.servlet.http.HttpServletRequest,
+     * fr.paris.lutece.portal.business.user.AdminUser, java.util.Map)
      */
     @Override
     public void fillModel( HttpServletRequest request, AdminUser adminUser, Map<String, Object> model )
@@ -72,7 +85,16 @@ public class MassDeleteAction extends AbstractPluginAction<DossierFields> implem
         // nothing
     }
 
-    /* (non-Javadoc)
+    /**
+     * Checks if is invoked.
+     *
+     * @param request
+     *            the request
+     * @return true, if is invoked
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.portal.web.pluginaction.IPluginAction#isInvoked(javax.servlet.http.HttpServletRequest)
      */
     @Override
@@ -81,18 +103,44 @@ public class MassDeleteAction extends AbstractPluginAction<DossierFields> implem
         return request.getParameter( PARAMETER_BUTTON_MASS_DELETE_ACTION_X ) != null;
     }
 
-    /* (non-Javadoc)
-     * @see fr.paris.lutece.portal.web.pluginaction.IPluginAction#process(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, fr.paris.lutece.portal.business.user.AdminUser, java.lang.Object)
+    /**
+     * Process.
+     *
+     * @param request
+     *            the request
+     * @param response
+     *            the response
+     * @param adminUser
+     *            the admin user
+     * @param sessionFields
+     *            the session fields
+     * @return the i plugin action result
+     * @throws AccessDeniedException
+     *             the access denied exception
+     */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.paris.lutece.portal.web.pluginaction.IPluginAction#process(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse,
+     * fr.paris.lutece.portal.business.user.AdminUser, java.lang.Object)
      */
     @Override
-    public IPluginActionResult process( HttpServletRequest request, HttpServletResponse response, AdminUser adminUser, DossierFields sessionFields ) throws AccessDeniedException
+    public IPluginActionResult process( HttpServletRequest request, HttpServletResponse response, AdminUser adminUser, DossierFields sessionFields )
+            throws AccessDeniedException
     {
         IPluginActionResult actionResult = new DefaultPluginActionResult( );
         actionResult.setRedirect( AppPathService.getBaseUrl( request ) + JSP_ACTION_MASS_DELETE );
         return actionResult;
     }
 
-    /* (non-Javadoc)
+    /**
+     * Gets the button template.
+     *
+     * @return the button template
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.portal.web.pluginaction.IPluginAction#getButtonTemplate()
      */
     @Override
@@ -101,7 +149,14 @@ public class MassDeleteAction extends AbstractPluginAction<DossierFields> implem
         return null;
     }
 
-    /* (non-Javadoc)
+    /**
+     * Gets the name.
+     *
+     * @return the name
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.portal.web.pluginaction.IPluginAction#getName()
      */
     @Override

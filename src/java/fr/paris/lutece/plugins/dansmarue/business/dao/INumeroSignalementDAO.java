@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,8 +42,10 @@ public interface INumeroSignalementDAO
     /**
      * Retrieves the next number to use as a file name.
      *
-     * @param strMonth            Month letter
-     * @param nYear            Year
+     * @param strMonth
+     *            Month letter
+     * @param nYear
+     *            Year
      * @return The next number that can be used for this combination
      */
     public Long findByMonthYear( String strMonth, int nYear );

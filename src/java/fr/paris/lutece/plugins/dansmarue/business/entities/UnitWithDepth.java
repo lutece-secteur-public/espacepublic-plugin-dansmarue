@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,10 +42,10 @@ public class UnitWithDepth
 {
 
     /** The n id unit. */
-    private int    _nIdUnit;
+    private int _nIdUnit;
 
     /** The n id parent. */
-    private int    _nIdParent;
+    private int _nIdParent;
 
     /** The str label. */
     private String _strLabel;
@@ -54,7 +54,7 @@ public class UnitWithDepth
     private String _strDescription;
 
     /** The n depth. */
-    private int    _nDepth;
+    private int _nDepth;
 
     /**
      * Get the id unit.
@@ -79,7 +79,8 @@ public class UnitWithDepth
     /**
      * Sets the depth.
      *
-     * @param _nDepth the new depth
+     * @param _nDepth
+     *            the new depth
      */
     public void setDepth( int _nDepth )
     {
@@ -89,7 +90,8 @@ public class UnitWithDepth
     /**
      * Set the id unit.
      *
-     * @param nIdUnit            the id unit
+     * @param nIdUnit
+     *            the id unit
      */
     public void setIdUnit( int nIdUnit )
     {
@@ -109,7 +111,8 @@ public class UnitWithDepth
     /**
      * Set the label.
      *
-     * @param strLabel            the label
+     * @param strLabel
+     *            the label
      */
     public void setLabel( String strLabel )
     {
@@ -129,7 +132,8 @@ public class UnitWithDepth
     /**
      * Set the description.
      *
-     * @param strDescription            the description
+     * @param strDescription
+     *            the description
      */
     public void setDescription( String strDescription )
     {
@@ -139,7 +143,8 @@ public class UnitWithDepth
     /**
      * Set the id parent.
      *
-     * @param nIdParent            the nIdParent to set
+     * @param nIdParent
+     *            the nIdParent to set
      */
     public void setIdParent( int nIdParent )
     {
@@ -184,7 +189,7 @@ public class UnitWithDepth
             return false;
         }
 
-        Unit unit = ( Unit ) obj;
+        Unit unit = (Unit) obj;
         return _nIdUnit == unit.getIdUnit( );
     }
 }

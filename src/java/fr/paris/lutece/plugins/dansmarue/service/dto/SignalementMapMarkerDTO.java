@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,19 +43,22 @@ public class SignalementMapMarkerDTO
     private static final String LINE_BREAK = "<br></br>";
 
     /** The id signalement. */
-    private Long                _idSignalement;
+    private Long _idSignalement;
 
     /** The str tooltip. */
-    private String              _strTooltip;
+    private String _strTooltip;
 
     /** The lng. */
-    private Double              _lng;
+    private Double _lng;
 
     /** The lat. */
-    private Double              _lat;
+    private Double _lat;
 
     /** The str icon name. */
-    private String              _strIconName;
+    private String _strIconName;
+
+    /** The number color. **/
+    private String _strColorNumber;
 
     /**
      * Gets the id signalement.
@@ -70,7 +73,8 @@ public class SignalementMapMarkerDTO
     /**
      * Sets the id signalement.
      *
-     * @param idSignalement            the idSignalement to set
+     * @param idSignalement
+     *            the idSignalement to set
      */
     public void setIdSignalement( Long idSignalement )
     {
@@ -90,7 +94,8 @@ public class SignalementMapMarkerDTO
     /**
      * Sets the tooltip.
      *
-     * @param tooltip the new tooltip
+     * @param tooltip
+     *            the new tooltip
      */
     public void setTooltip( String tooltip )
     {
@@ -100,8 +105,10 @@ public class SignalementMapMarkerDTO
     /**
      * Adds the tooltip text.
      *
-     * @param title the title
-     * @param text the text
+     * @param title
+     *            the title
+     * @param text
+     *            the text
      */
     public void addTooltipText( String title, String text )
     {
@@ -112,6 +119,18 @@ public class SignalementMapMarkerDTO
         else
         {
             _strTooltip += LINE_BREAK + title + text;
+        }
+    }
+
+    public void addTooltipTextWithClass( String title, String text )
+    {
+        if ( _strTooltip == null )
+        {
+            _strTooltip = "<span class='tooltipMapTitle'>" + title + "</span>" + text;
+        }
+        else
+        {
+            _strTooltip += LINE_BREAK + "<span class='tooltipMapTitle'>" + title + "</span>" + text;
         }
     }
 
@@ -128,7 +147,8 @@ public class SignalementMapMarkerDTO
     /**
      * Sets the lng.
      *
-     * @param lng            the lng to set
+     * @param lng
+     *            the lng to set
      */
     public void setLng( Double lng )
     {
@@ -148,7 +168,8 @@ public class SignalementMapMarkerDTO
     /**
      * Sets the lat.
      *
-     * @param lat            the lat to set
+     * @param lat
+     *            the lat to set
      */
     public void setLat( Double lat )
     {
@@ -168,11 +189,22 @@ public class SignalementMapMarkerDTO
     /**
      * Sets the icon name.
      *
-     * @param iconName the new icon name
+     * @param iconName
+     *            the new icon name
      */
     public void setIconName( String iconName )
     {
         _strIconName = iconName;
+    }
+
+    public String getColorNumber( )
+    {
+        return _strColorNumber;
+    }
+
+    public void setColorNumber( String colorNumber )
+    {
+        _strColorNumber = colorNumber;
     }
 
 }

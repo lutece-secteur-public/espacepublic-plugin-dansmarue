@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,28 +44,28 @@ public class SiraUserDAO implements ISiraUserDAO
 {
 
     /** The Constant SQL_QUERY_NEW_PK. */
-    private static final String SQL_QUERY_NEW_PK                     = "SELECT nextval('seq_sira_user_id')";
+    private static final String SQL_QUERY_NEW_PK = "SELECT nextval('seq_sira_user_id')";
 
     /** The Constant SQL_QUERY_INSERT. */
-    private static final String SQL_QUERY_INSERT                     = "INSERT INTO sira_user(id_sira_user, user_guid, user_udid, user_device, user_email, user_token) VALUES (?, ?, ?, ?, ?,?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO sira_user(id_sira_user, user_guid, user_udid, user_device, user_email, user_token) VALUES (?, ?, ?, ?, ?,?)";
 
     /** The Constant SQL_QUERY_DELETE. */
-    private static final String SQL_QUERY_DELETE                     = "DELETE FROM sira_user WHERE id_sira_user = ?";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM sira_user WHERE id_sira_user = ?";
 
     /** The Constant SQL_QUERY_SELECT. */
-    private static final String SQL_QUERY_SELECT                     = "SELECT id_sira_user, user_guid, user_udid, user_device, user_email, user_token FROM sira_user WHERE id_sira_user = ?";
+    private static final String SQL_QUERY_SELECT = "SELECT id_sira_user, user_guid, user_udid, user_device, user_email, user_token FROM sira_user WHERE id_sira_user = ?";
 
     /** The Constant SQL_QUERY_UPDATE. */
-    private static final String SQL_QUERY_UPDATE                     = "UPDATE signalement_signaleur SET user_guid=?, user_udid=?, user_device=?, user_email=?, user_token=? WHERE id_sira_user=?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_signaleur SET user_guid=?, user_udid=?, user_device=?, user_email=?, user_token=? WHERE id_sira_user=?";
 
     /** The Constant SQL_QUERY_SELECT_BY_GUID_AND_TOKEN. */
-    private static final String SQL_QUERY_SELECT_BY_GUID_AND_TOKEN   = "SELECT id_sira_user, user_guid, user_udid, user_device, user_email, user_token FROM sira_user WHERE user_guid=? AND user_token=?";
+    private static final String SQL_QUERY_SELECT_BY_GUID_AND_TOKEN = "SELECT id_sira_user, user_guid, user_udid, user_device, user_email, user_token FROM sira_user WHERE user_guid=? AND user_token=?";
 
     /** The Constant SQL_QUERY_SELECT_BY_GUID. */
-    private static final String SQL_QUERY_SELECT_BY_GUID             = "SELECT id_sira_user, user_guid, user_udid, user_device, user_email, user_token FROM sira_user WHERE user_guid=? AND user_email is not null LIMIT 1";
+    private static final String SQL_QUERY_SELECT_BY_GUID = "SELECT id_sira_user, user_guid, user_udid, user_device, user_email, user_token FROM sira_user WHERE user_guid=? AND user_email is not null LIMIT 1";
 
     /** The Constant SQL_QUERY_IS_USER_PRESTATAIRE. */
-    private static final String SQL_QUERY_IS_USER_PRESTATAIRE        = "SELECT * FROM signalement_workflow_webservice_config_unit where id_unit=?";
+    private static final String SQL_QUERY_IS_USER_PRESTATAIRE = "SELECT * FROM signalement_workflow_webservice_config_unit where id_unit=?";
 
     /** The Constant SQL_QUERY_GET_MAX_ENTITE_FROM_ENTITE. */
     private static final String SQL_QUERY_GET_MAX_ENTITE_FROM_ENTITE = "with recursive rel_tree as ( select id_unit, id_parent, id_unit as parentMax from unittree_unit where id_parent =0 union all select c.id_unit, c.id_parent, p.parentMax from unittree_unit c join rel_tree p on c.id_parent = p.id_unit) select parentmax from rel_tree where id_unit=?";
@@ -95,7 +95,8 @@ public class SiraUserDAO implements ISiraUserDAO
     @Override
     public Long insert( SiraUser siraUser )
     {
-        try(DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT )) {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT ) )
+        {
             if ( ( siraUser.getId( ) == null ) || ( siraUser.getId( ) == 0 ) )
             {
                 siraUser.setId( newPrimaryKey( ) );

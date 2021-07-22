@@ -1,0 +1,293 @@
+<#macro map_feuille_de_tournee>
+	<@leaflet_map_includes/>
+	<@leaflet_cluster_includes/>
+	<@adresse_autocomplete_includes/>
+	<link rel="stylesheet" href="css/plugins/leaflet/leaflet_awesome_number_markers.css" />
+	<link rel="stylesheet" href="css/plugins/leaflet/leaflet.draw.css" />
+	<script src="js/leaflet_awesome_number_markers.js"></script>
+	<script src="js/leaflet.draw.js"></script>
+	<script src="js/turf.min.js"></script>
+	<div class="row">
+		<div class="col-xs-2 col-sm-12 col-md-12 col-lg-12">
+			<div class="row row-flex-fdt">
+				<div class="col-xs-2 col-lg-4 col-flex-fdt">
+					<label class="fdt-generate-vue">#i18n{dansmarue.tournee.select.vuecarte}</label>
+				</div>
+				<div class="col-xs-2 col-lg-4 col-flex-fdt">
+					<div class="col-xs-2 col-lg-12 text-center">
+						<@button id="selectOnMap"  buttonIcon='plus-square' class="btn btn-paris btn-blue" title='#i18n{dansmarue.reportingList.alt.select}' color='btn-secondary' params='onclick="setSelectModeOn()"' />
+						<@button id="unselectOnMap"  buttonIcon='minus-square' class="btn btn-paris btn-red" title='#i18n{dansmarue.reportingList.alt.unselect}' params='onclick="setSelectModeOff()"' />
+						<@button id="unselectAll"  buttonIcon='trash' class="btn btn-paris btn-red" title='#i18n{dansmarue.reinitialiser}' params='onclick="unselectAll()"' />
+					</div>
+				</div>
+				<div class="col-xs-2 col-lg-4 col-flex-fdt">
+				    <div class="col-xs-2 col-lg-12 text-right">
+				    	<label><span style="color: #37A6D8; font-size: 25px;"><i class="fa fa-map-marker"></i></span> #i18n{dansmarue.tournee.select.nb.select}<span class="nbSigSelect"></span></label><br>
+				 		<label><span style="color: #EB902E; font-size: 25px;"><i class="fa fa-map-marker"></i></span> #i18n{dansmarue.tournee.select.nb.unselect}<span class="nbSigUnselect"></span></label>
+				 	</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-12">
+	     	<input type="text" class="form-control" id="adresse" name="adresse" placeholder="Saisir une adresse"/>
+		</div>
+		<div class="col-xs-2 col-sm-12 col-md-12 col-lg-12">
+			<div id="map_spinner" class="text-center"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i><br/>#i18n{dansmarue.map.loading}</div>
+			<div id="map_canvas" style="height:800px;z-index:1;">
+			</div>
+		</div>
+	</div>
+	
+	<script>
+		var nbSigSelect = 0;
+		var nbSigUnselect = 0;
+		var signalement_select_arr = [];
+		var order_marker_select_arr = [];
+		var selectMode = true;
+		var layerGroupMarkers;
+		var isMapInitOnce = false;
+		var signalement_arr = [];
+		//Signalements sélectionnés avant le changement de page du tableau
+		var signalement_previously_select = [];
+	
+		$.getScript("jsp/admin/plugins/signalement/DoGetMap.jsp", function(data){
+			initLeafletMap("map_canvas");
+			drawMarkers();
+			initSelectSignalement();
+		});
+		
+		/* Ajoute les markers sur la carte */
+		function drawMarkers(){
+			nbSigUnselect = 0;
+			nbSigSelect = 0;
+			
+			var markers = new L.FeatureGroup().addTo(leafletmap);
+			
+			if(!isMapInitOnce) {
+				<#list signalements_map_list as s>
+					var signalement = new Object();
+					signalement.idSignalement = ${s.idSignalement};
+					signalement.lat = ${s.lat?replace(',', '.')};
+					signalement.lng = ${s.lng?replace(',', '.')};
+					signalement.tooltip ="${s.tooltip}";
+					signalement.isSelect = false;
+					signalement.colorNumber = "${s.colorNumber}";
+					signalement_arr.push(signalement);
+				</#list>
+				
+				<#if signalementSelectIds?has_content>
+					<#list signalementSelectIds as signalementId>
+						signalement_previously_select.push(${signalementId});
+					</#list>
+				</#if>
+			}
+			
+			//Add signalements markers on map
+			var index=1;
+			signalement_arr.forEach(function(signalement) {
+				var color;
+				if( signalement.isSelect ) {
+					color = "blue";
+					nbSigSelect++;
+					if (order_marker_select_arr.indexOf(index) === -1){
+						  order_marker_select_arr.push(index);
+					}	
+				} else {
+					color = "orange";
+					nbSigUnselect++;
+					removeItem(order_marker_select_arr, index);
+				}
+				
+				if( signalement.isSurbrillance ){
+					color="red";
+				}
+				
+				var marker = L.marker([signalement.lng, signalement.lat], {
+		          icon: new L.AwesomeNumberMarkers({
+		            number: index, 
+		            markerColor: color,
+		            numberColor: signalement.colorNumber
+		        }), 
+		        options: { 
+			          idSignalement: signalement.idSignalement,
+			          index: index
+		         }
+				});
+				
+				marker.bindPopup(signalement.tooltip);
+				marker.on('click',function(){this.openPopup()});
+				marker.on('click',function(){setBoutonAction( signalement.idSignalement, signalement.isSelect )});
+				
+				index++;
+				marker.addTo(markers);
+			});
+			
+			$(".nbSigSelect").text(nbSigSelect);
+		    $(".nbSigUnselect").text(nbSigUnselect);
+			
+			//Add draw function on buttons
+			if(!isMapInitOnce) {
+				var polygonDrawer = new L.Draw.Polygon(leafletmap);
+				$('#selectOnMap').click(function() {
+				    polygonDrawer.enable();
+				});
+				
+				$('#unselectOnMap').click(function() {
+				    polygonDrawer.enable();
+				});
+			}
+			
+			//Select/unselect after draw
+			leafletmap.on(L.Draw.Event.CREATED, function (e) {
+			    markers.eachLayer(function (marker) {
+			    	//Le signalement est selectionné
+			        if (e.layer.contains(marker.getLatLng())) {
+			        	//Mode sélection activé
+			        	if(selectMode) {
+			        		marker.setIcon(new L.AwesomeNumberMarkers({
+				        		number: marker.options.options.index, 
+					            markerColor: "blue"
+					        }));
+			        		
+			        		updateSelectStatut( marker.options.options.idSignalement, true);
+				        	incrementCompteurSelect( marker.options.options.idSignalement );
+				        	addToSelection( marker.options.options.idSignalement );
+			        	}
+			        	//Mode désélection activé
+			        	else if ( signalement_select_arr.length > 0 ) {
+			        		marker.setIcon(new L.AwesomeNumberMarkers({
+				        		number: marker.options.options.index, 
+					            markerColor: "orange"
+					        }));
+			        		
+			        		updateSelectStatut( marker.options.options.idSignalement, false);
+			        		decrementCompteurSelect( marker.options.options.idSignalement );
+			        		removeFromSelection( marker.options.options.idSignalement );
+			        	}
+			        }
+			    });
+			});
+			
+			//Check if marker is in polygon
+			L.Polygon.include({
+			    contains: function (latLng) {
+			    	return turf.inside(new L.Marker(latLng).toGeoJSON(), this.toGeoJSON());
+			    }
+			});
+		   
+		    $("#map_spinner").addClass("hidden");
+		    $("#map_canvas").removeClass("hidden");
+		    layerGroupMarkers = markers;
+		    isMapInitOnce = true;
+		};
+		
+		/* MAJ du statut du signalement dans le tableau signalement_arr  */
+		function updateSelectStatut( signalementId, isSelect) {
+			var sig = signalement_arr.find(signalement => signalement.idSignalement == signalementId);
+    		sig.isSelect = isSelect;
+    		const index_sig = signalement_arr.findIndex(signalement => signalement.idSignalement == signalementId);
+    		signalement_arr[index_sig] = sig;
+    		setBoutonAction( signalementId, isSelect);
+		}
+		
+		/*Ajout d'un signalement à la selection*/
+		function addToSelection( signalementId ) {
+			if( !signalement_select_arr.includes( signalementId ) ) {
+			  signalement_select_arr.push( signalementId);
+			}
+			updateSelectStatut( signalementId, true );
+			drawMarkers();
+			$('#checkboxSignalement-'+signalementId+':checkbox').prop('checked', true);
+		}
+		
+		/*Suppression d'un signalement à la selection*/
+		function removeFromSelection( signalementId ) {
+			removeItem(signalement_select_arr, signalementId)
+			updateSelectStatut( signalementId, false );
+			drawMarkers();
+			$('#checkboxSignalement-'+signalementId+':checkbox').prop('checked', false);
+		}
+		
+		/* Incrémentation du compteur du nb d'ano selectionnées*/
+		function incrementCompteurSelect( signalementId ) {
+			if( !signalement_select_arr.includes( signalementId ) ) 
+        	{
+        		signalement_select_arr.push( signalementId);
+	            nbSigSelect++;
+	            nbSigUnselect--;
+	            $(".nbSigSelect").text(nbSigSelect);
+			    $(".nbSigUnselect").text(nbSigUnselect);
+        	}
+		}
+		
+		/* Décrémentation du compteur du nb d'ano selectionnées*/
+		function decrementCompteurSelect( signalementId ) {
+			if( signalement_select_arr.includes( signalementId ) ) 
+	    	{
+	    		removeItem(signalement_select_arr, signalementId)
+	            nbSigSelect--;
+	            nbSigUnselect++;
+	            $(".nbSigSelect").text(nbSigSelect);
+			    $(".nbSigUnselect").text(nbSigUnselect);
+	    	}
+		}
+		
+		function setSelectModeOn(){
+			selectMode = true;
+		}
+		
+		function setSelectModeOff(){
+			selectMode = false;
+		}
+		
+		/*Remove item from array*/
+		function removeItem(arr, value) { 
+		  const index = arr.indexOf(value);
+		  if (index > -1) {
+		    arr.splice(index, 1);
+		  }
+		  return arr;
+		}
+		
+		/*Unselect all signalement*/
+		function unselectAll() {
+            signalement_select_arr = [];
+            signalement_arr.forEach(signalement => signalement.isSelect = false);
+            
+            drawMarkers();
+            $("#checkboxHeader:checkbox").prop('checked', false);
+            $('.checkboxSignalement:checkbox').prop('checked', false);
+		}
+		
+		function setBoutonAction( signalementId, isSelect) {
+			if( isSelect ) {
+				$("#actionSuppression_" + signalementId).show();
+				$("#actionAjout_" + signalementId).hide();
+			} else {
+				$("#actionSuppression_" + signalementId).hide();
+				$("#actionAjout_" + signalementId).show();
+			}
+			
+		}
+		
+		/* Prise en compte des signalements déjà sélectionnés */
+		function initSelectSignalement () {
+			signalement_previously_select.forEach(function(signalementId) {
+				addToSelection(signalementId);
+			});
+		}
+		
+		
+		$.getScript("jsp/site/plugins/leaflet/DoGetAutocomplete.jsp", function(data){
+			addAutocomplete("adresse",adressSelectCallback);
+		});
+		
+		/*Zoom sur l'adresse sélectionnée*/
+		function adressSelectCallback(item){
+			var coordPoint = new Proj4js.Point(item.lng,item.lat);
+			Proj4js.transform(projSourceMapSRID, projDestSRID, coordPoint);
+			zoomToWithoutMarker(coordPoint.y,coordPoint.x);
+		}
+		
+	</script>
+</#macro>

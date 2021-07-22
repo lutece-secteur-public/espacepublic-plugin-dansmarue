@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -73,101 +73,101 @@ public class MessageTypeSignalementJspBean extends AbstractJspBean
 {
 
     /** The Constant serialVersionUID. */
-    private static final long        serialVersionUID                         = 1L;
+    private static final long serialVersionUID = 1L;
 
     /** The Constant RIGHT_MANAGE_TYPE_SIGNALEMENT. */
     // RIGHT
-    public static final String       RIGHT_MANAGE_TYPE_SIGNALEMENT            = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
+    public static final String RIGHT_MANAGE_TYPE_SIGNALEMENT = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
 
     /** The Constant MARK_LIST_TYPE_SIGNALEMENT. */
-    private static final String      MARK_LIST_TYPE_SIGNALEMENT               = "list_type";
+    private static final String MARK_LIST_TYPE_SIGNALEMENT = "list_type";
 
     /** The Constant MARK_LIST_MESSAGE. */
-    private static final String      MARK_LIST_MESSAGE                        = "list_message";
+    private static final String MARK_LIST_MESSAGE = "list_message";
 
     /** The Constant MARK_TYPE_SIGNALEMENT. */
-    private static final String      MARK_TYPE_SIGNALEMENT                    = "type_signalement";
+    private static final String MARK_TYPE_SIGNALEMENT = "type_signalement";
 
     /** The Constant MARK_WEBAPP_URL. */
-    private static final String      MARK_WEBAPP_URL                          = "webapp_url";
+    private static final String MARK_WEBAPP_URL = "webapp_url";
 
     /** The Constant MARK_ERRORS. */
-    protected static final String    MARK_ERRORS                              = "errors";
+    protected static final String MARK_ERRORS = "errors";
 
     /** The Constant MARK_IS_FROM_VALIDATION. */
-    protected static final String    MARK_IS_FROM_VALIDATION                  = "is_from_validation";
+    protected static final String MARK_IS_FROM_VALIDATION = "is_from_validation";
 
     /** The Constant MESSAGE_CONFIRMATION_DELETE_MESSAGE. */
     // Messages
-    private static final String      MESSAGE_CONFIRMATION_DELETE_MESSAGE      = "dansmarue.messagetitle.messageTypeSignalement.delete.confirmation";
+    private static final String MESSAGE_CONFIRMATION_DELETE_MESSAGE = "dansmarue.messagetitle.messageTypeSignalement.delete.confirmation";
 
     /** The Constant MESSAGE_TITLE_DELETE_MESSAGE. */
-    private static final String      MESSAGE_TITLE_DELETE_MESSAGE             = "dansmarue.message.messageTypeSignalement.delete.confirmation";
+    private static final String MESSAGE_TITLE_DELETE_MESSAGE = "dansmarue.message.messageTypeSignalement.delete.confirmation";
 
     /** The Constant MESSAGE_CONFIRMATION_DELETE_ALL_MESSAGE. */
-    private static final String      MESSAGE_CONFIRMATION_DELETE_ALL_MESSAGE  = "dansmarue.messagetitle.messageTypeSignalement.deleteall.confirmation";
+    private static final String MESSAGE_CONFIRMATION_DELETE_ALL_MESSAGE = "dansmarue.messagetitle.messageTypeSignalement.deleteall.confirmation";
 
     /** The Constant MESSAGE_TITLE_DELETE_ALL_MESSAGE. */
-    private static final String      MESSAGE_TITLE_DELETE_ALL_MESSAGE         = "dansmarue.message.messageTypeSignalement.deleteall.confirmation";
+    private static final String MESSAGE_TITLE_DELETE_ALL_MESSAGE = "dansmarue.message.messageTypeSignalement.deleteall.confirmation";
 
     /** The Constant PARAMETER_TYPE_SIGNALEMENT. */
-    private static final String      PARAMETER_TYPE_SIGNALEMENT               = "typesignalement_id";
+    private static final String PARAMETER_TYPE_SIGNALEMENT = "typesignalement_id";
 
     /** The Constant PARAMETER_ORDRE_INITIAL. */
-    private static final String      PARAMETER_ORDRE_INITIAL                  = "ordreInitial";
+    private static final String PARAMETER_ORDRE_INITIAL = "ordreInitial";
 
     /** The Constant TEMPLATE_MANAGE_MESSAGE_TYPE_SIGNALEMENT. */
     // TEMPLATES
-    private static final String      TEMPLATE_MANAGE_MESSAGE_TYPE_SIGNALEMENT = "admin/plugins/signalement/manage_message_typesignalement.html";
+    private static final String TEMPLATE_MANAGE_MESSAGE_TYPE_SIGNALEMENT = "admin/plugins/signalement/manage_message_typesignalement.html";
 
     /** The Constant TEMPLATE_MODIFY_MESSAGE_TYPE_SIGNALEMENT. */
-    private static final String      TEMPLATE_MODIFY_MESSAGE_TYPE_SIGNALEMENT = "admin/plugins/signalement/modify_message_typesignalement.html";
+    private static final String TEMPLATE_MODIFY_MESSAGE_TYPE_SIGNALEMENT = "admin/plugins/signalement/modify_message_typesignalement.html";
 
     /** The Constant TEMPLATE_SAVE_MESSAGE_TYPE_SIGNALEMENT. */
-    private static final String      TEMPLATE_SAVE_MESSAGE_TYPE_SIGNALEMENT   = "admin/plugins/signalement/save_message_typesignalement.html";
+    private static final String TEMPLATE_SAVE_MESSAGE_TYPE_SIGNALEMENT = "admin/plugins/signalement/save_message_typesignalement.html";
 
     /** The Constant JSP_MODIFY. */
     // JSP
-    private static final String      JSP_MODIFY                               = "ModifyMessageTypeSignalement.jsp";
+    private static final String JSP_MODIFY = "ModifyMessageTypeSignalement.jsp";
 
     /** The Constant JSP_MANAGE. */
-    private static final String      JSP_MANAGE                               = "ManageMessageTypeSignalement.jsp";
+    private static final String JSP_MANAGE = "ManageMessageTypeSignalement.jsp";
 
     /** The Constant JSP_DELETE_MESSAGE. */
-    private static final String      JSP_DELETE_MESSAGE                       = "jsp/admin/plugins/signalement/DoDeleteMessageTypeSignalement.jsp";
+    private static final String JSP_DELETE_MESSAGE = "jsp/admin/plugins/signalement/DoDeleteMessageTypeSignalement.jsp";
 
     /** The Constant JSP_DELETE_ALL_MESSAGES. */
-    private static final String      JSP_DELETE_ALL_MESSAGES                  = "jsp/admin/plugins/signalement/DoDeleteAllMessagesTypeSignalement.jsp";
+    private static final String JSP_DELETE_ALL_MESSAGES = "jsp/admin/plugins/signalement/DoDeleteAllMessagesTypeSignalement.jsp";
 
     /** The Constant PARAMETER_MARK_TYPE_SIGNALEMENT_ID. */
     // PARAMETERS
-    private static final String      PARAMETER_MARK_TYPE_SIGNALEMENT_ID       = "typesignalement_id";
+    private static final String PARAMETER_MARK_TYPE_SIGNALEMENT_ID = "typesignalement_id";
 
     /** The Constant PARAMETER_MARK_MESSAGE_ID. */
-    private static final String      PARAMETER_MARK_MESSAGE_ID                = "message_id";
+    private static final String PARAMETER_MARK_MESSAGE_ID = "message_id";
 
     /** The message typologie service. */
     // SERVICES
-    private transient IMessageTypologieService _messageTypologieService                 = SpringContextService.getBean( "messageTypologieService" );
+    private transient IMessageTypologieService _messageTypologieService = SpringContextService.getBean( "messageTypologieService" );
 
     /** The type signalement service. */
-    private transient ITypeSignalementService  _typeSignalementService                  = SpringContextService.getBean( "typeSignalementService" );
+    private transient ITypeSignalementService _typeSignalementService = SpringContextService.getBean( "typeSignalementService" );
 
     /** The Constant VIEW_MANAGE_MESSAGES. */
     // Views
-    private static final String      VIEW_MANAGE_MESSAGES                     = "manageMessages";
+    private static final String VIEW_MANAGE_MESSAGES = "manageMessages";
 
     /** The Constant VIEW_SAVE_MESSAGES. */
-    private static final String      VIEW_SAVE_MESSAGES                       = "saveMessages";
+    private static final String VIEW_SAVE_MESSAGES = "saveMessages";
 
     /** The Constant VIEW_MODIFY_MESSAGES. */
-    private static final String      VIEW_MODIFY_MESSAGES                     = "modifyMessages";
+    private static final String VIEW_MODIFY_MESSAGES = "modifyMessages";
 
     /** The Constant CSV_ISO. */
-    private static final String      CSV_ISO                                  = "ISO-8859-1";
+    private static final String CSV_ISO = "ISO-8859-1";
 
     /** The Constant CSV_SEPARATOR. */
-    private static final char        CSV_SEPARATOR                            = ';';
+    private static final char CSV_SEPARATOR = ';';
 
     /**
      * Get the manage reporting type page.
@@ -188,7 +188,8 @@ public class MessageTypeSignalementJspBean extends AbstractJspBean
     /**
      * Gets the modify message type signalement.
      *
-     * @param request            the request
+     * @param request
+     *            the request
      * @return the modify message type signalement
      */
     @View( value = VIEW_MODIFY_MESSAGES )
@@ -211,7 +212,8 @@ public class MessageTypeSignalementJspBean extends AbstractJspBean
     /**
      * Do modify message type signalement.
      *
-     * @param request the request
+     * @param request
+     *            the request
      * @return the string
      */
     @Action( "doModifyMessageTypeSignalement" )
@@ -238,11 +240,12 @@ public class MessageTypeSignalementJspBean extends AbstractJspBean
             {
                 _messageTypologieService.decreaseOrdreMessageTypologie( ordreInitial, messageTypologie );
             }
-            else if ( ordreInitial < messageTypologie.getOrdre( ) )
-            {
-                // L'ordre a baissé, incrémentation de l'ordre des messages qui passent devant
-                _messageTypologieService.increaseOrdreMessageTypologie( ordreInitial, messageTypologie );
-            }
+            else
+                if ( ordreInitial < messageTypologie.getOrdre( ) )
+                {
+                    // L'ordre a baissé, incrémentation de l'ordre des messages qui passent devant
+                    _messageTypologieService.increaseOrdreMessageTypologie( ordreInitial, messageTypologie );
+                }
         }
 
         _messageTypologieService.updateMessageTypologie( messageTypologie );
@@ -256,7 +259,8 @@ public class MessageTypeSignalementJspBean extends AbstractJspBean
     /**
      * Gets the save message type signalement.
      *
-     * @param request the request
+     * @param request
+     *            the request
      * @return the save message type signalement
      */
     @View( value = VIEW_SAVE_MESSAGES )
@@ -274,7 +278,8 @@ public class MessageTypeSignalementJspBean extends AbstractJspBean
     /**
      * Do save message type signalement.
      *
-     * @param request the request
+     * @param request
+     *            the request
      * @return the string
      */
     @Action( "" )
@@ -309,14 +314,15 @@ public class MessageTypeSignalementJspBean extends AbstractJspBean
     @Action( "deleteMessageTypeSignalement" )
     public String deleteMessageTypeSignalement( HttpServletRequest request )
     {
-        MessageTypologie messageTypologie = _messageTypologieService.loadMessageTypologie( Integer.parseInt( request.getParameter( PARAMETER_MARK_MESSAGE_ID ) ) );
+        MessageTypologie messageTypologie = _messageTypologieService
+                .loadMessageTypologie( Integer.parseInt( request.getParameter( PARAMETER_MARK_MESSAGE_ID ) ) );
 
         Map<String, Object> urlParam = new HashMap<>( );
         urlParam.put( PARAMETER_MARK_MESSAGE_ID, messageTypologie.getId( ) );
         urlParam.put( PARAMETER_MARK_TYPE_SIGNALEMENT_ID, messageTypologie.getFkIdTypeSignalement( ) );
 
-        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRMATION_DELETE_MESSAGE, null, MESSAGE_TITLE_DELETE_MESSAGE, JSP_DELETE_MESSAGE, "_self", AdminMessage.TYPE_CONFIRMATION,
-                urlParam, JSP_MANAGE );
+        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRMATION_DELETE_MESSAGE, null, MESSAGE_TITLE_DELETE_MESSAGE, JSP_DELETE_MESSAGE, "_self",
+                AdminMessage.TYPE_CONFIRMATION, urlParam, JSP_MANAGE );
     }
 
     /**
@@ -364,13 +370,14 @@ public class MessageTypeSignalementJspBean extends AbstractJspBean
     @Action( "deleteAllMessagesTypeSignalement" )
     public String deleteAllMessagesTypeSignalement( HttpServletRequest request )
     {
-        TypeSignalement typeSignalement = _typeSignalementService.getByIdTypeSignalement( Integer.parseInt( request.getParameter( PARAMETER_MARK_TYPE_SIGNALEMENT_ID ) ) );
+        TypeSignalement typeSignalement = _typeSignalementService
+                .getByIdTypeSignalement( Integer.parseInt( request.getParameter( PARAMETER_MARK_TYPE_SIGNALEMENT_ID ) ) );
 
         Map<String, Object> urlParam = new HashMap<>( );
         urlParam.put( PARAMETER_MARK_TYPE_SIGNALEMENT_ID, typeSignalement.getId( ) );
 
-        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRMATION_DELETE_ALL_MESSAGE, null, MESSAGE_TITLE_DELETE_ALL_MESSAGE, JSP_DELETE_ALL_MESSAGES, "_self",
-                AdminMessage.TYPE_CONFIRMATION, urlParam, JSP_MANAGE );
+        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRMATION_DELETE_ALL_MESSAGE, null, MESSAGE_TITLE_DELETE_ALL_MESSAGE,
+                JSP_DELETE_ALL_MESSAGES, "_self", AdminMessage.TYPE_CONFIRMATION, urlParam, JSP_MANAGE );
     }
 
     /**
@@ -399,14 +406,16 @@ public class MessageTypeSignalementJspBean extends AbstractJspBean
      */
     public void exportMessageTypologie( HttpServletRequest request, HttpServletResponse response )
     {
-        String[] datas;
+        String [ ] datas;
         try
         {
             CSVWriter writer = null;
             response.setCharacterEncoding( CSV_ISO );
             writer = new CSVWriter( response.getWriter( ), CSV_SEPARATOR );
 
-            writer.writeNext( new String[] { "Type d'anomalie", "Type de message de service fait associé", "Contenu du message", "Nombre de message configuré", "Actif" } );
+            writer.writeNext( new String [ ] {
+                    "Type d'anomalie", "Type de message de service fait associé", "Contenu du message", "Nombre de message configuré", "Actif"
+            } );
 
             List<MessageTypologieExport> messageTypologieExportList = _messageTypologieService.getExportMessages( );
 
@@ -414,7 +423,8 @@ public class MessageTypeSignalementJspBean extends AbstractJspBean
             {
                 if ( messageTypologieExport.getFkIdTypeSignalement( ) != null )
                 {
-                    TypeSignalement typeSignalement = _typeSignalementService.getTypeSignalementByIdWithParents( messageTypologieExport.getFkIdTypeSignalement( ) );
+                    TypeSignalement typeSignalement = _typeSignalementService
+                            .getTypeSignalementByIdWithParents( messageTypologieExport.getFkIdTypeSignalement( ) );
                     if ( typeSignalement != null )
                     {
                         messageTypologieExport.setLibelleTypeSignalement( typeSignalement.getFormatTypeSignalement( ) );
@@ -427,7 +437,7 @@ public class MessageTypeSignalementJspBean extends AbstractJspBean
             writer.close( );
 
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
             AppLogService.error( e );
         }

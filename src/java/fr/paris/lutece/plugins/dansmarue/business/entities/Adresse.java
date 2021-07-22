@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.dansmarue.business.entities;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-
 /**
  * The Class Adresse.
  */
@@ -44,28 +43,28 @@ public class Adresse
 {
 
     /** The lat. */
-    private Double      _lat;
+    private Double _lat;
 
     /** The lng. */
-    private Double      _lng;
+    private Double _lng;
 
     /** The lat address. */
-    private Double      _latAddress;
+    private Double _latAddress;
 
     /** The lng address. */
-    private Double      _lngAddress;
+    private Double _lngAddress;
 
     /** The n id. */
-    private Long        _nId;
+    private Long _nId;
 
     /** The signalement. */
     private Signalement _signalement;
 
     /** The str adresse. */
-    private String      _strAdresse;
+    private String _strAdresse;
 
     /** The str precision localisation. */
-    private String      _strPrecisionLocalisation;
+    private String _strPrecisionLocalisation;
 
     /**
      * Gets the adresse.
@@ -150,7 +149,8 @@ public class Adresse
     /**
      * Sets the adresse.
      *
-     * @param adresse the new adresse
+     * @param adresse
+     *            the new adresse
      */
     public void setAdresse( String adresse )
     {
@@ -160,7 +160,8 @@ public class Adresse
     /**
      * Sets the id.
      *
-     * @param id the new id
+     * @param id
+     *            the new id
      */
     public void setId( Long id )
     {
@@ -170,7 +171,8 @@ public class Adresse
     /**
      * Sets the lat.
      *
-     * @param lat the new lat
+     * @param lat
+     *            the new lat
      */
     public void setLat( Double lat )
     {
@@ -180,7 +182,8 @@ public class Adresse
     /**
      * Sets the lng.
      *
-     * @param lng the new lng
+     * @param lng
+     *            the new lng
      */
     public void setLng( Double lng )
     {
@@ -190,7 +193,8 @@ public class Adresse
     /**
      * Sets the lat address.
      *
-     * @param latAddress the new lat address
+     * @param latAddress
+     *            the new lat address
      */
     public void setLatAddress( Double latAddress )
     {
@@ -200,7 +204,8 @@ public class Adresse
     /**
      * Sets the lng address.
      *
-     * @param lngAddress the new lng address
+     * @param lngAddress
+     *            the new lng address
      */
     public void setLngAddress( Double lngAddress )
     {
@@ -210,7 +215,8 @@ public class Adresse
     /**
      * Sets the precision localisation.
      *
-     * @param precisionLocalisation the new precision localisation
+     * @param precisionLocalisation
+     *            the new precision localisation
      */
     public void setPrecisionLocalisation( String precisionLocalisation )
     {
@@ -220,7 +226,8 @@ public class Adresse
     /**
      * Sets the signalement.
      *
-     * @param signalement the new signalement
+     * @param signalement
+     *            the new signalement
      */
     public void setSignalement( Signalement signalement )
     {

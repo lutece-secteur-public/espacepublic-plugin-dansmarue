@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -71,116 +71,116 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
 {
 
     /** The Constant SQL_WHERE_IS_NULL. */
-    private static final String SQL_WHERE_IS_NULL                                          = "is null";
+    private static final String SQL_WHERE_IS_NULL = "is null";
 
     /** The Constant SQL_WHERE_FK_ID_TYPE_SIGNALEMENT. */
-    private static final String SQL_WHERE_FK_ID_TYPE_SIGNALEMENT                           = " AND fk_id_type_signalement ";
+    private static final String SQL_WHERE_FK_ID_TYPE_SIGNALEMENT = " AND fk_id_type_signalement ";
 
     // Constants
     /** The Constant SQL_QUERY_GET_ID_PARENT. */
-    private static final String SQL_QUERY_GET_ID_PARENT                                    = "SELECT fk_id_type_signalement FROM signalement_type_signalement WHERE id_type_signalement =?";
+    private static final String SQL_QUERY_GET_ID_PARENT = "SELECT fk_id_type_signalement FROM signalement_type_signalement WHERE id_type_signalement =?";
 
     /** The Constant SQL_QUERY_SELECT_ALL_TYPE_SIGNALEMENT. */
-    private static final String SQL_QUERY_SELECT_ALL_TYPE_SIGNALEMENT                      = "SELECT signalement_type_signalement.id_type_signalement, libelle, signalement_type_signalement.actif, signalement_type_signalement.fk_id_type_signalement, fk_id_unit, unittree_unit.id_parent, label, description, ordre, image_url, image_content, image_mime_type, vstswpl.id_parent, alias, alias_mobile, horsdmr, messagehorsdmr FROM signalement_type_signalement LEFT OUTER JOIN unittree_unit ON signalement_type_signalement.fk_id_unit = unittree_unit.id_unit LEFT JOIN v_signalement_type_signalement_with_parents_links vstswpl ON vstswpl.id_type_signalement= signalement_type_signalement.id_type_signalement AND vstswpl.is_parent_a_category=1 LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = signalement_type_signalement.id_type_signalement ORDER BY ordre";
+    private static final String SQL_QUERY_SELECT_ALL_TYPE_SIGNALEMENT = "SELECT signalement_type_signalement.id_type_signalement, libelle, signalement_type_signalement.actif, signalement_type_signalement.fk_id_type_signalement, fk_id_unit, unittree_unit.id_parent, label, description, ordre, image_url, image_content, image_mime_type, vstswpl.id_parent, alias, alias_mobile, horsdmr, messagehorsdmr FROM signalement_type_signalement LEFT OUTER JOIN unittree_unit ON signalement_type_signalement.fk_id_unit = unittree_unit.id_unit LEFT JOIN v_signalement_type_signalement_with_parents_links vstswpl ON vstswpl.id_type_signalement= signalement_type_signalement.id_type_signalement AND vstswpl.is_parent_a_category=1 LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = signalement_type_signalement.id_type_signalement ORDER BY ordre";
 
     /** The Constant SQL_QUERY_SELECT_ALL_TYPE_SIGNALEMENT_WITHOUT_CHILDREN. */
-    private static final String SQL_QUERY_SELECT_ALL_TYPE_SIGNALEMENT_WITHOUT_CHILDREN     = "SELECT id_type_signalement, libelle, actif, signalement_type_signalement.fk_id_type_signalement, fk_id_unit, id_parent, label, description, alias, alias_mobile, type_signalement.isAgent FROM signalement_type_signalement, horsdmr, messagehorsdmr  LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = signalement_type_signalement.id_type_signalement , unittree_unit WHERE id_unit=fk_id_unit AND id_type_signalement NOT IN (SELECT fk_id_type_signalement FROM signalement_type_signalement) ORDER BY libelle";
+    private static final String SQL_QUERY_SELECT_ALL_TYPE_SIGNALEMENT_WITHOUT_CHILDREN = "SELECT id_type_signalement, libelle, actif, signalement_type_signalement.fk_id_type_signalement, fk_id_unit, id_parent, label, description, alias, alias_mobile, type_signalement.isAgent FROM signalement_type_signalement, horsdmr, messagehorsdmr  LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = signalement_type_signalement.id_type_signalement , unittree_unit WHERE id_unit=fk_id_unit AND id_type_signalement NOT IN (SELECT fk_id_type_signalement FROM signalement_type_signalement) ORDER BY libelle";
 
     /** The Constant SQL_QUERY_SELECT_ALL_TYPE_SIGNALEMENT_WITHOUT_PARENT. */
-    private static final String SQL_QUERY_SELECT_ALL_TYPE_SIGNALEMENT_WITHOUT_PARENT       = "SELECT id_type_signalement, libelle, actif, type_signalement.fk_id_type_signalement, fk_id_unit, id_parent, label, description, ordre, image_url, image_content, image_mime_type, alias, alias_mobile, type_signalement.isAgent, horsdmr, messagehorsdmr  FROM signalement_type_signalement type_signalement LEFT OUTER JOIN unittree_unit unit ON type_signalement.fk_id_unit=unit.id_unit LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = type_signalement.id_type_signalement WHERE type_signalement.fk_id_type_signalement IS NULL ORDER BY ordre";
+    private static final String SQL_QUERY_SELECT_ALL_TYPE_SIGNALEMENT_WITHOUT_PARENT = "SELECT id_type_signalement, libelle, actif, type_signalement.fk_id_type_signalement, fk_id_unit, id_parent, label, description, ordre, image_url, image_content, image_mime_type, alias, alias_mobile, type_signalement.isAgent, horsdmr, messagehorsdmr  FROM signalement_type_signalement type_signalement LEFT OUTER JOIN unittree_unit unit ON type_signalement.fk_id_unit=unit.id_unit LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = type_signalement.id_type_signalement WHERE type_signalement.fk_id_type_signalement IS NULL ORDER BY ordre";
 
     /** The Constant SQL_QUERY_SELECT_ALL_TYPE_SIGNALEMENT_ACTIF_WITHOUT_PARENT. */
     private static final String SQL_QUERY_SELECT_ALL_TYPE_SIGNALEMENT_ACTIF_WITHOUT_PARENT = "SELECT id_type_signalement, libelle, actif, type_signalement.fk_id_type_signalement, fk_id_unit, id_parent, label, description, ordre, image_url, image_content, image_mime_type, alias, alias_mobile, type_signalement.isAgent, horsdmr, messagehorsdmr  FROM signalement_type_signalement type_signalement LEFT OUTER JOIN unittree_unit unit ON type_signalement.fk_id_unit=unit.id_unit LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = type_signalement.id_type_signalement WHERE type_signalement.fk_id_type_signalement IS NULL AND type_signalement.actif=1 ORDER BY ordre";
 
     /** The Constant SQL_QUERY_SELECT_ALL_TYPE_SIGNALEMENT_ACTIF_WITH_DEPTH. */
-    private static final String SQL_QUERY_SELECT_ALL_TYPE_SIGNALEMENT_ACTIF_WITH_DEPTH     = "select id_type_signalement, fk_id_type_signalement, libelle, fk_id_unit, depth from ( with recursive descendants as( select id_type_signalement, fk_id_type_signalement, libelle, actif, fk_id_unit, 0 depth from signalement_type_signalement where fk_id_type_signalement is null union select p.id_type_signalement, p.fk_id_type_signalement, p.libelle, p.actif, p.fk_id_unit, d.depth + 1 from signalement_type_signalement p inner join descendants d on p.fk_id_type_signalement = d.id_type_signalement ) select p.id_type_signalement, p.fk_id_type_signalement, p.libelle, p.actif, p.fk_id_unit, d.depth from descendants d inner join descendants p on d.id_type_signalement = p.id_type_signalement order by d.depth, p.fk_id_type_signalement asc ) as query where actif = 1";
+    private static final String SQL_QUERY_SELECT_ALL_TYPE_SIGNALEMENT_ACTIF_WITH_DEPTH = "select id_type_signalement, fk_id_type_signalement, libelle, fk_id_unit, depth from ( with recursive descendants as( select id_type_signalement, fk_id_type_signalement, libelle, actif, fk_id_unit, 0 depth from signalement_type_signalement where fk_id_type_signalement is null union select p.id_type_signalement, p.fk_id_type_signalement, p.libelle, p.actif, p.fk_id_unit, d.depth + 1 from signalement_type_signalement p inner join descendants d on p.fk_id_type_signalement = d.id_type_signalement ) select p.id_type_signalement, p.fk_id_type_signalement, p.libelle, p.actif, p.fk_id_unit, d.depth from descendants d inner join descendants p on d.id_type_signalement = p.id_type_signalement order by d.depth, p.fk_id_type_signalement asc ) as query where actif = 1";
 
     /** The Constant SQL_QUERY_SELECT_ALL_TYPE_SIGNALEMENT_BY_IS_AGENT. */
-    private static final String SQL_QUERY_SELECT_ALL_TYPE_SIGNALEMENT_BY_IS_AGENT          = "SELECT id_type_signalement, libelle, actif, type_signalement.fk_id_type_signalement, fk_id_unit, id_parent, label, description, ordre, image_url, image_content, image_mime_type, alias, alias_mobile, type_signalement.isAgent, horsdmr, messagehorsdmr FROM signalement_type_signalement type_signalement  LEFT OUTER JOIN unittree_unit unit ON type_signalement.fk_id_unit=unit.id_unit  LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = type_signalement.id_type_signalement WHERE isagent = ? ";
+    private static final String SQL_QUERY_SELECT_ALL_TYPE_SIGNALEMENT_BY_IS_AGENT = "SELECT id_type_signalement, libelle, actif, type_signalement.fk_id_type_signalement, fk_id_unit, id_parent, label, description, ordre, image_url, image_content, image_mime_type, alias, alias_mobile, type_signalement.isAgent, horsdmr, messagehorsdmr FROM signalement_type_signalement type_signalement  LEFT OUTER JOIN unittree_unit unit ON type_signalement.fk_id_unit=unit.id_unit  LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = type_signalement.id_type_signalement WHERE isagent = ? ";
 
     /** The Constant SQL_QUERY_SELECT_ALL. */
-    private static final String SQL_QUERY_SELECT_ALL                                       = "SELECT id_type_signalement, libelle, actif, type_signalement.fk_id_type_signalement, fk_id_unit, id_parent, label, description, ordre, image_url, image_content, image_mime_type, alias, alias_mobile, type_signalement.isAgent, horsdmr, messagehorsdmr  FROM signalement_type_signalement type_signalement LEFT OUTER JOIN unittree_unit unit ON type_signalement.fk_id_unit=unit.id_unit LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = type_signalement.id_type_signalement ORDER BY ordre";
+    private static final String SQL_QUERY_SELECT_ALL = "SELECT id_type_signalement, libelle, actif, type_signalement.fk_id_type_signalement, fk_id_unit, id_parent, label, description, ordre, image_url, image_content, image_mime_type, alias, alias_mobile, type_signalement.isAgent, horsdmr, messagehorsdmr  FROM signalement_type_signalement type_signalement LEFT OUTER JOIN unittree_unit unit ON type_signalement.fk_id_unit=unit.id_unit LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = type_signalement.id_type_signalement ORDER BY ordre";
 
     /** The Constant SQL_QUERY_SELECT_ALL_SOUS_TYPE_SIGNALEMENT. */
-    private static final String SQL_QUERY_SELECT_ALL_SOUS_TYPE_SIGNALEMENT                 = "SELECT id_type_signalement, libelle, actif, type_signalement.fk_id_type_signalement, fk_id_unit, id_parent, label, description, ordre, image_url, image_content, image_mime_type, alias, alias_mobile, type_signalement.isAgent, horsdmr, messagehorsdmr  FROM signalement_type_signalement type_signalement LEFT OUTER JOIN unittree_unit unit ON type_signalement.fk_id_unit=unit.id_unit LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = type_signalement.id_type_signalement WHERE type_signalement.fk_id_type_signalement = ? ORDER BY ordre";
+    private static final String SQL_QUERY_SELECT_ALL_SOUS_TYPE_SIGNALEMENT = "SELECT id_type_signalement, libelle, actif, type_signalement.fk_id_type_signalement, fk_id_unit, id_parent, label, description, ordre, image_url, image_content, image_mime_type, alias, alias_mobile, type_signalement.isAgent, horsdmr, messagehorsdmr  FROM signalement_type_signalement type_signalement LEFT OUTER JOIN unittree_unit unit ON type_signalement.fk_id_unit=unit.id_unit LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = type_signalement.id_type_signalement WHERE type_signalement.fk_id_type_signalement = ? ORDER BY ordre";
 
     /** The Constant SQL_QUERY_SELECT_ALL_SOUS_TYPE_SIGNALEMENT. */
-    private static final String SQL_QUERY_SELECT_ALL_SOUS_TYPE_SIGNALEMENT_ACTIFS          = "SELECT id_type_signalement, libelle, actif, type_signalement.fk_id_type_signalement, fk_id_unit, id_parent, label, description, ordre, image_url, image_content, image_mime_type, alias, alias_mobile, type_signalement.isAgent, horsdmr, messagehorsdmr  FROM signalement_type_signalement type_signalement LEFT OUTER JOIN unittree_unit unit ON type_signalement.fk_id_unit=unit.id_unit LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = type_signalement.id_type_signalement WHERE type_signalement.fk_id_type_signalement = ? AND type_signalement.actif = 1 ORDER BY ordre";
+    private static final String SQL_QUERY_SELECT_ALL_SOUS_TYPE_SIGNALEMENT_ACTIFS = "SELECT id_type_signalement, libelle, actif, type_signalement.fk_id_type_signalement, fk_id_unit, id_parent, label, description, ordre, image_url, image_content, image_mime_type, alias, alias_mobile, type_signalement.isAgent, horsdmr, messagehorsdmr  FROM signalement_type_signalement type_signalement LEFT OUTER JOIN unittree_unit unit ON type_signalement.fk_id_unit=unit.id_unit LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = type_signalement.id_type_signalement WHERE type_signalement.fk_id_type_signalement = ? AND type_signalement.actif = 1 ORDER BY ordre";
 
     /** The Constant SQL_QUERY_SELECT. */
-    private static final String SQL_QUERY_SELECT                                           = " SELECT type_signalement.id_type_signalement, type_signalement.libelle, type_signalement.actif, type_signalement.fk_id_type_signalement, type_signalement.fk_id_unit, type_signalement.isAgent, unit.id_parent, unit.label, unit.description, ordre, image_url, image_content, image_mime_type, alias, alias_mobile, horsdmr, messagehorsdmr  FROM signalement_type_signalement type_signalement LEFT OUTER JOIN unittree_unit unit ON type_signalement.fk_id_unit=unit.id_unit LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = type_signalement.id_type_signalement WHERE id_type_signalement =? ORDER BY libelle";
+    private static final String SQL_QUERY_SELECT = " SELECT type_signalement.id_type_signalement, type_signalement.libelle, type_signalement.actif, type_signalement.fk_id_type_signalement, type_signalement.fk_id_unit, type_signalement.isAgent, unit.id_parent, unit.label, unit.description, ordre, image_url, image_content, image_mime_type, alias, alias_mobile, horsdmr, messagehorsdmr  FROM signalement_type_signalement type_signalement LEFT OUTER JOIN unittree_unit unit ON type_signalement.fk_id_unit=unit.id_unit LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = type_signalement.id_type_signalement WHERE id_type_signalement =? ORDER BY libelle";
 
     /** The Constant SQL_QUERY_GET_SIGNALEMENT_WITHOUT_PHOTO. */
-    private static final String SQL_QUERY_GET_SIGNALEMENT_WITHOUT_PHOTO                    = "SELECT id_type_signalement, libelle, actif, signalement_type_signalement.fk_id_type_signalement, fk_id_unit, id_parent, label, description, ordre, image_url, alias, alias_mobile FROM signalement_type_signalement LEFT OUTER JOIN unittree_unit ON signalement_type_signalement.fk_id_unit = unittree_unit.id_unit LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = signalement_type_signalement.id_type_signalement WHERE id_type_signalement = ?";
+    private static final String SQL_QUERY_GET_SIGNALEMENT_WITHOUT_PHOTO = "SELECT id_type_signalement, libelle, actif, signalement_type_signalement.fk_id_type_signalement, fk_id_unit, id_parent, label, description, ordre, image_url, alias, alias_mobile FROM signalement_type_signalement LEFT OUTER JOIN unittree_unit ON signalement_type_signalement.fk_id_unit = unittree_unit.id_unit LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = signalement_type_signalement.id_type_signalement WHERE id_type_signalement = ?";
 
     /** The Constant SQL_QUERY_NEW_PK. */
-    private static final String SQL_QUERY_NEW_PK                                           = " SELECT nextval('seq_signalement_type_signalement_id_type_signalement')";
+    private static final String SQL_QUERY_NEW_PK = " SELECT nextval('seq_signalement_type_signalement_id_type_signalement')";
 
     /** The Constant SQL_QUERY_INSERT. */
-    private static final String SQL_QUERY_INSERT                                           = " INSERT INTO signalement_type_signalement(id_type_signalement, libelle, actif, fk_id_type_signalement, fk_id_unit, ordre, image_url, image_content, image_mime_type, isAgent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_QUERY_INSERT = " INSERT INTO signalement_type_signalement(id_type_signalement, libelle, actif, fk_id_type_signalement, fk_id_unit, ordre, image_url, image_content, image_mime_type, isAgent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     /** The Constant SQL_QUERY_INSERT_WITHOUT_PARENT. */
-    private static final String SQL_QUERY_INSERT_WITHOUT_PARENT                            = "INSERT INTO signalement_type_signalement(id_type_signalement, libelle, actif, fk_id_unit, ordre, isagent, image_url, image_content, image_mime_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_QUERY_INSERT_WITHOUT_PARENT = "INSERT INTO signalement_type_signalement(id_type_signalement, libelle, actif, fk_id_unit, ordre, isagent, image_url, image_content, image_mime_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     /** The Constant SQL_QUERY_DELETE. */
-    private static final String SQL_QUERY_DELETE                                           = " DELETE FROM signalement_type_signalement WHERE id_type_signalement=? ";
+    private static final String SQL_QUERY_DELETE = " DELETE FROM signalement_type_signalement WHERE id_type_signalement=? ";
 
     /** The Constant SQL_QUERY_UPDATE. */
-    private static final String SQL_QUERY_UPDATE                                           = "UPDATE signalement_type_signalement SET id_type_signalement=?, libelle=?, actif=?, fk_id_type_signalement=?, fk_id_unit=?, image_url=?, image_content=?, image_mime_type=?, isAgent=?, horsdmr=?, messagehorsdmr=? WHERE id_type_signalement=?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_type_signalement SET id_type_signalement=?, libelle=?, actif=?, fk_id_type_signalement=?, fk_id_unit=?, image_url=?, image_content=?, image_mime_type=?, isAgent=?, horsdmr=?, messagehorsdmr=? WHERE id_type_signalement=?";
 
     /** The Constant SQL_QUERY_UPDATE. */
-    private static final String SQL_QUERY_UPDATE_WITHOUT_IMAGE                             = "UPDATE signalement_type_signalement SET id_type_signalement=?, libelle=?, actif=?, fk_id_type_signalement=?, fk_id_unit=?, isAgent=?, horsdmr=?, messagehorsdmr=?  WHERE id_type_signalement=?";
+    private static final String SQL_QUERY_UPDATE_WITHOUT_IMAGE = "UPDATE signalement_type_signalement SET id_type_signalement=?, libelle=?, actif=?, fk_id_type_signalement=?, fk_id_unit=?, isAgent=?, horsdmr=?, messagehorsdmr=?  WHERE id_type_signalement=?";
 
     /** The Constant SQL_QUERY_UPDATE_WITHOUT_PARENT. */
-    private static final String SQL_QUERY_UPDATE_WITHOUT_PARENT                            = "UPDATE signalement_type_signalement SET id_type_signalement=?, libelle=?, actif=?, fk_id_unit=?, image_url=?, image_content=?, image_mime_type=?, isAgent=?, horsdmr=?, messagehorsdmr=? WHERE id_type_signalement = ?";
+    private static final String SQL_QUERY_UPDATE_WITHOUT_PARENT = "UPDATE signalement_type_signalement SET id_type_signalement=?, libelle=?, actif=?, fk_id_unit=?, image_url=?, image_content=?, image_mime_type=?, isAgent=?, horsdmr=?, messagehorsdmr=? WHERE id_type_signalement = ?";
 
     /** The Constant SQL_QUERY_UPDATE_WITHOUT_PARENT. */
-    private static final String SQL_QUERY_UPDATE_WITHOUT_PARENT_WITHOUT_IMAGE              = "UPDATE signalement_type_signalement SET id_type_signalement=?, libelle=?, actif=?, fk_id_unit=?, isAgent=?, horsdmr=?, messagehorsdmr=? WHERE id_type_signalement = ?";
+    private static final String SQL_QUERY_UPDATE_WITHOUT_PARENT_WITHOUT_IMAGE = "UPDATE signalement_type_signalement SET id_type_signalement=?, libelle=?, actif=?, fk_id_unit=?, isAgent=?, horsdmr=?, messagehorsdmr=? WHERE id_type_signalement = ?";
 
     /** The Constant SQL_QUERY_EXISTS_TYPE_SIGNALEMENT. */
-    private static final String SQL_QUERY_EXISTS_TYPE_SIGNALEMENT                          = "SELECT id_type_signalement FROM signalement_type_signalement WHERE libelle=?";
+    private static final String SQL_QUERY_EXISTS_TYPE_SIGNALEMENT = "SELECT id_type_signalement FROM signalement_type_signalement WHERE libelle=?";
 
     /** The Constant SQL_QUERY_SELECT_BY_ID. */
-    private static final String SQL_QUERY_SELECT_BY_ID                                     = "SELECT id_type_signalement, libelle, ordre, image_url, image_content, image_mime_type, alias, alias_mobile, signalement_type_signalement.fk_id_type_signalement FROM signalement_type_signalement LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = signalement_type_signalement.id_type_signalement WHERE id_type_signalement=?";
+    private static final String SQL_QUERY_SELECT_BY_ID = "SELECT id_type_signalement, libelle, ordre, image_url, image_content, image_mime_type, alias, alias_mobile, signalement_type_signalement.fk_id_type_signalement FROM signalement_type_signalement LEFT JOIN signalement_type_signalement_alias signalement_alias ON signalement_alias.fk_id_type_signalement = signalement_type_signalement.id_type_signalement WHERE id_type_signalement=?";
 
     /** The Constant SQL_SELECT_SIGNALEMENT_BY_ID_TYPE_SIGNALEMENT. */
-    private static final String SQL_SELECT_SIGNALEMENT_BY_ID_TYPE_SIGNALEMENT              = "SELECT id_signalement FROM signalement_signalement WHERE fk_id_type_signalement=?;";
+    private static final String SQL_SELECT_SIGNALEMENT_BY_ID_TYPE_SIGNALEMENT = "SELECT id_signalement FROM signalement_signalement WHERE fk_id_type_signalement=?;";
 
     /** The Constant SQL_QUERY_EXISTS_TYPE_SIGNALEMENT_WITH_ID. */
-    private static final String SQL_QUERY_EXISTS_TYPE_SIGNALEMENT_WITH_ID                  = "SELECT id_type_signalement FROM signalement_type_signalement WHERE libelle=? AND NOT id_type_signalement=? ";
+    private static final String SQL_QUERY_EXISTS_TYPE_SIGNALEMENT_WITH_ID = "SELECT id_type_signalement FROM signalement_type_signalement WHERE libelle=? AND NOT id_type_signalement=? ";
 
     /** The Constant SQL_QUERY_UPDATE_ORDRE. */
-    private static final String SQL_QUERY_UPDATE_ORDRE                                     = "UPDATE signalement_type_signalement SET ordre=? WHERE id_type_signalement=?";
+    private static final String SQL_QUERY_UPDATE_ORDRE = "UPDATE signalement_type_signalement SET ordre=? WHERE id_type_signalement=?";
 
-    /**  The Constant SQL_QUERY_FIND_IMAGE_BY_PRIMARY_KEY. */
-    private static final String SQL_QUERY_FIND_IMAGE_BY_PRIMARY_KEY                        = "SELECT image_content, image_mime_type FROM signalement_type_signalement WHERE id_type_signalement=? ";
+    /** The Constant SQL_QUERY_FIND_IMAGE_BY_PRIMARY_KEY. */
+    private static final String SQL_QUERY_FIND_IMAGE_BY_PRIMARY_KEY = "SELECT image_content, image_mime_type FROM signalement_type_signalement WHERE id_type_signalement=? ";
 
-    /**  The Constant SQL_QUERY_FIND_LAST_VERSION_TYPE_SIGNALEMENT. */
-    private static final String SQL_QUERY_FIND_LAST_VERSION_TYPE_SIGNALEMENT               = "SELECT version FROM signalement_type_signalement_version ORDER BY version DESC LIMIT 1;";
+    /** The Constant SQL_QUERY_FIND_LAST_VERSION_TYPE_SIGNALEMENT. */
+    private static final String SQL_QUERY_FIND_LAST_VERSION_TYPE_SIGNALEMENT = "SELECT version FROM signalement_type_signalement_version ORDER BY version DESC LIMIT 1;";
 
-    /**  The Constant SQL_QUERY_UPDATE_VERSION_TYPE_SIGNALEMENT. */
-    private static final String SQL_QUERY_ADD_NEW_VERSION_TYPE_SIGNALEMENT                 = "INSERT INTO signalement_type_signalement_version (version) VALUES ( ? );";
+    /** The Constant SQL_QUERY_UPDATE_VERSION_TYPE_SIGNALEMENT. */
+    private static final String SQL_QUERY_ADD_NEW_VERSION_TYPE_SIGNALEMENT = "INSERT INTO signalement_type_signalement_version (version) VALUES ( ? );";
 
-    /**  The Constant SQL_QUERY_INSERT_INTO_TYPE_SIGNALEMENT_ALIAS *. */
-    private static final String SQL_QUERY_INSERT_TYPE_SIGNALEMENT_ALIAS                    = "INSERT INTO signalement_type_signalement_alias(fk_id_type_signalement,alias,alias_mobile) VALUES (?,?,?)";
+    /** The Constant SQL_QUERY_INSERT_INTO_TYPE_SIGNALEMENT_ALIAS *. */
+    private static final String SQL_QUERY_INSERT_TYPE_SIGNALEMENT_ALIAS = "INSERT INTO signalement_type_signalement_alias(fk_id_type_signalement,alias,alias_mobile) VALUES (?,?,?)";
 
-    /**  The Constant SQL_QUERY_UPDATE_TYPE_SIGNALEMENT_ALIAS *. */
-    private static final String SQL_QUERY_UPDATE_TYPE_SIGNALEMENT_ALIAS                    = "UPDATE signalement_type_signalement_alias SET alias = ?, alias_mobile=? WHERE fk_id_type_signalement=?";
+    /** The Constant SQL_QUERY_UPDATE_TYPE_SIGNALEMENT_ALIAS *. */
+    private static final String SQL_QUERY_UPDATE_TYPE_SIGNALEMENT_ALIAS = "UPDATE signalement_type_signalement_alias SET alias = ?, alias_mobile=? WHERE fk_id_type_signalement=?";
 
-    /**  The Constant SQL_QUERY_DELETE_TYPE_SIGNALEMENT_ALIAS *. */
-    private static final String SQL_QUERY_DELETE_TYPE_SIGNALEMENT_ALIAS                    = "DELETE FROM signalement_type_signalement_alias WHERE fk_id_type_signalement=?";
+    /** The Constant SQL_QUERY_DELETE_TYPE_SIGNALEMENT_ALIAS *. */
+    private static final String SQL_QUERY_DELETE_TYPE_SIGNALEMENT_ALIAS = "DELETE FROM signalement_type_signalement_alias WHERE fk_id_type_signalement=?";
 
-    /**  The Constant SQL_QUERY_REFRESH_VIEW_TYPES_WITH_HIERARCHY *. */
-    private static final String SQL_QUERY_REFRESH_VIEW_TYPES_WITH_PARENTS_LINKS            = "REFRESH MATERIALIZED VIEW v_signalement_type_signalement_with_parents_links";
+    /** The Constant SQL_QUERY_REFRESH_VIEW_TYPES_WITH_HIERARCHY *. */
+    private static final String SQL_QUERY_REFRESH_VIEW_TYPES_WITH_PARENTS_LINKS = "REFRESH MATERIALIZED VIEW v_signalement_type_signalement_with_parents_links";
 
     /** The Constant SQL_QUERY_CATEGORY_FROM_TYPE_ID. */
-    private static final String SQL_QUERY_CATEGORY_FROM_TYPE_ID                            = "SELECT id_parent FROM v_signalement_type_signalement_with_parents_links WHERE id_type_signalement=? AND is_parent_a_category=1";
+    private static final String SQL_QUERY_CATEGORY_FROM_TYPE_ID = "SELECT id_parent FROM v_signalement_type_signalement_with_parents_links WHERE id_type_signalement=? AND is_parent_a_category=1";
 
     /** The Constant SQL_QUERY_UPDATE_PARENT. */
-    private static final String SQL_QUERY_UPDATE_PARENT                                    = "UPDATE signalement_type_signalement set fk_id_type_signalement=?, ordre= (select max(ordre)+1 from signalement_type_signalement where fk_id_type_signalement=?) where id_type_signalement=?";
+    private static final String SQL_QUERY_UPDATE_PARENT = "UPDATE signalement_type_signalement set fk_id_type_signalement=?, ordre= (select max(ordre)+1 from signalement_type_signalement where fk_id_type_signalement=?) where id_type_signalement=?";
 
     /** The Constant SQL_QUERY_SELECT_LAST_LEVEL_WITH_PARENT. */
-    private static final String SQL_QUERY_SELECT_LAST_LEVEL_WITH_PARENT                    = "select id_type_signalement, libelle, nb_message, actif from "
+    private static final String SQL_QUERY_SELECT_LAST_LEVEL_WITH_PARENT = "select id_type_signalement, libelle, nb_message, actif from "
             + " (WITH RECURSIVE t(id_type_signalement, libelle, fk_id_type_signalement, nb_message, actif) AS ("
             + " SELECT type1.id_type_signalement, type1.libelle::TEXT, type1.fk_id_type_signalement, "
             + " (select count(id_message) from signalement_message_typologie message where  message.fk_id_type_signalement = type1.id_type_signalement), actif "
@@ -188,12 +188,13 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
             + " SELECT type2.id_type_signalement, recurs.libelle::TEXT || '->' || type2.libelle::TEXT, type2.fk_id_type_signalement, "
             + " (select count(id_message) from signalement_message_typologie message where  message.fk_id_type_signalement = type2.id_type_signalement), type2.actif "
             + " FROM signalement_type_signalement as type2, t as recurs" + " WHERE type2.fk_id_type_signalement =recurs.id_type_signalement" + " )"
-            + " SELECT * FROM t where (select count(s2.id_type_signalement) from signalement_type_signalement s2 where s2.fk_id_type_signalement=t.id_type_signalement) = 0" + " order by libelle asc "
-            + " ) as res";
+            + " SELECT * FROM t where (select count(s2.id_type_signalement) from signalement_type_signalement s2 where s2.fk_id_type_signalement=t.id_type_signalement) = 0"
+            + " order by libelle asc " + " ) as res";
 
     /** The Constant SQL_QUERY_SELECT_LAST_LEVEL_WITH_PARENT_NOT_IN_SOURCE. */
-    private static final String SQL_QUERY_SELECT_LAST_LEVEL_WITH_PARENT_NOT_IN_SOURCE      = "select id_type_signalement, libelle, actif, fk_id_type_signalement from (select id_type_signalement, libelle, actif, fk_id_type_signalement from ( "
-            + "with recursive t(id_type_signalement,libelle,fk_id_type_signalement,nb_message,actif) as( " + "select	type1.id_type_signalement,type1.libelle::text, type1.fk_id_type_signalement,( "
+    private static final String SQL_QUERY_SELECT_LAST_LEVEL_WITH_PARENT_NOT_IN_SOURCE = "select id_type_signalement, libelle, actif, fk_id_type_signalement from (select id_type_signalement, libelle, actif, fk_id_type_signalement from ( "
+            + "with recursive t(id_type_signalement,libelle,fk_id_type_signalement,nb_message,actif) as( "
+            + "select	type1.id_type_signalement,type1.libelle::text, type1.fk_id_type_signalement,( "
             + "select count( id_message ) from	signalement_message_typologie message where	message.fk_id_type_signalement = type1.id_type_signalement),actif "
             + "from signalement_type_signalement as type1 where type1.fk_id_type_signalement is null union all select type2.id_type_signalement, recurs.libelle::text || '->' || type2.libelle::text, "
             + "type2.fk_id_type_signalement,(select count( id_message ) from signalement_message_typologie message	where message.fk_id_type_signalement = type2.id_type_signalement), type2.actif "
@@ -202,18 +203,19 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
             + "where id_type_signalement not in (select fk_id_type_signalement from signalement_type_signalement_source where id_source=?) and fk_id_type_signalement is not null";
 
     /** The Constant SQL_QUERY_INSERT_TYPE_SOURCE. */
-    private static final String SQL_QUERY_INSERT_TYPE_SOURCE                               = "INSERT INTO public.signalement_type_signalement_source (fk_id_type_signalement, id_source) VALUES(?, ?)";
+    private static final String SQL_QUERY_INSERT_TYPE_SOURCE = "INSERT INTO public.signalement_type_signalement_source (fk_id_type_signalement, id_source) VALUES(?, ?)";
 
     /** The Constant SQL_QUERY_REMOVE_TYPE_SOURCE. */
-    private static final String SQL_QUERY_REMOVE_TYPE_SOURCE                               = "DELETE FROM  public.signalement_type_signalement_source WHERE fk_id_type_signalement=? AND id_source=?";
+    private static final String SQL_QUERY_REMOVE_TYPE_SOURCE = "DELETE FROM  public.signalement_type_signalement_source WHERE fk_id_type_signalement=? AND id_source=?";
 
     /** The Constant SQL_QUERY_SELECT_BY_SOURCE. */
-    private static final String SQL_QUERY_SELECT_BY_SOURCE                                 = "SELECT id_type_signalement, libelle, actif, sig.fk_id_type_signalement, ordre, image_url, image_content, image_mime_type, isagent, horsdmr, messagehorsdmr  FROM signalement_type_signalement sig "
+    private static final String SQL_QUERY_SELECT_BY_SOURCE = "SELECT id_type_signalement, libelle, actif, sig.fk_id_type_signalement, ordre, image_url, image_content, image_mime_type, isagent, horsdmr, messagehorsdmr  FROM signalement_type_signalement sig "
             + "inner join signalement_type_signalement_source s on s.fk_id_type_signalement = sig.id_type_signalement " + "where s.id_source=? and sig.actif=1";
 
     /** The Constant SQL_QUERY_SELECT_BY_SOURCE_WITH_FULL_LIBELLE. */
-    private static final String SQL_QUERY_SELECT_BY_SOURCE_WITH_FULL_LIBELLE               = "select id_type_signalement, libelle, actif, fk_id_type_signalement from (select id_type_signalement, libelle, actif, fk_id_type_signalement from ( "
-            + "with recursive t(id_type_signalement,libelle,fk_id_type_signalement,nb_message,actif) as( " + "select	type1.id_type_signalement,type1.libelle::text, type1.fk_id_type_signalement,( "
+    private static final String SQL_QUERY_SELECT_BY_SOURCE_WITH_FULL_LIBELLE = "select id_type_signalement, libelle, actif, fk_id_type_signalement from (select id_type_signalement, libelle, actif, fk_id_type_signalement from ( "
+            + "with recursive t(id_type_signalement,libelle,fk_id_type_signalement,nb_message,actif) as( "
+            + "select	type1.id_type_signalement,type1.libelle::text, type1.fk_id_type_signalement,( "
             + "select count( id_message ) from	signalement_message_typologie message where	message.fk_id_type_signalement = type1.id_type_signalement),actif "
             + "from signalement_type_signalement as type1 where type1.fk_id_type_signalement is null union all select type2.id_type_signalement, recurs.libelle::text || '->' || type2.libelle::text, "
             + "type2.fk_id_type_signalement,(select count( id_message ) from signalement_message_typologie message	where message.fk_id_type_signalement = type2.id_type_signalement), type2.actif "
@@ -222,26 +224,29 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
             + "where id_type_signalement in (select fk_id_type_signalement from signalement_type_signalement_source where id_source=?) and fk_id_type_signalement is not null";
 
     /** The Constant SQL_QUERY_SELECT_TYPE_BY_ID_SIGNALEMENT. */
-    private static final String SQL_QUERY_SELECT_TYPE_BY_ID_SIGNALEMENT                    = "select id_type_signalement, libelle, actif, fk_id_type_signalement, ordre, image_url, image_content, image_mime_type, isagent, horsdmr, messagehorsdmr from signalement_type_signalement where id_type_signalement=?";
+    private static final String SQL_QUERY_SELECT_TYPE_BY_ID_SIGNALEMENT = "select id_type_signalement, libelle, actif, fk_id_type_signalement, ordre, image_url, image_content, image_mime_type, isagent, horsdmr, messagehorsdmr from signalement_type_signalement where id_type_signalement=?";
 
     /** The Constant SQL_QUERY_LIST_IDS_CHILDREN. */
-    private static final String SQL_QUERY_LIST_IDS_CHILDREN                                = "select distinct(s2.id_type_signalement) " + "from signalement_type_signalement s1 "
+    private static final String SQL_QUERY_LIST_IDS_CHILDREN = "select distinct(s2.id_type_signalement) " + "from signalement_type_signalement s1 "
             + "join signalement_type_signalement s2 on s2.fk_id_type_signalement = s1.id_type_signalement " + "where s1.id_type_signalement in ({0})";
 
     /** The Constant SQL_QUERY_SELECT_SOURCE. */
-    private static final String SQL_QUERY_SELECT_SOURCE                                    = "select id_source, libelle, description, commentaire from signalement_source order by id_source asc";
+    private static final String SQL_QUERY_SELECT_SOURCE = "select id_source, libelle, description, commentaire from signalement_source order by id_source asc";
 
     /** The Constant SQL_QUERY_ADD_SOURCE. */
-    private static final String SQL_QUERY_ADD_SOURCE                                       = "INSERT INTO signalement_source (libelle, description, commentaire) VALUES(?, ?, ?)";
+    private static final String SQL_QUERY_ADD_SOURCE = "INSERT INTO signalement_source (libelle, description, commentaire) VALUES(?, ?, ?)";
 
     /** The Constant SQL_QUERY_REMOVE_SOURCE. */
-    private static final String SQL_QUERY_REMOVE_SOURCE                                    = "DELETE FROM signalement_source WHERE id_source=?";
+    private static final String SQL_QUERY_REMOVE_SOURCE = "DELETE FROM signalement_source WHERE id_source=?";
 
     /** The Constant SQL_QUERY_GET_SOURCE_BY_ID. */
-    private static final String SQL_QUERY_GET_SOURCE_BY_ID                                 = "SELECT id_source, libelle, description, commentaire FROM signalement_source WHERE id_source=?";
+    private static final String SQL_QUERY_GET_SOURCE_BY_ID = "SELECT id_source, libelle, description, commentaire FROM signalement_source WHERE id_source=?";
 
     /** The Constant SQL_QUERY_UPDATE_SOURCE. */
-    private static final String SQL_QUERY_UPDATE_SOURCE                                    = "UPDATE signalement_source SET description=?, commentaire=? WHERE id_source=?";
+    private static final String SQL_QUERY_UPDATE_SOURCE = "UPDATE signalement_source SET description=?, commentaire=? WHERE id_source=?";
+
+    /** The Constant SQL_QUERY_IS_TYPE_SIGNALEMENT_SELECTABLE. */
+    private static final String SQL_QUERY_IS_TYPE_SIGNALEMENT_SELECTABLE = "SELECT COUNT(fk_id_type_signalement) FROM signalement_type_signalement WHERE fk_id_type_signalement = ?";
 
     /**
      * {@inheritDoc}
@@ -426,8 +431,10 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
     /**
      * Finds report types with their parent informations.
      *
-     * @param daoUtil the dao util
-     * @param linkedToUnit the linked to unit
+     * @param daoUtil
+     *            the dao util
+     * @param linkedToUnit
+     *            the linked to unit
      * @return a list of report types
      */
     private List<TypeSignalement> getTypesWithParentLink( DAOUtil daoUtil, boolean linkedToUnit )
@@ -435,7 +442,7 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
 
         List<TypeSignalement> listResult = new ArrayList<>( );
 
-        Map<Integer, Object[]> mapParents = new HashMap<>( );
+        Map<Integer, Object [ ]> mapParents = new HashMap<>( );
 
         daoUtil.executeQuery( );
         int nIndex;
@@ -466,7 +473,7 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
             Object oImageContent = daoUtil.getBytes( nIndex++ );
 
             typeSignalement.setImage( new ImageResource( ) );
-            typeSignalement.setImageContent( ( byte[] ) oImageContent );
+            typeSignalement.setImageContent( (byte [ ]) oImageContent );
             typeSignalement.setMimeType( daoUtil.getString( nIndex++ ) );
 
             typeSignalement.setIdCategory( daoUtil.getInt( nIndex++ ) );
@@ -476,7 +483,9 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
             typeSignalement.setHorsDMR( daoUtil.getBoolean( nIndex++ ) );
             typeSignalement.setMessageHorsDMR( daoUtil.getString( nIndex ) );
 
-            mapParents.put( typeSignalement.getId( ), new Object[] { typeSignalement, 0L } );
+            mapParents.put( typeSignalement.getId( ), new Object [ ] {
+                    typeSignalement, 0L
+            } );
         }
 
         daoUtil.close( );
@@ -484,34 +493,34 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
         // here we have a list of all types of child or parent reports
 
         // we count the number of children in each element
-        for ( Entry<Integer, Object[]> entrySet : mapParents.entrySet( ) )
+        for ( Entry<Integer, Object [ ]> entrySet : mapParents.entrySet( ) )
         {
-            Integer idTypeSignalementParent = ( ( TypeSignalement ) entrySet.getValue( )[0] ).getTypeSignalementParent( ).getId( );
+            Integer idTypeSignalementParent = ( (TypeSignalement) entrySet.getValue( ) [0] ).getTypeSignalementParent( ).getId( );
             if ( idTypeSignalementParent != null )
             {
-                Object[] objects = mapParents.get( idTypeSignalementParent );
+                Object [ ] objects = mapParents.get( idTypeSignalementParent );
                 if ( objects != null )
                 {
-                    objects[1] = ( Long ) mapParents.get( idTypeSignalementParent )[1] + 1;
+                    objects [1] = (Long) mapParents.get( idTypeSignalementParent ) [1] + 1;
                 }
             }
         }
 
         // children are assigned to parents by searching for elements that have not been counted as parents of another element
         // then by successive search of all the upper parents of each "leaf" element.
-        for ( Entry<Integer, Object[]> entrySet : mapParents.entrySet( ) )
+        for ( Entry<Integer, Object [ ]> entrySet : mapParents.entrySet( ) )
         {
             // if you are in the presence of a child (because there are no sons).
-            if ( ( ( Long ) entrySet.getValue( )[1] ).equals( 0L ) )
+            if ( ( (Long) entrySet.getValue( ) [1] ).equals( 0L ) )
             {
-                TypeSignalement typeSignalement = ( TypeSignalement ) entrySet.getValue( )[0];
+                TypeSignalement typeSignalement = (TypeSignalement) entrySet.getValue( ) [0];
                 Integer idTypeSignalementParent = typeSignalement.getTypeSignalementParent( ).getId( );
 
-                Object[] objects = mapParents.get( idTypeSignalementParent );
+                Object [ ] objects = mapParents.get( idTypeSignalementParent );
                 TypeSignalement typeSignalementParent;
                 if ( objects != null )
                 {
-                    typeSignalementParent = ( TypeSignalement ) objects[0];
+                    typeSignalementParent = (TypeSignalement) objects [0];
                 }
                 else
                 {
@@ -529,9 +538,10 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
                 {
                     TypeSignalement current = typeSignalementParent;
 
-                    if ( ( typeSignalementParent.getTypeSignalementParent( ) != null ) && ( mapParents.get( typeSignalementParent.getTypeSignalementParent( ).getId( ) ) != null ) )
+                    if ( ( typeSignalementParent.getTypeSignalementParent( ) != null )
+                            && ( mapParents.get( typeSignalementParent.getTypeSignalementParent( ).getId( ) ) != null ) )
                     {
-                        typeSignalementParent = ( TypeSignalement ) mapParents.get( typeSignalementParent.getTypeSignalementParent( ).getId( ) )[0];
+                        typeSignalementParent = (TypeSignalement) mapParents.get( typeSignalementParent.getTypeSignalementParent( ).getId( ) ) [0];
                     }
                     else
                     {
@@ -540,12 +550,13 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
                     current.setTypeSignalementParent( typeSignalementParent );
                 }
             }
-            else if ( !linkedToUnit )
-            {
-                // If you are not only looking for leafs (and therefore also categories, subcategories)
-                TypeSignalement typeSignalement = ( TypeSignalement ) entrySet.getValue( )[0];
-                listResult.add( typeSignalement );
-            }
+            else
+                if ( !linkedToUnit )
+                {
+                    // If you are not only looking for leafs (and therefore also categories, subcategories)
+                    TypeSignalement typeSignalement = (TypeSignalement) entrySet.getValue( ) [0];
+                    listResult.add( typeSignalement );
+                }
         }
 
         TypeSignalementComparator compareSignalements = new TypeSignalementComparator( );
@@ -658,7 +669,7 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
         }
         else
         {
-            byte[] baImageNull = null;
+            byte [ ] baImageNull = null;
             daoUtil.setString( nIndex++, "" );
             daoUtil.setBytes( nIndex++, baImageNull );
             daoUtil.setString( nIndex++, "" );
@@ -697,7 +708,7 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
             Object oImageContent = daoUtil.getBytes( nIndex++ );
 
             typeSignalement.setImage( new ImageResource( ) );
-            typeSignalement.setImageContent( ( byte[] ) oImageContent );
+            typeSignalement.setImageContent( (byte [ ]) oImageContent );
             typeSignalement.setMimeType( daoUtil.getString( nIndex++ ) );
 
             typeSignalement.setAlias( daoUtil.getString( nIndex++ ) );
@@ -750,7 +761,7 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
             Object oImageContent = daoUtil.getBytes( nIndex++ );
 
             typeSignalement.setImage( new ImageResource( ) );
-            typeSignalement.setImageContent( ( byte[] ) oImageContent );
+            typeSignalement.setImageContent( (byte [ ]) oImageContent );
             typeSignalement.setMimeType( daoUtil.getString( nIndex++ ) );
             typeSignalement.setAlias( daoUtil.getString( nIndex++ ) );
             typeSignalement.setAliasMobile( daoUtil.getString( nIndex++ ) );
@@ -1005,7 +1016,7 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
         }
         else
         {
-            byte[] baImageNull = null;
+            byte [ ] baImageNull = null;
             daoUtil.setString( nIndex++, "" );
             daoUtil.setBytes( nIndex++, baImageNull );
             daoUtil.setString( nIndex, "" );
@@ -1022,7 +1033,8 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
     /**
      * Returns a list of report types from the daoUtil.
      *
-     * @param daoUtil            the daoUtil object
+     * @param daoUtil
+     *            the daoUtil object
      * @return a list of report types
      */
     private List<TypeSignalement> getListTypeSignalement( DAOUtil daoUtil )
@@ -1056,7 +1068,7 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
             Object oImageContent = daoUtil.getBytes( nIndex++ );
 
             typeSignalement.setImage( new ImageResource( ) );
-            typeSignalement.setImageContent( ( byte[] ) oImageContent );
+            typeSignalement.setImageContent( (byte [ ]) oImageContent );
             typeSignalement.setMimeType( daoUtil.getString( nIndex++ ) );
 
             typeSignalement.setAlias( daoUtil.getString( nIndex++ ) );
@@ -1134,7 +1146,8 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
     {
         TypeSignalement typeSignalementParent = getParent( typeSignalement.getId( ), PluginService.getPlugin( SignalementPlugin.PLUGIN_NAME ) );
         StringBuilder query = new StringBuilder( );
-        query.append( "SELECT id_type_signalement FROM signalement_type_signalement WHERE ordre=(SELECT max(ordre) FROM signalement_type_signalement WHERE ordre< " );
+        query.append(
+                "SELECT id_type_signalement FROM signalement_type_signalement WHERE ordre=(SELECT max(ordre) FROM signalement_type_signalement WHERE ordre< " );
         query.append( typeSignalement.getOrdre( ) );
         if ( typeSignalementParent == null )
         {
@@ -1176,7 +1189,8 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
     {
         TypeSignalement typeSignalementParent = getParent( typeSignalement.getId( ), PluginService.getPlugin( SignalementPlugin.PLUGIN_NAME ) );
         StringBuilder query = new StringBuilder( );
-        query.append( "SELECT id_type_signalement FROM signalement_type_signalement WHERE ordre=(SELECT min(ordre) FROM signalement_type_signalement WHERE ordre> " );
+        query.append(
+                "SELECT id_type_signalement FROM signalement_type_signalement WHERE ordre=(SELECT min(ordre) FROM signalement_type_signalement WHERE ordre> " );
         query.append( typeSignalement.getOrdre( ) );
         if ( typeSignalementParent == null )
         {
@@ -1433,7 +1447,8 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
     /**
      * Method to add new version when user updates or add report type update.
      *
-     * @param dVersion the d version
+     * @param dVersion
+     *            the d version
      */
     private void insertNewVersionTypeSignalement( double dVersion )
     {
@@ -1443,7 +1458,7 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
         {
             dIncVersion = Double.parseDouble( strIncVersion );
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
             AppLogService.error( e );
         }
@@ -1668,7 +1683,7 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
             {
                 BeanUtils.copyProperties( dto, typeSignalement );
             }
-            catch ( IllegalAccessException | InvocationTargetException e )
+            catch( IllegalAccessException | InvocationTargetException e )
             {
                 AppLogService.error( e );
             }
@@ -1680,7 +1695,16 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
         return listResult;
     }
 
-    /* (non-Javadoc)
+    /**
+     * Gets the all type lastlevel not in source.
+     *
+     * @param idSource
+     *            the id source
+     * @return the all type lastlevel not in source
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.dansmarue.business.dao.ITypeSignalementDAO#getAllTypeLastlevelNotInSource(java.lang.Integer)
      */
     @Override
@@ -1734,7 +1758,7 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
         {
             BeanUtils.copyProperties( dto, typeSignalement );
         }
-        catch ( IllegalAccessException | InvocationTargetException e )
+        catch( IllegalAccessException | InvocationTargetException e )
         {
             AppLogService.error( e );
         }
@@ -1745,7 +1769,8 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
     /**
      * Fill type signalement without unit.
      *
-     * @param daoUtil the dao util
+     * @param daoUtil
+     *            the dao util
      * @return the type signalement
      */
     private TypeSignalement fillTypeSignalementWithoutUnit( DAOUtil daoUtil )
@@ -1771,7 +1796,7 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
         Object oImageContent = daoUtil.getBytes( nIndex++ );
 
         typeSignalement.setImage( new ImageResource( ) );
-        typeSignalement.setImageContent( ( byte[] ) oImageContent );
+        typeSignalement.setImageContent( (byte [ ]) oImageContent );
         typeSignalement.setMimeType( daoUtil.getString( nIndex++ ) );
 
         typeSignalement.setIsAgent( daoUtil.getBoolean( nIndex++ ) );
@@ -1907,4 +1932,27 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isTypeSignalementSelectable( int idTypeSignalement )
+    {
+        boolean isSelectable = false;
+
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_IS_TYPE_SIGNALEMENT_SELECTABLE );
+
+        daoUtil.setInt( 1, idTypeSignalement );
+        daoUtil.executeQuery( );
+
+        while ( daoUtil.next( ) )
+        {
+            if ( daoUtil.getInt( 1 ) == 0 )
+            {
+                isSelectable = true;
+            }
+        }
+        daoUtil.close( );
+        return isSelectable;
+    }
 }

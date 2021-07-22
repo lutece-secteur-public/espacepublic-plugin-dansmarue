@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,19 +33,22 @@
  */
 package fr.paris.lutece.plugins.dansmarue.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import fr.paris.lutece.plugins.dansmarue.business.dao.IPhotoDAO;
 import fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementExportDAO;
+import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
+import fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementExportService;
 import fr.paris.lutece.plugins.dansmarue.service.SignalementPlugin;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-
 
 /**
  * The Class SignalementExportService.
@@ -57,28 +60,101 @@ public class SignalementExportService implements ISignalementExportService
     @Named( "signalementExportDAO" )
     private ISignalementExportDAO _signalementExportDAO;
 
+    @Inject
+    @Named( "photoDAO" )
+    private IPhotoDAO _photoDAO;
+
     /** The plugin signalement. */
     // Plugin
-    private Plugin                _pluginSignalement = PluginService.getPlugin( SignalementPlugin.PLUGIN_NAME );
+    private Plugin _pluginSignalement = PluginService.getPlugin( SignalementPlugin.PLUGIN_NAME );
 
-    /* (non-Javadoc)
+    /**
+     * Find by ids.
+     *
+     * @param ids
+     *            the ids
+     * @return the list
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.dansmarue.service.ISignalementExportService#findByIds(int[])
      */
     @Override
-    public List<SignalementExportCSVDTO> findByIds( int[] ids )
+    public List<SignalementExportCSVDTO> findByIds( int [ ] ids )
     {
 
         return _signalementExportDAO.findByIds( ids, _pluginSignalement );
     }
 
-    /* (non-Javadoc)
-     * @see fr.paris.lutece.plugins.dansmarue.service.ISignalementExportService#findByFilter(fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter)
+    /**
+     * Find by filter.
+     *
+     * @param filter
+     *            the filter
+     * @return the list
+     */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.paris.lutece.plugins.dansmarue.service.ISignalementExportService#findByFilter(fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter)
      */
     @Override
     public List<SignalementExportCSVDTO> findByFilter( SignalementFilter filter )
     {
 
         return _signalementExportDAO.findByFilter( filter, _pluginSignalement );
+    }
+
+    /**
+     * Count search result.
+     *
+     * @param filter
+     *            the filter
+     * @return the int
+     */
+    @Override
+    public int countSearchResult( SignalementFilter filter )
+    {
+
+        return _signalementExportDAO.countSignalementSearch( filter, _pluginSignalement );
+    }
+
+    /**
+     * Find by filter search.
+     *
+     * @param filter
+     *            the filter
+     * @param paginationProperties
+     *            the pagination properties
+     * @return the list
+     */
+    @Override
+    public List<Signalement> findByFilterSearch( SignalementFilter filter, PaginationProperties paginationProperties )
+    {
+        List<Signalement> result = new ArrayList<>( );
+        List<String> numeroFinds = _signalementExportDAO.searchNumeroByFilter( filter, paginationProperties, _pluginSignalement );
+        if ( !numeroFinds.isEmpty( ) )
+        {
+            result = _signalementExportDAO.searchFindByFilter( filter, numeroFinds, _pluginSignalement );
+        }
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<SignalementExportCSVDTO> findByIdsWithPhoto( int [ ] ids )
+    {
+        List<SignalementExportCSVDTO> signalementExportCSVDTOList = findByIds( ids );
+        for ( SignalementExportCSVDTO signalementExportCSVDTO : signalementExportCSVDTOList )
+        {
+            signalementExportCSVDTO.setPhotos( _photoDAO.findBySignalementId( signalementExportCSVDTO.getIdSignalement( ) ) );
+        }
+        return signalementExportCSVDTOList;
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,16 +56,16 @@ public final class ListUtils
 {
 
     /** The Constant ERROR_LIST_CREATION. */
-    private static final String ERROR_LIST_CREATION     = "Error when creating a combo list: ";
+    private static final String ERROR_LIST_CREATION = "Error when creating a combo list: ";
 
     /** The Constant LOGGER. */
-    private static final Logger LOGGER                  = Logger.getLogger( ListUtils.class );
+    private static final Logger LOGGER = Logger.getLogger( ListUtils.class );
 
     /** The Constant PROPERTY_LIST_SEPARATOR. */
     private static final String PROPERTY_LIST_SEPARATOR = ";";
 
     /** The Constant PROPERTY_LIST_COMA. */
-    private static final String PROPERTY_LIST_COMA      = ",";
+    private static final String PROPERTY_LIST_COMA = ",";
 
     /**
      * Instantiates a new list utils.
@@ -87,7 +87,7 @@ public final class ListUtils
         String property = AppPropertiesService.getProperty( propertyKey );
         if ( property != null )
         {
-            String[] items = property.split( PROPERTY_LIST_SEPARATOR );
+            String [ ] items = property.split( PROPERTY_LIST_SEPARATOR );
             if ( items != null )
             {
                 return Arrays.asList( items );
@@ -99,10 +99,14 @@ public final class ListUtils
     /**
      * Conversion of a list of type {@link List} to a {@link ReferenceList}.
      *
-     * @param list            the list to be converted
-     * @param key            the value of the bean property used as a key in the {@link ReferenceList}
-     * @param value            the value of the bean property used as a value in the {@link ReferenceList}
-     * @param firstItem            value of the first line in the {@link ReferenceList} (example, to display the ReferenceList in a drop-down list:" -- Select a value --").
+     * @param list
+     *            the list to be converted
+     * @param key
+     *            the value of the bean property used as a key in the {@link ReferenceList}
+     * @param value
+     *            the value of the bean property used as a value in the {@link ReferenceList}
+     * @param firstItem
+     *            value of the first line in the {@link ReferenceList} (example, to display the ReferenceList in a drop-down list:" -- Select a value --").
      * @return The {@link ReferenceList} populated with data from the List
      */
     public static ReferenceList toReferenceList( List<?> list, String key, String value, String firstItem )
@@ -113,11 +117,16 @@ public final class ListUtils
     /**
      * Conversion of a list of type {@link List} to a {@link ReferenceList}.
      *
-     * @param list            the list to be converted
-     * @param key            the value of the bean property used as a key in the {@link ReferenceList}
-     * @param value            the value of the bean property used as a value in the {@link ReferenceList}
-     * @param firstItem            value of the first line in the {@link ReferenceList} (example, to display the ReferenceList in a drop-down list:" -- Select a value --").
-     * @param sort            if the list has to be sorted
+     * @param list
+     *            the list to be converted
+     * @param key
+     *            the value of the bean property used as a key in the {@link ReferenceList}
+     * @param value
+     *            the value of the bean property used as a value in the {@link ReferenceList}
+     * @param firstItem
+     *            value of the first line in the {@link ReferenceList} (example, to display the ReferenceList in a drop-down list:" -- Select a value --").
+     * @param sort
+     *            if the list has to be sorted
      * @return The {@link ReferenceList} populated with data from the List
      */
     public static ReferenceList toReferenceList( List<?> list, String key, String value, String firstItem, boolean sort )
@@ -141,22 +150,22 @@ public final class ListUtils
             }
             if ( sort )
             {
-                referenceList.sort( (ReferenceItem o1, ReferenceItem o2 ) -> o1.getName( ).compareTo( o2.getName( ) ) );
+                referenceList.sort( ( ReferenceItem o1, ReferenceItem o2 ) -> o1.getName( ).compareTo( o2.getName( ) ) );
             }
         }
-        catch ( IllegalAccessException e )
+        catch( IllegalAccessException e )
         {
             LOGGER.warn( ERROR_LIST_CREATION + e.getMessage( ), e );
         }
-        catch ( InvocationTargetException e )
+        catch( InvocationTargetException e )
         {
             LOGGER.warn( ERROR_LIST_CREATION + e.getMessage( ), e );
         }
-        catch ( NoSuchMethodException e )
+        catch( NoSuchMethodException e )
         {
             LOGGER.warn( ERROR_LIST_CREATION + e.getMessage( ), e );
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
             LOGGER.warn( ERROR_LIST_CREATION + e.getMessage( ), e );
         }
@@ -173,7 +182,8 @@ public final class ListUtils
      *            The list of ids to retain in the reference list
      * @param bKeepFirstItem
      *            True to keep the first item, false to keep it only ifs code match any item of the id list.
-     * @return a new list with only the items of the referenceList which ids are in the parameter list. Note that a new list is created, but items are NOT duplicated !
+     * @return a new list with only the items of the referenceList which ids are in the parameter list. Note that a new list is created, but items are NOT
+     *         duplicated !
      */
     public static ReferenceList retainReferenceList( ReferenceList refList, List<Integer> listId, boolean bKeepFirstItem )
     {
@@ -209,10 +219,11 @@ public final class ListUtils
     /**
      * Converts an array of string, to a list of int.
      *
-     * @param array            an array of string
+     * @param array
+     *            an array of string
      * @return an integer list
      */
-    public static List<Integer> getListOfIntFromStrArray( String[] array )
+    public static List<Integer> getListOfIntFromStrArray( String [ ] array )
     {
         if ( null == array )
         {
@@ -233,10 +244,11 @@ public final class ListUtils
     /**
      * Converts an array of string, to a list of int.
      *
-     * @param array            an array of string
+     * @param array
+     *            an array of string
      * @return an integer list
      */
-    public static List<String> getListOfStringFromStrArray( String[] array )
+    public static List<String> getListOfStringFromStrArray( String [ ] array )
     {
         if ( null == array )
         {
@@ -265,7 +277,7 @@ public final class ListUtils
         String property = AppPropertiesService.getProperty( propertyKey );
         if ( property != null )
         {
-            String[] items = property.split( PROPERTY_LIST_COMA );
+            String [ ] items = property.split( PROPERTY_LIST_COMA );
             List<String> itemsAsList = Arrays.asList( items );
             if ( items != null )
             {

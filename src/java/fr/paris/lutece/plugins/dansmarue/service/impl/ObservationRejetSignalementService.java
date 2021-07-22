@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,6 @@ import javax.inject.Inject;
 import fr.paris.lutece.plugins.dansmarue.business.dao.IObservationRejetSignalementDAO;
 import fr.paris.lutece.plugins.dansmarue.business.entities.ObservationRejet;
 import fr.paris.lutece.plugins.dansmarue.service.IObservationRejetSignalementService;
-
 
 /**
  * The Class ObservationRejetSignalementService.

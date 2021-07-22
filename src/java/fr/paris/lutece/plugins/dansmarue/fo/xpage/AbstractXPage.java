@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -67,62 +67,62 @@ public class AbstractXPage extends MVCApplication
 {
 
     /** The Constant serialVersionUID. */
-    private static final long                      serialVersionUID        = 1723850575195580846L;
+    private static final long serialVersionUID = 1723850575195580846L;
 
     /** The Constant PARAMETER_TOKEN. */
-    private static final String                    PARAMETER_TOKEN         = "token";
+    private static final String PARAMETER_TOKEN = "token";
 
     /** The Constant PAGE_PORTAL. */
     // PAGES
-    protected static final String                  PAGE_PORTAL             = "Portal.jsp?page=";
+    protected static final String PAGE_PORTAL = "Portal.jsp?page=";
 
     /** The Constant PAGE_PORTAL_FULL. */
-    protected static final String                  PAGE_PORTAL_FULL        = "jsp/site/Portal.jsp?page=";
+    protected static final String PAGE_PORTAL_FULL = "jsp/site/Portal.jsp?page=";
 
     /** The Constant XPAGE_DANSMARUE. */
     // XPAGE NAMES
-    protected static final String                  XPAGE_DANSMARUE         = "dansmarue";
+    protected static final String XPAGE_DANSMARUE = "dansmarue";
 
     /** The Constant XPAGE_DOUBLONS. */
-    protected static final String                  XPAGE_DOUBLONS          = "doublons";
+    protected static final String XPAGE_DOUBLONS = "doublons";
 
     /** The Constant XPAGE_SUIVI. */
-    public static final String                     XPAGE_SUIVI             = "suivi";
+    public static final String XPAGE_SUIVI = "suivi";
 
     /** The Constant URL_ACCUEIL. */
     // URLS
-    protected static final String                  URL_ACCUEIL             = "jsp/site/Portal.jsp?page=accueil";
+    protected static final String URL_ACCUEIL = "jsp/site/Portal.jsp?page=accueil";
 
     /** The Constant MARK_BASE_URL. */
     // MARKS
-    protected static final String                  MARK_BASE_URL           = "base_url";
+    protected static final String MARK_BASE_URL = "base_url";
 
     /** The Constant MARK_WRAPPER_WARNINGS. */
-    protected static final String                  MARK_WRAPPER_WARNINGS   = "wrapper_warnings";
+    protected static final String MARK_WRAPPER_WARNINGS = "wrapper_warnings";
 
     /** The Constant MARK_MAP_ERRORS. */
-    protected static final String                  MARK_MAP_ERRORS         = "map_errors";
+    protected static final String MARK_MAP_ERRORS = "map_errors";
 
     /** The Constant MARK_ERRORS. */
-    protected static final String                  MARK_ERRORS             = "errors";
+    protected static final String MARK_ERRORS = "errors";
 
     /** The Constant signalementService. */
-    protected static final SignalementService      signalementService      = SpringContextService.getBean( "signalementService" );
+    protected static final SignalementService signalementService = SpringContextService.getBean( "signalementService" );
 
     /** The Constant typeSignalementService. */
-    protected static final TypeSignalementService  typeSignalementService  = SpringContextService.getBean( "typeSignalementService" );
+    protected static final TypeSignalementService typeSignalementService = SpringContextService.getBean( "typeSignalementService" );
 
     /** The Constant prioriteService. */
-    protected static final PrioriteService         prioriteService         = SpringContextService.getBean( "prioriteService" );
+    protected static final PrioriteService prioriteService = SpringContextService.getBean( "prioriteService" );
 
     /** The Constant dansmarueUploadHandler. */
-    protected static final DansMaRueUploadHandler  dansmarueUploadHandler  = SpringContextService.getBean( "dansmarueUploadHandler" );
+    protected static final DansMaRueUploadHandler dansmarueUploadHandler = SpringContextService.getBean( "dansmarueUploadHandler" );
 
     /** The Constant signalementSuiviService. */
     protected static final SignalementSuiviService signalementSuiviService = SpringContextService.getBean( "signalementSuiviService" );
 
     /** The map errors. */
-    private transient Map<String, List<ErrorMessage>>        mapErrors               = new HashMap<>( );
+    private transient Map<String, List<ErrorMessage>> mapErrors = new HashMap<>( );
 
     /**
      * Default constructor.
@@ -141,7 +141,8 @@ public class AbstractXPage extends MVCApplication
     /**
      * Redirect home.
      *
-     * @param request            {@link HttpServletRequest}
+     * @param request
+     *            {@link HttpServletRequest}
      * @return {@link XPage}
      */
     public XPage redirectHome( final HttpServletRequest request )
@@ -174,7 +175,7 @@ public class AbstractXPage extends MVCApplication
      *            {@link Object} Arguments
      * @return localized message
      */
-    protected String getMessageWithParam( String key, HttpServletRequest request, Object[] arg )
+    protected String getMessageWithParam( String key, HttpServletRequest request, Object [ ] arg )
     {
         return I18nService.getLocalizedString( key, arg, request.getLocale( ) );
     }
@@ -182,8 +183,10 @@ public class AbstractXPage extends MVCApplication
     /**
      * Sets the token.
      *
-     * @param request            http request
-     * @param token            {@link String} token
+     * @param request
+     *            http request
+     * @param token
+     *            {@link String} token
      */
     protected void setToken( final HttpServletRequest request, final String token )
     {
@@ -193,18 +196,20 @@ public class AbstractXPage extends MVCApplication
     /**
      * Gets the token.
      *
-     * @param request            http request
+     * @param request
+     *            http request
      * @return {@link String} the token
      */
     protected String getToken( final HttpServletRequest request )
     {
-        return ( String ) request.getSession( ).getAttribute( PARAMETER_TOKEN );
+        return (String) request.getSession( ).getAttribute( PARAMETER_TOKEN );
     }
 
     /**
      * Removes the token.
      *
-     * @param request            http request
+     * @param request
+     *            http request
      */
     protected void removeToken( final HttpServletRequest request )
     {
@@ -296,7 +301,8 @@ public class AbstractXPage extends MVCApplication
     /**
      * {@inheritDoc }.
      *
-     * @param model the model
+     * @param model
+     *            the model
      */
     @Override
     protected void fillCommons( Map<String, Object> model )

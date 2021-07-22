@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,6 @@ import java.util.List;
 import fr.paris.lutece.plugins.dansmarue.business.dao.IDashboardUserPreferencesDAO;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-
 /**
  * The Class DashboardUserPreferencesDAO.
  */
@@ -47,10 +46,10 @@ public class DashboardUserPreferencesDAO implements IDashboardUserPreferencesDAO
 {
 
     /** The Constant SQL_QUERY_INSERT. */
-    private static final String SQL_QUERY_INSERT            = "INSERT INTO signalement_dashboard_user_preferences(fk_id_user, fk_id_state) VALUES (?,?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_dashboard_user_preferences(fk_id_user, fk_id_state) VALUES (?,?)";
 
     /** The Constant SQL_QUERY_DELETE. */
-    private static final String SQL_QUERY_DELETE            = "DELETE FROM signalement_dashboard_user_preferences WHERE fk_id_user = ? AND fk_id_state = ?";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_dashboard_user_preferences WHERE fk_id_user = ? AND fk_id_state = ?";
 
     /** The Constant SQL_QUERY_SELECT_BY_USER_ID. */
     private static final String SQL_QUERY_SELECT_BY_USER_ID = "SELECT fk_id_state FROM signalement_dashboard_user_preferences WHERE fk_id_user = ?";

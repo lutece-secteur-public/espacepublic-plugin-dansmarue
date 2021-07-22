@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,51 +59,51 @@ public class SignalementSuiviDAO implements ISignalementSuiviDAO
 {
 
     /** The Constant SQL_QUERY_NEW_PK. */
-    private static final String SQL_QUERY_NEW_PK                                     = "SELECT nextval('seq_signalement_suivi_id')";
+    private static final String SQL_QUERY_NEW_PK = "SELECT nextval('seq_signalement_suivi_id')";
 
     /** The Constant SQL_QUERY_INSERT. */
-    private static final String SQL_QUERY_INSERT                                     = "INSERT INTO signalement_suivi(id_suivi, fk_id_signalement, fk_user_guid) VALUES (?,?,?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_suivi(id_suivi, fk_id_signalement, fk_user_guid) VALUES (?,?,?)";
 
     /** The Constant SQL_QUERY_DELETE. */
-    private static final String SQL_QUERY_DELETE                                     = "DELETE FROM signalement_suivi WHERE id_suivi = ?";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_suivi WHERE id_suivi = ?";
 
     /** The Constant SQL_QUERY_SELECT. */
-    private static final String SQL_QUERY_SELECT                                     = "SELECT id_suivi, fk_id_signalement, fk_user_guid FROM signalement_suivi WHERE id_suivi = ?";
+    private static final String SQL_QUERY_SELECT = "SELECT id_suivi, fk_id_signalement, fk_user_guid FROM signalement_suivi WHERE id_suivi = ?";
 
     /** The Constant SQL_QUERY_UPDATE. */
-    private static final String SQL_QUERY_UPDATE                                     = "UPDATE signalement_suivi SET fk_id_signalement=?, fk_user_guid=? WHERE id_suivi=?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_suivi SET fk_id_signalement=?, fk_user_guid=? WHERE id_suivi=?";
 
     /** The Constant SQL_QUERY_SELECT_USERS_MOBILES_BY_ID_SIGNALEMENT. */
-    private static final String SQL_QUERY_SELECT_USERS_MOBILES_BY_ID_SIGNALEMENT     = "SELECT id_sira_user, user_guid, user_udid, user_device, user_email, user_token FROM sira_user INNER JOIN signalement_suivi ON fk_user_guid = user_guid WHERE fk_id_signalement = ?";
+    private static final String SQL_QUERY_SELECT_USERS_MOBILES_BY_ID_SIGNALEMENT = "SELECT id_sira_user, user_guid, user_udid, user_device, user_email, user_token FROM sira_user INNER JOIN signalement_suivi ON fk_user_guid = user_guid WHERE fk_id_signalement = ?";
 
     /** The Constant SQL_QUERY_SELECT_FOLLOWERS_MOBILES_BY_ID_SIGNALEMENT. */
     private static final String SQL_QUERY_SELECT_FOLLOWERS_MOBILES_BY_ID_SIGNALEMENT = "SELECT id_sira_user, user_guid, user_udid, user_device, user_email, user_token FROM sira_user INNER JOIN signalement_suivi ON fk_user_guid = user_guid WHERE fk_id_signalement = ? and (select guid from signalement_signaleur where fk_id_signalement=?) != user_guid";
 
     /** The Constant SQL_QUERY_SELECT_CREATOR_MOBILES_BY_ID_SIGNALEMENT. */
-    private static final String SQL_QUERY_SELECT_CREATOR_MOBILES_BY_ID_SIGNALEMENT   = "SELECT id_sira_user, user_guid, user_udid, user_device, user_email, user_token FROM sira_user INNER JOIN signalement_suivi ON fk_user_guid = user_guid WHERE fk_id_signalement = ? and (select guid from signalement_signaleur where fk_id_signalement=?) = user_guid";
+    private static final String SQL_QUERY_SELECT_CREATOR_MOBILES_BY_ID_SIGNALEMENT = "SELECT id_sira_user, user_guid, user_udid, user_device, user_email, user_token FROM sira_user INNER JOIN signalement_suivi ON fk_user_guid = user_guid WHERE fk_id_signalement = ? and (select guid from signalement_signaleur where fk_id_signalement=?) = user_guid";
 
     /** The Constant SQL_QUERY_SELECT_BY_ID_SIGNALEMENT_USER_GUID. */
-    private static final String SQL_QUERY_SELECT_BY_ID_SIGNALEMENT_USER_GUID         = "SELECT id_suivi FROM signalement_suivi WHERE fk_id_signalement=? AND fk_user_guid=?";
+    private static final String SQL_QUERY_SELECT_BY_ID_SIGNALEMENT_USER_GUID = "SELECT id_suivi FROM signalement_suivi WHERE fk_id_signalement=? AND fk_user_guid=?";
 
     /** The Constant SQL_QUERY_SELECT_SIGNALEMENTS_RESOLVED_BY_GUID. */
-    private static final String SQL_QUERY_SELECT_SIGNALEMENTS_RESOLVED_BY_GUID       = "select id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee,mois, numero, prefix, fk_id_priorite,fk_id_arrondissement,fk_id_type_signalement,fk_id_sector,is_doublon,token,service_fait_date_passage,felicitations,date_mise_surveillance,date_rejet,courriel_destinataire,courriel_expediteur,courriel_date,is_send_ws,commentaire_agent_terrain,id_adresse, adresse, ST_X(geom), ST_Y(geom), precision_localisation "
+    private static final String SQL_QUERY_SELECT_SIGNALEMENTS_RESOLVED_BY_GUID = "select id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee,mois, numero, prefix, fk_id_priorite,fk_id_arrondissement,fk_id_type_signalement,fk_id_sector,is_doublon,token,service_fait_date_passage,felicitations,date_mise_surveillance,date_rejet,courriel_destinataire,courriel_expediteur,courriel_date,is_send_ws,commentaire_agent_terrain,id_adresse, adresse, ST_X(geom), ST_Y(geom), precision_localisation "
             + "from signalement_suivi join workflow_resource_workflow w on w.id_resource = signalement_suivi.fk_id_signalement join signalement_signalement signalement on signalement.id_signalement =  signalement_suivi.fk_id_signalement join signalement_adresse adresse on adresse.fk_id_signalement = signalement_suivi.fk_id_signalement WHERE fk_user_guid = ? and id_state in (10, 11, 12, 22) order by id_suivi desc limit ?";
 
     /** The Constant SQL_QUERY_SELECT_SIGNALEMENTS_NOT_RESOLVED_BY_GUID. */
-    private static final String SQL_QUERY_SELECT_SIGNALEMENTS_NOT_RESOLVED_BY_GUID   = "select id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee,mois, numero, prefix, fk_id_priorite,fk_id_arrondissement,fk_id_type_signalement,fk_id_sector,is_doublon,token,service_fait_date_passage,felicitations,date_mise_surveillance,date_rejet,courriel_destinataire,courriel_expediteur,courriel_date,is_send_ws,commentaire_agent_terrain,id_adresse, adresse, ST_X(geom), ST_Y(geom), precision_localisation "
+    private static final String SQL_QUERY_SELECT_SIGNALEMENTS_NOT_RESOLVED_BY_GUID = "select id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee,mois, numero, prefix, fk_id_priorite,fk_id_arrondissement,fk_id_type_signalement,fk_id_sector,is_doublon,token,service_fait_date_passage,felicitations,date_mise_surveillance,date_rejet,courriel_destinataire,courriel_expediteur,courriel_date,is_send_ws,commentaire_agent_terrain,id_adresse, adresse, ST_X(geom), ST_Y(geom), precision_localisation "
             + "from signalement_suivi join workflow_resource_workflow w on w.id_resource = signalement_suivi.fk_id_signalement join signalement_signalement signalement on signalement.id_signalement =  signalement_suivi.fk_id_signalement join signalement_adresse adresse on adresse.fk_id_signalement = signalement_suivi.fk_id_signalement WHERE fk_user_guid = ? and id_state not in (10, 11, 12, 22) order by id_suivi desc limit ?";
 
     /** The Constant SQL_QUERY_SELECT_USERS_MAIL_BY_ID_SIGNALEMENT. */
-    private static final String SQL_QUERY_SELECT_USERS_MAIL_BY_ID_SIGNALEMENT        = "SELECT DISTINCT user_email FROM sira_user INNER JOIN signalement_suivi ON fk_user_guid = user_guid WHERE fk_id_signalement = ?";
+    private static final String SQL_QUERY_SELECT_USERS_MAIL_BY_ID_SIGNALEMENT = "SELECT DISTINCT user_email FROM sira_user INNER JOIN signalement_suivi ON fk_user_guid = user_guid WHERE fk_id_signalement = ?";
 
     /** The Constant SQL_QUERY_SELECT_FOLLOWERS_COUNT_BY_ID_SIGNALEMENT. */
-    private static final String SQL_QUERY_SELECT_FOLLOWERS_COUNT_BY_ID_SIGNALEMENT   = "SELECT COUNT(*) FROM signalement_suivi WHERE fk_id_signalement=?";
+    private static final String SQL_QUERY_SELECT_FOLLOWERS_COUNT_BY_ID_SIGNALEMENT = "SELECT COUNT(*) FROM signalement_suivi WHERE fk_id_signalement=?";
 
     /** The Constant SQL_QUERY_SELECT_FOLLOWERS_GUID_BY_ID_RESOURCE. */
-    private static final String SQL_QUERY_SELECT_FOLLOWERS_GUID_BY_ID_RESOURCE       = "SELECT fk_user_guid FROM signalement_suivi WHERE fk_id_signalement = ?";
+    private static final String SQL_QUERY_SELECT_FOLLOWERS_GUID_BY_ID_RESOURCE = "SELECT fk_user_guid FROM signalement_suivi WHERE fk_id_signalement = ?";
 
     /** The Constant SQL_QUERY_DELETE_BY_ID_SIGNALEMENT. */
-    private static final String SQL_QUERY_DELETE_BY_ID_SIGNALEMENT                   = "DELETE FROM signalement_suivi WHERE fk_id_signalement = ?";
+    private static final String SQL_QUERY_DELETE_BY_ID_SIGNALEMENT = "DELETE FROM signalement_suivi WHERE fk_id_signalement = ?";
 
     /**
      * Generates a new primary key.
@@ -130,7 +130,8 @@ public class SignalementSuiviDAO implements ISignalementSuiviDAO
     @Override
     public Long insert( SignalementSuivi signalementSuivi )
     {
-        try(DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT )){
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT ) )
+        {
             if ( ( signalementSuivi.getId( ) == null ) || ( signalementSuivi.getId( ) == 0 ) )
             {
                 signalementSuivi.setId( newPrimaryKey( ) );
@@ -382,19 +383,21 @@ public class SignalementSuiviDAO implements ISignalementSuiviDAO
 
         while ( daoUtil.next( ) )
         {
-            signalements.add( fillSignalement(daoUtil) );
+            signalements.add( fillSignalement( daoUtil ) );
         }
         daoUtil.close( );
         return signalements;
     }
 
     /**
-     * Fill Signalement entite
+     * Fill Signalement entite.
+     *
      * @param daoUtil
-     *       DaoUtil
+     *            DaoUtil
      * @return the signalement
      */
-    private Signalement fillSignalement(DAOUtil daoUtil) {
+    private Signalement fillSignalement( DAOUtil daoUtil )
+    {
 
         int nIndex = 0;
         Signalement signalement = new Signalement( );
@@ -521,7 +524,16 @@ public class SignalementSuiviDAO implements ISignalementSuiviDAO
         daoUtil.close( );
     }
 
-    /* (non-Javadoc)
+    /**
+     * Gets the all suiveurs guid.
+     *
+     * @param idRessource
+     *            the id ressource
+     * @return the all suiveurs guid
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementSuiviDAO#getAllSuiveursGuid(java.lang.Integer)
      */
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,6 +52,7 @@ import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.image.ImageUtil;
+
 /**
  * The Class SuppressionPhotosDaemon.
  */
@@ -60,38 +61,44 @@ public class SuppressionPhotosDaemon extends Daemon
 
     /** The Constant TYPE_ANOMALIE_CIBLE. */
     // Properties
-    private static final String TYPE_ANOMALIE_CIBLE            = "daemon.suppressionPhotos.anomalieCible";
+    private static final String TYPE_ANOMALIE_CIBLE = "daemon.suppressionPhotos.anomalieCible";
 
     /** The Constant DUREE_EXISTENCE_ANOMALIE_CIBLE. */
     private static final String DUREE_EXISTENCE_ANOMALIE_CIBLE = "daemon.suppressionPhotos.dureeConservation";
 
     /** The Constant ETAT_ANOMALIE_CIBLE. */
-    private static final String ETAT_ANOMALIE_CIBLE            = "daemon.suppressionPhotos.etatsCible";
+    private static final String ETAT_ANOMALIE_CIBLE = "daemon.suppressionPhotos.etatsCible";
 
     /** The Constant NB_LINES_PER_REQUEST. */
-    private static final String NB_LINES_PER_REQUEST           = "daemon.suppressionPhotos.request.limit";
+    private static final String NB_LINES_PER_REQUEST = "daemon.suppressionPhotos.request.limit";
 
     /** The Constant PATH_PHOTO_DELETE. */
-    private static final String PATH_PHOTO_DELETE              = "../../images/photo_delete.jpg";
+    private static final String PATH_PHOTO_DELETE = "../../images/photo_delete.jpg";
 
     /** The Constant PHOTO_MIME_TYPE. */
-    private static final String PHOTO_MIME_TYPE                = "image/jpeg";
+    private static final String PHOTO_MIME_TYPE = "image/jpeg";
 
     /** The photo DAO. */
     // dao
-    private IPhotoDAO           _photoDAO                      = SpringContextService.getBean( "photoDAO" );
+    private IPhotoDAO _photoDAO = SpringContextService.getBean( "photoDAO" );
 
     /** The log. */
-    private final Logger        _log                           = Logger.getLogger( "Photo" );
+    private final Logger _log = Logger.getLogger( "Photo" );
 
-    /* (non-Javadoc)
+    /**
+     * Run.
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Runnable#run()
      */
     @Override
     public void run( )
     {
         Calendar dateMinusNbMonth = Calendar.getInstance( );
-        _log.info( "////////////////////// Lancement du daemon de suppression des photos au " + dateMinusNbMonth.getTime( ).toString( ) + "//////////////////////" );
+        _log.info( "////////////////////// Lancement du daemon de suppression des photos au " + dateMinusNbMonth.getTime( ).toString( )
+                + "//////////////////////" );
         // Type d'anomalie où la photo doit être supprimé
         List<String> anomaliesCible = Arrays.asList( AppPropertiesService.getProperty( TYPE_ANOMALIE_CIBLE ).split( "," ) );
         // Durée d'existence (en jours) à partir de laquelle la photo de l'anomalie doit être supprimé
@@ -124,7 +131,7 @@ public class SuppressionPhotosDaemon extends Daemon
      */
     private ImageResource getPhotoDelete( )
     {
-        byte[] imageInByte = null;
+        byte [ ] imageInByte = null;
         try
         {
             BufferedImage image = ImageIO.read( new File( getClass( ).getClassLoader( ).getResource( PATH_PHOTO_DELETE ).toURI( ) ) );
@@ -134,7 +141,7 @@ public class SuppressionPhotosDaemon extends Daemon
             imageInByte = baos.toByteArray( );
             baos.close( );
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
             _log.error( "Erreur lors de la récupération de l'image de suppression" + e.getCause( ) );
         }
@@ -148,7 +155,8 @@ public class SuppressionPhotosDaemon extends Daemon
     /**
      * Gets the resize image.
      *
-     * @param originalImage the original image
+     * @param originalImage
+     *            the original image
      * @return the resize image
      */
     private ImageResource getResizeImage( ImageResource originalImage )

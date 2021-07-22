@@ -1,0 +1,95 @@
+<#macro modal_export_pdf>
+	<!-- Modal export fdt-->
+	<div class="modal fade" id="exportFDTModal" tabindex="-1" role="dialog" aria-labelledby="exportFDTModal" aria-hidden="true">
+	  <div class="modal-dialog" role="document"> 
+	    <div class="modal-content">
+	      <@tform method='post' action='jsp/admin/plugins/signalement/ExportFeuilleDeTournee.jsp' id='form-export'>
+	      <div class="modal-header">
+	        <h3 class="modal-title" id="saveModalLabel">#i18n{dansmarue.tournee.pdf.param.title}</h3>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<span class="blueDmr">#i18n{dansmarue.tournee.pdf.param.modele}:</span> ${nom_template}
+			</div>
+			<br><br>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+					<input type="checkbox" id="mapCheckbox" name="mapCheckbox" value="1">
+		 		    <label for="mapCheckbox">#i18n{dansmarue.tournee.pdf.param.include}</label><br>
+		 		    <span class="greyDmr">#i18n{dansmarue.tournee.pdf.param.include.help}</span>
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+					<span class="blueDmr">#i18n{dansmarue.tournee.pdf.param.format} :</span> 
+					<input type="radio" id="formatRadio" name="formatRadio" value="pdf" checked>
+					<label for="formatRadio">PDF </label><span class="greyDmr"> #i18n{dansmarue.tournee.pdf.param.format.help}</span>
+				</div>
+			</div>
+			<br><br>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+					<span class="blueDmr"><label for="destinataires">#i18n{dansmarue.tournee.pdf.param.destinataires}</label></span>
+					<span class="greyDmr"><br>#i18n{dansmarue.tournee.pdf.param.destinataires.help}</span>
+				</div> 
+				<div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
+					<br>
+					<textarea id="destinataires" name="destinataires" rows="2" cols="60"></textarea>
+				</div>
+			</div>
+			<br><br>
+	      </div>
+	      <div class="modal-footer">
+		    <@button class="btn btn-paris btn-red" type='submit' params='onclick="return checkMailDestinataires();"' name='export' title='Exporter'/>
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+	      </div>
+	      </@tform>
+	    </div>
+	  </div>
+	</div>
+	
+	<script>
+		/* Ajout du l'id feuille de tournée au formulaire */
+		function addFeuilleDeTourneeId( feuilleDeTourneeId) {
+			feuilleDeTourneeId
+			$( "#idFeuilleDeTournee" ).remove();
+			var inputPageIndex = $("<input>").attr({"type":"hidden","name":"idFeuilleDeTournee", "id":"idFeuilleDeTournee"}).val(feuilleDeTourneeId);
+			$('#form-export').append(inputPageIndex);
+		}
+		
+		function checkMailDestinataires() {
+		    var isValid = true;
+			var destinatairesList = $( "#destinataires" ).val();
+			var divError = $("<div>").attr({"id":"errorMailDestinataire"}).css('color','red').text('format d\'email invalide');
+			if (destinatairesList.trim().length > 0) {
+			  if(destinatairesList.includes(',')) {
+			    destinatairesList.split(',').forEach(function(email){
+				  if(!checkMail(email)) {
+				    isValid = false;
+				  }
+				});
+			  } else {
+			    isValid = checkMail(destinatairesList)
+			  }
+			}
+			
+			if(isValid) {
+			  $("#errorMailDestinataire").remove();
+			  return true;
+			} else {
+			   $("#errorMailDestinataire").remove();
+			  $( "#destinataires" ).parent().append(divError);
+			  return false;
+			}
+		}
+		
+		function checkMail(email) {
+		  if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)){
+			return (true)
+		  }
+		  return false;
+		}
+		
+	</script>
+</#macro>

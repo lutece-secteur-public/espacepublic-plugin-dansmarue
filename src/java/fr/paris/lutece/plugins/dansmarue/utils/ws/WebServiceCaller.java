@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -63,30 +63,43 @@ public class WebServiceCaller implements IWebServiceCaller
 {
 
     /** The Constant MARK_JSON_STREAM. */
-    private static final String MARK_JSON_STREAM         = "jsonStream";
+    private static final String MARK_JSON_STREAM = "jsonStream";
 
     /** The Constant PARAMETER_TYPE_FORM. */
-    private static final String PARAMETER_TYPE_FORM      = "application/x-www-form-urlencoded";
+    private static final String PARAMETER_TYPE_FORM = "application/x-www-form-urlencoded";
 
     /** The Constant MARK_CONTENT_TYPE. */
-    private static final String MARK_CONTENT_TYPE        = "Content-Type";
+    private static final String MARK_CONTENT_TYPE = "Content-Type";
 
     /** The Constant PARAMETER_METHOD. */
-    private static final String PARAMETER_METHOD         = "POST";
+    private static final String PARAMETER_METHOD = "POST";
 
     /** The Constant PARAMETER_LINE_SEPARATOR. */
     private static final String PARAMETER_LINE_SEPARATOR = System.getProperty( "line.separator" );
 
     /** The Constant PROPERTY_TRACE_ENABLED. */
-    private static final String PROPERTY_TRACE_ENABLED   = "signalement.trace.webservices.calls.enabled";
+    private static final String PROPERTY_TRACE_ENABLED = "signalement.trace.webservices.calls.enabled";
 
     /** The Constant PROPERTY_AUTH_SECRET. */
-    private static final String PROPERTY_AUTH_SECRET     = "signalement.trace.webservices.secret";
+    private static final String PROPERTY_AUTH_SECRET = "signalement.trace.webservices.secret";
 
     /** The Constant LOGGER. */
-    private static final Logger LOGGER                   = Logger.getLogger( WebServiceCaller.class );
+    private static final Logger LOGGER = Logger.getLogger( WebServiceCaller.class );
 
-    /* (non-Javadoc)
+    /**
+     * Post JSON.
+     *
+     * @param strUrl
+     *            the str url
+     * @param json
+     *            the json
+     * @return the string
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.dansmarue.utils.ws.IWebServiceCaller#postJSON(java.lang.String, net.sf.json.JSONObject)
      */
     @Override
@@ -94,7 +107,7 @@ public class WebServiceCaller implements IWebServiceCaller
     {
         LOGGER.debug( "Send to " + strUrl + " : " + json.toString( ) );
         URL url = new URL( strUrl );
-        HttpURLConnection conn = ( HttpURLConnection ) url.openConnection( );
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection( );
         conn.setDoOutput( true );
         conn.setRequestMethod( PARAMETER_METHOD );
         conn.setRequestProperty( MARK_CONTENT_TYPE, PARAMETER_TYPE_FORM );
@@ -126,7 +139,8 @@ public class WebServiceCaller implements IWebServiceCaller
     /**
      * Enclose json data with param name use by REST api.
      *
-     * @param json            the json object to send
+     * @param json
+     *            the json object to send
      * @return the post data
      */
     private String wrapJsonToPostData( JSONObject json )
@@ -134,11 +148,30 @@ public class WebServiceCaller implements IWebServiceCaller
         return MARK_JSON_STREAM + "=[" + json.toString( ) + "]";
     }
 
-    /* (non-Javadoc)
-     * @see fr.paris.lutece.plugins.dansmarue.utils.ws.IWebServiceCaller#callWebService(java.lang.String, java.util.Map, fr.paris.lutece.util.signrequest.RequestAuthenticator, java.util.List)
+    /**
+     * Call web service.
+     *
+     * @param strUrl
+     *            the str url
+     * @param params
+     *            the params
+     * @param authenticator
+     *            the authenticator
+     * @param listElements
+     *            the list elements
+     * @return the string
+     * @throws HttpAccessException
+     *             the http access exception
+     */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.paris.lutece.plugins.dansmarue.utils.ws.IWebServiceCaller#callWebService(java.lang.String, java.util.Map,
+     * fr.paris.lutece.util.signrequest.RequestAuthenticator, java.util.List)
      */
     @Override
-    public String callWebService( String strUrl, Map<String, List<String>> params, RequestAuthenticator authenticator, List<String> listElements ) throws HttpAccessException
+    public String callWebService( String strUrl, Map<String, List<String>> params, RequestAuthenticator authenticator, List<String> listElements )
+            throws HttpAccessException
     {
         HttpAccess httpAccess = new HttpAccess( );
         return httpAccess.doPostMultiValues( strUrl, params, authenticator, listElements );
@@ -158,10 +191,14 @@ public class WebServiceCaller implements IWebServiceCaller
     /**
      * Trace the web service call.
      *
-     * @param strUrl            The WS URI
-     * @param mapParameters            The parameters
-     * @param authenticator            The Request Authenticator
-     * @param listElements            The list of elements to use to build the signature
+     * @param strUrl
+     *            The WS URI
+     * @param mapParameters
+     *            The parameters
+     * @param authenticator
+     *            The Request Authenticator
+     * @param listElements
+     *            The list of elements to use to build the signature
      * @return The trace
      */
     protected String trace( String strUrl, Map<String, List<String>> mapParameters, RequestAuthenticator authenticator, List<String> listElements )
@@ -195,7 +232,7 @@ public class WebServiceCaller implements IWebServiceCaller
 
         if ( authenticator instanceof RequestHashAuthenticator )
         {
-            RequestHashAuthenticator auth = ( RequestHashAuthenticator ) authenticator;
+            RequestHashAuthenticator auth = (RequestHashAuthenticator) authenticator;
             String strTimestamp = "" + new Date( ).getTime( );
             String strSecret = AppPropertiesService.getProperty( PROPERTY_AUTH_SECRET );
             String strSignature = auth.buildSignature( listElements, strTimestamp, strSecret );
@@ -203,14 +240,15 @@ public class WebServiceCaller implements IWebServiceCaller
             sbTrace.append( PARAMETER_LINE_SEPARATOR + " Timestamp sample : " ).append( strTimestamp );
             sbTrace.append( PARAMETER_LINE_SEPARATOR + " Signature for this timestamp : " ).append( strSignature );
         }
-        else if ( authenticator instanceof NoSecurityAuthenticator )
-        {
-            sbTrace.append( PARAMETER_LINE_SEPARATOR + " No request authentification" );
-        }
         else
-        {
-            sbTrace.append( PARAMETER_LINE_SEPARATOR + " Unknown Request authenticator" );
-        }
+            if ( authenticator instanceof NoSecurityAuthenticator )
+            {
+                sbTrace.append( PARAMETER_LINE_SEPARATOR + " No request authentification" );
+            }
+            else
+            {
+                sbTrace.append( PARAMETER_LINE_SEPARATOR + " Unknown Request authenticator" );
+            }
 
         sbTrace.append( PARAMETER_LINE_SEPARATOR + " --------------------------------------------------------------------" );
 

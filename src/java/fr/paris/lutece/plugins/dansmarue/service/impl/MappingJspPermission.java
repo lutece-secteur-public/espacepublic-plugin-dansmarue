@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,6 @@ import java.util.Map;
 
 import fr.paris.lutece.plugins.dansmarue.service.role.SignalementResourceIdService;
 
-
 /**
  * Class allowing to do the mapping between jsp and their associated permission.
  *
@@ -67,7 +66,8 @@ public class MappingJspPermission
         MAPPING_JSP_PERMISSIONS.put( "ManageSignalement.jsp",
                 new PermissionRessourceType( SignalementResourceIdService.KEY_ID_RESOURCE, SignalementResourceIdService.PERMISSION_RECHERCHER_SIGNALEMENT ) );
 
-        MAPPING_JSP_PERMISSIONS.put( "SaveSignalement.jsp", new PermissionRessourceType( SignalementResourceIdService.KEY_ID_RESOURCE, SignalementResourceIdService.PERMISSION_CREATION_SIGNALEMENT ) );
+        MAPPING_JSP_PERMISSIONS.put( "SaveSignalement.jsp",
+                new PermissionRessourceType( SignalementResourceIdService.KEY_ID_RESOURCE, SignalementResourceIdService.PERMISSION_CREATION_SIGNALEMENT ) );
 
         MAPPING_JSP_PERMISSIONS.put( "DoSaveSignalement.jsp",
                 new PermissionRessourceType( SignalementResourceIdService.KEY_ID_RESOURCE, SignalementResourceIdService.PERMISSION_CREATION_SIGNALEMENT ) );

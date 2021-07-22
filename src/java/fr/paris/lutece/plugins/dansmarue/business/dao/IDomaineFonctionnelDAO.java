@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,8 +47,10 @@ public interface IDomaineFonctionnelDAO
     /**
      * Inserts into the database, the functional domain.
      *
-     * @param domaineFonctionnel            the functional domain
-     * @param plugin            the plugin
+     * @param domaineFonctionnel
+     *            the functional domain
+     * @param plugin
+     *            the plugin
      * @return the functional domain id
      */
     Integer insert( DomaineFonctionnel domaineFonctionnel, Plugin plugin );
@@ -56,7 +58,8 @@ public interface IDomaineFonctionnelDAO
     /**
      * Gets the next id.
      *
-     * @param plugin            the plugin
+     * @param plugin
+     *            the plugin
      * @return The new primary key
      */
     Integer newPrimaryKey( Plugin plugin );
@@ -64,14 +67,16 @@ public interface IDomaineFonctionnelDAO
     /**
      * Removes a functional domain.
      *
-     * @param lId            the domain id
+     * @param lId
+     *            the domain id
      */
     void remove( long lId );
 
     /**
      * Loads a functional domain.
      *
-     * @param lId            the id of the domain to load
+     * @param lId
+     *            the id of the domain to load
      * @return a functional domain
      */
     DomaineFonctionnel getById( Integer lId );
@@ -79,7 +84,8 @@ public interface IDomaineFonctionnelDAO
     /**
      * Inserts or Updates a functional domain.
      *
-     * @param domaineFonctionnel            the functional domain object
+     * @param domaineFonctionnel
+     *            the functional domain object
      */
     void store( DomaineFonctionnel domaineFonctionnel );
 
@@ -93,7 +99,8 @@ public interface IDomaineFonctionnelDAO
     /**
      * Gets all districts ids linked to this domain.
      *
-     * @param idDomaine            the domain id
+     * @param idDomaine
+     *            the domain id
      * @return list of districts ids linked to this domain
      */
     List<Integer> getArrondissementsIdsByDomaineId( int idDomaine );
@@ -110,7 +117,8 @@ public interface IDomaineFonctionnelDAO
     /**
      * Gets all reporting types ids linked to this domain.
      *
-     * @param idDomaine            the domain id
+     * @param idDomaine
+     *            the domain id
      * @return list of reporting types id linked to this domain
      */
     List<Integer> getTypesSignalementIdsByDomaineId( int idDomaine );
@@ -118,7 +126,8 @@ public interface IDomaineFonctionnelDAO
     /**
      * Gets all units linked to this domain.
      *
-     * @param idDomaine            the domain id
+     * @param idDomaine
+     *            the domain id
      * @return list of units id linked to this domain
      */
     List<Integer> getUnitsIdsByDomaineId( int idDomaine );

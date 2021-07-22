@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,7 @@ public class UnitNode
 {
 
     /** The unit. */
-    private Unit           _unit;
+    private Unit _unit;
 
     /** The list sub units. */
     private List<UnitNode> _listSubUnits;
@@ -53,7 +53,8 @@ public class UnitNode
     /**
      * Instantiates a new unit node.
      *
-     * @param unit the unit
+     * @param unit
+     *            the unit
      */
     public UnitNode( Unit unit )
     {
@@ -64,8 +65,10 @@ public class UnitNode
     /**
      * Instantiates a new unit node.
      *
-     * @param unit the unit
-     * @param subUnits the sub units
+     * @param unit
+     *            the unit
+     * @param subUnits
+     *            the sub units
      */
     public UnitNode( Unit unit, List<UnitNode> subUnits )
     {
@@ -86,7 +89,8 @@ public class UnitNode
     /**
      * Sets the unit.
      *
-     * @param unit            the unit to set
+     * @param unit
+     *            the unit to set
      */
     public void setUnit( Unit unit )
     {
@@ -106,7 +110,8 @@ public class UnitNode
     /**
      * Sets the sub units.
      *
-     * @param subUnits            the subUnits to set
+     * @param subUnits
+     *            the subUnits to set
      */
     public void setSubUnits( List<UnitNode> subUnits )
     {

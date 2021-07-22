@@ -1,0 +1,1 @@
+INSERT INTO core_datastore (entity_key, entity_value) VALUES('elastic.date.last.indexation', '01/01/2020');

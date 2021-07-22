@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.dansmarue.commons.exceptions;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * The Class FunctionnalException.
  */
@@ -44,10 +43,10 @@ public class FunctionnalException extends RuntimeException
 {
 
     /** The Constant serialVersionUID. */
-    private static final long   serialVersionUID = 7260516599116118558L;
+    private static final long serialVersionUID = 7260516599116118558L;
 
     /** The bean. */
-    private transient Object              _bean;
+    private transient Object _bean;
 
     /** The additional parameters. */
     private transient Map<String, Object> _additionalParameters;
@@ -55,7 +54,8 @@ public class FunctionnalException extends RuntimeException
     /**
      * Instantiates a new functionnal exception.
      *
-     * @param bean the bean
+     * @param bean
+     *            the bean
      */
     public FunctionnalException( Object bean )
     {
@@ -66,8 +66,10 @@ public class FunctionnalException extends RuntimeException
     /**
      * Instantiates a new functionnal exception.
      *
-     * @param bean the bean
-     * @param additionalParameters the additional parameters
+     * @param bean
+     *            the bean
+     * @param additionalParameters
+     *            the additional parameters
      */
     public FunctionnalException( Object bean, Map<String, Object> additionalParameters )
     {
@@ -88,7 +90,8 @@ public class FunctionnalException extends RuntimeException
     /**
      * Sets the bean.
      *
-     * @param bean            the bean to set
+     * @param bean
+     *            the bean to set
      */
     public void setBean( Object bean )
     {
@@ -108,7 +111,8 @@ public class FunctionnalException extends RuntimeException
     /**
      * Sets the additional parameters.
      *
-     * @param additionnalParameters            the additional parameters to add
+     * @param additionnalParameters
+     *            the additional parameters to add
      */
     public void setAdditionalParameters( Map<String, Object> additionnalParameters )
     {

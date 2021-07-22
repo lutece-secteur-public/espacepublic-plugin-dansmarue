@@ -3,27 +3,60 @@
 	<!-- Critères de recherche -->
 	<form method="post" action="jsp/admin/plugins/signalement/ManageSignalementDashboard.jsp">
 		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 				<div class="form-group">
 					<label>#i18n{dansmarue.dashboard.criterias.period}</label>
 					<div data-toggle="buttons">
-						<label class="btn btn-radio <#if filter.periodId?? && (filter.periodId==2)>active</#if>">
+						<label id="periode30" class="radio-period btn btn-radio <#if filter.periodId?? && (filter.periodId==2)>active</#if>">
 							<input type="radio" name="periodId" value="2" <#if filter.periodId?? && (filter.periodId==2)>checked</#if>>
 							#i18n{dansmarue.dashboard.criterias.period.30jours}
 						</label>
-						<label class="btn btn-radio <#if filter.periodId?? && (filter.periodId==1)>active</#if>">
+						<label class="radio-period btn btn-radio <#if filter.periodId?? && (filter.periodId==1)>active</#if>">
 							<input type="radio" name="periodId" value="1" <#if filter.periodId?? && (filter.periodId==1)>checked</#if>>
 							#i18n{dansmarue.dashboard.criterias.period.90jours}
 						</label>
-						<label class="btn btn-radio <#if filter.periodId?? && (filter.periodId==0)>active</#if>">
+						<label class="radio-period btn btn-radio <#if filter.periodId?? && (filter.periodId==0)>active</#if>">
 							<input type="radio" name="periodId" value="0" <#if filter.periodId?? && (filter.periodId==0)>checked</#if>>
 							#i18n{dansmarue.dashboard.criterias.period.180jours}
 						</label>
 					</div>
 				</div>
 			</div>
+			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+						for="filter_dateBegin">
+						#i18n{dansmarue.dashboard.criterias.date.period}</label>
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="input-daterange">
+							<div class="col-xs-1">
+								#i18n{dansmarue.reportingList.from}
+							</div>
+							<div class="col-xs-3 ">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<span class="glyphicon glyphicon-calendar"></span>
+									</div>
+									<input disabled class="form-control input-sm" type="text" name="dateBegin" id="filter_dateBegin" maxlength="10" />
+								</div>
+							</div>
+						</div>
+						<div class="input-daterange">
+							<div class="col-xs-1">#i18n{dansmarue.reportingList.to}
+							</div>
+							<div class="col-xs-3">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<span class="glyphicon glyphicon-calendar"></span>
+									</div>
+									<input disabled class="form-control input-sm" type="text" name="dateEnd" id="filter_dateEnd" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-		
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				<div class="form-group">
@@ -47,7 +80,7 @@
 							<div id="arrondissementCheckboxes" data-toggle="buttons">
 								<#if arrondissement_list?has_content>		
 									<#list arrondissement_list as arrondissement>
-										<label class="btn btn-checkbox
+										<label class="checkbox-arrondissement btn btn-checkbox
 										<#if (filter.arrondissementIds)?has_content && filter.arrondissementIds?seq_contains(arrondissement.id)>
 											active
 										</#if>
@@ -80,6 +113,10 @@
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				<button class="btn btn-paris btn-blue btn-lg" type="submit" name="action" value="search">Rechercher</button>
+				<button type="button" class="btn btn-paris btn-blue btn-lg"
+					id="re-init-button" onclick="deleteFields()">
+					#i18n{dansmarue.reportingList.reInitChamps}
+				</button>
 			</div>
 		</div>
 	</form>
@@ -90,13 +127,24 @@
 			<div class="col-xs-12 col-sm-12 col-md-offset-3 col-md-6 col-lg-offset-3 col-lg-6">
 				<!-- Tableau 1 -->
 				<@tableau states_list=states_list_1/>
-				
-				<br><br><br><br>
-				
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-offset-3 col-md-6 col-lg-offset-3 col-lg-6">
+					<i>#i18n{dansmarue.dashboard.tranche2.explication}</i>
+				</div>
+			</div>
+			<br><br><br><br>
+			<div class="col-xs-12 col-sm-12 col-md-offset-3 col-md-6 col-lg-offset-3 col-lg-6">
 				<!-- Tableau 2 -->
 				<@tableau states_list=states_list_2/>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-offset-3 col-md-6 col-lg-offset-3 col-lg-6">
+				<i>#i18n{dansmarue.dashboard.tranche2.explication}</i>
+			</div>
+		</div>
+		
 	</div>
 </section>
 
@@ -149,22 +197,13 @@
 									<#list listTranche as tranche>
 										<#if tranche==i>
 										<#assign nbSignalement=0>
-											<#if tranche==1  && (listNbSignalementSize > 1) && listNbSignalement[tranche?counter]??>
-												<!-- Pour la tranche -10j, on additionne avec la tranche -48h-->
-												<#assign nbSignalement = listNbSignalement[tranche?counter -1] + listNbSignalement[tranche?counter]>
-											<#else>
-												<#assign nbSignalement = listNbSignalement[tranche?counter -1]>
-											</#if>
+											<#assign nbSignalement = listNbSignalement[tranche?counter -1]>
 											<@fillCell tranche=tranche state=state nbSignalement=nbSignalement state=state/> 
 										</#if> 
 									</#list>
 								<#else>
 									<#-- Pas de signalement pour cette tranche -->
 									<#assign nbSignalement=0>
-									<#if i == 1 && listNbSignalementSize?? && (listNbSignalementSize > 1)>
-										<!-- Pour la tranche -10j, on additionne avec la tranche -48h-->
-										<#assign nbSignalement=listNbSignalement[listNbSignalementSize-1]>
-									</#if>
 									<@fillCell tranche=i state=state nbSignalement=nbSignalement state=state/>
 								</#if>
 							</#list>
@@ -273,7 +312,7 @@
 				<label 
 				<#-- On flag la category à isVisible si elle est affectée à l'entité parent de l'user. Si l'user est admin, on flag toutes les catégories -->
 				<#if (entiteParentUser == category.idUnit || entiteParentUser lt 0)> isVisible="true" </#if>
-				category-id="${category.id}" class="btn btn-radio 
+				category-id="${category.id}" class="radio-category btn btn-radio 
 				<#if (filter.categoryIds)?has_content && filter.categoryIds?seq_contains(category.id)>
 					active
 				</#if>
@@ -292,6 +331,8 @@
 
 <script>
 $(document).ready(function(){
+	//Visuel periode
+	setDateVisuel("${(filter.periodId)!}");
 	
 	/*** Unit ***/
 	var filterDepth = ${(filter.depth)!};
@@ -415,7 +456,6 @@ $("label[unit-id]").mouseup(function() {
 });
 
 
-
 //Clique sur une catégorie
 $("label[category-id]").mouseup(function() {
 	var categoryId = $(this).attr("category-id");
@@ -475,5 +515,76 @@ $("label[category-id]").mouseup(function() {
 	}
 });
 
+$(".radio-period").mouseup(function() {
+	var period = $(this).find("input").val();
+	setDateVisuel(period);	
+});
 
+//Mise à jour du visuel de la période
+function setDateVisuel( period) {
+	var date;
+	
+	//Date de début
+	switch (period) {
+	  case '0':
+		date = new Date(new Date().setDate(new Date().getDate() - 180));
+	    break;
+	  case '1':
+		date = new Date(new Date().setDate(new Date().getDate() - 90));
+		break;
+	  case '2':
+		date = new Date(new Date().setDate(new Date().getDate() - 30));
+		break;
+	  default:
+		  break;
+	}
+	
+	$("#filter_dateBegin").val( getTwoDigit(date.getDate()) + "/" + (getTwoDigit(date.getMonth()+1)) + "/" + date.getFullYear() );
+	
+	//Date de fin
+	date = new Date();
+	$("#filter_dateEnd").val( getTwoDigit(date.getDate()) + "/" + (getTwoDigit(date.getMonth()+1)) + "/" + date.getFullYear() );
+}
+
+function getTwoDigit( val ) {
+	return val<10? '0'+val:''+val;
+}
+	
+
+//Action du btn Réinitialiser
+function deleteFields()
+{
+	/*Le champs Entité est remis à la valeur de l’entité de l’utilisateur*/
+	$("div").filter(function(){
+		return $(this).attr("depth") > 0 ;
+	}).hide();
+	
+	$("div").filter(function(){
+		return $(this).attr("depth") > 0;
+	}).find("label[unit-id]").removeClass("active");
+	
+	$("input[name='unitId']").attr('checked',false);	
+	$("div[depth='0'] > label > input").attr('checked',true);
+	$("div[depth='0'] > label").addClass("active");
+	
+	/*La Période est remis à 30 jours*/
+	$(".radio-period").removeClass("active");
+	$("#periode30").addClass("active");
+	$("input[name='periodId']").attr('checked',false);
+	$("input[name='periodId'][value='2']").attr('checked',true);
+	
+	/*Tous les « autres critères » sont effacés, plus aucun n’est sélectionné*/ 
+	//Arrondissements
+	$(".checkbox-arrondissement").removeClass("active");
+	$("input[name='arrondissementIds']").attr('checked',false);
+	//Catégories
+	$("div").filter(function(){
+		return $(this).attr("depthcategory") > 0 ;
+	}).hide();
+	$(".radio-category").removeClass("active");
+	$("input[name='categoryId']").attr('checked',false);
+	
+	//Visuel periode
+	setDateVisuel("2");
+}
 </script>

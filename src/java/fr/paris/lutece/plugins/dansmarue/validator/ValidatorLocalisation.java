@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -51,7 +51,8 @@ public class ValidatorLocalisation
     /**
      * Validate.
      *
-     * @param adresse the adresse
+     * @param adresse
+     *            the adresse
      * @return true, if successful
      */
     public boolean validate( Adresse adresse )
@@ -64,7 +65,7 @@ public class ValidatorLocalisation
             dLat = adresse.getLat( );
             dLng = adresse.getLng( );
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
             // in case of cast error of lat/lng fields
             dLat = null;
@@ -77,7 +78,8 @@ public class ValidatorLocalisation
     /**
      * Retrieves from the request, the coordinates, then check if inside Paris.
      *
-     * @param request            the HTTPServletRequest
+     * @param request
+     *            the HTTPServletRequest
      * @return true if inside Paris
      */
     public boolean validate( HttpServletRequest request )
@@ -89,7 +91,7 @@ public class ValidatorLocalisation
             dLat = Double.parseDouble( request.getParameter( SignalementConstants.FIELD_LAT ) );
             dLng = Double.parseDouble( request.getParameter( SignalementConstants.FIELD_LNG ) );
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
             // in case of cast error of lat/lng fields
             dLat = null;
@@ -102,8 +104,10 @@ public class ValidatorLocalisation
     /**
      * Checks if coordinates are inside Paris.
      *
-     * @param dLat            the latitude
-     * @param dLng            the longitude
+     * @param dLat
+     *            the latitude
+     * @param dLng
+     *            the longitude
      * @return true if in Paris
      */
     public boolean validate( Double dLat, Double dLng )
@@ -114,13 +118,15 @@ public class ValidatorLocalisation
     /**
      * Is in Paris.
      *
-     * @param dLat            the lat
-     * @param dLng            the lng
+     * @param dLat
+     *            the lat
+     * @param dLng
+     *            the lng
      * @return true, if successful, coordinate are within paris.
      */
     private boolean estDansParis( Double dLat, Double dLng )
     {
-        IArrondissementService arrondissementService = ( IArrondissementService ) SpringContextService.getBean( "signalement.arrondissementService" );
+        IArrondissementService arrondissementService = (IArrondissementService) SpringContextService.getBean( "signalement.arrondissementService" );
         boolean dansParis = false;
         if ( ( dLat == null ) || ( dLng == null ) )
         {

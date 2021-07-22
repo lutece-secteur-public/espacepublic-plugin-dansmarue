@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,22 +47,22 @@ public class PrioriteDAO implements IPrioriteDAO
 {
 
     /** The Constant SQL_QUERY_NEW_PK. */
-    private static final String SQL_QUERY_NEW_PK     = "SELECT nextval('seq_signalement_priorite_id_priorite')";
+    private static final String SQL_QUERY_NEW_PK = "SELECT nextval('seq_signalement_priorite_id_priorite')";
 
     /** The Constant SQL_QUERY_INSERT. */
-    private static final String SQL_QUERY_INSERT     = "INSERT INTO signalement_priorite(id_priorite, libelle) VALUES (?, ?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_priorite(id_priorite, libelle) VALUES (?, ?)";
 
     /** The Constant SQL_QUERY_DELETE. */
-    private static final String SQL_QUERY_DELETE     = "DELETE FROM signalement_priorite WHERE id_priorite=?";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_priorite WHERE id_priorite=?";
 
     /** The Constant SQL_QUERY_SELECT. */
-    private static final String SQL_QUERY_SELECT     = "SELECT id_priorite, libelle FROM signalement_priorite WHERE id_priorite = ?";
+    private static final String SQL_QUERY_SELECT = "SELECT id_priorite, libelle FROM signalement_priorite WHERE id_priorite = ?";
 
     /** The Constant SQL_QUERY_SELECT_ALL. */
     private static final String SQL_QUERY_SELECT_ALL = "SELECT id_priorite, libelle, ordre_priorite FROM signalement_priorite ORDER BY ordre_priorite";
 
     /** The Constant SQL_QUERY_UPDATE. */
-    private static final String SQL_QUERY_UPDATE     = "UPDATE signalement_priorite SET id_priorite=?, libelle=? WHERE id_priorite = ?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_priorite SET id_priorite=?, libelle=? WHERE id_priorite = ?";
 
     /**
      * Generates a new primary key.
@@ -115,7 +115,8 @@ public class PrioriteDAO implements IPrioriteDAO
     @Override
     public Long insert( Priorite priorite )
     {
-        try(DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT )) {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT ) )
+        {
             if ( ( priorite.getId( ) == null ) || ( priorite.getId( ) == 0 ) )
             {
                 priorite.setId( newPrimaryKey( ) );

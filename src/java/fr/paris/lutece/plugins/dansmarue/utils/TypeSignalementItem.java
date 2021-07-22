@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.dansmarue.utils;
 
 import fr.paris.lutece.util.ReferenceItem;
 
-
 /**
  * The Class TypeSignalementItem.
  */
@@ -58,7 +57,8 @@ public class TypeSignalementItem extends ReferenceItem
     /**
      * Setter for the idCategory.
      *
-     * @param idCategory            the idCategory to set
+     * @param idCategory
+     *            the idCategory to set
      */
     public void setIdCategory( Integer idCategory )
     {

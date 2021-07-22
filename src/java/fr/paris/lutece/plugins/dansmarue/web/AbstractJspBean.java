@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -66,7 +66,6 @@ import fr.paris.lutece.portal.web.util.LocalizedDelegatePaginator;
 import fr.paris.lutece.util.html.AbstractPaginator;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
-
 /**
  * Abstract class for jsp bean.
  */
@@ -74,37 +73,49 @@ public class AbstractJspBean extends MVCAdminJspBean
 {
 
     /** The Constant serialVersionUID. */
-    private static final long     serialVersionUID             = -6753665775376332934L;
+    private static final long serialVersionUID = -6753665775376332934L;
 
     /** The str current page index. */
-    protected String              _strCurrentPageIndex         = "";
+    protected String _strCurrentPageIndex = "";
 
     /** The n items per page. */
-    protected int                 _nItemsPerPage;
+    protected int _nItemsPerPage;
 
     /** The n default items per page. */
-    public final int              N_DEFAULT_ITEMS_PER_PAGE     = AppPropertiesService.getPropertyInt( SignalementConstants.PROPERTY_DEFAULT_ITEM_PER_PAGE, 20 );
+    public final int N_DEFAULT_ITEMS_PER_PAGE = AppPropertiesService.getPropertyInt( SignalementConstants.PROPERTY_DEFAULT_ITEM_PER_PAGE, 20 );
 
     /** The Constant MARK_FILTER. */
-    protected static final String MARK_FILTER                  = "filter";
+    protected static final String MARK_FILTER = "filter";
 
     /** The Constant URL_JSP_MANAGE_SIGNALEMENTS. */
-    public static final String    URL_JSP_MANAGE_SIGNALEMENTS  = "jsp/admin/plugins/signalement/ManageSignalement.jsp";
+    public static final String URL_JSP_MANAGE_SIGNALEMENTS = "jsp/admin/plugins/signalement/ManageSignalement.jsp";
 
     /** The Constant MARK_PAGINATOR. */
-    protected static final String MARK_PAGINATOR               = "paginator";
+    protected static final String MARK_PAGINATOR = "paginator";
 
     /** The Constant MARK_NB_ITEMS_PER_PAGE. */
-    protected static final String MARK_NB_ITEMS_PER_PAGE       = "nb_items_per_page";
+    protected static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
 
     /** The request. */
-    private transient HttpServletRequest    _request;
+    private transient HttpServletRequest _request;
 
     /** The Constant PARAMETER_INT_PAGE_INDEX_ONE. */
     // PARAMETERS
-    private static final int      PARAMETER_INT_PAGE_INDEX_ONE = 1;
+    private static final int PARAMETER_INT_PAGE_INDEX_ONE = 1;
 
-    /* (non-Javadoc)
+    /**
+     * Inits the.
+     *
+     * @param request
+     *            the request
+     * @param strRight
+     *            the str right
+     * @throws AccessDeniedException
+     *             the access denied exception
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.portal.web.admin.PluginAdminPageJspBean#init(javax.servlet.http.HttpServletRequest, java.lang.String)
      */
     @Override
@@ -117,11 +128,16 @@ public class AbstractJspBean extends MVCAdminJspBean
     /**
      * Return a paginator for the view using parameter in http request.
      *
-     * @param <T>            This is the type parameter
-     * @param request            http request
-     * @param list            bean list to paginate
-     * @param jspUrl            the jsp Url
-     * @param totalResult            the total result
+     * @param <T>
+     *            This is the type parameter
+     * @param request
+     *            http request
+     * @param list
+     *            bean list to paginate
+     * @param jspUrl
+     *            the jsp Url
+     * @param totalResult
+     *            the total result
      * @return paginator
      */
     protected <T> LocalizedDelegatePaginator<T> getPaginator( HttpServletRequest request, ResultList<T> list, String jspUrl, int totalResult )
@@ -148,18 +164,24 @@ public class AbstractJspBean extends MVCAdminJspBean
         strBaseUrl.append( AppPathService.getBaseUrl( request ).toString( ) );
         strBaseUrl.append( jspUrl );
 
-        return new LocalizedDelegatePaginator<T>( list, _nItemsPerPage, strBaseUrl.toString( ), AbstractPaginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex, totalResult, getLocale( ) );
+        return new LocalizedDelegatePaginator<T>( list, _nItemsPerPage, strBaseUrl.toString( ), AbstractPaginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex,
+                totalResult, getLocale( ) );
 
     }
 
     /**
      * Init the jspBean.
      *
-     * @param request            the HTTpServletRequest
-     * @param strRight            the right
-     * @param keyResourceType            the resource type
-     * @param permission            the permission
-     * @throws AccessDeniedException             Throws AccessDeniedException
+     * @param request
+     *            the HTTpServletRequest
+     * @param strRight
+     *            the right
+     * @param keyResourceType
+     *            the resource type
+     * @param permission
+     *            the permission
+     * @throws AccessDeniedException
+     *             Throws AccessDeniedException
      */
     public void init( HttpServletRequest request, String strRight, String keyResourceType, String permission ) throws AccessDeniedException
     {
@@ -173,8 +195,10 @@ public class AbstractJspBean extends MVCAdminJspBean
     /**
      * Returns a bean for pagination in service/dao using parameter in http request.
      *
-     * @param request            http request
-     * @param totalResult            the total result
+     * @param request
+     *            http request
+     * @param totalResult
+     *            the total result
      * @return paginator
      */
     protected PaginationProperties getPaginationProperties( HttpServletRequest request, Integer totalResult )
@@ -204,7 +228,8 @@ public class AbstractJspBean extends MVCAdminJspBean
     /**
      * Return localized message.
      *
-     * @param key            i18n key
+     * @param key
+     *            i18n key
      * @return localized message
      */
     protected String getMessage( String key )
@@ -215,8 +240,10 @@ public class AbstractJspBean extends MVCAdminJspBean
     /**
      * Return localized message with args.
      *
-     * @param key            i18n key
-     * @param args            args
+     * @param key
+     *            i18n key
+     * @param args
+     *            args
      * @return localized message
      */
     protected String getMessage( String key, String... args )
@@ -227,12 +254,13 @@ public class AbstractJspBean extends MVCAdminJspBean
     /**
      * Get validation error from session and remove from it.
      *
-     * @param request            http request
+     * @param request
+     *            http request
      * @return validation exception
      */
     protected FunctionnalException getErrorOnce( HttpServletRequest request )
     {
-        FunctionnalException fe = ( FunctionnalException ) request.getSession( ).getAttribute( SignalementConstants.PARAMETER_ERROR );
+        FunctionnalException fe = (FunctionnalException) request.getSession( ).getAttribute( SignalementConstants.PARAMETER_ERROR );
         if ( fe != null )
         {
             request.getSession( ).removeAttribute( SignalementConstants.PARAMETER_ERROR );
@@ -243,18 +271,19 @@ public class AbstractJspBean extends MVCAdminJspBean
     /**
      * Return html code for error message.
      *
-     * @param e            validation exception
+     * @param e
+     *            validation exception
      * @return html
      */
     protected String getHtmlError( FunctionnalException e )
     {
-        Map<String, Object> model = new HashMap<String, Object>( );
-        List<String> messageList = new ArrayList<String>( );
+        Map<String, Object> model = new HashMap<>( );
+        List<String> messageList = new ArrayList<>( );
         try
         {
             throw e;
         }
-        catch ( ValidationException ve )
+        catch( ValidationException ve )
         {
             String typeName = ve.getBean( ).getClass( ).getSimpleName( );
 
@@ -262,13 +291,14 @@ public class AbstractJspBean extends MVCAdminJspBean
             for ( ConstraintViolation<?> constraintViolation : ve.getConstraintViolationList( ) )
             {
                 String fieldName = getMessage( "dansmarue.field." + typeName + "." + constraintViolation.getPropertyPath( ) );
-                messageList.add( getMessage( "dansmarue.validation.error", String.valueOf( constraintViolation.getInvalidValue( ) ), fieldName, constraintViolation.getMessage( ) ) );
+                messageList.add( getMessage( "dansmarue.validation.error", String.valueOf( constraintViolation.getInvalidValue( ) ), fieldName,
+                        constraintViolation.getMessage( ) ) );
             }
 
             AppLogService.error( ve.getMessage( ), ve );
 
         }
-        catch ( BusinessException be )
+        catch( BusinessException be )
         {
             messageList.add( getMessage( be.getCode( ), be.getArguments( ) ) );
             AppLogService.error( be.getMessage( ), be );
@@ -283,9 +313,12 @@ public class AbstractJspBean extends MVCAdminJspBean
     /**
      * Manage functionnal exception.
      *
-     * @param request the request
-     * @param e the e
-     * @param targetUrl the target url
+     * @param request
+     *            the request
+     * @param e
+     *            the e
+     * @param targetUrl
+     *            the target url
      * @return the string
      */
     protected String manageFunctionnalException( HttpServletRequest request, FunctionnalException e, String targetUrl )
@@ -316,8 +349,10 @@ public class AbstractJspBean extends MVCAdminJspBean
     /**
      * Check if the sector is allowed.
      *
-     * @param request            the HttpServletRequest
-     * @param idSecteur            the sector id
+     * @param request
+     *            the HttpServletRequest
+     * @param idSecteur
+     *            the sector id
      * @return true if the sector is allowed
      */
     protected boolean estAutoriseSecteur( HttpServletRequest request, String idSecteur )

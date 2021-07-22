@@ -1,0 +1,100 @@
+<#macro map_feuille_de_tournee_consult>
+	<@adresse_autocomplete_includes/>
+	<@leaflet_map_includes/>
+	<@leaflet_cluster_includes/>
+	<link rel="stylesheet" href="css/plugins/leaflet/leaflet_awesome_number_markers.css" />
+	<link rel="stylesheet" href="css/plugins/leaflet/leaflet.draw.css" />
+	<script src="js/leaflet_awesome_number_markers.js"></script>
+	<script src="js/leaflet.draw.js"></script>
+	<script src="js/turf.min.js"></script>
+	<div class="row">
+		<div class="col-xs-2 col-sm-12 col-md-12 col-lg-12">
+			<div class="row row-flex-fdt">
+				<div class="col-xs-2 col-lg-6 col-flex-fdt">
+					<label class="fdt-generate-vue">#i18n{dansmarue.tournee.select.vuecarte}</label>
+				</div>
+				<div class="col-xs-2 col-lg-6 col-flex-fdt">
+				    <div class="col-xs-2 col-lg-12 text-right">
+				    	 <label>#i18n{dansmarue.tournee.select.nb.select}  ${paginator.itemsCount}</label>
+				 	</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-12">
+	     	<input type="text" class="form-control" id="adresse" name="adresse" placeholder="Saisir une adresse"/>
+		</div>
+		<div class="col-xs-2 col-sm-12 col-md-12 col-lg-12">
+			<div id="map_canvas" style="height:800px;z-index:1;">
+			</div>
+		</div>
+	</div>
+	
+	<script>
+		var layerGroupMarkers;
+		var signalement_arr = [];
+		var isMapInitOnce = false;
+		
+		$.getScript("jsp/admin/plugins/signalement/DoGetMap.jsp", function(data){
+			initLeafletMap("map_canvas");
+			drawMarkers();
+		});
+		
+		/* Ajoute les markers sur la carte */
+		function drawMarkers(){
+			var markers = new L.FeatureGroup().addTo(leafletmap);
+			if(!isMapInitOnce) {
+				<#list signalements_map_list as s>
+					var signalement = new Object();
+					signalement.idSignalement = ${s.idSignalement};
+					signalement.lat = ${s.lat?replace(',', '.')};
+					signalement.lng = ${s.lng?replace(',', '.')};
+					signalement.tooltip ="${s.tooltip}";
+					signalement.colorNumber = "${s.colorNumber}";
+					signalement_arr.push(signalement);
+				</#list>
+			}
+			
+			//Add signalements markers on map
+			var index=1;
+			signalement_arr.forEach(function(signalement) {
+				
+				var color = "blue";
+				
+				if( signalement.isSurbrillance ){
+					color="red";
+				}
+
+				var marker = L.marker([signalement.lng, signalement.lat], {
+		          icon: new L.AwesomeNumberMarkers({
+		            number: index, 
+		            markerColor: color,
+		            numberColor: signalement.colorNumber
+		        }), 
+		        options: { 
+			          idSignalement: signalement.idSignalement,
+			          index: index
+		         }
+				});
+				
+				marker.bindPopup(signalement.tooltip);
+				marker.on('click',function(){this.openPopup()});
+				
+				index++;
+				marker.addTo(markers);
+				isMapInitOnce = true;
+			});
+		};
+		
+		$.getScript("jsp/site/plugins/leaflet/DoGetAutocomplete.jsp", function(data){
+			addAutocomplete("adresse",adressSelectCallback);
+		});
+		
+		/*Zoom sur l'adresse sélectionnée*/
+		function adressSelectCallback(item){
+			var coordPoint = new Proj4js.Point(item.lng,item.lat);
+			Proj4js.transform(projSourceMapSRID, projDestSRID, coordPoint);
+			zoomToWithoutMarker(coordPoint.y,coordPoint.x);
+		}
+		
+	</script>
+</#macro>

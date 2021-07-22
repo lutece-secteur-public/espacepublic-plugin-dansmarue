@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.image.ImageUtil;
 
-
 /**
  * The Class ImgUtils.
  */
@@ -62,7 +61,7 @@ public class ImgUtils
      *            the blob image
      * @return the byte[]
      */
-    public static byte[] checkQuality( byte[] blobImage )
+    public static byte [ ] checkQuality( byte [ ] blobImage )
     {
         String width = AppPropertiesService.getProperty( SignalementConstants.IMAGE_RESIZE_WIDTH );
         String height = AppPropertiesService.getProperty( SignalementConstants.IMAGE_RESIZE_HEIGHT );

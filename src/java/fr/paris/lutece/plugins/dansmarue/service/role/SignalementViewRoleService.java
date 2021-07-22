@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,6 @@ import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
 
-
 /**
  * Service to manage view roles. Allow to modify view roles, and to check if a user is authorized to view a report
  */
@@ -60,8 +59,10 @@ public class SignalementViewRoleService
     /**
      * Check if a user is restricted by a view role.
      *
-     * @param nIdUser            The is of the user to check
-     * @param request            The request to get the session of.
+     * @param nIdUser
+     *            The is of the user to check
+     * @param request
+     *            The request to get the session of.
      * @return True if the user is restricted by view role, false otherwise
      */
     public boolean checkIsUserRestrictedByViewRoles( int nIdUser, HttpServletRequest request )
@@ -77,13 +78,14 @@ public class SignalementViewRoleService
             request.getSession( ).setAttribute( SignalementConstants.ATTRIBUTE_SESSION_IS_USER_RECTRICTED, bIsRestricted );
             return bIsRestricted;
         }
-        return ( Boolean ) obj;
+        return (Boolean) obj;
     }
 
     /**
      * Check if a user has role restriction over reports.
      *
-     * @param nIdUser            The id of the user to check
+     * @param nIdUser
+     *            The id of the user to check
      * @return True if the user is restricted, false otherwise
      */
     public boolean isUserRestrictedByViewRoles( int nIdUser )
@@ -92,7 +94,8 @@ public class SignalementViewRoleService
     }
 
     /**
-     * Get the list of districts ids the user is allowed to view report of. The list is loaded from the session, or from the database is no one exists in session.
+     * Get the list of districts ids the user is allowed to view report of. The list is loaded from the session, or from the database is no one exists in
+     * session.
      *
      * @param nIdUser
      *            the id of the user
@@ -109,7 +112,7 @@ public class SignalementViewRoleService
             Object obj = request.getSession( ).getAttribute( SignalementConstants.ATTRIBUTE_SESSION_LIST_RESTRICTED_ARRONDISSEMENTS );
             if ( obj != null )
             {
-                listArrondissements = ( List<Integer> ) obj;
+                listArrondissements = (List<Integer>) obj;
             }
         }
         if ( listArrondissements == null )
@@ -136,7 +139,8 @@ public class SignalementViewRoleService
     }
 
     /**
-     * Get the list of ids of report types the user is allowed to view report of. The list is loaded from the session, or from the database is no one exists in session.
+     * Get the list of ids of report types the user is allowed to view report of. The list is loaded from the session, or from the database is no one exists in
+     * session.
      *
      * @param nIdUser
      *            the id of the user
@@ -153,7 +157,7 @@ public class SignalementViewRoleService
             Object obj = request.getSession( ).getAttribute( SignalementConstants.ATTRIBUTE_SESSION_LIST_RESTRICTED_TYPE_SIGNALEMENT );
             if ( obj != null )
             {
-                listTypeSignalement = ( List<Integer> ) obj;
+                listTypeSignalement = (List<Integer>) obj;
             }
         }
         if ( listTypeSignalement == null )
@@ -182,8 +186,10 @@ public class SignalementViewRoleService
     /**
      * Check if a user is authorized to access a report according to view roles.
      *
-     * @param signalement            The report
-     * @param request            The request
+     * @param signalement
+     *            The report
+     * @param request
+     *            The request
      * @return True if the user is authorized, false otherwise
      */
     public boolean isUserAuthorized( Signalement signalement, HttpServletRequest request )
@@ -214,6 +220,12 @@ public class SignalementViewRoleService
             bAuthorizedArrondissement = true;
         }
 
+        return bAuthorizedArrondissement && isAuthorizedTypeSignalement( adminUser, signalement, request );
+    }
+
+    private boolean isAuthorizedTypeSignalement( AdminUser adminUser, Signalement signalement, HttpServletRequest request )
+    {
+
         boolean bAuthorizedTypeSignalement = false;
         List<Integer> listTypeSignalement = getUserRestrictedTypeSignalementList( adminUser.getUserId( ), request );
         if ( ( signalement.getTypeSignalement( ) != null ) && ( listTypeSignalement != null ) && !listTypeSignalement.isEmpty( ) )
@@ -233,11 +245,12 @@ public class SignalementViewRoleService
             bAuthorizedTypeSignalement = true;
         }
 
-        return bAuthorizedArrondissement && bAuthorizedTypeSignalement;
+        return bAuthorizedTypeSignalement;
     }
 
     /**
-     * Get the list of ids of report categories the user is allowed to view report of. The list is loaded from the session, or from the database is no one exists in session.
+     * Get the list of ids of report categories the user is allowed to view report of. The list is loaded from the session, or from the database is no one
+     * exists in session.
      *
      * @param nIdUser
      *            the id of the user
@@ -254,7 +267,7 @@ public class SignalementViewRoleService
             Object obj = request.getSession( ).getAttribute( SignalementConstants.ATTRIBUTE_SESSION_LIST_RESTRICTED_CATEGORY_SIGNALEMENT );
             if ( obj != null )
             {
-                listCategoriesSignalement = ( List<Integer> ) obj;
+                listCategoriesSignalement = (List<Integer>) obj;
             }
         }
         if ( listCategoriesSignalement == null )

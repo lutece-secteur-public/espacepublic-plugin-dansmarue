@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,7 +47,8 @@ public interface IObservationRejetDAO
     /**
      * Save a new reject observation.
      *
-     * @param observationRejet            the reject observation
+     * @param observationRejet
+     *            the reject observation
      * @return observationRejet id
      */
     public Integer insert( ObservationRejet observationRejet );
@@ -55,14 +56,16 @@ public interface IObservationRejetDAO
     /**
      * Delete a reject observation.
      *
-     * @param lId            the observationRejet id
+     * @param lId
+     *            the observationRejet id
      */
     public void remove( long lId );
 
     /**
      * Load a reject observation.
      *
-     * @param lId            the observationRejet id
+     * @param lId
+     *            the observationRejet id
      * @return a reject observation
      */
     public ObservationRejet load( Integer lId );
@@ -70,14 +73,16 @@ public interface IObservationRejetDAO
     /**
      * Store a reject observation.
      *
-     * @param observationRejet            the observationRejet object
+     * @param observationRejet
+     *            the observationRejet object
      */
     public void store( ObservationRejet observationRejet );
 
     /**
      * Return all reject observation.
      *
-     * @param plugin            the plugin
+     * @param plugin
+     *            the plugin
      * @return a list of ObservationRejet
      */
     public List<ObservationRejet> getAllObservationRejet( Plugin plugin );
@@ -85,7 +90,8 @@ public interface IObservationRejetDAO
     /**
      * Check if the observationRejet already exists.
      *
-     * @param observationRejet            the observationRejet object
+     * @param observationRejet
+     *            the observationRejet object
      * @return boolean
      */
     public boolean existsObservationRejet( ObservationRejet observationRejet );
@@ -100,35 +106,40 @@ public interface IObservationRejetDAO
     /**
      * Updates a reject observation order, by its id.
      *
-     * @param observationRejet            the observationRejet object
+     * @param observationRejet
+     *            the observationRejet object
      */
     void updateObservationRejetOrdre( ObservationRejet observationRejet );
 
     /**
      * Decreases the order of the next reject.
      *
-     * @param observationRejet            the observationRejet object
+     * @param observationRejet
+     *            the observationRejet object
      */
     void decreaseOrdreOfNextRejet( ObservationRejet observationRejet );
 
     /**
      * Increases the order of the previous reject.
      *
-     * @param observationRejet            the observationRejet object
+     * @param observationRejet
+     *            the observationRejet object
      */
     void increaseOrdreOfPreviousRejet( ObservationRejet observationRejet );
 
     /**
      * Increases all the next orders.
      *
-     * @param nIdObservationRejet            the reject observation id
+     * @param nIdObservationRejet
+     *            the reject observation id
      */
     void increaseOrdreOfAllNext( int nIdObservationRejet );
 
     /**
      * Decreases all the next orders.
      *
-     * @param nIdObservationRejet            the reject observation id
+     * @param nIdObservationRejet
+     *            the reject observation id
      */
     void decreaseOrdreOfAllNext( int nIdObservationRejet );
 
@@ -142,7 +153,8 @@ public interface IObservationRejetDAO
     /**
      * Counts the number of time the reject observation has been used.
      *
-     * @param idObservationRejet            the id of reject observation to get the use count
+     * @param idObservationRejet
+     *            the id of reject observation to get the use count
      * @return the number of reject observation uses
      */
     int countByIdObservationRejet( int idObservationRejet );

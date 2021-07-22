@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,17 +40,17 @@ public class DossierFields
 {
 
     /** The dossiers id. */
-    private int[] _dossiersId;
+    private int [ ] _dossiersId;
 
     /** The n id resource. */
-    private int   nIdResource;
+    private int nIdResource;
 
     /**
      * getDossiersId.
      *
      * @return dossier ids
      */
-    public int[] getDossiersId( )
+    public int [ ] getDossiersId( )
     {
         return _dossiersId;
     }
@@ -58,9 +58,10 @@ public class DossierFields
     /**
      * setDossiersId.
      *
-     * @param dossiersId            dossier ids
+     * @param dossiersId
+     *            dossier ids
      */
-    public void setDossiersId( int[] dossiersId )
+    public void setDossiersId( int [ ] dossiersId )
     {
         _dossiersId = dossiersId;
     }
@@ -78,7 +79,8 @@ public class DossierFields
     /**
      * setIdResource.
      *
-     * @param nIdResource            id resource
+     * @param nIdResource
+     *            id resource
      */
     public void setIdResource( int nIdResource )
     {

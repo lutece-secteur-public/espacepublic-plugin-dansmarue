@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -64,7 +64,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import net.sf.json.JSONObject;
 
-
 /**
  * The Class SignalementOutputPrcessor.
  */
@@ -73,30 +72,42 @@ public class SignalementOutputPrcessor extends OperatorProcessor
 
     /** The Constant MESSAGE_ERROR_NO_SECTOR. */
     // MESSAGES
-    private static final String                    MESSAGE_ERROR_NO_SECTOR = "dansmarue.message.error.aucunSecteur";
+    private static final String MESSAGE_ERROR_NO_SECTOR = "dansmarue.message.error.aucunSecteur";
 
     /** The Constant TOKEN_NB_RANDOM_CHAR. */
-    private static final int                       TOKEN_NB_RANDOM_CHAR    = 100;
+    private static final int TOKEN_NB_RANDOM_CHAR = 100;
 
     /** The Constant signalementService. */
-    protected static final SignalementService      signalementService      = SpringContextService.getBean( "signalementService" );
+    protected static final SignalementService signalementService = SpringContextService.getBean( "signalementService" );
 
     /** The Constant typeSignalementService. */
-    protected static final TypeSignalementService  typeSignalementService  = SpringContextService.getBean( "typeSignalementService" );
+    protected static final TypeSignalementService typeSignalementService = SpringContextService.getBean( "typeSignalementService" );
 
     /** The Constant prioriteService. */
-    protected static final PrioriteService         prioriteService         = SpringContextService.getBean( "prioriteService" );
+    protected static final PrioriteService prioriteService = SpringContextService.getBean( "prioriteService" );
 
     /** The Constant dansmarueUploadHandler. */
-    protected static final DansMaRueUploadHandler  dansmarueUploadHandler  = SpringContextService.getBean( "dansmarueUploadHandler" );
+    protected static final DansMaRueUploadHandler dansmarueUploadHandler = SpringContextService.getBean( "dansmarueUploadHandler" );
 
     /** The Constant signalementSuiviService. */
     protected static final SignalementSuiviService signalementSuiviService = SpringContextService.getBean( "signalementSuiviService" );
 
     /** The Constant arrondissementService. */
-    protected static final ArrondissementService   arrondissementService   = SpringContextService.getBean( "signalement.arrondissementService" );
+    protected static final ArrondissementService arrondissementService = SpringContextService.getBean( "signalement.arrondissementService" );
 
-    /* (non-Javadoc)
+    /**
+     * Process.
+     *
+     * @param operator
+     *            the operator
+     * @param arguments
+     *            the arguments
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.pdfbox.util.operator.OperatorProcessor#process(org.apache.pdfbox.util.PDFOperator, java.util.List)
      */
     @Override
@@ -142,7 +153,7 @@ public class SignalementOutputPrcessor extends OperatorProcessor
             token.append( new Date( ).getTime( ) );
             demandeSignalement.setToken( DigestUtils.md5DigestAsHex( token.toString( ).getBytes( "UTF-8" ) ) );
         }
-        catch ( UnsupportedEncodingException e )
+        catch( UnsupportedEncodingException e )
         {
             AppLogService.error( e );
 
@@ -175,7 +186,7 @@ public class SignalementOutputPrcessor extends OperatorProcessor
                 signalementService.addFollower( signalementId, user.getName( ), "", user.getUserInfo( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL ), "", "", true );
             }
         }
-        catch ( BusinessException e )
+        catch( BusinessException e )
         {
             AppLogService.error( e.getMessage( ), e );
             throw new BusinessException( demandeSignalement, MESSAGE_ERROR_NO_SECTOR );
@@ -239,7 +250,7 @@ public class SignalementOutputPrcessor extends OperatorProcessor
             token.append( new Date( ).getTime( ) );
             demandeSignalement.setToken( DigestUtils.md5DigestAsHex( token.toString( ).getBytes( "UTF-8" ) ) );
         }
-        catch ( UnsupportedEncodingException e )
+        catch( UnsupportedEncodingException e )
         {
             AppLogService.error( e );
             JSONObject jObject = new JSONObject( );
@@ -283,7 +294,7 @@ public class SignalementOutputPrcessor extends OperatorProcessor
             }
 
         }
-        catch ( BusinessException e )
+        catch( BusinessException e )
         {
             AppLogService.error( e.getMessage( ), e );
             throw new BusinessException( demandeSignalement, MESSAGE_ERROR_NO_SECTOR );

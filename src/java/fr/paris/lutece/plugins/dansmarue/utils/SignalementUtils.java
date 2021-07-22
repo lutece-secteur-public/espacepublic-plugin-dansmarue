@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -83,9 +83,12 @@ public final class SignalementUtils
     /**
      * Populate a bean, launch a {@link AppException} in case of error.
      *
-     * @param <T>            This is the type parameter
-     * @param bean            the bean
-     * @param request            the request
+     * @param <T>
+     *            This is the type parameter
+     * @param bean
+     *            the bean
+     * @param request
+     *            the request
      */
     @SuppressWarnings( "unchecked" )
     public static <T> void populate( T bean, HttpServletRequest request )
@@ -94,11 +97,11 @@ public final class SignalementUtils
         {
             BeanUtils.populate( bean, request.getParameterMap( ) );
         }
-        catch ( IllegalAccessException e )
+        catch( IllegalAccessException e )
         {
             throw new AppException( "Unable to populate bean " + e.getMessage( ), e );
         }
-        catch ( InvocationTargetException e )
+        catch( InvocationTargetException e )
         {
             throw new AppException( "Unable to populate bean " + e.getMessage( ), e );
         }
@@ -107,20 +110,21 @@ public final class SignalementUtils
     /**
      * getIntArray : does not catch {@link NumberFormatException}.
      *
-     * @param stringArray            string array
+     * @param stringArray
+     *            string array
      * @return int array
      */
-    public static int[] getIntArray( String[] stringArray )
+    public static int [ ] getIntArray( String [ ] stringArray )
     {
         if ( stringArray == null )
         {
             return null;
         }
-        int[] intArray = new int[stringArray.length];
+        int [ ] intArray = new int [ stringArray.length];
 
         for ( int nIndex = 0; nIndex < stringArray.length; nIndex++ )
         {
-            intArray[nIndex] = Integer.parseInt( stringArray[nIndex] );
+            intArray [nIndex] = Integer.parseInt( stringArray [nIndex] );
         }
 
         return intArray;
@@ -129,7 +133,8 @@ public final class SignalementUtils
     /**
      * buildRedirectResult.
      *
-     * @param strUrl            url to redirect
+     * @param strUrl
+     *            url to redirect
      * @return {@link IPluginActionResult}
      */
     public static IPluginActionResult buildRedirectResult( String strUrl )
@@ -165,7 +170,6 @@ public final class SignalementUtils
 
     }
 
-
     /**
      * Get the current operating system, here if it's solaris.
      *
@@ -181,7 +185,8 @@ public final class SignalementUtils
     /**
      * Replace "DEVE" unit id by the SEJ unit id.
      *
-     * @param listeUnits            the units list
+     * @param listeUnits
+     *            the units list
      */
     public static void changeUnitDEVEIntoSEJ( ReferenceList listeUnits )
     {
@@ -197,7 +202,8 @@ public final class SignalementUtils
     /**
      * Checks wether the prefix belongs to reporting type.
      *
-     * @param prefix            the prefix
+     * @param prefix
+     *            the prefix
      * @return a boolean
      */
     public static boolean isTypeSignalement( String prefix )
@@ -208,7 +214,8 @@ public final class SignalementUtils
     /**
      * Returns all the properties matching the prefix.
      *
-     * @param prefix            the prefix
+     * @param prefix
+     *            the prefix
      * @return a boolean
      */
     public static List<String> getProperties( String prefix )
@@ -229,7 +236,8 @@ public final class SignalementUtils
     /**
      * Check address.
      *
-     * @param address the address
+     * @param address
+     *            the address
      * @return is valid
      */
     public static boolean isValidAddress( String address )
@@ -238,15 +246,20 @@ public final class SignalementUtils
         if ( ( address == null ) || StringUtils.isEmpty( address.trim( ) ) )
         {
             return false;
-        } else if ( !StringUtils.containsIgnoreCase( address, "PARIS" ) )
-        {
-            return false;
-        } else if ( !address.matches( ".*75[0-9]{3}.*" ) )
-        {
-            return false;
-        } else
-        {
-            return true;
         }
+        else
+            if ( !StringUtils.containsIgnoreCase( address, "PARIS" ) )
+            {
+                return false;
+            }
+            else
+                if ( !address.matches( ".*75[0-9]{3}.*" ) )
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
     }
 }

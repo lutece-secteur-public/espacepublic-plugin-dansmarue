@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,7 +42,6 @@ import fr.paris.lutece.plugins.dansmarue.service.dto.TypeSignalementDTO;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
-
 /**
  * The Interface ITypeSignalementDAO.
  */
@@ -52,7 +51,8 @@ public interface ITypeSignalementDAO
     /**
      * Get new primary key.
      *
-     * @param plugin            the plugin
+     * @param plugin
+     *            the plugin
      * @return a new primary key
      */
     Integer newPrimaryKey( Plugin plugin );
@@ -174,8 +174,10 @@ public interface ITypeSignalementDAO
     /**
      * Updates a report type.
      *
-     * @param typeSignalement            the report type
-     * @param plugin            the plugin
+     * @param typeSignalement
+     *            the report type
+     * @param plugin
+     *            the plugin
      */
     void store( TypeSignalement typeSignalement, Plugin plugin );
 
@@ -200,7 +202,8 @@ public interface ITypeSignalementDAO
     /**
      * Gets a report type by its id.
      *
-     * @param typeSignalementId            report type id
+     * @param typeSignalementId
+     *            report type id
      * @return the report type
      */
     TypeSignalement getTypeSignalement( Integer typeSignalementId );
@@ -238,7 +241,8 @@ public interface ITypeSignalementDAO
     /**
      * Returns a report sub type by id.
      *
-     * @param nIdTypeSignalement            the report type id
+     * @param nIdTypeSignalement
+     *            the report type id
      * @return the report type object
      */
     TypeSignalement getTypeSignalementByIdWithParents( Integer nIdTypeSignalement );
@@ -246,7 +250,8 @@ public interface ITypeSignalementDAO
     /**
      * Returns a report id with the minimal order.
      *
-     * @param typeSignalement            the report type object
+     * @param typeSignalement
+     *            the report type object
      * @return the report type with the minimal order
      */
     int getIdTypeSignalementOrdreInferieur( TypeSignalement typeSignalement );
@@ -254,7 +259,8 @@ public interface ITypeSignalementDAO
     /**
      * Returns a report id with the maximal order.
      *
-     * @param typeSignalement            the report type object
+     * @param typeSignalement
+     *            the report type object
      * @return the report type with the maximal order
      */
     int getIdTypeSignalementOrdreSuperieur( TypeSignalement typeSignalement );
@@ -262,15 +268,18 @@ public interface ITypeSignalementDAO
     /**
      * Change the order of a report type.
      *
-     * @param typeSignalement            the report type object
+     * @param typeSignalement
+     *            the report type object
      */
     void updateOrdre( TypeSignalement typeSignalement );
 
     /**
      * Check if an order exists.
      *
-     * @param ordre            the order
-     * @param typeSignalementParent            the parent report type object
+     * @param ordre
+     *            the order
+     * @param typeSignalementParent
+     *            the parent report type object
      * @return a boolean
      */
     boolean existsOrdre( int ordre, TypeSignalement typeSignalementParent );
@@ -278,15 +287,18 @@ public interface ITypeSignalementDAO
     /**
      * Update the order.
      *
-     * @param ordre            the order
-     * @param typeSignalementParent            the parent report type object
+     * @param ordre
+     *            the order
+     * @param typeSignalementParent
+     *            the parent report type object
      */
     void updateOrderGreaterThan( Integer ordre, TypeSignalement typeSignalementParent );
 
     /**
      * Returns the maximum order in hierarchy of a report type family.
      *
-     * @param typeSignalementParent            the parent report type
+     * @param typeSignalementParent
+     *            the parent report type
      * @return the maximum order
      */
     Integer getMaximumOrderInHierarchyTypeSignalement( TypeSignalement typeSignalementParent );
@@ -294,8 +306,10 @@ public interface ITypeSignalementDAO
     /**
      * Returns the minimum order in hierarchy of a report type family.
      *
-     * @param order            the order
-     * @param typeSignalementParent            the parent report type
+     * @param order
+     *            the order
+     * @param typeSignalementParent
+     *            the parent report type
      * @return the minimum order
      */
     Integer getMinimumOrderAfterGivenOrder( Integer order, TypeSignalement typeSignalementParent );
@@ -303,15 +317,18 @@ public interface ITypeSignalementDAO
     /**
      * Update the order of the report types if one is delete in the tree.
      *
-     * @param order            the order
-     * @param typeSignalementParent            the parent report type
+     * @param order
+     *            the order
+     * @param typeSignalementParent
+     *            the parent report type
      */
     void updateOrderSuperiorAfterDeletingTypeSignalement( Integer order, TypeSignalement typeSignalementParent );
 
     /**
      * Load the report type image.
      *
-     * @param nKey            the id of the report type image
+     * @param nKey
+     *            the id of the report type image
      * @return the image object
      */
     ImageResource loadImage( int nKey );
@@ -326,8 +343,10 @@ public interface ITypeSignalementDAO
     /**
      * Insert the report type alias.
      *
-     * @param typeSignalement            the report type object
-     * @param plugin            the plugin
+     * @param typeSignalement
+     *            the report type object
+     * @param plugin
+     *            the plugin
      * @return the report alias id
      */
     Integer insertAlias( TypeSignalement typeSignalement, Plugin plugin );
@@ -335,16 +354,20 @@ public interface ITypeSignalementDAO
     /**
      * Update the report type alias.
      *
-     * @param typeSignalement            the report type object
-     * @param plugin            the plugin
+     * @param typeSignalement
+     *            the report type object
+     * @param plugin
+     *            the plugin
      */
     void updateAlias( TypeSignalement typeSignalement, Plugin plugin );
 
     /**
      * Delete the report type alias.
      *
-     * @param idTypeSignalement            the report type id
-     * @param plugin            the plugin
+     * @param idTypeSignalement
+     *            the report type id
+     * @param plugin
+     *            the plugin
      */
     void deleteAlias( Integer idTypeSignalement, Plugin plugin );
 
@@ -356,7 +379,8 @@ public interface ITypeSignalementDAO
     /**
      * Retrieves a category id, of a report type id.
      *
-     * @param idTypeSignalement            the report type id
+     * @param idTypeSignalement
+     *            the report type id
      * @return The id of the category of the report type -1 if not found
      */
     int getCategoryFromTypeId( Integer idTypeSignalement );
@@ -371,7 +395,8 @@ public interface ITypeSignalementDAO
     /**
      * Finds report type even without unit.
      *
-     * @param nId            the report type id
+     * @param nId
+     *            the report type id
      * @return List of report type even without unit
      */
     TypeSignalement getTypeSignalementWithoutUnit( Integer nId );
@@ -379,7 +404,8 @@ public interface ITypeSignalementDAO
     /**
      * Finds report type with parent even without unit.
      *
-     * @param nIdTypeSignalement the n id type signalement
+     * @param nIdTypeSignalement
+     *            the n id type signalement
      * @return List of report type even without unit
      */
     TypeSignalement getTypeSignalementByIdWithParentsWithoutUnit( Integer nIdTypeSignalement );
@@ -387,8 +413,10 @@ public interface ITypeSignalementDAO
     /**
      * Update only the parent.
      *
-     * @param nIdTypeSignalement the n id type signalement
-     * @param nIdParent the n id parent
+     * @param nIdTypeSignalement
+     *            the n id type signalement
+     * @param nIdParent
+     *            the n id parent
      *
      */
     void updateParent( Integer nIdTypeSignalement, Integer nIdParent );
@@ -403,7 +431,8 @@ public interface ITypeSignalementDAO
     /**
      * Gets the list ids children.
      *
-     * @param idParent the id parent
+     * @param idParent
+     *            the id parent
      * @return the list ids children
      */
     List<Integer> getListIdsChildren( List<Integer> idParent );
@@ -411,7 +440,8 @@ public interface ITypeSignalementDAO
     /**
      * Return all type signalement agent or non agent.
      *
-     * @param isAgent the is agent
+     * @param isAgent
+     *            the is agent
      * @return the all type signalement by is agent
      */
     List<TypeSignalement> getAllTypeSignalementByIsAgent( boolean isAgent );
@@ -511,4 +541,13 @@ public interface ITypeSignalementDAO
      *            the source
      */
     void updateSource( Source source );
+
+    /**
+     * Check if the type signalement is selectable check if the type signalement do not has children.
+     *
+     * @param idTypeSignalement
+     *            the id of the type signalement who is checked as selectable (leaf)
+     * @return true if selectable
+     */
+    boolean isTypeSignalementSelectable( int idTypeSignalement );
 }

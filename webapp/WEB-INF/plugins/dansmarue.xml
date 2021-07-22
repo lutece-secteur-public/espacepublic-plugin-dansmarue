@@ -3,7 +3,7 @@
 	<!-- Plugin Informations -->
 	<name>signalement</name>
 	<class>fr.paris.lutece.plugins.dansmarue.service.SignalementPlugin</class>
-	<version>6.4.3</version>
+	<version>6.8.5-SNAPSHOT</version>
 	<description>signalement.plugin.description</description>
 	<documentation/>
 	<installation/>
@@ -57,6 +57,14 @@
 			<feature-level>2</feature-level>
 			<feature-url>jsp/admin/plugins/signalement/ManageSignalementDashboard.jsp</feature-url>
 			<feature-icon-url>images/admin/skin/plugins/signalement/dossier.png</feature-icon-url>
+		</admin-feature>
+		<admin-feature>
+			<feature-id>FEUILLE_DE_TOURNEE</feature-id>
+			<feature-title>dansmarue.adminFeature.feuilleDeTournee.name</feature-title>
+			<feature-description>dansmarue.adminFeature.feuilleDeTournee.description</feature-description>
+			<feature-level>2</feature-level>
+			<feature-url>jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp</feature-url>
+			<feature-icon-url/>
 		</admin-feature>
 	</admin-features>
 
@@ -119,6 +127,18 @@
 	  <daemon-description>dansmarue.daemon.suppressionPhotos.description</daemon-description>
 	  <daemon-class>fr.paris.lutece.plugins.dansmarue.service.deamon.SuppressionPhotosDaemon</daemon-class>
 	 </daemon>	 
+	  <daemon>
+	  <daemon-id>envoiMailServiceProgrammeDaemon</daemon-id>
+	  <daemon-name>dansmarue.deamon.envoiMailServiceProgramme.name</daemon-name>
+	  <daemon-description>dansmarue.deamon.envoiMailServiceProgramme.description</daemon-description>
+	  <daemon-class>fr.paris.lutece.plugins.dansmarue.service.deamon.EnvoiMailServiceProgrammeDaemon</daemon-class>
+	 </daemon>
+	  <daemon>
+	  <daemon-id>suppressionFeuilleDeTourneeDaemon</daemon-id>
+	  <daemon-name>dansmarue.deamon.suppresionFeuilleDeTournee.name</daemon-name>
+	  <daemon-description>deamon.suppresionFeuilleDeTournee.description</daemon-description>
+	  <daemon-class>fr.paris.lutece.plugins.dansmarue.service.deamon.SuppressionFeuilleDeTourneeDaemon</daemon-class>
+	 </daemon>
 	</daemons>
 	
 	<admin-javascript-files>

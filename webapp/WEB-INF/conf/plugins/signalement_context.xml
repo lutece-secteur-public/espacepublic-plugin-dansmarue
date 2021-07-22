@@ -59,6 +59,10 @@
 		class="fr.paris.lutece.plugins.dansmarue.service.impl.NumeroSignalementService"/>
 	<bean id="signalementExportService"
 		class="fr.paris.lutece.plugins.dansmarue.service.impl.SignalementExportService" />
+	<bean id="anonymizationPhotoService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.AnonymizationPhotoService" />
+	<bean id="feuilleDeTourneeService"
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.FeuilleDeTourneeService" />
 
 	<!-- Declaration des DAO -->
 	<bean id="dansmarue.numeroSignalementDAO"
@@ -105,6 +109,10 @@
 		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.ObservationRejetSignalementDAO" />
 	<bean id="signalementExportDAO"
 		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.SignalementExportDAO" />
+	<bean id="anonymizationPhotoDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.AnonymizationPhotoDAO" />
+	<bean id="dansmarue.FeuilleDeTourneeDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.FeuilleDeTourneeDAO"/>
 		
 	<!-- image services -->
 	<bean id="signalement.imageService"

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,18 @@ import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 public class TypeSignalementComparator implements Comparator<TypeSignalement>
 {
 
-    /* (non-Javadoc)
+    /**
+     * Compare.
+     *
+     * @param o1
+     *            the o 1
+     * @param o2
+     *            the o 2
+     * @return the int
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
     @Override
@@ -80,14 +91,15 @@ public class TypeSignalementComparator implements Comparator<TypeSignalement>
             {
                 ret = o1.getLibelle( ).compareTo( o2.getLibelle( ) );
             }
-            else if ( stack1.isEmpty( ) )
-            {
-                ret = -1;
-            }
             else
-            {
-                ret = 1;
-            }
+                if ( stack1.isEmpty( ) )
+                {
+                    ret = -1;
+                }
+                else
+                {
+                    ret = 1;
+                }
         }
 
         // Unstack the 2 until:
@@ -101,7 +113,8 @@ public class TypeSignalementComparator implements Comparator<TypeSignalement>
     /**
      * Initialize stack.
      *
-     * @param typeSignalement the type signalement
+     * @param typeSignalement
+     *            the type signalement
      * @return the deque
      */
     private Deque<Integer> initializeStack( TypeSignalement typeSignalement )

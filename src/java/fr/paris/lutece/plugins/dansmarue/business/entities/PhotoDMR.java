@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.web.constants.Parameters;
 import fr.paris.lutece.util.url.UrlItem;
 
-
 /**
  * The Class PhotoDMR.
  */
@@ -47,31 +46,34 @@ public class PhotoDMR
 {
 
     /** The Constant OVERVIEW. */
-    public static final Integer OVERVIEW          = 1;
+    public static final Integer OVERVIEW = 1;
 
     /** The Constant DETAILED_VIEW. */
-    public static final Integer DETAILED_VIEW     = 0;
+    public static final Integer DETAILED_VIEW = 0;
 
     /** The Constant SERVICE_DONE_VIEW. */
     public static final Integer SERVICE_DONE_VIEW = 2;
 
     /** The id. */
-    private Long                _id;
+    private Long _id;
 
     /** The image. */
-    private ImageResource       _image            = null;
+    private ImageResource _image = null;
 
     /** The image thumbnail. */
-    private ImageResource       _imageThumbnail   = new ImageResource( );
+    private ImageResource _imageThumbnail = new ImageResource( );
 
     /** The signalement. */
-    private Signalement         _signalement;
+    private Signalement _signalement;
 
     /** The str date. */
-    private String              _strDate;
+    private String _strDate;
 
     /** The n vue. */
-    private Integer             _nVue;
+    private Integer _nVue;
+
+    /** if photo is anonymized. */
+    private boolean _bIsAnonymized;
 
     /**
      * Gets the id.
@@ -86,7 +88,8 @@ public class PhotoDMR
     /**
      * Sets the id.
      *
-     * @param id the new id
+     * @param id
+     *            the new id
      */
     public void setId( Long id )
     {
@@ -106,7 +109,8 @@ public class PhotoDMR
     /**
      * Sets the image.
      *
-     * @param image the new image
+     * @param image
+     *            the new image
      */
     public void setImage( ImageResource image )
     {
@@ -120,7 +124,7 @@ public class PhotoDMR
      */
     public String getImageUrl( )
     {
-        String strResourceType = ( ( ImageResourceProvider ) SpringContextService.getBean( "signalement.imageService" ) ).getResourceTypeId( );
+        String strResourceType = ( (ImageResourceProvider) SpringContextService.getBean( "signalement.imageService" ) ).getResourceTypeId( );
         UrlItem url = new UrlItem( Parameters.IMAGE_SERVLET );
         url.addParameter( Parameters.RESOURCE_TYPE, strResourceType );
         url.addParameter( Parameters.RESOURCE_ID, Long.toString( _id ) );
@@ -134,7 +138,7 @@ public class PhotoDMR
      */
     public String getImageThumbnailUrl( )
     {
-        String strResourceType = ( ( ImageResourceProvider ) SpringContextService.getBean( "signalement.imageThumbnailService" ) ).getResourceTypeId( );
+        String strResourceType = ( (ImageResourceProvider) SpringContextService.getBean( "signalement.imageThumbnailService" ) ).getResourceTypeId( );
         UrlItem url = new UrlItem( Parameters.IMAGE_SERVLET );
         url.addParameter( Parameters.RESOURCE_TYPE, strResourceType );
         url.addParameter( Parameters.RESOURCE_ID, Long.toString( _id ) );
@@ -154,7 +158,8 @@ public class PhotoDMR
     /**
      * Sets the signalement.
      *
-     * @param signalement the new signalement
+     * @param signalement
+     *            the new signalement
      */
     public void setSignalement( Signalement signalement )
     {
@@ -164,7 +169,8 @@ public class PhotoDMR
     /**
      * Sets the mime type.
      *
-     * @param strMimeType the new mime type
+     * @param strMimeType
+     *            the new mime type
      */
     public void setMimeType( String strMimeType )
     {
@@ -174,9 +180,10 @@ public class PhotoDMR
     /**
      * Sets the image content.
      *
-     * @param imageContent the new image content
+     * @param imageContent
+     *            the new image content
      */
-    public void setImageContent( byte[] imageContent )
+    public void setImageContent( byte [ ] imageContent )
     {
         _image.setImage( imageContent );
     }
@@ -187,7 +194,7 @@ public class PhotoDMR
      * @param imageContent
      *            the new thumbnailed image
      */
-    public void setImageThumbnailWithBytes( byte[] imageContent )
+    public void setImageThumbnailWithBytes( byte [ ] imageContent )
     {
         _imageThumbnail.setImage( imageContent );
 
@@ -196,7 +203,8 @@ public class PhotoDMR
     /**
      * Sets the image thumbnail.
      *
-     * @param imageResource the new image thumbnail
+     * @param imageResource
+     *            the new image thumbnail
      */
     public void setImageThumbnail( ImageResource imageResource )
     {
@@ -226,7 +234,8 @@ public class PhotoDMR
     /**
      * Sets the date.
      *
-     * @param date the new date
+     * @param date
+     *            the new date
      */
     public void setDate( String date )
     {
@@ -246,11 +255,33 @@ public class PhotoDMR
     /**
      * Sets the vue.
      *
-     * @param vue the new vue
+     * @param vue
+     *            the new vue
      */
     public void setVue( Integer vue )
     {
         _nVue = vue;
+    }
+
+    /**
+     * is Photo Anonymized.
+     *
+     * @return boolean.
+     */
+    public boolean isAnonymized( )
+    {
+        return _bIsAnonymized;
+    }
+
+    /**
+     * Set IsAnonymized.
+     *
+     * @param isAnonymized
+     *            if is anonymized
+     */
+    public void setAnonymized( boolean isAnonymized )
+    {
+        _bIsAnonymized = isAnonymized;
     }
 
 }

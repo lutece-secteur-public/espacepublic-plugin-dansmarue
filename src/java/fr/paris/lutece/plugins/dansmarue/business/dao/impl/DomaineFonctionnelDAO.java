@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,68 +50,68 @@ public class DomaineFonctionnelDAO implements IDomaineFonctionnelDAO
 {
 
     /** The Constant SQL_QUERY_INSERT_DOMAINE. */
-    private static final String SQL_QUERY_INSERT_DOMAINE                      = "INSERT INTO signalement_domaine_fonctionnel(id_domaine_fonctionnel,libelle,actif) VALUES (?,?,?)";
+    private static final String SQL_QUERY_INSERT_DOMAINE = "INSERT INTO signalement_domaine_fonctionnel(id_domaine_fonctionnel,libelle,actif) VALUES (?,?,?)";
 
     /** The Constant SQL_QUERY_DELETE_DOMAINE. */
-    private static final String SQL_QUERY_DELETE_DOMAINE                      = "DELETE FROM signalement_domaine_fonctionnel WHERE id_domaine_fonctionnel=?";
+    private static final String SQL_QUERY_DELETE_DOMAINE = "DELETE FROM signalement_domaine_fonctionnel WHERE id_domaine_fonctionnel=?";
 
     /** The Constant SQL_QUERY_UPDATE_DOMAINE. */
-    private static final String SQL_QUERY_UPDATE_DOMAINE                      = "UPDATE signalement_domaine_fonctionnel SET libelle=?, actif=? WHERE id_domaine_fonctionnel = ?";
+    private static final String SQL_QUERY_UPDATE_DOMAINE = "UPDATE signalement_domaine_fonctionnel SET libelle=?, actif=? WHERE id_domaine_fonctionnel = ?";
 
     /** The Constant SQL_QUERY_SELECT_DOMAINE. */
-    private static final String SQL_QUERY_SELECT_DOMAINE                      = "SELECT id_domaine_fonctionnel, libelle, actif FROM signalement_domaine_fonctionnel WHERE id_domaine_fonctionnel=?";
+    private static final String SQL_QUERY_SELECT_DOMAINE = "SELECT id_domaine_fonctionnel, libelle, actif FROM signalement_domaine_fonctionnel WHERE id_domaine_fonctionnel=?";
 
     /** The Constant SQL_QUERY_SELECT_ALL_DOMAINES. */
-    private static final String SQL_QUERY_SELECT_ALL_DOMAINES                 = "SELECT id_domaine_fonctionnel, libelle, actif FROM signalement_domaine_fonctionnel";
+    private static final String SQL_QUERY_SELECT_ALL_DOMAINES = "SELECT id_domaine_fonctionnel, libelle, actif FROM signalement_domaine_fonctionnel";
 
     /** The Constant SQL_QUERY_SELECT_ALL_DOMAINES_ACTIFS. */
-    private static final String SQL_QUERY_SELECT_ALL_DOMAINES_ACTIFS          = "SELECT id_domaine_fonctionnel, libelle, actif FROM signalement_domaine_fonctionnel WHERE actif=1";
+    private static final String SQL_QUERY_SELECT_ALL_DOMAINES_ACTIFS = "SELECT id_domaine_fonctionnel, libelle, actif FROM signalement_domaine_fonctionnel WHERE actif=1";
 
     /** The Constant SQL_QUERY_NEW_PK. */
-    private static final String SQL_QUERY_NEW_PK                              = " SELECT nextval('seq_signalement_domaine_fonctionnel')";
+    private static final String SQL_QUERY_NEW_PK = " SELECT nextval('seq_signalement_domaine_fonctionnel')";
 
     /** The Constant SQL_QUERY_DELETE_FROM_ROLE_RESOURCE. */
-    private static final String SQL_QUERY_DELETE_FROM_ROLE_RESOURCE           = "DELETE FROM core_admin_role_resource WHERE resource_type=? AND resource_id=?";
+    private static final String SQL_QUERY_DELETE_FROM_ROLE_RESOURCE = "DELETE FROM core_admin_role_resource WHERE resource_type=? AND resource_id=?";
 
     /** The Constant SQL_QUERY_INSERT_DOMAINE_ARRONDISSEMENT. */
     // Link with arrondissement 0..N
-    private static final String SQL_QUERY_INSERT_DOMAINE_ARRONDISSEMENT       = "INSERT INTO signalement_domaine_arrondissement (fk_id_domaine_fonctionnel,fk_id_arrondissement) VALUES (?,?)";
+    private static final String SQL_QUERY_INSERT_DOMAINE_ARRONDISSEMENT = "INSERT INTO signalement_domaine_arrondissement (fk_id_domaine_fonctionnel,fk_id_arrondissement) VALUES (?,?)";
 
     /** The Constant SQL_QUERY_DELETE_ARRONDISSEMENT_BY_DOMAINE. */
-    private static final String SQL_QUERY_DELETE_ARRONDISSEMENT_BY_DOMAINE    = "DELETE FROM signalement_domaine_arrondissement WHERE fk_id_domaine_fonctionnel = ?";
+    private static final String SQL_QUERY_DELETE_ARRONDISSEMENT_BY_DOMAINE = "DELETE FROM signalement_domaine_arrondissement WHERE fk_id_domaine_fonctionnel = ?";
 
     /** The Constant SQL_QUERY_SELECT_ARRONDISSEMENTS_BY_DOMAINE. */
-    private static final String SQL_QUERY_SELECT_ARRONDISSEMENTS_BY_DOMAINE   = "SELECT fk_id_arrondissement FROM signalement_domaine_arrondissement WHERE fk_id_domaine_fonctionnel=?";
+    private static final String SQL_QUERY_SELECT_ARRONDISSEMENTS_BY_DOMAINE = "SELECT fk_id_arrondissement FROM signalement_domaine_arrondissement WHERE fk_id_domaine_fonctionnel=?";
 
     /** The Constant SQL_QUERY_INSERT_QUARTIER_ARRONDISSEMENT. */
     // Quartier
-    private static final String SQL_QUERY_INSERT_QUARTIER_ARRONDISSEMENT      = "INSERT INTO signalement_domaine_conseil_quartier (fk_id_domaine_fonctionnel,fk_id_quartier) VALUES (?,?)";
+    private static final String SQL_QUERY_INSERT_QUARTIER_ARRONDISSEMENT = "INSERT INTO signalement_domaine_conseil_quartier (fk_id_domaine_fonctionnel,fk_id_quartier) VALUES (?,?)";
 
     /** The Constant SQL_QUERY_SELECT_QUARTIERS_BY_DOMAINE. */
-    private static final String SQL_QUERY_SELECT_QUARTIERS_BY_DOMAINE         = "SELECT fk_id_quartier FROM signalement_domaine_conseil_quartier WHERE fk_id_domaine_fonctionnel=?";
+    private static final String SQL_QUERY_SELECT_QUARTIERS_BY_DOMAINE = "SELECT fk_id_quartier FROM signalement_domaine_conseil_quartier WHERE fk_id_domaine_fonctionnel=?";
 
     /** The Constant SQL_QUERY_DELETE_QUARTIER_BY_DOMAINE. */
-    private static final String SQL_QUERY_DELETE_QUARTIER_BY_DOMAINE          = "DELETE FROM signalement_domaine_conseil_quartier WHERE fk_id_domaine_fonctionnel = ?";
+    private static final String SQL_QUERY_DELETE_QUARTIER_BY_DOMAINE = "DELETE FROM signalement_domaine_conseil_quartier WHERE fk_id_domaine_fonctionnel = ?";
 
     /** The Constant SQL_QUERY_INSERT_DOMAINE_TYPE_SIGNALEMENT. */
     // Link with type signalement 0..N
-    private static final String SQL_QUERY_INSERT_DOMAINE_TYPE_SIGNALEMENT     = "INSERT INTO signalement_domaine_type_signalement (fk_id_domaine_fonctionnel,fk_id_type_signalement) VALUES (?,?)";
+    private static final String SQL_QUERY_INSERT_DOMAINE_TYPE_SIGNALEMENT = "INSERT INTO signalement_domaine_type_signalement (fk_id_domaine_fonctionnel,fk_id_type_signalement) VALUES (?,?)";
 
     /** The Constant SQL_QUERY_DELETE_TYPE_SIGNALEMENT_BY_DOMAINE. */
-    private static final String SQL_QUERY_DELETE_TYPE_SIGNALEMENT_BY_DOMAINE  = "DELETE FROM signalement_domaine_type_signalement WHERE fk_id_domaine_fonctionnel = ?";
+    private static final String SQL_QUERY_DELETE_TYPE_SIGNALEMENT_BY_DOMAINE = "DELETE FROM signalement_domaine_type_signalement WHERE fk_id_domaine_fonctionnel = ?";
 
     /** The Constant SQL_QUERY_SELECT_TYPES_SIGNALEMENT_BY_DOMAINE. */
     private static final String SQL_QUERY_SELECT_TYPES_SIGNALEMENT_BY_DOMAINE = "SELECT fk_id_type_signalement FROM signalement_domaine_type_signalement WHERE fk_id_domaine_fonctionnel=?";
 
     /** The Constant SQL_QUERY_INSERT_DOMAINE_UNIT. */
     // Link with type signalement 0..N
-    private static final String SQL_QUERY_INSERT_DOMAINE_UNIT                 = "INSERT INTO signalement_domaine_unit (fk_id_domaine_fonctionnel,fk_id_unit) VALUES (?,?)";
+    private static final String SQL_QUERY_INSERT_DOMAINE_UNIT = "INSERT INTO signalement_domaine_unit (fk_id_domaine_fonctionnel,fk_id_unit) VALUES (?,?)";
 
     /** The Constant SQL_QUERY_DELETE_UNIT_BY_DOMAINE. */
-    private static final String SQL_QUERY_DELETE_UNIT_BY_DOMAINE              = "DELETE FROM signalement_domaine_unit WHERE fk_id_domaine_fonctionnel = ?";
+    private static final String SQL_QUERY_DELETE_UNIT_BY_DOMAINE = "DELETE FROM signalement_domaine_unit WHERE fk_id_domaine_fonctionnel = ?";
 
     /** The Constant SQL_QUERY_SELECT_UNIT_BY_DOMAINE. */
-    private static final String SQL_QUERY_SELECT_UNIT_BY_DOMAINE              = "SELECT fk_id_unit FROM signalement_domaine_unit WHERE fk_id_domaine_fonctionnel=?";
+    private static final String SQL_QUERY_SELECT_UNIT_BY_DOMAINE = "SELECT fk_id_unit FROM signalement_domaine_unit WHERE fk_id_domaine_fonctionnel=?";
 
     /**
      * {@inheritDoc}

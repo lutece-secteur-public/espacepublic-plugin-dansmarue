@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,10 +40,10 @@ public class SignalementSuivi
 {
 
     /** The id. */
-    private Long   _id;
+    private Long _id;
 
     /** The id signalement. */
-    private Long   _idSignalement;
+    private Long _idSignalement;
 
     /** The str user guid. */
     private String _strUserGuid;
@@ -61,7 +61,8 @@ public class SignalementSuivi
     /**
      * Setter for the id.
      *
-     * @param id            the id to set
+     * @param id
+     *            the id to set
      */
     public void setId( Long id )
     {
@@ -81,7 +82,8 @@ public class SignalementSuivi
     /**
      * Setter for the idSignalement.
      *
-     * @param idSignalement            the idSignalement to set
+     * @param idSignalement
+     *            the idSignalement to set
      */
     public void setIdSignalement( Long idSignalement )
     {
@@ -101,7 +103,8 @@ public class SignalementSuivi
     /**
      * Setter for the userGuid.
      *
-     * @param userGuid            the userGuid to set
+     * @param userGuid
+     *            the userGuid to set
      */
     public void setUserGuid( String userGuid )
     {

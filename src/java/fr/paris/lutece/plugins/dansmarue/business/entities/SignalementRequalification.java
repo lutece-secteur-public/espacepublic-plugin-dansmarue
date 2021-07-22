@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,31 +45,31 @@ public class SignalementRequalification
 {
 
     /** The n id signalement. */
-    private Long            _nIdSignalement;
+    private Long _nIdSignalement;
 
     /** The n id type signalement. */
-    private Integer         _nIdTypeSignalement;
+    private Integer _nIdTypeSignalement;
 
     /** The str adresse. */
-    private String          _strAdresse;
+    private String _strAdresse;
 
     /** The n id sector. */
-    private Integer         _nIdSector;
+    private Integer _nIdSector;
 
     /** The date requalification. */
-    private String          _dateRequalification;
+    private String _dateRequalification;
 
     /** The type signalement. */
     private TypeSignalement _typeSignalement;
 
     /** The sector. */
-    private Sector          _sector;
+    private Sector _sector;
 
     /** The n id task. */
-    private Integer         _nIdTask;
+    private Integer _nIdTask;
 
     /** The str commentaire agent terrain. */
-    private String          _strCommentaireAgentTerrain;
+    private String _strCommentaireAgentTerrain;
 
     /**
      * Gets the id signalement.
@@ -84,7 +84,8 @@ public class SignalementRequalification
     /**
      * Sets the id signalement.
      *
-     * @param nIdSignalement            the nIdSignalement to set
+     * @param nIdSignalement
+     *            the nIdSignalement to set
      */
     public void setIdSignalement( Long nIdSignalement )
     {
@@ -104,7 +105,8 @@ public class SignalementRequalification
     /**
      * Sets the id type signalement.
      *
-     * @param nIdTypeSignalement            the _nIdTypeSignalement to set
+     * @param nIdTypeSignalement
+     *            the _nIdTypeSignalement to set
      */
     public void setIdTypeSignalement( Integer nIdTypeSignalement )
     {
@@ -124,7 +126,8 @@ public class SignalementRequalification
     /**
      * Sets the adresse.
      *
-     * @param strAdresse            the _strAdresse to set
+     * @param strAdresse
+     *            the _strAdresse to set
      */
     public void setAdresse( String strAdresse )
     {
@@ -144,7 +147,8 @@ public class SignalementRequalification
     /**
      * Sets the id sector.
      *
-     * @param nIdSector            the _nIdSector to set
+     * @param nIdSector
+     *            the _nIdSector to set
      */
     public void setIdSector( Integer nIdSector )
     {
@@ -164,7 +168,8 @@ public class SignalementRequalification
     /**
      * Sets the date requalification.
      *
-     * @param dateRequalification            the _dateRequalification to set
+     * @param dateRequalification
+     *            the _dateRequalification to set
      */
     public void setDateRequalification( String dateRequalification )
     {
@@ -184,7 +189,8 @@ public class SignalementRequalification
     /**
      * Sets the type signalement.
      *
-     * @param typeSignalement            the _typeSignalement to set
+     * @param typeSignalement
+     *            the _typeSignalement to set
      */
     public void setTypeSignalement( TypeSignalement typeSignalement )
     {
@@ -204,7 +210,8 @@ public class SignalementRequalification
     /**
      * Sets the sector.
      *
-     * @param sector            the _sector to set
+     * @param sector
+     *            the _sector to set
      */
     public void setSector( Sector sector )
     {
@@ -224,7 +231,8 @@ public class SignalementRequalification
     /**
      * Sets the id task.
      *
-     * @param nIdTask            the _nIdTask to set
+     * @param nIdTask
+     *            the _nIdTask to set
      */
     public void setIdTask( Integer nIdTask )
     {
@@ -244,7 +252,8 @@ public class SignalementRequalification
     /**
      * Sets the commentaire agent terrain.
      *
-     * @param strCommentaireAgentTerrain the new commentaire agent terrain
+     * @param strCommentaireAgentTerrain
+     *            the new commentaire agent terrain
      */
     public void setCommentaireAgentTerrain( String strCommentaireAgentTerrain )
     {

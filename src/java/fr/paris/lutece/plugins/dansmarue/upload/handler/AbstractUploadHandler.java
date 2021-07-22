@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -68,33 +68,33 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
 
     /** The upload directory. */
     @Value( "${signalement.directory.upload}" )
-    protected String            uploadDirectory;
+    protected String uploadDirectory;
 
     /** The max file size. */
     @Value( "${signalement.upload.max.file.size}" )
-    private String              maxFileSize;
+    private String maxFileSize;
 
     /** The max category files count. */
     @Value( "${signalement.upload.max.category.files.count}" )
-    private Integer             maxCategoryFilesCount;
+    private Integer maxCategoryFilesCount;
 
     /** The Constant PREFIX_ENTRY_ID. */
-    private static final String PREFIX_ENTRY_ID   = "dansmarue_";
+    private static final String PREFIX_ENTRY_ID = "dansmarue_";
 
     /** The Constant LOGGER. */
-    private static final Log    LOGGER            = LogFactory.getLog( AbstractUploadHandler.class );
+    private static final Log LOGGER = LogFactory.getLog( AbstractUploadHandler.class );
 
     /** The Constant ERROR_EXTENSION. */
-    public static final String  ERROR_EXTENSION   = "dansmarue.message.upload.file.error.extension";
+    public static final String ERROR_EXTENSION = "dansmarue.message.upload.file.error.extension";
 
     /** The Constant ERROR_FILES_COUNT. */
-    public static final String  ERROR_FILES_COUNT = "dansmarue.message.upload.file.error.files.count";
+    public static final String ERROR_FILES_COUNT = "dansmarue.message.upload.file.error.files.count";
 
     /** The Constant HANDLER_NAME. */
-    private static final String HANDLER_NAME      = "DansmarueAsynchronousUploadHandler";
+    private static final String HANDLER_NAME = "DansmarueAsynchronousUploadHandler";
 
     /** The extension list. */
-    private static List<String> extensionList     = Arrays.asList( "jpeg", "png", "jpg" );
+    private static List<String> extensionList = Arrays.asList( "jpeg", "png", "jpg" );
 
     /**
      * Instantiates a new abstract upload handler.
@@ -114,8 +114,21 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
         return maxFileSize;
     }
 
-    /* (non-Javadoc)
-     * @see fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler#addFileItemToUploadedFilesList(org.apache.commons.fileupload.FileItem, java.lang.String, javax.servlet.http.HttpServletRequest)
+    /**
+     * Adds the file item to uploaded files list.
+     *
+     * @param fileItem
+     *            the file item
+     * @param strFieldName
+     *            the str field name
+     * @param request
+     *            the request
+     */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler#addFileItemToUploadedFilesList(org.apache.commons.fileupload.FileItem,
+     * java.lang.String, javax.servlet.http.HttpServletRequest)
      */
     @Override
     public void addFileItemToUploadedFilesList( FileItem fileItem, String strFieldName, HttpServletRequest request )
@@ -149,8 +162,24 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
         }
     }
 
-    /* (non-Javadoc)
-     * @see fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler#canUploadFiles(javax.servlet.http.HttpServletRequest, java.lang.String, java.util.List, java.util.Locale)
+    /**
+     * Can upload files.
+     *
+     * @param request
+     *            the request
+     * @param strFieldName
+     *            the str field name
+     * @param listFileItemsToUpload
+     *            the list file items to upload
+     * @param locale
+     *            the locale
+     * @return the string
+     */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler#canUploadFiles(javax.servlet.http.HttpServletRequest, java.lang.String,
+     * java.util.List, java.util.Locale)
      */
     @Override
     public String canUploadFiles( HttpServletRequest request, String strFieldName, List<FileItem> listFileItemsToUpload, Locale locale )
@@ -160,7 +189,9 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
 
             if ( getListUploadedFiles( strFieldName, request.getSession( ) ).size( ) >= maxCategoryFilesCount )
             {
-                return I18nService.getLocalizedString( ERROR_FILES_COUNT, new Object[] { maxCategoryFilesCount }, locale );
+                return I18nService.getLocalizedString( ERROR_FILES_COUNT, new Object [ ] {
+                        maxCategoryFilesCount
+                }, locale );
             }
 
             for ( FileItem fileItem : listFileItemsToUpload )
@@ -174,7 +205,14 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
         return null;
     }
 
-    /* (non-Javadoc)
+    /**
+     * Gets the handler name.
+     *
+     * @return the handler name
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler#getHandlerName()
      */
     @Override
@@ -186,8 +224,10 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
     /**
      * Gets the file.
      *
-     * @param request the request
-     * @param strFieldName the str field name
+     * @param request
+     *            the request
+     * @param strFieldName
+     *            the str field name
      * @return the file
      */
     public FileItem getFile( HttpServletRequest request, String strFieldName )
@@ -204,7 +244,18 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
         return null;
     }
 
-    /* (non-Javadoc)
+    /**
+     * Gets the list uploaded files.
+     *
+     * @param strFieldName
+     *            the str field name
+     * @param session
+     *            the session
+     * @return the list uploaded files
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler#getListUploadedFiles(java.lang.String, javax.servlet.http.HttpSession)
      */
     @Override
@@ -222,7 +273,19 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
         return mapFileItemsSession.get( strFieldName );
     }
 
-    /* (non-Javadoc)
+    /**
+     * Removes the file item.
+     *
+     * @param strFieldName
+     *            the str field name
+     * @param session
+     *            the session
+     * @param nIndex
+     *            the n index
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler#removeFileItem(java.lang.String, javax.servlet.http.HttpSession, int)
      */
     @Override
@@ -236,8 +299,10 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
     /**
      * Inits the map.
      *
-     * @param session the session
-     * @param strFieldName the str field name
+     * @param session
+     *            the session
+     * @param strFieldName
+     *            the str field name
      */
     private void initMap( HttpSession session, String strFieldName )
     {
@@ -246,7 +311,7 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
 
         if ( mapFileItemsSession == null )
         {
-            synchronized ( this )
+            synchronized( this )
             {
                 mapFileItemsSession = getMapAsynchronousUpload( ).get( strSessionId );
 
@@ -258,16 +323,19 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
             }
         }
 
-        mapFileItemsSession.computeIfAbsent( strFieldName, k -> new ArrayList<>( ));
+        mapFileItemsSession.computeIfAbsent( strFieldName, k -> new ArrayList<>( ) );
 
     }
 
     /**
      * Removes the file.
      *
-     * @param session the session
-     * @param fileToSave the file to save
-     * @param categoryName the category name
+     * @param session
+     *            the session
+     * @param fileToSave
+     *            the file to save
+     * @param categoryName
+     *            the category name
      */
     private void removeFile( HttpSession session, FileItem fileToSave, String categoryName )
     {
@@ -289,7 +357,7 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
 
             LOGGER.info( "Fichier supprimé avec succès : " + fileName );
         }
-        catch ( IOException ex )
+        catch( IOException ex )
         {
             LOGGER.error( "Impossible de supprimer le fichier : " + fileName, ex );
         }
@@ -298,10 +366,14 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
     /**
      * Removes the.
      *
-     * @param strFieldName the str field name
-     * @param session the session
-     * @param nIndex the n index
-     * @param uploadedFiles the uploaded files
+     * @param strFieldName
+     *            the str field name
+     * @param session
+     *            the session
+     * @param nIndex
+     *            the n index
+     * @param uploadedFiles
+     *            the uploaded files
      */
     private void remove( String strFieldName, HttpSession session, int nIndex, List<FileItem> uploadedFiles )
     {
@@ -316,8 +388,10 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
     /**
      * Checks for file.
      *
-     * @param request the request
-     * @param strFieldName the str field name
+     * @param request
+     *            the request
+     * @param strFieldName
+     *            the str field name
      * @return true, if successful
      */
     public boolean hasFile( HttpServletRequest request, String strFieldName )
@@ -337,7 +411,8 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
     /**
      * Gets the id in session.
      *
-     * @param session the session
+     * @param session
+     *            the session
      * @return the id in session
      */
     public abstract String getIdInSession( HttpSession session );

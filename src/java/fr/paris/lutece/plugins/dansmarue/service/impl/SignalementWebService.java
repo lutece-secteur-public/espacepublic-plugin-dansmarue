@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -51,6 +51,7 @@ import fr.paris.lutece.plugins.dansmarue.business.dao.IAdresseDAO;
 import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.commons.exceptions.BusinessException;
+import fr.paris.lutece.plugins.dansmarue.commons.exceptions.TechnicalException;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementWebService;
 import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.SignalementUtils;
@@ -71,35 +72,35 @@ public class SignalementWebService implements ISignalementWebService
 
     /** The Constant REQUEST_METHOD_ADD. */
     // JSON TAG
-    public static final String   REQUEST_METHOD_ADD  = "addAnomalie";
+    public static final String REQUEST_METHOD_ADD = "addAnomalie";
 
     /** The Constant REQUEST_METHOD_DONE. */
-    public static final String   REQUEST_METHOD_DONE = "serviceDoneAnomalie";
+    public static final String REQUEST_METHOD_DONE = "serviceDoneAnomalie";
 
     /** The Constant JSON_TAG_ANOMALIE. */
-    public static final String   JSON_TAG_ANOMALIE   = "anomalie";
+    public static final String JSON_TAG_ANOMALIE = "anomalie";
 
     /** The Constant JSON_TAG_UDID. */
-    public static final String   JSON_TAG_UDID       = "udid";
+    public static final String JSON_TAG_UDID = "udid";
 
     /** The Constant JSON_TAG_EMAIL. */
-    public static final String   JSON_TAG_EMAIL      = "email";
+    public static final String JSON_TAG_EMAIL = "email";
 
     /** The Constant JSON_TAG_PHOTOS. */
-    public static final String   JSON_TAG_PHOTOS     = "photos";
+    public static final String JSON_TAG_PHOTOS = "photos";
 
     /** The Constant TAG_REQUEST. */
-    private static final String  TAG_REQUEST         = "request";
+    private static final String TAG_REQUEST = "request";
 
     /** The Constant TAG_ERROR. */
-    private static final String  TAG_ERROR           = "error";
+    private static final String TAG_ERROR = "error";
 
     /** The Constant TAG_ANSWER. */
-    private static final String  TAG_ANSWER          = "answer";
+    private static final String TAG_ANSWER = "answer";
 
     /** The ws caller. */
     @Inject
-    private IWebServiceCaller    _wsCaller;
+    private IWebServiceCaller _wsCaller;
 
     /** The authenticator. */
     @Inject
@@ -109,7 +110,7 @@ public class SignalementWebService implements ISignalementWebService
     /** The adresse signalement DAO. */
     @Inject
     @Named( "signalementAdresseDAO" )
-    private IAdresseDAO          _adresseSignalementDAO;
+    private IAdresseDAO _adresseSignalementDAO;
 
     /**
      * {@inheritDoc}
@@ -119,8 +120,9 @@ public class SignalementWebService implements ISignalementWebService
     {
         JSONObject response = null;
 
-        if( signalement.getAdresses( ).isEmpty( ) || ! SignalementUtils.isValidAddress( signalement.getAdresses( ).get( 0 ).getAdresse( ) )) {
-            return generateErrorResponse( "Error invalid address id signalement " + signalement.getId( ));
+        if ( signalement.getAdresses( ).isEmpty( ) || !SignalementUtils.isValidAddress( signalement.getAdresses( ).get( 0 ).getAdresse( ) ) )
+        {
+            return generateErrorResponse( "Error invalid address id signalement " + signalement.getId( ) );
         }
 
         try
@@ -128,19 +130,23 @@ public class SignalementWebService implements ISignalementWebService
             String strResp = sendByWS( signalement, url );
             JSONArray array = JSONArray.fromObject( strResp );
             response = array.getJSONObject( 0 );
-        } catch ( BusinessException e )
+        }
+        catch( BusinessException e )
         {
             AppLogService.error( e.getMessage( ), e );
             response = generateErrorResponse( "Error when contacting " + url );
-        } catch ( UnsupportedEncodingException e )
+        }
+        catch( UnsupportedEncodingException e )
         {
             AppLogService.error( e.getMessage( ), e );
             response = generateErrorResponse( "Encoding error" );
-        } catch ( JSONException e )
+        }
+        catch( JSONException e )
         {
             AppLogService.error( e.getMessage( ), e );
             response = generateErrorResponse( "Get response error" );
-        } catch ( Exception e )
+        }
+        catch( Exception e )
         {
             AppLogService.error( e.getMessage( ), e );
             response = generateErrorResponse( "Unexpected error" );
@@ -181,10 +187,11 @@ public class SignalementWebService implements ISignalementWebService
         {
             AppLogService.info( "Call web service " + url + " for id anomalie : " + signalement.getId( ) );
             // Suppression des photos pour ne pas surcharger les logs
-            ( ( JSONObject ) jsonSrc.get( JSON_TAG_ANOMALIE ) ).remove( JSON_TAG_PHOTOS );
+            ( (JSONObject) jsonSrc.get( JSON_TAG_ANOMALIE ) ).remove( JSON_TAG_PHOTOS );
             AppLogService.info( "Flux Json : " + jsonSrc.toString( ) );
             result = _wsCaller.callWebService( url, params, _authenticator, values );
-        } catch ( Exception e )
+        }
+        catch( Exception e )
         {
             AppLogService.error( e.getMessage( ), e );
             throw new BusinessException( signalement, "dansmarue.ws.error.url.connexion" );
@@ -229,7 +236,8 @@ public class SignalementWebService implements ISignalementWebService
                 array.add( photoJson );
             }
             jsonAnomalie.accumulate( JSON_TAG_PHOTOS, array );
-        } else
+        }
+        else
         {
             jsonAnomalie.accumulate( JSON_TAG_PHOTOS, array );
         }
@@ -267,14 +275,31 @@ public class SignalementWebService implements ISignalementWebService
             AppLogService.info( "Call web service PartnerServiceDone " + urlPartner + " for id anomalie : " + signalement.getId( ) );
             AppLogService.info( "Flux Json : " + jsonFormated );
             result = _wsCaller.callWebService( urlPartner, params, _authenticator, values );
-
-            JSONArray array = JSONArray.fromObject( result );
-            response = array.getJSONObject( 0 );
-
-        } catch ( HttpAccessException e )
+        }
+        catch( HttpAccessException e )
         {
             AppLogService.error( e.getMessage( ), e );
             throw new BusinessException( signalement.getId( ), "dansmarue.ws.error.url.connexion" );
+        }
+
+        try
+        {
+            JSONArray array = JSONArray.fromObject( result );
+            response = array.getJSONObject( 0 );
+        }
+        catch( JSONException e1 )
+        {
+            try
+            {
+                AppLogService.info( "Received JSONObject is not of the regular type (JSONObject in JSONArray)" );
+                response = JSONObject.fromObject( result );
+            }
+            catch( JSONException e2 )
+            {
+                AppLogService.info( "Received JSONObject is not of the irregular type (JSONObject)" );
+                AppLogService.error( e2.getMessage( ), e2 );
+                throw new TechnicalException( e2.getMessage( ), e2.getCause( ) );
+            }
         }
 
         AppLogService.info( "Web service PartnerServiceDone response for id anomalie : " + signalement.getId( ) + " is : " + result );
@@ -284,9 +309,11 @@ public class SignalementWebService implements ISignalementWebService
     /**
      * Encode report data before create JSON.
      *
-     * @param data            the signalement data
+     * @param data
+     *            the signalement data
      * @return the encoded data
-     * @throws UnsupportedEncodingException             when charset cannot be use
+     * @throws UnsupportedEncodingException
+     *             when charset cannot be use
      */
     private String encode( String data ) throws UnsupportedEncodingException
     {
@@ -307,7 +334,7 @@ public class SignalementWebService implements ISignalementWebService
         {
             Base64 codec = new Base64( );
             String data = new String( codec.encode( image.getImage( ) ) );
-            String mimeType = ( image.getMimeType( ) == null ) ? "data:image/jpg;base64," : "data:" + image.getMimeType( ) + ";base64,";
+            String mimeType = ( image.getMimeType( ) == null ) ? "data:image/jpg;base64," : ( "data:" + image.getMimeType( ) + ";base64," );
             dataImg = mimeType + data;
         }
 
@@ -317,7 +344,8 @@ public class SignalementWebService implements ISignalementWebService
     /**
      * Generate Error response.
      *
-     * @param message the message
+     * @param message
+     *            the message
      * @return Json error response
      */
     private JSONObject generateErrorResponse( String message )

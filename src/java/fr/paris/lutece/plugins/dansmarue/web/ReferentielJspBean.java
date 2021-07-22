@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,11 +46,11 @@ public class ReferentielJspBean extends AbstractJspBean
 {
 
     /** The Constant serialVersionUID. */
-    private static final long   serialVersionUID            = 8371960828666432636L;
+    private static final long serialVersionUID = 8371960828666432636L;
 
     /** The Constant RIGHT_MANAGE_REFERENTIEL. */
     // RIGHT
-    public static final String  RIGHT_MANAGE_REFERENTIEL    = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
+    public static final String RIGHT_MANAGE_REFERENTIEL = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
 
     /** The Constant TEMPLATE_MANAGE_REFERENTIEL. */
     // TEMPLATES

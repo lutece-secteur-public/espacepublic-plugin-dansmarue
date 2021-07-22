@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,17 +45,17 @@ public class Source
     public static final String RESOURCE_TYPE = "TYPE_SIGNALEMENT";
 
     /** The n id. */
-    private Integer            _nId;
+    private Integer _nId;
 
     /** The str libelle. */
     @NotBlank
-    private String             _strLibelle;
+    private String _strLibelle;
 
     /** The str description. */
-    private String             _strDescription;
+    private String _strDescription;
 
     /** The str commentaire. */
-    private String             _strCommentaire;
+    private String _strCommentaire;
 
     /**
      * Gets the id.
@@ -70,7 +70,8 @@ public class Source
     /**
      * Sets the id.
      *
-     * @param id the new id
+     * @param id
+     *            the new id
      */
     public void setId( Integer id )
     {
@@ -90,7 +91,8 @@ public class Source
     /**
      * Sets the libelle.
      *
-     * @param libelle the new libelle
+     * @param libelle
+     *            the new libelle
      */
     public void setLibelle( String libelle )
     {
@@ -110,7 +112,8 @@ public class Source
     /**
      * Sets the commentaire.
      *
-     * @param commentaire the new commentaire
+     * @param commentaire
+     *            the new commentaire
      */
     public void setCommentaire( String commentaire )
     {
@@ -130,7 +133,8 @@ public class Source
     /**
      * Sets the description.
      *
-     * @param description the new description
+     * @param description
+     *            the new description
      */
     public void setDescription( String description )
     {

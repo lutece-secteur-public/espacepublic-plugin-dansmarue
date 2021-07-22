@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,21 +45,22 @@ public class EtatSignalement implements Serializable
     private static final long serialVersionUID = 1L;
 
     /** The l id. */
-    private Long              _lId;
+    private Long _lId;
 
     /** The str libelle. */
-    private String            _strLibelle;
+    private String _strLibelle;
 
     /** The str code. */
-    private String            _strCode;
+    private String _strCode;
 
     /** The b coche. */
-    private Boolean           _bCoche;
+    private Boolean _bCoche;
 
     /**
      * Sets the id.
      *
-     * @param id the new id
+     * @param id
+     *            the new id
      */
     public void setId( Long id )
     {
@@ -89,7 +90,8 @@ public class EtatSignalement implements Serializable
     /**
      * Sets the libelle.
      *
-     * @param libelle            the libelle to set
+     * @param libelle
+     *            the libelle to set
      */
     public void setLibelle( String libelle )
     {
@@ -109,7 +111,8 @@ public class EtatSignalement implements Serializable
     /**
      * Sets the code.
      *
-     * @param code            the code to set
+     * @param code
+     *            the code to set
      */
     public void setCode( String code )
     {
@@ -129,11 +132,37 @@ public class EtatSignalement implements Serializable
     /**
      * Sets the coche.
      *
-     * @param pChecked            the checked to set
+     * @param pChecked
+     *            the checked to set
      */
     public void setCoche( Boolean pChecked )
     {
         _bCoche = pChecked;
+    }
+
+    /**
+     * Equals.
+     *
+     * @param o
+     *            the o
+     * @return true, if successful
+     */
+    @Override
+    public boolean equals( Object o )
+    {
+        if ( this == o )
+        {
+            return true;
+        }
+
+        if ( o == null || getClass( ) != o.getClass( ) )
+        {
+            return false;
+        }
+
+        EtatSignalement etatSignalement = (EtatSignalement) o;
+        return _lId == etatSignalement._lId && _strLibelle.equals( etatSignalement._strLibelle );
+
     }
 
 }

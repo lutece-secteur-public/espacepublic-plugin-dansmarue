@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,8 @@ public interface IPrioriteDAO
     /**
      * Save a new priorite.
      *
-     * @param priorite            the prioritie object
+     * @param priorite
+     *            the prioritie object
      * @return the prioritie id
      */
     public Long insert( Priorite priorite );
@@ -54,14 +55,16 @@ public interface IPrioriteDAO
     /**
      * Delete an prioritie.
      *
-     * @param lId            the prioritie id
+     * @param lId
+     *            the prioritie id
      */
     public void remove( long lId );
 
     /**
      * Load a prioritie.
      *
-     * @param lId            the prioritie id
+     * @param lId
+     *            the prioritie id
      * @return a prioritie
      */
     public Priorite load( long lId );
@@ -69,7 +72,8 @@ public interface IPrioriteDAO
     /**
      * Store a prioritie.
      *
-     * @param priorite            the prioritie object
+     * @param priorite
+     *            the prioritie object
      */
     public void store( Priorite priorite );
 

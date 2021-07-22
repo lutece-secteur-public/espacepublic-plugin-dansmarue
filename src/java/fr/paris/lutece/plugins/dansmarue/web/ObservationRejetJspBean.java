@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -65,78 +65,91 @@ public class ObservationRejetJspBean extends AbstractJspBean
 {
 
     /** The Constant serialVersionUID. */
-    private static final long        serialVersionUID                              = -7320055975149743428L;
+    private static final long serialVersionUID = -7320055975149743428L;
 
     /** The Constant MESSAGE_CONFIRMATION_DELETE_OBSERVATION_REJET. */
     // MESSAGES
-    private static final String      MESSAGE_CONFIRMATION_DELETE_OBSERVATION_REJET = "dansmarue.message.observationRejet.delete.confirmation";
+    private static final String MESSAGE_CONFIRMATION_DELETE_OBSERVATION_REJET = "dansmarue.message.observationRejet.delete.confirmation";
 
     /** The Constant MESSAGE_TITLE_DELETE_OBSERVATION_REJET. */
-    private static final String      MESSAGE_TITLE_DELETE_OBSERVATION_REJET        = "dansmarue.messagetitle.observationRejet.delete.confirmation";
+    private static final String MESSAGE_TITLE_DELETE_OBSERVATION_REJET = "dansmarue.messagetitle.observationRejet.delete.confirmation";
 
     /** The Constant MESSAGE_ERROR_OBSERVATION_CANT_BE_REMOVED. */
-    private static final String      MESSAGE_ERROR_OBSERVATION_CANT_BE_REMOVED     = "dansmarue.message.observationRejet.error.used";
+    private static final String MESSAGE_ERROR_OBSERVATION_CANT_BE_REMOVED = "dansmarue.message.observationRejet.error.used";
 
     /** The Constant PARAMETER_OBSERVATION_REJET_ID. */
     // PARAMETERS
-    public static final String       PARAMETER_OBSERVATION_REJET_ID                = "observation_rejet_id";
+    public static final String PARAMETER_OBSERVATION_REJET_ID = "observation_rejet_id";
 
     /** The Constant JSP_MANAGE_OBSERVATION_REJET. */
     // JSP
-    private static final String      JSP_MANAGE_OBSERVATION_REJET                  = "jsp/admin/plugins/signalement/ManageObservationRejet.jsp";
+    private static final String JSP_MANAGE_OBSERVATION_REJET = "jsp/admin/plugins/signalement/ManageObservationRejet.jsp";
 
     /** The Constant JSP_DELETE_OBSERVATION_REJET. */
-    private static final String      JSP_DELETE_OBSERVATION_REJET                  = "jsp/admin/plugins/signalement/DoDeleteObservationRejet.jsp";
+    private static final String JSP_DELETE_OBSERVATION_REJET = "jsp/admin/plugins/signalement/DoDeleteObservationRejet.jsp";
 
     /** The Constant JSP_SAVE_OBSERVATION_REJET. */
-    private static final String      JSP_SAVE_OBSERVATION_REJET                    = "SaveObservationRejet.jsp";
+    private static final String JSP_SAVE_OBSERVATION_REJET = "SaveObservationRejet.jsp";
 
     /** The Constant JSP_MODIFY_OBSERVATION_REJET. */
-    private static final String      JSP_MODIFY_OBSERVATION_REJET                  = "ModifyObservationRejet.jsp";
+    private static final String JSP_MODIFY_OBSERVATION_REJET = "ModifyObservationRejet.jsp";
 
     /** The Constant RIGHT_MANAGE_OBSERVATION_REJET. */
     // RIGHT
-    public static final String       RIGHT_MANAGE_OBSERVATION_REJET                = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
+    public static final String RIGHT_MANAGE_OBSERVATION_REJET = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
 
     /** The Constant ERROR_OCCUR. */
     // CONSTANTS
-    public static final String       ERROR_OCCUR                                   = "error";
+    public static final String ERROR_OCCUR = "error";
 
     /** The Constant MARK_OBSERVATION_REJET_LIST. */
     // Markers
-    private static final String      MARK_OBSERVATION_REJET_LIST                   = "observation_rejet_list";
+    private static final String MARK_OBSERVATION_REJET_LIST = "observation_rejet_list";
 
     /** The Constant MARK_OBSERVATION_REJET. */
-    private static final String      MARK_OBSERVATION_REJET                        = "observation_rejet";
+    private static final String MARK_OBSERVATION_REJET = "observation_rejet";
 
     /** The Constant TEMPLATE_MANAGE_OBSERVATION_REJET. */
     // TEMPLATES
-    private static final String      TEMPLATE_MANAGE_OBSERVATION_REJET             = "admin/plugins/signalement/manage_observation_rejet.html";
+    private static final String TEMPLATE_MANAGE_OBSERVATION_REJET = "admin/plugins/signalement/manage_observation_rejet.html";
 
     /** The Constant TEMPLATE_SAVE_OBSERVATION_REJET. */
-    private static final String      TEMPLATE_SAVE_OBSERVATION_REJET               = "admin/plugins/signalement/save_observation_rejet.html";
+    private static final String TEMPLATE_SAVE_OBSERVATION_REJET = "admin/plugins/signalement/save_observation_rejet.html";
 
     /** The Constant TEMPLATE_MODIFY_OBSERVATION_REJET. */
-    private static final String      TEMPLATE_MODIFY_OBSERVATION_REJET             = "admin/plugins/signalement/modify_observation_rejet.html";
+    private static final String TEMPLATE_MODIFY_OBSERVATION_REJET = "admin/plugins/signalement/modify_observation_rejet.html";
 
     /** The observation rejet service. */
     // SERVICES
     private transient IObservationRejetService _observationRejetService;
 
-    /* (non-Javadoc)
+    /**
+     * Inits the.
+     *
+     * @param request
+     *            the request
+     * @param strRight
+     *            the str right
+     * @throws AccessDeniedException
+     *             the access denied exception
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.dansmarue.web.AbstractJspBean#init(javax.servlet.http.HttpServletRequest, java.lang.String)
      */
     @Override
     public void init( HttpServletRequest request, String strRight ) throws AccessDeniedException
     {
         super.init( request, strRight );
-        _observationRejetService = ( IObservationRejetService ) SpringContextService.getBean( "observationRejetService" );
+        _observationRejetService = (IObservationRejetService) SpringContextService.getBean( "observationRejetService" );
     }
 
     /**
      * Get the manage ObservationRejet page.
      *
-     * @param request            the request
+     * @param request
+     *            the request
      * @return the page with ObservationRejet list
      */
     public String getManageObservationRejet( HttpServletRequest request )
@@ -155,7 +168,8 @@ public class ObservationRejetJspBean extends AbstractJspBean
     /**
      * Delete a ObservationRejet.
      *
-     * @param request            The HTTP request
+     * @param request
+     *            The HTTP request
      * @return redirection url
      */
     public String doDeleteObservationRejet( HttpServletRequest request )
@@ -169,7 +183,7 @@ public class ObservationRejetJspBean extends AbstractJspBean
         {
             nIdObservationRejet = Integer.parseInt( strObservationRejetId );
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
 
             return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
@@ -184,7 +198,8 @@ public class ObservationRejetJspBean extends AbstractJspBean
     /**
      * Returns the confirmation message to delete a ObservationRejet.
      *
-     * @param request            The Http request
+     * @param request
+     *            The Http request
      * @return the html code message
      */
     public String getDeleteObservationRejet( HttpServletRequest request )
@@ -200,7 +215,7 @@ public class ObservationRejetJspBean extends AbstractJspBean
         {
             nIdObservationRejet = Integer.parseInt( strIdObservationRejet );
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
             return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
         }
@@ -213,15 +228,16 @@ public class ObservationRejetJspBean extends AbstractJspBean
         Map<String, Object> urlParam = new HashMap<String, Object>( );
         urlParam.put( PARAMETER_OBSERVATION_REJET_ID, nIdObservationRejet );
 
-        return AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_DELETE_OBSERVATION_REJET, null, MESSAGE_CONFIRMATION_DELETE_OBSERVATION_REJET, JSP_DELETE_OBSERVATION_REJET, "_self",
-                AdminMessage.TYPE_CONFIRMATION, urlParam, strJspBack );
+        return AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_DELETE_OBSERVATION_REJET, null, MESSAGE_CONFIRMATION_DELETE_OBSERVATION_REJET,
+                JSP_DELETE_OBSERVATION_REJET, "_self", AdminMessage.TYPE_CONFIRMATION, urlParam, strJspBack );
 
     }
 
     /**
      * Returns the form for ObservationRejet creation.
      *
-     * @param request            The HTTP request
+     * @param request
+     *            The HTTP request
      * @return HTML Form
      */
 
@@ -239,7 +255,7 @@ public class ObservationRejetJspBean extends AbstractJspBean
 
         if ( ve != null )
         {
-            observationRejet = ( ObservationRejet ) ve.getBean( );
+            observationRejet = (ObservationRejet) ve.getBean( );
             model.put( ERROR_OCCUR, getHtmlError( ve ) );
         }
 
@@ -253,7 +269,8 @@ public class ObservationRejetJspBean extends AbstractJspBean
     /**
      * Returns the form for ObservationRejet modification.
      *
-     * @param request            The HTTP request
+     * @param request
+     *            The HTTP request
      * @return HTML Form
      */
 
@@ -272,7 +289,7 @@ public class ObservationRejetJspBean extends AbstractJspBean
         {
             nIdObservationRejet = Integer.parseInt( strIdObservationRejet );
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
             return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
         }
@@ -283,7 +300,7 @@ public class ObservationRejetJspBean extends AbstractJspBean
         FunctionnalException ve = getErrorOnce( request );
         if ( ve != null )
         {
-            observationRejet = ( ObservationRejet ) ve.getBean( );
+            observationRejet = (ObservationRejet) ve.getBean( );
             model.put( ERROR_OCCUR, getHtmlError( ve ) );
         }
 
@@ -297,7 +314,8 @@ public class ObservationRejetJspBean extends AbstractJspBean
     /**
      * Modify a ObservationRejet.
      *
-     * @param request            The HTTP request
+     * @param request
+     *            The HTTP request
      * @return redirection url
      */
 
@@ -319,7 +337,7 @@ public class ObservationRejetJspBean extends AbstractJspBean
             {
                 _observationRejetService.doSaveObservationRejet( observationRejet );
             }
-            catch ( BusinessException e )
+            catch( BusinessException e )
             {
                 UrlItem url = new UrlItem( JSP_MODIFY_OBSERVATION_REJET );
                 url.addParameter( PARAMETER_OBSERVATION_REJET_ID, observationRejet.getId( ) );
@@ -338,7 +356,8 @@ public class ObservationRejetJspBean extends AbstractJspBean
     /**
      * Save a ObservationRejet.
      *
-     * @param request            The HTTP request
+     * @param request
+     *            The HTTP request
      * @return redirection url
      */
     public String doSaveObservationRejet( HttpServletRequest request )
@@ -359,7 +378,7 @@ public class ObservationRejetJspBean extends AbstractJspBean
             {
                 _observationRejetService.doSaveObservationRejet( observationRejet );
             }
-            catch ( BusinessException e )
+            catch( BusinessException e )
             {
                 UrlItem url = new UrlItem( JSP_SAVE_OBSERVATION_REJET );
                 return manageFunctionnalException( request, e, url.getUrl( ) );
@@ -377,21 +396,24 @@ public class ObservationRejetJspBean extends AbstractJspBean
     /**
      * Return the url of the JSP which called the last action.
      *
-     * @param request            The Http request
+     * @param request
+     *            The Http request
      * @return The url of the last JSP
      */
     private String doGoBack( HttpServletRequest request )
     {
         String strJspBack = request.getParameter( SignalementConstants.MARK_JSP_BACK );
 
-        return StringUtils.isNotBlank( strJspBack ) ? ( AppPathService.getBaseUrl( request ) + strJspBack ) : AppPathService.getBaseUrl( request ) + JSP_MANAGE_OBSERVATION_REJET;
+        return StringUtils.isNotBlank( strJspBack ) ? ( AppPathService.getBaseUrl( request ) + strJspBack )
+                : ( AppPathService.getBaseUrl( request ) + JSP_MANAGE_OBSERVATION_REJET );
 
     }
 
     /**
      * Increase the reject observation order.
      *
-     * @param request            the HttpServletRequest
+     * @param request
+     *            the HttpServletRequest
      * @return The url of the last JSP
      */
     public String doIncreaseObservationRejetOrder( HttpServletRequest request )
@@ -405,7 +427,8 @@ public class ObservationRejetJspBean extends AbstractJspBean
     /**
      * Decrease the reject observation order.
      *
-     * @param request            the HttpServletRequest
+     * @param request
+     *            the HttpServletRequest
      * @return The url of the last JSP
      */
     public String doDecreaseObservationRejetOrder( HttpServletRequest request )

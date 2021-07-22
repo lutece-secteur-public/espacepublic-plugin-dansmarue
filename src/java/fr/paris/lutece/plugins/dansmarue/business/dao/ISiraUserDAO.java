@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,7 +44,8 @@ public interface ISiraUserDAO
     /**
      * Inserts into the database a new sira user.
      *
-     * @param siraUser            the sira user to insert
+     * @param siraUser
+     *            the sira user to insert
      * @return the sira user id
      */
     public Long insert( SiraUser siraUser );
@@ -52,14 +53,16 @@ public interface ISiraUserDAO
     /**
      * Removes from the data base a sira user.
      *
-     * @param lId            the id of the sira user to remove
+     * @param lId
+     *            the id of the sira user to remove
      */
     public void remove( long lId );
 
     /**
      * Loads a sira user from its id.
      *
-     * @param lId            the id of the sira user to load
+     * @param lId
+     *            the id of the sira user to load
      * @return The sira user matching the id null otherwise
      */
     public SiraUser load( long lId );
@@ -67,15 +70,18 @@ public interface ISiraUserDAO
     /**
      * Updates a SiraUser.
      *
-     * @param siraUser            the sira user to update
+     * @param siraUser
+     *            the sira user to update
      */
     void update( SiraUser siraUser );
 
     /**
      * Finds a sira user from its guid and udid.
      *
-     * @param guid            the mon compte user id
-     * @param token            the user token
+     * @param guid
+     *            the mon compte user id
+     * @param token
+     *            the user token
      * @return The user matching those ids null otherwise
      */
     SiraUser findByGuidAndToken( String guid, String token );
@@ -83,7 +89,8 @@ public interface ISiraUserDAO
     /**
      * Finds a sira user from its guid.
      *
-     * @param guid            the mon compte user id
+     * @param guid
+     *            the mon compte user id
      * @return The user matching those ids null otherwise
      */
     SiraUser findByGuid( String guid );

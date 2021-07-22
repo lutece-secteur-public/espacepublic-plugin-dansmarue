@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,49 +41,49 @@ public final class LibrarySiraConstants
 
     /** The Constant PROPERTY_REST_RAMEN_URL. */
     // WebService links
-    public static final String PROPERTY_REST_RAMEN_URL                           = "ramen-rest-url";
+    public static final String PROPERTY_REST_RAMEN_URL = "ramen-rest-url";
 
     /** The Constant PROPERTY_REST_DMR_URL. */
-    public static final String PROPERTY_REST_DMR_URL                             = "dmr-rest-url";
+    public static final String PROPERTY_REST_DMR_URL = "dmr-rest-url";
 
     /** The Constant REST_SAVE_DOSSIER. */
-    public static final String REST_SAVE_DOSSIER                                 = "saveDossier";
+    public static final String REST_SAVE_DOSSIER = "saveDossier";
 
     /** The Constant REST_SAVE_DOSSIER_HISTORY. */
-    public static final String REST_SAVE_DOSSIER_HISTORY                         = "saveDossierHistory";
+    public static final String REST_SAVE_DOSSIER_HISTORY = "saveDossierHistory";
 
     /** The Constant REST_GET_DOSSIER. */
-    public static final String REST_GET_DOSSIER                                  = "getDossier";
+    public static final String REST_GET_DOSSIER = "getDossier";
 
     /** The Constant REST_GET_DOSSIER_COURRANT_BY_GEOM_WITH_EXPIRATION. */
     public static final String REST_GET_DOSSIER_COURRANT_BY_GEOM_WITH_EXPIRATION = "getDossiersCourrantsByGeomWithExpiration";
 
     /** The Constant REST_GET_DOSSIER_COURRANT_BY_GEO_WITH_LIMIT. */
-    public static final String REST_GET_DOSSIER_COURRANT_BY_GEO_WITH_LIMIT       = "getDossiersCourrantsByGeomWithLimit";
+    public static final String REST_GET_DOSSIER_COURRANT_BY_GEO_WITH_LIMIT = "getDossiersCourrantsByGeomWithLimit";
 
     /** The Constant REST_GET_SERVICE_BY_ID. */
-    public static final String REST_GET_SERVICE_BY_ID                            = "getServiceById";
+    public static final String REST_GET_SERVICE_BY_ID = "getServiceById";
 
     /** The Constant REST_GET_ALL_TYPE_OBJECT_ACTIFS. */
-    public static final String REST_GET_ALL_TYPE_OBJECT_ACTIFS                   = "getAllTypeObjetActifs";
+    public static final String REST_GET_ALL_TYPE_OBJECT_ACTIFS = "getAllTypeObjetActifs";
 
     /** The Constant REST_NATURE_BY_TYPE_OBJECT. */
-    public static final String REST_NATURE_BY_TYPE_OBJECT                        = "getNatureByTypeObjetId";
+    public static final String REST_NATURE_BY_TYPE_OBJECT = "getNatureByTypeObjetId";
 
     /** The Constant REST_TYPE_SIGNALEMENT_SERVICE. */
-    public static final String REST_TYPE_SIGNALEMENT_SERVICE                     = "getAllSousTypeSignalementCascade";
+    public static final String REST_TYPE_SIGNALEMENT_SERVICE = "getAllSousTypeSignalementCascade";
 
     /** The Constant REST_LIST_SIGNALEMENT_DOSSIER_SERVICE. */
-    public static final String REST_LIST_SIGNALEMENT_DOSSIER_SERVICE             = "getListSignalementDossierByParam";
+    public static final String REST_LIST_SIGNALEMENT_DOSSIER_SERVICE = "getListSignalementDossierByParam";
 
     /** The Constant REST_GET_SIGNALEMENT_BY_ID. */
-    public static final String REST_GET_SIGNALEMENT_BY_ID                        = "getSignalementById";
+    public static final String REST_GET_SIGNALEMENT_BY_ID = "getSignalementById";
 
     /** The Constant REST_GET_LIST_WORKFLOW_ACTION. */
-    public static final String REST_GET_LIST_WORKFLOW_ACTION                     = "getWorkflowActions";
+    public static final String REST_GET_LIST_WORKFLOW_ACTION = "getWorkflowActions";
 
     /** The Constant REST_HAS_SIGNALEMENT_FOR_ROADMAP. */
-    public static final String REST_HAS_SIGNALEMENT_FOR_ROADMAP                  = "hasSignalementForRoadMap";
+    public static final String REST_HAS_SIGNALEMENT_FOR_ROADMAP = "hasSignalementForRoadMap";
 
     /**
      * Utility class - empty constructor.

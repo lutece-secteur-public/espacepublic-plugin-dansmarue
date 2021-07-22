@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,7 +41,6 @@ import fr.paris.lutece.portal.service.image.ImageResourceManager;
 import fr.paris.lutece.portal.service.image.ImageResourceProvider;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-
 /**
  * This class provide services for ImageServiceTypeObjet.
  */
@@ -49,21 +48,21 @@ public class ImageObjetService implements ImageResourceProvider
 {
 
     /** The Constant IMAGE_RESOURCE_TYPE_ID. */
-    private static final String      IMAGE_RESOURCE_TYPE_ID = "image_type_signalement";
+    private static final String IMAGE_RESOURCE_TYPE_ID = "image_type_signalement";
 
     /** The type signalement service. */
     @Inject
-    private ITypeSignalementService  _typeSignalementService;
+    private ITypeSignalementService _typeSignalementService;
 
     /** The singleton. */
-    private static ImageObjetService _singleton             = new ImageObjetService( );
+    private static ImageObjetService _singleton = new ImageObjetService( );
 
     /**
      * Creates a new instance of CategoryService.
      */
     ImageObjetService( )
     {
-        _typeSignalementService = ( ITypeSignalementService ) SpringContextService.getBean( "typeSignalementService" );
+        _typeSignalementService = (ITypeSignalementService) SpringContextService.getBean( "typeSignalementService" );
 
         ImageResourceManager.registerProvider( this );
     }
@@ -89,7 +88,8 @@ public class ImageObjetService implements ImageResourceProvider
     /**
      * Get the resource for image.
      *
-     * @param nIdTypeSignalement            The identifier of nIdTypeSignalement object
+     * @param nIdTypeSignalement
+     *            The identifier of nIdTypeSignalement object
      * @return The ImageResource
      */
     @Override

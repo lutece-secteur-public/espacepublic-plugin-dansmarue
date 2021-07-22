@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,13 +55,13 @@ public class FileMessageCreationService implements IFileMessageCreationService
 {
 
     /** The Constant DOT. */
-    private static final String DOT            = ".";
+    private static final String DOT = ".";
 
     /** The Constant UNDERSCORE. */
-    private static final String UNDERSCORE     = "_";
+    private static final String UNDERSCORE = "_";
 
     /** The Constant REGEX. */
-    private static final String REGEX          = "\\W";
+    private static final String REGEX = "\\W";
 
     /** The Constant RETOUR_CHARIOT. */
     private static final String RETOUR_CHARIOT = "<br/>";
@@ -76,11 +76,16 @@ public class FileMessageCreationService implements IFileMessageCreationService
     /**
      * Create a file.
      *
-     * @param strFolderPath            the folder path
-     * @param strFileName            the file name
-     * @param strFileOutPut            the file output
-     * @param strEncoding            the encoding
-     * @throws IOException             exception if there is an error during the deletion
+     * @param strFolderPath
+     *            the folder path
+     * @param strFileName
+     *            the file name
+     * @param strFileOutPut
+     *            the file output
+     * @param strEncoding
+     *            the encoding
+     * @throws IOException
+     *             exception if there is an error during the deletion
      */
     @Override
     public void createFile( String strFolderPath, String strFileName, String strFileOutPut, String strEncoding ) throws IOException
@@ -96,16 +101,19 @@ public class FileMessageCreationService implements IFileMessageCreationService
     /**
      * Delete a file.
      *
-     * @param strFolderPath            the folder path
-     * @param strFileName            the file name
-     * @throws IOException             exception if there is an error during the deletion
+     * @param strFolderPath
+     *            the folder path
+     * @param strFileName
+     *            the file name
+     * @throws IOException
+     *             exception if there is an error during the deletion
      */
     @Override
     public void deleteFile( String strFolderPath, String strFileName ) throws IOException
     {
         File file = new File( strFolderPath + strFileName );
 
-        if ( file.exists( ) && !file.delete( ))
+        if ( file.exists( ) && !file.delete( ) )
         {
             throw new IOException( "ERROR when deleting the file or folder " + strFolderPath + strFileName );
         }
@@ -114,8 +122,10 @@ public class FileMessageCreationService implements IFileMessageCreationService
     /**
      * Build the file name.
      *
-     * @param strFileName            the filename to set
-     * @param strFormatExtension            the format extension
+     * @param strFileName
+     *            the filename to set
+     * @param strFormatExtension
+     *            the format extension
      * @return the file name
      */
     @Override
@@ -139,7 +149,8 @@ public class FileMessageCreationService implements IFileMessageCreationService
     /**
      * Read content from the given file.
      *
-     * @param strFile            the file absolute path (ex : /home/filetopath/file.txt)
+     * @param strFile
+     *            the file absolute path (ex : /home/filetopath/file.txt)
      * @return the string, an empty string if the file does not exists
      */
     @Override
@@ -151,7 +162,7 @@ public class FileMessageCreationService implements IFileMessageCreationService
         {
             in = new FileInputStream( strFile );
         }
-        catch ( FileNotFoundException e )
+        catch( FileNotFoundException e )
         {
 
             AppLogService.error( e.getMessage( ), e );
@@ -160,11 +171,10 @@ public class FileMessageCreationService implements IFileMessageCreationService
         }
 
         String strContent = StringUtils.EMPTY;
-        BufferedReader br = new BufferedReader( new InputStreamReader( in ) );
-        StringBuilder buf = new StringBuilder( );
-
-        try
+        try ( BufferedReader br = new BufferedReader( new InputStreamReader( in ) ) )
         {
+            StringBuilder buf = new StringBuilder( );
+
             while ( br.ready( ) )
             {
                 String strLine = br.readLine( );
@@ -175,16 +185,17 @@ public class FileMessageCreationService implements IFileMessageCreationService
                 }
                 buf.append( strLine );
             }
+
+            strContent = buf.toString( );
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
             AppLogService.error( e.getMessage( ), e );
-        } finally
+        }
+        finally
         {
             IOUtils.closeQuietly( in );
         }
-
-        strContent = buf.toString( );
 
         return strContent;
     }
@@ -192,25 +203,22 @@ public class FileMessageCreationService implements IFileMessageCreationService
     /**
      * Write to the given file.
      *
-     * @param strContent            the content to write
-     * @param strFile            the file
+     * @param strContent
+     *            the content to write
+     * @param strFile
+     *            the file
      */
     @Override
     public void writeToFile( String strContent, String strFile )
     {
-        FileWriter fw = null;
 
-        try
+        try ( FileWriter fw = new FileWriter( strFile, false ) ; )
         {
-            fw = new FileWriter( strFile, false );
             fw.write( strContent );
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
             AppLogService.error( e.getMessage( ), e );
-        } finally
-        {
-            IOUtils.closeQuietly( fw );
         }
     }
 

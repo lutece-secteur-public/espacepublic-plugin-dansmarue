@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,42 +50,43 @@ public class MessageTypologieDAO implements IMessageTypologieDAO
 {
 
     /** The Constant SQL_SELECT_BY_ID_TYPE. */
-    private static final String SQL_SELECT_BY_ID_TYPE               = "SELECT id_message, fk_id_type_signalement, type_message, contenu_message, ordre, actif FROM signalement_message_typologie where fk_id_type_signalement=? order by ordre asc";
+    private static final String SQL_SELECT_BY_ID_TYPE = "SELECT id_message, fk_id_type_signalement, type_message, contenu_message, ordre, actif FROM signalement_message_typologie where fk_id_type_signalement=? order by ordre asc";
 
     /** The Constant SQL_SELECT_MESSAGE_ACTIF_BY_ID_TYPE. */
     private static final String SQL_SELECT_MESSAGE_ACTIF_BY_ID_TYPE = "SELECT id_message, fk_id_type_signalement, type_message, contenu_message, ordre, actif FROM signalement_message_typologie where fk_id_type_signalement=? and actif=1 order by ordre asc";
 
     /** The Constant SQL_UPDATE. */
-    private static final String SQL_UPDATE                          = "UPDATE signalement_message_typologie SET fk_id_type_signalement=?, type_message=?, contenu_message=?, ordre=?, actif=? WHERE id_message=?";
+    private static final String SQL_UPDATE = "UPDATE signalement_message_typologie SET fk_id_type_signalement=?, type_message=?, contenu_message=?, ordre=?, actif=? WHERE id_message=?";
 
     /** The Constant SQL_DELETE. */
-    private static final String SQL_DELETE                          = "DELETE FROM signalement_message_typologie WHERE id_message=?";
+    private static final String SQL_DELETE = "DELETE FROM signalement_message_typologie WHERE id_message=?";
 
     /** The Constant SQL_DELETE_BY_ID_TYPE_SIGNALEMENT. */
-    private static final String SQL_DELETE_BY_ID_TYPE_SIGNALEMENT   = "DELETE FROM signalement_message_typologie WHERE fk_id_type_signalement=?";
+    private static final String SQL_DELETE_BY_ID_TYPE_SIGNALEMENT = "DELETE FROM signalement_message_typologie WHERE fk_id_type_signalement=?";
 
     /** The Constant SQL_CREATE. */
-    private static final String SQL_CREATE                          = "INSERT INTO signalement_message_typologie (id_message, fk_id_type_signalement, type_message, contenu_message, actif, ordre) VALUES((select COALESCE (max (id_message)+1, 1) from signalement_message_typologie), ?, ?, ?, ?, COALESCE((select max(ordre+1) from signalement_message_typologie where fk_id_type_signalement=?),1))";
+    private static final String SQL_CREATE = "INSERT INTO signalement_message_typologie (id_message, fk_id_type_signalement, type_message, contenu_message, actif, ordre) VALUES((select COALESCE (max (id_message)+1, 1) from signalement_message_typologie), ?, ?, ?, ?, COALESCE((select max(ordre+1) from signalement_message_typologie where fk_id_type_signalement=?),1))";
 
     /** The Constant SQL_SELECT. */
-    private static final String SQL_SELECT                          = "SELECT id_message, fk_id_type_signalement, type_message, contenu_message, ordre, actif FROM signalement_message_typologie where id_message=?";
+    private static final String SQL_SELECT = "SELECT id_message, fk_id_type_signalement, type_message, contenu_message, ordre, actif FROM signalement_message_typologie where id_message=?";
 
     /** The Constant SQL_DECREASE_ORDRE. */
-    private static final String SQL_DECREASE_ORDRE                  = "update signalement_message_typologie set ordre = (ordre+1) where fk_id_type_signalement=? and ordre>=? and ordre<? and id_message!=?";
+    private static final String SQL_DECREASE_ORDRE = "update signalement_message_typologie set ordre = (ordre+1) where fk_id_type_signalement=? and ordre>=? and ordre<? and id_message!=?";
 
     /** The Constant SQL_INCREASE_ORDRE. */
-    private static final String SQL_INCREASE_ORDRE                  = "update signalement_message_typologie set ordre = (ordre-1) where fk_id_type_signalement=? and ordre<=? and ordre>?  and id_message!=?";
+    private static final String SQL_INCREASE_ORDRE = "update signalement_message_typologie set ordre = (ordre-1) where fk_id_type_signalement=? and ordre<=? and ordre>?  and id_message!=?";
 
     /** The Constant SQL_INCREASE_ORDRE_UNDER. */
-    private static final String SQL_INCREASE_ORDRE_UNDER            = "update signalement_message_typologie set ordre = (ordre-1) where fk_id_type_signalement=? and ordre>=?";
+    private static final String SQL_INCREASE_ORDRE_UNDER = "update signalement_message_typologie set ordre = (ordre-1) where fk_id_type_signalement=? and ordre>=?";
 
     /** The Constant SQL_EXPORT_MESSAGES. */
-    private static final String SQL_EXPORT_MESSAGES                 = "SELECT message.fk_id_type_signalement, message.type_message, message.contenu_message, (select count(*) from signalement_message_typologie where fk_id_type_signalement=message.fk_id_type_signalement) ,message.actif  "
-            + "FROM signalement_message_typologie message " + "join signalement_type_signalement typeSig on typeSig.id_type_signalement = message.fk_id_type_signalement "
+    private static final String SQL_EXPORT_MESSAGES = "SELECT message.fk_id_type_signalement, message.type_message, message.contenu_message, (select count(*) from signalement_message_typologie where fk_id_type_signalement=message.fk_id_type_signalement) ,message.actif  "
+            + "FROM signalement_message_typologie message "
+            + "join signalement_type_signalement typeSig on typeSig.id_type_signalement = message.fk_id_type_signalement "
             + "order by message.fk_id_type_signalement, message.ordre asc";
 
     /** The Constant SQL_IS_MESSAGE_ACTIF_FOR_TYPE. */
-    private static final String SQL_IS_MESSAGE_ACTIF_FOR_TYPE       = "select count(id_message) from signalement_message_typologie where actif=1 and fk_id_type_signalement=?";
+    private static final String SQL_IS_MESSAGE_ACTIF_FOR_TYPE = "select count(id_message) from signalement_message_typologie where actif=1 and fk_id_type_signalement=?";
 
     /**
      * {@inheritDoc}
@@ -300,7 +301,8 @@ public class MessageTypologieDAO implements IMessageTypologieDAO
     /**
      * Message typologie mapper.
      *
-     * @param daoUtil the dao util
+     * @param daoUtil
+     *            the dao util
      * @return the message typologie
      */
     private MessageTypologie messageTypologieMapper( DAOUtil daoUtil )

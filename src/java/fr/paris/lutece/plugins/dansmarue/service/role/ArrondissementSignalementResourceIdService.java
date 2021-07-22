@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,13 +55,13 @@ public class ArrondissementSignalementResourceIdService extends ResourceIdServic
 {
 
     /** Permission view District. */
-    public static final String     PERMISSION_VIEW_ARRONDISSEMENT     = "VIEW_ARRONDISSEMENT_SIGNALEMENT";
+    public static final String PERMISSION_VIEW_ARRONDISSEMENT = "VIEW_ARRONDISSEMENT_SIGNALEMENT";
 
     /** The Constant PROPERTY_LABEL_RESOURCE_TYPE. */
-    private static final String    PROPERTY_LABEL_RESOURCE_TYPE       = "dansmarue.rbac.arrondissement.resourceType.label";
+    private static final String PROPERTY_LABEL_RESOURCE_TYPE = "dansmarue.rbac.arrondissement.resourceType.label";
 
     /** The Constant PROPERTY_LABEL_VIEW_ARRONDISSEMENT. */
-    private static final String    PROPERTY_LABEL_VIEW_ARRONDISSEMENT = "dansmarue.rbac.arrondissement.permission.viewArrondissement";
+    private static final String PROPERTY_LABEL_VIEW_ARRONDISSEMENT = "dansmarue.rbac.arrondissement.permission.viewArrondissement";
 
     /** The arrondissement service. */
     private IArrondissementService _arrondissementService;
@@ -96,7 +96,7 @@ public class ArrondissementSignalementResourceIdService extends ResourceIdServic
     {
         if ( _arrondissementService == null )
         {
-            _arrondissementService = ( IArrondissementService ) SpringContextService.getBean( "signalement.arrondissementService" );
+            _arrondissementService = (IArrondissementService) SpringContextService.getBean( "signalement.arrondissementService" );
         }
         return ListUtils.toReferenceList( _arrondissementService.getAllArrondissement( ), "id", "numero", null );
     }
@@ -109,7 +109,7 @@ public class ArrondissementSignalementResourceIdService extends ResourceIdServic
     {
         if ( _arrondissementService == null )
         {
-            _arrondissementService = ( IArrondissementService ) SpringContextService.getBean( "signalement.arrondissementService" );
+            _arrondissementService = (IArrondissementService) SpringContextService.getBean( "signalement.arrondissementService" );
         }
         Arrondissement arrondissement = _arrondissementService.getByIdArrondissement( Integer.parseInt( strId ) );
         if ( arrondissement == null )

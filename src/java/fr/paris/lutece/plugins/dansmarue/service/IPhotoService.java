@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,7 +55,8 @@ public interface IPhotoService
     /**
      * Delete an photo.
      *
-     * @param lId            the photo id
+     * @param lId
+     *            the photo id
      */
     void remove( long lId );
 
@@ -71,14 +72,16 @@ public interface IPhotoService
     /**
      * Store a photo.
      *
-     * @param photo            the photo object
+     * @param photo
+     *            the photo object
      */
     void store( PhotoDMR photo );
 
     /**
      * Gets the image resource.
      *
-     * @param nKey the n key
+     * @param nKey
+     *            the n key
      * @return the image resource
      */
     ImageResource getImageResource( int nKey );
@@ -95,7 +98,8 @@ public interface IPhotoService
     /**
      * Find photos for a report id.
      *
-     * @param lIdSignalement            the report id
+     * @param lIdSignalement
+     *            the report id
      * @return list of photos
      */
     List<PhotoDMR> findBySignalementId( long lIdSignalement );
@@ -103,7 +107,8 @@ public interface IPhotoService
     /**
      * Find photos for a report id with photo content.
      *
-     * @param lIdSignalement            the report id
+     * @param lIdSignalement
+     *            the report id
      * @return list of photos
      */
     List<PhotoDMR> findWithFullPhotoBySignalementId( long lIdSignalement );

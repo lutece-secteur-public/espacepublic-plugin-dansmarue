@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,9 +42,12 @@ public interface ITaskNotificationConfigDAO
     /**
      * Gets the message of a report notification user task by its, task type, idworkflow and state before for automatic actions.
      *
-     * @param taskType            the task type
-     * @param idWorkflow            the workflow id
-     * @param idStateBefore            the state before id
+     * @param taskType
+     *            the task type
+     * @param idWorkflow
+     *            the workflow id
+     * @param idStateBefore
+     *            the state before id
      * @return the message of the report notification user task
      */
     String getMessageByTaskTypeStateWorkflow( String taskType, int idWorkflow, int idStateBefore );

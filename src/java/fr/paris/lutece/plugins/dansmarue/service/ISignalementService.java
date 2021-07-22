@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,6 +39,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import fr.paris.lutece.plugins.dansmarue.business.entities.EtatSignalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.ServiceFaitMasseFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDashboardFilter;
@@ -77,7 +78,8 @@ public interface ISignalementService
     /**
      * Get the report with the given id with photo content.
      *
-     * @param lIdSignalement            The report id
+     * @param lIdSignalement
+     *            The report id
      * @return The report with the given id
      */
     Signalement getSignalementWithFullPhoto( long lIdSignalement );
@@ -148,7 +150,7 @@ public interface ISignalementService
      *            ids of report to get
      * @return list of SignalementExportCSVDTO with columns : Priorities, Type, Board, Address, Creation date, State.
      */
-    List<SignalementExportCSVDTO> getSignalementForExport( int[] signalementIds );
+    List<SignalementExportCSVDTO> getSignalementForExport( int [ ] signalementIds );
 
     /**
      * Set the given report id as duplicate.
@@ -184,7 +186,8 @@ public interface ISignalementService
     /**
      * Add one to a report's follow.
      *
-     * @param nIdSignalement            the report id
+     * @param nIdSignalement
+     *            the report id
      */
     void incrementeSuiviByIdSignalement( Integer nIdSignalement );
 
@@ -200,6 +203,15 @@ public interface ISignalementService
      * @return a list of all the reports in the given parameter
      */
     List<Signalement> findAllSignalementInPerimeterWithInfo( Double lat, Double lng, Integer radius );
+
+    /**
+     * Gets the anomalie by number.
+     *
+     * @param number
+     *            the number
+     * @return the anomalie by number
+     */
+    Signalement getAnomalieByNumber( String number );
 
     /**
      * Select all the report for a given point and a radius.
@@ -240,7 +252,8 @@ public interface ISignalementService
     /**
      * Returns all the reports linked to a selected phone number.
      *
-     * @param idTelephone            the phone id
+     * @param idTelephone
+     *            the phone id
      * @return list of reports
      */
     List<Signalement> findSignalementsByIdTelephone( String idTelephone );
@@ -248,9 +261,12 @@ public interface ISignalementService
     /**
      * Get the Parent Unit.
      *
-     * @param idTypeSignalement            the report id to load
-     * @param lng            the longitude
-     * @param lat            the latitude
+     * @param idTypeSignalement
+     *            the report id to load
+     * @param lng
+     *            the longitude
+     * @param lat
+     *            the latitude
      * @return the parent unit
      */
     Unit getMajorUnit( Integer idTypeSignalement, Double lng, Double lat );
@@ -258,7 +274,8 @@ public interface ISignalementService
     /**
      * Get the informations of a report by its token.
      *
-     * @param token            the report token
+     * @param token
+     *            the report token
      * @return report
      */
     Signalement getSignalementByToken( String token );
@@ -266,11 +283,13 @@ public interface ISignalementService
     /**
      * Returns a geom.
      *
-     * @param dLatLambert            the latitude
-     * @param dLngLambert            the longitude
+     * @param dLatLambert
+     *            the latitude
+     * @param dLngLambert
+     *            the longitude
      * @return a double array
      */
-    Double[] getGeomFromLambertToWgs84( Double dLatLambert, Double dLngLambert );
+    Double [ ] getGeomFromLambertToWgs84( Double dLatLambert, Double dLngLambert );
 
     /**
      * Gets the geom from lambert 93 to wgs 84.
@@ -281,13 +300,15 @@ public interface ISignalementService
      *            the d lng lambert
      * @return the geom from lambert 93 to wgs 84
      */
-    Double[] getGeomFromLambert93ToWgs84( Double dLatLambert, Double dLngLambert );
+    Double [ ] getGeomFromLambert93ToWgs84( Double dLatLambert, Double dLngLambert );
 
     /**
      * Count the number of report by filter.
      *
-     * @param filter            the filter
-     * @param plugin            the plugin
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
      * @return number of report
      */
     Integer countIdSignalementByFilter( SignalementFilter filter, Plugin plugin );
@@ -295,28 +316,32 @@ public interface ISignalementService
     /**
      * Delete a report and all its information.
      *
-     * @param lIdSignalement            the report id
+     * @param lIdSignalement
+     *            the report id
      */
     void doDeleteSignalement( long lIdSignalement );
 
     /**
      * Delete a arrays of report and all its information.
      *
-     * @param lIdSignalement            the report id
+     * @param lIdSignalement
+     *            the report id
      */
-    void doDeleteSignalement( int[] lIdSignalement );
+    void doDeleteSignalement( int [ ] lIdSignalement );
 
     /**
      * Insert a message of report creation (linked with notification user task workflow).
      *
-     * @param messageCreation            the default message send to user when creating a report
+     * @param messageCreation
+     *            the default message send to user when creating a report
      */
     void insertMessageCreationSignalement( String messageCreation );
 
     /**
      * Update the message of report creation (linked with notification user task workflow).
      *
-     * @param messageCreation            the default message send to user when creating a report
+     * @param messageCreation
+     *            the default message send to user when creating a report
      */
     void updateMessageCreationSignalement( String messageCreation );
 
@@ -335,7 +360,8 @@ public interface ISignalementService
     /**
      * Replace the current state to a more explicit one for front office.
      *
-     * @param stateOfSignalement            the current state of the report
+     * @param stateOfSignalement
+     *            the current state of the report
      * @return the new state
      */
     String changeToGoodStateForSuivi( State stateOfSignalement );
@@ -343,16 +369,20 @@ public interface ISignalementService
     /**
      * Affect unique token to the report, don't throw erro in case of charset exception.
      *
-     * @param signalement            the report to affect token
+     * @param signalement
+     *            the report to affect token
      */
     void affectToken( Signalement signalement );
 
     /**
      * Set the given passage date.
      *
-     * @param dateDePassage            the string value of passage date
-     * @param heureDePassage            the string value of passage hour
-     * @param lIdSignalement            the id of report
+     * @param dateDePassage
+     *            the string value of passage date
+     * @param heureDePassage
+     *            the string value of passage hour
+     * @param lIdSignalement
+     *            the id of report
      */
     void setDateDePassage( String dateDePassage, String heureDePassage, Long lIdSignalement );
 
@@ -366,8 +396,10 @@ public interface ISignalementService
     /**
      * Returns the link for tracking report.
      *
-     * @param signalement            the report object
-     * @param request            HttpServletRequest
+     * @param signalement
+     *            the report object
+     * @param request
+     *            HttpServletRequest
      * @return the tracking link
      */
     String getLienConsultation( Signalement signalement, HttpServletRequest request );
@@ -375,22 +407,26 @@ public interface ISignalementService
     /**
      * Increases the congratulations count of a report.
      *
-     * @param idSignalement            the id of the report which the congratulations count must be increased
+     * @param idSignalement
+     *            the id of the report which the congratulations count must be increased
      */
     void incrementFelicitationsByIdSignalement( int idSignalement );
 
     /**
      * Decrements the number of people following a report.
      *
-     * @param nIdSignalement            the id of the report, which the following number must be decreased
+     * @param nIdSignalement
+     *            the id of the report, which the following number must be decreased
      */
     void decrementSuiviByIdSignalement( Integer nIdSignalement );
 
     /**
      * Finds all reports which are followed by an user.
      *
-     * @param guid            the user guid
-     * @param isResolved the is resolved
+     * @param guid
+     *            the user guid
+     * @param isResolved
+     *            the is resolved
      * @return List of all reports followed by this user
      */
     List<Signalement> getSignalementsByGuid( String guid, boolean isResolved );
@@ -398,31 +434,44 @@ public interface ISignalementService
     /**
      * Adds a follower to a report.
      *
-     * @param signalementId            The report id to follow
-     * @param guid            The follower guid
-     * @param strUDID            The follower udid
-     * @param email            The user email
-     * @param device            The user device
-     * @param userToken            The user token
-     * @param createUser            Defines if the user must be created
-     * @throws AlreadyFollowedException             exception if the report is already followed by the user
-     * @throws InvalidStateActionException             exception if the report is not in a state which allows following
+     * @param signalementId
+     *            The report id to follow
+     * @param guid
+     *            The follower guid
+     * @param strUDID
+     *            The follower udid
+     * @param email
+     *            The user email
+     * @param device
+     *            The user device
+     * @param userToken
+     *            The user token
+     * @param createUser
+     *            Defines if the user must be created
+     * @throws AlreadyFollowedException
+     *             exception if the report is already followed by the user
+     * @throws InvalidStateActionException
+     *             exception if the report is not in a state which allows following
      */
     void addFollower( Long signalementId, String guid, String strUDID, String email, String device, String userToken, boolean createUser );
 
     /**
      * Removes a report follower.
      *
-     * @param signalementId            the report id which must be unfollowed
-     * @param guid            user guid
-     * @throws NonExistentFollowItem             exception thrown when we try to remove a following item when the user is not following the report
+     * @param signalementId
+     *            the report id which must be unfollowed
+     * @param guid
+     *            user guid
+     * @throws NonExistentFollowItem
+     *             exception thrown when we try to remove a following item when the user is not following the report
      */
     void removeFollower( Long signalementId, String guid ) throws NonExistentFollowItem;
 
     /**
      * Filters report by the criterias defined in dashboard.
      *
-     * @param filter            the report filter
+     * @param filter
+     *            the report filter
      * @return a list of report for dashboard
      */
     List<DashboardSignalementDTO> findByDashboardFilter( SignalementDashboardFilter filter );
@@ -430,9 +479,12 @@ public interface ISignalementService
     /**
      * Finds reports by their Ids, and display a restricted list.
      *
-     * @param signalementIds            the reports ids
-     * @param nbMaxItems            the maximum number of items to return
-     * @param offset            the offset
+     * @param signalementIds
+     *            the reports ids
+     * @param nbMaxItems
+     *            the maximum number of items to return
+     * @param offset
+     *            the offset
      * @return a list of reports
      */
     List<Signalement> getByIds( List<Integer> signalementIds, Integer nbMaxItems, Integer offset );
@@ -440,7 +492,8 @@ public interface ISignalementService
     /**
      * Build the query to get the report ids matching the filter.
      *
-     * @param filter            the report filter
+     * @param filter
+     *            the report filter
      * @return the query
      */
     List<Integer> getIdsSignalementByFilter( SignalementFilter filter );
@@ -461,7 +514,8 @@ public interface ISignalementService
     /**
      * Check if a report is followable, based on its status.
      *
-     * @param nIdSignalement            The id of report to check
+     * @param nIdSignalement
+     *            The id of report to check
      * @return True if the report is in a followable state False otherwise
      */
     boolean isSignalementFollowable( int nIdSignalement );
@@ -469,8 +523,10 @@ public interface ISignalementService
     /**
      * Checks if the user has already followed this report.
      *
-     * @param nIdSignalement            Id of the report to check
-     * @param userGuid            User to check
+     * @param nIdSignalement
+     *            Id of the report to check
+     * @param userGuid
+     *            User to check
      * @return True if the report has already been followed by the user False otherwise
      */
     boolean isSignalementFollowedByUser( int nIdSignalement, String userGuid );
@@ -478,8 +534,10 @@ public interface ISignalementService
     /**
      * Checks if the user has already followed this report.
      *
-     * @param reference            Id of the report reference
-     * @param signalement            the report
+     * @param reference
+     *            Id of the report reference
+     * @param signalement
+     *            the report
      * @return the report id reference
      */
     String getSignalementReference( String reference, Signalement signalement );
@@ -487,16 +545,20 @@ public interface ISignalementService
     /**
      * Add date dateMiseEnSurveillance for report.
      *
-     * @param nIdSignalement            Id of the report reference
-     * @param dateMiseEnSurveillance            the monitoring date
+     * @param nIdSignalement
+     *            Id of the report reference
+     * @param dateMiseEnSurveillance
+     *            the monitoring date
      */
     void doMettreSousSurveillance( int nIdSignalement, String dateMiseEnSurveillance );
 
     /**
      * Return the report history.
      *
-     * @param idSignalement            the report id
-     * @param request            HttpServletRequest
+     * @param idSignalement
+     *            the report id
+     * @param request
+     *            HttpServletRequest
      * @return a json object containing the report history
      */
     JSONObject getHistorySignalement( Integer idSignalement, HttpServletRequest request );
@@ -504,16 +566,20 @@ public interface ISignalementService
     /**
      * Add a rejection date to the report.
      *
-     * @param lIdSignalement            the report id
-     * @param dateRejet            the rejection date
+     * @param lIdSignalement
+     *            the report id
+     * @param dateRejet
+     *            the rejection date
      */
     void setDateRejet( Integer lIdSignalement, String dateRejet );
 
     /**
      * Returns a requalification object by history and task ids.
      *
-     * @param nIdHistory            the workflow history id
-     * @param idTask            the workflow task id
+     * @param nIdHistory
+     *            the workflow history id
+     * @param idTask
+     *            the workflow task id
      * @return the requalification object
      */
     SignalementRequalification getSignalementRequalificationByTaskHistory( int nIdHistory, int idTask );
@@ -521,30 +587,43 @@ public interface ISignalementService
     /**
      * Update the requalification.
      *
-     * @param lIdSignalement            the report id
-     * @param nIdHistory            the workflow history id
-     * @param idTask            the workflow task id
+     * @param lIdSignalement
+     *            the report id
+     * @param nIdHistory
+     *            the workflow history id
+     * @param idTask
+     *            the workflow task id
      */
     void setRequalificationIdHistory( Long lIdSignalement, int nIdHistory, int idTask );
 
     /**
      * Save the requalification of a report.
      *
-     * @param lIdSignalement            the report id
-     * @param idTypeSignalement            the report type id
-     * @param adresse            the report address
-     * @param idSector            the report sector
-     * @param idTask            the workflow task id
-     * @param commentaireAgentTerrain            commentaire Agent Terrain
+     * @param lIdSignalement
+     *            the report id
+     * @param idTypeSignalement
+     *            the report type id
+     * @param adresse
+     *            the report address
+     * @param idSector
+     *            the report sector
+     * @param idTask
+     *            the workflow task id
+     * @param commentaireAgentTerrain
+     *            commentaire Agent Terrain
      */
-    void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector, Integer idTask, String commentaireAgentTerrain );
+    void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector, Integer idTask,
+            String commentaireAgentTerrain );
 
     /**
      * Update the requalification history task.
      *
-     * @param lIdSignalement            the report id
-     * @param idHistory            the workflow history id
-     * @param idTask            the workflow task id
+     * @param lIdSignalement
+     *            the report id
+     * @param idHistory
+     *            the workflow history id
+     * @param idTask
+     *            the workflow task id
      */
     void setRequalificationIdHistoryAndIdTask( Long lIdSignalement, int idHistory, int idTask );
 
@@ -560,7 +639,8 @@ public interface ISignalementService
     /**
      * Get the followers mails.
      *
-     * @param idRessource            the report id
+     * @param idRessource
+     *            the report id
      * @return a list of mails
      */
     List<String> getAllSuiveursMail( Integer idRessource );
@@ -603,8 +683,10 @@ public interface ISignalementService
     /**
      * Find user for service done.
      *
-     * @param userAccessCode            user acess code
-     * @param signaleur            report creator
+     * @param userAccessCode
+     *            user acess code
+     * @param signaleur
+     *            report creator
      * @return user mail
      */
     String findUserServiceFait( String userAccessCode, Signaleur signaleur );
@@ -626,4 +708,45 @@ public interface ISignalementService
      * @return true, if successful
      */
     boolean executeServiceFaitMasse( ServiceFaitMasseFilter serviceFaitMasseFilter );
+
+    /**
+     * Gets the signalements service programme ids.
+     *
+     * @return the signalements service programme ids
+     */
+    List<Integer> getSignalementsServiceProgrammeIds( );
+
+    /**
+     * Gets the signalements service programme tier ids.
+     *
+     * @return the signalements service programme tier ids
+     */
+    List<Integer> getSignalementsServiceProgrammeTierIds( );
+
+    /**
+     * Find Signalement prestataire.
+     * 
+     * @param idSignalement
+     *            id Signalement.
+     * @return prestataire label.
+     */
+    String findPrestataireSignalement( int idSignalement );
+
+    /**
+     * Retrive list action to display.
+     *
+     * @param signalement
+     *            the signalement
+     * @return List action
+     */
+    Collection<Action> getListActionsByIdSignalementAndUser( Signalement signalement );
+
+    /**
+     * Gets the state if date indicated.
+     *
+     * @param signalementFilter
+     *            the signalement filter
+     * @return the state if date indicated
+     */
+    EtatSignalement getStateIfDateIndicated( SignalementFilter signalementFilter );
 }

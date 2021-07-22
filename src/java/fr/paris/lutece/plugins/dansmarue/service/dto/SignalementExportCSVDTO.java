@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,13 @@
  */
 package fr.paris.lutece.plugins.dansmarue.service.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
 
 /**
  * The Class SignalementExportCSVDTO.
@@ -42,70 +48,70 @@ public class SignalementExportCSVDTO
 {
 
     /** The str priorite. */
-    private String  _strPriorite;
+    private String _strPriorite;
 
     /** The str type signalement. */
-    private String  _strTypeSignalement;
+    private String _strTypeSignalement;
 
     /** The str alias. */
-    private String  _strAlias;
+    private String _strAlias;
 
     /** The str alias mobile. */
-    private String  _strAliasMobile;
+    private String _strAliasMobile;
 
     /** The str direction. */
-    private String  _strDirection;
+    private String _strDirection;
 
     /** The str quartier. */
-    private String  _strQuartier;
+    private String _strQuartier;
 
     /** The str adresse. */
-    private String  _strAdresse;
+    private String _strAdresse;
 
     /** The d coord X. */
-    private Double  _dCoordX;
+    private Double _dCoordX;
 
     /** The d coord Y. */
-    private Double  _dCoordY;
+    private Double _dCoordY;
 
     /** The str arrondissement. */
-    private String  _strArrondissement;
+    private String _strArrondissement;
 
     /** The str secteur. */
-    private String  _strSecteur;
+    private String _strSecteur;
 
     /** The str date creation. */
-    private String  _strDateCreation;
+    private String _strDateCreation;
 
     /** The str heure creation. */
-    private String  _strHeureCreation;
+    private String _strHeureCreation;
 
     /** The str etat. */
-    private String  _strEtat;
+    private String _strEtat;
 
     /** The str mail usager. */
-    private String  _strMailUsager;
+    private String _strMailUsager;
 
     /** The str commentaire usager. */
-    private String  _strCommentaireUsager;
+    private String _strCommentaireUsager;
 
     /** The str commentair agent terrain. */
-    private String  _strCommentairAgentTerrain;
+    private String _strCommentairAgentTerrain;
 
     /** The n nb photos. */
     private Integer _nNbPhotos;
 
     /** The str date cloture. */
-    private String  _strDateCloture;
+    private String _strDateCloture;
 
     /** The str date prevu traitement. */
-    private String  _strDatePrevuTraitement;
+    private String _strDatePrevuTraitement;
 
     /** The str raisons rejet. */
-    private String  _strRaisonsRejet;
+    private String _strRaisonsRejet;
 
     /** The str numero signalement. */
-    private String  _strNumeroSignalement;
+    private String _strNumeroSignalement;
 
     /** The n nb suivis. */
     private Integer _nNbSuivis;
@@ -120,36 +126,53 @@ public class SignalementExportCSVDTO
     private Integer _nIdMailServiceFait;
 
     /** The str executeur service fait. */
-    private String  _strExecuteurServiceFait;
+    private String _strExecuteurServiceFait;
 
     /** The str date derniere action. */
-    private String  _strDateDerniereAction;
+    private String _strDateDerniereAction;
 
     /** The str mail destinataire courriel. */
-    private String  _strMailDestinataireCourriel;
+    private String _strMailDestinataireCourriel;
 
     /** The str courriel expediteur. */
-    private String  _strCourrielExpediteur;
+    private String _strCourrielExpediteur;
 
     /** The str date envoi courriel. */
-    private String  _strDateEnvoiCourriel;
+    private String _strDateEnvoiCourriel;
+
+    /** The str executeur rejet. */
+    private String _strExecuteurRejet;
+
+    /** The str executeur mise surveillance. */
+    private String _strExecuteurMiseSurveillance;
+
+    /** The n nb requalifications. */
+    private Integer _nNbRequalifications;
 
     /** The str reg ex special caracter. */
-    private String  _strRegExSpecialCaracter = "[’]";
+    private String _strRegExSpecialCaracter = "[’]";
+
+    private Integer _nIdSignalement;
+
+    /** The photos. */
+    private List<PhotoDMR> _listPhotos = new ArrayList<>( );
 
     /**
      * Gets the tab all datas.
      *
      * @return the tab all datas
      */
-    public String[] getTabAllDatas( )
+    public String [ ] getTabAllDatas( )
     {
-        return new String[] { getNumeroSignalement( ), getPriorite( ), getTypeSignalement( ), getAlias( ), getAliasMobile( ), getDirection( ), getQuartier( ), getAdresse( ),
-                Double.toString( getCoordX( ) ), Double.toString( getCoordY( ) ), getArrondissement( ), getSecteur( ), getDateCreation( ), getHeureCreation( ), getEtat( ), getMailUsager( ),
-                getCommentaireUsager( ), Integer.toString( getNbPhotos( ) ), getRaisonsRejet( ), Integer.toString( getNbSuivis( ) ), Integer.toString( getNbFelicitations( ) ), getDateCloture( ),
+        return new String [ ] {
+                getNumeroSignalement( ), getPriorite( ), getTypeSignalement( ), getAlias( ), getAliasMobile( ), getDirection( ), getQuartier( ), getAdresse( ),
+                Double.toString( getCoordX( ) ), Double.toString( getCoordY( ) ), getArrondissement( ), getSecteur( ), getDateCreation( ), getHeureCreation( ),
+                getEtat( ), getMailUsager( ), getCommentaireUsager( ), Integer.toString( getNbPhotos( ) ), getRaisonsRejet( ),
+                Integer.toString( getNbSuivis( ) ), Integer.toString( getNbFelicitations( ) ), getDateCloture( ),
                 isPhotoServiceFait( ) ? "Photo présente" : "Pas de photo", getMailDestinataireCourriel( ), getCourrielExpediteur( ), getDateEnvoiCourriel( ),
-                        getIdMailServiceFait( ) != 0 ? getIdMailServiceFait( ).toString( ) : "", getExecuteurServiceFait( ), getDateDerniereAction( ), getDatePrevuTraitement( ),
-                                getCommentairAgentTerrain( ) };
+                getIdMailServiceFait( ) != 0 ? getIdMailServiceFait( ).toString( ) : "", getExecuteurServiceFait( ), getDateDerniereAction( ),
+                getDatePrevuTraitement( ), getCommentairAgentTerrain( ), getExecuteurRejet( ), getExecuteurMiseSurveillance( ), getNbRequalifications( )
+        };
     }
 
     /**
@@ -159,9 +182,9 @@ public class SignalementExportCSVDTO
      *            the num pin
      * @return the tab all datas with num pin
      */
-    public String[] getTabAllDatasWithNumPin( int numPin )
+    public String [ ] getTabAllDatasWithNumPin( int numPin )
     {
-        return ( String[] ) ArrayUtils.add( getTabAllDatas( ), 0, Integer.toString( numPin ) );
+        return (String [ ]) ArrayUtils.add( getTabAllDatas( ), 0, Integer.toString( numPin ) );
     }
 
     /**
@@ -177,7 +200,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the priorite.
      *
-     * @param priorite the new priorite
+     * @param priorite
+     *            the new priorite
      */
     public void setPriorite( String priorite )
     {
@@ -197,7 +221,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the type signalement.
      *
-     * @param typeSignalement the new type signalement
+     * @param typeSignalement
+     *            the new type signalement
      */
     public void setTypeSignalement( String typeSignalement )
     {
@@ -217,7 +242,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the direction.
      *
-     * @param direction the new direction
+     * @param direction
+     *            the new direction
      */
     public void setDirection( String direction )
     {
@@ -237,7 +263,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the adresse.
      *
-     * @param adresse the new adresse
+     * @param adresse
+     *            the new adresse
      */
     public void setAdresse( String adresse )
     {
@@ -257,7 +284,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the date creation.
      *
-     * @param dateCreation the new date creation
+     * @param dateCreation
+     *            the new date creation
      */
     public void setDateCreation( String dateCreation )
     {
@@ -277,7 +305,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the etat.
      *
-     * @param etat the new etat
+     * @param etat
+     *            the new etat
      */
     public void setEtat( String etat )
     {
@@ -297,7 +326,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the numero signalement.
      *
-     * @param strNumeroSignalement the new numero signalement
+     * @param strNumeroSignalement
+     *            the new numero signalement
      */
     public void setNumeroSignalement( String strNumeroSignalement )
     {
@@ -317,7 +347,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the alias.
      *
-     * @param strAlias the new alias
+     * @param strAlias
+     *            the new alias
      */
     public void setAlias( String strAlias )
     {
@@ -337,7 +368,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the alias mobile.
      *
-     * @param strAliasMobile the new alias mobile
+     * @param strAliasMobile
+     *            the new alias mobile
      */
     public void setAliasMobile( String strAliasMobile )
     {
@@ -357,7 +389,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the coord X.
      *
-     * @param dCoordX the new coord X
+     * @param dCoordX
+     *            the new coord X
      */
     public void setCoordX( Double dCoordX )
     {
@@ -377,7 +410,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the coord Y.
      *
-     * @param dCoordY the new coord Y
+     * @param dCoordY
+     *            the new coord Y
      */
     public void setCoordY( Double dCoordY )
     {
@@ -397,7 +431,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the arrondissement.
      *
-     * @param strArrondissement the new arrondissement
+     * @param strArrondissement
+     *            the new arrondissement
      */
     public void setArrondissement( String strArrondissement )
     {
@@ -417,7 +452,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the heure creation.
      *
-     * @param strHeureCreation the new heure creation
+     * @param strHeureCreation
+     *            the new heure creation
      */
     public void setHeureCreation( String strHeureCreation )
     {
@@ -437,7 +473,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the mailusager.
      *
-     * @param strMailUsager the new mailusager
+     * @param strMailUsager
+     *            the new mailusager
      */
     public void setMailusager( String strMailUsager )
     {
@@ -457,7 +494,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the commentaire usager.
      *
-     * @param strCommentaireUsager the new commentaire usager
+     * @param strCommentaireUsager
+     *            the new commentaire usager
      */
     public void setCommentaireUsager( String strCommentaireUsager )
     {
@@ -477,7 +515,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the commentair agent terrain.
      *
-     * @param strCommentairAgentTerrain the new commentair agent terrain
+     * @param strCommentairAgentTerrain
+     *            the new commentair agent terrain
      */
     public void setCommentairAgentTerrain( String strCommentairAgentTerrain )
     {
@@ -497,7 +536,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the nb photos.
      *
-     * @param nNbPhotos the new nb photos
+     * @param nNbPhotos
+     *            the new nb photos
      */
     public void setNbPhotos( Integer nNbPhotos )
     {
@@ -517,7 +557,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the raisons rejet.
      *
-     * @param raisonsRejet the new raisons rejet
+     * @param raisonsRejet
+     *            the new raisons rejet
      */
     public void setRaisonsRejet( String raisonsRejet )
     {
@@ -537,7 +578,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the secteur.
      *
-     * @param strSecteur the new secteur
+     * @param strSecteur
+     *            the new secteur
      */
     public void setSecteur( String strSecteur )
     {
@@ -557,7 +599,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the nb suivis.
      *
-     * @param nNbSuivis the new nb suivis
+     * @param nNbSuivis
+     *            the new nb suivis
      */
     public void setNbSuivis( Integer nNbSuivis )
     {
@@ -577,7 +620,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the nb felicitations.
      *
-     * @param nNbFelicitations the new nb felicitations
+     * @param nNbFelicitations
+     *            the new nb felicitations
      */
     public void setNbFelicitations( Integer nNbFelicitations )
     {
@@ -597,7 +641,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the quartier.
      *
-     * @param strQuartier the new quartier
+     * @param strQuartier
+     *            the new quartier
      */
     public void setQuartier( String strQuartier )
     {
@@ -617,7 +662,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the date cloture.
      *
-     * @param strDateCloture the new date cloture
+     * @param strDateCloture
+     *            the new date cloture
      */
     public void setDateCloture( String strDateCloture )
     {
@@ -637,7 +683,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the date prevu traitement.
      *
-     * @param strDatePrevuTraitement the new date prevu traitement
+     * @param strDatePrevuTraitement
+     *            the new date prevu traitement
      */
     public void setDatePrevuTraitement( String strDatePrevuTraitement )
     {
@@ -657,7 +704,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the photo service fait.
      *
-     * @param isPhotoServiceFait the new photo service fait
+     * @param isPhotoServiceFait
+     *            the new photo service fait
      */
     public void setPhotoServiceFait( boolean isPhotoServiceFait )
     {
@@ -677,7 +725,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the id mail service fait.
      *
-     * @param idMailServiceFait the new id mail service fait
+     * @param idMailServiceFait
+     *            the new id mail service fait
      */
     public void setIdMailServiceFait( Integer idMailServiceFait )
     {
@@ -697,7 +746,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the executeur service fait.
      *
-     * @param executeurServiceFait the new executeur service fait
+     * @param executeurServiceFait
+     *            the new executeur service fait
      */
     public void setExecuteurServiceFait( String executeurServiceFait )
     {
@@ -717,7 +767,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the date derniere action.
      *
-     * @param dateDerniereAction the new date derniere action
+     * @param dateDerniereAction
+     *            the new date derniere action
      */
     public void setDateDerniereAction( String dateDerniereAction )
     {
@@ -737,7 +788,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the mail destinataire courriel.
      *
-     * @param strMailDestinataireCourriel the new mail destinataire courriel
+     * @param strMailDestinataireCourriel
+     *            the new mail destinataire courriel
      */
     public void setMailDestinataireCourriel( String strMailDestinataireCourriel )
     {
@@ -757,7 +809,8 @@ public class SignalementExportCSVDTO
     /**
      * Sets the courriel expediteur.
      *
-     * @param strCourrielExpediteur the new courriel expediteur
+     * @param strCourrielExpediteur
+     *            the new courriel expediteur
      */
     public void setCourrielExpediteur( String strCourrielExpediteur )
     {
@@ -777,12 +830,117 @@ public class SignalementExportCSVDTO
     /**
      * Sets the date envoi courriel.
      *
-     * @param strDateEnvoiCourriel the new date envoi courriel
+     * @param strDateEnvoiCourriel
+     *            the new date envoi courriel
      */
     public void setDateEnvoiCourriel( String strDateEnvoiCourriel )
     {
         _strDateEnvoiCourriel = strDateEnvoiCourriel;
     }
 
+    /**
+     * Gets the executeur rejet.
+     *
+     * @return the executeur rejet
+     */
+    public String getExecuteurRejet( )
+    {
+        return _strExecuteurRejet;
+    }
+
+    /**
+     * Sets the executeur rejet.
+     *
+     * @param executeurRejet
+     *            the new executeur rejet
+     */
+    public void setExecuteurRejet( String executeurRejet )
+    {
+        _strExecuteurRejet = executeurRejet;
+    }
+
+    /**
+     * Gets the executeur mise surveillance.
+     *
+     * @return the executeur mise surveillance
+     */
+    public String getExecuteurMiseSurveillance( )
+    {
+        return _strExecuteurMiseSurveillance;
+    }
+
+    /**
+     * Sets the executeur mise surveillance.
+     *
+     * @param executeurMiseSurveillance
+     *            the new executeur mise surveillance
+     */
+    public void setExecuteurMiseSurveillance( String executeurMiseSurveillance )
+    {
+        _strExecuteurMiseSurveillance = executeurMiseSurveillance;
+    }
+
+    /**
+     * Get number requalification.
+     * 
+     * @return String value nbRequalification
+     */
+    public String getNbRequalifications( )
+    {
+        return _nNbRequalifications != null ? Integer.toString( _nNbRequalifications ) : StringUtils.EMPTY;
+    }
+
+    /**
+     * Set requalification number.
+     * 
+     * @param nbRequalifications
+     *            nombre de requalification
+     */
+    public void setNbRequalifications( Integer nbRequalifications )
+    {
+        _nNbRequalifications = nbRequalifications;
+    }
+
+    /**
+     * Gets the id signalement.
+     *
+     * @return the id signalement
+     */
+    public Integer getIdSignalement( )
+    {
+        return _nIdSignalement;
+    }
+
+    /**
+     * Sets the id signalement.
+     *
+     * @param nIdSignalement
+     *            the new id signalement
+     */
+    public void setIdSignalement( Integer nIdSignalement )
+    {
+        _nIdSignalement = nIdSignalement;
+    }
+
+    /**
+     * Gets the photos.
+     *
+     * @return the photos
+     */
+    public List<PhotoDMR> getPhotos( )
+    {
+        return _listPhotos;
+    }
+
+    /**
+     * Sets the photos.
+     *
+     * @param pPhotos
+     *            the new photos
+     */
+    public void setPhotos( List<PhotoDMR> pPhotos )
+    {
+        _listPhotos = pPhotos;
+    }
 
 }

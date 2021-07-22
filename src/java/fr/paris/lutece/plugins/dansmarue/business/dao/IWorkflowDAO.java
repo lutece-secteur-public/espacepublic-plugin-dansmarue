@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -51,15 +51,18 @@ public interface IWorkflowDAO
     /**
      * Update DansMaRue workflow id.
      *
-     * @param nId            DansMaRue workflow id
-     * @param plugin            le plugin
+     * @param nId
+     *            DansMaRue workflow id
+     * @param plugin
+     *            le plugin
      */
     void updateWorkflowId( Integer nId, Plugin plugin );
 
     /**
      * Returns DansMaRue workflow id.
      *
-     * @param plugin            the plugin
+     * @param plugin
+     *            the plugin
      * @return DansMaRue workflow id
      */
     Integer selectWorkflowId( Plugin plugin );
@@ -67,9 +70,12 @@ public interface IWorkflowDAO
     /**
      * Returns the action id according to the start and finish states.
      *
-     * @param idStateBefore            the state before processing
-     * @param idStateAfter            the state after processing
-     * @param plugin            the plugin
+     * @param idStateBefore
+     *            the state before processing
+     * @param idStateAfter
+     *            the state after processing
+     * @param plugin
+     *            the plugin
      * @return The id of the action -1 if not found
      */
     int selectIdActionByStates( int idStateBefore, int idStateAfter, Plugin plugin );
@@ -77,7 +83,8 @@ public interface IWorkflowDAO
     /**
      * Returns the notification message linked to a workflow history.
      *
-     * @param idHistory            the workflow history id
+     * @param idHistory
+     *            the workflow history id
      * @return the notification message
      */
     String selectMessageNotification( Integer idHistory );
@@ -85,7 +92,8 @@ public interface IWorkflowDAO
     /**
      * Returns the user access code from the id of the report.
      *
-     * @param idResource            the workflow resource id
+     * @param idResource
+     *            the workflow resource id
      * @return the user access code
      */
     String selectUserServiceFait( Integer idResource );
@@ -93,7 +101,8 @@ public interface IWorkflowDAO
     /**
      * Returns the notification multicontent message linked to a workflow history.
      *
-     * @param idHistory            the workflow history id
+     * @param idHistory
+     *            the workflow history id
      * @return the notification message
      */
     String selectMultiContentsMessageNotification( Integer idHistory );
@@ -101,7 +110,8 @@ public interface IWorkflowDAO
     /**
      * Returns an action by its id.
      *
-     * @param id            the aciton id
+     * @param id
+     *            the aciton id
      * @return an action
      */
     Action findByPrimaryKey( int id );
@@ -109,9 +119,12 @@ public interface IWorkflowDAO
     /**
      * Returns a list of workflow resource history.
      *
-     * @param nIdResource            the workflow resource id
-     * @param strResourceType            the workflow resource type
-     * @param nIdWorkflow            the workflow history id
+     * @param nIdResource
+     *            the workflow resource id
+     * @param strResourceType
+     *            the workflow resource type
+     * @param nIdWorkflow
+     *            the workflow history id
      * @return a list of workflow resource history
      */
     List<ResourceHistory> selectByResource( int nIdResource, String strResourceType, int nIdWorkflow );
@@ -119,7 +132,8 @@ public interface IWorkflowDAO
     /**
      * Returns the notification messages associated with a task.
      *
-     * @param listTaskPrestaServiceFait            a list of service done tasks
+     * @param listTaskPrestaServiceFait
+     *            a list of service done tasks
      * @return a map of tasks id and messages associated with the task
      */
     Map<Integer, List<NotificationSignalementUserMultiContents>> selectMessageServiceFaitPresta( List<String> listTaskPrestaServiceFait );
@@ -127,9 +141,12 @@ public interface IWorkflowDAO
     /**
      * Returns the message sended to the user from the task.
      *
-     * @param nIdMessage            the message id
-     * @param idTask            the workflow task id
-     * @param plugin            the plugin
+     * @param nIdMessage
+     *            the message id
+     * @param idTask
+     *            the workflow task id
+     * @param plugin
+     *            the plugin
      * @return a notification message for the user
      */
     NotificationSignalementUserMultiContents getMessageByIdMessage( Long nIdMessage, Integer idTask, Plugin plugin );
@@ -147,8 +164,10 @@ public interface IWorkflowDAO
     /**
      * Update DansMaRue workflow id.
      *
-     * @param userAccessCode            User Access Code
-     * @param idResourceHistory            id resource history
+     * @param userAccessCode
+     *            User Access Code
+     * @param idResourceHistory
+     *            id resource history
      */
     void updateUserAccessCodeResouceHistory( String userAccessCode, int idResourceHistory );
 
@@ -168,6 +187,6 @@ public interface IWorkflowDAO
      *            action name
      * @return list action
      */
-    List<Action> findActionByName (String strActionName);
+    List<Action> findActionByName( String strActionName );
 
 }

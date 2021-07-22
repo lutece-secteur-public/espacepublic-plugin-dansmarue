@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import java.util.List;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.ConseilQuartier;
 
-
 /**
  * The Interface IConseilQuartierDao.
  */
@@ -54,7 +53,8 @@ public interface IConseilQuartierDao
     /**
      * Load the data of the neighborhood from the table.
      *
-     * @param nId            The identifier of the neighborhood
+     * @param nId
+     *            The identifier of the neighborhood
      * @return the instance of the neighborhood
      */
     ConseilQuartier load( int nId );
@@ -62,7 +62,8 @@ public interface IConseilQuartierDao
     /**
      * Returns a neighborhood from an address.
      *
-     * @param nIdAdresse            the address id
+     * @param nIdAdresse
+     *            the address id
      * @return the instance of the neighborhood
      */
     ConseilQuartier selectQuartierByAdresse( int nIdAdresse );
@@ -78,14 +79,16 @@ public interface IConseilQuartierDao
     /**
      * Delete a record from the table.
      *
-     * @param nQuartierId            The identifier of the neighborhood
+     * @param nQuartierId
+     *            The identifier of the neighborhood
      */
     void delete( int nQuartierId );
 
     /**
      * Update the record in the table.
      *
-     * @param quartier            The reference of the neighborhood
+     * @param quartier
+     *            The reference of the neighborhood
      */
     void store( ConseilQuartier quartier );
 }

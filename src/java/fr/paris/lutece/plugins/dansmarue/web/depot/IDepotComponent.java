@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -72,7 +72,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 
-
 /**
  * IUnitUserAttributeComponent.
  */
@@ -82,9 +81,12 @@ public interface IDepotComponent
     /**
      * Fill the model of the unit user attribute component.
      *
-     * @param request            the HTTP request
-     * @param signalement            the report
-     * @param model            the model
+     * @param request
+     *            the HTTP request
+     * @param signalement
+     *            the report
+     * @param model
+     *            the model
      */
     void fillModel( HttpServletRequest request, Signalement signalement, Map<String, Object> model );
 

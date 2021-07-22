@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,7 +57,8 @@ public class SignalementUnit extends Unit
     /**
      * Setter for the visible.
      *
-     * @param visible            the visible to set
+     * @param visible
+     *            the visible to set
      */
     public void setVisible( boolean visible )
     {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,8 @@ import java.util.ArrayList;
 /**
  * The Class ResultList.
  *
- * @param <E> the element type
+ * @param <E>
+ *            the element type
  */
 public class ResultList<E> extends ArrayList<E>
 {
@@ -47,7 +48,7 @@ public class ResultList<E> extends ArrayList<E>
     private static final long serialVersionUID = 7990665032081947290L;
 
     /** The total result. */
-    private int               totalResult;
+    private int totalResult;
 
     /**
      * Returns the total number of results.
@@ -62,7 +63,8 @@ public class ResultList<E> extends ArrayList<E>
     /**
      * Initialize the total number of results.
      *
-     * @param totalResult            the total number of results
+     * @param totalResult
+     *            the total number of results
      */
     public void setTotalResult( int totalResult )
     {

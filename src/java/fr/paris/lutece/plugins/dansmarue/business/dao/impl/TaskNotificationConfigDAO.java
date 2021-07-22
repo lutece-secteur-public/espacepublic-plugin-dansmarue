@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,8 +46,9 @@ public class TaskNotificationConfigDAO implements ITaskNotificationConfigDAO
 
     /** The Constant SQL_QUERY_MESSAGE_BY_TASK_TYPE_STATE_WORKFLOW. */
     private static final String SQL_QUERY_MESSAGE_BY_TASK_TYPE_STATE_WORKFLOW = "SELECT message FROM signalement_workflow_notification_user_config notif_user_config "
-            + " INNER JOIN workflow_task task ON notif_user_config.id_task = task.id_task " + " INNER JOIN workflow_action action ON task.id_action = action.id_action " + " WHERE task_type_key= ? "
-            + " AND action.id_workflow=? " + " AND action.id_state_before=? " + " AND is_automatic=1";
+            + " INNER JOIN workflow_task task ON notif_user_config.id_task = task.id_task "
+            + " INNER JOIN workflow_action action ON task.id_action = action.id_action " + " WHERE task_type_key= ? " + " AND action.id_workflow=? "
+            + " AND action.id_state_before=? " + " AND is_automatic=1";
 
     /**
      * {@inheritDoc}

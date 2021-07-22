@@ -525,6 +525,16 @@ function updateSectorList(idDirection, idDomaine){
 												id="filter_commentaireAgentTerrain" maxlength="255" />
 										</div>
 									</div>
+									<div class="form-group">
+										<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+											for="filter_mailDernierIntervenant">#i18n{dansmarue.reportingList.mailDernierIntervenant}
+										</label>
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+											<input type="text" value="${filter.mailDernierIntervenant!}"
+												class="form-control input-sm" name="mailDernierIntervenant"
+												id="filter_mailDernierIntervenant" maxlength="255" />
+										</div>
+									</div>
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 									<div class="form-group">
@@ -549,6 +559,41 @@ function updateSectorList(idDirection, idDomaine){
 										<div id="" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" data-toggle="buttons">
 											<select name="listIdQuartierParam"  id="conseilQuartier" class="selectpicker show-menu-arrow form-control" data-width="300px" data-size="10" multiple data-actions-box="true" data-live-search="true">
 											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+											for="filter_dateDoneBegin">
+											#i18n{dansmarue.reportingList.serviceFaitDate}</label>
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+											<div class="input-daterange">
+												<div class="col-xs-1">
+													#i18n{dansmarue.reportingList.from}</div>
+												<div class="col-xs-3 ">
+													<div class="input-group">
+														<div class="input-group-addon">
+															<span class="glyphicon glyphicon-calendar"></span>
+														</div>
+														<input class="form-control input-sm" type="text"
+															value="${filter.dateDoneBegin!}" name="dateDoneBegin"
+															id="filter_dateDoneBegin" maxlength="10" />
+													</div>
+												</div>
+											</div>
+											<div class="input-daterange">
+												<div class="col-xs-1">#i18n{dansmarue.reportingList.to}
+												</div>
+												<div class="col-xs-3">
+													<div class="input-group">
+														<div class="input-group-addon">
+															<span class="glyphicon glyphicon-calendar"></span>
+														</div>
+														<input class="form-control input-sm" type="text"
+															value="${filter.dateDoneEnd!}" name="dateDoneEnd"
+															id="filter_dateDoneEnd" />
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -794,10 +839,13 @@ function updateSectorList(idDirection, idDomaine){
         updateSectorList("0", $("#idDomaine").val());
         $("#filter_adresse").val('');
         $("#filter_mail").val('');
+        $("#filter_mailDernierIntervenant").val('');
         $("#filter_commentaire").val('');
         $("#filter_commentaireAgentTerrain").val('');
         $("#filter_dateBegin").val('');
         $("#filter_dateEnd").val('');
+        $("#filter_dateDoneBegin").val('');
+        $("#filter_dateDoneEnd").val('');
 
 		isReset ? $("#conseilQuartier option").remove() : $("#conseilQuartier").selectpicker('val', '');
        

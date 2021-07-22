@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,31 +46,31 @@ public class Photo
 {
 
     /** The Constant OVERVIEW. */
-    public static final Integer OVERVIEW        = 1;
+    public static final Integer OVERVIEW = 1;
 
     /** The Constant DETAILED_VIEW. */
-    public static final Integer DETAILED_VIEW   = 0;
+    public static final Integer DETAILED_VIEW = 0;
 
     /** The id. */
-    private Long                _id;
+    private Long _id;
 
     /** The image. */
-    private ImageResource       _image          = null;
+    private ImageResource _image = null;
 
     /** The image thumbnail. */
-    private ImageResource       _imageThumbnail = new ImageResource( );
+    private ImageResource _imageThumbnail = new ImageResource( );
 
     /** The str date. */
-    private String              _strDate;
+    private String _strDate;
 
     /** The n vue. */
-    private Integer             _nVue;
+    private Integer _nVue;
 
     /** The str image url. */
-    private String              _strImageUrl;
+    private String _strImageUrl;
 
     /** The str image thumbnail url. */
-    private String              _strImageThumbnailUrl;
+    private String _strImageThumbnailUrl;
 
     /**
      * Instantiates a new photo.
@@ -83,11 +83,16 @@ public class Photo
     /**
      * Instantiates a new photo.
      *
-     * @param id the id
-     * @param image the image
-     * @param imageThumbnail the image thumbnail
-     * @param date the date
-     * @param vue the vue
+     * @param id
+     *            the id
+     * @param image
+     *            the image
+     * @param imageThumbnail
+     *            the image thumbnail
+     * @param date
+     *            the date
+     * @param vue
+     *            the vue
      */
     public Photo( Long id, ImageResource image, ImageResource imageThumbnail, String date, Integer vue )
     {
@@ -112,7 +117,8 @@ public class Photo
     /**
      * Sets the id.
      *
-     * @param id the new id
+     * @param id
+     *            the new id
      */
     public void setId( Long id )
     {
@@ -132,7 +138,8 @@ public class Photo
     /**
      * Sets the image.
      *
-     * @param image the new image
+     * @param image
+     *            the new image
      */
     public void setImage( ImageResource image )
     {
@@ -142,7 +149,8 @@ public class Photo
     /**
      * Sets the image url.
      *
-     * @param imageUrl the new image url
+     * @param imageUrl
+     *            the new image url
      */
     public void setImageUrl( String imageUrl )
     {
@@ -158,7 +166,7 @@ public class Photo
     {
         if ( _strImageUrl == null )
         {
-            String strResourceType = ( ( ImageResourceProvider ) SpringContextService.getBean( "signalement.imageService" ) ).getResourceTypeId( );
+            String strResourceType = ( (ImageResourceProvider) SpringContextService.getBean( "signalement.imageService" ) ).getResourceTypeId( );
             UrlItem url = new UrlItem( Parameters.IMAGE_SERVLET );
             url.addParameter( Parameters.RESOURCE_TYPE, strResourceType );
             url.addParameter( Parameters.RESOURCE_ID, Long.toString( _id ) );
@@ -173,7 +181,8 @@ public class Photo
     /**
      * Sets the image thumbnail url.
      *
-     * @param imageThumbnailUrl the new image thumbnail url
+     * @param imageThumbnailUrl
+     *            the new image thumbnail url
      */
     public void setImageThumbnailUrl( String imageThumbnailUrl )
     {
@@ -189,7 +198,7 @@ public class Photo
     {
         if ( _strImageThumbnailUrl == null )
         {
-            String strResourceType = ( ( ImageResourceProvider ) SpringContextService.getBean( "signalement.imageThumbnailService" ) ).getResourceTypeId( );
+            String strResourceType = ( (ImageResourceProvider) SpringContextService.getBean( "signalement.imageThumbnailService" ) ).getResourceTypeId( );
             UrlItem url = new UrlItem( Parameters.IMAGE_SERVLET );
             url.addParameter( Parameters.RESOURCE_TYPE, strResourceType );
             url.addParameter( Parameters.RESOURCE_ID, Long.toString( _id ) );
@@ -205,7 +214,8 @@ public class Photo
     /**
      * Sets the mime type.
      *
-     * @param strMimeType the new mime type
+     * @param strMimeType
+     *            the new mime type
      */
     public void setMimeType( String strMimeType )
     {
@@ -215,9 +225,10 @@ public class Photo
     /**
      * Sets the image content.
      *
-     * @param imageContent the new image content
+     * @param imageContent
+     *            the new image content
      */
-    public void setImageContent( byte[] imageContent )
+    public void setImageContent( byte [ ] imageContent )
     {
         _image.setImage( imageContent );
     }
@@ -256,7 +267,8 @@ public class Photo
     /**
      * Sets the date.
      *
-     * @param date the new date
+     * @param date
+     *            the new date
      */
     public void setDate( String date )
     {
@@ -276,7 +288,8 @@ public class Photo
     /**
      * Sets the vue.
      *
-     * @param vue the new vue
+     * @param vue
+     *            the new vue
      */
     public void setVue( Integer vue )
     {

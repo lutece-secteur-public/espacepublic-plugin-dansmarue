@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,13 +55,13 @@ public class TypeSignalementResourceIdService extends ResourceIdService
 {
 
     /** Permission view report type. */
-    public static final String      PERMISSION_VIEW_TYPE_SIGNALEMENT     = "VIEW_TYPE_SIGNALEMENT";
+    public static final String PERMISSION_VIEW_TYPE_SIGNALEMENT = "VIEW_TYPE_SIGNALEMENT";
 
     /** The Constant PROPERTY_LABEL_RESOURCE_TYPE. */
-    private static final String     PROPERTY_LABEL_RESOURCE_TYPE         = "dansmarue.rbac.typeSignalement.resourceType.label";
+    private static final String PROPERTY_LABEL_RESOURCE_TYPE = "dansmarue.rbac.typeSignalement.resourceType.label";
 
     /** The Constant PROPERTY_LABEL_VIEW_TYPE_SIGNALEMENT. */
-    private static final String     PROPERTY_LABEL_VIEW_TYPE_SIGNALEMENT = "dansmarue.rbac.typeSignalement.permission.viewTypeSignalement";
+    private static final String PROPERTY_LABEL_VIEW_TYPE_SIGNALEMENT = "dansmarue.rbac.typeSignalement.permission.viewTypeSignalement";
 
     /** The type signalement service. */
     private ITypeSignalementService _typeSignalementService;
@@ -96,7 +96,7 @@ public class TypeSignalementResourceIdService extends ResourceIdService
     {
         if ( _typeSignalementService == null )
         {
-            _typeSignalementService = ( ITypeSignalementService ) SpringContextService.getBean( "typeSignalementService" );
+            _typeSignalementService = (ITypeSignalementService) SpringContextService.getBean( "typeSignalementService" );
         }
         return ListUtils.toReferenceList( _typeSignalementService.getAllTypeSignalement( ), "id", "formatTypeSignalement", null, false );
     }
@@ -109,7 +109,7 @@ public class TypeSignalementResourceIdService extends ResourceIdService
     {
         if ( _typeSignalementService == null )
         {
-            _typeSignalementService = ( ITypeSignalementService ) SpringContextService.getBean( "typeSignalementService" );
+            _typeSignalementService = (ITypeSignalementService) SpringContextService.getBean( "typeSignalementService" );
         }
         TypeSignalement typeSignalement = _typeSignalementService.findByIdTypeSignalement( Integer.parseInt( strId ) );
         if ( typeSignalement == null )

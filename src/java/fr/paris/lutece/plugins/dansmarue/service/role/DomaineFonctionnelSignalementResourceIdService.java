@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48,7 +48,6 @@ import fr.paris.lutece.portal.service.rbac.ResourceTypeManager;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
-
 /**
  * Functional domain resource id service.
  */
@@ -56,13 +55,13 @@ public class DomaineFonctionnelSignalementResourceIdService extends ResourceIdSe
 {
 
     /** Permission view report consultation. */
-    public static final String         PERMISSION_CONSULT_SIGNALEMENT     = "PERMISSION_VIEW_SIGNALEMENT";
+    public static final String PERMISSION_CONSULT_SIGNALEMENT = "PERMISSION_VIEW_SIGNALEMENT";
 
     /** The Constant PROPERTY_LABEL_RESOURCE_TYPE. */
-    private static final String        PROPERTY_LABEL_RESOURCE_TYPE       = "dansmarue.rbac.domainefonctionnel.resourceType.label";
+    private static final String PROPERTY_LABEL_RESOURCE_TYPE = "dansmarue.rbac.domainefonctionnel.resourceType.label";
 
     /** The Constant PROPERTY_LABEL_CONSULT_SIGNALEMENT. */
-    private static final String        PROPERTY_LABEL_CONSULT_SIGNALEMENT = "dansmarue.rbac.domainefonctionnel.permission.consultsignalement";
+    private static final String PROPERTY_LABEL_CONSULT_SIGNALEMENT = "dansmarue.rbac.domainefonctionnel.permission.consultsignalement";
 
     /** The domaine fonctionnel service. */
     private IDomaineFonctionnelService _domaineFonctionnelService;
@@ -97,7 +96,7 @@ public class DomaineFonctionnelSignalementResourceIdService extends ResourceIdSe
     {
         if ( _domaineFonctionnelService == null )
         {
-            _domaineFonctionnelService = ( IDomaineFonctionnelService ) SpringContextService.getBean( "domaineFonctionnelService" );
+            _domaineFonctionnelService = (IDomaineFonctionnelService) SpringContextService.getBean( "domaineFonctionnelService" );
         }
         return ListUtils.toReferenceList( _domaineFonctionnelService.getAllDomainesFonctionnel( ), "id", "libelle", null );
     }
@@ -110,7 +109,7 @@ public class DomaineFonctionnelSignalementResourceIdService extends ResourceIdSe
     {
         if ( _domaineFonctionnelService == null )
         {
-            _domaineFonctionnelService = ( IDomaineFonctionnelService ) SpringContextService.getBean( "domaineFonctionnelService" );
+            _domaineFonctionnelService = (IDomaineFonctionnelService) SpringContextService.getBean( "domaineFonctionnelService" );
         }
 
         DomaineFonctionnel domaineFonctionnel = _domaineFonctionnelService.getById( Integer.parseInt( strId ) );

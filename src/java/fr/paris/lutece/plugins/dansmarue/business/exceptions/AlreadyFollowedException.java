@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.dansmarue.business.exceptions;
 
-
 /**
  * Exception raised when trying to follow a report which is already followed by the user.
  */
@@ -43,7 +42,8 @@ public class AlreadyFollowedException extends RuntimeException
     /**
      * Instantiates a new already followed exception.
      *
-     * @param message the message
+     * @param message
+     *            the message
      */
     public AlreadyFollowedException( String message )
     {

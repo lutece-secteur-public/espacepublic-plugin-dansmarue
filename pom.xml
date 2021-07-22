@@ -8,16 +8,16 @@
   </parent>
   <groupId>fr.paris.lutece.plugins</groupId>
   <artifactId>plugin-dansmarue</artifactId>
-  <version>6.4.3</version>
+  <version>6.8.5-SNAPSHOT</version>
   <packaging>lutece-plugin</packaging>
   <name>plugin Dans Ma Rue (BO signalement)</name>
-  <url>https://github.com/lutece-secteur-public/espacepublic-plugin-dansmarue</url>
+  <url>https://dev.lutece.paris.fr/gitlab/tmma/r59/plugin-signalement</url>
   <scm>
-        <connection>scm:git:https://github.com/lutece-secteur-public/espacepublic-plugin-dansmarue.git</connection>
-        <developerConnection>scm:git:https://github.com/lutece-secteur-public/espacepublic-plugin-dansmarue.git</developerConnection>
-        <url>https://github.com/lutece-secteur-public/espacepublic-plugin-dansmarue.git</url>
-		<tag>HEAD</tag>
-    </scm>
+    <connection>scm:git:https://dev.lutece.paris.fr/gitlab/tmma/r59/plugin-signalement.git</connection>
+    <developerConnection>scm:git:https://dev.lutece.paris.fr/gitlab/tmma/r59/plugin-signalement.git</developerConnection>
+    <url>https://dev.lutece.paris.fr/gitlab/tmma/r59/plugin-signalement</url>
+    <tag>HEAD</tag>
+  </scm>
   <properties>
     <jiraComponentId>10653</jiraComponentId>
     <sonar.sources>src/java</sonar.sources>
@@ -140,6 +140,27 @@
       <version>2.0.3</version>
       <type>lutece-plugin</type>
     </dependency>
+    <dependency>
+      <groupId>fr.paris.lutece.plugins</groupId>
+      <artifactId>library-identitystore</artifactId>
+      <version>2.0.3</version>
+    </dependency>
+    <dependency>
+      <groupId>fr.paris.lutece.plugins</groupId>
+      <artifactId>plugin-anonymizationphoto</artifactId>
+      <version>1.0.0</version>
+      <type>lutece-plugin</type>
+    </dependency>
+	<dependency>
+		<groupId>net.sf.jasperreports</groupId>
+		<artifactId>jasperreports</artifactId>
+		<version>6.16.0</version>
+	</dependency>
+	<dependency>
+         <groupId>org.assertj</groupId>
+         <artifactId>assertj-core</artifactId>
+         <version>3.19.0</version>
+     </dependency>
   </dependencies>
 
   <repositories>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -49,7 +49,16 @@ import fr.paris.lutece.portal.web.pluginaction.IPluginActionResult;
 public class MassWorkflowAction extends AbstractPluginAction<SignalementFields> implements ISignalementAction
 {
 
-    /* (non-Javadoc)
+    /**
+     * Checks if is invoked.
+     *
+     * @param request
+     *            the request
+     * @return true, if is invoked
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.portal.web.pluginaction.IPluginAction#isInvoked(javax.servlet.http.HttpServletRequest)
      */
     @Override
@@ -58,17 +67,49 @@ public class MassWorkflowAction extends AbstractPluginAction<SignalementFields> 
         return false;
     }
 
-    /* (non-Javadoc)
-     * @see fr.paris.lutece.portal.web.pluginaction.IPluginAction#process(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, fr.paris.lutece.portal.business.user.AdminUser, java.lang.Object)
+    /**
+     * Process.
+     *
+     * @param request
+     *            the request
+     * @param response
+     *            the response
+     * @param adminUser
+     *            the admin user
+     * @param sessionFields
+     *            the session fields
+     * @return the i plugin action result
+     * @throws AccessDeniedException
+     *             the access denied exception
+     */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.paris.lutece.portal.web.pluginaction.IPluginAction#process(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse,
+     * fr.paris.lutece.portal.business.user.AdminUser, java.lang.Object)
      */
     @Override
-    public IPluginActionResult process( HttpServletRequest request, HttpServletResponse response, AdminUser adminUser, SignalementFields sessionFields ) throws AccessDeniedException
+    public IPluginActionResult process( HttpServletRequest request, HttpServletResponse response, AdminUser adminUser, SignalementFields sessionFields )
+            throws AccessDeniedException
     {
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see fr.paris.lutece.portal.web.pluginaction.IPluginAction#fillModel(javax.servlet.http.HttpServletRequest, fr.paris.lutece.portal.business.user.AdminUser, java.util.Map)
+    /**
+     * Fill model.
+     *
+     * @param request
+     *            the request
+     * @param adminUser
+     *            the admin user
+     * @param model
+     *            the model
+     */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.paris.lutece.portal.web.pluginaction.IPluginAction#fillModel(javax.servlet.http.HttpServletRequest,
+     * fr.paris.lutece.portal.business.user.AdminUser, java.util.Map)
      */
     @Override
     public void fillModel( HttpServletRequest request, AdminUser adminUser, Map<String, Object> model )
@@ -76,7 +117,14 @@ public class MassWorkflowAction extends AbstractPluginAction<SignalementFields> 
         // nothing
     }
 
-    /* (non-Javadoc)
+    /**
+     * Gets the button template.
+     *
+     * @return the button template
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.portal.web.pluginaction.IPluginAction#getButtonTemplate()
      */
     @Override
@@ -85,7 +133,14 @@ public class MassWorkflowAction extends AbstractPluginAction<SignalementFields> 
         return null;
     }
 
-    /* (non-Javadoc)
+    /**
+     * Gets the name.
+     *
+     * @return the name
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.portal.web.pluginaction.IPluginAction#getName()
      */
     @Override
