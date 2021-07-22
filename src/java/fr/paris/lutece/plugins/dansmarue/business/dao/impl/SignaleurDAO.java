@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48,22 +48,22 @@ public class SignaleurDAO implements ISignaleurDAO
 {
 
     /** The Constant SQL_QUERY_NEW_PK. */
-    private static final String SQL_QUERY_NEW_PK                = "SELECT nextval('seq_signalement_signaleur_id_signaleur')";
+    private static final String SQL_QUERY_NEW_PK = "SELECT nextval('seq_signalement_signaleur_id_signaleur')";
 
     /** The Constant SQL_QUERY_INSERT. */
-    private static final String SQL_QUERY_INSERT                = "INSERT INTO signalement_signaleur(id_signaleur, mail, id_telephone, fk_id_signalement, guid) VALUES (?, ?, ?, ?, ?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_signaleur(id_signaleur, mail, id_telephone, fk_id_signalement, guid) VALUES (?, ?, ?, ?, ?)";
 
     /** The Constant SQL_QUERY_DELETE. */
-    private static final String SQL_QUERY_DELETE                = "DELETE FROM signalement_signaleur WHERE id_signaleur = ?";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_signaleur WHERE id_signaleur = ?";
 
     /** The Constant SQL_QUERY_SELECT. */
-    private static final String SQL_QUERY_SELECT                = "SELECT id_signaleur, mail, fk_id_signalement, guid, id_telephone FROM signalement_signaleur WHERE id_signaleur = ?";
+    private static final String SQL_QUERY_SELECT = "SELECT id_signaleur, mail, fk_id_signalement, guid, id_telephone FROM signalement_signaleur WHERE id_signaleur = ?";
 
     /** The Constant SQL_QUERY_SELECT_BY_SIGNALEMENT. */
     private static final String SQL_QUERY_SELECT_BY_SIGNALEMENT = "SELECT id_signaleur, mail, fk_id_signalement, guid, id_telephone FROM signalement_signaleur WHERE fk_id_signalement = ?";
 
     /** The Constant SQL_QUERY_UPDATE. */
-    private static final String SQL_QUERY_UPDATE                = "UPDATE signalement_signaleur SET id_signaleur=?, mail = ?, id_telephone=?, fk_id_signalement=?, guid=? WHERE id_signaleur=?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_signaleur SET id_signaleur=?, mail = ?, id_telephone=?, fk_id_signalement=?, guid=? WHERE id_signaleur=?";
 
     /**
      * Generates a new primary key.
@@ -87,7 +87,8 @@ public class SignaleurDAO implements ISignaleurDAO
     /**
      * Upadate a signaleur.
      *
-     * @param signaleur            the signaleur to update
+     * @param signaleur
+     *            the signaleur to update
      */
     /**
      * {@inheritDoc}
@@ -116,7 +117,8 @@ public class SignaleurDAO implements ISignaleurDAO
     @Override
     public Long insert( Signaleur signaleur )
     {
-        try(DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT )) {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT ) )
+        {
             if ( ( signaleur.getId( ) == null ) || ( signaleur.getId( ) == 0 ) )
             {
                 signaleur.setId( newPrimaryKey( ) );

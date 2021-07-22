@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,6 +47,9 @@ import fr.paris.lutece.plugins.dansmarue.service.dto.DashboardSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DossierSignalementDTO;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
+/**
+ * The Interface ISignalementDAO.
+ */
 public interface ISignalementDAO
 {
 
@@ -77,7 +80,7 @@ public interface ISignalementDAO
     Signalement load( long lId );
 
     /**
-     * Returns a list of reports according to the search parameters contained in the filter
+     * Returns a list of reports according to the search parameters contained in the filter.
      *
      * @param filter
      *            the request based filter
@@ -86,7 +89,6 @@ public interface ISignalementDAO
      * @param plugin
      *            the plugin
      * @return a list of reports
-     *
      */
     List<Signalement> findByFilter( SignalementFilter filter, PaginationProperties paginationProperties, Plugin plugin );
 
@@ -100,7 +102,16 @@ public interface ISignalementDAO
     Signalement loadById( long nId );
 
     /**
-     * Update a report
+     * Gets the anomalie by number.
+     *
+     * @param number
+     *            the number
+     * @return the anomalie by number
+     */
+    Signalement getAnomalieByNumber( String number );
+
+    /**
+     * Update a report.
      *
      * @param signalement
      *            the report to update
@@ -133,7 +144,7 @@ public interface ISignalementDAO
     List<Integer> getAllIdSignalement( );
 
     /**
-     * Add one to a report's follow
+     * Add one to a report's follow.
      *
      * @param nIdSignalement
      *            the report id
@@ -141,7 +152,7 @@ public interface ISignalementDAO
     void incrementeSuiviByIdSignalement( Integer nIdSignalement );
 
     /**
-     * Retrieves one to a report's follow
+     * Retrieves one to a report's follow.
      *
      * @param nIdSignalement
      *            the report id
@@ -194,7 +205,7 @@ public interface ISignalementDAO
     Integer getDistanceBetweenSignalement( double lat1, double lng1, double lat2, double lng2 );
 
     /**
-     * Returns all the reports linked to a selected phone number
+     * Returns all the reports linked to a selected phone number.
      *
      * @param idTelephone
      *            the phone id
@@ -203,7 +214,7 @@ public interface ISignalementDAO
     List<Integer> findByIdTelephone( String idTelephone );
 
     /**
-     * Get a reports by a token
+     * Get a reports by a token.
      *
      * @param token
      *            the token
@@ -214,7 +225,7 @@ public interface ISignalementDAO
     Signalement getSignalementByToken( String token, Plugin plugin );
 
     /**
-     * Returns a geom
+     * Returns a geom.
      *
      * @param dLatLambert
      *            the latitude
@@ -222,7 +233,7 @@ public interface ISignalementDAO
      *            the longitude
      * @return a double array
      */
-    Double[] getGeomFromLambertToWgs84( Double dLatLambert, Double dLngLambert );
+    Double [ ] getGeomFromLambertToWgs84( Double dLatLambert, Double dLngLambert );
 
     /**
      * Gets the geom from lambert 93 to wgs 84.
@@ -233,10 +244,10 @@ public interface ISignalementDAO
      *            the d lng lambert
      * @return the geom from lambert 93 to wgs 84
      */
-    Double[] getGeomFromLambert93ToWgs84( Double dLatLambert, Double dLngLambert );
+    Double [ ] getGeomFromLambert93ToWgs84( Double dLatLambert, Double dLngLambert );
 
     /**
-     * Count the number of results for a given query
+     * Count the number of results for a given query.
      *
      * @param filter
      *            the signalementfilter
@@ -247,7 +258,7 @@ public interface ISignalementDAO
     Integer countIdSignalementByFilter( SignalementFilter filter, Plugin plugin );
 
     /**
-     * Build the query to count the number of results for a given query
+     * Build the query to count the number of results for a given query.
      *
      * @param filter
      *            the signalementfilter
@@ -256,7 +267,7 @@ public interface ISignalementDAO
     String buildSQLQueryForCount( SignalementFilter filter );
 
     /**
-     * Insert a message creation report (linked with notification user task workflow)
+     * Insert a message creation report (linked with notification user task workflow).
      *
      * @param messageCreation
      *            the default message send to user when creating a report
@@ -264,7 +275,7 @@ public interface ISignalementDAO
     void insertMessageCreationSignalement( String messageCreation );
 
     /**
-     * Update the message creation report (linked with notification user task workflow)
+     * Update the message creation report (linked with notification user task workflow).
      *
      * @param messageCreation
      *            the default message send to user when creating a report
@@ -272,19 +283,19 @@ public interface ISignalementDAO
     void updateMessageCreationSignalement( String messageCreation );
 
     /**
-     * Load the message creation report (linked with notification user task workflow)
+     * Load the message creation report (linked with notification user task workflow).
      *
      * @return the message creation report
      */
     String loadMessageCreationSignalement( );
 
     /**
-     * Remove the message creation report (linked with notification user task workflow)
+     * Remove the message creation report (linked with notification user task workflow).
      */
     void removeMessageCreationSignalement( );
 
     /**
-     * Increments the number of congratulations for this report
+     * Increments the number of congratulations for this report.
      *
      * @param idSignalement
      *            the report id, to increment
@@ -292,7 +303,7 @@ public interface ISignalementDAO
     void incrementFelicitationsByIdSignalement( int idSignalement );
 
     /**
-     * Find the report to display in the dashboard
+     * Find the report to display in the dashboard.
      *
      * @param filter
      *            the report filter
@@ -303,7 +314,7 @@ public interface ISignalementDAO
     List<DashboardSignalementDTO> findByDashboardFilter( SignalementDashboardFilter filter, Plugin pluginSignalement );
 
     /**
-     * Build the query to get the reports ids matching the filter
+     * Build the query to get the reports ids matching the filter.
      *
      * @param filter
      *            the signalementfilter
@@ -314,7 +325,7 @@ public interface ISignalementDAO
     List<Integer> getIdsSignalementByFilter( SignalementFilter filter, Plugin plugin );
 
     /**
-     * Execute Query to add a monitoring date for this report
+     * Execute Query to add a monitoring date for this report.
      *
      * @param idSignalement
      *            the report id
@@ -324,16 +335,18 @@ public interface ISignalementDAO
     void addMiseEnSurveillanceDate( int idSignalement, String dateMiseEnSurveillance );
 
     /**
-     * Find reports ids canditate for WebServicePartnerDeamon
+     * Find reports ids canditate for WebServicePartnerDeamon.
      *
      * @param signalementState
      *            the report state
+     * @param nbDays
+     *            number of days between current date and signalement creation date
      * @return list of reports ids.
      */
-    List<Integer> findIdsSingalementForWSPartnerDeamon( int signalementState );
+    List<Integer> findIdsSingalementForWSPartnerDeamon( int signalementState, int nbDays );
 
     /**
-     * Add a rejection date to the report
+     * Add a rejection date to the report.
      *
      * @param idSignalement
      *            the report id
@@ -343,7 +356,7 @@ public interface ISignalementDAO
     void setDateRejet( int idSignalement, String dateRejet );
 
     /**
-     * Save the requalification of a report
+     * Save the requalification of a report.
      *
      * @param lIdSignalement
      *            the report id
@@ -358,10 +371,11 @@ public interface ISignalementDAO
      * @param commentaireAgentTerrain
      *            commentaire Agent Terrain
      */
-    void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector, Integer idTask, String commentaireAgentTerrain );
+    void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector, Integer idTask,
+            String commentaireAgentTerrain );
 
     /**
-     * Returns a list of requalification entries for a report, if it has been requalified
+     * Returns a list of requalification entries for a report, if it has been requalified.
      *
      * @param lIdSignalement
      *            the report id
@@ -379,7 +393,7 @@ public interface ISignalementDAO
     Integer getIdMailServiceFait( Long idSignalement );
 
     /**
-     * Returns a requalification object by history and task ids
+     * Returns a requalification object by history and task ids.
      *
      * @param idHistory
      *            the workflow history id
@@ -390,7 +404,7 @@ public interface ISignalementDAO
     SignalementRequalification getSignalementRequalificationByTaskHistory( int idHistory, int idTask );
 
     /**
-     * Update the requalification
+     * Update the requalification.
      *
      * @param lIdSignalement
      *            the report id
@@ -402,7 +416,7 @@ public interface ISignalementDAO
     void updateRequalification( long lIdSignalement, int idTask, int idHistory );
 
     /**
-     * Update the requalification history task
+     * Update the requalification history task.
      *
      * @param lIdSignalement
      *            the report id
@@ -472,4 +486,36 @@ public interface ISignalementDAO
      *            the service fait masse filter
      */
     void updateStateServiceFaitMasse( ServiceFaitMasseFilter serviceFaitMasseFilter );
+
+    /**
+     * Update date passage service fait masse.
+     *
+     * @param serviceFaitMasseFilter
+     *            the service fait masse filter
+     */
+    void updateDatePassageServiceFaitMasse( ServiceFaitMasseFilter serviceFaitMasseFilter );
+
+    /**
+     * Gets the signalements service programme ids.
+     *
+     * @return the signalements service programme ids
+     */
+    List<Integer> getSignalementsServiceProgrammeIds( );
+
+    /**
+     * Gets the signalements service programme tier ids.
+     *
+     * @return the signalements service programme tier ids
+     */
+    List<Integer> getSignalementsServiceProgrammeTierIds( );
+
+    /**
+     * Find signalement prestataire.
+     *
+     * @param idSignalement
+     *            idSignalement
+     * @return label prestataire.
+     */
+    String findLabelPrestataireSignalement( int idSignalement );
+
 }

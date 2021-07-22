@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48,40 +48,40 @@ public class SignalementResourceIdService extends ResourceIdService
 {
 
     /** The Constant KEY_ID_RESOURCE. */
-    public static final String  KEY_ID_RESOURCE                     = "GESTION_DES_SIGNALEMENTS";
+    public static final String KEY_ID_RESOURCE = "GESTION_DES_SIGNALEMENTS";
 
     /** The Constant PERMISSION_GESTION_REFERENTIEL. */
-    public static final String  PERMISSION_GESTION_REFERENTIEL      = "GESTION_REFERENTIEL";
+    public static final String PERMISSION_GESTION_REFERENTIEL = "GESTION_REFERENTIEL";
 
     /** The Constant PERMISSION_RECHERCHER_SIGNALEMENT. */
-    public static final String  PERMISSION_RECHERCHER_SIGNALEMENT   = "RECHERCHER_SIGNALEMENT";
+    public static final String PERMISSION_RECHERCHER_SIGNALEMENT = "RECHERCHER_SIGNALEMENT";
 
     /** The Constant PERMISSION_CREATION_SIGNALEMENT. */
-    public static final String  PERMISSION_CREATION_SIGNALEMENT     = "CREATION_SIGNALEMENT";
+    public static final String PERMISSION_CREATION_SIGNALEMENT = "CREATION_SIGNALEMENT";
 
     /** The Constant PERMISSION_MODIFICATION_SIGNALEMENT. */
-    public static final String  PERMISSION_MODIFICATION_SIGNALEMENT = "MODIFICATION_SIGNALEMENT";
+    public static final String PERMISSION_MODIFICATION_SIGNALEMENT = "MODIFICATION_SIGNALEMENT";
 
     /** The Constant PERMISSION_CONSULTATION_SIGNALEMENT. */
-    public static final String  PERMISSION_CONSULTATION_SIGNALEMENT = "CONSULTATION_SIGNALEMENT";
+    public static final String PERMISSION_CONSULTATION_SIGNALEMENT = "CONSULTATION_SIGNALEMENT";
 
     /** The Constant PERMISSION_ENVOI_MAIL_SIGNALEMENT. */
-    public static final String  PERMISSION_ENVOI_MAIL_SIGNALEMENT   = "ENVOI_MAIL_SIGNALEMENT";
+    public static final String PERMISSION_ENVOI_MAIL_SIGNALEMENT = "ENVOI_MAIL_SIGNALEMENT";
 
     /** The Constant PERMISSION_SUPPRIMER_SIGNALEMENT. */
-    public static final String  PERMISSION_SUPPRIMER_SIGNALEMENT    = "SUPPRESSION_SIGNALEMENT";
+    public static final String PERMISSION_SUPPRIMER_SIGNALEMENT = "SUPPRESSION_SIGNALEMENT";
 
     /** The Constant EXPORTER_SIGNALEMENT. */
-    public static final String  EXPORTER_SIGNALEMENT                = "EXPORTER_SIGNALEMENT";
+    public static final String EXPORTER_SIGNALEMENT = "EXPORTER_SIGNALEMENT";
 
     /** The Constant SUPPRIMER_SIGNALEMENT_MASSE. */
-    public static final String  SUPPRIMER_SIGNALEMENT_MASSE         = "SUPPRIMER_SIGNALEMENT_MASSE";
+    public static final String SUPPRIMER_SIGNALEMENT_MASSE = "SUPPRIMER_SIGNALEMENT_MASSE";
 
     /** The Constant TRAITEMENT_MASSE. */
-    public static final String  TRAITEMENT_MASSE                    = "TRAITEMENT_MASSE";
+    public static final String TRAITEMENT_MASSE = "TRAITEMENT_MASSE";
 
     /** The Constant PROPERTY_LABEL_RESOURCE_TYPE. */
-    private static final String PROPERTY_LABEL_RESOURCE_TYPE        = "dansmarue.rbac.resourceType.label.gestionDesSignalements";
+    private static final String PROPERTY_LABEL_RESOURCE_TYPE = "dansmarue.rbac.resourceType.label.gestionDesSignalements";
 
     /**
      * Creates a new instance of ReportingResourceIdService.
@@ -161,7 +161,8 @@ public class SignalementResourceIdService extends ResourceIdService
     /**
      * Returns a list of resource identifiers or null.
      *
-     * @param locale            The current locale
+     * @param locale
+     *            The current locale
      * @return A list of resource ids
      */
     @Override
@@ -173,8 +174,10 @@ public class SignalementResourceIdService extends ResourceIdService
     /**
      * Returns the title of the resource specified by its ID or null.
      *
-     * @param strId            The resource id
-     * @param locale            The current locale
+     * @param strId
+     *            The resource id
+     * @param locale
+     *            The current locale
      * @return The title of the specified resource
      */
     @Override

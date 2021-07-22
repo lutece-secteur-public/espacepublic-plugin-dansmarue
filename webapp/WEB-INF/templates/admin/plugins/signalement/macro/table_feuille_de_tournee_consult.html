@@ -1,0 +1,130 @@
+<#macro table_feuille_de_tournee_consult>
+	<fieldset id="list-block">
+	  <div class="pull-left">
+	     <label class="fdt-generate-vue">#i18n{dansmarue.tournee.select.vuelist}</label><br>
+	  </div>
+	  <div class="pull-right">
+	      <label>#i18n{dansmarue.tournee.select.nb.select}  ${paginator.itemsCount}</label>
+	  </div>
+	  <table id="table-signalements" class="table table-condensed">
+		<thead>
+			<tr>
+				<th>#i18n{dansmarue.reportingList.actions}</th>
+				<th>#</th>
+				<th>#i18n{dansmarue.reportingList.photo}</th>
+				<th>#i18n{dansmarue.reportingList.number}</th>
+				<th>#i18n{dansmarue.reportingList.priority}</th>
+				<th>#i18n{dansmarue.reportingList.type}</th>
+				<th>#i18n{dansmarue.reportingList.direction}</th>
+				<th>#i18n{dansmarue.reportingList.adress}</th>
+				<th>#i18n{dansmarue.reportingList.comment}</th>
+				<th>#i18n{dansmarue.saveSignalement.commentaireAgentTerrain}</th>
+				<th>#i18n{dansmarue.reportingList.creationDate}</th>
+				<th>#i18n{dansmarue.reportingList.programmingDate}</th>
+				<th>#i18n{dansmarue.reportingList.etat}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<#if signalement_list?has_content> 
+			  <#list signalement_list as signalement>
+			    <tr id="ancre-signalement-${signalement.idSignalement}" class="signalement-list-element">
+			      <td class="signalement-actions" style="text-align: center;">
+			      	<span title="Afficher" style="color: #ff0c0c; font-size: 25px; cursor:pointer" onclick="showMarker(${signalement.idSignalement})"><i class="fa fa-map-marker"></i></span>
+					<a href="jsp/admin/plugins/signalement/ViewSignalement.jsp?signalement_id=${signalement.idSignalement}" class="btn btn-xs btn-primary" title="Details" target="blank" style="margin-bottom: 25%;">
+						<i class="glyphicon glyphicon-eye-open"></i>  
+					</a>
+			      </td>
+				  <td class="signalement-actions">
+				  	<#assign itemPerPage=paginator.itemsPerPage currentPage=paginator.pageCurrent>
+				  	<#assign signalementNumber=( ( paginator.pageCurrent-1 ) * paginator.itemsPerPage ) + signalement?index + 1>
+				  	 ${signalementNumber} 
+				  </td>
+			      <td class="signalement-photo">
+				     <#if signalement.photos?has_content> 
+						<#assign isHidden = false>
+							<#list signalement.photos as photo> 
+								<span id='${signalement.idSignalement}'>
+									<a href='#' data-toggle="modal" data-target="#imageModal" id-vue='${photo.vue}' id-signalement='${signalement.idSignalement}' image-url='${photo.imageUrl}' <#if isHidden> style='display: none'</#if>>
+								      <img src="${photo.imageThumbnailUrl}" width="100" />
+									</a>
+								</span>
+								<#assign isHidden = true>
+							</#list>
+					  </#if>
+					</td>
+					<td class="signalement-id">
+					   ${signalement.numeroSignalement!}
+					</td>
+					<td class="signalement-priorite">${signalement.priorite!}</td>
+					<td class="signalement-type">${signalement.typeSignalement!}</td>
+					<td class="signalement-direction">${(signalement.direction)!}</td>
+					<td class="signalement-address">${signalement.adresse!}</td>
+					<td class="signalement-comment">${signalement.commentaireUsager!}</td>
+					<td class="signalement-comment">${signalement.commentairAgentTerrain!}</td>
+					<td class="signalement-date">${signalement.dateCreation!}</td>
+					<td class="signalement-date">${signalement.datePrevuTraitement!}</td>
+					<td class="signalement">${signalement.etat!}</td>
+			    </tr>
+			 </#list>
+			</#if>
+		</tbody>
+	  </table>
+	  
+	  <@paginationSig paginator=paginator combo=1 />
+	</fieldset>
+	
+	<div class="row">
+		<div class="col-xs-2 col-sm-12 col-md-12 col-lg-12">
+			<a class="btn btn-paris btn-blue" href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp">#i18n{dansmarue.button.return} </a>
+			<div class="pull-right">
+				<@button id="export" class="btn btn-paris btn-red" title='#i18n{dansmarue.tournee.exportpdf}' params='onclick="addFeuilleDeTourneeId(${feuille_de_tournee.id}); carteToBase64();" data-toggle="modal" data-target="#exportFDTModal"' />
+			</div>
+		</div>
+	</div>
+	
+	<style type="text/css">
+	  div.pull-left {
+	    color: #0C518A;
+	  }
+	  
+	  div.pull-right {
+	    color: #0C518A;
+	  }
+	</style>
+	<script>
+		/* Mise en surbrillance du marker sélectionné sur la carte*/
+		function showMarker( signalementId ) {
+			signalement_arr.forEach(function(signalement) {
+				if(signalement.idSignalement == signalementId) {
+					signalement.isSurbrillance = !signalement.isSurbrillance;
+				} else {
+					signalement.isSurbrillance = false;
+				}
+			});
+			drawMarkers();
+		}
+		
+		//transform map to base64 String 
+		function carteToBase64(){
+			  html2canvas(document.querySelector("#map_canvas"), {allowTaint: true,useCORS: true, 
+			   onclone: function (mapClone) {
+				  var children = [].slice.call(mapClone.querySelector("div.leaflet-marker-pane").getElementsByTagName('div'),0);
+				  var i = 0;
+				  var arrayLength = children.length;
+				  while(i < arrayLength) {
+					if (children[i].classList.contains("awesome-number-marker-icon-blue") !== true) {
+					 children[i].remove();
+					}
+					i++;
+				  }
+			   }}).then(function(canvas) {
+			    if ($('#param_carte_base_64').length > 0) {
+			      document.getElementById('param_carte_base_64').remove();
+				}
+	            var dataURL = canvas.toDataURL('image/jpeg', 0.5);
+				var inputCarteBase64 = $("<input>").attr({"type":"hidden","name":"param_carte_base_64", "id":"param_carte_base_64"}).val(dataURL.split(';base64,')[1]);
+				$('#form-export').append(inputCarteBase64);
+	          });
+		}
+	</script>
+</#macro>

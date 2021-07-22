@@ -48,6 +48,27 @@
 	</div>
 </div>
 
+<#if rights.hasRight("FEUILLE_DE_TOURNEE")>
+	<!-- Dashboard feuilles de tournéess -->
+	<div class="col-sm-12">
+		<div class="box box-solid box-info">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{dansmarue.adminDashboard.pageFeuillesTournee}</h3>
+				<div class="box-tools">
+					<button class="btn btn-box-tool" data-widget="collapse">
+						<i class="fa fa-minus"></i>
+					</button>
+					<button class="btn btn-box-tool" data-widget="remove">
+						<i class="fa fa-times"></i>
+					</button>
+				</div>
+			</div>
+		
+			<div class="box-body"><#include "signalement_dashboard_feuilles_tournee.html" /></div>
+		</div>
+	</div>
+</#if>
+
 <!-- Dashboard video -->
 <div class="col-sm-12">
 	<div class="box box-solid box-info">
@@ -98,7 +119,7 @@ $( document ).ready(function() {
 			//Affichage de la popup
 			swal({
 			  title: "Information",
-			  text: "Le site est optimisé pour le navigateur Firefox.\nL'utilisation d'un autre navigateur peut empêcher l’accès à certaines fonctionnalités.",
+			  text: "Le site est optimis\u00e9 pour le navigateur Firefox.\nL'utilisation d'un autre navigateur peut emp\u00eacher l'acc\u00e8s \u00e0 certaines fonctionnalit\u00e9s.",
 			  icon: "info",
 			  button: "Ok",
 			});

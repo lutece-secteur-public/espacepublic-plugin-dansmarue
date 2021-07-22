@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48,7 +48,8 @@ public interface ISignalementSuiviDAO
     /**
      * Inserts into the database a new report follow.
      *
-     * @param signalementSuivi            the report follow to insert
+     * @param signalementSuivi
+     *            the report follow to insert
      * @return the report id
      */
     public Long insert( SignalementSuivi signalementSuivi );
@@ -56,14 +57,16 @@ public interface ISignalementSuiviDAO
     /**
      * Removes from the data base a report follow.
      *
-     * @param lId            the id of the report follow to remove
+     * @param lId
+     *            the id of the report follow to remove
      */
     public void remove( long lId );
 
     /**
      * Loads a report follow from its id.
      *
-     * @param lId            the id of the report follow to load
+     * @param lId
+     *            the id of the report follow to load
      * @return The report follow matching the id null otherwise
      */
     public SignalementSuivi load( long lId );
@@ -71,14 +74,16 @@ public interface ISignalementSuiviDAO
     /**
      * Updates a report follow.
      *
-     * @param signalementSuivi            the report follow to update
+     * @param signalementSuivi
+     *            the report follow to update
      */
     void update( SignalementSuivi signalementSuivi );
 
     /**
      * Search all users which subscribed to this anomaly.
      *
-     * @param idSignalement            the report id
+     * @param idSignalement
+     *            the report id
      * @return list of users
      */
     List<SiraUser> findUsersMobileByIdSignalement( long idSignalement );
@@ -86,7 +91,8 @@ public interface ISignalementSuiviDAO
     /**
      * Search all users which subscribed to this anomaly - Except the creator of the anomaly.
      *
-     * @param idSignalement            the report id
+     * @param idSignalement
+     *            the report id
      * @return list of users
      */
     List<SiraUser> findFollowersMobilesByIdSignalement( long idSignalement );
@@ -94,7 +100,8 @@ public interface ISignalementSuiviDAO
     /**
      * Search all users from the GUID who created the anomaly.
      *
-     * @param idSignalement            the report id
+     * @param idSignalement
+     *            the report id
      * @return list of users
      */
     List<SiraUser> findCreatorMobilesByIdSignalement( long idSignalement );
@@ -102,8 +109,10 @@ public interface ISignalementSuiviDAO
     /**
      * Finds a report follow, by an report id and a user guid.
      *
-     * @param idSignalement            the report id
-     * @param guid            the user guid
+     * @param idSignalement
+     *            the report id
+     * @param guid
+     *            the user guid
      * @return the id of the report follow item -1 otherwise
      */
     long findByIdSignalementAndGuid( long idSignalement, String guid );
@@ -122,7 +131,8 @@ public interface ISignalementSuiviDAO
     /**
      * Finds all followers mails of a report.
      *
-     * @param idSignalement            The report from which the followers must be found
+     * @param idSignalement
+     *            The report from which the followers must be found
      * @return List of mail of all report followers
      */
     List<String> findUsersMailByIdSignalement( long idSignalement );
@@ -130,7 +140,8 @@ public interface ISignalementSuiviDAO
     /**
      * Counts the number of followers of the report.
      *
-     * @param idSignalement            The report id from which we want to get the followers count
+     * @param idSignalement
+     *            The report id from which we want to get the followers count
      * @return The number of followers, for this report
      */
     Integer getNbFollowersByIdSignalement( long idSignalement );
@@ -138,14 +149,16 @@ public interface ISignalementSuiviDAO
     /**
      * Removes all reports following.
      *
-     * @param idSignalement            The report id from which the following must be removed
+     * @param idSignalement
+     *            The report id from which the following must be removed
      */
     void removeByIdSignalement( long idSignalement );
 
     /**
      * Get the followers guids.
      *
-     * @param idRessource            the report id
+     * @param idRessource
+     *            the report id
      * @return a list of guids
      */
     List<String> getAllSuiveursGuid( Integer idRessource );

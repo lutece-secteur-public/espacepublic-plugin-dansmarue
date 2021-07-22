@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,54 +58,65 @@ public class WebServicePartnerDaemon extends Daemon
 
     /** The Constant ID_STATE_ECHEC_WS. */
     // Properties
-    private static final String ID_STATE_ECHEC_WS           = "signalement.idStateEchecEnvoiWS";
+    private static final String ID_STATE_ECHEC_WS = "signalement.idStateEchecEnvoiWS";
 
     /** The Constant ID_STATE_SERVICE_FAIT. */
-    private static final String ID_STATE_SERVICE_FAIT       = "signalement.idStateServiceFait";
+    private static final String ID_STATE_SERVICE_FAIT = "signalement.idStateServiceFait";
 
     /** The Constant MAX_ANOMALIES_TRAITED. */
     // maximum amount of anomalies treated by the daemon at once
-    private static final String MAX_ANOMALIES_TRAITED       = "signalement.daemon.maxAnomalies.traited";
+    private static final String MAX_ANOMALIES_TRAITED = "signalement.daemon.maxAnomalies.traited";
+    // Nb days between today and signalement creation date
+    private static final String NB_DAYS_SINCE_CREATION_DATE = "signalement.daemon.nbdays.trasfert.partner";
 
     /** The signalement workflow service. */
     // service
-    private IWorkflowService    _signalementWorkflowService = SpringContextService.getBean( "signalement.workflowService" );
+    private IWorkflowService _signalementWorkflowService = SpringContextService.getBean( "signalement.workflowService" );
 
     /** The signalement DAO. */
     // dao
-    private ISignalementDAO     _signalementDAO             = SpringContextService.getBean( "signalementDAO" );
+    private ISignalementDAO _signalementDAO = SpringContextService.getBean( "signalementDAO" );
 
     /** The address DAO. */
-    private IAdresseDAO         _addressDAO                 = SpringContextService.getBean( "signalementAdresseDAO" );
+    private IAdresseDAO _addressDAO = SpringContextService.getBean( "signalementAdresseDAO" );
 
-    /* (non-Javadoc)
+    /**
+     * Run.
+     */
+    /*
+     * (non-Javadoc)
+     *
      * @see java.lang.Runnable#run()
      */
     @Override
     public void run( )
     {
 
-
         // 1) find the anomalies with the failure state
         int stateToFind = Integer.valueOf( AppPropertiesService.getProperty( ID_STATE_ECHEC_WS ) );
-        List<Integer> lstIdsSignalementFound = _signalementDAO.findIdsSingalementForWSPartnerDeamon( stateToFind );
+        int nbDays = Integer.valueOf( AppPropertiesService.getProperty( NB_DAYS_SINCE_CREATION_DATE ) );
+        List<Integer> lstIdsSignalementFound = _signalementDAO.findIdsSingalementForWSPartnerDeamon( stateToFind, nbDays );
 
         AppLogService.info( lstIdsSignalementFound.size( ) + " anomalie(s) found with the failure send by ws" );
 
         // 2) call workflow to send anomalies to partner by WS.
         int max = Integer.valueOf( AppPropertiesService.getProperty( MAX_ANOMALIES_TRAITED ) );
 
-        lstIdsSignalementFound.stream( ).limit( max ).forEach( (Integer idSignalement) ->
-        {
+        lstIdsSignalementFound.stream( ).limit( max ).forEach( ( Integer idSignalement ) -> {
             callWorkflowAction( idSignalement );
 
-        }
-
-                );
+        } );
 
     }
 
-    private void callWorkflowAction(Integer idSignalement) {
+    /**
+     * Call workflow action.
+     *
+     * @param idSignalement
+     *            the id signalement
+     */
+    private void callWorkflowAction( Integer idSignalement )
+    {
 
         WorkflowService workflowService = WorkflowService.getInstance( );
 
@@ -113,10 +124,10 @@ public class WebServicePartnerDaemon extends Daemon
         int idActionDone = Integer.valueOf( AppPropertiesService.getProperty( SignalementConstants.ID_ACTION_DAEMON_SIGNALEMENT_DONE ) );
         int stateServiceFait = Integer.valueOf( AppPropertiesService.getProperty( ID_STATE_SERVICE_FAIT ) );
 
-
         try
         {
-            ResourceHistory history = _signalementWorkflowService.getLastHistoryResource( idSignalement, Signalement.WORKFLOW_RESOURCE_TYPE, SignalementConstants.SIGNALEMENT_WORKFLOW_ID );
+            ResourceHistory history = _signalementWorkflowService.getLastHistoryResource( idSignalement, Signalement.WORKFLOW_RESOURCE_TYPE,
+                    SignalementConstants.SIGNALEMENT_WORKFLOW_ID );
 
             if ( history.getAction( ).getStateAfter( ).getId( ) == stateServiceFait )
             {
@@ -124,7 +135,8 @@ public class WebServicePartnerDaemon extends Daemon
                 AppLogService.info( "call action id " + idActionDone + " Demon Service fait for anomalie " + idSignalement );
                 workflowService.doProcessAction( idSignalement, Signalement.WORKFLOW_RESOURCE_TYPE, idActionDone, null, null, Locale.FRANCE, true );
 
-            } else
+            }
+            else
             {
                 // else call action id 85 Transferer prestataire
                 AppLogService.info( "call action id " + idActionTransfert + " Transferer prestataire for anomalie " + idSignalement );
@@ -134,7 +146,8 @@ public class WebServicePartnerDaemon extends Daemon
                     workflowService.doProcessAction( idSignalement, Signalement.WORKFLOW_RESOURCE_TYPE, idActionTransfert, null, null, Locale.FRANCE, true );
                 }
             }
-        } catch ( Exception e )
+        }
+        catch( Exception e )
         {
             AppLogService.error( "Unexpected error " + e.getMessage( ) );
         }

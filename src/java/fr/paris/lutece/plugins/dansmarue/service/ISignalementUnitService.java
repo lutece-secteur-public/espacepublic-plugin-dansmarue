@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,7 +47,8 @@ public interface ISignalementUnitService
     /**
      * Inserts into the database, the report unit.
      *
-     * @param unitSignalement            the report unit
+     * @param unitSignalement
+     *            the report unit
      * @return the report unit id
      */
     Integer insert( SignalementUnit unitSignalement );
@@ -55,14 +56,16 @@ public interface ISignalementUnitService
     /**
      * Removes report unit properties.
      *
-     * @param lId            the report unit id
+     * @param lId
+     *            the report unit id
      */
     void remove( long lId );
 
     /**
      * Loads the report unit.
      *
-     * @param lId            the report unit id
+     * @param lId
+     *            the report unit id
      * @return the report unit
      */
     SignalementUnit load( Integer lId );
@@ -70,7 +73,8 @@ public interface ISignalementUnitService
     /**
      * Updates a report unit.
      *
-     * @param unitSignalement            the report unit object
+     * @param unitSignalement
+     *            the report unit object
      */
     void store( SignalementUnit unitSignalement );
 
@@ -91,7 +95,8 @@ public interface ISignalementUnitService
     /**
      * Save units defined as visible.
      *
-     * @param visibleUnitsIds            list of visible units ids
+     * @param visibleUnitsIds
+     *            list of visible units ids
      */
     void saveVisibleUnits( List<Integer> visibleUnitsIds );
 

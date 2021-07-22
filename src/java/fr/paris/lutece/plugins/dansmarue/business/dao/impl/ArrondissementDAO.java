@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,6 @@ import fr.paris.lutece.plugins.dansmarue.business.dao.IArrondissementDAO;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-
 /**
  * The Class ArrondissementDAO.
  */
@@ -48,7 +47,7 @@ public class ArrondissementDAO implements IArrondissementDAO
 {
 
     /** The Constant SQL_QUERY_SELECT_ALL_ARRONDISSEMENT. */
-    private static final String SQL_QUERY_SELECT_ALL_ARRONDISSEMENT  = "SELECT id_arrondissement, numero_arrondissement, actif, geom FROM signalement_arrondissement ORDER BY id_arrondissement";
+    private static final String SQL_QUERY_SELECT_ALL_ARRONDISSEMENT = "SELECT id_arrondissement, numero_arrondissement, actif, geom FROM signalement_arrondissement ORDER BY id_arrondissement";
 
     /** The Constant SQL_QUERY_SELECT_BY_IDARRONDISSEMENT. */
     private static final String SQL_QUERY_SELECT_BY_IDARRONDISSEMENT = "SELECT id_arrondissement, numero_arrondissement, actif, geom FROM signalement_arrondissement WHERE id_arrondissement=?";
@@ -63,9 +62,10 @@ public class ArrondissementDAO implements IArrondissementDAO
 
         if ( ( lng != null ) && ( lat != null ) )
         {
-            try(  DAOUtil daoUtil = new DAOUtil(
-                    "SELECT id_arrondissement, numero_arrondissement, actif, geom FROM signalement_arrondissement WHERE ST_Contains(signalement_arrondissement.geom, ST_GeomFromText('POINT(" + lng
-                    + " " + lat + ")', 4326))" )){
+            try ( DAOUtil daoUtil = new DAOUtil(
+                    "SELECT id_arrondissement, numero_arrondissement, actif, geom FROM signalement_arrondissement WHERE ST_Contains(signalement_arrondissement.geom, ST_GeomFromText('POINT("
+                            + lng + " " + lat + ")', 4326))" ) )
+            {
 
                 daoUtil.executeQuery( );
 
@@ -91,7 +91,8 @@ public class ArrondissementDAO implements IArrondissementDAO
     /**
      * expected column order is id_arrondissement, arrondissement, active.
      *
-     * @param daoUtil            daoUtil
+     * @param daoUtil
+     *            daoUtil
      * @return A district entity filled with query's data.
      */
     public Arrondissement convertDaoUtilToEntity( DAOUtil daoUtil )

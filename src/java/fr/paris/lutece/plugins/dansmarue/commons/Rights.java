@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -62,25 +62,25 @@ public class Rights
 {
 
     /** The Constant PERMISSIONS. */
-    public static final String       PERMISSIONS                 = "PERMISSIONS";
+    public static final String PERMISSIONS = "PERMISSIONS";
 
     /** The Constant PERMISSIONS_SECTEURS. */
-    public static final String       PERMISSIONS_SECTEURS        = "PERMISSIONS_SECTEURS";
+    public static final String PERMISSIONS_SECTEURS = "PERMISSIONS_SECTEURS";
 
     /** The Constant PERMISSION_JOKER. */
-    private static final String      PERMISSION_JOKER            = "*";
+    private static final String PERMISSION_JOKER = "*";
 
     /** The Constant RIGHT_SIGNALEMENT_DASHBOARD. */
-    public static final String       RIGHT_SIGNALEMENT_DASHBOARD = "SIGNALEMENT_DASHBOARD";
+    public static final String RIGHT_SIGNALEMENT_DASHBOARD = "SIGNALEMENT_DASHBOARD";
 
     /** The unit service. */
-    private IUnitService             _unitService;
+    private IUnitService _unitService;
 
     /** The sector service. */
-    private ISectorService           _sectorService;
+    private ISectorService _sectorService;
 
     /** HttpRequest. */
-    private HttpServletRequest       _request;
+    private HttpServletRequest _request;
 
     /** List of user permissions retrieved in session. */
     private HashMap<String, Boolean> _permissionsCache;
@@ -91,18 +91,19 @@ public class Rights
     /**
      * Initialize the rights: retrieve the permission lists in the session.
      *
-     * @param request            HttpRequest
+     * @param request
+     *            HttpRequest
      */
     @SuppressWarnings( "unchecked" )
     public void init( HttpServletRequest request )
     {
         _request = request;
-        _unitService = ( IUnitService ) SpringContextService.getBean( "unittree.unitService" );
-        _sectorService = ( ISectorService ) SpringContextService.getBean( "unittree-dansmarue.sectorService" );
+        _unitService = (IUnitService) SpringContextService.getBean( "unittree.unitService" );
+        _sectorService = (ISectorService) SpringContextService.getBean( "unittree-dansmarue.sectorService" );
         HttpSession session = request.getSession( );
         if ( session.getAttribute( PERMISSIONS ) != null )
         {
-            _permissionsCache = ( HashMap<String, Boolean> ) session.getAttribute( PERMISSIONS );
+            _permissionsCache = (HashMap<String, Boolean>) session.getAttribute( PERMISSIONS );
         }
         else
         {
@@ -112,7 +113,7 @@ public class Rights
         }
         if ( session.getAttribute( PERMISSIONS_SECTEURS ) != null )
         {
-            _permissionsSecteurCache = ( HashMap<String, Boolean> ) session.getAttribute( PERMISSIONS_SECTEURS );
+            _permissionsSecteurCache = (HashMap<String, Boolean>) session.getAttribute( PERMISSIONS_SECTEURS );
         }
         else
         {
@@ -125,16 +126,19 @@ public class Rights
     /**
      * Returns if the user has the permission passed in parameter.
      *
-     * @param ressourceType            the resource type
-     * @param permission            permission key
-     * @param secteur            sector which needs a permission
+     * @param ressourceType
+     *            the resource type
+     * @param permission
+     *            permission key
+     * @param secteur
+     *            sector which needs a permission
      * @return allow or not
      */
     public boolean estAutorise( String ressourceType, String permission, String secteur )
     {
         HttpSession session = _request.getSession( );
         @SuppressWarnings( "unchecked" )
-        Map<String, Boolean> permissionsCache = ( Map<String, Boolean> ) session.getAttribute( PERMISSIONS );
+        Map<String, Boolean> permissionsCache = (Map<String, Boolean>) session.getAttribute( PERMISSIONS );
         String clePermission = ressourceType + permission;
         Boolean autorise = estAutoriseSecteur( secteur );
         if ( autorise )
@@ -142,7 +146,8 @@ public class Rights
             Boolean autorisePermission = permissionsCache.get( clePermission );
             if ( autorisePermission == null )
             {
-                autorisePermission = RBACService.isAuthorized( ressourceType, RBAC.WILDCARD_RESOURCES_ID, permission, AdminUserService.getAdminUser( _request ) );
+                autorisePermission = RBACService.isAuthorized( ressourceType, RBAC.WILDCARD_RESOURCES_ID, permission,
+                        AdminUserService.getAdminUser( _request ) );
                 permissionsCache.put( clePermission, autorisePermission );
             }
             autorise &= autorisePermission;
@@ -187,7 +192,8 @@ public class Rights
     /**
      * Check that the user is authorized on the sector passed in parameter.
      *
-     * @param secteur            the sector
+     * @param secteur
+     *            the sector
      * @return allow or not
      */
     public boolean estAutoriseSecteur( String secteur )
@@ -201,14 +207,14 @@ public class Rights
         {
             HttpSession session = _request.getSession( );
             @SuppressWarnings( "unchecked" )
-            Map<String, Boolean> permissionsSecteursCache = ( Map<String, Boolean> ) session.getAttribute( PERMISSIONS_SECTEURS );
+            Map<String, Boolean> permissionsSecteursCache = (Map<String, Boolean>) session.getAttribute( PERMISSIONS_SECTEURS );
 
             // get the courant user
             AdminUser adminUser = AdminUserService.getAdminUser( _request );
 
             Boolean autorisePermission = permissionsSecteursCache.get( secteur );
             if ( autorisePermission == null )
-                // Pas en cache
+            // Pas en cache
             {
                 // get the unit for the courant user
                 List<Unit> listUnits = _unitService.getUnitsByIdUser( adminUser.getUserId( ), false );
@@ -224,7 +230,7 @@ public class Rights
                     {
                         nCourantSector = Integer.parseInt( secteur );
                     }
-                    catch ( NumberFormatException e )
+                    catch( NumberFormatException e )
                     {
                         return AdminMessageService.getMessageUrl( _request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP ) != null;
                     }
@@ -257,9 +263,12 @@ public class Rights
     /**
      * Checks if the user has at least one of the permissions passed in parameter.
      *
-     * @param ressourceType            the resource type
-     * @param permissions            the permission
-     * @param secteur            the sector
+     * @param ressourceType
+     *            the resource type
+     * @param permissions
+     *            the permission
+     * @param secteur
+     *            the sector
      * @return allow or not
      */
     public boolean hasAutorisation( String ressourceType, List<String> permissions, String secteur )
@@ -279,7 +288,8 @@ public class Rights
     /**
      * Checks if the user has the right passed in parameter.
      *
-     * @param right            the right to check
+     * @param right
+     *            the right to check
      * @return true if has right, otherwise false
      */
     public boolean hasRight( String right )

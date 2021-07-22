@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,7 +43,7 @@ public class SignalementGeoLoc implements Comparable<SignalementGeoLoc>
     private Signalement _signalement;
 
     /** The n distance. */
-    private Integer     _nDistance;
+    private Integer _nDistance;
 
     /**
      * Gets the distance.
@@ -58,7 +58,8 @@ public class SignalementGeoLoc implements Comparable<SignalementGeoLoc>
     /**
      * Sets the distance.
      *
-     * @param distance the new distance
+     * @param distance
+     *            the new distance
      */
     public void setDistance( Integer distance )
     {
@@ -78,14 +79,24 @@ public class SignalementGeoLoc implements Comparable<SignalementGeoLoc>
     /**
      * Sets the signalement.
      *
-     * @param signalement the new signalement
+     * @param signalement
+     *            the new signalement
      */
     public void setSignalement( Signalement signalement )
     {
         _signalement = signalement;
     }
 
-    /* (non-Javadoc)
+    /**
+     * Compare to.
+     *
+     * @param signalementGeoloc
+     *            the signalement geoloc
+     * @return the int
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     @Override
@@ -95,14 +106,15 @@ public class SignalementGeoLoc implements Comparable<SignalementGeoLoc>
         {
             return -1;
         }
-        else if ( signalementGeoloc.getDistance( ).intValue( ) == getDistance( ).intValue( ) )
-        {
-            return 0;
-        }
         else
-        {
-            return 1;
-        }
+            if ( signalementGeoloc.getDistance( ).intValue( ) == getDistance( ).intValue( ) )
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
 
     }
 

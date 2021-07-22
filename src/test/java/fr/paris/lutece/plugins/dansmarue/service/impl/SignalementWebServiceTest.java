@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -77,7 +77,7 @@ public class SignalementWebServiceTest
 
     /** The ws caller. */
     @Mock
-    private IWebServiceCaller    _wsCaller;
+    private IWebServiceCaller _wsCaller;
 
     /** The authenticator. */
     @Mock( name = "signalement.outputws.requestAuthenticator" )
@@ -85,15 +85,16 @@ public class SignalementWebServiceTest
 
     /** The signalement web service. */
     @InjectMocks
-    SignalementWebService        _signalementWebService = new SignalementWebService( );
+    SignalementWebService _signalementWebService = new SignalementWebService( );
 
     /** The signalement. */
-    private Signalement          signalement;
+    private Signalement signalement;
 
     /**
      * Inits the signalement.
      *
-     * @throws ParseException the parse exception
+     * @throws ParseException
+     *             the parse exception
      */
     @Before
     public void initSignalement( ) throws ParseException
@@ -123,10 +124,14 @@ public class SignalementWebServiceTest
     /**
      * Send by WS test.
      *
-     * @throws HttpAccessException the http access exception
-     * @throws BusinessException the business exception
-     * @throws UnsupportedEncodingException the unsupported encoding exception
-     * @throws ParseException the parse exception
+     * @throws HttpAccessException
+     *             the http access exception
+     * @throws BusinessException
+     *             the business exception
+     * @throws UnsupportedEncodingException
+     *             the unsupported encoding exception
+     * @throws ParseException
+     *             the parse exception
      */
     @Test
     public void sendByWSTest( ) throws HttpAccessException, BusinessException, UnsupportedEncodingException, ParseException
@@ -151,8 +156,10 @@ public class SignalementWebServiceTest
     /**
      * Send by WS http exception test.
      *
-     * @throws HttpAccessException the http access exception
-     * @throws UnsupportedEncodingException the unsupported encoding exception
+     * @throws HttpAccessException
+     *             the http access exception
+     * @throws UnsupportedEncodingException
+     *             the unsupported encoding exception
      */
     @Test( expected = HttpAccessException.class )
     @Ignore( "Implementation partiel du test, il faudrait founir une implémentation partiel pour le ws caller" )
@@ -170,7 +177,8 @@ public class SignalementWebServiceTest
     /**
      * Creates the JSON exception test.
      *
-     * @throws UnsupportedEncodingException the unsupported encoding exception
+     * @throws UnsupportedEncodingException
+     *             the unsupported encoding exception
      */
     @Test( expected = NullPointerException.class )
     public void createJSONExceptionTest( ) throws UnsupportedEncodingException
@@ -182,7 +190,8 @@ public class SignalementWebServiceTest
     /**
      * Creates the JSON test.
      *
-     * @throws UnsupportedEncodingException the unsupported encoding exception
+     * @throws UnsupportedEncodingException
+     *             the unsupported encoding exception
      */
     @Test
     public void createJSONTest( ) throws UnsupportedEncodingException

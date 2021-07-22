@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import java.util.List;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
 
-
 /**
  * The Interface IArrondissementDAO.
  */
@@ -47,8 +46,10 @@ public interface IArrondissementDAO
     /**
      * Returns a district by his location.
      *
-     * @param lng            the longitude
-     * @param lat            the latitude
+     * @param lng
+     *            the longitude
+     * @param lat
+     *            the latitude
      * @return A borough
      */
     Arrondissement getArrondissementByGeom( Double lng, Double lat );
@@ -63,7 +64,8 @@ public interface IArrondissementDAO
     /**
      * Returns a list of districts ids for a given area.
      *
-     * @param sectors            a list of sector ids
+     * @param sectors
+     *            a list of sector ids
      * @return a list of districts ids
      */
     List<Integer> getArrondissementsInSector( List<Integer> sectors );
@@ -71,7 +73,8 @@ public interface IArrondissementDAO
     /**
      * Return a district by his Id.
      *
-     * @param nIdArrondissement            the district id
+     * @param nIdArrondissement
+     *            the district id
      * @return a districts
      */
     Arrondissement getByIdArrondissement( int nIdArrondissement );

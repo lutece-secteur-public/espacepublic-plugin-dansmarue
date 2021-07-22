@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.dansmarue.commons.exceptions;
 
-
 /**
  * The Class TechnicalException.
  */
@@ -46,8 +45,10 @@ public class TechnicalException extends RuntimeException
     /**
      * Instantiates a new technical exception.
      *
-     * @param message the message
-     * @param cause the cause
+     * @param message
+     *            the message
+     * @param cause
+     *            the cause
      */
     public TechnicalException( String message, Throwable cause )
     {
@@ -57,7 +58,8 @@ public class TechnicalException extends RuntimeException
     /**
      * Instantiates a new technical exception.
      *
-     * @param message the message
+     * @param message
+     *            the message
      */
     public TechnicalException( String message )
     {

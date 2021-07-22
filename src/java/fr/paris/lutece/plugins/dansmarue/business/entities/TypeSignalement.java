@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,6 @@ import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 
-
 /**
  * The Class TypeSignalement.
  */
@@ -54,60 +53,60 @@ public class TypeSignalement implements RBACResource
 {
 
     /** The Constant RESOURCE_TYPE. */
-    public static final String RESOURCE_TYPE          = "TYPE_SIGNALEMENT";
+    public static final String RESOURCE_TYPE = "TYPE_SIGNALEMENT";
 
     /** The n id. */
-    private Integer            _nId;
+    private Integer _nId;
 
     /** The str libelle. */
     @NotBlank
-    private String             _strLibelle;
+    private String _strLibelle;
 
     /** The b actif. */
-    private boolean            _bActif;
+    private boolean _bActif;
 
     /** The b is agent. */
-    private boolean            _bIsAgent;
+    private boolean _bIsAgent;
 
     /** The type signalement parent. */
     @JsonBackReference
-    private TypeSignalement    _typeSignalementParent = null;
+    private TypeSignalement _typeSignalementParent = null;
 
     /** The unit. */
-    private Unit               _unit                  = new Unit( );
+    private Unit _unit = new Unit( );
 
     /** The n id type signalement parent. */
-    private Integer            _nIdTypeSignalementParent;
+    private Integer _nIdTypeSignalementParent;
 
     /** The image. */
-    private ImageResource      _image                 = null;
+    private ImageResource _image = null;
 
     /** The n ordre. */
     @NotNull
     @Min( 1 )
-    private int                _nOrdre;
+    private int _nOrdre;
 
     /** The str image url. */
-    private String             _strImageUrl           = "";
+    private String _strImageUrl = "";
 
     /** The n id category. */
     @Transient
-    private Integer            _nIdCategory;
+    private Integer _nIdCategory;
 
     /** The str alias. */
-    private String             _strAlias;
+    private String _strAlias;
 
     /** The str alias mobile. */
-    private String             _strAliasMobile;
+    private String _strAliasMobile;
 
     /** The n nb messages. */
-    private Integer            _nNbMessages;
+    private Integer _nNbMessages;
 
     /** The b hors DMR. */
-    private boolean            _bHorsDMR;
+    private boolean _bHorsDMR;
 
     /** The str message hors DMR. */
-    private String             _strMessageHorsDMR;
+    private String _strMessageHorsDMR;
 
     /**
      * Gets the ordre.
@@ -122,7 +121,8 @@ public class TypeSignalement implements RBACResource
     /**
      * Sets the ordre.
      *
-     * @param ordre the new ordre
+     * @param ordre
+     *            the new ordre
      */
     public void setOrdre( int ordre )
     {
@@ -142,7 +142,8 @@ public class TypeSignalement implements RBACResource
     /**
      * Sets the id type signalement parent.
      *
-     * @param idTypeSignalementParent the new id type signalement parent
+     * @param idTypeSignalementParent
+     *            the new id type signalement parent
      */
     public void setIdTypeSignalementParent( Integer idTypeSignalementParent )
     {
@@ -162,7 +163,8 @@ public class TypeSignalement implements RBACResource
     /**
      * Sets the id.
      *
-     * @param id the new id
+     * @param id
+     *            the new id
      */
     public void setId( Integer id )
     {
@@ -182,7 +184,8 @@ public class TypeSignalement implements RBACResource
     /**
      * Sets the libelle.
      *
-     * @param libelle the new libelle
+     * @param libelle
+     *            the new libelle
      */
     public void setLibelle( String libelle )
     {
@@ -202,7 +205,8 @@ public class TypeSignalement implements RBACResource
     /**
      * Sets the actif.
      *
-     * @param actif the new actif
+     * @param actif
+     *            the new actif
      */
     public void setActif( boolean actif )
     {
@@ -222,7 +226,8 @@ public class TypeSignalement implements RBACResource
     /**
      * Sets the checks if is agent.
      *
-     * @param bIsAgent the new checks if is agent
+     * @param bIsAgent
+     *            the new checks if is agent
      */
     public void setIsAgent( boolean bIsAgent )
     {
@@ -242,7 +247,8 @@ public class TypeSignalement implements RBACResource
     /**
      * Sets the image.
      *
-     * @param image the new image
+     * @param image
+     *            the new image
      */
     public void setImage( ImageResource image )
     {
@@ -262,7 +268,8 @@ public class TypeSignalement implements RBACResource
     /**
      * Sets the image url.
      *
-     * @param imageUrl the new image url
+     * @param imageUrl
+     *            the new image url
      */
     public void setImageUrl( String imageUrl )
     {
@@ -272,7 +279,8 @@ public class TypeSignalement implements RBACResource
     /**
      * Sets the mime type.
      *
-     * @param strMimeType the new mime type
+     * @param strMimeType
+     *            the new mime type
      */
     public void setMimeType( String strMimeType )
     {
@@ -282,9 +290,10 @@ public class TypeSignalement implements RBACResource
     /**
      * Sets the image content.
      *
-     * @param imageContent the new image content
+     * @param imageContent
+     *            the new image content
      */
-    public void setImageContent( byte[] imageContent )
+    public void setImageContent( byte [ ] imageContent )
     {
         _image.setImage( imageContent );
     }
@@ -319,7 +328,8 @@ public class TypeSignalement implements RBACResource
     /**
      * Sets the unit.
      *
-     * @param pUnit            the unit to set
+     * @param pUnit
+     *            the unit to set
      */
     public void setUnit( Unit pUnit )
     {
@@ -329,7 +339,8 @@ public class TypeSignalement implements RBACResource
     /**
      * Sets the type signalement parent.
      *
-     * @param typeSignalement the new type signalement parent
+     * @param typeSignalement
+     *            the new type signalement parent
      */
     public void setTypeSignalementParent( TypeSignalement typeSignalement )
     {
@@ -377,7 +388,8 @@ public class TypeSignalement implements RBACResource
     /**
      * Sets the id category.
      *
-     * @param nIdCategory the new id category
+     * @param nIdCategory
+     *            the new id category
      */
     public void setIdCategory( Integer nIdCategory )
     {
@@ -415,7 +427,8 @@ public class TypeSignalement implements RBACResource
     /**
      * Setter for the alias.
      *
-     * @param alias            the alias to set
+     * @param alias
+     *            the alias to set
      */
     public void setAlias( String alias )
     {
@@ -450,7 +463,8 @@ public class TypeSignalement implements RBACResource
     /**
      * Setter for the alias mobile.
      *
-     * @param aliasMobile            the alias mobile to set
+     * @param aliasMobile
+     *            the alias mobile to set
      */
     public void setAliasMobile( String aliasMobile )
     {
@@ -485,7 +499,8 @@ public class TypeSignalement implements RBACResource
     /**
      * Sets the nb messages.
      *
-     * @param _nNbMessages the new nb messages
+     * @param _nNbMessages
+     *            the new nb messages
      */
     public void setNbMessages( Integer _nNbMessages )
     {
@@ -505,7 +520,8 @@ public class TypeSignalement implements RBACResource
     /**
      * Sets the hors DMR.
      *
-     * @param horsDMR the new hors DMR
+     * @param horsDMR
+     *            the new hors DMR
      */
     public void setHorsDMR( boolean horsDMR )
     {
@@ -525,7 +541,8 @@ public class TypeSignalement implements RBACResource
     /**
      * Sets the message hors DMR.
      *
-     * @param messageHorsDMR the new message hors DMR
+     * @param messageHorsDMR
+     *            the new message hors DMR
      */
     public void setMessageHorsDMR( String messageHorsDMR )
     {

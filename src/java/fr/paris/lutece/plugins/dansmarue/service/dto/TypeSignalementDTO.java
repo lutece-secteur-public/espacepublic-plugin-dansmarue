@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,58 +47,58 @@ public class TypeSignalementDTO
 {
 
     /** The _actif. */
-    private boolean                  _bActif;
+    private boolean _bActif;
 
     /** The id. */
-    private Integer                  _nId;
+    private Integer _nId;
 
     /** The parent report type id. */
-    private Integer                  _nIdTypeSignalementParent;
+    private Integer _nIdTypeSignalementParent;
 
     /** The _is selected. */
-    private boolean                  _bIsSelected;
+    private boolean _bIsSelected;
 
     /** The libelle. */
-    private String                   _strLibelle;
+    private String _strLibelle;
 
     /** The imageUrl. */
-    private String                   _strImageUrl;
+    private String _strImageUrl;
 
     /** The imageResource. */
-    private ImageResource            _image;
+    private ImageResource _image;
 
     /** The list child. */
     private List<TypeSignalementDTO> _listChild = new ArrayList<TypeSignalementDTO>( );
 
     /** The _minus. */
-    private boolean                  _bMinus;
+    private boolean _bMinus;
 
     /** The parent report type. */
-    private TypeSignalement          _typeSignalementParent;
+    private TypeSignalement _typeSignalementParent;
 
     /** The unit. */
-    private Unit                     _unit;
+    private Unit _unit;
 
     /** The str alias. */
-    private String                   _strAlias;
+    private String _strAlias;
 
     /** The str alias mobile. */
-    private String                   _strAliasMobile;
+    private String _strAliasMobile;
 
     /** The b is agent. */
-    private boolean                  _bIsAgent;
+    private boolean _bIsAgent;
 
     /** The b hors DMR. */
-    private boolean                  _bHorsDMR;
+    private boolean _bHorsDMR;
 
     /** The str message hors DMR. */
-    private String                   _strMessageHorsDMR;
+    private String _strMessageHorsDMR;
 
-    /**  Le nombre de sous niveau. */
-    private Integer                  nbSousNiveau;
+    /** Le nombre de sous niveau. */
+    private Integer nbSousNiveau;
 
-    /**  Le niveau du type de signalement dans sa hierachie. */
-    private Integer                  niveau;
+    /** Le niveau du type de signalement dans sa hierachie. */
+    private Integer niveau;
 
     /**
      * Gets the id.
@@ -323,7 +323,8 @@ public class TypeSignalementDTO
     /**
      * Sets the image.
      *
-     * @param image the new image
+     * @param image
+     *            the new image
      */
     public void setImage( ImageResource image )
     {
@@ -343,7 +344,8 @@ public class TypeSignalementDTO
     /**
      * Sets the alias.
      *
-     * @param _strAlias the new alias
+     * @param _strAlias
+     *            the new alias
      */
     public void setAlias( String _strAlias )
     {
@@ -363,7 +365,8 @@ public class TypeSignalementDTO
     /**
      * Sets the alias mobile.
      *
-     * @param _strAliasMobile the new alias mobile
+     * @param _strAliasMobile
+     *            the new alias mobile
      */
     public void setAliasMobile( String _strAliasMobile )
     {
@@ -383,7 +386,8 @@ public class TypeSignalementDTO
     /**
      * Sets the nb sous niveau.
      *
-     * @param nbSousNiveau the new nb sous niveau
+     * @param nbSousNiveau
+     *            the new nb sous niveau
      */
     public void setNbSousNiveau( Integer nbSousNiveau )
     {
@@ -403,7 +407,8 @@ public class TypeSignalementDTO
     /**
      * Sets the level.
      *
-     * @param niveau the new level
+     * @param niveau
+     *            the new level
      */
     public void setLevel( Integer niveau )
     {
@@ -423,7 +428,8 @@ public class TypeSignalementDTO
     /**
      * Sets the checks if is agent.
      *
-     * @param bIsAgent the new checks if is agent
+     * @param bIsAgent
+     *            the new checks if is agent
      */
     public void setIsAgent( boolean bIsAgent )
     {
@@ -443,7 +449,8 @@ public class TypeSignalementDTO
     /**
      * Sets the hors DMR.
      *
-     * @param horsDMR the new hors DMR
+     * @param horsDMR
+     *            the new hors DMR
      */
     public void setHorsDMR( boolean horsDMR )
     {
@@ -463,7 +470,8 @@ public class TypeSignalementDTO
     /**
      * Sets the message hors DMR.
      *
-     * @param messageHorsDMR the new message hors DMR
+     * @param messageHorsDMR
+     *            the new message hors DMR
      */
     public void setMessageHorsDMR( String messageHorsDMR )
     {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,8 @@ public interface IAdresseDAO
     /**
      * Save a new address.
      *
-     * @param address            the address
+     * @param address
+     *            the address
      * @return the address id
      */
     public Long insert( Adresse address );
@@ -54,14 +55,16 @@ public interface IAdresseDAO
     /**
      * Delete an address.
      *
-     * @param lId            the address id
+     * @param lId
+     *            the address id
      */
     public void remove( long lId );
 
     /**
      * Load a address.
      *
-     * @param lId            the address id
+     * @param lId
+     *            the address id
      * @return the address
      */
     public Adresse load( long lId );
@@ -69,14 +72,16 @@ public interface IAdresseDAO
     /**
      * Store an address.
      *
-     * @param address            the address object
+     * @param address
+     *            the address object
      */
     public void store( Adresse address );
 
     /**
      * Find address for a report id.
      *
-     * @param lIdSignalement            the report id
+     * @param lIdSignalement
+     *            the report id
      * @return list of address
      */
     List<Adresse> findBySignalementId( long lIdSignalement );
@@ -84,7 +89,8 @@ public interface IAdresseDAO
     /**
      * Load an address by its Id report.
      *
-     * @param lId            the report id
+     * @param lId
+     *            the report id
      * @return the address
      */
     Adresse loadByIdSignalement( long lId );
@@ -92,7 +98,8 @@ public interface IAdresseDAO
     /**
      * Update an adresse.
      *
-     * @param adresse            the address
+     * @param adresse
+     *            the address
      */
     void update( Adresse adresse );
 
@@ -129,7 +136,8 @@ public interface IAdresseDAO
     /**
      * Sets the coordonate to WSG84.
      *
-     * @param adresse            the adresse
+     * @param adresse
+     *            the adresse
      * @return the adresse
      */
     public Adresse setCoordonateLambert93ToWSG84( Adresse adresse );

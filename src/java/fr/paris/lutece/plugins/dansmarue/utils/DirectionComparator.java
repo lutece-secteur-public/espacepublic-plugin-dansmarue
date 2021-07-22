@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,9 +44,20 @@ public class DirectionComparator implements Comparator<Signalement>
 {
 
     /** The order. */
-    private static String _order = "true";
+    private String _strOrder = "true";
 
-    /* (non-Javadoc)
+    /**
+     * Compare.
+     *
+     * @param o1
+     *            the o 1
+     * @param o2
+     *            the o 2
+     * @return the int
+     */
+    /*
+     * (non-Javadoc)
+     *
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
     @Override
@@ -57,7 +68,7 @@ public class DirectionComparator implements Comparator<Signalement>
 
         Integer ret;
 
-        if ( "true".equals( _order ) )
+        if ( "true".equals( _strOrder ) )
         {
             ret = direction1.compareTo( direction2 );
         }
@@ -72,11 +83,12 @@ public class DirectionComparator implements Comparator<Signalement>
     /**
      * Sets the sort order.
      *
-     * @param order the new sort order
+     * @param order
+     *            the new sort order
      */
     public void setSortOrder( String order )
     {
-        _order = order;
+        _strOrder = order;
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,9 @@ package fr.paris.lutece.plugins.dansmarue.business.dao;
 
 import java.util.List;
 
+import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
+import fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
@@ -48,19 +50,60 @@ public interface ISignalementExportDAO
     /**
      * Returns a list of reports formatted for export according to the search parameters contained in the filter.
      *
-     * @param ids the ids
-     * @param plugin            the plugin
+     * @param ids
+     *            the ids
+     * @param plugin
+     *            the plugin
      * @return a list of reports formatted for export
      */
-    List<SignalementExportCSVDTO> findByIds( int[] ids, Plugin plugin );
+    List<SignalementExportCSVDTO> findByIds( int [ ] ids, Plugin plugin );
 
     /**
      * Returns a list of reports formatted for export according to the search parameters contained in the filter.
      *
-     * @param filter            the request based filter
-     * @param plugin            the plugin
+     * @param filter
+     *            the request based filter
+     * @param plugin
+     *            the plugin
      * @return a list of reports formatted for export
      */
     List<SignalementExportCSVDTO> findByFilter( SignalementFilter filter, Plugin plugin );
+
+    /**
+     * Count signalement search.
+     *
+     * @param filter
+     *            the request based filter
+     * @param plugin
+     *            the plugin
+     * @return number of reports found.
+     */
+    int countSignalementSearch( SignalementFilter filter, Plugin plugin );
+
+    /**
+     * Return numero report find.
+     *
+     * @param filter
+     *            the filter
+     * @param paginationProperties
+     *            the pagination properties
+     * @param plugin
+     *            the plugin
+     * @return list of numero signalement
+     */
+    List<String> searchNumeroByFilter( SignalementFilter filter, PaginationProperties paginationProperties, Plugin plugin );
+
+    /**
+     * Return a list of reports for search screen according to the search parameters contained in the filter.
+     *
+     * @param filter
+     *            the request based filter
+     * @param listIdSignalement
+     *            the list id signalement
+     * @param plugin
+     *            the plugin
+     * @return a list of reports formatted for search
+     */
+    List<Signalement> searchFindByFilter( SignalementFilter filter, List<String> listIdSignalement, Plugin plugin );
 
 }

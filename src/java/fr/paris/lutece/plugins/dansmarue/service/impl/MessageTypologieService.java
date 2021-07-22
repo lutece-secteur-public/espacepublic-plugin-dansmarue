@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -106,7 +106,15 @@ public class MessageTypologieService implements IMessageTypologieService
         _messageTypologieDAO.removeMessageTypologie( messageId );
     }
 
-    /* (non-Javadoc)
+    /**
+     * Removes the message typologie by id type signalement.
+     *
+     * @param typeSignalementId
+     *            the type signalement id
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.dansmarue.service.IMessageTypologieService#removeMessageTypologieByIdTypeSignalement(java.lang.Integer)
      */
     @Override

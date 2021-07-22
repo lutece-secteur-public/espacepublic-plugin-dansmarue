@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,7 @@ public class ObservationRejet
 
     /** The str libelle. */
     @NotBlank
-    private String  _strLibelle;
+    private String _strLibelle;
 
     /** The b actif. */
     private boolean _bActif;
@@ -67,7 +67,8 @@ public class ObservationRejet
     /**
      * Sets the id.
      *
-     * @param id the new id
+     * @param id
+     *            the new id
      */
     public void setId( Integer id )
     {
@@ -87,7 +88,8 @@ public class ObservationRejet
     /**
      * Sets the libelle.
      *
-     * @param strLibelle the new libelle
+     * @param strLibelle
+     *            the new libelle
      */
     public void setLibelle( String strLibelle )
     {
@@ -107,7 +109,8 @@ public class ObservationRejet
     /**
      * Sets the actif.
      *
-     * @param actif the new actif
+     * @param actif
+     *            the new actif
      */
     public void setActif( boolean actif )
     {
@@ -127,7 +130,8 @@ public class ObservationRejet
     /**
      * Sets the ordre.
      *
-     * @param ordre the new ordre
+     * @param ordre
+     *            the new ordre
      */
     public void setOrdre( Integer ordre )
     {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,7 +54,6 @@ import fr.paris.lutece.plugins.workflowcore.service.task.ITask;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-
 /**
  * WorkflowDAO.
  */
@@ -63,51 +62,51 @@ public class WorkflowDAO implements IWorkflowDAO
 
     /** The Constant SQL_QUERY_DELETE. */
     // QUERY
-    private static final String SQL_QUERY_DELETE                                     = "DELETE FROM signalement_workflow";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_workflow";
 
     /** The Constant SQL_QUERY_INSERT. */
-    private static final String SQL_QUERY_INSERT                                     = "INSERT INTO signalement_workflow (id_workflow) VALUES (?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_workflow (id_workflow) VALUES (?)";
 
     /** The Constant SQL_QUERY_SELECT. */
-    private static final String SQL_QUERY_SELECT                                     = "SELECT id_workflow FROM signalement_workflow";
+    private static final String SQL_QUERY_SELECT = "SELECT id_workflow FROM signalement_workflow";
 
     /** The Constant SQL_QUERY_SELECT_ACTION_BY_STATES. */
-    private static final String SQL_QUERY_SELECT_ACTION_BY_STATES                    = "SELECT id_action FROM workflow_action WHERE id_state_before=? AND id_state_after=?";
+    private static final String SQL_QUERY_SELECT_ACTION_BY_STATES = "SELECT id_action FROM workflow_action WHERE id_state_before=? AND id_state_after=?";
 
     /** The Constant SQL_QUERY_FIND_ACTION_BY_NAME. */
-    private static final String SQL_QUERY_FIND_ACTION_BY_NAME                        = "SELECT id_action, name, id_state_before, id_state_after, id_icon FROM workflow_action WHERE name=?";
+    private static final String SQL_QUERY_FIND_ACTION_BY_NAME = "SELECT id_action, name, id_state_before, id_state_after, id_icon FROM workflow_action WHERE name=?";
 
     /** The Constant SQL_QUERY_SELECT_MULTI_CONTENTS_MESSAGE_NOTIFICATION. */
     private static final String SQL_QUERY_SELECT_MULTI_CONTENTS_MESSAGE_NOTIFICATION = "select notification_value from signalement_workflow_notifuser_multi_contents_value where id_history = ? ";
 
     /** The Constant SQL_QUERY_SELECT_MESSAGE_NOTIFICATION. */
-    private static final String SQL_QUERY_SELECT_MESSAGE_NOTIFICATION                = "select notification_value from signalement_workflow_notification_user_value where id_history = ? ";
+    private static final String SQL_QUERY_SELECT_MESSAGE_NOTIFICATION = "select notification_value from signalement_workflow_notification_user_value where id_history = ? ";
 
     /** The Constant SQL_QUERY_SELECT_USER_SERVICE_FAIT. */
-    private static final String SQL_QUERY_SELECT_USER_SERVICE_FAIT                   = "select user_access_code from workflow_resource_history where id_resource = ? and id_action in (62,70,22,18,49,53,41)";
+    private static final String SQL_QUERY_SELECT_USER_SERVICE_FAIT = "select user_access_code from workflow_resource_history where id_resource = ? and id_action in (62,70,22,18,49,53,41)";
 
     /** The Constant SQL_QUERY_SELECT_HISTORY_BY_RESOURCES. */
-    private static final String SQL_QUERY_SELECT_HISTORY_BY_RESOURCES                = "select * from workflow_resource_history where id_resource = ? and resource_type = ? and id_workflow = ? ";
+    private static final String SQL_QUERY_SELECT_HISTORY_BY_RESOURCES = "select * from workflow_resource_history where id_resource = ? and resource_type = ? and id_workflow = ? ";
 
     /** The Constant SQL_QUERY_SELECT_ACTION_BY_HISTORY. */
-    private static final String SQL_QUERY_SELECT_ACTION_BY_HISTORY                   = "select * from workflow_action where id_action = ?";
+    private static final String SQL_QUERY_SELECT_ACTION_BY_HISTORY = "select * from workflow_action where id_action = ?";
 
     /** The Constant SQL_QUERY_SELECT_ALL_MESSAGE_TASK. */
-    private static final String SQL_QUERY_SELECT_ALL_MESSAGE_TASK                    = "SELECT id_task, id_message from signalement_workflow_notifuser_multi_contents_task WHERE id_task in (";
+    private static final String SQL_QUERY_SELECT_ALL_MESSAGE_TASK = "SELECT id_task, id_message from signalement_workflow_notifuser_multi_contents_task WHERE id_task in (";
 
     /** The Constant SQL_QUERY_FIND_BY_PRIMARY_KEY. */
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY                        = "SELECT signalement_workflow_notifuser_multi_contents_config.id_message,subject,sender,title,message"
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT signalement_workflow_notifuser_multi_contents_config.id_message,subject,sender,title,message"
             + " FROM signalement_workflow_notifuser_multi_contents_config INNER JOIN signalement_workflow_notifuser_multi_contents_task on signalement_workflow_notifuser_multi_contents_config.id_message = signalement_workflow_notifuser_multi_contents_task.id_message WHERE signalement_workflow_notifuser_multi_contents_config.id_message=? AND signalement_workflow_notifuser_multi_contents_task.id_task=?";
 
     /** The Constant SQL_QUERY_FIND_MESSAGE_ID_TITLE_BY_TASK. */
-    private static final String SQL_QUERY_FIND_MESSAGE_ID_TITLE_BY_TASK              = "SELECT cc.id_message, cc.title FROM signalement_workflow_notifuser_multi_contents_task ct, signalement_workflow_notifuser_multi_contents_config cc"
+    private static final String SQL_QUERY_FIND_MESSAGE_ID_TITLE_BY_TASK = "SELECT cc.id_message, cc.title FROM signalement_workflow_notifuser_multi_contents_task ct, signalement_workflow_notifuser_multi_contents_config cc"
             + " WHERE ct.id_message = cc.id_message and ct.id_task in ({0}) order by cc.id_message";
 
     /** The Constant SQL_QUERY_UPDATE_USER_ACCESS_CODE_WORKFLOW_HISTORY. */
-    private static final String SQL_QUERY_UPDATE_USER_ACCESS_CODE_WORKFLOW_HISTORY   = "UPDATE workflow_resource_history set user_access_code = ? WHERE id_history = ? ";
+    private static final String SQL_QUERY_UPDATE_USER_ACCESS_CODE_WORKFLOW_HISTORY = "UPDATE workflow_resource_history set user_access_code = ? WHERE id_history = ? ";
 
     /** The Constant SQL_QUERY_FIND_TASK_ID_BY_TASK_TYPE_KEY. */
-    private static final String SQL_QUERY_FIND_TASK_ID_BY_TASK_TYPE_KEY              = "SELECT id_task FROM workflow_task WHERE task_type_key=?";
+    private static final String SQL_QUERY_FIND_TASK_ID_BY_TASK_TYPE_KEY = "SELECT id_task FROM workflow_task WHERE task_type_key=?";
 
     /**
      * {@inheritDoc}
@@ -123,7 +122,8 @@ public class WorkflowDAO implements IWorkflowDAO
         if ( nId == null )
         {
             daoUtil.setIntNull( 1 );
-        } else
+        }
+        else
         {
             daoUtil.setInt( 1, nId );
         }
@@ -144,7 +144,8 @@ public class WorkflowDAO implements IWorkflowDAO
         if ( daoUtil.next( ) )
         {
             workflowId = daoUtil.getInt( 1 );
-        } else
+        }
+        else
         {
             workflowId = null;
         }
@@ -352,10 +353,10 @@ public class WorkflowDAO implements IWorkflowDAO
     {
         Map<Integer, List<NotificationSignalementUserMultiContents>> taskMessagesServiceFait = new HashMap<>( );
 
-        String[] tab = new String[listTaskPrestaServiceFait.size( )];
+        String [ ] tab = new String [ listTaskPrestaServiceFait.size( )];
         for ( int i = 0; i < tab.length; i++ )
         {
-            tab[i] = "?";
+            tab [i] = "?";
         }
         String listewhere = StringUtils.join( tab, "," );
 
@@ -492,7 +493,7 @@ public class WorkflowDAO implements IWorkflowDAO
     {
 
         List<Long> listIdsTask = new ArrayList<>( );
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_TASK_ID_BY_TASK_TYPE_KEY ); )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_TASK_ID_BY_TASK_TYPE_KEY ) ; )
         {
             daoUtil.setString( 1, strTakKeyName );
             daoUtil.executeQuery( );
@@ -513,7 +514,7 @@ public class WorkflowDAO implements IWorkflowDAO
     {
 
         List<Action> listAction = new ArrayList<>( );
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_ACTION_BY_NAME ); )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_ACTION_BY_NAME ) ; )
         {
             daoUtil.setString( 1, strActionName );
             daoUtil.executeQuery( );
@@ -532,7 +533,7 @@ public class WorkflowDAO implements IWorkflowDAO
                 Icon icon = new Icon( );
                 icon.setId( daoUtil.getInt( nIndex ) );
                 action.setIcon( icon );
-                listAction.add(action );
+                listAction.add( action );
             }
         }
 

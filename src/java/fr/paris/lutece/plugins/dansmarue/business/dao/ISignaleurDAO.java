@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,8 @@ public interface ISignaleurDAO
     /**
      * Create a new reporter.
      *
-     * @param signaleur            the reporter object
+     * @param signaleur
+     *            the reporter object
      * @return the reporter id
      */
     public Long insert( Signaleur signaleur );
@@ -54,14 +55,16 @@ public interface ISignaleurDAO
     /**
      * Delete a reporter.
      *
-     * @param lId            the reporter id
+     * @param lId
+     *            the reporter id
      */
     public void remove( long lId );
 
     /**
      * Load a reporter.
      *
-     * @param lId            the reporter id
+     * @param lId
+     *            the reporter id
      * @return the reporter object
      */
     public Signaleur load( long lId );
@@ -69,7 +72,8 @@ public interface ISignaleurDAO
     /**
      * Find reporters for a report id.
      *
-     * @param lIdSignalement            the report id
+     * @param lIdSignalement
+     *            the report id
      * @return list of reporters
      */
     List<Signaleur> findBySignalementId( long lIdSignalement );
@@ -77,7 +81,8 @@ public interface ISignaleurDAO
     /**
      * Load a reporter by the report id.
      *
-     * @param lId            the reporter id
+     * @param lId
+     *            the reporter id
      * @return the reporter object
      */
     Signaleur loadByIdSignalement( long lId );
@@ -85,7 +90,8 @@ public interface ISignaleurDAO
     /**
      * Update a reporter.
      *
-     * @param signaleur            the reporter to update
+     * @param signaleur
+     *            the reporter to update
      */
     void update( Signaleur signaleur );
 }

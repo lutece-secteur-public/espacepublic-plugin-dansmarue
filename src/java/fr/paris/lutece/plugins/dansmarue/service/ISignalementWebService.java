@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48,19 +48,25 @@ public interface ISignalementWebService
     /**
      * Send signalement to the correct recipient, with Web Service.
      *
-     * @param signalement            the signalement to send
-     * @param url            the ws url
+     * @param signalement
+     *            the signalement to send
+     * @param url
+     *            the ws url
      * @return the return of the call, fail or success
-     * @throws UnsupportedEncodingException             throws UnsupportedEncodingException
-     * @throws BusinessException             throws BusinessException
+     * @throws UnsupportedEncodingException
+     *             throws UnsupportedEncodingException
+     * @throws BusinessException
+     *             throws BusinessException
      */
     String sendByWS( Signalement signalement, String url ) throws UnsupportedEncodingException;
 
     /**
      * Get the JSON reponse.
      *
-     * @param signalement            the report object
-     * @param url            the url to call
+     * @param signalement
+     *            the report object
+     * @param url
+     *            the url to call
      * @return the response JSON object
      */
     JSONObject getJSONResponse( Signalement signalement, String url );
@@ -68,17 +74,21 @@ public interface ISignalementWebService
     /**
      * convert signalement into json formated data.
      *
-     * @param signalement            the signalement
+     * @param signalement
+     *            the signalement
      * @return the json
-     * @throws UnsupportedEncodingException             the exception
+     * @throws UnsupportedEncodingException
+     *             the exception
      */
     JSONObject createJSON( Signalement signalement ) throws UnsupportedEncodingException;
 
     /**
      * Send notification service done to the correct recipient, with Web Service.
      *
-     * @param signalement            the signalement to send
-     * @param urlPartner            the ws url
+     * @param signalement
+     *            the signalement to send
+     * @param urlPartner
+     *            the ws url
      * @return the return of the call, fail or success
      */
     JSONObject callWSPartnerServiceDone( Signalement signalement, String urlPartner );

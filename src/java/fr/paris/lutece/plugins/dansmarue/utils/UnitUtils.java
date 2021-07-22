@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -64,7 +64,8 @@ public class UnitUtils
     /**
      * Builds the tree.
      *
-     * @param startNode the start node
+     * @param startNode
+     *            the start node
      */
     public static void buildTree( UnitNode startNode )
     {
@@ -85,8 +86,10 @@ public class UnitUtils
     /**
      * Builds the tree.
      *
-     * @param startNode the start node
-     * @param depth the depth
+     * @param startNode
+     *            the start node
+     * @param depth
+     *            the depth
      */
     public static void buildTree( UnitNode startNode, int depth )
     {
@@ -107,8 +110,10 @@ public class UnitUtils
     /**
      * Populate sub units set.
      *
-     * @param startNode the start node
-     * @param units the units
+     * @param startNode
+     *            the start node
+     * @param units
+     *            the units
      */
     public static void populateSubUnitsSet( Unit startNode, Set<Unit> units )
     {

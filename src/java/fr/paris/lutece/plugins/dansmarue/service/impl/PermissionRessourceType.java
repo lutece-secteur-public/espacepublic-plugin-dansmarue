@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -63,7 +63,8 @@ public class PermissionRessourceType
     /**
      * Sets the permission.
      *
-     * @param permission            the permission to set
+     * @param permission
+     *            the permission to set
      */
     public void setPermission( String permission )
     {
@@ -83,7 +84,8 @@ public class PermissionRessourceType
     /**
      * Sets the resource type.
      *
-     * @param resourceType            the resourceType to set
+     * @param resourceType
+     *            the resourceType to set
      */
     public void setResourceType( String resourceType )
     {

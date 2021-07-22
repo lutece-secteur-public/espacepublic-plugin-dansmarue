@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,9 +35,10 @@ package fr.paris.lutece.plugins.dansmarue.service;
 
 import java.util.List;
 
+import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
+import fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
-
 
 /**
  * The Interface ISignalementExportService.
@@ -48,16 +49,47 @@ public interface ISignalementExportService
     /**
      * Returns a list of reports formatted for export according to the search parameters contained in the filter.
      *
-     * @param ids the ids
+     * @param ids
+     *            the ids
      * @return a list of reports formatted for export
      */
-    List<SignalementExportCSVDTO> findByIds( int[] ids );
+    List<SignalementExportCSVDTO> findByIds( int [ ] ids );
 
     /**
      * Returns a list of reports formatted for export according to the search parameters contained in the filter.
      *
-     * @param filter            the request based filter
+     * @param filter
+     *            the request based filter
      * @return a list of reports formatted for export
      */
     List<SignalementExportCSVDTO> findByFilter( SignalementFilter filter );
+
+    /**
+     * Returns number of reports return by the search query.
+     *
+     * @param filter
+     *            the request based filter
+     * @return a list of reports formatted for export
+     */
+    int countSearchResult( SignalementFilter filter );
+
+    /**
+     * Returns a list of reports formatted for search screen according to the search parameters contained in the filter.
+     *
+     * @param filter
+     *            the request based filter
+     * @param paginationProperties
+     *            pagination properties
+     * @return a list of reports formatted for export
+     */
+    List<Signalement> findByFilterSearch( SignalementFilter filter, PaginationProperties paginationProperties );
+
+    /**
+     * Find by ids with photo.
+     *
+     * @param ids
+     *            the ids
+     * @return the list
+     */
+    List<SignalementExportCSVDTO> findByIdsWithPhoto( int [ ] ids );
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,19 +40,19 @@ public class Signaleur
 {
 
     /** The id. */
-    private Long        _id;
+    private Long _id;
 
     /** The str mail. */
-    private String      _strMail;
+    private String _strMail;
 
     /** The signalement. */
     private Signalement _signalement;
 
     /** The str id telephone. */
-    private String      _strIdTelephone;
+    private String _strIdTelephone;
 
     /** The str guid. */
-    private String      _strGuid;
+    private String _strGuid;
 
     /**
      * Gets the id.
@@ -67,7 +67,8 @@ public class Signaleur
     /**
      * Sets the id.
      *
-     * @param id the new id
+     * @param id
+     *            the new id
      */
     public void setId( Long id )
     {
@@ -87,7 +88,8 @@ public class Signaleur
     /**
      * Sets the mail.
      *
-     * @param mail the new mail
+     * @param mail
+     *            the new mail
      */
     public void setMail( String mail )
     {
@@ -107,7 +109,8 @@ public class Signaleur
     /**
      * Sets the signalement.
      *
-     * @param signalement the new signalement
+     * @param signalement
+     *            the new signalement
      */
     public void setSignalement( Signalement signalement )
     {
@@ -127,7 +130,8 @@ public class Signaleur
     /**
      * Sets the id telephone.
      *
-     * @param idTelephone the new id telephone
+     * @param idTelephone
+     *            the new id telephone
      */
     public void setIdTelephone( String idTelephone )
     {
@@ -137,7 +141,8 @@ public class Signaleur
     /**
      * Sets the guid.
      *
-     * @param guid the new guid
+     * @param guid
+     *            the new guid
      */
     public void setGuid( String guid )
     {

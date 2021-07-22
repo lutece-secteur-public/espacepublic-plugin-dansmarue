@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -49,11 +49,11 @@ public class MessageTypologie
 
     /** The str type message. */
     @NotBlank( message = "Le type de message est obligatoire." )
-    private String  _strTypeMessage;
+    private String _strTypeMessage;
 
     /** The str contenu message. */
     @NotBlank( message = "Le contenu du message est obligatoire." )
-    private String  _strContenuMessage;
+    private String _strContenuMessage;
 
     /** The n fk id type signalement. */
     private Integer _nFkIdTypeSignalement;
@@ -74,7 +74,8 @@ public class MessageTypologie
     /**
      * Sets the ordre.
      *
-     * @param ordre the new ordre
+     * @param ordre
+     *            the new ordre
      */
     public void setOrdre( Integer ordre )
     {
@@ -94,7 +95,8 @@ public class MessageTypologie
     /**
      * Sets the id.
      *
-     * @param _nId the new id
+     * @param _nId
+     *            the new id
      */
     public void setId( Integer _nId )
     {
@@ -114,7 +116,8 @@ public class MessageTypologie
     /**
      * Sets the type message.
      *
-     * @param _strTypeMessage the new type message
+     * @param _strTypeMessage
+     *            the new type message
      */
     public void setTypeMessage( String _strTypeMessage )
     {
@@ -134,7 +137,8 @@ public class MessageTypologie
     /**
      * Sets the contenu message.
      *
-     * @param _strContenuMessage the new contenu message
+     * @param _strContenuMessage
+     *            the new contenu message
      */
     public void setContenuMessage( String _strContenuMessage )
     {
@@ -154,7 +158,8 @@ public class MessageTypologie
     /**
      * Sets the fk id type signalement.
      *
-     * @param fkIdTypeSignalement the new fk id type signalement
+     * @param fkIdTypeSignalement
+     *            the new fk id type signalement
      */
     public void setFkIdTypeSignalement( Integer fkIdTypeSignalement )
     {
@@ -174,7 +179,8 @@ public class MessageTypologie
     /**
      * Sets the actif.
      *
-     * @param actif the new actif
+     * @param actif
+     *            the new actif
      */
     public void setActif( boolean actif )
     {

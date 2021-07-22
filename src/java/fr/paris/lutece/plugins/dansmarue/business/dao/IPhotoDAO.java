@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,7 +55,8 @@ public interface IPhotoDAO
     /**
      * Delete an photo.
      *
-     * @param lId            the photo id
+     * @param lId
+     *            the photo id
      */
     void remove( long lId );
 
@@ -71,7 +72,8 @@ public interface IPhotoDAO
     /**
      * Store a photo.
      *
-     * @param photo            the photo object
+     * @param photo
+     *            the photo object
      */
     void store( PhotoDMR photo );
 
@@ -87,7 +89,8 @@ public interface IPhotoDAO
     /**
      * Find photos for a report id.
      *
-     * @param lIdSignalement            the report id
+     * @param lIdSignalement
+     *            the report id
      * @return list of photos
      */
     List<PhotoDMR> findBySignalementId( long lIdSignalement );
@@ -95,7 +98,8 @@ public interface IPhotoDAO
     /**
      * Find photos for a report id with photo content.
      *
-     * @param lIdSignalement            the report id
+     * @param lIdSignalement
+     *            the report id
      * @return list of photos
      */
     List<PhotoDMR> findWithFullPhotoBySignalementId( long lIdSignalement );
@@ -121,10 +125,14 @@ public interface IPhotoDAO
     /**
      * Find photos for suppr photos daemon.
      *
-     * @param anomaliesCible the anomalies cible
-     * @param tempsConservation the temps conservation
-     * @param etatsCible the etats cible
-     * @param limitRequest the limit request
+     * @param anomaliesCible
+     *            the anomalies cible
+     * @param tempsConservation
+     *            the temps conservation
+     * @param etatsCible
+     *            the etats cible
+     * @param limitRequest
+     *            the limit request
      * @return the list
      */
     List<PhotoDMR> findPhotosForSupprPhotosDaemon( List<String> anomaliesCible, Integer tempsConservation, List<String> etatsCible, Integer limitRequest );
@@ -132,7 +140,8 @@ public interface IPhotoDAO
     /**
      * Update a photo.
      *
-     * @param photo the photo
+     * @param photo
+     *            the photo
      */
     void updatePhoto( PhotoDMR photo );
 }

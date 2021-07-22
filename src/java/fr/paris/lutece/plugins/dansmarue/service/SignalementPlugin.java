@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,8 +57,8 @@ public class SignalementPlugin extends PluginDefaultImplementation
     public void init( )
     {
         ImageObjetService.init( );
-        ImageResourceManager.registerProvider( ( ImageResourceProvider ) SpringContextService.getBean( "signalement.imageService" ) );
-        ImageResourceManager.registerProvider( ( ImageResourceProvider ) SpringContextService.getBean( "signalement.imageThumbnailService" ) );
+        ImageResourceManager.registerProvider( (ImageResourceProvider) SpringContextService.getBean( "signalement.imageService" ) );
+        ImageResourceManager.registerProvider( (ImageResourceProvider) SpringContextService.getBean( "signalement.imageThumbnailService" ) );
     }
 
     /**

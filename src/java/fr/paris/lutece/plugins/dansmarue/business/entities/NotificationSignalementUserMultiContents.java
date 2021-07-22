@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.dansmarue.business.entities;
 
 import fr.paris.lutece.plugins.workflowcore.business.config.TaskConfig;
 
-
 /**
  * The Class NotificationSignalementUserMultiContents.
  */
@@ -46,21 +45,28 @@ public class NotificationSignalementUserMultiContents extends TaskConfig
     private Integer _nIdTask;
 
     /** The n id message. */
-    private Long    _nIdMessage;
+    private Long _nIdMessage;
 
     /** The str subject. */
-    private String  _strSubject;
+    private String _strSubject;
 
     /** The str sender. */
-    private String  _strSender;
+    private String _strSender;
 
     /** The str title. */
-    private String  _strTitle;
+    private String _strTitle;
 
     /** The str message. */
-    private String  _strMessage;
+    private String _strMessage;
 
-    /* (non-Javadoc)
+    /**
+     * Gets the id task.
+     *
+     * @return the id task
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.workflowcore.business.config.TaskConfig#getIdTask()
      */
     @Override
@@ -72,7 +78,8 @@ public class NotificationSignalementUserMultiContents extends TaskConfig
     /**
      * Sets the id task.
      *
-     * @param nIdTask the new id task
+     * @param nIdTask
+     *            the new id task
      */
     public void setIdTask( Integer nIdTask )
     {
@@ -92,7 +99,8 @@ public class NotificationSignalementUserMultiContents extends TaskConfig
     /**
      * Sets the id message.
      *
-     * @param nIdMessage the new id message
+     * @param nIdMessage
+     *            the new id message
      */
     public void setIdMessage( Long nIdMessage )
     {
@@ -112,7 +120,8 @@ public class NotificationSignalementUserMultiContents extends TaskConfig
     /**
      * Sets the subject.
      *
-     * @param strSubject the new subject
+     * @param strSubject
+     *            the new subject
      */
     public void setSubject( String strSubject )
     {
@@ -132,7 +141,8 @@ public class NotificationSignalementUserMultiContents extends TaskConfig
     /**
      * Sets the sender.
      *
-     * @param strSender the new sender
+     * @param strSender
+     *            the new sender
      */
     public void setSender( String strSender )
     {
@@ -152,7 +162,8 @@ public class NotificationSignalementUserMultiContents extends TaskConfig
     /**
      * Sets the title.
      *
-     * @param strTitle the new title
+     * @param strTitle
+     *            the new title
      */
     public void setTitle( String strTitle )
     {
@@ -172,7 +183,8 @@ public class NotificationSignalementUserMultiContents extends TaskConfig
     /**
      * Sets the message.
      *
-     * @param strMessage the new message
+     * @param strMessage
+     *            the new message
      */
     public void setMessage( String strMessage )
     {

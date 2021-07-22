@@ -1,0 +1,605 @@
+<script src="js/jquery.multi-select.min.js"></script>
+<script src="js/jquery.quicksearch.js"></script>
+<link rel="stylesheet" href="css/multi-select.css" type="text/css"/>
+<link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
+
+<@box color='primary'>
+	<div class="box-header">
+		<h3 class="box-title">#i18n{dansmarue.tournee.creation.titre}</h3>
+	</div>
+	<!-- Filtres sauvegardés-->
+	<@boxBody>
+		<@tform method='post' action='jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp'>
+				<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+					  <div class="form-group">
+						<label class="col-xs-12 col-sm-2 col-lg-2 control-label" for="filtre">#i18n{dansmarue.tournee.creation.filtre}</label>
+				 		<div class="col-xs-8 col-sm-8 col-md-4 col-lg-4">
+					 		<@select id='filtre' name='param_filter' title='filtre' size='sm'>
+							  <#if id_filter_select == -1 >
+							      <option value=-1 selected ></option>
+						      </#if> 
+							  <#list filter_list as key, value>
+							    <#if id_filter_select == key >
+								   <option value='${key}' selected>${value}</option>
+							    <#else>
+								   <option value='${key}'>${value}</option>
+								</#if> 
+								
+							  </#list>
+							</@select>
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+							<@button type='submit' class="" name='action_doLoadFilter' title='#i18n{dansmarue.charger}' />
+							<@button id='deleteFilterButton' buttonIcon='trash' class="btn btn-paris btn-red" params='data-toggle="modal" onClick="deleteFilter()"'/>
+						</div>
+					</div>	
+				</div>
+				
+				<!-- Modal Delete filtre-->
+				<div class="modal fade" id="deleteFilterModal" tabindex="-1" role="dialog" aria-labelledby="deleteFilterModal" aria-hidden="true">
+				  <div class="modal-dialog" role="document">
+					<div class="modal-content">
+					  <div class="modal-header">
+						<h5 class="modal-title" id="deleteModalLabel">Supprimer un filtre de recherche</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						  <span aria-hidden="true">&times;</span>
+						</button>
+					  </div>
+					  <div class="modal-body">
+						<p>Etes vous sur de vouloir supprimer le filtre <i id="idFilterNameDelete"></i> ? </p>
+					  </div>
+					  <div class="modal-footer">
+						<@button class="btn btn-paris btn-red" type='submit' name='action_doDeleteFilter' title='Confirmer' />
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+					  </div>
+					</div>
+				  </div>
+				</div>
+		</@tform>
+	</@boxBody>
+</@box>
+
+<!-- Filtres -->
+<@tform method='post' action='jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp' id="creationFeuilleTournee">
+	<div class="box" style="border-top-width:0px !important;">
+		<@boxBody>
+			<!-- Types -->
+			<select name="typologieSelect" id="typologieSelect" multiple="multiple">
+				<#list type_list as type>
+					<option value='${type.id}'>${type.formatTypeSignalement}</option>
+				</#list>
+			</select>
+			<br><br>
+			
+			<!-- Etat -->
+			<@formGroup formStyle="inline" class="col-xs-12 col-sm-12 col-md-5 col-lg-5" labelFor='checkbox_etat' labelKey='#i18n{dansmarue.reportingList.etat}'>
+				<div id="checkbox_etat"  data-toggle="buttons">
+					<#list etat_list as etat>
+						<label checkType="etat" class="btn btn-checkbox
+							<#list filter.etats as filterEtat> 
+								<#if etat.id == filterEtat.id > 
+									active
+								</#if> 
+							</#list>">
+							<input type="checkbox" id="etat${etat.id}" name="etat${etat.id}" value="true"
+							<#list filter.etats as filterEtat> 
+								<#if etat.id == filterEtat.id > checked="checked"
+								</#if> 
+							</#list> />
+							${etat.name!}
+						</label>
+					</#list>
+					<div data-toggle="buttons">
+						<button type="button" class="btn btn-primary" onClick="select_all_states()">#i18n{dansmarue.button.select.all}</button>
+						<button type="button" class="btn btn-primary" onClick="un_select_all_states();">#i18n{dansmarue.button.deselect.all}</button>
+					</div>
+				</div>
+			</@formGroup>
+			<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"></div>
+			<!-- Priorité -->
+			<@formGroup formStyle="inline" class="col-xs-12 col-sm-12 col-md-5 col-lg-5" labelFor='checkbox_priorite' labelKey='#i18n{dansmarue.saveSignalement.priorite}'>
+				<div id="checkbox_priorite"  data-toggle="buttons">
+					<#list priorite_list as priorite>
+						<label checkType="priorite" class="btn btn-checkbox
+							<#list filter.priorites as filterPriorite> 
+								<#if priorite.id == filterPriorite > 
+									active
+								</#if> 
+							</#list>">
+							<input type="checkbox" id="priorite${priorite.id}" name="priorite${priorite.id}" value="true"
+							<#list filter.priorites as filterPriorite> 
+								<#if priorite.id == filterPriorite > checked="checked"
+								</#if> 
+							</#list> />
+							${priorite.libelle!}
+						</label>
+					</#list>
+					<div data-toggle="buttons">
+						<button type="button" class="btn btn-primary" onClick="select_all_priorite()">#i18n{dansmarue.button.select.all}</button>
+						<button type="button" class="btn btn-primary" onClick="un_select_all_priorite();">#i18n{dansmarue.button.deselect.all}</button>
+					</div>
+				</div>
+			</@formGroup>
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+			<!-- Arrondissement -->
+			<@formGroup formStyle="inline" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" labelFor='checkbox_arrondissement' labelKey='#i18n{dansmarue.reportingList.arrondissement}'>
+				<div id="checkbox_arrondissement"  data-toggle="buttons">
+					<#list arrondissement_list as arrondissement>
+						<label checkType="arrondissement" class="btn btn-checkbox
+							<#list filter.listIdArrondissements as filterArrondissement> 
+								<#if arrondissement.id == filterArrondissement > 
+									active
+								</#if> 
+							</#list>">
+							<input type="checkbox" id="arrondissement${arrondissement.id}" name="arrondissement${arrondissement.id}" value="true"
+							<#list filter.listIdArrondissements as filterArrondissement> 
+								<#if arrondissement.id == filterArrondissement > checked="checked"
+								</#if> 
+							</#list> />
+							${arrondissement.numero!}
+						</label>
+					</#list>
+					<div data-toggle="buttons">
+						<button type="button" class="btn btn-primary" onClick="select_all_arrondissement()">#i18n{dansmarue.button.select.all}</button>
+						<button type="button" class="btn btn-primary" onClick="un_select_all_arrondissement();">#i18n{dansmarue.button.deselect.all}</button>
+					</div>
+				</div>
+			</@formGroup>
+			
+			<!-- Quartier -->
+			<@formGroup formStyle="inline" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" labelFor='select_quartier' labelKey='#i18n{dansmarue.reportingList.quartier}'>
+				<div id="select_quartier"  data-toggle="buttons">
+					<select name="listIdQuartierParam"  id="conseilQuartier" class="selectpicker show-menu-arrow form-control" data-width="300px" data-size="10" multiple data-actions-box="true" data-live-search="true">
+						<#list  conseilQuartier_list as conseilQuartier>
+							<option value="${conseilQuartier.idConsqrt}" <#if (filter.listIdQuartier?has_content && filter.listIdQuartier?seq_contains(conseilQuartier.idConsqrt?number))>selected</#if> >${conseilQuartier.nomConsqrt}</option>
+						</#list>
+					</select>	
+				</div>
+			</@formGroup>
+			
+			<!-- Date Creation -->
+			<@formGroup formStyle="inline" class="col-xs-12 col-sm-12 col-md-5 col-lg-5"  labelKey='#i18n{dansmarue.reportingList.creationDate}'>
+				<div>
+					<div class="input-daterange">
+						<div class="col-xs-1">#i18n{dansmarue.reportingList.from}</div>
+						<div class="col-xs-3 ">
+							<div class="input-group">
+								<div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+								<input class="form-control input-sm" type="text" value="${filter.dateBegin!}" name="dateBegin" id="filter_dateBegin" maxlength="10" />
+							</div>
+						</div>
+					</div>
+					<div class="input-daterange">
+						<div class="col-xs-1">#i18n{dansmarue.reportingList.to}</div>
+						<div class="col-xs-3">
+							<div class="input-group">
+								<div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+									<input class="form-control input-sm" type="text" value="${filter.dateEnd!}" name="dateEnd" id="filter_dateEnd" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</@formGroup>
+			<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"></div>
+			<!-- Date de requalification -->
+			<@formGroup formStyle="inline" class="col-xs-12 col-sm-12 col-md-5 col-lg-5"  labelKey='#i18n{dansmarue.reportingList.requalificationDate}'>
+				<div>
+					<div class="input-daterange">
+						<div class="col-xs-1">#i18n{dansmarue.reportingList.from}</div>
+						<div class="col-xs-3 ">
+							<div class="input-group">
+								<div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+								<input class="form-control input-sm" type="text" value="${filter.dateRequalificationBegin!}" name="dateRequalificationBegin" id="filter_dateRequalificationBegin" maxlength="10" />
+							</div>
+						</div>
+					</div>
+					<div class="input-daterange">
+						<div class="col-xs-1">#i18n{dansmarue.reportingList.to}</div>
+						<div class="col-xs-3">
+							<div class="input-group">
+								<div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+								<input class="form-control input-sm" type="text" value="${filter.dateRequalificationEnd!}" name="dateRequalificationEnd" id="filter_dateRequalificationEnd" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</@formGroup>
+			
+			<!-- Date de programmation -->
+			<@formGroup formStyle="inline" class="col-xs-12 col-sm-12 col-md-5 col-lg-5"  labelKey='#i18n{dansmarue.reportingList.programmingDate}'>
+				<div>
+					<div class="input-daterange">
+						<div class="col-xs-1">#i18n{dansmarue.reportingList.from}</div>
+						<div class="col-xs-3 ">
+							<div class="input-group">
+								<div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+								<input class="form-control input-sm" type="text" value="${filter.dateProgrammationBegin!}" name="dateProgrammationBegin" id="filter_dateProgrammationBegin" maxlength="10" />
+							</div>
+						</div>
+					</div>
+					<div class="input-daterange">
+						<div class="col-xs-1">#i18n{dansmarue.reportingList.to}</div>
+						<div class="col-xs-3">
+							<div class="input-group">
+								<div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+								<input class="form-control input-sm" type="text" value="${filter.dateProgrammationEnd!}" name="dateProgrammationEnd" id="filter_dateProgrammationEnd" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</@formGroup>
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+			<!-- Commentaire agent terrain -->
+			<@formGroup formStyle="inline" class="col-xs-12 col-sm-12 col-md-5 col-lg-5"  labelKey='#i18n{dansmarue.saveSignalement.commentaireAgentTerrain}'>
+				<div>
+					<input type="text" value="${filter.commentaireAgentTerrain!}" class="form-control input-sm" name="commentaireAgentTerrain"
+						id="filter_commentaireAgentTerrain" maxlength="255" />
+				</div>
+			</@formGroup>
+			<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"></div>
+			<!-- Commentaire usager -->
+			<@formGroup formStyle="inline" class="col-xs-12 col-sm-12 col-md-5 col-lg-5"  labelKey='#i18n{dansmarue.saveSignalement.commentaireUsager}'>
+				<div>
+					<input type="text" value="${filter.commentaire!}" class="form-control input-sm" name="commentaire"
+						id="filter_commentaire" maxlength="255" />
+				</div>
+			</@formGroup>
+			
+			<!-- Entite -->
+			<@formGroup formStyle="inline" class="col-xs-12 col-sm-12 col-md-5 col-lg-5"  labelKey='#i18n{dansmarue.reportingList.entite}'>
+				<div>
+					<#if secteur_list?has_content && secteur_list?size != 0>
+						<@comboWithParams additionalParameters="class='form-control
+							input-sm'" name="idSector" default_value="${filter.idSector!}"
+							items=secteur_list /> 
+					<#else>
+						#i18n{dansmarue.reportingList.listEmpty} 
+					</#if>
+					<noscript>
+						<button class="btn btn-primary btn-sm" type="submit"
+							name="updateSectorsWithDirection">
+							#i18n{dansmarue.commons.refresh}
+						</button>
+					</noscript>
+				</div>
+				<input type="hidden" value="${filter.idSector!}" class="<@inputStyle />" name="idSelectedSector" id="idSelectedSector" />
+			</@formGroup>
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+			<!-- Adresse -->
+			<@formGroup formStyle="inline" class="col-xs-12 col-sm-12 col-md-5 col-lg-5"  labelKey='#i18n{dansmarue.reportingList.adress}'>
+				<div>
+					<input type="text" value="${filter.adresse!}" class="form-control input-sm" name="adresse"
+						id="filter_adresse" maxlength="255" />
+				</div>
+			</@formGroup>
+			
+		</@boxBody>
+	</div>
+	
+	<div class="box" style="border-top-width:0px !important;">
+		<@boxBody>
+			<@button name='reinit' class="btn btn-paris btn-blue" params='onclick="deleteFields()"' title='#i18n{dansmarue.reinitialiser}' color='btn-secondary' />
+			<@button buttonIcon='save' class="btn btn-paris btn-blue" params='data-toggle="modal" data-target="#saveFilterModal"' title='#i18n{dansmarue.tournee.creation.btn.sauvegarder.filtre}' color='btn-secondary' />
+			<@button buttonIcon='search' class="btn btn-paris btn-red" type='submit' name='action_doInitSearchAno' title='#i18n{dansmarue.rechercher}' />
+		</@boxBody>
+	</div>
+
+
+<!-- Modal Sauvegarde filtre-->
+<div class="modal fade" id="saveFilterModal" tabindex="-1" role="dialog" aria-labelledby="saveFilterModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="saveModalLabel">Sauvegarder un filtre de recherche</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label>Createur</label><input type='text' name="param_search_filter_creator" value="${search_filter_creator!}" readonly/></br>
+		<label>Nom du filtre</label><span id="filter_prefix_name" class="textbox">${user_entite!}<input type='text' id="filter_name" name="param_search_filter_name" maxlength='64' value="${search_filter_name!}"/></span></br>
+		<p>(max 64 caract&egrave;res)</p></br>
+		<label>Commentaire</label>(facultatif)</br>
+		<textarea name="param_search_filter_comment" rows='4' cols='50' maxlength='200'>${search_filter_comment!}</textarea>
+      </div>
+      <div class="modal-footer">
+	    <@button  id="submitFilterSearch" class="btn btn-paris btn-red" type='submit' params='onclick="checkNameFilterValue()"' name='action_doSaveFilter' title='Enregistrer' />
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal warning save filtre -->
+<div class="modal fade" id="warningSaveFilterModal" tabindex="-1" role="dialog" aria-labelledby="warningSaveFilterModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="warningModalLabel">Un filtre de m&ecirc;me nom existe d&eacute;j&agrave; </h5>
+      </div>
+      <div class="modal-body">
+        <p>Un filtre de m&ecirc;me nom existe d&eacute;j&agrave; : </p>
+        <p id="warningSaveFilterModalFilterName"></p>
+        <p id="warningSaveFilterModalFilterCreationDate"></p>
+		<p id="warningSaveFilterModalFilterCreationAuthor"></p>
+		<p id="warningSaveFilterModalFilterCommentary"></p>
+		<p>Voulez-vous &eacute;craser ce filtre existant ? </p>
+      </div>
+      <div class="modal-footer">
+	    <@button class="btn btn-paris btn-red" type='submit' name='action_doUpdateFilter' title='Oui' />
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Delete filtre-->
+<div class="modal fade" id="deleteFilterModal" tabindex="-1" role="dialog" aria-labelledby="deleteFilterModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Supprimer un filtre de recherche</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Etes vous sur de vouloir supprimer le filtre <i id="idFilterNameDelete"></i> ? </p>
+      </div>
+      <div class="modal-footer">
+	    <@button class="btn btn-paris btn-red" type='submit' name='action_doDeleteFilter' title='Confirmer' />
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</@tform>
+
+<@getDatePickerRangeBootstrap language="${locale.language!}" />
+
+<style type="text/css">
+div.modal-header {
+  background-color: white;
+}
+.modal-header .close {
+  color: #000;
+}
+h5.modal-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+.modal-content {
+  text-align: left;
+}
+.modal-content label {
+  width: 130px;
+  height: 30px;
+  color:#3c8dbc;
+}
+.modal-content input {
+  width: 300px;
+}
+.btn-save {
+  background-color : #df225a 
+}
+
+span.textbox {
+	background-color: #FFF;
+	color: #888;
+	line-height:18px;
+	height:20px;
+	padding:3px;
+	border:1px #888 solid;
+	font-size:9pt;
+}
+    
+span.textbox input {
+    border: 0px;
+	background-color: #FFF;
+	color: #333;
+}
+ 
+</style>
+
+<script>
+
+var isFilterSearchNameOk = false;
+
+function deleteFilter() {
+  let nameSelectedFilter = $( "#filtre option:selected" ).text();
+  if (nameSelectedFilter.trim().length > 0) {
+     $('#deleteFilterButton').attr('data-target','#deleteFilterModal');
+	 $('#idFilterNameDelete').text(nameSelectedFilter);
+	 $('#deleteFilterButton').click();
+  }else {
+     $('#deleteFilterButton').attr('data-target','#nothing');
+  }
+}
+
+
+//Initialisation du multiselect (doc sur la librairie : http://loudev.com/)
+$('#typologieSelect').multiSelect({
+	  selectableHeader: "<span class='titreSelect'>#i18n{dansmarue.tournee.creation.type.dispo}</span><br><input type='text' class='search-input' autocomplete='off' placeholder='Recherche'>",
+	  selectionHeader: "<span class='titreSelect'>#i18n{dansmarue.tournee.creation.type.select}</span>"+
+	  "<span id='compteurSelect'><span id='compteur'>0 </span>#i18n{dansmarue.tournee.creation.compteur.elements.select}</span><br>"+
+	  "<input type='text' class='search-input' autocomplete='off' placeholder='Recherche'>",
+	  afterInit: function(ms){
+	    var that = this,
+	        $selectableSearch = that.$selectableUl.prev(),
+	        $selectionSearch = that.$selectionUl.prev(),
+	        selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+	        selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+	    that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+	    .on('keydown', function(e){
+	      if (e.which === 40){
+	        that.$selectableUl.focus();
+	        return false;
+	      }
+	    });
+
+	    that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+	    .on('keydown', function(e){
+	      if (e.which == 40){
+	        that.$selectionUl.focus();
+	        return false;
+	      }
+	    });
+	  },
+	  afterSelect: function(values){
+		$("#compteur").html($(".ms-selection>ul>li:visible").length + ' ');
+	    this.qs1.cache();
+	    this.qs2.cache();
+	  },
+	  afterDeselect: function(values){
+		$("#compteur").html($(".ms-selection>ul>li:visible").length + ' ');
+	    this.qs1.cache();
+	    this.qs2.cache();
+	  }
+	});
+	
+	
+	//load id type signalement
+	let idTypeSignalementsSelect = [<#list filter.listIdTypeSignalements as idType>${idType},</#list>];
+    idTypeSignalementsSelect.forEach(idType => {
+	  $('#typologieSelect').multiSelect('select', idType.toString());
+	 });
+	
+	$('.ms-selectable').append('<button class="btn btn-primary btn-flat" type="button" title="Tout selectionner" id="select-all">Tout s\u00e9lectionner</button>');
+	$('.ms-selection').append('<button class="btn btn-primary btn-flat" type="button" title="Tout deselectionner" id="deselect-all">Tout d\u00e9s\u00e9lectionner</button>');
+	
+	$('#select-all').click(function(){
+	  $('#typologieSelect').multiSelect('select_all');
+	  return false;
+	});
+	$('#deselect-all').click(function(){
+	  $('#typologieSelect').multiSelect('deselect_all');
+	  return false;
+	});
+	
+	function select_all_states() {
+		var checkboxes = $( "label[checkType='etat'] > input");
+		$( "label[checkType='etat']").addClass("active");
+	  
+		for (var i = 0; i < checkboxes.length; i++) {
+		  checkboxes[i].checked = true
+		}
+	}
+
+	function un_select_all_states() {
+		var checkboxes = $( "label[checkType='etat'] > input");
+		$( "label[checkType='etat']").removeClass("active");
+		
+		for (var i = 0; i < checkboxes.length; i++) {
+		  checkboxes[i].checked = false
+		}
+	}
+	
+	function select_all_priorite() {
+		var checkboxes = $( "label[checkType='priorite'] > input");
+		$( "label[checkType='priorite']").addClass("active");
+	  
+		for (var i = 0; i < checkboxes.length; i++) {
+		  checkboxes[i].checked = true
+		}
+	}
+
+	function un_select_all_priorite() {
+		var checkboxes = $( "label[checkType='priorite'] > input");
+		$( "label[checkType='priorite']").removeClass("active");
+		
+		for (var i = 0; i < checkboxes.length; i++) {
+		  checkboxes[i].checked = false
+		}
+	}
+	
+	function select_all_arrondissement() {
+		var checkboxes = $( "label[checkType='arrondissement'] > input");
+		$( "label[checkType='arrondissement']").addClass("active");
+	  
+		for (var i = 0; i < checkboxes.length; i++) {
+		  checkboxes[i].checked = true
+		}
+	}
+
+	function un_select_all_arrondissement() {
+		var checkboxes = $( "label[checkType='arrondissement'] > input");
+		$( "label[checkType='arrondissement']").removeClass("active");
+		
+		for (var i = 0; i < checkboxes.length; i++) {
+		  checkboxes[i].checked = false
+		}
+	}
+	
+	 var idEtatsDefault = new Array();
+	 <#list etats_default as etat_id>idEtatsDefault.push('etat${etat_id}');</#list>
+	 function deleteFields()
+    {
+		$('#typologieSelect').multiSelect('deselect_all');
+		
+        $("#checkbox_etat input:checkbox").attr('checked',false);
+		$("#checkbox_etat label").removeClass("active");
+		$("#checkbox_etat input:checkbox").each(function(index,data){
+	       	var dataId = $(data).attr('id');
+			if(idEtatsDefault.indexOf(dataId) > -1){
+				$(data).parent().addClass("active");
+				data.checked= true;
+			}
+       	});
+		
+		$("#checkbox_priorite input:checkbox").each(function(index,data){
+			$(data).parent().addClass("active");
+			data.checked= true;
+       	});
+		
+		$("#checkbox_arrondissement input:checkbox").each(function(index,data){
+			$(data).parent().addClass("active");
+			data.checked= true;
+       	});
+		
+		$("#conseilQuartier").selectpicker('val', '');
+        $("#conseilQuartier").selectpicker('refresh');
+		
+		$("#filter_dateBegin").val('');
+        $("#filter_dateEnd").val('');
+		
+		$("#filter_dateRequalificationBegin").val('');
+		$("#filter_dateRequalificationEnd").val('');
+		
+		$("#filter_dateProgrammationBegin").val('');
+		$("#filter_dateProgrammationEnd").val('');
+		
+		$("#filter_commentaire").val('');
+        $("#filter_commentaireAgentTerrain").val('');
+		$("#filter_adresse").val('');
+		
+		$('#idSector option:selected').removeAttr('selected');
+        $('#idSector option:first').attr("selected", "selected");
+
+    }
+	
+	 function checkNameFilterValue() {
+		 
+		 if (!isFilterSearchNameOk) {
+		     event.preventDefault();
+			 var nameFilter = $("#filter_prefix_name").text() + $("#filter_name").val();
+					
+			 $.get( "jsp/admin/plugins/signalement/CheckNameFilterSearch.jsp", {param_search_filter_name:nameFilter}, function( data ) {
+				if ( data && nameFilter === data.nom ) {
+					$('#warningSaveFilterModalFilterName').text(data.nom );
+					$('#warningSaveFilterModalFilterCreationDate').text('Cr\u00e9\u00e9 le ' +data.date );
+					$('#warningSaveFilterModalFilterCreationAuthor').text('Par ' +data.createur );
+					$('#warningSaveFilterModalFilterCommentary').text(data.commentaire);
+					$('#warningSaveFilterModal').modal('show');
+				} 
+				else {
+					isFilterSearchNameOk = true;
+					$('#submitFilterSearch').click ();
+				}
+			  });
+		} else {
+		  return;
+		}
+	}
+</script>

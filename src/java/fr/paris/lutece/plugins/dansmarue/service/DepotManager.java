@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -70,10 +70,14 @@ public final class DepotManager
     /**
      * Fill the model for the unit user attribute component.
      *
-     * @param request            the HTTP request
-     * @param signalement            the report
-     * @param model            the model
-     * @param strMark            the marker
+     * @param request
+     *            the HTTP request
+     * @param signalement
+     *            the report
+     * @param model
+     *            the model
+     * @param strMark
+     *            the marker
      */
     public static void fillModel( HttpServletRequest request, Signalement signalement, Map<String, Object> model, String strMark )
     {
@@ -98,8 +102,10 @@ public final class DepotManager
     /**
      * Do create the additional attributes of the given unit.
      *
-     * @param request            the HTTP request
-     * @param resourceId            the original resource id
+     * @param request
+     *            the HTTP request
+     * @param resourceId
+     *            the original resource id
      */
     public static void doCreate( HttpServletRequest request, int resourceId )
     {
@@ -112,7 +118,8 @@ public final class DepotManager
     /**
      * Do create the additional attributes of the given unit.
      *
-     * @param request            the HTTP request
+     * @param request
+     *            the HTTP request
      */
     public static void doValidate( HttpServletRequest request )
     {

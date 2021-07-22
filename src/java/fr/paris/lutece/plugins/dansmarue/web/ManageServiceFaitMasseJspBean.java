@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -63,61 +63,61 @@ public class ManageServiceFaitMasseJspBean extends AbstractJspBean
 {
 
     /** The Constant serialVersionUID. */
-    private static final long       serialVersionUID                              = 3821167568683063124L;
+    private static final long serialVersionUID = 3821167568683063124L;
 
     /** The Constant RIGHT_MANAGE_TYPE_SIGNALEMENT. */
     // RIGHT
-    public static final String      RIGHT_MANAGE_TYPE_SIGNALEMENT                 = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
+    public static final String RIGHT_MANAGE_TYPE_SIGNALEMENT = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
 
     /** The Constant MARK_LIST_TYPE_SIGNALEMENT. */
-    private static final String     MARK_LIST_TYPE_SIGNALEMENT                    = "list_type";
+    private static final String MARK_LIST_TYPE_SIGNALEMENT = "list_type";
 
     /** The Constant MARK_LIST_STATE. */
-    private static final String     MARK_LIST_STATE                               = "list_state";
+    private static final String MARK_LIST_STATE = "list_state";
 
     /** The Constant MARK_REPARTITION. */
-    private static final String     MARK_REPARTITION                              = "repartition";
+    private static final String MARK_REPARTITION = "repartition";
 
     /** The Constant MARK_FILTER. */
-    private static final String     MARK_FILTER                                   = "filter";
+    private static final String MARK_FILTER = "filter";
 
     /** The Constant MARK_IS_EXECUTION_OK. */
-    private static final String     MARK_IS_EXECUTION_OK                          = "isExecutionOk";
+    private static final String MARK_IS_EXECUTION_OK = "isExecutionOk";
 
     /** The Constant TEMPLATE_MANAGE_SERVICE_FAIT_MASSE. */
     // TEMPLATES
-    private static final String     TEMPLATE_MANAGE_SERVICE_FAIT_MASSE            = "admin/plugins/signalement/manage_service_fait_masse.html";
+    private static final String TEMPLATE_MANAGE_SERVICE_FAIT_MASSE = "admin/plugins/signalement/manage_service_fait_masse.html";
 
     /** The Constant TEMPLATE_RAPPORT_EXECUTION_SERVICE_FAIT_MASSE. */
-    private static final String     TEMPLATE_RAPPORT_EXECUTION_SERVICE_FAIT_MASSE = "admin/plugins/signalement/rapport_execution_service_fait_masse.html";
+    private static final String TEMPLATE_RAPPORT_EXECUTION_SERVICE_FAIT_MASSE = "admin/plugins/signalement/rapport_execution_service_fait_masse.html";
 
     /** The type signalement service. */
     // SERVICES
-    private transient ITypeSignalementService _typeSignalementService                       = SpringContextService.getBean( "typeSignalementService" );
+    private transient ITypeSignalementService _typeSignalementService = SpringContextService.getBean( "typeSignalementService" );
 
     /** The signalement service. */
-    private transient ISignalementService     _signalementService                           = SpringContextService.getBean( "signalementService" );
+    private transient ISignalementService _signalementService = SpringContextService.getBean( "signalementService" );
 
     /** The Constant VIEW_MANAGE_SERVICE_FAIT_MASSE. */
     // Views
-    private static final String     VIEW_MANAGE_SERVICE_FAIT_MASSE                = "manageServiceFaitMasse";
+    private static final String VIEW_MANAGE_SERVICE_FAIT_MASSE = "manageServiceFaitMasse";
 
     /** The Constant PROPERTY_ID_WORKFLOW_SIGNALEMENT. */
     // Properties
-    private static final String     PROPERTY_ID_WORKFLOW_SIGNALEMENT              = "signalement.idWorkflow";
+    private static final String PROPERTY_ID_WORKFLOW_SIGNALEMENT = "signalement.idWorkflow";
 
     /** The Constant ACTION_SEARCH. */
     // Actions
-    private static final String     ACTION_SEARCH                                 = "search";
+    private static final String ACTION_SEARCH = "search";
 
     /** The Constant ACTION_EXECUTE_SERVICE_FAIT. */
-    private static final String     ACTION_EXECUTE_SERVICE_FAIT                   = "executeServiceFait";
+    private static final String ACTION_EXECUTE_SERVICE_FAIT = "executeServiceFait";
 
     /** The service fait masse filter. */
-    private ServiceFaitMasseFilter  _serviceFaitMasseFilter                       = new ServiceFaitMasseFilter( );
+    private ServiceFaitMasseFilter _serviceFaitMasseFilter = new ServiceFaitMasseFilter( );
 
     /** The repartition. */
-    private Map<String, Integer>    _repartition                                  = new HashMap<>( );
+    private Map<String, Integer> _repartition = new HashMap<>( );
 
     /**
      * Get the manage reporting type page.
@@ -155,7 +155,7 @@ public class ManageServiceFaitMasseJspBean extends AbstractJspBean
         // Si pas d'état renseigné, on selectionne les états en cours
         if ( _serviceFaitMasseFilter.getIdEtats( ) == null )
         {
-            _serviceFaitMasseFilter.setIdEtats( getEtatEnCours( ).stream( ).map( State::getId ).toArray( Integer[]::new ) );
+            _serviceFaitMasseFilter.setIdEtats( getEtatEnCours( ).stream( ).map( State::getId ).toArray( Integer [ ]::new ) );
         }
 
         Map<String, Object> model = new HashMap<>( );
@@ -202,9 +202,11 @@ public class ManageServiceFaitMasseJspBean extends AbstractJspBean
     private List<State> getEtatEnCours( )
     {
         WorkflowService workflowService = WorkflowService.getInstance( );
-        Collection<State> states = workflowService.getAllStateByWorkflow( AppPropertiesService.getPropertyInt( PROPERTY_ID_WORKFLOW_SIGNALEMENT, -1 ), getUser( ) );
+        Collection<State> states = workflowService.getAllStateByWorkflow( AppPropertiesService.getPropertyInt( PROPERTY_ID_WORKFLOW_SIGNALEMENT, -1 ),
+                getUser( ) );
 
-        return states.stream( ).filter( state -> ( state.getId( ) < 10 ) || ( ( state.getId( ) > 12 ) && ( state.getId( ) != 22 ) ) ).collect( Collectors.toList( ) );
+        return states.stream( ).filter( state -> ( state.getId( ) < 10 ) || ( ( state.getId( ) > 12 ) && ( state.getId( ) != 22 ) ) )
+                .collect( Collectors.toList( ) );
     }
 
     /**
@@ -218,7 +220,8 @@ public class ManageServiceFaitMasseJspBean extends AbstractJspBean
     {
         // Récupération de l'objet State pour les Ids de type du filtre
         WorkflowService workflowService = WorkflowService.getInstance( );
-        Collection<State> states = workflowService.getAllStateByWorkflow( AppPropertiesService.getPropertyInt( PROPERTY_ID_WORKFLOW_SIGNALEMENT, -1 ), getUser( ) );
+        Collection<State> states = workflowService.getAllStateByWorkflow( AppPropertiesService.getPropertyInt( PROPERTY_ID_WORKFLOW_SIGNALEMENT, -1 ),
+                getUser( ) );
 
         List<Integer> stateIdsFiltreList = Arrays.asList( filtre.getIdEtats( ) );
 

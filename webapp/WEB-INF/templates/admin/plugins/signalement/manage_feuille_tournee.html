@@ -1,0 +1,165 @@
+<link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
+<#include "macro/modal_export_pdf.html" />
+<#include "macro/modal_transfert_fdt.html" />
+<!-- Formulaire de recherche -->
+<@box color='primary'>
+	<@boxBody>
+		<@tform method='post' action='jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp'>
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+				<@formGroup labelFor='nom' labelKey='#i18n{dansmarue.tournee.recherche.nom}'>
+					<@input type='text' name='nom' id='nom' value="${filter_fdt.nom!}" />
+				</@formGroup>
+				<@formGroup labelFor='createur' labelKey='#i18n{dansmarue.tournee.recherche.createur}'>
+					<@input type='text' name='createur' id='createur' value="${filter_fdt.createur!}" />
+				</@formGroup>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+				<@formGroup labelFor='dateCreationDebut' labelKey='#i18n{dansmarue.tournee.recherche.date.creation}'>
+					<div class="input-daterange">
+						<div class="col-xs-1"> #i18n{dansmarue.tournee.recherche.date.creation.du}</div>
+						<div class="col-xs-5 ">
+							<div class="input-group">
+								<div class="input-group-addon">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</div>
+								<input class="form-control input-sm" type="text" name="dateCreationDebut" 
+								id="dateCreationDebut" maxlength="10" value="${filter_fdt.dateCreationDebut!}" />
+							</div>
+						</div>
+					</div>
+					<div class="input-daterange">
+						<div class="col-xs-1">#i18n{dansmarue.tournee.recherche.date.creation.au}
+						</div>
+						<div class="col-xs-5">
+							<div class="input-group">
+								<div class="input-group-addon">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</div>
+								<input class="form-control input-sm" type="text" name="dateCreationFin" 
+								id="dateCreationFin" value="${filter_fdt.dateCreationFin!}" />
+							</div>
+						</div>
+					</div>
+				</@formGroup>
+				<@button type='submit' class="btn btn-paris btn-red" name='action_doSearchFDT' buttonIcon='search' title='#i18n{dansmarue.rechercher}' />
+				<@button name='reinit' class="btn btn-paris btn-blue" title='#i18n{dansmarue.reinitialiser}' params ='onclick="deleteFields()"' />
+			</div>
+		</@tform>
+	</@boxBody>
+</@box>
+
+<!-- Résultats de la recherche -->
+<@box color='primary'>
+	<@boxBody>
+		<br>
+		<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=create">
+			<img
+			src="images/admin/skin/plugins/signalement/carte-add.png"
+			width="20px"
+			alt="#i18n{dansmarue.tournee.lien.creation}"
+			title="#i18n{dansmarue.tournee.lien.creation}" />
+		</a> 
+		<b><a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=create">#i18n{dansmarue.tournee.lien.creation}</a></b>
+		<#assign nbresult=fdt_list?size>
+		<span class="pull-right"><b>#i18n{dansmarue.reportingList.search.results}:</b> ${nbresult} #i18n{dansmarue.tournee.recherche.resultat.nb}</span>
+		<br>
+		<@table>
+			<thead>
+				<tr>
+					<th>
+						<input type="checkbox" name="selectAll" id="selectAll" value="selectAll" title="#i18n{dansmarue.reportingList.alt.selectAll}" />
+					</th> 
+					<th>
+						#i18n{dansmarue.tournee.resultat.header.action}
+					</th>
+					<th>
+						<@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" attribute=""/>
+						#i18n{dansmarue.tournee.resultat.header.nom}
+					</th>
+					<th>
+						<@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" attribute=""/>
+						#i18n{dansmarue.tournee.resultat.header.createur}
+					</th>
+					<th>
+						<@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" attribute=""/>
+						#i18n{dansmarue.tournee.resultat.header.date.creation}
+					</th>
+					<th>
+						<@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" attribute=""/>
+						#i18n{dansmarue.tournee.resultat.header.date.modification}
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list fdt_list as fdt>
+					<tr>
+						<td> 
+							<input type="checkbox" name="id" value="${fdt.id}" title="#i18n{dansmarue.reportingList.alt.select}" /> 
+						</td>
+						<td> 
+							<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=load&idFeuilleDeTournee=${fdt.id}" class="btn btn-xs btn-primary" 
+								title="#i18n{dansmarue.tournee.pdf.param.btn.consult}"> <i class="glyphicon glyphicon-eye-open"></i>
+							</a>
+							<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=edit&idFeuilleDeTournee=${fdt.id}" class="btn btn-xs btn-primary" 
+								title="#i18n{dansmarue.tournee.pdf.param.btn.edit}"> <i class="glyphicon glyphicon-edit"></i>
+							</a>
+							<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?action=getDeleteFDT&idFeuilleDeTournee=${fdt.id}" class="btn btn-xs btn-danger" 
+								title="#i18n{dansmarue.tournee.pdf.param.btn.delete}"> <i class="glyphicon glyphicon-trash"></i>
+							</a>
+							<button value="exportcsv"
+								data-toggle="modal" data-target="#exportFDTModal"
+								title="#i18n{dansmarue.tournee.pdf.param.btn.export}"
+								name="exportcsv" class="btn btn-xs btn-primary" onclick="addFeuilleDeTourneeId(${fdt.id})">
+								<i class="glyphicon glyphicon-save"></i>
+							</button>
+							<a href="#transfertFDTModal" onclick="addTransfertFeuilleDeTourneeId(${fdt.id})" title="#i18n{dansmarue.tournee.pdf.param.btn.transfer}" data-toggle="modal" data-target="#transfertFDTModal">
+								<img src="image?resource_type=workflow_icon_img&amp;id=12" alt="#i18n{dansmarue.tournee.pdf.param.btn.transfer}" width="24px">
+							</a>
+						</td>
+						<td> 
+							${fdt.nom!}
+						</td>
+						<td> 
+							${fdt.createur!}
+						</td>
+						<td> 
+							${fdt.dateCreation!}
+						</td>
+						<td> 
+							${fdt.dateModification!}
+						</td>
+					</tr>
+				</#list>
+			</tbody>
+		</@table>
+		<!-- TODO Gérer la pagination-->
+	</@boxBody>
+</@box>	
+
+<@getDatePickerRangeBootstrap language="${locale.language!}" />
+
+<script>
+	// Réinitialisation des champs du formulaire de recherche
+	function deleteFields()
+	{
+		var currentDate = new Date();
+		var currentDateMinus30Days = new Date();
+		currentDateMinus30Days.setDate(currentDateMinus30Days.getDate() - 30);
+		
+	   	$("#nom").val('');
+	   	$("#createur").val('');
+	   	$("#dateCreationDebut").val( getStringDateFromDate( currentDateMinus30Days ) );
+	   	$("#dateCreationFin").val( getStringDateFromDate( currentDate )  );
+	}
+	
+	function getStringDateFromDate( date ) 
+	{
+		var dd = String(date.getDate()).padStart(2, '0');
+		var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+		var yyyy = date.getFullYear();
+		
+		return dd +"/" + mm +"/" + yyyy;
+	}
+</script>
+<@modal_export_pdf/>
+<@modal_transfert_fdt/>

@@ -475,3 +475,127 @@ label.btn-radio > [type='radio']{
   margin: 0 8px 0 0;
   opacity: 0.7;
 }
+
+/* MANAGE FEUILLE DE TOURNEE */
+#creationFeuilleTournee .form-group > label{
+	color: #0C518A;
+}
+
+#exportFDTModal .modal-dialog, #transfertFDTModal .modal-dialog {
+	width: 75% !important;
+}
+
+#exportFDTModal .modal-header, #transfertFDTModal .modal-header  {
+	background-color: white;
+	font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif ;
+}
+
+#exportFDTModal .modal-header .close, #transfertFDTModal .modal-header .close {
+	color: rgb(0,0,0);
+	opacity: 1;
+	font-size: 30px;
+	margin-top: -15px;
+}
+
+#exportFDTModal .modal-footer, #transfertFDTModal .modal-footer {
+	border-top: 0px;
+}
+
+#exportFDTModal .modal-content, #transfertFDTModal .modal-content {
+    text-align: initial;
+    font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif ;
+}
+
+#exportFDTModal .blueDmr, #transfertFDTModal .blueDmr {
+	font-family: "Montserrat-Light";
+	font-size: 15px;
+	color: rgb(12,81,138);
+}
+
+#exportFDTModal .greyDmr, #saveFDTModal .greyDmr, #transfertFDTModal .greyDmr {
+	color: rgb(153,153,153);
+}
+
+.fdt-generate-vue {
+	font-size: x-large;
+	color: #0C518A;
+}
+
+.row-flex-fdt {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.col-flex-fdt {
+	align-items: center;
+	display: flex;
+}
+
+.tooltipMapTitle {
+	color: rgb(12,81,138);
+	font-weight: bolder;
+}
+
+.tooltipMapLink {
+	width: 100%;
+	display: inline-block;
+	text-align: center;
+	font-weight: bolder;
+	text-decoration: underline;
+}
+
+.tooltipMapPhoto {
+	width: 100%;
+	display: inline-block;
+	text-align: center;
+}
+
+.btnActionTooltip {
+	color: rgb(12,81,138);
+	text-decoration: underline;
+	width: 100%;
+	display: inline-block;
+	text-align: center;
+	cursor: pointer;
+	font-weight: bolder;
+}
+
+.fdt-modal-save .blueDmr {
+	width: 130px;
+	height: 30px;
+	color: rgb(12,81,138);
+	font-weight: 700;
+}
+
+.fdt-modal-save .help {
+	font-style: italic;
+}
+
+.fdt-modal-save .fdt_prefixe {
+	font-weight: bolder;
+}
+
+.create-fdt-modale .modal-header {
+	background-color: white;
+	font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif ;
+}
+
+.create-fdt-modale .modal-header .close{
+	color: rgb(0,0,0);
+	opacity: 1;
+	font-size: 30px;
+	margin-top: -15px;
+}
+
+.create-fdt-modale .modal-footer {
+	border-top: 0px;
+}
+
+.create-fdt-modale .modal-content {
+    text-align: initial;
+    font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif ;
+}
+
+.create-fdt-modale .greyDmr {
+	color: rgb(153,153,153);
+}

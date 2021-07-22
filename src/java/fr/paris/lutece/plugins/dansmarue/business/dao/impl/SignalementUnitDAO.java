@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -49,40 +49,42 @@ public class SignalementUnitDAO implements ISignalementUnitDAO
 {
 
     /** The Constant SQL_QUERY_INSERT. */
-    private static final String SQL_QUERY_INSERT                       = "INSERT INTO signalement_unit(fk_id_unit, visible) VALUES (?, ?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_unit(fk_id_unit, visible) VALUES (?, ?)";
 
     /** The Constant SQL_QUERY_DELETE. */
-    private static final String SQL_QUERY_DELETE                       = "DELETE FROM signalement_unit WHERE fk_id_unit=?";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_unit WHERE fk_id_unit=?";
 
     /** The Constant SQL_QUERY_SELECT. */
-    private static final String SQL_QUERY_SELECT                       = "SELECT id_unit, id_parent, label, description, visible FROM " + " unittree_unit unit"
+    private static final String SQL_QUERY_SELECT = "SELECT id_unit, id_parent, label, description, visible FROM " + " unittree_unit unit"
             + " LEFT JOIN signalement_unit su ON su.fk_id_unit = unit.id_unit WHERE id_unit = ?";
 
     /** The Constant SQL_QUERY_UPDATE. */
-    private static final String SQL_QUERY_UPDATE                       = "UPDATE signalement_unit SET visible=? WHERE fk_id_unit = ?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_unit SET visible=? WHERE fk_id_unit = ?";
 
     /** The Constant SQL_QUERY_DELETE_ALL. */
-    private static final String SQL_QUERY_DELETE_ALL                   = "DELETE FROM signalement_unit";
+    private static final String SQL_QUERY_DELETE_ALL = "DELETE FROM signalement_unit";
 
     /** The Constant SQL_QUERY_SELECT_ALL_VISIBLE_UNITS. */
-    private static final String SQL_QUERY_SELECT_ALL_VISIBLE_UNITS     = "SELECT fk_id_unit FROM signalement_unit WHERE visible = 1";
+    private static final String SQL_QUERY_SELECT_ALL_VISIBLE_UNITS = "SELECT fk_id_unit FROM signalement_unit WHERE visible = 1";
 
     /** The Constant SQL_QUERY_SELECT_UNITS_IDS. */
-    private static final String SQL_QUERY_SELECT_UNITS_IDS             = "SELECT id_unit FROM unittree_unit";
+    private static final String SQL_QUERY_SELECT_UNITS_IDS = "SELECT id_unit FROM unittree_unit";
 
     /** The Constant SQL_QUERY_GET_VISIBLE_UNITS_WITH_DEPTH. */
-    private static final String SQL_QUERY_GET_VISIBLE_UNITS_WITH_DEPTH = "select id_unit, id_parent, label, description, depth from  " + "(WITH RECURSIVE descendants AS ( "
-            + "    SELECT id_unit, id_parent, label, description, 0 depth " + "    FROM unittree_unit " + "    WHERE id_unit = ? " + "UNION "
-            + "    SELECT p.id_unit, p.id_parent, p.label, p.description, d.depth+ 1 " + "    FROM unittree_unit p " + "    INNER JOIN descendants d " + "    ON p.id_parent = d.id_unit " + ") "
-            + "SELECT p.id_unit, p.id_parent, p.label, p.description, d.depth " + "FROM descendants d " + "INNER JOIN descendants p ON d.id_unit = p.id_unit "
-            + "order by d.depth, p.label asc) as tata " + "where id_unit not in (select fk_id_unit from signalement_unit where visible=0) " + "";
+    private static final String SQL_QUERY_GET_VISIBLE_UNITS_WITH_DEPTH = "select id_unit, id_parent, label, description, depth from  "
+            + "(WITH RECURSIVE descendants AS ( " + "    SELECT id_unit, id_parent, label, description, 0 depth " + "    FROM unittree_unit "
+            + "    WHERE id_unit = ? " + "UNION " + "    SELECT p.id_unit, p.id_parent, p.label, p.description, d.depth+ 1 " + "    FROM unittree_unit p "
+            + "    INNER JOIN descendants d " + "    ON p.id_parent = d.id_unit " + ") " + "SELECT p.id_unit, p.id_parent, p.label, p.description, d.depth "
+            + "FROM descendants d " + "INNER JOIN descendants p ON d.id_unit = p.id_unit " + "order by d.depth, p.label asc) as tata "
+            + "where id_unit not in (select fk_id_unit from signalement_unit where visible=0) " + "";
 
     /** The Constant SQL_QUERY_GET_MAX_DEPTH_VISIBLE_UNITS. */
-    private static final String SQL_QUERY_GET_MAX_DEPTH_VISIBLE_UNITS  = "select max(depth) from  " + "(WITH RECURSIVE descendants AS ( "
+    private static final String SQL_QUERY_GET_MAX_DEPTH_VISIBLE_UNITS = "select max(depth) from  " + "(WITH RECURSIVE descendants AS ( "
             + "    SELECT id_unit, id_parent, label, description, 0 depth " + "    FROM unittree_unit " + "    WHERE id_unit = ? " + "UNION "
-            + "    SELECT p.id_unit, p.id_parent, p.label, p.description, d.depth+ 1 " + "    FROM unittree_unit p " + "    INNER JOIN descendants d " + "    ON p.id_parent = d.id_unit " + ") "
-            + "SELECT p.id_unit, p.id_parent, p.label, p.description, d.depth " + "FROM descendants d " + "INNER JOIN descendants p ON d.id_unit = p.id_unit "
-            + "order by d.depth, p.label asc) as tata " + "where id_unit not in (select fk_id_unit from signalement_unit where visible=0)";
+            + "    SELECT p.id_unit, p.id_parent, p.label, p.description, d.depth+ 1 " + "    FROM unittree_unit p " + "    INNER JOIN descendants d "
+            + "    ON p.id_parent = d.id_unit " + ") " + "SELECT p.id_unit, p.id_parent, p.label, p.description, d.depth " + "FROM descendants d "
+            + "INNER JOIN descendants p ON d.id_unit = p.id_unit " + "order by d.depth, p.label asc) as tata "
+            + "where id_unit not in (select fk_id_unit from signalement_unit where visible=0)";
 
     /**
      * {@inheritDoc}

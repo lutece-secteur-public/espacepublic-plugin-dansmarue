@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,19 +43,19 @@ public class TypeSignalementWithDepth
     public static final String RESOURCE_TYPE = "TYPE_SIGNALEMENT";
 
     /** The n id. */
-    private Integer            _nId;
+    private Integer _nId;
 
     /** The n id parent. */
-    private Integer            _nIdParent;
+    private Integer _nIdParent;
 
     /** The str libelle. */
-    private String             _strLibelle;
+    private String _strLibelle;
 
     /** The n depth. */
-    private Integer            _nDepth;
+    private Integer _nDepth;
 
     /** The n id unit. */
-    private Integer            _nIdUnit;
+    private Integer _nIdUnit;
 
     /**
      * Gets the id.
@@ -70,7 +70,8 @@ public class TypeSignalementWithDepth
     /**
      * Sets the id.
      *
-     * @param id the new id
+     * @param id
+     *            the new id
      */
     public void setId( Integer id )
     {
@@ -90,7 +91,8 @@ public class TypeSignalementWithDepth
     /**
      * Sets the libelle.
      *
-     * @param libelle the new libelle
+     * @param libelle
+     *            the new libelle
      */
     public void setLibelle( String libelle )
     {
@@ -110,7 +112,8 @@ public class TypeSignalementWithDepth
     /**
      * Sets the depth.
      *
-     * @param nDepth the new depth
+     * @param nDepth
+     *            the new depth
      */
     public void setDepth( int nDepth )
     {
@@ -130,7 +133,8 @@ public class TypeSignalementWithDepth
     /**
      * Sets the id parent.
      *
-     * @param nIdParent the new id parent
+     * @param nIdParent
+     *            the new id parent
      */
     public void setIdParent( Integer nIdParent )
     {
@@ -150,7 +154,8 @@ public class TypeSignalementWithDepth
     /**
      * Sets the id unit.
      *
-     * @param nIdUnit the new id unit
+     * @param nIdUnit
+     *            the new id unit
      */
     public void setIdUnit( Integer nIdUnit )
     {

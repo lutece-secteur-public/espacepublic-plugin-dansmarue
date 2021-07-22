@@ -1,0 +1,30 @@
+<#include "macro/commons_signalement.html" />
+<script src="js/jquery.multi-select.min.js"></script>
+<script src="js/jquery.quicksearch.js"></script>
+<link rel="stylesheet" href="css/multi-select.css" type="text/css"/>
+<link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
+<#include "macro/map_feuille_de_tournee.html" />
+<#include "macro/table_feuille_de_tournee.html" />
+
+<@box color='primary'>
+	<div class="box-header">
+		<h3 class="box-title">#i18n{dansmarue.tournee.select.titre}</h3>
+	</div>
+</@box>
+
+<div class="row">
+	<div class="col-xs-2 col-sm-12 col-md-12 col-lg-12">
+		<a class="btn btn-paris btn-blue" href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=create">#i18n{dansmarue.button.return} </a>
+		<span style="color: #0C518A;">#i18n{dansmarue.tournee.select.result}</span> : ${paginator.itemsCount}
+		<div class="pull-right">
+			<@button id="export" params='disabled' class="btn btn-paris btn-red" title='#i18n{dansmarue.tournee.exportpdf}' />
+			<@button params='data-toggle="modal" data-target="#saveFDTModal" onclick="carteToBase64()"' class="btn btn-paris btn-red save" title='#i18n{dansmarue.tournee.sauvegarder}' />
+		</div>
+	</div>
+</div>
+<hr>
+<fieldset id="map-fdt">
+	<@map_feuille_de_tournee/>
+</fieldset>
+<br><br>
+<@table_feuille_de_tournee/>

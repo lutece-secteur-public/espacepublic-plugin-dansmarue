@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,46 +41,44 @@ import java.io.Serializable;
 public class TableauDeBordFilter implements Serializable
 {
 
-    /**
-     *
-     */
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
     /** The n period id. */
-    private Integer         _nPeriodId;
+    private Integer _nPeriodId;
 
     /** The n unit id. */
-    private Integer         _nUnitId;
+    private Integer _nUnitId;
 
     /** The n tranche id. */
-    private Integer         _nTrancheId;
+    private Integer _nTrancheId;
 
     /** The category ids. */
-    private Integer[]       _categoryIds;
+    private Integer [ ] _categoryIds;
 
     /** The category id. */
-    private Integer         _categoryId;
+    private Integer _categoryId;
 
     /** The category parent ids. */
-    private Integer[]       _categoryParentIds;
+    private Integer [ ] _categoryParentIds;
 
     /** The category parent id. */
-    private Integer         _categoryParentId;
+    private Integer _categoryParentId;
 
     /** The arrondissement ids. */
-    private Integer[]       _arrondissementIds;
+    private Integer [ ] _arrondissementIds;
 
     /** The dashboard period. */
     private DashboardPeriod _dashboardPeriod;
 
     /** The n depth. */
-    private Integer         _nDepth;
+    private Integer _nDepth;
 
     /** The n depth category. */
-    private Integer         _nDepthCategory;
+    private Integer _nDepthCategory;
 
     /** The n state. */
-    private Integer         _nState;
+    private Integer _nState;
 
     /**
      * Instantiates a new tableau de bord filter.
@@ -103,7 +101,8 @@ public class TableauDeBordFilter implements Serializable
     /**
      * Setter for the periodId.
      *
-     * @param periodId            the periodId to set
+     * @param periodId
+     *            the periodId to set
      */
     public void setPeriodId( Integer periodId )
     {
@@ -123,7 +122,8 @@ public class TableauDeBordFilter implements Serializable
     /**
      * Sets the unit id.
      *
-     * @param unitId the new unit id
+     * @param unitId
+     *            the new unit id
      */
     public void setUnitId( Integer unitId )
     {
@@ -143,7 +143,8 @@ public class TableauDeBordFilter implements Serializable
     /**
      * Sets the tranche id.
      *
-     * @param nTrancheId the new tranche id
+     * @param nTrancheId
+     *            the new tranche id
      */
     public void setTrancheId( Integer nTrancheId )
     {
@@ -155,7 +156,7 @@ public class TableauDeBordFilter implements Serializable
      *
      * @return the categoryIds
      */
-    public Integer[] getCategoryIds( )
+    public Integer [ ] getCategoryIds( )
     {
         return _categoryIds;
     }
@@ -163,9 +164,10 @@ public class TableauDeBordFilter implements Serializable
     /**
      * Setter for the categoryIds.
      *
-     * @param categoryIds            the categoryIds to set
+     * @param categoryIds
+     *            the categoryIds to set
      */
-    public void setCategoryIds( Integer[] categoryIds )
+    public void setCategoryIds( Integer [ ] categoryIds )
     {
         _categoryIds = categoryIds;
     }
@@ -175,7 +177,7 @@ public class TableauDeBordFilter implements Serializable
      *
      * @return the category parent ids
      */
-    public Integer[] getCategoryParentIds( )
+    public Integer [ ] getCategoryParentIds( )
     {
         return _categoryParentIds;
     }
@@ -183,9 +185,10 @@ public class TableauDeBordFilter implements Serializable
     /**
      * Sets the category parent ids.
      *
-     * @param categoryParentIds the new category parent ids
+     * @param categoryParentIds
+     *            the new category parent ids
      */
-    public void setCategoryParentIds( Integer[] categoryParentIds )
+    public void setCategoryParentIds( Integer [ ] categoryParentIds )
     {
         _categoryParentIds = categoryParentIds;
     }
@@ -195,7 +198,7 @@ public class TableauDeBordFilter implements Serializable
      *
      * @return the districts ids
      */
-    public Integer[] getArrondissementIds( )
+    public Integer [ ] getArrondissementIds( )
     {
         return _arrondissementIds;
     }
@@ -203,9 +206,10 @@ public class TableauDeBordFilter implements Serializable
     /**
      * Setter for the districts ids.
      *
-     * @param arrondissementIds            the disctricts ids to set
+     * @param arrondissementIds
+     *            the disctricts ids to set
      */
-    public void setArrondissementIds( Integer[] arrondissementIds )
+    public void setArrondissementIds( Integer [ ] arrondissementIds )
     {
         _arrondissementIds = arrondissementIds;
     }
@@ -223,7 +227,8 @@ public class TableauDeBordFilter implements Serializable
     /**
      * Sets the dashboard period.
      *
-     * @param dashboardPeriod the new dashboard period
+     * @param dashboardPeriod
+     *            the new dashboard period
      */
     public void setDashboardPeriod( DashboardPeriod dashboardPeriod )
     {
@@ -243,7 +248,8 @@ public class TableauDeBordFilter implements Serializable
     /**
      * Sets the depth.
      *
-     * @param depth the new depth
+     * @param depth
+     *            the new depth
      */
     public void setDepth( Integer depth )
     {
@@ -263,7 +269,8 @@ public class TableauDeBordFilter implements Serializable
     /**
      * Sets the depth category.
      *
-     * @param depthCategory the new depth category
+     * @param depthCategory
+     *            the new depth category
      */
     public void setDepthCategory( Integer depthCategory )
     {
@@ -283,7 +290,8 @@ public class TableauDeBordFilter implements Serializable
     /**
      * Sets the state.
      *
-     * @param nState the new state
+     * @param nState
+     *            the new state
      */
     public void setState( Integer nState )
     {
@@ -303,7 +311,8 @@ public class TableauDeBordFilter implements Serializable
     /**
      * Sets the category id.
      *
-     * @param categoryId the new category id
+     * @param categoryId
+     *            the new category id
      */
     public void setCategoryId( Integer categoryId )
     {
@@ -323,7 +332,8 @@ public class TableauDeBordFilter implements Serializable
     /**
      * Sets the category parent id.
      *
-     * @param categoryParentId the new category parent id
+     * @param categoryParentId
+     *            the new category parent id
      */
     public void setCategoryParentId( Integer categoryParentId )
     {

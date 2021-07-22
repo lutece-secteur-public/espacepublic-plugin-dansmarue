@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -66,20 +66,20 @@ public class AdresseService implements IAdresseService
     /** The adresse signalement DAO. */
     @Inject
     @Named( "signalementAdresseDAO" )
-    private IAdresseDAO         _adresseSignalementDAO;
+    private IAdresseDAO _adresseSignalementDAO;
 
     /** The arrondissement DAO. */
     @Inject
     @Named( "signalement.arrondissementDAO" )
-    private IArrondissementDAO  _arrondissementDAO;
+    private IArrondissementDAO _arrondissementDAO;
 
     /** The sector DAO. */
     @Inject
     @Named( "unittree-dansmarue.sectorDAO" )
-    private ISectorDAO          _sectorDAO;
+    private ISectorDAO _sectorDAO;
 
     /** The Constant URL_REVERSE_GEOCODING. */
-    private static final String URL_REVERSE_GEOCODING           = "https://nominatim.openstreetmap.org/reverse?format=jsonv2&email=xxxx.xxxx@accenture.com&&addressdetails=1&zoom=18";
+    private static final String URL_REVERSE_GEOCODING = "https://nominatim.openstreetmap.org/reverse?format=jsonv2&email=xxxx.xxxx@accenture.com&&addressdetails=1&zoom=18";
 
     /** The Constant URL_REVERSE_GEOCODING_STORE_ADR. */
     private static final String URL_REVERSE_GEOCODING_STORE_ADR = "signalement.storeAdr.url";
@@ -178,7 +178,14 @@ public class AdresseService implements IAdresseService
         return _sectorDAO.getSectorByGeomAndIdUnitParent( lng, lat, idUnitParent );
     }
 
-    /* (non-Javadoc)
+    /**
+     * Find wrong adresses.
+     *
+     * @return the list
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.dansmarue.service.IAdresseService#findWrongAdresses()
      */
     @Override
@@ -187,7 +194,16 @@ public class AdresseService implements IAdresseService
         return _adresseSignalementDAO.findWrongAdresses( );
     }
 
-    /* (non-Javadoc)
+    /**
+     * Gets the adresse by position.
+     *
+     * @param adresse
+     *            the adresse
+     * @return the adresse by position
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.dansmarue.service.IAdresseService#getAdresseByPosition(fr.paris.lutece.plugins.dansmarue.business.entities.Adresse)
      */
     @Override
@@ -212,7 +228,7 @@ public class AdresseService implements IAdresseService
             return adresseCorrigee;
 
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
             AppLogService.error( "Erreur lors de la récupération de l'adresse via WS : ", e );
             AppLogService.info( "Correction de l'adresse " + adresse.getId( ) + " KO" );
@@ -223,15 +239,19 @@ public class AdresseService implements IAdresseService
     /**
      * Gets the adresse from store adr.
      *
-     * @param lat the lat
-     * @param lng the lng
+     * @param lat
+     *            the lat
+     * @param lng
+     *            the lng
      * @return the adresse from store adr
-     * @throws HttpAccessException the http access exception
+     * @throws HttpAccessException
+     *             the http access exception
      */
     private String getAdresseFromStoreAdr( Double lat, Double lng ) throws HttpAccessException
     {
         HttpAccess http = new HttpAccess( );
-        String answer = http.doGet( AppPropertiesService.getProperty( URL_REVERSE_GEOCODING_STORE_ADR ) + "StoreAdr/rest/AdressesPostales/R59/xy/(" + lng + "," + lat + ",5)" );
+        String answer = http.doGet(
+                AppPropertiesService.getProperty( URL_REVERSE_GEOCODING_STORE_ADR ) + "StoreAdr/rest/AdressesPostales/R59/xy/(" + lng + "," + lat + ",5)" );
 
         Map<String, ArrayList> answerMap = new Gson( ).fromJson( answer, Map.class );
 
@@ -255,10 +275,13 @@ public class AdresseService implements IAdresseService
     /**
      * Gets the adresse from open street map.
      *
-     * @param lat the lat
-     * @param lng the lng
+     * @param lat
+     *            the lat
+     * @param lng
+     *            the lng
      * @return the adresse from open street map
-     * @throws HttpAccessException the http access exception
+     * @throws HttpAccessException
+     *             the http access exception
      */
     private String getAdresseFromOpenStreetMap( Double lat, Double lng ) throws HttpAccessException
     {

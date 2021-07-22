@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,8 @@ public interface IPrioriteService
     /**
      * Save a new priorite.
      *
-     * @param priorite            the prioritie object
+     * @param priorite
+     *            the prioritie object
      * @return the prioritie id
      */
     Long insert( Priorite priorite );
@@ -54,14 +55,16 @@ public interface IPrioriteService
     /**
      * Delete an prioritie.
      *
-     * @param lId            the prioritie id
+     * @param lId
+     *            the prioritie id
      */
     void remove( long lId );
 
     /**
      * Load a prioritie.
      *
-     * @param lId            the prioritie id
+     * @param lId
+     *            the prioritie id
      * @return a prioritie
      */
     Priorite load( long lId );
@@ -69,7 +72,8 @@ public interface IPrioriteService
     /**
      * Store a prioritie.
      *
-     * @param priorite            the prioritie object
+     * @param priorite
+     *            the prioritie object
      */
     void store( Priorite priorite );
 

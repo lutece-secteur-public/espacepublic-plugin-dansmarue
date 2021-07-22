@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48,54 +48,54 @@ public class ObservationRejetDAO implements IObservationRejetDAO
 {
 
     /** The Constant SQL_QUERY_NEW_PK. */
-    private static final String SQL_QUERY_NEW_PK                             = "SELECT nextval('seq_signalement_observation_rejet_id_observation_rejet')";
+    private static final String SQL_QUERY_NEW_PK = "SELECT nextval('seq_signalement_observation_rejet_id_observation_rejet')";
 
     /** The Constant SQL_QUERY_INSERT. */
-    private static final String SQL_QUERY_INSERT                             = "INSERT INTO signalement_observation_rejet(id_observation_rejet, libelle, actif, ordre) VALUES (?, ?, ?, ?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_observation_rejet(id_observation_rejet, libelle, actif, ordre) VALUES (?, ?, ?, ?)";
 
     /** The Constant SQL_QUERY_DELETE. */
-    private static final String SQL_QUERY_DELETE                             = "DELETE FROM signalement_observation_rejet WHERE id_observation_rejet=?";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_observation_rejet WHERE id_observation_rejet=?";
 
     /** The Constant SQL_QUERY_SELECT. */
-    private static final String SQL_QUERY_SELECT                             = "SELECT id_observation_rejet, libelle, actif, ordre FROM signalement_observation_rejet WHERE id_observation_rejet = ?";
+    private static final String SQL_QUERY_SELECT = "SELECT id_observation_rejet, libelle, actif, ordre FROM signalement_observation_rejet WHERE id_observation_rejet = ?";
 
     /** The Constant SQL_QUERY_UPDATE. */
-    private static final String SQL_QUERY_UPDATE                             = "UPDATE signalement_observation_rejet SET id_observation_rejet=?, libelle=?, actif=? WHERE id_observation_rejet = ?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_observation_rejet SET id_observation_rejet=?, libelle=?, actif=? WHERE id_observation_rejet = ?";
 
     /** The Constant SQL_QUERY_SELECT_ALL_OBSERVATION_REJET. */
-    private static final String SQL_QUERY_SELECT_ALL_OBSERVATION_REJET       = "SELECT id_observation_rejet, libelle, actif, ordre FROM signalement_observation_rejet ORDER BY ordre";
+    private static final String SQL_QUERY_SELECT_ALL_OBSERVATION_REJET = "SELECT id_observation_rejet, libelle, actif, ordre FROM signalement_observation_rejet ORDER BY ordre";
 
     /** The Constant SQL_QUERY_SELECT_ALL_OBSERVATION_REJET_ACTIF. */
     private static final String SQL_QUERY_SELECT_ALL_OBSERVATION_REJET_ACTIF = "SELECT id_observation_rejet, libelle, actif, ordre FROM signalement_observation_rejet WHERE actif=1 ORDER BY ordre";
 
     /** The Constant SQL_QUERY_EXISTS_OBSERVATION_OBJET. */
-    private static final String SQL_QUERY_EXISTS_OBSERVATION_OBJET           = "SELECT id_observation_rejet FROM signalement_observation_rejet WHERE libelle=?";
+    private static final String SQL_QUERY_EXISTS_OBSERVATION_OBJET = "SELECT id_observation_rejet FROM signalement_observation_rejet WHERE libelle=?";
 
     /** The Constant SQL_QUERY_EXISTS_OBSERVATION_OBJET_WITH_ID. */
-    private static final String SQL_QUERY_EXISTS_OBSERVATION_OBJET_WITH_ID   = "SELECT id_observation_rejet FROM signalement_observation_rejet WHERE libelle=? AND NOT id_observation_rejet=? ";
+    private static final String SQL_QUERY_EXISTS_OBSERVATION_OBJET_WITH_ID = "SELECT id_observation_rejet FROM signalement_observation_rejet WHERE libelle=? AND NOT id_observation_rejet=? ";
 
     /** The Constant SQL_QUERY_UPDATE_OBSERVATION_REJET_ORDRE. */
-    private static final String SQL_QUERY_UPDATE_OBSERVATION_REJET_ORDRE     = "UPDATE signalement_observation_rejet SET ordre = ? WHERE id_observation_rejet = ?";
+    private static final String SQL_QUERY_UPDATE_OBSERVATION_REJET_ORDRE = "UPDATE signalement_observation_rejet SET ordre = ? WHERE id_observation_rejet = ?";
 
     /** The Constant SQL_QUERY_DECREASE_ORDER_OF_NEXT. */
-    private static final String SQL_QUERY_DECREASE_ORDER_OF_NEXT             = "UPDATE signalement_observation_rejet SET ordre = ordre-1 WHERE ordre= (? + 1)";
+    private static final String SQL_QUERY_DECREASE_ORDER_OF_NEXT = "UPDATE signalement_observation_rejet SET ordre = ordre-1 WHERE ordre= (? + 1)";
 
     /** The Constant SQL_QUERY_INCREASE_ORDER_OF_PREVIOUS. */
-    private static final String SQL_QUERY_INCREASE_ORDER_OF_PREVIOUS         = "UPDATE signalement_observation_rejet SET ordre = ordre+1 WHERE ordre= (? - 1)";
+    private static final String SQL_QUERY_INCREASE_ORDER_OF_PREVIOUS = "UPDATE signalement_observation_rejet SET ordre = ordre+1 WHERE ordre= (? - 1)";
 
     /** The Constant SQL_QUERY_INCREASE_ORDER_OF_ALL_NEXT. */
-    private static final String SQL_QUERY_INCREASE_ORDER_OF_ALL_NEXT         = "UPDATE signalement_observation_rejet SET ordre = ordre+1 WHERE ordre >= "
+    private static final String SQL_QUERY_INCREASE_ORDER_OF_ALL_NEXT = "UPDATE signalement_observation_rejet SET ordre = ordre+1 WHERE ordre >= "
             + "(SELECT ordre FROM signalement_observation_rejet WHERE id_observation_rejet=?) AND id_observation_rejet != ?";
 
     /** The Constant SQL_QUERY_DECREASE_ORDER_OF_ALL_NEXT. */
-    private static final String SQL_QUERY_DECREASE_ORDER_OF_ALL_NEXT         = "UPDATE signalement_observation_rejet SET ordre = ordre-1 WHERE ordre >= "
+    private static final String SQL_QUERY_DECREASE_ORDER_OF_ALL_NEXT = "UPDATE signalement_observation_rejet SET ordre = ordre-1 WHERE ordre >= "
             + "(SELECT ordre FROM signalement_observation_rejet WHERE id_observation_rejet=?)";
 
     /** The Constant SQL_QUERY_GET_OBSERVATION_REJET_COUNT. */
-    private static final String SQL_QUERY_GET_OBSERVATION_REJET_COUNT        = "SELECT count(id_observation_rejet) FROM signalement_observation_rejet";
+    private static final String SQL_QUERY_GET_OBSERVATION_REJET_COUNT = "SELECT count(id_observation_rejet) FROM signalement_observation_rejet";
 
     /** The Constant SQL_COUNT_BY_ID_OBSERVATION_REJET. */
-    private static final String SQL_COUNT_BY_ID_OBSERVATION_REJET            = "SELECT count(*) FROM signalement_observation_rejet_signalement WHERE fk_id_observation_rejet = ?";
+    private static final String SQL_COUNT_BY_ID_OBSERVATION_REJET = "SELECT count(*) FROM signalement_observation_rejet_signalement WHERE fk_id_observation_rejet = ?";
 
     /**
      * Generates a new primary key.
@@ -127,7 +127,8 @@ public class ObservationRejetDAO implements IObservationRejetDAO
     @Override
     public Integer insert( ObservationRejet observationRejet )
     {
-        try(DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT )){
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT ) )
+        {
             if ( ( observationRejet.getId( ) == null ) || ( observationRejet.getId( ) == 0 ) )
             {
                 observationRejet.setId( newPrimaryKey( ) );

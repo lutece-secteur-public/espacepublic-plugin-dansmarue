@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,16 +41,14 @@ import java.io.Serializable;
 public class DashboardPeriod implements Serializable
 {
 
-    /**
-     *
-     */
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
     /** The id. */
-    private Long    _id;
+    private Long _id;
 
     /** The str libelle. */
-    private String  _strLibelle;
+    private String _strLibelle;
 
     /** The n lower bound. */
     private Integer _nLowerBound;
@@ -59,10 +57,10 @@ public class DashboardPeriod implements Serializable
     private Integer _nHigherBound;
 
     /** The str unit. */
-    private String  _strUnit;
+    private String _strUnit;
 
     /** The str category. */
-    private String  _strCategory;
+    private String _strCategory;
 
     /** The n ordre. */
     private Integer _nOrdre;
@@ -80,7 +78,8 @@ public class DashboardPeriod implements Serializable
     /**
      * Setter for the id.
      *
-     * @param id            the id to set
+     * @param id
+     *            the id to set
      */
     public void setId( Long id )
     {
@@ -100,7 +99,8 @@ public class DashboardPeriod implements Serializable
     /**
      * Setter for the libelle.
      *
-     * @param libelle            the libelle to set
+     * @param libelle
+     *            the libelle to set
      */
     public void setLibelle( String libelle )
     {
@@ -120,7 +120,8 @@ public class DashboardPeriod implements Serializable
     /**
      * Setter for the lowerBound.
      *
-     * @param lowerBound            the lowerBound to set
+     * @param lowerBound
+     *            the lowerBound to set
      */
     public void setLowerBound( Integer lowerBound )
     {
@@ -140,7 +141,8 @@ public class DashboardPeriod implements Serializable
     /**
      * Setter for the higherBound.
      *
-     * @param higherBound            the higherBound to set
+     * @param higherBound
+     *            the higherBound to set
      */
     public void setHigherBound( Integer higherBound )
     {
@@ -160,7 +162,8 @@ public class DashboardPeriod implements Serializable
     /**
      * Setter for the unit.
      *
-     * @param unit            the unit to set
+     * @param unit
+     *            the unit to set
      */
     public void setUnit( String unit )
     {
@@ -180,7 +183,8 @@ public class DashboardPeriod implements Serializable
     /**
      * Setter for the category.
      *
-     * @param category            the category to set
+     * @param category
+     *            the category to set
      */
     public void setCategory( String category )
     {
@@ -200,7 +204,8 @@ public class DashboardPeriod implements Serializable
     /**
      * Setter for the order.
      *
-     * @param ordre            the order to set
+     * @param ordre
+     *            the order to set
      */
     public void setOrdre( Integer ordre )
     {

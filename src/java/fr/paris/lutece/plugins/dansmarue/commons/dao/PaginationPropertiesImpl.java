@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,7 +32,6 @@
  * License 1.0
  */
 package fr.paris.lutece.plugins.dansmarue.commons.dao;
-
 
 /**
  * The Class PaginationPropertiesImpl.
@@ -81,7 +80,14 @@ public class PaginationPropertiesImpl implements PaginationProperties
         _nPageIndex = pageIndex;
     }
 
-    /* (non-Javadoc)
+    /**
+     * Gets the first result.
+     *
+     * @return the first result
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties#getFirstResult()
      */
     @Override
@@ -90,7 +96,14 @@ public class PaginationPropertiesImpl implements PaginationProperties
         return _nFirstResult;
     }
 
-    /* (non-Javadoc)
+    /**
+     * Gets the page size.
+     *
+     * @return the page size
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties#getPageSize()
      */
     @Override
@@ -99,7 +112,14 @@ public class PaginationPropertiesImpl implements PaginationProperties
         return _nPageSize;
     }
 
-    /* (non-Javadoc)
+    /**
+     * Gets the items per page.
+     *
+     * @return the items per page
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties#getItemsPerPage()
      */
     @Override
@@ -108,7 +128,14 @@ public class PaginationPropertiesImpl implements PaginationProperties
         return _nItemsPerPage;
     }
 
-    /* (non-Javadoc)
+    /**
+     * Gets the page index.
+     *
+     * @return the page index
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties#getPageIndex()
      */
     @Override

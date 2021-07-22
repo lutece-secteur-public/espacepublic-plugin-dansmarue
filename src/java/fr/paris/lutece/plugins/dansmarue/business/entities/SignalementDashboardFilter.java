@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.dansmarue.business.entities;
 
-
 /**
  * The Class SignalementDashboardFilter.
  */
@@ -41,22 +40,22 @@ public class SignalementDashboardFilter
 {
 
     /** The n period id. */
-    private Integer         _nPeriodId;
+    private Integer _nPeriodId;
 
     /** The n unit id. */
-    private Integer         _nUnitId;
+    private Integer _nUnitId;
 
     /** The category ids. */
-    private Integer[]       _categoryIds;
+    private Integer [ ] _categoryIds;
 
     /** The arrondissement ids. */
-    private Integer[]       _arrondissementIds;
+    private Integer [ ] _arrondissementIds;
 
     /** The dashboard period. */
     private DashboardPeriod _dashboardPeriod;
 
     /** The n depth. */
-    private Integer         _nDepth;
+    private Integer _nDepth;
 
     /**
      * Instantiates a new signalement dashboard filter.
@@ -79,7 +78,8 @@ public class SignalementDashboardFilter
     /**
      * Setter for the periodId.
      *
-     * @param periodId            the periodId to set
+     * @param periodId
+     *            the periodId to set
      */
     public void setPeriodId( Integer periodId )
     {
@@ -99,7 +99,8 @@ public class SignalementDashboardFilter
     /**
      * Setter for the unitId.
      *
-     * @param unitId            the unitId to set
+     * @param unitId
+     *            the unitId to set
      */
     public void setUnitId( Integer unitId )
     {
@@ -111,7 +112,7 @@ public class SignalementDashboardFilter
      *
      * @return the categoryIds
      */
-    public Integer[] getCategoryIds( )
+    public Integer [ ] getCategoryIds( )
     {
         return _categoryIds;
     }
@@ -119,9 +120,10 @@ public class SignalementDashboardFilter
     /**
      * Setter for the categoryIds.
      *
-     * @param categoryIds            the categoryIds to set
+     * @param categoryIds
+     *            the categoryIds to set
      */
-    public void setCategoryIds( Integer[] categoryIds )
+    public void setCategoryIds( Integer [ ] categoryIds )
     {
         _categoryIds = categoryIds;
     }
@@ -131,7 +133,7 @@ public class SignalementDashboardFilter
      *
      * @return the districts ids
      */
-    public Integer[] getArrondissementIds( )
+    public Integer [ ] getArrondissementIds( )
     {
         return _arrondissementIds;
     }
@@ -139,9 +141,10 @@ public class SignalementDashboardFilter
     /**
      * Setter for the districts ids.
      *
-     * @param arrondissementIds            the disctricts ids to set
+     * @param arrondissementIds
+     *            the disctricts ids to set
      */
-    public void setArrondissementIds( Integer[] arrondissementIds )
+    public void setArrondissementIds( Integer [ ] arrondissementIds )
     {
         _arrondissementIds = arrondissementIds;
     }
@@ -159,7 +162,8 @@ public class SignalementDashboardFilter
     /**
      * Sets the dashboard period.
      *
-     * @param dashboardPeriod the new dashboard period
+     * @param dashboardPeriod
+     *            the new dashboard period
      */
     public void setDashboardPeriod( DashboardPeriod dashboardPeriod )
     {
@@ -179,7 +183,8 @@ public class SignalementDashboardFilter
     /**
      * Sets the depth.
      *
-     * @param depth the new depth
+     * @param depth
+     *            the new depth
      */
     public void setDepth( Integer depth )
     {

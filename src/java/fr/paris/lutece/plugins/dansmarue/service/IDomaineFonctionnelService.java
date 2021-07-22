@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,11 +33,9 @@
  */
 package fr.paris.lutece.plugins.dansmarue.service;
 
-
 import java.util.List;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.DomaineFonctionnel;
-
 
 /**
  * The Interface IDomaineFonctionnelService.
@@ -48,7 +46,8 @@ public interface IDomaineFonctionnelService
     /**
      * Inserts into the database, the functional domain.
      *
-     * @param domaineFonctionnel            the functional domain
+     * @param domaineFonctionnel
+     *            the functional domain
      * @return the functional domain id
      */
     Integer insert( DomaineFonctionnel domaineFonctionnel );
@@ -56,14 +55,16 @@ public interface IDomaineFonctionnelService
     /**
      * Removes a functional domain.
      *
-     * @param lId            the domain id
+     * @param lId
+     *            the domain id
      */
     void remove( long lId );
 
     /**
      * Loads a functional domain.
      *
-     * @param lId            the id of the domain to load
+     * @param lId
+     *            the id of the domain to load
      * @return a functional domain
      */
     DomaineFonctionnel getById( Integer lId );
@@ -71,7 +72,8 @@ public interface IDomaineFonctionnelService
     /**
      * Inserts or Updates a functional domain.
      *
-     * @param domaineFonctionnel            the functional domain object
+     * @param domaineFonctionnel
+     *            the functional domain object
      */
     void store( DomaineFonctionnel domaineFonctionnel );
 
@@ -85,7 +87,8 @@ public interface IDomaineFonctionnelService
     /**
      * Gets all districts ids linked to this domain.
      *
-     * @param idDomaine            the domain id
+     * @param idDomaine
+     *            the domain id
      * @return list of districts ids linked to this domain
      */
     List<Integer> getArrondissementsIdsByDomaineId( int idDomaine );
@@ -93,11 +96,11 @@ public interface IDomaineFonctionnelService
     /**
      * Gets all reporting types ids linked to this domain.
      *
-     * @param idDomaine            the domain id
+     * @param idDomaine
+     *            the domain id
      * @return list of reporting types id linked to this domain
      */
     List<Integer> getTypesSignalementIdsByDomaineId( int idDomaine );
-
 
     /**
      * Gets all active domains.

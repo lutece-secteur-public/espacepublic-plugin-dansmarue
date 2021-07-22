@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,24 +46,30 @@ public interface IObservationRejetSignalementService
     /**
      * Inserts an entry of a report reject reason.
      *
-     * @param idSignalement            The report id
-     * @param idRaisonRejet            The reject id
-     * @param observationRejetComment            the reject observation comment
+     * @param idSignalement
+     *            The report id
+     * @param idRaisonRejet
+     *            The reject id
+     * @param observationRejetComment
+     *            the reject observation comment
      */
     void insert( int idSignalement, Integer idRaisonRejet, String observationRejetComment );
 
     /**
      * Removes an entry of a report reject reason.
      *
-     * @param idSignalement            The report id
-     * @param idRaisonRejet            The reject id
+     * @param idSignalement
+     *            The report id
+     * @param idRaisonRejet
+     *            The reject id
      */
     void delete( int idSignalement, Integer idRaisonRejet );
 
     /**
      * Finds alls reject reasons of a report.
      *
-     * @param idSignalement            The report Id
+     * @param idSignalement
+     *            The report Id
      * @return List of reject observation matching with the report id
      */
     List<ObservationRejet> findByIdSignalement( int idSignalement );

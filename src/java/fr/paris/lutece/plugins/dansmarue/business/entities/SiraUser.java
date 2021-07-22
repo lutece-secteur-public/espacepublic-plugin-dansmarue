@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,7 @@ public class SiraUser
 {
 
     /** The id. */
-    private Long   _id;
+    private Long _id;
 
     /** The str guid. */
     private String _strGuid;
@@ -70,7 +70,8 @@ public class SiraUser
     /**
      * Sets the guid.
      *
-     * @param guid            the guid to set
+     * @param guid
+     *            the guid to set
      */
     public void setGuid( String guid )
     {
@@ -90,7 +91,8 @@ public class SiraUser
     /**
      * Sets the mail.
      *
-     * @param mail            the mail to set
+     * @param mail
+     *            the mail to set
      */
     public void setMail( String mail )
     {
@@ -110,7 +112,8 @@ public class SiraUser
     /**
      * Sets the udid.
      *
-     * @param udid            the udid to set
+     * @param udid
+     *            the udid to set
      */
     public void setUdid( String udid )
     {
@@ -130,7 +133,8 @@ public class SiraUser
     /**
      * Sets the device.
      *
-     * @param device            the device to set
+     * @param device
+     *            the device to set
      */
     public void setDevice( String device )
     {
@@ -150,7 +154,8 @@ public class SiraUser
     /**
      * Sets the id.
      *
-     * @param id            the id to set
+     * @param id
+     *            the id to set
      */
     public void setId( Long id )
     {
@@ -170,7 +175,8 @@ public class SiraUser
     /**
      * Sets the token.
      *
-     * @param token            the token to set
+     * @param token
+     *            the token to set
      */
     public void setToken( String token )
     {

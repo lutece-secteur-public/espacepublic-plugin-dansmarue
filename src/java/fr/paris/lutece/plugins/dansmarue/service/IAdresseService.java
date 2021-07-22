@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,6 @@ import java.util.List;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Adresse;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
 import fr.paris.lutece.plugins.unittree.modules.dansmarue.business.sector.Sector;
-
 
 /**
  * The Interface IAdresseService.
@@ -152,7 +151,8 @@ public interface IAdresseService
     /**
      * Sets the coordonate to WSG84.
      *
-     * @param adresse            the adresse
+     * @param adresse
+     *            the adresse
      * @return the adresse
      */
     public Adresse setCoordonateLambert93ToWSG84( Adresse adresse );

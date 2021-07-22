@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -70,61 +70,63 @@ import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
  * The Class SignalementJspBeanTest.
  */
 @RunWith( PowerMockRunner.class )
-@PrepareForTest( { SignalementJspBean.class, SpringContextService.class, AppPropertiesService.class } )
+@PrepareForTest( {
+        SignalementJspBean.class, SpringContextService.class, AppPropertiesService.class
+} )
 public class SignalementJspBeanTest
 {
 
     /** The type signalement service. */
     @Mock
-    ITypeSignalementService     _typeSignalementService;
-    
+    ITypeSignalementService _typeSignalementService;
+
     /** The signalement service. */
     @Mock
-    ISignalementService         _signalementService;
-    
+    ISignalementService _signalementService;
+
     /** The adresse service. */
     @Mock
-    IAdresseService             _adresseService;
-    
+    IAdresseService _adresseService;
+
     /** The photo service. */
     @Mock
-    IPhotoService               _photoService;
-    
+    IPhotoService _photoService;
+
     /** The signaleur service. */
     @Mock
-    ISignaleurService           _signaleurService;
-    
+    ISignaleurService _signaleurService;
+
     /** The signalement workflow service. */
     @Mock
-    IWorkflowService            _signalementWorkflowService;
-    
+    IWorkflowService _signalementWorkflowService;
+
     /** The priorite service. */
     @Mock
-    IPrioriteService            _prioriteService;
-    
+    IPrioriteService _prioriteService;
+
     /** The arrondissement service. */
     @Mock
-    IArrondissementService      _arrondissementService;
-    
+    IArrondissementService _arrondissementService;
+
     /** The signalement view role service. */
     @Mock
-    SignalementViewRoleService  _signalementViewRoleService;
-    
+    SignalementViewRoleService _signalementViewRoleService;
+
     /** The unit service. */
     @Mock
-    IUnitService                _unitService;
-    
+    IUnitService _unitService;
+
     /** The sector service. */
     @Mock
-    ISectorService              _sectorService;
-    
+    ISectorService _sectorService;
+
     /** The file message creation service. */
     @Mock
     IFileMessageCreationService _fileMessageCreationService;
-    
+
     /** The signalement web services. */
     @Mock
-    ISignalementWebService      _signalementWebServices;
+    ISignalementWebService _signalementWebServices;
 
     /**
      * Inits the spring context.
@@ -162,7 +164,8 @@ public class SignalementJspBeanTest
      * Parse HttpRequest, get data and save (create or update) signalement.
      *
      * @return the data and save test
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test( expected = NullPointerException.class )
     public void getDataAndSaveTest( ) throws Exception

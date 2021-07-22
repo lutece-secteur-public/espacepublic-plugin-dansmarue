@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,7 +42,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 import fr.paris.lutece.util.ReferenceList;
 
-
 /**
  * The Class DomaineFonctionnel.
  */
@@ -53,50 +52,50 @@ public class DomaineFonctionnel implements RBACResource
     public static final String RESOURCE_TYPE = "SIGNALEMENT_DOMAINE_FONCTIONNEL";
 
     /** The id. */
-    private Integer            _nId;
+    private Integer _nId;
 
     /** The libelle. */
     @NotBlank
-    private String             _strLibelle;
+    private String _strLibelle;
 
     /** The active boolean. */
-    private boolean            _bActif;
+    private boolean _bActif;
 
     /** The districts ids. */
-    private List<Integer>      _listArrondissementsIds;
+    private List<Integer> _listArrondissementsIds;
 
     /** The neighborhoods ids. */
-    private List<Integer>      _listQuartiersIds;
+    private List<Integer> _listQuartiersIds;
 
     /** The report types ids. */
-    private List<Integer>      _listTypesSignalementIds;
+    private List<Integer> _listTypesSignalementIds;
 
     /** The boards ref list. */
     @Transient
-    private ReferenceList      _directionsRefList;
+    private ReferenceList _directionsRefList;
 
     /** The districts ref list. */
     @Transient
-    private ReferenceList      _arrondissementsRefList;
+    private ReferenceList _arrondissementsRefList;
 
     /** The neighborhoods ref list. */
     @Transient
-    private ReferenceList      _quartierRefList;
+    private ReferenceList _quartierRefList;
 
     /** The sectors ref list. */
     @Transient
-    private ReferenceList      _secteursRefList;
+    private ReferenceList _secteursRefList;
 
     /** The categories ref list. */
     @Transient
-    private ReferenceList      _categoriesRefList;
+    private ReferenceList _categoriesRefList;
 
     /** The anomaly types ref list. */
     @Transient
-    private ReferenceList      _typesAnomalieRefList;
+    private ReferenceList _typesAnomalieRefList;
 
     /** ENTITIES from unittree. */
-    private List<Integer>      _unitIds;
+    private List<Integer> _unitIds;
 
     /**
      * Getter for the id.
@@ -161,6 +160,11 @@ public class DomaineFonctionnel implements RBACResource
         _bActif = actif;
     }
 
+    /**
+     * Gets the resource type code.
+     *
+     * @return the resource type code
+     */
     /*
      * (non-Javadoc)
      *
@@ -172,6 +176,11 @@ public class DomaineFonctionnel implements RBACResource
         return RESOURCE_TYPE;
     }
 
+    /**
+     * Gets the resource id.
+     *
+     * @return the resource id
+     */
     /*
      * (non-Javadoc)
      *

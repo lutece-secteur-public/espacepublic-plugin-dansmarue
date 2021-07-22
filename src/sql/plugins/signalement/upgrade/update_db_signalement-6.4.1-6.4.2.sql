@@ -1,0 +1,2 @@
+--DMR-1883 : suppression des lignes présentes dans workflow_resource_workflow et pas dans signalement_signalement 
+delete from workflow_resource_workflow where id_resource not in (select id_signalement from signalement_signalement);

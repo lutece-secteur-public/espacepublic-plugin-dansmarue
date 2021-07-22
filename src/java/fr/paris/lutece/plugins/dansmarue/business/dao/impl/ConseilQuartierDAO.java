@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48,22 +48,22 @@ public final class ConseilQuartierDAO implements IConseilQuartierDao
 
     /** The Constant SQL_QUERY_NEW_PK. */
     // Constants
-    private static final String SQL_QUERY_NEW_PK            = "SELECT max( id_consqrt ) FROM signalement_conseil_quartier";
+    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_consqrt ) FROM signalement_conseil_quartier";
 
     /** The Constant SQL_QUERY_SELECT. */
-    private static final String SQL_QUERY_SELECT            = "SELECT id_consqrt, numero_consqrt, surface, nom_consqrt, numero_arrondissement FROM signalement_conseil_quartier WHERE id_consqrt = ?";
+    private static final String SQL_QUERY_SELECT = "SELECT id_consqrt, numero_consqrt, surface, nom_consqrt, numero_arrondissement FROM signalement_conseil_quartier WHERE id_consqrt = ?";
 
     /** The Constant SQL_QUERY_INSERT. */
-    private static final String SQL_QUERY_INSERT            = "INSERT INTO signalement_conseil_quartier ( id_consqrt, numero_consqrt, surface, nom_consqrt, numero_arrondissement ) VALUES ( ?, ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_conseil_quartier ( id_consqrt, numero_consqrt, surface, nom_consqrt, numero_arrondissement ) VALUES ( ?, ?, ?, ?, ? ) ";
 
     /** The Constant SQL_QUERY_DELETE. */
-    private static final String SQL_QUERY_DELETE            = "DELETE FROM signalement_conseil_quartier WHERE id_consqrt = ? ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_conseil_quartier WHERE id_consqrt = ? ";
 
     /** The Constant SQL_QUERY_UPDATE. */
-    private static final String SQL_QUERY_UPDATE            = "UPDATE signalement_conseil_quartier SET id_consqrt = ?, numero_consqrt = ?, surface = ?, nom_consqrt = ?, numero_arrondissement = ? WHERE id_consqrt = ?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_conseil_quartier SET id_consqrt = ?, numero_consqrt = ?, surface = ?, nom_consqrt = ?, numero_arrondissement = ? WHERE id_consqrt = ?";
 
     /** The Constant SQL_QUERY_SELECTALL. */
-    private static final String SQL_QUERY_SELECTALL         = "SELECT id_consqrt, numero_consqrt, surface, nom_consqrt, numero_arrondissement FROM signalement_conseil_quartier order by numero_arrondissement,nom_consqrt asc";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_consqrt, numero_consqrt, surface, nom_consqrt, numero_arrondissement FROM signalement_conseil_quartier order by numero_arrondissement,nom_consqrt asc";
 
     /** The Constant SQL_QUERY_SELECT_BY_ADRESSE. */
     private static final String SQL_QUERY_SELECT_BY_ADRESSE = "SELECT id_consqrt, numero_consqrt, surface, nom_consqrt, numero_arrondissement from signalement_conseil_quartier where ST_Intersects( ( select ST_Union(geom) from signalement_adresse where id_adresse = ? )::geometry, signalement_conseil_quartier.geom::geometry )";
@@ -92,7 +92,8 @@ public final class ConseilQuartierDAO implements IConseilQuartierDao
     @Override
     public void insert( ConseilQuartier quartier )
     {
-        try(DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT )){
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT ) )
+        {
 
             int nIndex = 1;
 

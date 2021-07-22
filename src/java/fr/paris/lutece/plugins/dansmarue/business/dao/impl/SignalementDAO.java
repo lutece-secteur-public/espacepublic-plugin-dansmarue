@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -77,7 +77,6 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-
 /**
  * The Class SignalementDAO.
  */
@@ -85,252 +84,276 @@ public class SignalementDAO implements ISignalementDAO
 {
 
     /** The Constant SEJ_ID. */
-    private static final int    SEJ_ID                                              = 94;
+    private static final int SEJ_ID = 94;
 
     /** The Constant SQL_QUERY_AND. */
-    private static final String SQL_QUERY_AND                                       = " AND ";
+    private static final String SQL_QUERY_AND = " AND ";
 
     /** The Constant SQL_QUERY_INNER_JOIN. */
-    private static final String SQL_QUERY_INNER_JOIN                                = " INNER JOIN ";
+    private static final String SQL_QUERY_INNER_JOIN = " INNER JOIN ";
 
     /** The Constant SIGNALEUR_MAIL. */
-    private static final String SIGNALEUR_MAIL                                      = "signaleur.mail";
+    private static final String SIGNALEUR_MAIL = "signaleur.mail";
+
+    /** The Constant ADRESSE. */
+    private static final String ADRESSE = "adr.adresse";
 
     /** The Constant NUM_SIGNALEMENT. */
-    private static final String NUM_SIGNALEMENT                                     = "numSignalement";
+    private static final String NUM_SIGNALEMENT = "numSignalement";
 
     /** The Constant SQL_QUERY_NEW_PK. */
-    private static final String SQL_QUERY_NEW_PK                                    = "SELECT nextval('seq_signalement_signalement_id_signalement')";
+    private static final String SQL_QUERY_NEW_PK = "SELECT nextval('seq_signalement_signalement_id_signalement')";
 
     /** The Constant SQL_QUERY_INSERT. */
-    private static final String SQL_QUERY_INSERT                                    = "INSERT INTO signalement_signalement (id_signalement, suivi, date_creation, commentaire, annee, mois, numero, PREFIX, fk_id_priorite, fk_id_type_signalement, fk_id_arrondissement, fk_id_sector, is_doublon, token, commentaire_agent_terrain) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_signalement (id_signalement, suivi, date_creation, commentaire, annee, mois, numero, PREFIX, fk_id_priorite, fk_id_type_signalement, fk_id_arrondissement, fk_id_sector, is_doublon, token, commentaire_agent_terrain) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     /** The Constant SQL_QUERY_DELETE. */
-    private static final String SQL_QUERY_DELETE                                    = "DELETE FROM signalement_signalement WHERE id_signalement = ?";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_signalement WHERE id_signalement = ?";
 
     /** The Constant SQL_QUERY_SELECT. */
-    private static final String SQL_QUERY_SELECT                                    = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon, token, service_fait_date_passage, felicitations, date_mise_surveillance, date_rejet, courriel_destinataire, courriel_expediteur, courriel_date, is_send_ws, commentaire_agent_terrain FROM signalement_signalement WHERE id_signalement = ?";
+    private static final String SQL_QUERY_SELECT = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon, token, service_fait_date_passage, felicitations, date_mise_surveillance, date_rejet, courriel_destinataire, courriel_expediteur, courriel_date, is_send_ws, commentaire_agent_terrain FROM signalement_signalement WHERE id_signalement = ?";
+
+    /** The Constant SQL_QUERY_SELECT_BY_NUMBER. */
+    private static final String SQL_QUERY_SELECT_BY_NUMBER = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon, token, service_fait_date_passage, felicitations, date_mise_surveillance, date_rejet, courriel_destinataire, courriel_expediteur, courriel_date, is_send_ws, commentaire_agent_terrain FROM signalement_signalement WHERE prefix || annee || mois || numero = ?";
 
     /** The Constant SQL_QUERY_SELECT_BY_STATUS. */
-    private static final String SQL_QUERY_SELECT_BY_STATUS                          = "SELECT signalement.id_signalement, signalement.suivi, signalement.date_creation, signalement.date_prevue_traitement, signalement.commentaire, signalement.annee,  signalement.mois, signalement.numero, signalement.prefix, signalement.fk_id_priorite,   signalement.fk_id_arrondissement,  signalement.fk_id_type_signalement,  signalement.fk_id_sector,   signalement.is_doublon, signalement.service_fait_date_passage FROM signalement_signalement AS signalement  INNER JOIN workflow_resource_workflow AS resource_workflow ON resource_workflow.id_resource = signalement.id_signalement  INNER JOIN workflow_resource_history AS resource_history ON resource_history.id_resource = signalement.id_signalement INNER JOIN workflow_action AS action ON action.id_action = resource_history.id_action WHERE resource_workflow.resource_type = ''SIGNALEMENT_SIGNALEMENT''  AND resource_history.resource_type = ''SIGNALEMENT_SIGNALEMENT''  AND resource_workflow.id_state = ? AND action.id_state_after = ? AND resource_history.creation_date + '''{0} ''days''::interval < now();";
+    private static final String SQL_QUERY_SELECT_BY_STATUS = "SELECT signalement.id_signalement, signalement.suivi, signalement.date_creation, signalement.date_prevue_traitement, signalement.commentaire, signalement.annee,  signalement.mois, signalement.numero, signalement.prefix, signalement.fk_id_priorite,   signalement.fk_id_arrondissement,  signalement.fk_id_type_signalement,  signalement.fk_id_sector,   signalement.is_doublon, signalement.service_fait_date_passage FROM signalement_signalement AS signalement  INNER JOIN workflow_resource_workflow AS resource_workflow ON resource_workflow.id_resource = signalement.id_signalement  INNER JOIN workflow_resource_history AS resource_history ON resource_history.id_resource = signalement.id_signalement INNER JOIN workflow_action AS action ON action.id_action = resource_history.id_action WHERE resource_workflow.resource_type = ''SIGNALEMENT_SIGNALEMENT''  AND resource_history.resource_type = ''SIGNALEMENT_SIGNALEMENT''  AND resource_workflow.id_state = ? AND action.id_state_after = ? AND resource_history.creation_date + '''{0} ''days''::interval < now();";
     /** The Constant SQL_QUERY_UPDATE. */
-    private static final String SQL_QUERY_UPDATE                                    = "UPDATE signalement_signalement SET id_signalement=?, suivi=?, date_creation=?, date_prevue_traitement=?, commentaire=? , fk_id_priorite=?, fk_id_type_signalement=?, fk_id_arrondissement = ?, fk_id_sector = ?, is_doublon = ?, service_fait_date_passage = ?, courriel_destinataire = ?, courriel_expediteur = ?, courriel_date = ?, is_send_ws = ?, commentaire_agent_terrain=? WHERE id_signalement=?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_signalement SET id_signalement=?, suivi=?, date_creation=?, date_prevue_traitement=?, commentaire=? , fk_id_priorite=?, fk_id_type_signalement=?, fk_id_arrondissement = ?, fk_id_sector = ?, is_doublon = ?, service_fait_date_passage = ?, courriel_destinataire = ?, courriel_expediteur = ?, courriel_date = ?, is_send_ws = ?, commentaire_agent_terrain=? WHERE id_signalement=?";
 
     /** The Constant SQL_QUERY_SELECT_ALL. */
-    private static final String SQL_QUERY_SELECT_ALL                                = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon, is_send_ws FROM signalement_signalement";
+    private static final String SQL_QUERY_SELECT_ALL = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon, is_send_ws FROM signalement_signalement";
 
     /** The Constant SQL_QUERY_ADD_FILTER_SECTOR_ALLOWED. */
-    private static final String SQL_QUERY_ADD_FILTER_SECTOR_ALLOWED                 = " fk_id_sector IN (SELECT s.id_sector FROM unittree_sector s INNER JOIN unittree_unit_sector u ON s.id_sector = u.id_sector WHERE u.id_unit in ({0}))";
+    private static final String SQL_QUERY_ADD_FILTER_SECTOR_ALLOWED = " fk_id_sector IN (SELECT s.id_sector FROM unittree_sector s INNER JOIN unittree_unit_sector u ON s.id_sector = u.id_sector WHERE u.id_unit in ({0}))";
 
     /** The Constant SQL_QUERY_SELECT_SIGNALEMENT_BY_TOKEN. */
-    private static final String SQL_QUERY_SELECT_SIGNALEMENT_BY_TOKEN               = "SELECT id_signalement, token FROM signalement_signalement WHERE token = ?";
+    private static final String SQL_QUERY_SELECT_SIGNALEMENT_BY_TOKEN = "SELECT id_signalement, token FROM signalement_signalement WHERE token = ?";
 
-    /**  SQL QUERY FOR WebServicePartnerDaemon. */
-    private static final String SQL_QUERY_SELECT_ID_SIGNALEMENT_FOR_PARTNER_DEAMON  = "SELECT id_signalement FROM signalement_signalement, workflow_resource_workflow  WHERE id_signalement = id_resource AND id_state =? ORDER BY id_signalement DESC";
+    /** SQL QUERY FOR WebServicePartnerDaemon. */
+    private static final String SQL_QUERY_SELECT_ID_SIGNALEMENT_FOR_PARTNER_DEAMON = "SELECT DISTINCT id_signalement FROM signalement_signalement sis, workflow_resource_workflow wrw, workflow_resource_history wrh WHERE sis.id_signalement = wrw.id_resource AND wrw.id_state = ? AND sis.id_signalement = wrh.id_resource AND wrh.creation_date > current_date - integer 'NB_DAYS' ORDER BY sis.id_signalement DESC";
 
     // FOR THE FILTERS
     /** The Constant SQL_QUERY_PART_SELECT. */
-    private static final String SQL_QUERY_PART_SELECT                               = " signalement.id_signalement, priorite.libelle, signalement.fk_id_type_signalement ";
+    private static final String SQL_QUERY_PART_SELECT = " signalement.id_signalement, priorite.libelle, signalement.fk_id_type_signalement ";
 
     /** The Constant SQL_QUERY_FROM_ALL. */
-    private static final String SQL_QUERY_FROM_ALL                                  = " FROM signalement_signalement AS signalement INNER JOIN workflow_resource_workflow AS workflow ON workflow.id_resource = signalement.id_signalement INNER JOIN unittree_unit_sector unit_sector ON unit_sector.id_sector = signalement.fk_id_sector INNER JOIN unittree_unit direction_unit ON direction_unit.id_unit = unit_sector.id_unit AND direction_unit.id_parent = 0 ";
+    private static final String SQL_QUERY_FROM_ALL = " FROM signalement_signalement AS signalement INNER JOIN workflow_resource_workflow AS workflow ON workflow.id_resource = signalement.id_signalement INNER JOIN unittree_unit_sector unit_sector ON unit_sector.id_sector = signalement.fk_id_sector INNER JOIN unittree_unit direction_unit ON direction_unit.id_unit = unit_sector.id_unit AND direction_unit.id_parent = 0 ";
 
     /** The Constant SQL_QUERY_FROM_SIGNALEMENT_TYPE. */
-    private static final String SQL_QUERY_FROM_SIGNALEMENT_TYPE                     = " INNER JOIN signalement_type_signalement AS type ON type.id_type_signalement = signalement.fk_id_type_signalement ";
+    private static final String SQL_QUERY_FROM_SIGNALEMENT_TYPE = " INNER JOIN signalement_type_signalement AS type ON type.id_type_signalement = signalement.fk_id_type_signalement ";
 
     /** The Constant SQL_QUERY_FROM_VIEW_TYPE_SIGNALEMENT_W_PARENT_LINK. */
-    private static final String SQL_QUERY_FROM_VIEW_TYPE_SIGNALEMENT_W_PARENT_LINK  = " INNER JOIN v_signalement_type_signalement_with_parents_links AS vstswpl ON vstswpl.id_type_signalement= signalement.fk_id_type_signalement ";
+    private static final String SQL_QUERY_FROM_VIEW_TYPE_SIGNALEMENT_W_PARENT_LINK = " INNER JOIN v_signalement_type_signalement_with_parents_links AS vstswpl ON vstswpl.id_type_signalement= signalement.fk_id_type_signalement ";
 
     /** The Constant SQL_QUERY_FROM_SIGNALEMENT_CATEGORY. */
-    private static final String SQL_QUERY_FROM_SIGNALEMENT_CATEGORY                 = " INNER JOIN v_signalement_type_signalement_with_parents_links AS vstswp ON vstswp.id_type_signalement = signalement.fk_id_type_signalement AND vstswp.is_parent_a_category=1";
+    private static final String SQL_QUERY_FROM_SIGNALEMENT_CATEGORY = " INNER JOIN v_signalement_type_signalement_with_parents_links AS vstswp ON vstswp.id_type_signalement = signalement.fk_id_type_signalement AND vstswp.is_parent_a_category=1";
 
     /** The Constant SQL_QUERY_FROM_UNITTREE. */
-    private static final String SQL_QUERY_FROM_UNITTREE                             = " INNER JOIN unittree_unit_sector uus ON signalement.fk_id_sector = uus.id_sector ";
+    private static final String SQL_QUERY_FROM_UNITTREE = " INNER JOIN unittree_unit_sector uus ON signalement.fk_id_sector = uus.id_sector ";
 
     /** The Constant SQL_QUERY_FROM_SIGNALEUR. */
-    private static final String SQL_QUERY_FROM_SIGNALEUR                            = " LEFT OUTER JOIN signalement_signaleur AS signaleur ON signalement.id_signalement = signaleur.fk_id_signalement ";
+    private static final String SQL_QUERY_FROM_SIGNALEUR = " LEFT OUTER JOIN signalement_signaleur AS signaleur ON signalement.id_signalement = signaleur.fk_id_signalement ";
 
     /** The Constant SQL_QUERY_FROM_PHOTO. */
-    private static final String SQL_QUERY_FROM_PHOTO                                = " LEFT OUTER JOIN signalement_photo AS photo ON signalement.id_signalement = photo.fk_id_signalement ";
+    private static final String SQL_QUERY_FROM_PHOTO = " LEFT OUTER JOIN signalement_photo AS photo ON signalement.id_signalement = photo.fk_id_signalement ";
 
     /** The Constant SQL_QUERY_FROM_ADRESS. */
-    private static final String SQL_QUERY_FROM_ADRESS                               = " INNER JOIN signalement_adresse as adr on signalement.id_signalement = adr.fk_id_signalement ";
+    private static final String SQL_QUERY_FROM_ADRESS = " INNER JOIN signalement_adresse as adr on signalement.id_signalement = adr.fk_id_signalement ";
 
     /** The Constant SQL_QUERY_FROM_PRORITE. */
-    private static final String SQL_QUERY_FROM_PRORITE                              = " INNER JOIN signalement_priorite as priorite on priorite.id_priorite = signalement.fk_id_priorite  ";
+    private static final String SQL_QUERY_FROM_PRORITE = " INNER JOIN signalement_priorite as priorite on priorite.id_priorite = signalement.fk_id_priorite  ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_LIST_TYPE_SIGNALEMENT. */
-    private static final String SQL_QUERY_ADD_FILTER_LIST_TYPE_SIGNALEMENT          = " signalement.fk_id_type_signalement IN ({0}) ";
+    private static final String SQL_QUERY_ADD_FILTER_LIST_TYPE_SIGNALEMENT = " signalement.fk_id_type_signalement IN ({0}) ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_TYPE_SIGNALEMENT. */
-    private static final String SQL_QUERY_ADD_FILTER_TYPE_SIGNALEMENT               = " vstswpl.id_parent = ? ";
+    private static final String SQL_QUERY_ADD_FILTER_TYPE_SIGNALEMENT = " vstswpl.id_parent = ? ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_NUMERO. */
-    private static final String SQL_QUERY_ADD_FILTER_NUMERO                         = " CASE " + " WHEN (RIGHT(?, 1) = '*')  " + " THEN CASE "
-            + " WHEN (length(?) = 2) THEN signalement.prefix LIKE REPLACE (?, '*', '%') " + " WHEN (length(?) = 6) THEN signalement.prefix || signalement.annee LIKE REPLACE (?, '*', '%') "
+    private static final String SQL_QUERY_ADD_FILTER_NUMERO = " CASE " + " WHEN (RIGHT(?, 1) = '*')  " + " THEN CASE "
+            + " WHEN (length(?) = 2) THEN signalement.prefix LIKE REPLACE (?, '*', '%') "
+            + " WHEN (length(?) = 6) THEN signalement.prefix || signalement.annee LIKE REPLACE (?, '*', '%') "
             + " WHEN (length(?) = 7) THEN signalement.prefix || signalement.annee || signalement.mois LIKE REPLACE (?, '*', '%') "
-            + " WHEN (length(?) > 7) THEN signalement.prefix || signalement.annee || signalement.mois || signalement.numero LIKE REPLACE (?, '*', '%') " + " end "
-            + " ELSE signalement.prefix || signalement.annee || signalement.mois || signalement.numero like ? " + " END ";
+            + " WHEN (length(?) > 7) THEN signalement.prefix || signalement.annee || signalement.mois || signalement.numero LIKE REPLACE (?, '*', '%') "
+            + " end " + " ELSE signalement.prefix || signalement.annee || signalement.mois || signalement.numero like ? " + " END ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_DIRECTION. */
-    private static final String SQL_QUERY_ADD_FILTER_DIRECTION                      = " uus.id_unit = ? ";
+    private static final String SQL_QUERY_ADD_FILTER_DIRECTION = " uus.id_unit = ? ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_LIST_ARRONDISSEMENT. */
-    private static final String SQL_QUERY_ADD_FILTER_LIST_ARRONDISSEMENT            = " signalement.fk_id_arrondissement IN ({0}) ";
+    private static final String SQL_QUERY_ADD_FILTER_LIST_ARRONDISSEMENT = " signalement.fk_id_arrondissement IN ({0}) ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_LIST_QUARTIER. */
-    private static final String SQL_QUERY_ADD_FILTER_LIST_QUARTIER                  = " ST_Intersects(adr.geom::geometry, (select ST_Union(geom) from signalement_conseil_quartier  where id_consqrt in ({0}))::geometry) ";
+    private static final String SQL_QUERY_ADD_FILTER_LIST_QUARTIER = " ST_Intersects(adr.geom::geometry, (select ST_Union(geom) from signalement_conseil_quartier  where id_consqrt in ({0}))::geometry) ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_ARRONDISSEMENT. */
-    private static final String SQL_QUERY_ADD_FILTER_ARRONDISSEMENT                 = " signalement.fk_id_arrondissement = ? ";
+    private static final String SQL_QUERY_ADD_FILTER_ARRONDISSEMENT = " signalement.fk_id_arrondissement = ? ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_SECTOR. */
-    private static final String SQL_QUERY_ADD_FILTER_SECTOR                         = " signalement.fk_id_sector = ? ";
+    private static final String SQL_QUERY_ADD_FILTER_SECTOR = " signalement.fk_id_sector = ? ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_ETAT. */
-    private static final String SQL_QUERY_ADD_FILTER_ETAT                           = " workflow.id_state = ? ";
+    private static final String SQL_QUERY_ADD_FILTER_ETAT = " workflow.id_state = ? ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_ADRESSE. */
-    private static final String SQL_QUERY_ADD_FILTER_ADRESSE                        = "lower_unaccent(adr.adresse) LIKE lower_unaccent(?) ";
+    private static final String SQL_QUERY_ADD_FILTER_ADRESSE = "lower_unaccent(adr.adresse) LIKE lower_unaccent(?) ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_MAIL. */
-    private static final String SQL_QUERY_ADD_FILTER_MAIL                           = "lower_unaccent(signaleur.mail) LIKE lower_unaccent(?) ";
+    private static final String SQL_QUERY_ADD_FILTER_MAIL = "lower_unaccent(signaleur.mail) LIKE lower_unaccent(?) ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_COMMENTAIRE. */
-    private static final String SQL_QUERY_ADD_FILTER_COMMENTAIRE                    = " lower_unaccent(signalement.commentaire) LIKE lower_unaccent(?) ";
+    private static final String SQL_QUERY_ADD_FILTER_COMMENTAIRE = " lower_unaccent(signalement.commentaire) LIKE lower_unaccent(?) ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_COMMENTAIRE_AGENT_TERRAIN. */
-    private static final String SQL_QUERY_ADD_FILTER_COMMENTAIRE_AGENT_TERRAIN      = " lower_unaccent(signalement.commentaire_agent_terrain) LIKE lower_unaccent(?) ";
+    private static final String SQL_QUERY_ADD_FILTER_COMMENTAIRE_AGENT_TERRAIN = " lower_unaccent(signalement.commentaire_agent_terrain) LIKE lower_unaccent(?) ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_DATE_BEGIN. */
-    private static final String SQL_QUERY_ADD_FILTER_DATE_BEGIN                     = "date_trunc('day', signalement.date_creation) >= ? ";
+    private static final String SQL_QUERY_ADD_FILTER_DATE_BEGIN = "date_trunc('day', signalement.date_creation) >= ? ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_DATE_END. */
-    private static final String SQL_QUERY_ADD_FILTER_DATE_END                       = "date_trunc('day', signalement.date_creation) <= ? ";
+    private static final String SQL_QUERY_ADD_FILTER_DATE_END = "date_trunc('day', signalement.date_creation) <= ? ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_CATEGORY. */
-    private static final String SQL_QUERY_ADD_FILTER_CATEGORY                       = " vstswp.id_parent IN ({0}) ";
+    private static final String SQL_QUERY_ADD_FILTER_CATEGORY = " vstswp.id_parent IN ({0}) ";
 
     /** The Constant SQL_QUERY_SELECT_ALL_ID_SIGNALEMENT. */
-    private static final String SQL_QUERY_SELECT_ALL_ID_SIGNALEMENT                 = "select id_signalement from signalement_signalement";
+    private static final String SQL_QUERY_SELECT_ALL_ID_SIGNALEMENT = "select id_signalement from signalement_signalement";
 
     /** The Constant SQL_UPDATE_SUIVI_PLUS_ONE. */
-    private static final String SQL_UPDATE_SUIVI_PLUS_ONE                           = "UPDATE signalement_signalement SET suivi=suivi+1 WHERE id_signalement=?";
+    private static final String SQL_UPDATE_SUIVI_PLUS_ONE = "UPDATE signalement_signalement SET suivi=suivi+1 WHERE id_signalement=?";
 
     /** The Constant SQL_UPDATE_SUIVI_PLUS_ONE. */
-    private static final String SQL_UPDATE_SUIVI_MINUS_ONE                          = "UPDATE signalement_signalement SET suivi=suivi-1 WHERE id_signalement=?";
+    private static final String SQL_UPDATE_SUIVI_MINUS_ONE = "UPDATE signalement_signalement SET suivi=suivi-1 WHERE id_signalement=?";
 
-    /**  The Constant SQL_QUERY_FELICITATIONS_INCREMENT *. */
-    private static final String SQL_QUERY_FELICITATIONS_INCREMENT                   = "UPDATE signalement_signalement SET felicitations=felicitations+1 WHERE id_signalement=?";
+    /** The Constant SQL_QUERY_FELICITATIONS_INCREMENT *. */
+    private static final String SQL_QUERY_FELICITATIONS_INCREMENT = "UPDATE signalement_signalement SET felicitations=felicitations+1 WHERE id_signalement=?";
 
-    /**  The Constant SQL_QUERY_UPDATE_COMMENT_AGENT *. */
-    private static final String SQL_QUERY_UPDATE_COMMENT_AGENT                      = "UPDATE signalement_signalement SET commentaire_agent_terrain=? WHERE id_signalement=?";
+    /** The Constant SQL_QUERY_UPDATE_COMMENT_AGENT *. */
+    private static final String SQL_QUERY_UPDATE_COMMENT_AGENT = "UPDATE signalement_signalement SET commentaire_agent_terrain=? WHERE id_signalement=?";
 
     /** The Constant SQL_SELECT_BY_ID_TELEPHONE. */
-    private static final String SQL_QUERY_SELECT_BY_ID_TELEPHONE                    = "SELECT fk_id_signalement FROM signalement_signaleur WHERE id_telephone=?";
+    private static final String SQL_QUERY_SELECT_BY_ID_TELEPHONE = "SELECT fk_id_signalement FROM signalement_signaleur WHERE id_telephone=?";
 
     /** The Constant SQL_QUERY_INSERT_MESSAGE_CREATION. */
-    private static final String SQL_QUERY_INSERT_MESSAGE_CREATION                   = "INSERT INTO signalement_message_creation VALUES (1,?)";
+    private static final String SQL_QUERY_INSERT_MESSAGE_CREATION = "INSERT INTO signalement_message_creation VALUES (1,?)";
 
     /** The Constant SQL_QUERY_UPDATE_MESSAGE_CREATION. */
-    private static final String SQL_QUERY_UPDATE_MESSAGE_CREATION                   = "UPDATE signalement_message_creation SET contenu=? WHERE id_message=1";
+    private static final String SQL_QUERY_UPDATE_MESSAGE_CREATION = "UPDATE signalement_message_creation SET contenu=? WHERE id_message=1";
 
     /** The Constant SQL_QUERY_SELECT_MESSAGE_CREATION. */
-    private static final String SQL_QUERY_SELECT_MESSAGE_CREATION                   = "SELECT contenu FROM signalement_message_creation WHERE id_message=1";
+    private static final String SQL_QUERY_SELECT_MESSAGE_CREATION = "SELECT contenu FROM signalement_message_creation WHERE id_message=1";
 
     /** The Constant SQL_QUERY_DELETE_MESSAGE_CREATION. */
-    private static final String SQL_QUERY_DELETE_MESSAGE_CREATION                   = "DELETE FROM signalement_message_creation WHERE id_message=1";
+    private static final String SQL_QUERY_DELETE_MESSAGE_CREATION = "DELETE FROM signalement_message_creation WHERE id_message=1";
 
     /** The Constant SQL_QUERY_UPDATE_DATE_MISE_SURVEILLANCE. */
-    private static final String SQL_QUERY_UPDATE_DATE_MISE_SURVEILLANCE             = "UPDATE signalement_signalement SET date_mise_surveillance =? WHERE id_signalement=?";
+    private static final String SQL_QUERY_UPDATE_DATE_MISE_SURVEILLANCE = "UPDATE signalement_signalement SET date_mise_surveillance =? WHERE id_signalement=?";
 
     /** The Constant SQL_QUERY_UPDATE_DATE_REJET. */
-    private static final String SQL_QUERY_UPDATE_DATE_REJET                         = "UPDATE signalement_signalement SET date_rejet =? WHERE id_signalement=?";
+    private static final String SQL_QUERY_UPDATE_DATE_REJET = "UPDATE signalement_signalement SET date_rejet =? WHERE id_signalement=?";
 
     /** The Constant SQL_WHERE. */
-    private static final String SQL_WHERE                                           = " WHERE ";
+    private static final String SQL_WHERE = " WHERE ";
 
     /** The Constant SQL_AND. */
-    private static final String SQL_AND                                             = SQL_QUERY_AND;
+    private static final String SQL_AND = SQL_QUERY_AND;
 
     /** The Constant SQL_OR. */
-    private static final String SQL_OR                                              = " OR ";
+    private static final String SQL_OR = " OR ";
 
     /** The Constant SQL_GROUP_BY. */
-    private static final String SQL_GROUP_BY                                        = " GROUP BY ";
+    private static final String SQL_GROUP_BY = " GROUP BY ";
 
     /** The Constant SQL_SELECT. */
-    private static final String SQL_SELECT                                          = "SELECT ";
+    private static final String SQL_SELECT = "SELECT ";
 
     /** The Constant SQL_SELECT_COUNT_ID_SIGNALEMENT. */
-    private static final String SQL_SELECT_COUNT_ID_SIGNALEMENT                     = "SELECT COUNT (DISTINCT signalement.id_signalement) ";
+    private static final String SQL_SELECT_COUNT_ID_SIGNALEMENT = "SELECT COUNT (DISTINCT signalement.id_signalement) ";
 
     /** The Constant SQL_SELECT_ID_SIGNALEMENT. */
-    private static final String SQL_SELECT_ID_SIGNALEMENT                           = "SELECT DISTINCT signalement.id_signalement";
+    private static final String SQL_SELECT_ID_SIGNALEMENT = "SELECT DISTINCT signalement.id_signalement";
 
     /** The Constant COMA_SEPARATOR. */
-    private static final String COMA_SEPARATOR                                      = ", ";
+    private static final String COMA_SEPARATOR = ", ";
 
-    /**  The Constant DISTINCT. */
-    private static final String SQL_DISTINCT                                        = " DISTINCT ";
+    /** The Constant DISTINCT. */
+    private static final String SQL_DISTINCT = " DISTINCT ";
 
     /** The Constant SQL_QUERY_ID_MAIL_BY_ID. */
-    private static final String SQL_QUERY_ID_MAIL_BY_ID                             = "select value.id_message, history.id_resource from signalement_workflow_notifuser_multi_contents_value value "
+    private static final String SQL_QUERY_ID_MAIL_BY_ID = "select value.id_message, history.id_resource from signalement_workflow_notifuser_multi_contents_value value "
             + "inner join workflow_resource_history history on history.id_history = value.id_history " + "where history.id_resource=? "
-            + "and value.id_history = (select max(h.id_history) from signalement_workflow_notifuser_multi_contents_value v " + "inner join workflow_resource_history h on h.id_history = v.id_history "
-            + "where h.id_resource= ?)";
+            + "and value.id_history = (select max(h.id_history) from signalement_workflow_notifuser_multi_contents_value v "
+            + "inner join workflow_resource_history h on h.id_history = v.id_history " + "where h.id_resource= ?)";
 
     /** The Constant SQL_QUERY_INSERT_REQUALIFICATION. */
-    private static final String SQL_QUERY_INSERT_REQUALIFICATION                    = "INSERT INTO signalement_requalification(id_signalement,id_type_signalement,adresse,id_sector,date_requalification,id_task,commentaire_agent_terrain) VALUES (?,?,?,?,?,?,?)";
+    private static final String SQL_QUERY_INSERT_REQUALIFICATION = "INSERT INTO signalement_requalification(id_signalement,id_type_signalement,adresse,id_sector,date_requalification,id_task,commentaire_agent_terrain) VALUES (?,?,?,?,?,?,?)";
 
     /** The Constant SQL_QUERY_SELECT_REQUALIFICATION. */
-    private static final String SQL_QUERY_SELECT_REQUALIFICATION                    = "SELECT * from signalement_requalification where id_signalement = ? ORDER BY date_requalification DESC";
+    private static final String SQL_QUERY_SELECT_REQUALIFICATION = "SELECT * from signalement_requalification where id_signalement = ? ORDER BY date_requalification DESC";
 
     /** The Constant SQL_QUERY_SELECT_REQUALIFICATION_BY_ID_TASK_HISTORY. */
     private static final String SQL_QUERY_SELECT_REQUALIFICATION_BY_ID_TASK_HISTORY = "SELECT id_signalement, id_type_signalement, adresse, id_sector, date_requalification, id_task, commentaire_agent_terrain from signalement_requalification where id_history = ? and id_task = ?";
 
     /** The Constant SQL_QUERY_UPDATE_REQUALIFICATION. */
-    private static final String SQL_QUERY_UPDATE_REQUALIFICATION                    = "UPDATE signalement_requalification t1 set id_history = ? where t1.id_signalement = ? and t1.id_task = ? and date_requalification = ( select max(t2.date_requalification) from signalement_requalification t2 where t1.id_signalement = t2.id_signalement )";
+    private static final String SQL_QUERY_UPDATE_REQUALIFICATION = "UPDATE signalement_requalification t1 set id_history = ? where t1.id_signalement = ? and t1.id_task = ? and date_requalification = ( select max(t2.date_requalification) from signalement_requalification t2 where t1.id_signalement = t2.id_signalement )";
 
     /** The Constant SQL_QUERY_UPDATE_REQUALIFICATION_HISTORY_TASK. */
-    private static final String SQL_QUERY_UPDATE_REQUALIFICATION_HISTORY_TASK       = "UPDATE signalement_requalification t1 set id_history = ?, id_task = ? where t1.id_signalement = ? and date_requalification = ( select max(t2.date_requalification) from signalement_requalification t2 where t1.id_signalement = t2.id_signalement )";
+    private static final String SQL_QUERY_UPDATE_REQUALIFICATION_HISTORY_TASK = "UPDATE signalement_requalification t1 set id_history = ?, id_task = ? where t1.id_signalement = ? and date_requalification = ( select max(t2.date_requalification) from signalement_requalification t2 where t1.id_signalement = t2.id_signalement )";
 
-    private static final String SQL_QUERY_GET_SIGNALEMENT_TDT_SELECT                = "select state.id_state,  " + "case WHEN sig.date_creation>(NOW()::date - INTERVAL ''2 DAY'') THEN ''2'' "
-            + "    WHEN sig.date_creation>(NOW() - INTERVAL ''10 DAY'') THEN ''1'' " + "    ELSE ''0'' " + "END AS tranche_date_creation,  count(sig.id_signalement) "
-            + "from signalement_signalement sig " + "join workflow_resource_workflow resource on resource.id_resource=sig.id_signalement "
-            + "join workflow_state state on state.id_state = resource.id_state " + "join unittree_unit_sector uus on sig.fk_id_sector = uus.id_sector "
-            + "where date_creation > (now() - ''{0} days''::interval) ";
+    /** The Constant SQL_QUERY_GET_SIGNALEMENT_TDT_SELECT. */
+    private static final String SQL_QUERY_GET_SIGNALEMENT_TDT_SELECT = "select state.id_state, case when state.id_state not in(9,21) then case when sig.date_creation >=( now()::date - interval ''2 DAY''::interval) then ''2'' when (sig.date_creation > now()- interval ''11 DAY''::interval) AND (sig.date_creation < now()- interval ''3 DAY''::interval) then ''1'' else ''0'' "
+            + "end when state.id_state in (9,21) THEN case when sig.date_prevue_traitement > ( select  now()  ) and sig.date_prevue_traitement < ( select  now() + interval ''2 DAY''::interval ) then ''2'' when (sig.date_prevue_traitement > now()- interval ''11 DAY''::interval) and (sig.date_prevue_traitement < now()) then ''1'' when (sig.date_prevue_traitement < now()- ''11 days''::interval ) then ''0'' else ''-1'' end END AS tranche_date_creation,  count(sig.id_signalement) from signalement_signalement sig"
+            + " join workflow_resource_workflow resource on resource.id_resource=sig.id_signalement join workflow_state state on state.id_state = resource.id_state "
+            + "join unittree_unit_sector uus on sig.fk_id_sector = uus.id_sector " + "where date_creation > (now() - ''{0} days''::interval) ";
 
     /** The Constant SQL_QUERY_GET_ID_SIGNALEMENT_TDT_SELECT. */
-    private static final String SQL_QUERY_GET_ID_SIGNALEMENT_TDT_SELECT             = "select sig.id_signalement " + "from signalement_signalement sig "
-            + "join workflow_resource_workflow resource on resource.id_resource=sig.id_signalement " + "join workflow_state state on state.id_state = resource.id_state "
-            + "join unittree_unit_sector uus on sig.fk_id_sector = uus.id_sector ";
+    private static final String SQL_QUERY_GET_ID_SIGNALEMENT_TDT_SELECT = "select sig.id_signalement " + "from signalement_signalement sig "
+            + "join workflow_resource_workflow resource on resource.id_resource=sig.id_signalement "
+            + "join workflow_state state on state.id_state = resource.id_state " + "join unittree_unit_sector uus on sig.fk_id_sector = uus.id_sector ";
 
     /** The Constant SQL_QUERY_GET_SIGNALEMENT_TDT_GROUP. */
-    private static final String SQL_QUERY_GET_SIGNALEMENT_TDT_GROUP                 = " group by state.id_state, tranche_date_creation " + "order by state.id_state, tranche_date_creation asc";
+    private static final String SQL_QUERY_GET_SIGNALEMENT_TDT_GROUP = " group by state.id_state, tranche_date_creation "
+            + "order by state.id_state, tranche_date_creation asc";
 
     /** The Constant SQL_QUERY_FIND_ANO_WITHOUT_STATES. */
-    private static final String SQL_QUERY_FIND_ANO_WITHOUT_STATES                   = "select id_signalement, date_creation from signalement_signalement s left join workflow_resource_workflow w on s.id_signalement = w.id_resource where w.id_resource is null order by date_creation desc limit 10";
+    private static final String SQL_QUERY_FIND_ANO_WITHOUT_STATES = "select id_signalement, date_creation from signalement_signalement s left join workflow_resource_workflow w on s.id_signalement = w.id_resource where w.id_resource is null order by date_creation desc limit 10";
 
     /** The Constant SQL_QUERY_GET_REPARTITION_SERVICE_FAIT_MASSE. */
-    private static final String SQL_QUERY_GET_REPARTITION_SERVICE_FAIT_MASSE        = "select type.libelle, count(signalement.id_signalement) from signalement_signalement signalement join workflow_resource_workflow workflow on workflow.id_resource=signalement.id_signalement join signalement_type_signalement type on type.id_type_signalement = signalement.fk_id_type_signalement";
+    private static final String SQL_QUERY_GET_REPARTITION_SERVICE_FAIT_MASSE = "select type.libelle, count(signalement.id_signalement) from signalement_signalement signalement join workflow_resource_workflow workflow on workflow.id_resource=signalement.id_signalement join signalement_type_signalement type on type.id_type_signalement = signalement.fk_id_type_signalement";
 
     /** The Constant SQL_QUERY_GET_ID_SIGNALEMENT_SERVICE_FAIT_MASSE. */
-    private static final String SQL_QUERY_GET_ID_SIGNALEMENT_SERVICE_FAIT_MASSE     = "select signalement.id_signalement from signalement_signalement signalement join workflow_resource_workflow workflow on workflow.id_resource = signalement.id_signalement join signalement_type_signalement type on type.id_type_signalement = signalement.fk_id_type_signalement";
+    private static final String SQL_QUERY_GET_ID_SIGNALEMENT_SERVICE_FAIT_MASSE = "select signalement.id_signalement from signalement_signalement signalement join workflow_resource_workflow workflow on workflow.id_resource = signalement.id_signalement join signalement_type_signalement type on type.id_type_signalement = signalement.fk_id_type_signalement";
 
     /** The Constant SQL_QUERY_INSERT_HISTORY_SERVICE_FAIT_MASSE_PART_1. */
-    private static final String SQL_QUERY_INSERT_HISTORY_SERVICE_FAIT_MASSE_PART_1  = "WITH insHistory AS ( insert into workflow_resource_history (id_resource, resource_type, id_workflow, id_action, creation_date, user_access_code) select id_signalement, 'SIGNALEMENT_SIGNALEMENT', 2, 70, localtimestamp, 'admin' from signalement_signalement where signalement_signalement.id_signalement in ( ";
+    private static final String SQL_QUERY_INSERT_HISTORY_SERVICE_FAIT_MASSE_PART_1 = "WITH insHistory AS ( insert into workflow_resource_history (id_resource, resource_type, id_workflow, id_action, creation_date, user_access_code) select id_signalement, 'SIGNALEMENT_SIGNALEMENT', 2, 70, localtimestamp, 'admin' from signalement_signalement where signalement_signalement.id_signalement in ( ";
 
     /** The Constant SQL_QUERY_INSERT_HISTORY_SERVICE_FAIT_MASSE_PART_2. */
-    private static final String SQL_QUERY_INSERT_HISTORY_SERVICE_FAIT_MASSE_PART_2  = " ) RETURNING id_history ) insert into workflow_task_comment_value (id_history, id_task, comment_value) select id_history, 150, ? from insHistory ";
+    private static final String SQL_QUERY_INSERT_HISTORY_SERVICE_FAIT_MASSE_PART_2 = " ) RETURNING id_history ) insert into workflow_task_comment_value (id_history, id_task, comment_value) select id_history, 150, ? from insHistory ";
 
     /** The Constant SQL_QUERY_UPDATE_STATE_SERVICE_FAIT_MASSE. */
-    private static final String SQL_QUERY_UPDATE_STATE_SERVICE_FAIT_MASSE           = " update workflow_resource_workflow set id_state = 10 ";
+    private static final String SQL_QUERY_UPDATE_STATE_SERVICE_FAIT_MASSE = " update workflow_resource_workflow set id_state = 10 ";
+
+    /** The Constant SQL_QUERY_UPDATE_DATE_PASSAGE_FAIT_MASSE. */
+    private static final String SQL_QUERY_UPDATE_DATE_PASSAGE_FAIT_MASSE = " update signalement_signalement set service_fait_date_passage = (select current_timestamp) ";
+
+    /** The Constant SQL_QUERY_GET_SIGNALEMENTS_PROGRAMME. */
+    private static final String SQL_QUERY_GET_SIGNALEMENTS_PROGRAMME = "select id_signalement from signalement_signalement join workflow_resource_workflow w on w.id_resource = id_signalement where date_prevue_traitement = NOW()::date and w.id_state=9";
+
+    /** The Constant SQL_QUERY_GET_SIGNALEMENTS_PROGRAMME_TIERS. */
+    private static final String SQL_QUERY_GET_SIGNALEMENTS_PROGRAMME_TIERS = "select id_signalement from signalement_signalement join workflow_resource_workflow w on w.id_resource = id_signalement where date_prevue_traitement = NOW()::date and w.id_state=21";
+
+    /** The Constant SQL_QUERY_FIND_LABEL_PRESTATAIRE. */
+    private static final String SQL_QUERY_FIND_LABEL_PRESTATAIRE = "select uu.label from signalement_signalement ss, unittree_unit_sector uus , unittree_unit uu , signalement_workflow_webservice_config_unit swwcu "
+            + "where ss.fk_id_sector = uus.id_sector and uus.id_unit = uu.id_unit and uu.id_unit = swwcu.id_unit and ss.id_signalement = ? and swwcu.urlprestataire is not null limit 1";
 
     /**
      * Makes references between client sort keyword and actual sql joins / columns names.
      */
     private Map<String, String> _ordersMap;
+
+    /** The Constant SQL_WHERE_DATE_CREATION. */
+    private static final String SQL_WHERE_DATE_CREATION = "where date_creation > (now() - ''{0} days''::interval)";
 
     /**
      * Instantiates a new report dao.
@@ -348,7 +371,7 @@ public class SignalementDAO implements ISignalementDAO
         _ordersMap.put( "priorite.libelle", "priorite.libelle" );
         _ordersMap.put( "type.libelle", "type.libelle" );
         _ordersMap.put( "direction_unit.label", "direction_unit.label" );
-        _ordersMap.put( "adr.adresse", "adr.adresse" );
+        _ordersMap.put( ADRESSE, ADRESSE );
         _ordersMap.put( "signalement.commentaire", "signalement.commentaire" );
         _ordersMap.put( "signalement.date_creation", "signalement.date_creation" );
         _ordersMap.put( "photo.id_photo", "photo.id_photo" );
@@ -379,7 +402,7 @@ public class SignalementDAO implements ISignalementDAO
     @Override
     public Long insert( Signalement signalement )
     {
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT ); )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT ) ; )
         {
             if ( ( signalement.getId( ) == null ) || signalement.getId( ).equals( 0L ) )
             {
@@ -560,7 +583,7 @@ public class SignalementDAO implements ISignalementDAO
             {
                 daoUtil.setTimestamp( nIndex++, DateUtils.formatDateSqlWithTime( dateTraitementString ) );
             }
-            catch ( ParseException e )
+            catch( ParseException e )
             {
                 AppLogService.error( e );
             }
@@ -592,79 +615,113 @@ public class SignalementDAO implements ISignalementDAO
         daoUtil.executeQuery( );
         if ( daoUtil.next( ) )
         {
-            signalement = new Signalement( );
-            int nIndex = 1;
-            signalement.setId( daoUtil.getLong( nIndex++ ) );
-            signalement.setSuivi( daoUtil.getInt( nIndex++ ) );
-            signalement.setDateCreation( DateUtils.getDateFr( daoUtil.getDate( nIndex ) ) );
-            signalement.setHeureCreation( daoUtil.getTimestamp( nIndex++ ) );
-            signalement.setDatePrevueTraitement( DateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
-            signalement.setCommentaire( daoUtil.getString( nIndex++ ) );
-
-            signalement.setAnnee( daoUtil.getInt( nIndex++ ) );
-            signalement.setMois( daoUtil.getString( nIndex++ ) );
-            signalement.setNumero( daoUtil.getInt( nIndex++ ) );
-            signalement.setPrefix( daoUtil.getString( nIndex++ ) );
-
-            if ( daoUtil.getLong( nIndex++ ) > 0 )
-            {
-                Priorite priorite = new Priorite( );
-                priorite.setId( daoUtil.getLong( nIndex - 1 ) );
-                signalement.setPriorite( priorite );
-            }
-            if ( daoUtil.getLong( nIndex++ ) > 0 )
-            {
-                Arrondissement arrondissement = new Arrondissement( );
-                arrondissement.setId( daoUtil.getLong( nIndex - 1 ) );
-                signalement.setArrondissement( arrondissement );
-            }
-            if ( daoUtil.getLong( nIndex++ ) > 0 )
-            {
-                TypeSignalement typeSignalement = new TypeSignalement( );
-                typeSignalement.setId( daoUtil.getInt( nIndex - 1 ) );
-                signalement.setTypeSignalement( typeSignalement );
-            }
-            if ( daoUtil.getInt( nIndex++ ) > 0 )
-            {
-                Sector sector = new Sector( );
-                sector.setIdSector( daoUtil.getInt( nIndex - 1 ) );
-                signalement.setSecteur( sector );
-            }
-
-            signalement.setIsDoublon( daoUtil.getBoolean( nIndex++ ) );
-            signalement.setToken( daoUtil.getString( nIndex++ ) );
-            Date serviceFaitTraitement = daoUtil.getTimestamp( nIndex++ );
-            if ( serviceFaitTraitement != null )
-            {
-                signalement.setDateServiceFaitTraitement( DateUtils.getDateFr( serviceFaitTraitement ) );
-                signalement.setHeureServiceFaitTraitement( DateUtils.getHourFrSansColonne( serviceFaitTraitement ) );
-            }
-            signalement.setFelicitations( daoUtil.getInt( nIndex++ ) );
-            Date miseEnSurveillance = daoUtil.getTimestamp( nIndex++ );
-            if ( miseEnSurveillance != null )
-            {
-                signalement.setDateMiseEnSurveillance( DateUtils.getDateFr( miseEnSurveillance ) );
-            }
-            Date rejet = daoUtil.getTimestamp( nIndex++ );
-            if ( rejet != null )
-            {
-                signalement.setDateRejet( DateUtils.getDateFr( rejet ) );
-            }
-
-            signalement.setCourrielDestinataire( daoUtil.getString( nIndex++ ) );
-            signalement.setCourrielExpediteur( daoUtil.getString( nIndex++ ) );
-
-            Timestamp courrielDate = daoUtil.getTimestamp( nIndex++ );
-            if ( courrielDate != null )
-            {
-                signalement.setCourrielDate( courrielDate );
-            }
-            signalement.setSendWs( daoUtil.getBoolean( nIndex++ ) );
-            signalement.setCommentaireAgentTerrain( daoUtil.getString( nIndex ) );
-
+            signalement = fillSignalement( daoUtil );
         }
 
         daoUtil.close( );
+
+        return signalement;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Signalement getAnomalieByNumber( String number )
+    {
+        Signalement signalement = null;
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_NUMBER );
+        daoUtil.setString( 1, number );
+        daoUtil.executeQuery( );
+        if ( daoUtil.next( ) )
+        {
+            signalement = fillSignalement( daoUtil );
+        }
+
+        daoUtil.close( );
+
+        return signalement;
+    }
+
+    /**
+     * Fill signalement.
+     *
+     * @param daoUtil
+     *            the dao util
+     * @return the signalement
+     */
+    private Signalement fillSignalement( DAOUtil daoUtil )
+    {
+        Signalement signalement = new Signalement( );
+
+        int nIndex = 1;
+        signalement.setId( daoUtil.getLong( nIndex++ ) );
+        signalement.setSuivi( daoUtil.getInt( nIndex++ ) );
+        signalement.setDateCreation( DateUtils.getDateFr( daoUtil.getDate( nIndex ) ) );
+        signalement.setHeureCreation( daoUtil.getTimestamp( nIndex++ ) );
+        signalement.setDatePrevueTraitement( DateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
+        signalement.setCommentaire( daoUtil.getString( nIndex++ ) );
+
+        signalement.setAnnee( daoUtil.getInt( nIndex++ ) );
+        signalement.setMois( daoUtil.getString( nIndex++ ) );
+        signalement.setNumero( daoUtil.getInt( nIndex++ ) );
+        signalement.setPrefix( daoUtil.getString( nIndex++ ) );
+
+        if ( daoUtil.getLong( nIndex++ ) > 0 )
+        {
+            Priorite priorite = new Priorite( );
+            priorite.setId( daoUtil.getLong( nIndex - 1 ) );
+            signalement.setPriorite( priorite );
+        }
+        if ( daoUtil.getLong( nIndex++ ) > 0 )
+        {
+            Arrondissement arrondissement = new Arrondissement( );
+            arrondissement.setId( daoUtil.getLong( nIndex - 1 ) );
+            signalement.setArrondissement( arrondissement );
+        }
+        if ( daoUtil.getLong( nIndex++ ) > 0 )
+        {
+            TypeSignalement typeSignalement = new TypeSignalement( );
+            typeSignalement.setId( daoUtil.getInt( nIndex - 1 ) );
+            signalement.setTypeSignalement( typeSignalement );
+        }
+        if ( daoUtil.getInt( nIndex++ ) > 0 )
+        {
+            Sector sector = new Sector( );
+            sector.setIdSector( daoUtil.getInt( nIndex - 1 ) );
+            signalement.setSecteur( sector );
+        }
+
+        signalement.setIsDoublon( daoUtil.getBoolean( nIndex++ ) );
+        signalement.setToken( daoUtil.getString( nIndex++ ) );
+        Date serviceFaitTraitement = daoUtil.getTimestamp( nIndex++ );
+        if ( serviceFaitTraitement != null )
+        {
+            signalement.setDateServiceFaitTraitement( DateUtils.getDateFr( serviceFaitTraitement ) );
+            signalement.setHeureServiceFaitTraitement( DateUtils.getHourFrSansColonne( serviceFaitTraitement ) );
+        }
+        signalement.setFelicitations( daoUtil.getInt( nIndex++ ) );
+        Date miseEnSurveillance = daoUtil.getTimestamp( nIndex++ );
+        if ( miseEnSurveillance != null )
+        {
+            signalement.setDateMiseEnSurveillance( DateUtils.getDateFr( miseEnSurveillance ) );
+        }
+        Date rejet = daoUtil.getTimestamp( nIndex++ );
+        if ( rejet != null )
+        {
+            signalement.setDateRejet( DateUtils.getDateFr( rejet ) );
+        }
+
+        signalement.setCourrielDestinataire( daoUtil.getString( nIndex++ ) );
+        signalement.setCourrielExpediteur( daoUtil.getString( nIndex++ ) );
+
+        Timestamp courrielDate = daoUtil.getTimestamp( nIndex++ );
+        if ( courrielDate != null )
+        {
+            signalement.setCourrielDate( courrielDate );
+        }
+        signalement.setSendWs( daoUtil.getBoolean( nIndex++ ) );
+        signalement.setCommentaireAgentTerrain( daoUtil.getString( nIndex ) );
 
         return signalement;
     }
@@ -686,27 +743,23 @@ public class SignalementDAO implements ISignalementDAO
             int index = 1;
             for ( Order order : listeOrders )
             {
-                if ( index == listeOrders.size( ) )
+                if ( order.getName( ).equals( NUM_SIGNALEMENT ) )
                 {
-                    if ( order.getName( ).equals( NUM_SIGNALEMENT ) )
+                    sbSQL.append( "signalement.prefix, signalement.annee, signalement.mois, signalement.numero " );
+                }
+                else
+                    if ( ADRESSE.equals( order.getName( ) ) )
                     {
-                        sbSQL.append( "signalement.prefix, signalement.annee, signalement.mois, signalement.numero " );
+                        sbSQL.append( order.getName( ) + ", naturalsort(adresse) " );
                     }
                     else
                     {
                         sbSQL.append( order.getName( ) + " " );
                     }
-                }
-                else
+
+                if ( index < listeOrders.size( ) )
                 {
-                    if ( order.getName( ).equals( NUM_SIGNALEMENT ) )
-                    {
-                        sbSQL.append( "signalement.prefix, signalement.annee, signalement.mois, signalement.numero, " );
-                    }
-                    else
-                    {
-                        sbSQL.append( order.getName( ) + ", " );
-                    }
+                    sbSQL.append( ", " );
                     index++;
                 }
             }
@@ -718,7 +771,8 @@ public class SignalementDAO implements ISignalementDAO
     /**
      * replaces sort keys with sql paths to columns to sort.
      *
-     * @param orders            the orders
+     * @param orders
+     *            the orders
      * @return the list
      */
     private List<Order> convertOrderToClause( List<Order> orders )
@@ -763,18 +817,21 @@ public class SignalementDAO implements ISignalementDAO
                 {
                     bHasOrderUnit = true;
                 }
-                else if ( order.getName( ).startsWith( "type." ) )
-                {
-                    bHasOrderSignalementType = true;
-                }
-                else if ( order.getName( ).startsWith( "signaleur." ) )
-                {
-                    bHasOrderSignaleur = true;
-                }
-                else if ( order.getName( ).startsWith( "photo." ) )
-                {
-                    bHasOrderPhoto = true;
-                }
+                else
+                    if ( order.getName( ).startsWith( "type." ) )
+                    {
+                        bHasOrderSignalementType = true;
+                    }
+                    else
+                        if ( order.getName( ).startsWith( "signaleur." ) )
+                        {
+                            bHasOrderSignaleur = true;
+                        }
+                        else
+                            if ( order.getName( ).startsWith( "photo." ) )
+                            {
+                                bHasOrderPhoto = true;
+                            }
             }
         }
 
@@ -784,6 +841,12 @@ public class SignalementDAO implements ISignalementDAO
         boolean bHasFilterCategory = !CollectionUtils.isEmpty( filter.getListIdCategories( ) );
         boolean bHasFilterAdress = !StringUtils.isEmpty( filter.getAdresse( ) );
         boolean bHasFilterQuatier = !CollectionUtils.isEmpty( filter.getListIdQuartier( ) );
+
+        List<Order> listeOrders = convertOrderToClause( filter.getOrders( ) );
+        if ( !listeOrders.isEmpty( ) && !bHasFilterAdress )
+        {
+            bHasFilterAdress = listeOrders.stream( ).anyMatch( o -> ADRESSE.equals( o.getName( ) ) );
+        }
 
         // Units requires type
         if ( bHasFilterSignalementType || bHasOrderSignalementType || bHasFilterUnit || bHasOrderUnit )
@@ -833,10 +896,10 @@ public class SignalementDAO implements ISignalementDAO
         if ( ( filter.getListIdTypeSignalements( ) != null ) && !filter.getListIdTypeSignalements( ).isEmpty( ) )
         {
             int listeLength = filter.getListIdTypeSignalements( ).size( );
-            Character[] array = new Character[listeLength];
+            Character [ ] array = new Character [ listeLength];
             for ( int i = 0; i < listeLength; i++ )
             {
-                array[i] = '?';
+                array [i] = '?';
             }
             String unionQuery = StringUtils.join( array, COMA_SEPARATOR );
             nIndex = addSQLWhereOr( false, sbSQL, nIndex );
@@ -866,10 +929,10 @@ public class SignalementDAO implements ISignalementDAO
         if ( ( filter.getListIdArrondissements( ) != null ) && !filter.getListIdArrondissements( ).isEmpty( ) )
         {
             int listeLength = filter.getListIdArrondissements( ).size( );
-            Character[] array = new Character[listeLength];
+            Character [ ] array = new Character [ listeLength];
             for ( int i = 0; i < listeLength; i++ )
             {
-                array[i] = '?';
+                array [i] = '?';
             }
             String unionQuery = StringUtils.join( array, COMA_SEPARATOR );
             nIndex = addSQLWhereOr( false, sbSQL, nIndex );
@@ -880,10 +943,10 @@ public class SignalementDAO implements ISignalementDAO
         if ( ( filter.getListIdQuartier( ) != null ) && !filter.getListIdQuartier( ).isEmpty( ) )
         {
             int listeLength = filter.getListIdQuartier( ).size( );
-            Character[] array = new Character[listeLength];
+            Character [ ] array = new Character [ listeLength];
             for ( int i = 0; i < listeLength; i++ )
             {
-                array[i] = '?';
+                array [i] = '?';
             }
             String unionQuery = StringUtils.join( array, COMA_SEPARATOR );
             nIndex = addSQLWhereOr( false, sbSQL, nIndex );
@@ -902,10 +965,10 @@ public class SignalementDAO implements ISignalementDAO
         if ( !filter.getListIdUnit( ).isEmpty( ) )
         {
             int listeLength = filter.getListIdUnit( ).size( );
-            Character[] array = new Character[listeLength];
+            Character [ ] array = new Character [ listeLength];
             for ( int i = 0; i < listeLength; i++ )
             {
-                array[i] = '?';
+                array [i] = '?';
             }
             String unionQuery = StringUtils.join( array, COMA_SEPARATOR );
             nIndex = addSQLWhereOr( false, sbSQL, nIndex );
@@ -1010,10 +1073,10 @@ public class SignalementDAO implements ISignalementDAO
         if ( bHasFilterCategory )
         {
             int listeLength = filter.getListIdCategories( ).size( );
-            Character[] array = new Character[listeLength];
+            Character [ ] array = new Character [ listeLength];
             for ( int i = 0; i < listeLength; i++ )
             {
-                array[i] = '?';
+                array [i] = '?';
             }
             String unionQuery = StringUtils.join( array, COMA_SEPARATOR );
             addSQLWhereOr( false, sbSQL, nIndex );
@@ -1028,7 +1091,6 @@ public class SignalementDAO implements ISignalementDAO
             sbSQL.append( updateSelectPart( filter ) );
         }
         // ADD ORDERS
-        List<Order> listeOrders = convertOrderToClause( filter.getOrders( ) );
         if ( ( listeOrders != null ) && !listeOrders.isEmpty( ) )
         {
             sbSQL.append( " ORDER BY " );
@@ -1037,41 +1099,27 @@ public class SignalementDAO implements ISignalementDAO
             {
                 if ( NUM_SIGNALEMENT.equals( order.getName( ) ) )
                 {
-                    if ( index == listeOrders.size( ) )
-                    {
-                        sbSQL.append( " signalement.prefix " + order.getOrder( ) + ", signalement.annee " + order.getOrder( ) + ", signalement.mois " + order.getOrder( ) + ", signalement.numero "
-                                + order.getOrder( ) + " " );
-                    }
-                    else
-                    {
-                        sbSQL.append( " signalement.prefix " + order.getOrder( ) + ", signalement.annee " + order.getOrder( ) + ", signalement.mois " + order.getOrder( ) + ", signalement.numero "
-                                + order.getOrder( ) + ", " );
-                        index++;
-                    }
+                    sbSQL.append( " signalement.prefix " + order.getOrder( ) + ", signalement.annee " + order.getOrder( ) + ", signalement.mois "
+                            + order.getOrder( ) + ", signalement.numero " + order.getOrder( ) + " " );
                 }
-                else if ( SIGNALEUR_MAIL.equals( order.getName( ) ) )
-                {
-                    if ( index == listeOrders.size( ) )
+                else
+                    if ( SIGNALEUR_MAIL.equals( order.getName( ) ) )
                     {
                         sbSQL.append( order.getName( ) + " " + order.getOrder( ) + " NULLS LAST " );
                     }
                     else
-                    {
-                        sbSQL.append( order.getName( ) + " " + order.getOrder( ) + " NULLS LAST, " );
-                        index++;
-                    }
-                }
-                else
+                        if ( ADRESSE.equals( order.getName( ) ) )
+                        {
+                            sbSQL.append( " naturalsort(adresse) " + " " + order.getOrder( ) + " " );
+                        }
+                        else
+                        {
+                            sbSQL.append( order.getName( ) + " " + order.getOrder( ) + " " );
+                        }
+                if ( index < listeOrders.size( ) )
                 {
-                    if ( index == listeOrders.size( ) )
-                    {
-                        sbSQL.append( order.getName( ) + " " + order.getOrder( ) + " " );
-                    }
-                    else
-                    {
-                        sbSQL.append( order.getName( ) + " " + order.getOrder( ) + ", " );
-                        index++;
-                    }
+                    sbSQL.append( ", " );
+                    index++;
                 }
             }
         }
@@ -1164,7 +1212,14 @@ public class SignalementDAO implements ISignalementDAO
         }
 
         // Address
-        if ( ( filter.getAdresse( ) != null ) && !StringUtils.isBlank( filter.getAdresse( ) ) )
+        boolean bHasFilterAdress = !StringUtils.isEmpty( filter.getAdresse( ) );
+        List<Order> listeOrders = convertOrderToClause( filter.getOrders( ) );
+        if ( !listeOrders.isEmpty( ) && !bHasFilterAdress )
+        {
+            bHasFilterAdress = listeOrders.stream( ).anyMatch( o -> ADRESSE.equals( o.getName( ) ) );
+        }
+
+        if ( bHasFilterAdress )
         {
             daoUtil.setString( nIndex++, addPercent( filter.getAdresse( ) ) );
         }
@@ -1488,10 +1543,10 @@ public class SignalementDAO implements ISignalementDAO
 
         if ( ( listStatus != null ) && !listStatus.isEmpty( ) )
         {
-            Object[] qMarks = new Object[listStatus.size( )];
+            Object [ ] qMarks = new Object [ listStatus.size( )];
             for ( int i = 0; i < listStatus.size( ); i++ )
             {
-                qMarks[i] = '?';
+                qMarks [i] = '?';
             }
             String joinQuestionMarks = StringUtils.join( qMarks, ", " );
             stringBuilder.append( "AND resource_workflow.id_state IN (" + joinQuestionMarks + ") " );
@@ -1547,10 +1602,10 @@ public class SignalementDAO implements ISignalementDAO
 
         if ( ( listStatus != null ) && !listStatus.isEmpty( ) )
         {
-            Object[] qMarks = new Object[listStatus.size( )];
+            Object [ ] qMarks = new Object [ listStatus.size( )];
             for ( int i = 0; i < listStatus.size( ); i++ )
             {
-                qMarks[i] = '?';
+                qMarks [i] = '?';
             }
             String joinQuestionMarks = StringUtils.join( qMarks, ", " );
             stringBuilder.append( "AND resource_workflow.id_state IN (" + joinQuestionMarks + ") " );
@@ -1576,7 +1631,7 @@ public class SignalementDAO implements ISignalementDAO
             int nIndex = 1;
 
             DossierSignalementDTO dossierSignalementDTO = new DossierSignalementDTO( );
-            dossierSignalementDTO.setId( ( long ) daoUtil.getInt( nIndex++ ) );
+            dossierSignalementDTO.setId( (long) daoUtil.getInt( nIndex++ ) );
             dossierSignalementDTO.setAdresse( daoUtil.getString( nIndex++ ) );
             dossierSignalementDTO.setDateCreation( DateUtils.getDateFr( daoUtil.getDate( nIndex ) ) );
             dossierSignalementDTO.setHeureCreation( DateUtils.getHourFr( daoUtil.getTimestamp( nIndex++ ) ) );
@@ -1599,7 +1654,8 @@ public class SignalementDAO implements ISignalementDAO
     @Override
     public Integer getDistanceBetweenSignalement( double lat1, double lng1, double lat2, double lng2 )
     {
-        String query = "SELECT ST_Distance(ST_GeographyFromText('POINT(" + lng1 + "" + lat1 + ")'), " + "ST_GeographyFromText('POINT(" + lng2 + "" + lat2 + ")')) ";
+        String query = "SELECT ST_Distance(ST_GeographyFromText('POINT(" + lng1 + "" + lat1 + ")'), " + "ST_GeographyFromText('POINT(" + lng2 + "" + lat2
+                + ")')) ";
 
         Integer distance = 0;
 
@@ -1667,13 +1723,13 @@ public class SignalementDAO implements ISignalementDAO
      * {@inheritDoc}
      */
     @Override
-    public Double[] getGeomFromLambertToWgs84( Double dLatLambert, Double dLngLambert )
+    public Double [ ] getGeomFromLambertToWgs84( Double dLatLambert, Double dLngLambert )
     {
 
-        String query = "SELECT ST_X(ST_Transform(ST_GeomFromText('POINT(" + dLatLambert + " " + dLngLambert + ")',27561),4326)), ST_Y(ST_Transform(ST_GeomFromText('POINT(" + dLatLambert + " "
-                + dLngLambert + ")',27561),4326))";
+        String query = "SELECT ST_X(ST_Transform(ST_GeomFromText('POINT(" + dLatLambert + " " + dLngLambert
+                + ")',27561),4326)), ST_Y(ST_Transform(ST_GeomFromText('POINT(" + dLatLambert + " " + dLngLambert + ")',27561),4326))";
 
-        Double geom[] = new Double[2];
+        Double geom[] = new Double [ 2];
         DAOUtil daoUtil = new DAOUtil( query );
         daoUtil.executeQuery( );
 
@@ -1681,8 +1737,8 @@ public class SignalementDAO implements ISignalementDAO
         {
             int nIndex = 1;
 
-            geom[0] = daoUtil.getDouble( nIndex++ );
-            geom[1] = daoUtil.getDouble( nIndex );
+            geom [0] = daoUtil.getDouble( nIndex++ );
+            geom [1] = daoUtil.getDouble( nIndex );
         }
 
         daoUtil.close( );
@@ -1693,13 +1749,13 @@ public class SignalementDAO implements ISignalementDAO
      * {@inheritDoc}
      */
     @Override
-    public Double[] getGeomFromLambert93ToWgs84( Double dLatLambert, Double dLngLambert )
+    public Double [ ] getGeomFromLambert93ToWgs84( Double dLatLambert, Double dLngLambert )
     {
 
-        String query = "SELECT ST_X(ST_Transform(ST_GeomFromText('POINT(" + dLatLambert + " " + dLngLambert + ")',2154),4326)), ST_Y(ST_Transform(ST_GeomFromText('POINT(" + dLatLambert + " "
-                + dLngLambert + ")',2154),4326))";
+        String query = "SELECT ST_X(ST_Transform(ST_GeomFromText('POINT(" + dLatLambert + " " + dLngLambert
+                + ")',2154),4326)), ST_Y(ST_Transform(ST_GeomFromText('POINT(" + dLatLambert + " " + dLngLambert + ")',2154),4326))";
 
-        Double geom[] = new Double[2];
+        Double geom[] = new Double [ 2];
         DAOUtil daoUtil = new DAOUtil( query );
         daoUtil.executeQuery( );
 
@@ -1707,8 +1763,8 @@ public class SignalementDAO implements ISignalementDAO
         {
             int nIndex = 1;
 
-            geom[0] = daoUtil.getDouble( nIndex++ );
-            geom[1] = daoUtil.getDouble( nIndex );
+            geom [0] = daoUtil.getDouble( nIndex++ );
+            geom [1] = daoUtil.getDouble( nIndex );
         }
 
         daoUtil.close( );
@@ -1754,8 +1810,10 @@ public class SignalementDAO implements ISignalementDAO
     /**
      * Adds filter criterias to query.
      *
-     * @param filter            the report filter
-     * @param sbSQL            the quey
+     * @param filter
+     *            the report filter
+     * @param sbSQL
+     *            the quey
      */
     private void addFilterCriterias( SignalementFilter filter, StringBuilder sbSQL )
     {
@@ -1767,6 +1825,12 @@ public class SignalementDAO implements ISignalementDAO
         boolean bHasFilterCategory = !CollectionUtils.isEmpty( filter.getListIdCategories( ) );
         boolean bHasFilterAdress = !StringUtils.isEmpty( filter.getAdresse( ) );
         boolean bHasFilterQuatier = !CollectionUtils.isEmpty( filter.getListIdQuartier( ) );
+
+        List<Order> listeOrders = convertOrderToClause( filter.getOrders( ) );
+        if ( !listeOrders.isEmpty( ) && !bHasFilterAdress )
+        {
+            bHasFilterAdress = listeOrders.stream( ).anyMatch( o -> ADRESSE.equals( o.getName( ) ) );
+        }
 
         // Units requires type
         if ( bHasFilterSignalementType || bHasFilterUnit )
@@ -1810,10 +1874,10 @@ public class SignalementDAO implements ISignalementDAO
         if ( ( filter.getListIdTypeSignalements( ) != null ) && !filter.getListIdTypeSignalements( ).isEmpty( ) )
         {
             int listeLength = filter.getListIdTypeSignalements( ).size( );
-            Character[] array = new Character[listeLength];
+            Character [ ] array = new Character [ listeLength];
             for ( int i = 0; i < listeLength; i++ )
             {
-                array[i] = '?';
+                array [i] = '?';
             }
             String unionQuery = StringUtils.join( array, COMA_SEPARATOR );
             nIndex = addSQLWhereOr( false, sbSQL, nIndex );
@@ -1843,10 +1907,10 @@ public class SignalementDAO implements ISignalementDAO
         if ( ( filter.getListIdArrondissements( ) != null ) && !filter.getListIdArrondissements( ).isEmpty( ) )
         {
             int listeLength = filter.getListIdArrondissements( ).size( );
-            Character[] array = new Character[listeLength];
+            Character [ ] array = new Character [ listeLength];
             for ( int i = 0; i < listeLength; i++ )
             {
-                array[i] = '?';
+                array [i] = '?';
             }
             String unionQuery = StringUtils.join( array, COMA_SEPARATOR );
             nIndex = addSQLWhereOr( false, sbSQL, nIndex );
@@ -1857,10 +1921,10 @@ public class SignalementDAO implements ISignalementDAO
         if ( ( filter.getListIdQuartier( ) != null ) && !filter.getListIdQuartier( ).isEmpty( ) )
         {
             int listeLength = filter.getListIdQuartier( ).size( );
-            Character[] array = new Character[listeLength];
+            Character [ ] array = new Character [ listeLength];
             for ( int i = 0; i < listeLength; i++ )
             {
-                array[i] = '?';
+                array [i] = '?';
             }
             String unionQuery = StringUtils.join( array, COMA_SEPARATOR );
             nIndex = addSQLWhereOr( false, sbSQL, nIndex );
@@ -1879,10 +1943,10 @@ public class SignalementDAO implements ISignalementDAO
         if ( !filter.getListIdUnit( ).isEmpty( ) )
         {
             int listeLength = filter.getListIdUnit( ).size( );
-            Character[] array = new Character[listeLength];
+            Character [ ] array = new Character [ listeLength];
             for ( int i = 0; i < listeLength; i++ )
             {
-                array[i] = '?';
+                array [i] = '?';
             }
             String unionQuery = StringUtils.join( array, COMA_SEPARATOR );
             nIndex = addSQLWhereOr( false, sbSQL, nIndex );
@@ -1986,10 +2050,10 @@ public class SignalementDAO implements ISignalementDAO
         if ( bHasFilterCategory )
         {
             int listeLength = filter.getListIdCategories( ).size( );
-            Character[] array = new Character[listeLength];
+            Character [ ] array = new Character [ listeLength];
             for ( int i = 0; i < listeLength; i++ )
             {
-                array[i] = '?';
+                array [i] = '?';
             }
             String unionQuery = StringUtils.join( array, COMA_SEPARATOR );
             addSQLWhereOr( false, sbSQL, nIndex );
@@ -2144,10 +2208,10 @@ public class SignalementDAO implements ISignalementDAO
         if ( !ArrayUtils.isEmpty( filter.getCategoryIds( ) ) )
         {
             int listeLength = filter.getCategoryIds( ).length;
-            Character[] array = new Character[listeLength];
+            Character [ ] array = new Character [ listeLength];
             for ( int i = 0; i < listeLength; i++ )
             {
-                array[i] = '?';
+                array [i] = '?';
             }
             String unionQuery = StringUtils.join( array, COMA_SEPARATOR );
             nIndex = addSQLWhereOr( false, query, nIndex );
@@ -2158,10 +2222,10 @@ public class SignalementDAO implements ISignalementDAO
         if ( !ArrayUtils.isEmpty( filter.getArrondissementIds( ) ) )
         {
             int listeLength = filter.getArrondissementIds( ).length;
-            Character[] array = new Character[listeLength];
+            Character [ ] array = new Character [ listeLength];
             for ( int i = 0; i < listeLength; i++ )
             {
-                array[i] = '?';
+                array [i] = '?';
             }
             String unionQuery = StringUtils.join( array, COMA_SEPARATOR );
             addSQLWhereOr( false, query, nIndex );
@@ -2195,7 +2259,7 @@ public class SignalementDAO implements ISignalementDAO
                     lowerBound = lowerBound + 1;
                 }
                 LocalDate lowerBoundDate = LocalDate.now( );
-                lowerBoundDate = lowerBoundDate.plus(  lowerBound , ChronoUnit.MONTHS );
+                lowerBoundDate = lowerBoundDate.plus( lowerBound, ChronoUnit.MONTHS );
                 // current month = first day of the month
                 if ( lowerBound == 0 )
                 {
@@ -2228,10 +2292,16 @@ public class SignalementDAO implements ISignalementDAO
 
         daoUtil.executeQuery( );
 
+        return fillDashboardDTO( daoUtil );
+    }
+
+    private List<DashboardSignalementDTO> fillDashboardDTO( DAOUtil daoUtil )
+    {
+
         List<DashboardSignalementDTO> dashboardSigList = new ArrayList<>( );
         while ( daoUtil.next( ) )
         {
-            nIndex = 1;
+            int nIndex = 1;
             DashboardSignalementDTO dashboardSigDTO = new DashboardSignalementDTO( );
             dashboardSigDTO.setIdSignalement( daoUtil.getInt( nIndex++ ) );
             java.sql.Date creationDate = daoUtil.getDate( nIndex++ );
@@ -2257,7 +2327,9 @@ public class SignalementDAO implements ISignalementDAO
         }
 
         daoUtil.close( );
+
         return dashboardSigList;
+
     }
 
     /**
@@ -2288,7 +2360,8 @@ public class SignalementDAO implements ISignalementDAO
     /**
      * Build the query to get the reports ids matching the filter.
      *
-     * @param filter            the report filter
+     * @param filter
+     *            the report filter
      * @return the query
      */
     private String buildSQLQueryForIds( SignalementFilter filter )
@@ -2332,11 +2405,12 @@ public class SignalementDAO implements ISignalementDAO
      * {@inheritDoc}
      */
     @Override
-    public List<Integer> findIdsSingalementForWSPartnerDeamon( int signalementState )
+    public List<Integer> findIdsSingalementForWSPartnerDeamon( int signalementState, int nbDays )
     {
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ID_SIGNALEMENT_FOR_PARTNER_DEAMON );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ID_SIGNALEMENT_FOR_PARTNER_DEAMON.replace( "NB_DAYS", String.valueOf( nbDays ) ) );
         daoUtil.setInt( 1, signalementState );
+
         daoUtil.executeQuery( );
 
         List<Integer> signalementsIds = new ArrayList<>( );
@@ -2376,7 +2450,8 @@ public class SignalementDAO implements ISignalementDAO
      * {@inheritDoc}
      */
     @Override
-    public void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector, Integer idTask, String commentaireAgentTerrain )
+    public void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector, Integer idTask,
+            String commentaireAgentTerrain )
     {
 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_REQUALIFICATION );
@@ -2545,12 +2620,7 @@ public class SignalementDAO implements ISignalementDAO
 
             // Si le statut n'est pas présent dans la map on l'ajoute
             Integer statut = daoUtil.getInt( nIndex++ );
-            if ( !signalementsMap.containsKey( statut ) )
-            {
-                Map<Integer, Integer> statutMap = new HashMap<>( );
-                signalementsMap.put( statut, statutMap );
-            }
-
+            signalementsMap.computeIfAbsent( statut, k -> new HashMap<>( ) );
             // Ajout des signalement
             Integer trancheCreation = daoUtil.getInt( nIndex++ );
             Integer nbSignalement = daoUtil.getInt( nIndex );
@@ -2577,28 +2647,12 @@ public class SignalementDAO implements ISignalementDAO
 
         if ( tableauDeBordFilter.getTrancheId( ) != null )
         {
-            switch ( tableauDeBordFilter.getTrancheId( ) )
-            {
-                case 2:
-                    // moins de 48h
-                    query.append( "where date_creation > (now() - '2 days'::interval) " );
-                    break;
-                case 1:
-                    // moins de 10j
-                    query.append( "where date_creation > (now() - '10 days'::interval) " );
-                    break;
-                default:
-                    // plus de 10j -> utilisation de la période
-                    query.append( MessageFormat.format( "where date_creation > (now() - ''{0} days''::interval)", PERIODE_MAP.get( tableauDeBordFilter.getPeriodId( ) ) ) );
-                    // plus de 10j
-                    query.append( " and date_creation < (now()- '10 DAY days'::interval) " );
-                    break;
-            }
+            addQueryTranche( tableauDeBordFilter, query );
         }
         else
         {
             // Utilisation de la période
-            query.append( MessageFormat.format( "where date_creation > (now() - ''{0} days''::interval)", PERIODE_MAP.get( tableauDeBordFilter.getPeriodId( ) ) ) );
+            query.append( MessageFormat.format( SQL_WHERE_DATE_CREATION, PERIODE_MAP.get( tableauDeBordFilter.getPeriodId( ) ) ) );
         }
 
         if ( tableauDeBordFilter.getUnitId( ) != null )
@@ -2615,8 +2669,9 @@ public class SignalementDAO implements ISignalementDAO
 
         if ( tableauDeBordFilter.getCategoryId( ) != null )
         {
-            query.append( " and sig.fk_id_type_signalement in ( SELECT id_type_signalement FROM v_signalement_type_signalement_with_parents_links WHERE id_parent = "
-                    + tableauDeBordFilter.getCategoryId( ) + " ) " );
+            query.append(
+                    " and sig.fk_id_type_signalement in ( SELECT id_type_signalement FROM v_signalement_type_signalement_with_parents_links WHERE id_parent = "
+                            + tableauDeBordFilter.getCategoryId( ) + " ) " );
         }
 
         if ( tableauDeBordFilter.getState( ) != null )
@@ -2624,6 +2679,7 @@ public class SignalementDAO implements ISignalementDAO
             query.append( " and state.id_state =  " + tableauDeBordFilter.getState( ) );
         }
 
+        query.append( " order by id_signalement desc " );
         DAOUtil daoUtil = new DAOUtil( query.toString( ) );
 
         daoUtil.executeQuery( );
@@ -2636,6 +2692,72 @@ public class SignalementDAO implements ISignalementDAO
         daoUtil.close( );
 
         return ids;
+    }
+
+    /**
+     * Add build query part for tranche.
+     *
+     * @param tableauDeBordFilter
+     *            filter
+     * @param query
+     *            query
+     */
+    private void addQueryTranche( TableauDeBordFilter tableauDeBordFilter, StringBuilder query )
+    {
+
+        boolean isProgramme = ( ( tableauDeBordFilter.getState( ).intValue( ) == SignalementConstants.ID_STATE_PROGRAMME.intValue( ) )
+                || ( tableauDeBordFilter.getState( ).intValue( ) == SignalementConstants.ID_STATE_PROGRAMME_PRESTATAIRE.intValue( ) ) );
+
+        if ( isProgramme )
+        {
+            // utilisation de la période
+            query.append( MessageFormat.format( SQL_WHERE_DATE_CREATION, PERIODE_MAP.get( tableauDeBordFilter.getPeriodId( ) ) ) );
+        }
+
+        switch( tableauDeBordFilter.getTrancheId( ) )
+        {
+            case 2:
+                if ( isProgramme )
+                {
+                    // A echeance dans 48h
+                    query.append( " and date_prevue_traitement > now()" );
+                    query.append( " and date_prevue_traitement < (now() + '2 days'::interval)" );
+                }
+                else
+                {
+                    // moins de 48h
+                    query.append( "where date_creation > (now() - '2 days'::interval) " );
+                }
+                break;
+            case 1:
+                if ( isProgramme )
+                {
+                    // retard de 10j ou moins
+                    query.append( " and date_prevue_traitement > (now()- '11 days'::interval)" );
+                    query.append( " and date_prevue_traitement < now()" );
+                }
+                else
+                {
+                    // moins de 10j
+                    query.append( "where date_creation > (now() - '10 days'::interval) " );
+                }
+                break;
+            default:
+                if ( isProgramme )
+                {
+                    // retard de + 10 jours
+                    query.append( " and date_prevue_traitement < (now()- '11 days'::interval)" );
+                }
+                else
+                {
+                    // utilisation de la période
+                    query.append( MessageFormat.format( SQL_WHERE_DATE_CREATION, PERIODE_MAP.get( tableauDeBordFilter.getPeriodId( ) ) ) );
+                    // plus de 10j
+                    query.append( " and date_creation < (now()- '10 DAY days'::interval) " );
+                }
+                break;
+        }
+
     }
 
     /**
@@ -2767,6 +2889,34 @@ public class SignalementDAO implements ISignalementDAO
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updateDatePassageServiceFaitMasse( ServiceFaitMasseFilter filter )
+    {
+        StringBuilder sbSQL = new StringBuilder( SQL_QUERY_UPDATE_DATE_PASSAGE_FAIT_MASSE );
+        sbSQL.append( " where id_signalement in ( " );
+
+        // Ajout de l'id des signalements via le filtre
+        sbSQL.append( SQL_QUERY_GET_ID_SIGNALEMENT_SERVICE_FAIT_MASSE );
+
+        // Ajout des conditions
+        getConditionsServiceFaitMasse( filter, sbSQL );
+
+        sbSQL.append( ")" );
+
+        DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ) );
+
+        // Ajout des valeurs aux conditions
+        setValuesToConditions( daoUtil, filter, false );
+
+        // Execution de la requête
+        daoUtil.executeUpdate( );
+
+        daoUtil.close( );
+    }
+
+    /**
      * Gets the conditions service fait masse.
      *
      * @param filter
@@ -2799,7 +2949,7 @@ public class SignalementDAO implements ISignalementDAO
             StringBuilder workflowCondition = new StringBuilder( " workflow.id_state in (" );
 
             int listeLength = filter.getIdEtats( ).length;
-            Character[] array = new Character[listeLength];
+            Character [ ] array = new Character [ listeLength];
 
             Arrays.fill( array, '?' );
 
@@ -2815,7 +2965,7 @@ public class SignalementDAO implements ISignalementDAO
             StringBuilder typeCondition = new StringBuilder( " signalement.fk_id_type_signalement in (" );
 
             int listeLength = filter.getIdTypeSignalements( ).length;
-            Character[] array = new Character[listeLength];
+            Character [ ] array = new Character [ listeLength];
 
             Arrays.fill( array, '?' );
 
@@ -2879,5 +3029,73 @@ public class SignalementDAO implements ISignalementDAO
         {
             daoUtil.setString( nIndex, filter.getCommentaire( ) );
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Integer> getSignalementsServiceProgrammeIds( )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_GET_SIGNALEMENTS_PROGRAMME );
+        daoUtil.executeQuery( );
+
+        List<Integer> ids = new ArrayList<>( );
+
+        while ( daoUtil.next( ) )
+        {
+            ids.add( daoUtil.getInt( 1 ) );
+        }
+
+        daoUtil.close( );
+
+        return ids;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Integer> getSignalementsServiceProgrammeTierIds( )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_GET_SIGNALEMENTS_PROGRAMME_TIERS );
+        daoUtil.executeQuery( );
+
+        List<Integer> ids = new ArrayList<>( );
+
+        while ( daoUtil.next( ) )
+        {
+            ids.add( daoUtil.getInt( 1 ) );
+        }
+
+        daoUtil.close( );
+
+        return ids;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String findLabelPrestataireSignalement( int idSignalement )
+    {
+
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_LABEL_PRESTATAIRE ) ; )
+        {
+
+            int nIndex = 1;
+
+            daoUtil.setInt( nIndex, idSignalement );
+
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                return daoUtil.getString( 1 );
+            }
+            return null;
+
+        }
+
     }
 }

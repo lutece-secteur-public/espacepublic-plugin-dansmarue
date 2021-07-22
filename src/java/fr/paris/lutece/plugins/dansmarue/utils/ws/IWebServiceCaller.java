@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,22 +50,31 @@ public interface IWebServiceCaller
     /**
      * This method calls Rest WS to do an action.
      *
-     * @param url            the url
-     * @param params            the params to pass in the post
-     * @param authenticator            The request authenticator
-     * @param listElements            the list of elements to include in the signature
+     * @param url
+     *            the url
+     * @param params
+     *            the params to pass in the post
+     * @param authenticator
+     *            The request authenticator
+     * @param listElements
+     *            the list of elements to include in the signature
      * @return the response as a string
-     * @throws HttpAccessException             the exception if there is a problem
+     * @throws HttpAccessException
+     *             the exception if there is a problem
      */
-    String callWebService( String url, Map<String, List<String>> params, RequestAuthenticator authenticator, List<String> listElements ) throws HttpAccessException;
+    String callWebService( String url, Map<String, List<String>> params, RequestAuthenticator authenticator, List<String> listElements )
+            throws HttpAccessException;
 
     /**
      * Post JSON.
      *
-     * @param strUrl the str url
-     * @param json the json
+     * @param strUrl
+     *            the str url
+     * @param json
+     *            the json
      * @return the string
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     String postJSON( String strUrl, JSONObject json ) throws IOException;
 }

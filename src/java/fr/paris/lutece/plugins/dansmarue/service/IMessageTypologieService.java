@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -64,30 +64,36 @@ public interface IMessageTypologieService
     /**
      * Update message typologie.
      *
-     * @param messageTypologie the message typologie
+     * @param messageTypologie
+     *            the message typologie
      */
     void updateMessageTypologie( MessageTypologie messageTypologie );
 
     /**
      * Increase ordre message typologie.
      *
-     * @param ordreInitial            the ordre initial
-     * @param messageTypologie the message typologie
+     * @param ordreInitial
+     *            the ordre initial
+     * @param messageTypologie
+     *            the message typologie
      */
     void increaseOrdreMessageTypologie( Integer ordreInitial, MessageTypologie messageTypologie );
 
     /**
      * Decrease ordre message typologie.
      *
-     * @param ordreInitial            the ordre initial
-     * @param messageTypologie the message typologie
+     * @param ordreInitial
+     *            the ordre initial
+     * @param messageTypologie
+     *            the message typologie
      */
     void decreaseOrdreMessageTypologie( Integer ordreInitial, MessageTypologie messageTypologie );
 
     /**
      * Removes the message typologie.
      *
-     * @param messageId the message id
+     * @param messageId
+     *            the message id
      */
     void removeMessageTypologie( Integer messageId );
 

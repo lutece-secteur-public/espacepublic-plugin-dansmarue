@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,17 +40,17 @@ public class SignalementFields
 {
 
     /** The signalements id. */
-    private int[] _signalementsId;
+    private int [ ] _signalementsId;
 
     /** The n id resource. */
-    private int   _nIdResource;
+    private int _nIdResource;
 
     /**
      * getSignalementsId.
      *
      * @return reports ids
      */
-    public int[] getSignalementsId( )
+    public int [ ] getSignalementsId( )
     {
         return _signalementsId;
     }
@@ -58,9 +58,10 @@ public class SignalementFields
     /**
      * setSignalementsId.
      *
-     * @param signalementsId            reports ids
+     * @param signalementsId
+     *            reports ids
      */
-    public void setSignalementsId( int[] signalementsId )
+    public void setSignalementsId( int [ ] signalementsId )
     {
         _signalementsId = signalementsId;
     }
@@ -78,7 +79,8 @@ public class SignalementFields
     /**
      * setIdResource.
      *
-     * @param nIdResource            id resource
+     * @param nIdResource
+     *            id resource
      */
     public void setIdResource( int nIdResource )
     {

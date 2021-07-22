@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -90,6 +90,7 @@ import fr.paris.lutece.plugins.dansmarue.service.IAdresseService;
 import fr.paris.lutece.plugins.dansmarue.service.IArrondissementService;
 import fr.paris.lutece.plugins.dansmarue.service.IConseilQuartierService;
 import fr.paris.lutece.plugins.dansmarue.service.IDomaineFonctionnelService;
+import fr.paris.lutece.plugins.dansmarue.service.IFeuilleDeTourneeService;
 import fr.paris.lutece.plugins.dansmarue.service.IPhotoService;
 import fr.paris.lutece.plugins.dansmarue.service.IPrioriteService;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementExportService;
@@ -150,7 +151,6 @@ import fr.paris.lutece.util.url.UrlItem;
 import net.sf.json.JSONObject;
 import net.sf.json.util.JSONBuilder;
 
-
 /**
  * The Class SignalementJspBean.
  */
@@ -158,584 +158,593 @@ public class SignalementJspBean extends AbstractJspBean
 {
 
     /** The Constant SELF. */
-    private static final String           SELF                                          = "_self";
+    private static final String SELF = "_self";
 
     /** The Constant NUMBER. */
-    private static final String           NUMBER                                        = "numero";
+    private static final String NUMBER = "numero";
 
     /** The Constant ID_DOMAINE. */
-    private static final String           ID_DOMAINE                                    = "idDomaine";
+    private static final String ID_DOMAINE = "idDomaine";
 
     /** The Constant EXTENSION_APPLICATION_JSON. */
-    private static final String           EXTENSION_APPLICATION_JSON                    = "application/json";
+    private static final String EXTENSION_APPLICATION_JSON = "application/json";
 
     /** The Constant INVALID_ACTION_ID. */
-    private static final String           INVALID_ACTION_ID                             = "Invalid action id ";
+    private static final String INVALID_ACTION_ID = "Invalid action id ";
 
     /** The Constant LIBELLE. */
-    private static final String           LIBELLE                                       = "libelle";
+    private static final String LIBELLE = "libelle";
 
     /** The Constant LINE_BREAK. */
-    private static final String           LINE_BREAK                                    = "<br />";
+    private static final String LINE_BREAK = "<br />";
 
     /** The Constant ID_SECTOR. */
-    private static final String           ID_SECTOR                                     = "idSector";
+    private static final String ID_SECTOR = "idSector";
 
     /** The Constant SEJ_ID. */
-    private static final int              SEJ_ID                                        = 94;
+    private static final int SEJ_ID = 94;
 
     /** The Constant LABEL. */
-    private static final String           LABEL                                         = "label";
+    private static final String LABEL = "label";
 
     /** The Constant ID_UNIT. */
-    private static final String           ID_UNIT                                       = "idUnit";
+    private static final String ID_UNIT = "idUnit";
 
     /** The Constant serialVersionUID. */
-    private static final long             serialVersionUID                              = 9005837483124219369L;
+    private static final long serialVersionUID = 9005837483124219369L;
 
     // RIGHTS
     /** The Constant RIGHT_MANAGE_SIGNALEMENT. */
-    public static final String            RIGHT_MANAGE_SIGNALEMENT                      = "SIGNALEMENT_MANAGEMENT";
+    public static final String RIGHT_MANAGE_SIGNALEMENT = "SIGNALEMENT_MANAGEMENT";
 
     // TEMPLATES
     /** The Constant TEMPLATE_MANAGE_SIGNALEMENT. */
-    private static final String           TEMPLATE_MANAGE_SIGNALEMENT                   = "admin/plugins/signalement/manage_signalement.html";
+    private static final String TEMPLATE_MANAGE_SIGNALEMENT = "admin/plugins/signalement/manage_signalement.html";
 
-    /**  The Constant TEMPLATE_DISPLAY_SIGNALEMENT. */
-    private static final String           TEMPLATE_DISPLAY_SIGNALEMENT                  = "admin/plugins/signalement/display_signalement.html";
+    /** The Constant TEMPLATE_DISPLAY_SIGNALEMENT. */
+    private static final String TEMPLATE_DISPLAY_SIGNALEMENT = "admin/plugins/signalement/display_signalement.html";
 
     /** The Constant TEMPLATE_SAVE_SIGNALEMENT. */
-    private static final String           TEMPLATE_SAVE_SIGNALEMENT                     = "admin/plugins/signalement/save_signalement.html";
+    private static final String TEMPLATE_SAVE_SIGNALEMENT = "admin/plugins/signalement/save_signalement.html";
 
     /** The Constant TEMPLATE_VIEW_SIGNALEMENT. */
-    private static final String           TEMPLATE_VIEW_SIGNALEMENT                     = "admin/plugins/signalement/view_signalement.html";
+    private static final String TEMPLATE_VIEW_SIGNALEMENT = "admin/plugins/signalement/view_signalement.html";
 
     /** The Constant TEMPLATE_TASK_WORKFLOW. */
-    private static final String           TEMPLATE_TASK_WORKFLOW                        = "admin/plugins/signalement/workflow/signalement_form.html";
+    private static final String TEMPLATE_TASK_WORKFLOW = "admin/plugins/signalement/workflow/signalement_form.html";
 
     /** The Constant TEMPLATE_SIGNALEMENT_HISTORY. */
-    private static final String           TEMPLATE_SIGNALEMENT_HISTORY                  = "admin/plugins/signalement/view_history_signalement.html";
+    private static final String TEMPLATE_SIGNALEMENT_HISTORY = "admin/plugins/signalement/view_history_signalement.html";
 
     /** The Constant TEMPLATE_SAVE_PHOTO_TO_SIGNALEMENT. */
-    private static final String           TEMPLATE_SAVE_PHOTO_TO_SIGNALEMENT            = "admin/plugins/signalement/add_photo_signalement.html";
+    private static final String TEMPLATE_SAVE_PHOTO_TO_SIGNALEMENT = "admin/plugins/signalement/add_photo_signalement.html";
 
     // JSP
     /** The Constant JSP_MANAGE_SIGNALEMENT. */
-    private static final String           JSP_MANAGE_SIGNALEMENT                        = "jsp/admin/plugins/signalement/ManageSignalement.jsp";
+    private static final String JSP_MANAGE_SIGNALEMENT = "jsp/admin/plugins/signalement/ManageSignalement.jsp";
 
     /** The Constant JSP_MANAGE_SIGNALEMENT. */
-    private static final String           JSP_DELETE_SIGNALEMENT                        = "jsp/admin/plugins/signalement/DoDeleteSignalement.jsp";
+    private static final String JSP_DELETE_SIGNALEMENT = "jsp/admin/plugins/signalement/DoDeleteSignalement.jsp";
 
     /** The Constant JSP_VIEW_SIGNALEMENT. */
-    private static final String           JSP_VIEW_SIGNALEMENT                          = "ViewSignalement.jsp";
+    private static final String JSP_VIEW_SIGNALEMENT = "ViewSignalement.jsp";
 
     /** The Constant JSP_MODIFY_SIGNALEMENT. */
-    private static final String           JSP_MODIFY_SIGNALEMENT                        = "ModifySignalement.jsp";
+    private static final String JSP_MODIFY_SIGNALEMENT = "ModifySignalement.jsp";
 
     /** The Constant JSP_WORKFLOW_ACTION. */
-    private static final String           JSP_WORKFLOW_ACTION                           = "jsp/admin/plugins/signalement/WorkflowAction.jsp";
+    private static final String JSP_WORKFLOW_ACTION = "jsp/admin/plugins/signalement/WorkflowAction.jsp";
 
     /** The Constant JSP_WORKFLOW__ACTION. */
-    private static final String           JSP_WORKFLOW_PROCESS_ACTION                   = "jsp/admin/plugins/signalement/ProcessAction.jsp";
+    private static final String JSP_WORKFLOW_PROCESS_ACTION = "jsp/admin/plugins/signalement/ProcessAction.jsp";
 
     /** The Constant JSP_DO_PROCESS_ACTION. */
-    private static final String           JSP_DO_PROCESS_ACTION                         = "jsp/admin/plugins/signalement/DoProcessActionWorkflow.jsp";
+    private static final String JSP_DO_PROCESS_ACTION = "jsp/admin/plugins/signalement/DoProcessActionWorkflow.jsp";
 
     /** The Constant JSP_DO_PROCESS_MASS_ACTION. */
-    private static final String           JSP_DO_PROCESS_MASS_ACTION                    = "jsp/admin/plugins/signalement/DoMassProcessActionWorkflow.jsp";
+    private static final String JSP_DO_PROCESS_MASS_ACTION = "jsp/admin/plugins/signalement/DoMassProcessActionWorkflow.jsp";
 
     /** The Constant JSP_DO_PROCESS_MASS_ACTION. */
-    private static final String           JSP_DELETE_PHOTO_SIGNALEMENT                  = "jsp/admin/plugins/signalement/DoDeletePhotoSignalement.jsp";
+    private static final String JSP_DELETE_PHOTO_SIGNALEMENT = "jsp/admin/plugins/signalement/DoDeletePhotoSignalement.jsp";
 
     /** The Constant JSP_DO_PROCESS_MASS_ACTION. */
-    private static final String           JSP_MASS_DELETE_SIGNALEMENT                   = "jsp/admin/plugins/signalement/DoMassDeleteSignalement.jsp";
+    private static final String JSP_MASS_DELETE_SIGNALEMENT = "jsp/admin/plugins/signalement/DoMassDeleteSignalement.jsp";
 
     /** The Constant JSP_ADD_PHOTO_TO_SIGNALEMENT. */
-    private static final String           JSP_ADD_PHOTO_TO_SIGNALEMENT                  = "AddPhotoToSignalement.jsp";
+    private static final String JSP_ADD_PHOTO_TO_SIGNALEMENT = "AddPhotoToSignalement.jsp";
 
-    /**  The Constant URL_JSP_DISPLAY_SIGNALEMENTS *. */
-    private static final String           URL_JSP_DISPLAY_SIGNALEMENTS                  = "jsp/admin/plugins/signalement/DisplaySignalement.jsp";
+    /** The Constant URL_JSP_DISPLAY_SIGNALEMENTS *. */
+    private static final String URL_JSP_DISPLAY_SIGNALEMENTS = "jsp/admin/plugins/signalement/DisplaySignalement.jsp";
 
-    /**  The Constant URL_JSP_GET_ROAD_MAP *. */
-    private static final String           URL_JSP_GET_ROAD_MAP                          = "jsp/admin/plugins/ramen/GetRoadMap.jsp";
+    /** The Constant URL_JSP_GET_ROAD_MAP *. */
+    private static final String URL_JSP_GET_ROAD_MAP = "jsp/admin/plugins/ramen/GetRoadMap.jsp";
 
     /** The Constant CSV_ISO. */
-    private static final String           CSV_ISO                                       = "ISO-8859-1";
+    private static final String CSV_ISO = "ISO-8859-1";
 
     // PARAMETERS
     /** The Constant PARAMETER_MARK_SIGNALEMENT_ID. */
-    public static final String            PARAMETER_MARK_SIGNALEMENT_ID                 = "signalement_id";
+    public static final String PARAMETER_MARK_SIGNALEMENT_ID = "signalement_id";
 
     /** The Constant PARAMETER_PRIORITE. */
-    public static final String            PARAMETER_PRIORITE                            = "priorite";
+    public static final String PARAMETER_PRIORITE = "priorite";
 
     /** The Constant PARAMETER_SECTOR. */
-    public static final String            PARAMETER_SECTOR                              = "sector";
+    public static final String PARAMETER_SECTOR = "sector";
 
     /** The Constant PARAMETER_TYPE_SIGNALEMENT. */
-    public static final String            PARAMETER_TYPE_SIGNALEMENT                    = "typeSignalement";
+    public static final String PARAMETER_TYPE_SIGNALEMENT = "typeSignalement";
 
     /** The Constant PARAMETER__MARK_ADRESSE. */
-    public static final String            PARAMETER_MARK_ADRESSE                        = "adresse";
+    public static final String PARAMETER_MARK_ADRESSE = "adresse";
 
     /** The Constant PARAMETER_MAIL. */
-    public static final String            PARAMETER_MAIL                                = "mail";
+    public static final String PARAMETER_MAIL = "mail";
 
     /** The Constant PARAMETER_PRECISION_LOCALISATION. */
-    public static final String            PARAMETER_PRECISION_LOCALISATION              = "precisionLocalisation";
+    public static final String PARAMETER_PRECISION_LOCALISATION = "precisionLocalisation";
 
     /** The Constant PARAMETER_COMMENTAIRE. */
-    public static final String            PARAMETER_COMMENTAIRE                         = "commentaire";
+    public static final String PARAMETER_COMMENTAIRE = "commentaire";
 
     /** The Constant PARAMETER_COMMENTAIRE_AGENT_TERRAIN. */
-    public static final String            PARAMETER_COMMENTAIRE_AGENT_TERRAIN           = "commentaireAgentTerrain";
+    public static final String PARAMETER_COMMENTAIRE_AGENT_TERRAIN = "commentaireAgentTerrain";
 
     /** The Constant PARAMETER_PHOTO. */
-    public static final String            PARAMETER_PHOTO                               = "photo";
+    public static final String PARAMETER_PHOTO = "photo";
 
     /** The Constant PARAMETER_VUE_PHOTO. */
-    public static final String            PARAMETER_VUE_PHOTO                           = "vuePhoto";
+    public static final String PARAMETER_VUE_PHOTO = "vuePhoto";
 
     /** The Constant PARAMETER_PHOTO_ENSEMBLE. */
-    public static final String            PARAMETER_PHOTO_ENSEMBLE                      = "photoEnsemble";
+    public static final String PARAMETER_PHOTO_ENSEMBLE = "photoEnsemble";
 
     /** The Constant PARAMETER_PHOTO_PRES. */
-    public static final String            PARAMETER_PHOTO_PRES                          = "photoPres";
+    public static final String PARAMETER_PHOTO_PRES = "photoPres";
 
     /** The Constant PARAMETER_PHOTO_MODIFY. */
-    public static final String            PARAMETER_PHOTO_MODIFY                        = "photoModify";
+    public static final String PARAMETER_PHOTO_MODIFY = "photoModify";
 
     /** The Constant PARAMETER_ADRESSE_ID. */
-    public static final String            PARAMETER_ADRESSE_ID                          = "adresse_id";
+    public static final String PARAMETER_ADRESSE_ID = "adresse_id";
 
     /** The Constant PARAMETER_PHOTO_ID. */
-    public static final String            PARAMETER_PHOTO_ID                            = "photo_id";
+    public static final String PARAMETER_PHOTO_ID = "photo_id";
 
     /** The Constant PARAMETER_SIGNALEUR_ID. */
-    public static final String            PARAMETER_SIGNALEUR_ID                        = "signaleur_id";
+    public static final String PARAMETER_SIGNALEUR_ID = "signaleur_id";
 
     /** The Constant PARAMETER_TELEPHONE_ID. */
-    public static final String            PARAMETER_TELEPHONE_ID                        = "telephone_id";
+    public static final String PARAMETER_TELEPHONE_ID = "telephone_id";
 
     /** The Constant PARAMETER_TYPE_SIGNALEMENT_ID. */
-    public static final String            PARAMETER_TYPE_SIGNALEMENT_ID                 = "typesignalement_id";
+    public static final String PARAMETER_TYPE_SIGNALEMENT_ID = "typesignalement_id";
 
     /** The Constant PARAMETER_COMMENTAIRE_PROG. */
-    public static final String            PARAMETER_COMMENTAIRE_PROG                    = "commentaireProgrammation";
+    public static final String PARAMETER_COMMENTAIRE_PROG = "commentaireProgrammation";
 
     /** The Constant PARAMETER_COMMENTAIRE_PROG. */
-    public static final String            PARAMETER_DATE_PREVU_TRAITEMENT               = "datePrevueTraitement";
+    public static final String PARAMETER_DATE_PREVU_TRAITEMENT = "datePrevueTraitement";
 
     /** The Constant PARAMETER_MARK_ACTION_ID. */
-    public static final String            PARAMETER_MARK_ACTION_ID                      = "action_id";
+    public static final String PARAMETER_MARK_ACTION_ID = "action_id";
 
     /** The Constant PARAMETER_ACTION_TYPE. */
-    public static final String            PARAMETER_ACTION_TYPE                         = "action_type";
+    public static final String PARAMETER_ACTION_TYPE = "action_type";
 
     /** The Constant PARAMETER_NB_PHOTOS. */
-    public static final String            PARAMETER_NB_PHOTOS                           = "nbPhotos";
+    public static final String PARAMETER_NB_PHOTOS = "nbPhotos";
 
     /** The Constant PARAMETER_LNG. */
-    private static final String           PARAMETER_LNG                                 = "lng";
+    private static final String PARAMETER_LNG = "lng";
 
     /** The Constant PARAMETER_LAT. */
-    private static final String           PARAMETER_LAT                                 = "lat";
+    private static final String PARAMETER_LAT = "lat";
 
     /** The Constant PARAMETER_ACTION_NEXT. */
-    private static final String           PARAMETER_ACTION_NEXT                         = "next";
+    private static final String PARAMETER_ACTION_NEXT = "next";
 
     /** The Constant PARAMETER_IS_ROAD_MAP. */
-    private static final String           PARAMETER_IS_ROAD_MAP                         = "isRoadMap";
+    private static final String PARAMETER_IS_ROAD_MAP = "isRoadMap";
 
     /** The Constant PARAMETER_DATE_SERVICE. */
-    private static final String           PARAMETER_DATE_SERVICE                        = "dateService";
+    private static final String PARAMETER_DATE_SERVICE = "dateService";
 
     /** The Constant PARAMETER_SERVICEID. */
-    private static final String           PARAMETER_SERVICEID                           = "serviceId";
+    private static final String PARAMETER_SERVICEID = "serviceId";
 
     /** The Constant PARAMETER_SERVICE_ID. */
-    private static final String           PARAMETER_SERVICE_ID                          = "service_id";
+    private static final String PARAMETER_SERVICE_ID = "service_id";
 
     /** The Constant PARAMETER_DIRECTION_ID. */
-    private static final String           PARAMETER_DIRECTION_ID                        = "direction_id";
+    private static final String PARAMETER_DIRECTION_ID = "direction_id";
 
-    /**  The Constant PARAMETER_FROM_PAGE *. */
-    private static final String           PARAMETER_FROM_PAGE                           = "from_page";
+    /** The Constant PARAMETER_FROM_PAGE *. */
+    private static final String PARAMETER_FROM_PAGE = "from_page";
 
-    /**  The Constant PARAMETER_VALUE_DISPLAY_PAGE *. */
-    private static final String           PARAMETER_VALUE_DISPLAY_PAGE                  = "display_page";
+    /** The Constant PARAMETER_VALUE_DISPLAY_PAGE *. */
+    private static final String PARAMETER_VALUE_DISPLAY_PAGE = "display_page";
 
     /** The Constant PARAMETER_NEXT_URL. */
-    private static final String           PARAMETER_NEXT_URL                            = "next";
+    private static final String PARAMETER_NEXT_URL = "next";
 
     /** The Constant PARAMETER_WEBAPP_RAMEN. */
-    private static final String           PARAMETER_WEBAPP_RAMEN                        = "ramen";
+    private static final String PARAMETER_WEBAPP_RAMEN = "ramen";
 
     /** The Constant PARAMETER_SECTOR_ID. */
-    private static final String           PARAMETER_SECTOR_ID                           = "sector_id";
+    private static final String PARAMETER_SECTOR_ID = "sector_id";
 
     /** The Constant PARAMETER_UNIT_ID. */
-    private static final String           PARAMETER_UNIT_ID                             = "unit_id";
+    private static final String PARAMETER_UNIT_ID = "unit_id";
 
     /** The Constant JSON_KEY_ID. */
-    private static final String           JSON_KEY_ID                                   = "id";
+    private static final String JSON_KEY_ID = "id";
 
     /** The Constant ZERO_VOTE. */
-    private static final Integer          ZERO_VOTE                                     = 0;
+    private static final Integer ZERO_VOTE = 0;
 
     // MARKERS
     /** The Constant MARK_PRIORITE_LIST. */
-    private static final String           MARK_PRIORITE_LIST                            = "priorite_list";
+    private static final String MARK_PRIORITE_LIST = "priorite_list";
 
     /** The Constant MARK_TYPE_LIST. */
-    private static final String           MARK_TYPE_LIST                                = "type_list";
+    private static final String MARK_TYPE_LIST = "type_list";
 
     /** The Constant MARK_SIGNALEMENT. */
-    private static final String           MARK_SIGNALEMENT                              = "signalement";
+    private static final String MARK_SIGNALEMENT = "signalement";
 
     /** The Constant MARK_TITLE. */
-    public static final String            MARK_TITLE                                    = "title";
+    public static final String MARK_TITLE = "title";
 
     /** The Constant MARK_TYPE. */
-    public static final String            MARK_TYPE                                     = "type";
+    public static final String MARK_TYPE = "type";
 
     /** The Constant MARK_PHOTOS. */
-    public static final String            MARK_PHOTOS                                   = "photos";
+    public static final String MARK_PHOTOS = "photos";
 
     /** The Constant MARK_SIGNALEUR. */
-    public static final String            MARK_SIGNALEUR                                = "signaleur";
+    public static final String MARK_SIGNALEUR = "signaleur";
 
     /** The Constant MARK_DIRECTION_LIST. */
-    private static final String           MARK_DIRECTION_LIST                           = "direction_list";
+    private static final String MARK_DIRECTION_LIST = "direction_list";
 
     /** The Constant BUTTON_UPDATE_SECTOR_WITH_DIRECTION. */
-    private static final String           BUTTON_UPDATE_SECTOR_WITH_DIRECTION           = "updateSectorsWithDirection";
+    private static final String BUTTON_UPDATE_SECTOR_WITH_DIRECTION = "updateSectorsWithDirection";
 
     /** The Constant MARK_ARRONDISSEMENT_LIST. */
-    private static final String           MARK_ARRONDISSEMENT_LIST                      = "arrondissement_list";
+    private static final String MARK_ARRONDISSEMENT_LIST = "arrondissement_list";
 
     /** The Constant MARK_CONSEIL_QUARTIER_LIST. */
-    private static final String           MARK_CONSEIL_QUARTIER_LIST                    = "conseilQuartier_list";
+    private static final String MARK_CONSEIL_QUARTIER_LIST = "conseilQuartier_list";
 
     /** The Constant MARK_ETATS_LIST. */
-    private static final String           MARK_ETATS_LIST                               = "etat_list";
+    private static final String MARK_ETATS_LIST = "etat_list";
 
     /** The Constant MARK_WEBAPP_URL. */
-    private static final String           MARK_WEBAPP_URL                               = "webapp_url";
+    private static final String MARK_WEBAPP_URL = "webapp_url";
 
     /** The Constant MARK_ETATS. */
-    private static final String           MARK_ETATS                                    = "map_etats";
+    private static final String MARK_ETATS = "map_etats";
+
+    /** The Constant MARK_PROGRAMMING_DATE. */
+    private static final String MARK_PROGRAMMING_DATE = "map_programming_date";
 
     /** The Constant MARK_HAS_SIGNALEMENT_PRESTATAIRE. */
-    private static final String           MARK_HAS_SIGNALEMENT_PRESTATAIRE              = "hasSignalementPrestataire";
+    private static final String MARK_HAS_SIGNALEMENT_PRESTATAIRE = "hasSignalementPrestataire";
 
     /** The Constant MARK_ACTIONS. */
-    private static final String           MARK_ACTIONS                                  = "map_actions";
+    private static final String MARK_ACTIONS = "map_actions";
 
-    /**  The Constant MARK_POSSIBLE_ACTIONS. */
-    private static final String           MARK_POSSIBLE_ACTIONS                         = "possible_actions";
+    /** The Constant MARK_POSSIBLE_ACTIONS. */
+    private static final String MARK_POSSIBLE_ACTIONS = "possible_actions";
 
     /** The Constant MARK_SIGNALEMENT_LIST. */
-    private static final String           MARK_SIGNALEMENT_LIST                         = "signalement_list";
+    private static final String MARK_SIGNALEMENT_LIST = "signalement_list";
 
     /** The Constant MARK_TASK_FORM. */
-    private static final String           MARK_TASK_FORM                                = "task_form";
+    private static final String MARK_TASK_FORM = "task_form";
 
     /** The Constant MARK_HAS_NEXT. */
-    private static final String           MARK_HAS_NEXT                                 = "has_next";
+    private static final String MARK_HAS_NEXT = "has_next";
 
     /** The Constant MARK_STATE_SIGNALEMENT. */
-    private static final String           MARK_STATE_SIGNALEMENT                        = "stateSignalement";
+    private static final String MARK_STATE_SIGNALEMENT = "stateSignalement";
 
     /** The Constant MARL_STATE_SERVICE_FAIT. */
-    private static final String           MARK_STATE_SERVICE_FAIT                       = "serviceFaitValue";
+    private static final String MARK_STATE_SERVICE_FAIT = "serviceFaitValue";
 
     /** The Constant MARL_USER_SERVICE_FAIT. */
-    private static final String           MARK_USER_SERVICE_FAIT                        = "serviceFaitUser";
+    private static final String MARK_USER_SERVICE_FAIT = "serviceFaitUser";
 
     /** The Constant MARK_NO_VALID_ADDRESSES. */
-    public static final String            MARK_NO_VALID_ADDRESSES                       = "noValidAddresses";
+    public static final String MARK_NO_VALID_ADDRESSES = "noValidAddresses";
 
     /** The Constant MARK_PROPOSED_ADDRESSES. */
-    public static final String            MARK_PROPOSED_ADDRESSES                       = "proposedAddresses";
+    public static final String MARK_PROPOSED_ADDRESSES = "proposedAddresses";
 
     /** The Constant MARK_HISTORIQUE_LIST. */
-    private static final String           MARK_HISTORIQUE_LIST                          = "historiqueHtml";
+    private static final String MARK_HISTORIQUE_LIST = "historiqueHtml";
 
     /** The Constant MARK_SECTEUR_LIST. */
-    private static final String           MARK_SECTEUR_LIST                             = "secteur_list";
+    private static final String MARK_SECTEUR_LIST = "secteur_list";
 
     /** The Constant MARK_MESSAGE_FOR_USER. */
-    private static final String           MARK_MESSAGE_FOR_USER                         = "messageForUser";
+    private static final String MARK_MESSAGE_FOR_USER = "messageForUser";
 
     /** The Constant MARK_KEY_MAPS. */
-    private static final String           MARK_KEY_MAPS                                 = "key_maps";
+    private static final String MARK_KEY_MAPS = "key_maps";
 
     /** The Constant MARK_ID_ETATS_DEFAULT. */
-    private static final String           MARK_ID_ETATS_DEFAULT                         = "etats_default";
+    private static final String MARK_ID_ETATS_DEFAULT = "etats_default";
 
-    /**  The constant MARK_BACK_URL. */
-    private static final String           MARK_BACK_URL                                 = "back_url";
+    /** The constant MARK_BACK_URL. */
+    private static final String MARK_BACK_URL = "back_url";
 
     /** The Constant MARK_DASHBOARD_CRITERIAS. */
-    private static final String           MARK_DASHBOARD_CRITERIAS                      = "dashboard_criterias";
+    private static final String MARK_DASHBOARD_CRITERIAS = "dashboard_criterias";
 
     /** The Constant MARK_MAP_MAX_RESULTS. */
-    private static final String           MARK_MAP_MAX_RESULTS                          = "map_max_results";
+    private static final String MARK_MAP_MAX_RESULTS = "map_max_results";
 
     /** The Constant MARK_HAS_ADVANCED_CRITERIAS. */
-    private static final String           MARK_HAS_ADVANCED_CRITERIAS                   = "has_advanced_criterias";
+    private static final String MARK_HAS_ADVANCED_CRITERIAS = "has_advanced_criterias";
 
-    /**  The Constant VUE_ENSEMBLE. */
-    public static final Integer           OVERVIEW                                      = 1;
+    private static final String MARK_FEUILLE_DE_TOURNEE_LIST = "feuille_de_tournee_list";
 
-    /**  The Constant VUE_PRES. */
-    public static final Integer           DETAILED_VIEW                                 = 0;
+    /** The Constant VUE_ENSEMBLE. */
+    public static final Integer OVERVIEW = 1;
 
-    /**  The Constant ID_JARDIN. */
-    public static final Integer           ID_JARDIN                                     = 260;
+    /** The Constant VUE_PRES. */
+    public static final Integer DETAILED_VIEW = 0;
 
-    /**  The Constant ID_RACINE. */
-    public static final Integer           ID_RACINE                                     = 0;
+    /** The Constant ID_JARDIN. */
+    public static final Integer ID_JARDIN = 260;
+
+    /** The Constant ID_RACINE. */
+    public static final Integer ID_RACINE = 0;
 
     // I18N
     /** The Constant PAGE_TITLE_MANAGE_SIGNALEMENT. */
-    private static final String           PAGE_TITLE_MANAGE_SIGNALEMENT                 = "dansmarue.page.signalement.manage.title";
+    private static final String PAGE_TITLE_MANAGE_SIGNALEMENT = "dansmarue.page.signalement.manage.title";
 
     // CONSTANTS
     /** The Constant EMPTY_STRING. */
-    private static final String           EMPTY_STRING                                  = "";
+    private static final String EMPTY_STRING = "";
 
     /** The Constant MINUS_ONE. */
-    private static final String           MINUS_ONE                                     = "-1";
+    private static final String MINUS_ONE = "-1";
 
     /** The Constant NO_RESOURCE_FOUND. */
-    private static final int              NO_RESOURCE_FOUND                             = -1;
+    private static final int NO_RESOURCE_FOUND = -1;
 
     /** The Constant ACTION_MESSAGE_TASK. */
-    private static final int[]            ACTION_MESSAGE_TASK                           = { 13, 18, 22 };
+    private static final int [ ] ACTION_MESSAGE_TASK = {
+            13, 18, 22
+    };
 
     /** The Constant ID_ACTIONS_SERVICE_FAIT. */
-    private static final int[]            ID_ACTIONS_SERVICE_FAIT                       = { 18, 22 };
+    private static final int [ ] ID_ACTIONS_SERVICE_FAIT = {
+            18, 22
+    };
 
     /** The Constant ID_ACTIONS_ACCEPTER. */
-    private static final int[]            ID_ACTIONS_ACCEPTER                           = { 13 };
+    private static final int [ ] ID_ACTIONS_ACCEPTER = {
+            13
+    };
 
     /** The Constant ID_ETATS_DEFAULT. */
-    private static final int[]            ID_ETATS_DEFAULT                              = { 7, 8, 16, 17, 18, 21 };
+    private static final int [ ] ID_ETATS_DEFAULT = {
+            7, 8, 16, 17, 18, 21
+    };
 
     /** The Constant ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE. */
-    private static final String           ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE        = "signalement.idStateServiceProgrammePrestataire";
+    private static final String ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE = "signalement.idStateServiceProgrammePrestataire";
 
     /** The Constant ID_STATE_TRANSFERE_PRESTATAIRE. */
-    private static final String           ID_STATE_TRANSFERE_PRESTATAIRE                = "signalement.idStateTransferePrestataire";
+    private static final String ID_STATE_TRANSFERE_PRESTATAIRE = "signalement.idStateTransferePrestataire";
 
     /** The Constant CSV_SEPARATOR. */
-    private static final char             CSV_SEPARATOR                                 = ';';
+    private static final char CSV_SEPARATOR = ';';
 
     /** The Constant STATE_INIT. */
-    private static final String           STATE_NOT_DISPLAY                             = "signalement.state.not.display";
+    private static final String STATE_NOT_DISPLAY = "signalement.state.not.display";
 
     // MESSAGES
     /** The Constant MESSAGE_ERROR_EMPTY_FIELD. */
-    private static final String           MESSAGE_ERROR_EMPTY_FIELD                     = "dansmarue.message.error.champObligatoireNull";
+    private static final String MESSAGE_ERROR_EMPTY_FIELD = "dansmarue.message.error.champObligatoireNull";
 
     /** The Constant MESSAGE_ERREUR_HORS_PARIS. */
-    private static final String           MESSAGE_ERREUR_HORS_PARIS                     = "dansmarue.message.error.horsParis";
+    private static final String MESSAGE_ERREUR_HORS_PARIS = "dansmarue.message.error.horsParis";
 
     /** The Constant MESSAGE_ERREUR_HORS_PARIS. */
-    private static final String           MESSAGE_ERREUR_INVALID_MAIL                   = "dansmarue.message.error.invalidMail";
+    private static final String MESSAGE_ERREUR_INVALID_MAIL = "dansmarue.message.error.invalidMail";
 
     /** The Constant MESSAGE_ERREUR_SECTEUR_NULL. */
-    private static final String           MESSAGE_ERREUR_SECTEUR_NULL                   = "dansmarue.message.error.aucunSecteur";
+    private static final String MESSAGE_ERREUR_SECTEUR_NULL = "dansmarue.message.error.aucunSecteur";
 
     /** The Constant MESSAGE_ERROR_EMPTY_PHOTO_FIELD. */
-    private static final String           MESSAGE_ERROR_EMPTY_PHOTO_FIELD               = "dansmarue.message.error.emptyPhoto";
+    private static final String MESSAGE_ERROR_EMPTY_PHOTO_FIELD = "dansmarue.message.error.emptyPhoto";
 
     /** The Constant MESSAGE_ERROR_EXISTING_PHOTO. */
-    private static final String           MESSAGE_ERROR_EXISTING_PHOTO                  = "dansmarue.message.error.photo.existante";
+    private static final String MESSAGE_ERROR_EXISTING_PHOTO = "dansmarue.message.error.photo.existante";
 
     /** The Constant MESSAGE_TITLE_MASS_ACTION_IMPOSSIBLE. */
-    private static final String           MESSAGE_TITLE_MASS_ACTION_IMPOSSIBLE          = "dansmarue.messagetitle.massActionImpossible.message";
+    private static final String MESSAGE_TITLE_MASS_ACTION_IMPOSSIBLE = "dansmarue.messagetitle.massActionImpossible.message";
 
     /** The Constant MESSAGE_TITLE_DELETE_PHOTO_SIGNALEMENT. */
-    private static final String           MESSAGE_TITLE_DELETE_PHOTO_SIGNALEMENT        = "dansmarue.messagetitle.deletePhotoSignalement";
+    private static final String MESSAGE_TITLE_DELETE_PHOTO_SIGNALEMENT = "dansmarue.messagetitle.deletePhotoSignalement";
 
     /** The Constant MESSAGE_TITLE_SERVICE_FAIT. */
-    private static final String           MESSAGE_TITLE_SERVICE_FAIT                    = "dansmarue.messagetitle.servicefait.confirmation";
+    private static final String MESSAGE_TITLE_SERVICE_FAIT = "dansmarue.messagetitle.servicefait.confirmation";
 
     /** The Constant MESSAGE_CONFIRMATION_SERVICE_FAIT. */
-    private static final String           MESSAGE_CONFIRMATION_SERVICE_FAIT             = "dansmarue.message.servicefait.confirmation";
+    private static final String MESSAGE_CONFIRMATION_SERVICE_FAIT = "dansmarue.message.servicefait.confirmation";
 
     /** The Constant MESSAGE_CONFIRMATION_DELETE_PHOTO_SIGNALEMENT. */
-    private static final String           MESSAGE_CONFIRMATION_DELETE_PHOTO_SIGNALEMENT = "dansmarue.message.deletePhotoSignalement";
+    private static final String MESSAGE_CONFIRMATION_DELETE_PHOTO_SIGNALEMENT = "dansmarue.message.deletePhotoSignalement";
 
     /** The Constant MESSAGE_TITLE_MASS_SERVICE_FAIT. */
-    private static final String           MESSAGE_TITLE_MASS_SERVICE_FAIT               = "dansmarue.messagetitle.massActionServiceFait.confirmation";
+    private static final String MESSAGE_TITLE_MASS_SERVICE_FAIT = "dansmarue.messagetitle.massActionServiceFait.confirmation";
 
     /** The Constant MESSAGE_TITLE_MASS_DELETE_SIGNALEMENT. */
-    private static final String           MESSAGE_CONFIRMATION_MASS_DELETE_SIGNALEMENT  = "dansmarue.message.massDeleteSignalement.confirmation";
+    private static final String MESSAGE_CONFIRMATION_MASS_DELETE_SIGNALEMENT = "dansmarue.message.massDeleteSignalement.confirmation";
 
     /** The Constant MESSAGE_CONFIRMATION_MASS_SERVICE_FAIT. */
-    private static final String           MESSAGE_CONFIRMATION_MASS_SERVICE_FAIT        = "dansmarue.message.massActionServiceFait.confirmation";
+    private static final String MESSAGE_CONFIRMATION_MASS_SERVICE_FAIT = "dansmarue.message.massActionServiceFait.confirmation";
 
     /** The Constant MESSAGE_TITLE_ACCEPTER. */
-    private static final String           MESSAGE_TITLE_ACCEPTER                        = "dansmarue.messagetitle.Accepter.confirmation";
+    private static final String MESSAGE_TITLE_ACCEPTER = "dansmarue.messagetitle.Accepter.confirmation";
 
     /** The Constant MESSAGE_CONFIRMATION_ACCEPTER. */
-    private static final String           MESSAGE_CONFIRMATION_ACCEPTER                 = "dansmarue.message.Accepter.confirmation";
+    private static final String MESSAGE_CONFIRMATION_ACCEPTER = "dansmarue.message.Accepter.confirmation";
 
     /** The Constant MESSAGE_TITLE_MASS_ACCEPTER. */
-    private static final String           MESSAGE_TITLE_MASS_ACCEPTER                   = "dansmarue.messagetitle.massActionAccepter.confirmation";
+    private static final String MESSAGE_TITLE_MASS_ACCEPTER = "dansmarue.messagetitle.massActionAccepter.confirmation";
 
     /** The Constant MESSAGE_CONFIRMATION_MASS_ACCEPTER. */
-    private static final String           MESSAGE_CONFIRMATION_MASS_ACCEPTER            = "dansmarue.message.massActionAccepter.confirmation";
+    private static final String MESSAGE_CONFIRMATION_MASS_ACCEPTER = "dansmarue.message.massActionAccepter.confirmation";
 
     /** The Constant MESSAGE_ACCESS_DENIED. */
-    private static final String           MESSAGE_ACCESS_DENIED                         = "user does not have the right to do this";
+    private static final String MESSAGE_ACCESS_DENIED = "user does not have the right to do this";
 
     /** The Constant MESSAGE_TITLE_MASS_DELETE_SIGNALEMENT. */
-    private static final String           MESSAGE_TITLE_MASS_DELETE_SIGNALEMENT         = "dansmarue.messagetitle.massDeleteSignalement.confirmation";
+    private static final String MESSAGE_TITLE_MASS_DELETE_SIGNALEMENT = "dansmarue.messagetitle.massDeleteSignalement.confirmation";
 
     /** The Constant MESSAGE_CONFIRMATION_DELETE_SIGNALEMENT. */
-    private static final String           MESSAGE_CONFIRMATION_DELETE_SIGNALEMENT       = "dansmarue.messagetitle.deleteSignalement.confirmation";
+    private static final String MESSAGE_CONFIRMATION_DELETE_SIGNALEMENT = "dansmarue.messagetitle.deleteSignalement.confirmation";
 
     /** The Constant MESSAGE_TITLE_DELETE_SIGNALEMENT. */
-    private static final String           MESSAGE_TITLE_DELETE_SIGNALEMENT              = "dansmarue.messagetitle.deleteSignalement.title";
+    private static final String MESSAGE_TITLE_DELETE_SIGNALEMENT = "dansmarue.messagetitle.deleteSignalement.title";
 
     /** The Constant MESSAGE_ERROR_ACTION. */
-    private static final String           MESSAGE_ERROR_ACTION                          = "dansmarue.erreur.action";
+    private static final String MESSAGE_ERROR_ACTION = "dansmarue.erreur.action";
 
     /** The Constant PROPERTY_UNITS_RADIUS. */
     // PROPERTIES
-    private static final String           PROPERTY_UNITS_RADIUS                         = "signalement.near.units.radius";
-
-    /** The Constant PROPERTY_MARKER_STATES_GREEN. */
-    private static final String           PROPERTY_MARKER_STATES_GREEN                  = "signalement.map.markers.states.green";
-
-    /** The Constant PROPERTY_MARKER_STATES_YELLOW. */
-    private static final String           PROPERTY_MARKER_STATES_YELLOW                 = "signalement.map.markers.states.yellow";
+    private static final String PROPERTY_UNITS_RADIUS = "signalement.near.units.radius";
 
     /** The Constant PROPERTY_SEARCH_INITIAL_NB_DAYS. */
-    private static final String           PROPERTY_SEARCH_INITIAL_NB_DAYS               = "signalement.reportingList.init.datebegin";
+    private static final String PROPERTY_SEARCH_INITIAL_NB_DAYS = "signalement.reportingList.init.datebegin";
 
     /** The Constant PROPERTY_MAP_MAX_RESULTS. */
-    private static final String           PROPERTY_MAP_MAX_RESULTS                      = "signalement.map.max.results";
+    private static final String PROPERTY_MAP_MAX_RESULTS = "signalement.map.max.results";
 
     // MEMBERS VARIABLES
     /** The _signalement filter. */
-    private SignalementFilter             _signalementFilter;
+    private SignalementFilter _signalementFilter;
 
     /** The _mass reports ids. */
-    private int[]                         _massSignalementIds;
+    private int [ ] _massSignalementIds;
 
     /** The _action type. */
-    private String                        _actionType;
+    private String _actionType;
 
     /** The arrondissements. */
-    private List<Arrondissement>          arrondissements;
+    private List<Arrondissement> arrondissements;
 
     /** The types anomalies. */
-    private List<TypeSignalement>         typesAnomalies;
+    private List<TypeSignalement> typesAnomalies;
 
     /** The dashboard signalement list. */
-    private List<Integer>                 dashboardSignalementList;
+    private List<Integer> dashboardSignalementList;
 
     /** The dashboard criterias. */
-    private Map<String, List<String>>     dashboardCriterias;
+    private Map<String, List<String>> dashboardCriterias;
 
     /** The anomalies count. */
-    private Integer                       anomaliesCount;
+    private Integer anomaliesCount;
 
     // SERVICES
     /** The _signalement service. */
-    private transient ISignalementService           _signalementService;
+    private transient ISignalementService _signalementService;
 
     /** The _type signalement service. */
-    private transient ITypeSignalementService       _typeSignalementService;
+    private transient ITypeSignalementService _typeSignalementService;
 
     /** The _priorite service. */
-    private transient IPrioriteService              _prioriteService;
+    private transient IPrioriteService _prioriteService;
 
     /** The _signaleur service. */
-    private transient ISignaleurService             _signaleurService;
+    private transient ISignaleurService _signaleurService;
 
     /** The _unit service. */
-    private transient IUnitService                  _unitService;
+    private transient IUnitService _unitService;
 
     /** The _signalement workflow service. */
-    private transient IWorkflowService              _signalementWorkflowService;
+    private transient IWorkflowService _signalementWorkflowService;
 
     /** The _adresse service. */
-    private transient IAdresseService               _adresseService;
+    private transient IAdresseService _adresseService;
 
     /** The _photo service. */
-    private transient IPhotoService                 _photoService;
+    private transient IPhotoService _photoService;
 
     /** The _sector service. */
-    private transient ISectorService                _sectorService;
+    private transient ISectorService _sectorService;
 
     /** The task service. */
-    private transient ITaskService                  _taskService                                  = SpringContextService.getBean( "workflow.taskService" );
+    private transient ITaskService _taskService = SpringContextService.getBean( "workflow.taskService" );
 
     /** The _arrondissement service. */
-    private transient IArrondissementService        _arrondissementService;
+    private transient IArrondissementService _arrondissementService;
 
     /** The conseilQuartier service. */
-    private IConseilQuartierService       _conseilQuartier;
+    private IConseilQuartierService _conseilQuartier;
 
     /** The unit sira service. */
-    private transient IUnitSiraService    _unitSiraService;
+    private transient IUnitSiraService _unitSiraService;
 
-    /**  The _signalementViewRole service. */
-    private transient SignalementViewRoleService    _signalementViewRoleService;
+    /** The _signalementViewRole service. */
+    private transient SignalementViewRoleService _signalementViewRoleService;
 
-    /**  The _domaineFonctionnelService. */
-    private transient IDomaineFonctionnelService    _domaineFonctionnelService;
+    /** The _domaineFonctionnelService. */
+    private transient IDomaineFonctionnelService _domaineFonctionnelService;
 
     /** The _signalement export service. */
-    private transient ISignalementExportService     _signalementExportService;
+    private transient ISignalementExportService _signalementExportService;
+
+    private transient IFeuilleDeTourneeService _feuilleTourneeService = SpringContextService.getBean( "feuilleDeTourneeService" );
+
+    /** The Constant _simple_date_format. */
+    private final SimpleDateFormat _simple_date_format = new SimpleDateFormat( DateUtils.DATE_FR );
+
+    /** The green marker states. */
+    private List<Integer> _listGreenMarkerStates;
+
+    /** The yellow marker states. */
+    private List<Integer> _listYellowMarkerStates;
 
     /** The Constant PARAMETER_SEARCH. */
     // parameters
-    private static final String           PARAMETER_SEARCH                              = "search";
+    private static final String PARAMETER_SEARCH = "search";
 
     /** The Constant PARAMETER_ACTION_SERVICE_FAIT PM 2015. */
-    private static final String           PARAMETER_ACTION_SERVICE_FAIT                 = "servicefait";
+    private static final String PARAMETER_ACTION_SERVICE_FAIT = "servicefait";
 
     /** The Constant PARAMETER_ACTION_SERVICE_FAIT. */
-    private static final String           PARAMETER_ACTION_SERVICE_FAITS                = "servicefaits";
+    private static final String PARAMETER_ACTION_SERVICE_FAITS = "servicefaits";
 
     /** The Constant PARAMETER_ACTION_PROGRAMMER. */
-    private static final String           PARAMETER_ACTION_PROGRAMMER                   = "programmer";
+    private static final String PARAMETER_ACTION_PROGRAMMER = "programmer";
 
     /** The Constant PARAMETER_ACTION_REPROGRAMMER. */
-    private static final String           PARAMETER_ACTION_REPROGRAMMER                 = "reprogrammer";
+    private static final String PARAMETER_ACTION_REPROGRAMMER = "reprogrammer";
 
     // Actions
     /** The Constant ACTION_SERVICE_FAIT. */
-    private static final String           ACTION_SERVICE_FAIT                           = "Déclarer un service fait";
+    private static final String ACTION_SERVICE_FAIT = "Déclarer un service fait";
 
     /** The Constant ACTION_PROGRAMMER. */
-    private static final String           ACTION_PROGRAMMER                             = "Programmer";
+    private static final String ACTION_PROGRAMMER = "Programmer";
 
     /** The Constant ACTION_REPROGRAMMER. */
-    private static final String           ACTION_REPROGRAMMER                           = "Reprogrammer";
+    private static final String ACTION_REPROGRAMMER = "Reprogrammer";
 
     /** The Constant MESSAGE_ERROR_EMPTY. */
-    private static final int              MESSAGE_ERROR_EMPTY                           = 51;
-
-    /** The Constant SIMPLE_DATE_FORMAT. */
-    private static final SimpleDateFormat SIMPLE_DATE_FORMAT                                       = new SimpleDateFormat( DateUtils.DATE_FR );
+    private static final int MESSAGE_ERROR_EMPTY = 51;
 
     /** The Constant VALID_EMAIL_ADDRESS_REGEX. */
-    public static final Pattern           VALID_EMAIL_ADDRESS_REGEX                     = Pattern.compile( "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE );
-
-    /** The green marker states. */
-    private static List<Integer>          GREEN_MARKER_STATES;
-
-    /** The yellow marker states. */
-    private static List<Integer>          YELLOW_MARKER_STATES;
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile( "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE );
 
     /**
      * Instantiates a new signalement jsp bean.
@@ -771,15 +780,18 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Check the user functional domains.
      *
-     * @throws AccessDeniedException             throws AccessDeniedException
+     * @throws AccessDeniedException
+     *             throws AccessDeniedException
      */
     public void checkUserDomains( ) throws AccessDeniedException
     {
         Collection<DomaineFonctionnel> domainesFonctionnels = _domaineFonctionnelService.getAllDomainesFonctionnelActifs( );
-        domainesFonctionnels = RBACService.getAuthorizedCollection( domainesFonctionnels, DomaineFonctionnelSignalementResourceIdService.PERMISSION_CONSULT_SIGNALEMENT, getUser( ) );
+        domainesFonctionnels = RBACService.getAuthorizedCollection( domainesFonctionnels,
+                DomaineFonctionnelSignalementResourceIdService.PERMISSION_CONSULT_SIGNALEMENT, getUser( ) );
         if ( CollectionUtils.isEmpty( domainesFonctionnels ) )
         {
-            throw new AccessDeniedException( MessageFormat.format( "Acces denied for {0}.", DomaineFonctionnelSignalementResourceIdService.PERMISSION_CONSULT_SIGNALEMENT ) );
+            throw new AccessDeniedException(
+                    MessageFormat.format( "Acces denied for {0}.", DomaineFonctionnelSignalementResourceIdService.PERMISSION_CONSULT_SIGNALEMENT ) );
         }
     }
 
@@ -789,25 +801,25 @@ public class SignalementJspBean extends AbstractJspBean
     public void initStaticMembers( )
     {
         // Init map markers
-        if ( ( null == GREEN_MARKER_STATES ) || ( null == YELLOW_MARKER_STATES ) )
+        if ( ( null == _listGreenMarkerStates ) || ( null == _listYellowMarkerStates ) )
         {
-            GREEN_MARKER_STATES = new ArrayList<>( );
-            YELLOW_MARKER_STATES = new ArrayList<>( );
+            _listGreenMarkerStates = new ArrayList<>( );
+            _listYellowMarkerStates = new ArrayList<>( );
 
-            String greenStates = AppPropertiesService.getProperty( PROPERTY_MARKER_STATES_GREEN );
-            String yellowStates = AppPropertiesService.getProperty( PROPERTY_MARKER_STATES_YELLOW );
+            String greenStates = AppPropertiesService.getProperty( SignalementConstants.PROPERTY_MARKER_STATES_GREEN );
+            String yellowStates = AppPropertiesService.getProperty( SignalementConstants.PROPERTY_MARKER_STATES_YELLOW );
 
-            String[] greenStatesArr = greenStates.split( "," );
-            String[] yellowStatesArr = yellowStates.split( "," );
+            String [ ] greenStatesArr = greenStates.split( "," );
+            String [ ] yellowStatesArr = yellowStates.split( "," );
 
             for ( String greenState : greenStatesArr )
             {
-                GREEN_MARKER_STATES.add( Integer.parseInt( greenState ) );
+                _listGreenMarkerStates.add( Integer.parseInt( greenState ) );
             }
 
             for ( String yellowState : yellowStatesArr )
             {
-                YELLOW_MARKER_STATES.add( Integer.parseInt( yellowState ) );
+                _listYellowMarkerStates.add( Integer.parseInt( yellowState ) );
             }
         }
 
@@ -818,21 +830,21 @@ public class SignalementJspBean extends AbstractJspBean
      */
     public void initServices( )
     {
-        _signalementService = ( ISignalementService ) SpringContextService.getBean( "signalementService" );
-        _typeSignalementService = ( ITypeSignalementService ) SpringContextService.getBean( "typeSignalementService" );
-        _prioriteService = ( IPrioriteService ) SpringContextService.getBean( "prioriteService" );
-        _signaleurService = ( ISignaleurService ) SpringContextService.getBean( "signaleurService" );
-        _unitService = ( IUnitService ) SpringContextService.getBean( "unittree.unitService" );
-        _signalementWorkflowService = ( IWorkflowService ) SpringContextService.getBean( "signalement.workflowService" );
-        _adresseService = ( IAdresseService ) SpringContextService.getBean( "adresseSignalementService" );
-        _photoService = ( IPhotoService ) SpringContextService.getBean( "photoService" );
-        _sectorService = ( ISectorService ) SpringContextService.getBean( "unittree-dansmarue.sectorService" );
-        _arrondissementService = ( IArrondissementService ) SpringContextService.getBean( "signalement.arrondissementService" );
-        _conseilQuartier = ( IConseilQuartierService ) SpringContextService.getBean( "signalement.conseilQuartierService" );
-        _signalementViewRoleService = ( SignalementViewRoleService ) SpringContextService.getBean( "signalement.signalementViewRoleService" );
-        _domaineFonctionnelService = ( IDomaineFonctionnelService ) SpringContextService.getBean( "domaineFonctionnelService" );
-        _unitSiraService = ( IUnitSiraService ) SpringContextService.getBean( "unittree-dansmarue.unitSiraService" );
-        _signalementExportService = ( ISignalementExportService ) SpringContextService.getBean( "signalementExportService" );
+        _signalementService = (ISignalementService) SpringContextService.getBean( "signalementService" );
+        _typeSignalementService = (ITypeSignalementService) SpringContextService.getBean( "typeSignalementService" );
+        _prioriteService = (IPrioriteService) SpringContextService.getBean( "prioriteService" );
+        _signaleurService = (ISignaleurService) SpringContextService.getBean( "signaleurService" );
+        _unitService = (IUnitService) SpringContextService.getBean( "unittree.unitService" );
+        _signalementWorkflowService = (IWorkflowService) SpringContextService.getBean( "signalement.workflowService" );
+        _adresseService = (IAdresseService) SpringContextService.getBean( "adresseSignalementService" );
+        _photoService = (IPhotoService) SpringContextService.getBean( "photoService" );
+        _sectorService = (ISectorService) SpringContextService.getBean( "unittree-dansmarue.sectorService" );
+        _arrondissementService = (IArrondissementService) SpringContextService.getBean( "signalement.arrondissementService" );
+        _conseilQuartier = (IConseilQuartierService) SpringContextService.getBean( "signalement.conseilQuartierService" );
+        _signalementViewRoleService = (SignalementViewRoleService) SpringContextService.getBean( "signalement.signalementViewRoleService" );
+        _domaineFonctionnelService = (IDomaineFonctionnelService) SpringContextService.getBean( "domaineFonctionnelService" );
+        _unitSiraService = (IUnitSiraService) SpringContextService.getBean( "unittree-dansmarue.unitSiraService" );
+        _signalementExportService = (ISignalementExportService) SpringContextService.getBean( "signalementExportService" );
     }
 
     /**
@@ -848,7 +860,8 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Set the dashboard report list.
      *
-     * @param dashboardSignalementList            dashboard report list
+     * @param dashboardSignalementList
+     *            dashboard report list
      */
     public void setDashboardSignalementList( List<Integer> dashboardSignalementList )
     {
@@ -868,7 +881,8 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Sets the dashboard criterias.
      *
-     * @param dashboardCriterias the dashboard criterias
+     * @param dashboardCriterias
+     *            the dashboard criterias
      */
     public void setDashboardCriterias( Map<String, List<String>> dashboardCriterias )
     {
@@ -1040,7 +1054,7 @@ public class SignalementJspBean extends AbstractJspBean
         List<State> listeEtat = getListeEtats( );
         model.put( MARK_ETATS_LIST, listeEtat );
 
-        Integer totalResult = _signalementService.countIdSignalementByFilter( filter, getPlugin( ) );
+        Integer totalResult = 0;
 
         List<Signalement> listSignalements = null;
 
@@ -1049,38 +1063,17 @@ public class SignalementJspBean extends AbstractJspBean
             totalResult = dashboardSignalementList.size( );
             PaginationProperties paginationProperties = getPaginationProperties( request, totalResult );
 
-            List<Signalement> dashboardSignalements = _signalementService.getByIds( dashboardSignalementList, paginationProperties.getItemsPerPage( ) * ( paginationProperties.getPageIndex( ) - 1 ),
+            List<Signalement> dashboardSignalements = _signalementService.getByIds( dashboardSignalementList,
+                    paginationProperties.getItemsPerPage( ) * ( paginationProperties.getPageIndex( ) - 1 ),
                     paginationProperties.getItemsPerPage( ) * paginationProperties.getPageIndex( ) );
 
             listSignalements = dashboardSignalements;
         }
         else
         {
-            listSignalements = _signalementService.findByFilter( filter, getPaginationProperties( request, totalResult ), true );
-        }
+            totalResult = _signalementExportService.countSearchResult( filter );
+            listSignalements = _signalementExportService.findByFilterSearch( filter, getPaginationProperties( request, totalResult ) );
 
-        // get the first unit linked to the report sector
-        // Map of idSector and Unit instance
-        Map<String, Unit> mapUnits = new HashMap<>( );
-        for ( Signalement signalement : listSignalements )
-        {
-            Sector sector = signalement.getSecteur( );
-            if ( mapUnits.containsKey( String.valueOf( sector.getIdSector( ) ) ) )
-            {
-                signalement.setDirectionSector( mapUnits.get( String.valueOf( sector.getIdSector( ) ) ) );
-            }
-            else
-            {
-                List<Unit> listUnitsSector = _unitService.findBySectorId( sector.getIdSector( ) );
-                for ( Unit unit : listUnitsSector )
-                {
-                    if ( unit.getIdParent( ) == 0 )
-                    {
-                        signalement.setDirectionSector( unit );
-                        mapUnits.put( String.valueOf( sector.getIdSector( ) ), unit );
-                    }
-                }
-            }
         }
 
         ResultList<Signalement> resultListSignalement = new ResultList<>( );
@@ -1099,6 +1092,8 @@ public class SignalementJspBean extends AbstractJspBean
         // workflow : recovery of states and possible actions for page reports
         Map<String, List<Action>> mapActions = new HashMap<>( );
         Map<String, String> mapStates = new HashMap<>( );
+        // Map pour afficher ou non la date de service programmée
+        Map<String, Boolean> mapDisplayProgrammingDate = new HashMap<>( );
         WorkflowService workflowService = WorkflowService.getInstance( );
         Integer signalementWorkflowId = _signalementWorkflowService.getSignalementWorkflowId( );
         boolean hasSignalementPrestataire = false;
@@ -1107,32 +1102,60 @@ public class SignalementJspBean extends AbstractJspBean
             for ( Signalement signalement : paginator.getPageItems( ) )
             {
                 // workflow actions
-                Collection<Action> listActions = _signalementService.getListActionsByIdSignalementAndUser( signalement.getId( ).intValue( ), signalementWorkflowId, getUser( ) );
+                Collection<Action> listActions = null;
+                if ( dashboardSignalementList != null )
+                {
+                    listActions = _signalementService.getListActionsByIdSignalementAndUser( signalement.getId( ).intValue( ), signalementWorkflowId,
+                            getUser( ) );
+                }
+                else
+                {
+                    listActions = _signalementService.getListActionsByIdSignalementAndUser( signalement );
+                }
+
                 mapActions.put( signalement.getId( ).toString( ), new ArrayList<Action>( listActions ) );
 
                 // state
-                State state = workflowService.getState( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE, signalementWorkflowId, null );
+                State state = null;
+                if ( dashboardSignalementList != null )
+                {
+                    state = workflowService.getState( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE, signalementWorkflowId, null );
+                }
+                else
+                {
+                    state = new State( );
+                    state.setId( signalement.getIdState( ) );
+                    state.setName( signalement.getStateName( ) );
+                }
 
                 mapStates.put( signalement.getId( ).toString( ), state == null ? "Non défini" : state.getName( ) );
 
-                if ( ( state != null ) && ( ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_TRANSFERE_PRESTATAIRE, -1 ) )
-                        || ( ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE, -1 ) ) && signalement.getIsSendWS( ) ) ) )
+                if ( ( state != null )
+                        && ( ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_TRANSFERE_PRESTATAIRE, -1 ) )
+                                || ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE, -1 ) ) )
+                        && signalement.getIsSendWS( ) )
                 {
                     hasSignalementPrestataire = true;
                 }
+
+                boolean displayProgrammingDate = ( state != null ) && ( ( state.getId( ) == SignalementConstants.ID_STATE_PROGRAMME_PRESTATAIRE )
+                        || ( state.getId( ) == SignalementConstants.ID_STATE_PROGRAMME ) );
+                mapDisplayProgrammingDate.put( signalement.getId( ).toString( ), displayProgrammingDate );
             }
         }
 
         model.put( MARK_HAS_SIGNALEMENT_PRESTATAIRE, hasSignalementPrestataire );
 
         // Display of advanced options again
-        List<Integer> listArrondissementIds = listeArrondissement.stream( ).map( referenceItem -> Integer.valueOf( referenceItem.getCode( ) ) ).collect( Collectors.toList( ) );
+        List<Integer> listArrondissementIds = listeArrondissement.stream( ).map( referenceItem -> Integer.valueOf( referenceItem.getCode( ) ) )
+                .collect( Collectors.toList( ) );
         boolean hasCriteresAvances = hasCriteresAvances( filter, listArrondissementIds );
 
         model.put( MARK_HAS_ADVANCED_CRITERIAS, hasCriteresAvances );
 
         model.put( MARK_SIGNALEMENT_LIST, paginator.getPageItems( ) );
         model.put( MARK_ETATS, mapStates );
+        model.put( MARK_PROGRAMMING_DATE, mapDisplayProgrammingDate );
         model.put( MARK_ACTIONS, mapActions );
 
         model.put( MARK_TITLE, I18nService.getLocalizedString( PAGE_TITLE_MANAGE_SIGNALEMENT, getLocale( ) ) );
@@ -1142,7 +1165,7 @@ public class SignalementJspBean extends AbstractJspBean
         {
             filter.setIdDirection( SEJ_ID );
         }
-        model.put( SignalementConstants.MARK_FILTER, filter );
+
         model.put( SignalementConstants.MARK_LOCALE, request.getLocale( ) );
 
         model.put( MARK_ID_ETATS_DEFAULT, ID_ETATS_DEFAULT );
@@ -1151,7 +1174,16 @@ public class SignalementJspBean extends AbstractJspBean
         if ( CollectionUtils.isNotEmpty( dashboardSignalementList ) )
         {
             model.put( MARK_DASHBOARD_CRITERIAS, dashboardCriterias );
+            filter.setIdTypeSignalement( 0 );
+            filter.setNumero( null );
+            filter.setIdDirection( 0 );
+            filter.setIdDomaine( 0 );
+            filter.setIdSector( 0 );
         }
+
+        model.put( SignalementConstants.MARK_FILTER, filter );
+
+        model.put( MARK_FEUILLE_DE_TOURNEE_LIST, _feuilleTourneeService.getAllFeuilleDeTourneeAutorise( adminUser ) );
 
         return getAdminPage( getTemplate( TEMPLATE_MANAGE_SIGNALEMENT, model ) );
 
@@ -1208,13 +1240,14 @@ public class SignalementJspBean extends AbstractJspBean
 
         // report's history html
         WorkflowService workflowService = WorkflowService.getInstance( );
-        String historiqueList = workflowService.getDisplayDocumentHistory( nIdSignalement, Signalement.WORKFLOW_RESOURCE_TYPE, _signalementWorkflowService.getSignalementWorkflowId( ), request,
-                getLocale( ) );
+        String historiqueList = workflowService.getDisplayDocumentHistory( nIdSignalement, Signalement.WORKFLOW_RESOURCE_TYPE,
+                _signalementWorkflowService.getSignalementWorkflowId( ), request, getLocale( ) );
 
         model.put( MARK_HISTORIQUE_LIST, historiqueList );
 
         // get the report's state
-        State stateSignalement = workflowService.getState( nIdSignalement, Signalement.WORKFLOW_RESOURCE_TYPE, _signalementWorkflowService.getSignalementWorkflowId( ), null );
+        State stateSignalement = workflowService.getState( nIdSignalement, Signalement.WORKFLOW_RESOURCE_TYPE,
+                _signalementWorkflowService.getSignalementWorkflowId( ), null );
         String serviceFaitValue = AppPropertiesService.getProperty( SignalementConstants.PROPERTY_SERVICE_FAIT_VALUE );
 
         model.put( MARK_STATE_SIGNALEMENT, stateSignalement );
@@ -1271,28 +1304,38 @@ public class SignalementJspBean extends AbstractJspBean
 
                 _signalementFilter.getOrders( ).add( order );
             }
-            else if ( ( request.getParameter( SignalementConstants.PARAMETER_BUTTON_SEARCH ) != null ) || StringUtils.isNotBlank( request.getParameter( BUTTON_UPDATE_SECTOR_WITH_DIRECTION ) ) )
-            {
-
-                etats = new ArrayList<>( );
-                buildFilter( _signalementFilter, request );
-                for ( State state : ( List<State> ) WorkflowService.getInstance( ).getAllStateByWorkflow( SignalementConstants.SIGNALEMENT_WORKFLOW_ID, getUser( ) ) )
+            else
+                if ( ( request.getParameter( SignalementConstants.PARAMETER_BUTTON_SEARCH ) != null )
+                        || StringUtils.isNotBlank( request.getParameter( BUTTON_UPDATE_SECTOR_WITH_DIRECTION ) ) )
                 {
-                    String strValue = request.getParameter( "etat" + state.getId( ) );
-                    boolean bTypeDossChecked = Boolean.parseBoolean( strValue );
-                    if ( bTypeDossChecked )
+
+                    etats = new ArrayList<>( );
+                    buildFilter( _signalementFilter, request );
+                    for ( State state : (List<State>) WorkflowService.getInstance( ).getAllStateByWorkflow( SignalementConstants.SIGNALEMENT_WORKFLOW_ID,
+                            getUser( ) ) )
                     {
-                        EtatSignalement etatSignalement = new EtatSignalement( );
-                        etatSignalement.setCoche( bTypeDossChecked );
-                        etatSignalement.setId( ( long ) state.getId( ) );
-                        etatSignalement.setLibelle( state.getName( ) );
-                        etats.add( etatSignalement );
+                        String strValue = request.getParameter( "etat" + state.getId( ) );
+                        boolean bTypeDossChecked = Boolean.parseBoolean( strValue );
+                        if ( bTypeDossChecked )
+                        {
+                            EtatSignalement etatSignalement = new EtatSignalement( );
+                            etatSignalement.setCoche( bTypeDossChecked );
+                            etatSignalement.setId( (long) state.getId( ) );
+                            etatSignalement.setLibelle( state.getName( ) );
+                            etats.add( etatSignalement );
 
+                        }
                     }
-                }
-                _signalementFilter.setEtats( etats );
 
-            }
+                    EtatSignalement etatSignalementState = _signalementService.getStateIfDateIndicated( _signalementFilter );
+                    if ( etatSignalementState != null )
+                    {
+                        etats.add( etatSignalementState );
+                    }
+
+                    _signalementFilter.setEtats( etats );
+
+                }
 
         }
 
@@ -1348,24 +1391,27 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Manage the states list.
      *
-     * @param etats            the states list
+     * @param etats
+     *            the states list
      */
     public void manageEtatList( List<EtatSignalement> etats )
     {
-        for ( State state : ( List<State> ) WorkflowService.getInstance( ).getAllStateByWorkflow( SignalementConstants.SIGNALEMENT_WORKFLOW_ID, getUser( ) ) )
+        for ( State state : (List<State>) WorkflowService.getInstance( ).getAllStateByWorkflow( SignalementConstants.SIGNALEMENT_WORKFLOW_ID, getUser( ) ) )
         {
             /*
              * initialization of default values a New, To be processed, To be done in the field and To be done Office
              */
-            if ( ( state != null ) && ( ( state.getId( ) == SignalementConstants.ID_STATE_NOUVEAU ) || ( state.getId( ) == SignalementConstants.ID_STATE_A_TRAITER )
-                    || ( state.getId( ) == SignalementConstants.ID_STATE_A_FAIRE_TERRAIN ) || ( state.getId( ) == SignalementConstants.ID_STATE_A_FAIRE_BUREAU )
-                    || ( state.getId( ) == SignalementConstants.ID_STATE_TRANSFERE_PRESTATAIRE ) || ( state.getId( ) == SignalementConstants.ID_STATE_PROGRAMME_PRESTATAIRE ) ) )
+            if ( ( state != null ) && ( ( state.getId( ) == SignalementConstants.ID_STATE_NOUVEAU )
+                    || ( state.getId( ) == SignalementConstants.ID_STATE_A_TRAITER ) || ( state.getId( ) == SignalementConstants.ID_STATE_A_FAIRE_TERRAIN )
+                    || ( state.getId( ) == SignalementConstants.ID_STATE_A_FAIRE_BUREAU )
+                    || ( state.getId( ) == SignalementConstants.ID_STATE_TRANSFERE_PRESTATAIRE )
+                    || ( state.getId( ) == SignalementConstants.ID_STATE_PROGRAMME_PRESTATAIRE ) ) )
             {
 
                 EtatSignalement etatSignalement = new EtatSignalement( );
 
                 etatSignalement.setCoche( true );
-                etatSignalement.setId( ( long ) state.getId( ) );
+                etatSignalement.setId( (long) state.getId( ) );
                 etatSignalement.setLibelle( state.getName( ) );
                 etats.add( etatSignalement );
             }
@@ -1376,8 +1422,10 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Apply a restriction by role.
      *
-     * @param request            HttpRequest
-     * @param adminUser            the user
+     * @param request
+     *            HttpRequest
+     * @param adminUser
+     *            the user
      */
     private void applyViewRoleRestrictionToFilter( HttpServletRequest request, AdminUser adminUser )
     {
@@ -1411,10 +1459,11 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * This method return true if a resource does not have the state to be processed, New or Service Programmer.
      *
-     * @param idRessource            the resource id
+     * @param idRessource
+     *            the resource id
      * @return true if the report is not in one of the 3 states above
      */
-    public String isMassServiceFait( int[] idRessource )
+    public String isMassServiceFait( int [ ] idRessource )
     {
 
         // if the array is empty or null
@@ -1434,12 +1483,13 @@ public class SignalementJspBean extends AbstractJspBean
         {
 
             // the state of the resource is recovered
-            State etat = WorkflowService.getInstance( ).getState( idRessource[index], Signalement.WORKFLOW_RESOURCE_TYPE, _signalementWorkflowService.getSignalementWorkflowId( ), null );
+            State etat = WorkflowService.getInstance( ).getState( idRessource [index], Signalement.WORKFLOW_RESOURCE_TYPE,
+                    _signalementWorkflowService.getSignalementWorkflowId( ), null );
 
             // if the state is null
             if ( etat == null )
             {
-                trouver.append( setNumeroSignalement( idRessource[index] ) );
+                trouver.append( setNumeroSignalement( idRessource [index] ) );
                 break;
             }
 
@@ -1447,10 +1497,11 @@ public class SignalementJspBean extends AbstractJspBean
             int etats = etat.getId( );
 
             // if state id is the same as one of the states we are not looking for
-            if ( ( etats != SignalementConstants.ID_STATE_NOUVEAU ) && ( etats != SignalementConstants.ID_STATE_A_TRAITER ) && ( etats != SignalementConstants.ID_STATE_PROGRAMME ) )
+            if ( ( etats != SignalementConstants.ID_STATE_NOUVEAU ) && ( etats != SignalementConstants.ID_STATE_A_TRAITER )
+                    && ( etats != SignalementConstants.ID_STATE_PROGRAMME ) )
             {
 
-                trouver.append( setNumeroSignalement( idRessource[index] ) );
+                trouver.append( setNumeroSignalement( idRessource [index] ) );
                 break;
             }
 
@@ -1466,7 +1517,8 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Sets the numero signalement.
      *
-     * @param nIdSignalement the n id signalement
+     * @param nIdSignalement
+     *            the n id signalement
      * @return the string
      */
     /*
@@ -1516,8 +1568,8 @@ public class SignalementJspBean extends AbstractJspBean
     protected void buildFilter( SignalementFilter filter, HttpServletRequest request )
     {
         // Districts recovery (this is a list)
-        String[] strArrondissements = request.getParameterValues( "listIdArrondissementsParam" );
-        String[] strQuartiers = request.getParameterValues( "listIdQuartierParam" );
+        String [ ] strArrondissements = request.getParameterValues( "listIdArrondissementsParam" );
+        String [ ] strQuartiers = request.getParameterValues( "listIdQuartierParam" );
         if ( !ArrayUtils.isEmpty( strArrondissements ) )
         {
             List<Integer> arrondissementIds = ListUtils.getListOfIntFromStrArray( strArrondissements );
@@ -1561,7 +1613,7 @@ public class SignalementJspBean extends AbstractJspBean
         FunctionnalException fe = getErrorOnce( request );
         if ( fe != null )
         {
-            signalement = ( Signalement ) fe.getBean( );
+            signalement = (Signalement) fe.getBean( );
             model.put( "error", getHtmlError( fe ) );
 
             if ( fe.getAdditionalParameters( ) != null )
@@ -1637,8 +1689,8 @@ public class SignalementJspBean extends AbstractJspBean
 
                 // get the report's state
                 WorkflowService workflowService = WorkflowService.getInstance( );
-                State stateSignalement = workflowService.getState( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE, _signalementWorkflowService.getSignalementWorkflowId( ),
-                        null );
+                State stateSignalement = workflowService.getState( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE,
+                        _signalementWorkflowService.getSignalementWorkflowId( ), null );
 
                 model.put( MARK_STATE_SIGNALEMENT, stateSignalement );
 
@@ -1667,12 +1719,14 @@ public class SignalementJspBean extends AbstractJspBean
                 // get the default message creation (linked to the workflow)
                 if ( SignalementUtils.isWindows( ) )
                 {
-                    strMessageCreation = _signalementService.getMessageCreationSignalement( ).replaceAll( "</p>|<br/>|<br>|<br />", "\r" ).replaceAll( "<[^>]*>", "" );
+                    strMessageCreation = _signalementService.getMessageCreationSignalement( ).replaceAll( "</p>|<br/>|<br>|<br />", "\r" )
+                            .replaceAll( "<[^>]*>", "" );
 
                 }
                 else
                 {
-                    strMessageCreation = _signalementService.getMessageCreationSignalement( ).replaceAll( "<br/>|<br>|<br />", System.getProperty( "line.separator" ) ).replaceAll( "<[^>]*>", "" );
+                    strMessageCreation = _signalementService.getMessageCreationSignalement( )
+                            .replaceAll( "<br/>|<br>|<br />", System.getProperty( "line.separator" ) ).replaceAll( "<[^>]*>", "" );
 
                 }
 
@@ -1741,11 +1795,13 @@ public class SignalementJspBean extends AbstractJspBean
 
             // get the report's state
             WorkflowService workflowService = WorkflowService.getInstance( );
-            State stateSignalement = workflowService.getState( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE, _signalementWorkflowService.getSignalementWorkflowId( ), null );
+            State stateSignalement = workflowService.getState( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE,
+                    _signalementWorkflowService.getSignalementWorkflowId( ), null );
 
             // Get the report possible actions (based on user)
             Integer signalementWorkflowId = _signalementWorkflowService.getSignalementWorkflowId( );
-            Collection<Action> possibleActions = _signalementService.getListActionsByIdSignalementAndUser( lIdSignalement.intValue( ), signalementWorkflowId, getUser( ) );
+            Collection<Action> possibleActions = _signalementService.getListActionsByIdSignalementAndUser( lIdSignalement.intValue( ), signalementWorkflowId,
+                    getUser( ) );
 
             model.put( MARK_POSSIBLE_ACTIONS, possibleActions );
             model.put( MARK_STATE_SIGNALEMENT, stateSignalement );
@@ -1778,7 +1834,7 @@ public class SignalementJspBean extends AbstractJspBean
             return doGoBack( request );
         }
 
-        MultipartHttpServletRequest multipartRequest = ( MultipartHttpServletRequest ) request;
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         String strIdSignalement = multipartRequest.getParameter( PARAMETER_MARK_SIGNALEMENT_ID );
         Signalement signalement = new Signalement( );
 
@@ -1802,7 +1858,7 @@ public class SignalementJspBean extends AbstractJspBean
             {
                 lIdSignalement = Long.parseLong( strIdSignalement );
             }
-            catch ( NumberFormatException e )
+            catch( NumberFormatException e )
             {
                 throw new BusinessException( signalement, SignalementConstants.MESSAGE_ERROR_OCCUR );
             }
@@ -1851,7 +1907,8 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Add a photo to a report (only in modification mode).
      *
-     * @param request            the request
+     * @param request
+     *            the request
      * @return The next url
      */
     public String getSavePhotoToSignalement( HttpServletRequest request )
@@ -1872,7 +1929,8 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Delete a photo linked to a report.
      *
-     * @param request            the request
+     * @param request
+     *            the request
      * @return The next url
      */
     public String getDeletePhotoSignalement( HttpServletRequest request )
@@ -1893,15 +1951,16 @@ public class SignalementJspBean extends AbstractJspBean
         urlParam.put( PARAMETER_PHOTO_ID, nIdPhoto );
         urlParam.put( PARAMETER_MARK_SIGNALEMENT_ID, nIdSignalement );
 
-        return AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_DELETE_PHOTO_SIGNALEMENT, null, MESSAGE_CONFIRMATION_DELETE_PHOTO_SIGNALEMENT, JSP_DELETE_PHOTO_SIGNALEMENT, SELF,
-                AdminMessage.TYPE_CONFIRMATION, urlParam, strJspBack );
+        return AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_DELETE_PHOTO_SIGNALEMENT, null, MESSAGE_CONFIRMATION_DELETE_PHOTO_SIGNALEMENT,
+                JSP_DELETE_PHOTO_SIGNALEMENT, SELF, AdminMessage.TYPE_CONFIRMATION, urlParam, strJspBack );
 
     }
 
     /**
      * Delete a photo linked to a report.
      *
-     * @param request            the request
+     * @param request
+     *            the request
      * @return The next url
      */
     public String doDeletePhotoSignalement( HttpServletRequest request )
@@ -1924,13 +1983,14 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Add a photo to a report (only in modification mode).
      *
-     * @param request            the request
+     * @param request
+     *            the request
      * @return The next url
      */
     public String doSavePhotoToSignalement( HttpServletRequest request )
     {
 
-        MultipartHttpServletRequest multipartRequest = ( MultipartHttpServletRequest ) request;
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         String strIdSignalement = multipartRequest.getParameter( PARAMETER_MARK_SIGNALEMENT_ID );
         String strVuePhoto = multipartRequest.getParameter( PARAMETER_VUE_PHOTO );
         Signalement signalement = new Signalement( );
@@ -1962,14 +2022,14 @@ public class SignalementJspBean extends AbstractJspBean
         FileItem imageSource = multipartRequest.getFile( PARAMETER_PHOTO );
         String strImageName = FileUploadService.getFileNameOnly( imageSource );
 
-        byte[] baImageSource = imageSource.get( );
+        byte [ ] baImageSource = imageSource.get( );
         ImageResource image = new ImageResource( );
 
         if ( ( strImageName != null ) && !strImageName.equals( EMPTY_STRING ) )
         {
             String width = AppPropertiesService.getProperty( SignalementConstants.IMAGE_THUMBNAIL_RESIZE_WIDTH );
             String height = AppPropertiesService.getProperty( SignalementConstants.IMAGE_THUMBNAIL_RESIZE_HEIGHT );
-            byte[] resizeImage = ImageUtil.resizeImage( baImageSource, width, height, 1 );
+            byte [ ] resizeImage = ImageUtil.resizeImage( baImageSource, width, height, 1 );
             PhotoDMR photoSignalement = new PhotoDMR( );
             image.setImage( baImageSource );
             image.setMimeType( imageSource.getContentType( ) );
@@ -1979,7 +2039,7 @@ public class SignalementJspBean extends AbstractJspBean
 
             photoSignalement.setVue( nVuePhoto );
 
-            photoSignalement.setDate( SIMPLE_DATE_FORMAT.format( Calendar.getInstance( ).getTime( ) ) );
+            photoSignalement.setDate( _simple_date_format.format( Calendar.getInstance( ).getTime( ) ) );
 
             // creation of the image in the db linked to the report
             _photoService.insert( photoSignalement );
@@ -2009,11 +2069,13 @@ public class SignalementJspBean extends AbstractJspBean
     {
         String strJspBack = request.getParameter( SignalementConstants.MARK_JSP_BACK );
 
-        return StringUtils.isNotBlank( strJspBack ) ? AppPathService.getBaseUrl( request ) + strJspBack : AppPathService.getBaseUrl( request ) + JSP_MANAGE_SIGNALEMENT;
+        return StringUtils.isNotBlank( strJspBack ) ? ( AppPathService.getBaseUrl( request ) + strJspBack )
+                : ( AppPathService.getBaseUrl( request ) + JSP_MANAGE_SIGNALEMENT );
     }
 
     /**
-     * Get the request data and if there is no error insert the data in the report object specified in parameter. return null if there is no error or else return the error page url
+     * Get the request data and if there is no error insert the data in the report object specified in parameter. return null if there is no error or else
+     * return the error page url
      *
      * @param multipartRequest
      *            the request
@@ -2066,7 +2128,7 @@ public class SignalementJspBean extends AbstractJspBean
             if ( StringUtils.isBlank( strIdSignalement ) )
             {
 
-                String dateOfTheDay = SIMPLE_DATE_FORMAT.format( Calendar.getInstance( ).getTime( ) );
+                String dateOfTheDay = _simple_date_format.format( Calendar.getInstance( ).getTime( ) );
                 signalement.setDateCreation( dateOfTheDay );
                 Date dateDay = DateUtils.getDate( signalement.getDateCreation( ), false );
                 String annee = DateUtils.getAnnee( Calendar.getInstance( ).getTime( ) );
@@ -2096,7 +2158,7 @@ public class SignalementJspBean extends AbstractJspBean
                     nTypeSignalement = Integer.parseInt( strTypeSignalement );
                 }
             }
-            catch ( NumberFormatException e )
+            catch( NumberFormatException e )
             {
                 throw new BusinessException( signalement, model, SignalementConstants.MESSAGE_ERROR_OCCUR );
             }
@@ -2135,7 +2197,7 @@ public class SignalementJspBean extends AbstractJspBean
                     lastInsertedSignalement = _signalementService.insert( signalement );
 
                 }
-                catch ( BusinessException e )
+                catch( BusinessException e )
                 {
                     AppLogService.error( e.getMessage( ), e );
                     return AdminMessageService.getMessageUrl( multipartRequest, MESSAGE_ERREUR_SECTEUR_NULL, AdminMessage.TYPE_STOP );
@@ -2215,14 +2277,14 @@ public class SignalementJspBean extends AbstractJspBean
                     }
 
                 }
-                catch ( NumberFormatException e )
+                catch( NumberFormatException e )
                 {
                     throw new BusinessException( signalement, model, SignalementConstants.MESSAGE_ERROR_OCCUR );
                 }
             }
             return null;
         }
-        catch ( FunctionnalException e )
+        catch( FunctionnalException e )
         {
             return manageFunctionnalException( multipartRequest, e, "SaveSignalement.jsp" );
         }
@@ -2231,9 +2293,12 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Extract and set parameter for report address.
      *
-     * @param multipartRequest            the multipart request
-     * @param adresse            the address to set
-     * @param signalement            the report
+     * @param multipartRequest
+     *            the multipart request
+     * @param adresse
+     *            the address to set
+     * @param signalement
+     *            the report
      */
     private void setFromRequest( MultipartHttpServletRequest multipartRequest, Adresse adresse, Signalement signalement )
     {
@@ -2253,7 +2318,7 @@ public class SignalementJspBean extends AbstractJspBean
                 nLat = Double.parseDouble( strLat );
             }
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
             throw new BusinessException( signalement, SignalementConstants.MESSAGE_ERROR_OCCUR );
         }
@@ -2265,7 +2330,7 @@ public class SignalementJspBean extends AbstractJspBean
                 nLng = Double.parseDouble( strLng );
             }
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
             throw new BusinessException( signalement, SignalementConstants.MESSAGE_ERROR_OCCUR );
         }
@@ -2287,7 +2352,7 @@ public class SignalementJspBean extends AbstractJspBean
                 lIdAdresse = Long.parseLong( strIdAdresse );
 
             }
-            catch ( NumberFormatException e )
+            catch( NumberFormatException e )
             {
                 throw new BusinessException( signalement, SignalementConstants.MESSAGE_ERROR_OCCUR );
             }
@@ -2300,8 +2365,10 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Check the mandatory fields before create report.
      *
-     * @param multipartRequest            the request with report parameters
-     * @param signalement            the report to check
+     * @param multipartRequest
+     *            the request with report parameters
+     * @param signalement
+     *            the report to check
      * @return empty string if no errors, link to the error otherwise
      */
     public String checkMandatoryFields( MultipartHttpServletRequest multipartRequest, Signalement signalement )
@@ -2317,14 +2384,15 @@ public class SignalementJspBean extends AbstractJspBean
         {
             url = AdminMessageService.getMessageUrl( multipartRequest, MESSAGE_ERROR_EMPTY_FIELD, AdminMessage.TYPE_STOP );
         }
-        else if ( StringUtils.isNotBlank( strIdSignalement ) )
-        {
-            if ( ( strTypeSignalement != null ) && ( MINUS_ONE.equals( strTypeSignalement.trim( ) ) || StringUtils.isNotBlank( strAdresse ) ) )
+        else
+            if ( StringUtils.isNotBlank( strIdSignalement ) )
             {
-                url = AdminMessageService.getMessageUrl( multipartRequest, MESSAGE_ERROR_EMPTY_FIELD, AdminMessage.TYPE_STOP );
+                if ( ( strTypeSignalement != null ) && ( MINUS_ONE.equals( strTypeSignalement.trim( ) ) || StringUtils.isNotBlank( strAdresse ) ) )
+                {
+                    url = AdminMessageService.getMessageUrl( multipartRequest, MESSAGE_ERROR_EMPTY_FIELD, AdminMessage.TYPE_STOP );
+                }
+                signalement.setSuivi( ZERO_VOTE );
             }
-            signalement.setSuivi( ZERO_VOTE );
-        }
 
         return url;
     }
@@ -2332,7 +2400,8 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Check if the mandatory fields are not empty.
      *
-     * @param multipartRequest            multipartRequest
+     * @param multipartRequest
+     *            multipartRequest
      * @return url
      */
     public String checkUpdateMandatoryFields( MultipartHttpServletRequest multipartRequest )
@@ -2353,9 +2422,12 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Insert the report photo.
      *
-     * @param signalement            the report
-     * @param imageFile            the image
-     * @param vuePhoto            the type of view (detailed or overview)
+     * @param signalement
+     *            the report
+     * @param imageFile
+     *            the image
+     * @param vuePhoto
+     *            the type of view (detailed or overview)
      */
     private void insertPhoto( Signalement signalement, FileItem imageFile, Integer vuePhoto )
     {
@@ -2365,7 +2437,7 @@ public class SignalementJspBean extends AbstractJspBean
             ImageResource image = new ImageResource( );
             String width = AppPropertiesService.getProperty( SignalementConstants.IMAGE_THUMBNAIL_RESIZE_WIDTH );
             String height = AppPropertiesService.getProperty( SignalementConstants.IMAGE_THUMBNAIL_RESIZE_HEIGHT );
-            byte[] resizeImage = ImageUtil.resizeImage( imageFile.get( ), width, height, 1 );
+            byte [ ] resizeImage = ImageUtil.resizeImage( imageFile.get( ), width, height, 1 );
             PhotoDMR photoSignalement = new PhotoDMR( );
             image.setImage( imageFile.get( ) );
             String mimeType = imageFile.getContentType( ).replace( "pjpeg", "jpeg" );
@@ -2376,7 +2448,7 @@ public class SignalementJspBean extends AbstractJspBean
             photoSignalement.setImageThumbnailWithBytes( resizeImage );
             photoSignalement.setSignalement( signalement );
             photoSignalement.setVue( vuePhoto );
-            photoSignalement.setDate( SIMPLE_DATE_FORMAT.format( Calendar.getInstance( ).getTime( ) ) );
+            photoSignalement.setDate( _simple_date_format.format( Calendar.getInstance( ).getTime( ) ) );
 
             // creation of the image in the db linked to the report
             _photoService.insert( photoSignalement );
@@ -2386,8 +2458,10 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Check the accessibility.
      *
-     * @param multipartRequest            the request
-     * @param signalement            the report
+     * @param multipartRequest
+     *            the request
+     * @param signalement
+     *            the report
      * @return empty if no errors, url otherwise
      */
     public String checkAccessibility( MultipartHttpServletRequest multipartRequest, Signalement signalement )
@@ -2395,7 +2469,8 @@ public class SignalementJspBean extends AbstractJspBean
         String errorUrl = StringUtils.EMPTY;
         String addressLoad = multipartRequest.getParameter( "adresseLoad" );
         String address = multipartRequest.getParameter( PARAMETER_MARK_ADRESSE );
-        if ( ( multipartRequest.getParameter( "searchAddress" ) != null ) || ( StringUtils.isNotBlank( addressLoad ) && StringUtils.isNotBlank( address ) && !address.equals( addressLoad ) ) )
+        if ( ( multipartRequest.getParameter( "searchAddress" ) != null )
+                || ( StringUtils.isNotBlank( addressLoad ) && StringUtils.isNotBlank( address ) && !address.equals( addressLoad ) ) )
         {
 
             signalement.getAdresses( ).get( 0 ).setLat( null );
@@ -2403,17 +2478,18 @@ public class SignalementJspBean extends AbstractJspBean
             errorUrl = manageFunctionnalException( multipartRequest, new BusinessException( signalement, null ),
                     "SaveSignalement.jsp?searchAddress=" + multipartRequest.getParameter( "searchAddress" ) );
         }
-        else if ( multipartRequest.getParameter( "validProposedAddress" ) != null )
-        {
-            // get the chosen address in the select list
-            Adresse add = new Adresse( );
+        else
+            if ( multipartRequest.getParameter( "validProposedAddress" ) != null )
+            {
+                // get the chosen address in the select list
+                Adresse add = new Adresse( );
 
-            String allParameter = multipartRequest.getParameter( "validAddress" );
-            List<Adresse> addresses = getCoordinatesFromAccess( add, allParameter );
-            signalement.setAdresses( addresses );
+                String allParameter = multipartRequest.getParameter( "validAddress" );
+                List<Adresse> addresses = getCoordinatesFromAccess( add, allParameter );
+                signalement.setAdresses( addresses );
 
-            errorUrl = manageFunctionnalException( multipartRequest, new BusinessException( signalement, null ), "SaveSignalement.jsp?validAddress=true" );
-        }
+                errorUrl = manageFunctionnalException( multipartRequest, new BusinessException( signalement, null ), "SaveSignalement.jsp?validAddress=true" );
+            }
         return errorUrl;
     }
 
@@ -2494,7 +2570,7 @@ public class SignalementJspBean extends AbstractJspBean
         {
             nIdResource = Integer.parseInt( strIdResource );
         }
-        catch ( NumberFormatException nfe )
+        catch( NumberFormatException nfe )
         {
             return SignalementUtils.buildRedirectResult( getHomeUrl( request ) );
         }
@@ -2526,7 +2602,7 @@ public class SignalementJspBean extends AbstractJspBean
                 Signalement signalement;
                 UrlItem urlItem = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_WORKFLOW_PROCESS_ACTION );
                 putActionType( request, urlItem );
-                String[] messageArgs = new String[1];
+                String [ ] messageArgs = new String [ 1];
                 StringBuilder sbNumerosSignalement = new StringBuilder( );
 
                 for ( int nIdSignalement : _massSignalementIds )
@@ -2534,8 +2610,8 @@ public class SignalementJspBean extends AbstractJspBean
 
                     if ( findNextAction( nIdSignalement, _actionType ) != null )
                     {
-                        if ( !WorkflowService.getInstance( ).canProcessAction( nIdSignalement, Signalement.WORKFLOW_RESOURCE_TYPE, findNextAction( nIdSignalement, _actionType ).getId( ), null,
-                                request, false ) )
+                        if ( !WorkflowService.getInstance( ).canProcessAction( nIdSignalement, Signalement.WORKFLOW_RESOURCE_TYPE,
+                                findNextAction( nIdSignalement, _actionType ).getId( ), null, request, false ) )
                         {
                             suppression = true;
                             _massSignalementIds = ArrayUtils.remove( _massSignalementIds, index );
@@ -2578,9 +2654,10 @@ public class SignalementJspBean extends AbstractJspBean
                 }
                 if ( suppression )
                 {
-                    messageArgs[0] = sbNumerosSignalement.toString( );
+                    messageArgs [0] = sbNumerosSignalement.toString( );
 
-                    strUrl = AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_MASS_ACTION_IMPOSSIBLE, messageArgs, urlItem.getUrl( ), AdminMessage.TYPE_WARNING );
+                    strUrl = AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_MASS_ACTION_IMPOSSIBLE, messageArgs, urlItem.getUrl( ),
+                            AdminMessage.TYPE_WARNING );
 
                     return SignalementUtils.buildRedirectResult( strUrl );
 
@@ -2602,22 +2679,24 @@ public class SignalementJspBean extends AbstractJspBean
                 nIdAction = action.getId( );
             }
         }
-        else if ( nIdAction != null )
-        {
-
-            try
+        else
+            if ( nIdAction != null )
             {
-                nIdAction = Integer.parseInt( strIdAction );
-            }
-            catch ( NumberFormatException nfe )
-            {
-                throw new AppException( INVALID_ACTION_ID + nfe.getMessage( ), nfe );
-            }
-        }
 
-        boolean isFromDisplaySignalement =  PARAMETER_VALUE_DISPLAY_PAGE.equals(  request.getParameter( PARAMETER_FROM_PAGE ) );
+                try
+                {
+                    nIdAction = Integer.parseInt( strIdAction );
+                }
+                catch( NumberFormatException nfe )
+                {
+                    throw new AppException( INVALID_ACTION_ID + nfe.getMessage( ), nfe );
+                }
+            }
+
+        boolean isFromDisplaySignalement = PARAMETER_VALUE_DISPLAY_PAGE.equals( request.getParameter( PARAMETER_FROM_PAGE ) );
         String strBaseUrl = AppPathService.getBaseUrl( request );
-        if ( isFromDisplaySignalement || WorkflowService.getInstance( ).canProcessAction( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction.intValue( ), null, request, false ) )
+        if ( isFromDisplaySignalement || WorkflowService.getInstance( ).canProcessAction( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE,
+                nIdAction.intValue( ), null, request, false ) )
         {
 
             UrlItem urlItem;
@@ -2644,7 +2723,8 @@ public class SignalementJspBean extends AbstractJspBean
 
             }
 
-            if(isFromDisplaySignalement) {
+            if ( isFromDisplaySignalement )
+            {
                 urlItem.addParameter( PARAMETER_FROM_PAGE, PARAMETER_VALUE_DISPLAY_PAGE );
             }
             urlItem.addParameter( PARAMETER_MARK_ACTION_ID, nIdAction.intValue( ) );
@@ -2703,7 +2783,7 @@ public class SignalementJspBean extends AbstractJspBean
                     // set next url in the session
                     request.getSession( ).setAttribute( PARAMETER_NEXT_URL, nextUrl.getUrl( ) );
                 }
-                catch ( Exception e )
+                catch( Exception e )
                 {
                     AppLogService.error( e );
                 }
@@ -2745,7 +2825,7 @@ public class SignalementJspBean extends AbstractJspBean
         {
             nIdResource = Integer.parseInt( strIdResource );
         }
-        catch ( NumberFormatException nfe )
+        catch( NumberFormatException nfe )
         {
             return SignalementUtils.buildRedirectResult( getHomeUrl( request ) );
         }
@@ -2764,7 +2844,7 @@ public class SignalementJspBean extends AbstractJspBean
                 // deletion of reports on which the action cannot be carried out
                 int index = 0;
                 boolean suppression = false;
-                String[] messageArgs = new String[1];
+                String [ ] messageArgs = new String [ 1];
                 UrlItem urlItem;
                 StringBuilder sbNumerosSignalement = new StringBuilder( );
                 Signalement signalement;
@@ -2781,9 +2861,10 @@ public class SignalementJspBean extends AbstractJspBean
                 if ( !"".equals( trouve ) )
                 {
 
-                    messageArgs[0] = ( ( new StringBuilder( trouve ) ).append( LINE_BREAK ) ).toString( );
+                    messageArgs [0] = ( ( new StringBuilder( trouve ) ).append( LINE_BREAK ) ).toString( );
 
-                    strUrl = AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_MASS_ACTION_IMPOSSIBLE, messageArgs, urlItem.getUrl( ), AdminMessage.TYPE_STOP );
+                    strUrl = AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_MASS_ACTION_IMPOSSIBLE, messageArgs, urlItem.getUrl( ),
+                            AdminMessage.TYPE_STOP );
 
                     return SignalementUtils.buildRedirectResult( strUrl );
 
@@ -2797,7 +2878,8 @@ public class SignalementJspBean extends AbstractJspBean
                         if ( findNextAction( nIdSignalement, _actionType ) != null )
                         {
                             Action action = findNextAction( nIdSignalement, _actionType );
-                            if ( ( action != null ) && !WorkflowService.getInstance( ).canProcessAction( nIdSignalement, Signalement.WORKFLOW_RESOURCE_TYPE, action.getId( ), null, request, false ) )
+                            if ( ( action != null ) && !WorkflowService.getInstance( ).canProcessAction( nIdSignalement, Signalement.WORKFLOW_RESOURCE_TYPE,
+                                    action.getId( ), null, request, false ) )
                             {
 
                                 suppression = true;
@@ -2844,9 +2926,10 @@ public class SignalementJspBean extends AbstractJspBean
 
                 if ( suppression )
                 {
-                    messageArgs[0] = sbNumerosSignalement.toString( );
+                    messageArgs [0] = sbNumerosSignalement.toString( );
 
-                    strUrl = AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_MASS_ACTION_IMPOSSIBLE, messageArgs, urlItem.getUrl( ), AdminMessage.TYPE_WARNING );
+                    strUrl = AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_MASS_ACTION_IMPOSSIBLE, messageArgs, urlItem.getUrl( ),
+                            AdminMessage.TYPE_WARNING );
 
                     return SignalementUtils.buildRedirectResult( strUrl );
 
@@ -2868,18 +2951,19 @@ public class SignalementJspBean extends AbstractJspBean
                 nIdAction = action.getId( );
             }
         }
-        else if ( nIdAction != null )
-        {
+        else
+            if ( nIdAction != null )
+            {
 
-            try
-            {
-                nIdAction = Integer.parseInt( strIdAction );
+                try
+                {
+                    nIdAction = Integer.parseInt( strIdAction );
+                }
+                catch( NumberFormatException nfe )
+                {
+                    throw new AppException( INVALID_ACTION_ID + nfe.getMessage( ), nfe );
+                }
             }
-            catch ( NumberFormatException nfe )
-            {
-                throw new AppException( INVALID_ACTION_ID + nfe.getMessage( ), nfe );
-            }
-        }
 
         String strBaseUrl = AppPathService.getBaseUrl( request );
         if ( WorkflowService.getInstance( ).canProcessAction( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction.intValue( ), null, request, false ) )
@@ -2961,7 +3045,7 @@ public class SignalementJspBean extends AbstractJspBean
      *            the id
      * @return true, if successful
      */
-    private boolean contientIdAction( int[] listeIdActions, int id )
+    private boolean contientIdAction( int [ ] listeIdActions, int id )
     {
         for ( int i : listeIdActions )
         {
@@ -3019,8 +3103,8 @@ public class SignalementJspBean extends AbstractJspBean
                 }
             }
 
-            String[] messageArgs = new String[1];
-            messageArgs[0] = sbNumerosSignalement.toString( );
+            String [ ] messageArgs = new String [ 1];
+            messageArgs [0] = sbNumerosSignalement.toString( );
 
             if ( contientIdAction( ID_ACTIONS_SERVICE_FAIT, nIdAction ) )
             {
@@ -3033,8 +3117,8 @@ public class SignalementJspBean extends AbstractJspBean
                 messageTitle = MESSAGE_TITLE_MASS_ACCEPTER;
             }
 
-            return AdminMessageService.getMessageUrl( request, messageTitle, messageArgs, messageConfirmation, JSP_DO_PROCESS_MASS_ACTION, SELF, AdminMessage.TYPE_CONFIRMATION, urlParam,
-                    JSP_MANAGE_SIGNALEMENT );
+            return AdminMessageService.getMessageUrl( request, messageTitle, messageArgs, messageConfirmation, JSP_DO_PROCESS_MASS_ACTION, SELF,
+                    AdminMessage.TYPE_CONFIRMATION, urlParam, JSP_MANAGE_SIGNALEMENT );
         }
 
         if ( contientIdAction( ID_ACTIONS_SERVICE_FAIT, nIdAction ) )
@@ -3048,8 +3132,9 @@ public class SignalementJspBean extends AbstractJspBean
             messageTitle = MESSAGE_TITLE_ACCEPTER;
         }
 
-        urlParam.put( PARAMETER_MARK_SIGNALEMENT_ID, _massSignalementIds[0] );
-        return AdminMessageService.getMessageUrl( request, messageTitle, null, messageConfirmation, JSP_DO_PROCESS_ACTION, SELF, AdminMessage.TYPE_CONFIRMATION, urlParam, JSP_MANAGE_SIGNALEMENT );
+        urlParam.put( PARAMETER_MARK_SIGNALEMENT_ID, _massSignalementIds [0] );
+        return AdminMessageService.getMessageUrl( request, messageTitle, null, messageConfirmation, JSP_DO_PROCESS_ACTION, SELF, AdminMessage.TYPE_CONFIRMATION,
+                urlParam, JSP_MANAGE_SIGNALEMENT );
     }
 
     /**
@@ -3071,9 +3156,10 @@ public class SignalementJspBean extends AbstractJspBean
 
         String homeUrl = getWorkflowReturnURI( request );
 
-        boolean isFromDisplaySignalement =  PARAMETER_VALUE_DISPLAY_PAGE.equals(  request.getParameter( PARAMETER_FROM_PAGE ) );
-        if (isFromDisplaySignalement) {
-            homeUrl = AppPathService.getBaseUrl( request )+( String ) request.getSession( ).getAttribute( "next" );
+        boolean isFromDisplaySignalement = PARAMETER_VALUE_DISPLAY_PAGE.equals( request.getParameter( PARAMETER_FROM_PAGE ) );
+        if ( isFromDisplaySignalement )
+        {
+            homeUrl = AppPathService.getBaseUrl( request ) + (String) request.getSession( ).getAttribute( "next" );
         }
 
         if ( request.getParameter( SignalementConstants.PARAMETER_BUTTON_CANCEL ) != null )
@@ -3091,7 +3177,7 @@ public class SignalementJspBean extends AbstractJspBean
             nIdAction = Integer.parseInt( strIdAction );
             nIdResource = Integer.parseInt( strIdResource );
         }
-        catch ( NumberFormatException nfe )
+        catch( NumberFormatException nfe )
         {
             throw new AppException( INVALID_ACTION_ID + nfe.getMessage( ), nfe );
         }
@@ -3114,23 +3200,26 @@ public class SignalementJspBean extends AbstractJspBean
 
             if ( taskRequalification != null )
             {
-                _signalementService.saveRequalification( signalement.getId( ), signalement.getTypeSignalement( ).getId( ), signalement.getAdresses( ).get( 0 ).getAdresse( ),
-                        signalement.getSecteur( ).getIdSector( ), taskRequalification.getId( ), signalement.getCommentaireAgentTerrain( ) );
+                _signalementService.saveRequalification( signalement.getId( ), signalement.getTypeSignalement( ).getId( ),
+                        signalement.getAdresses( ).get( 0 ).getAdresse( ), signalement.getSecteur( ).getIdSector( ), taskRequalification.getId( ),
+                        signalement.getCommentaireAgentTerrain( ) );
             }
 
         }
 
-        if ( isFromDisplaySignalement || WorkflowService.getInstance( ).canProcessAction( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction, null, request, false ) )
+        if ( isFromDisplaySignalement
+                || WorkflowService.getInstance( ).canProcessAction( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction, null, request, false ) )
         {
             try
             {
-                String strErrorUrl = WorkflowService.getInstance( ).doSaveTasksForm( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction, null, request, getLocale( ) );
+                String strErrorUrl = WorkflowService.getInstance( ).doSaveTasksForm( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction, null, request,
+                        getLocale( ) );
                 if ( strErrorUrl != null )
                 {
                     return strErrorUrl;
                 }
             }
-            catch ( Exception e )
+            catch( Exception e )
             {
                 AppLogService.error( e );
                 return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_ACTION, AdminMessage.TYPE_STOP );
@@ -3168,7 +3257,8 @@ public class SignalementJspBean extends AbstractJspBean
 
         if ( listActionsRequalification.contains( strIdAction ) )
         {
-            Integer nIdHistory = _signalementWorkflowService.getLastHistoryResource( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE, nIdWorkflow ).getId( );
+            Integer nIdHistory = _signalementWorkflowService
+                    .getLastHistoryResource( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE, nIdWorkflow ).getId( );
 
             if ( taskRequalification != null )
             {
@@ -3192,7 +3282,7 @@ public class SignalementJspBean extends AbstractJspBean
         String homeUrl;
         try
         {
-            String strNext = ( String ) request.getSession( ).getAttribute( "next" );
+            String strNext = (String) request.getSession( ).getAttribute( "next" );
             if ( StringUtils.isEmpty( strNext ) )
             {
                 homeUrl = strNext;
@@ -3203,7 +3293,7 @@ public class SignalementJspBean extends AbstractJspBean
             }
 
         }
-        catch ( ClassCastException e )
+        catch( ClassCastException e )
         {
             AppLogService.error( e.getMessage( ), e );
             homeUrl = getHomeUrl( request );
@@ -3251,7 +3341,7 @@ public class SignalementJspBean extends AbstractJspBean
         {
             nIdAction = Integer.parseInt( strIdAction );
         }
-        catch ( NumberFormatException nfe )
+        catch( NumberFormatException nfe )
         {
             throw new AppException( INVALID_ACTION_ID + nfe.getMessage( ), nfe );
         }
@@ -3259,7 +3349,8 @@ public class SignalementJspBean extends AbstractJspBean
         {
             if ( WorkflowService.getInstance( ).canProcessAction( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction, null, request, false ) )
             {
-                String strErrorUrl = WorkflowService.getInstance( ).doSaveTasksForm( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction, null, request, getLocale( ) );
+                String strErrorUrl = WorkflowService.getInstance( ).doSaveTasksForm( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction, null, request,
+                        getLocale( ) );
                 if ( strErrorUrl != null )
                 {
                     return strErrorUrl;
@@ -3286,7 +3377,8 @@ public class SignalementJspBean extends AbstractJspBean
      */
     private Action findNextAction( int nId, String strActionName )
     {
-        Collection<Action> listActions = WorkflowService.getInstance( ).getActions( nId, Signalement.WORKFLOW_RESOURCE_TYPE, _signalementWorkflowService.getSignalementWorkflowId( ), getUser( ) );
+        Collection<Action> listActions = WorkflowService.getInstance( ).getActions( nId, Signalement.WORKFLOW_RESOURCE_TYPE,
+                _signalementWorkflowService.getSignalementWorkflowId( ), getUser( ) );
 
         if ( ( listActions != null ) && !listActions.isEmpty( ) )
         {
@@ -3311,7 +3403,7 @@ public class SignalementJspBean extends AbstractJspBean
     {
         while ( !ArrayUtils.isEmpty( _massSignalementIds ) )
         {
-            int nIdResource = _massSignalementIds[0];
+            int nIdResource = _massSignalementIds [0];
             Action action = findNextAction( nIdResource, _actionType );
             if ( action != null )
             {
@@ -3349,7 +3441,7 @@ public class SignalementJspBean extends AbstractJspBean
             nIdAction = Integer.parseInt( strIdAction );
             nIdResource = Integer.parseInt( strIdResource );
         }
-        catch ( NumberFormatException nfe )
+        catch( NumberFormatException nfe )
         {
             throw new AppException( INVALID_ACTION_ID + nfe.getMessage( ), nfe );
         }
@@ -3357,7 +3449,7 @@ public class SignalementJspBean extends AbstractJspBean
         /////////
         // we check the right again (if the users tries with the address in the url)
         /////////
-        boolean isFromDisplaySignalement =  PARAMETER_VALUE_DISPLAY_PAGE.equals(  request.getParameter( PARAMETER_FROM_PAGE ) );
+        boolean isFromDisplaySignalement = PARAMETER_VALUE_DISPLAY_PAGE.equals( request.getParameter( PARAMETER_FROM_PAGE ) );
         if ( nIdResource > 0 )
         {
             Signalement signalement = _signalementService.getSignalement( nIdResource );
@@ -3374,9 +3466,11 @@ public class SignalementJspBean extends AbstractJspBean
         /////////////
 
         String strTaskForm;
-        if ( isFromDisplaySignalement || WorkflowService.getInstance( ).canProcessAction( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction, null, request, false ) )
+        if ( isFromDisplaySignalement
+                || WorkflowService.getInstance( ).canProcessAction( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction, null, request, false ) )
         {
-            strTaskForm = WorkflowService.getInstance( ).getDisplayTasksForm( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction, request, getLocale( ) );
+            strTaskForm = WorkflowService.getInstance( ).getDisplayTasksForm( nIdResource, Signalement.WORKFLOW_RESOURCE_TYPE, nIdAction, request,
+                    getLocale( ) );
         }
         else
         {
@@ -3391,41 +3485,43 @@ public class SignalementJspBean extends AbstractJspBean
         model.put( PARAMETER_MARK_SIGNALEMENT_ID, nIdResource );
 
         String nextURL = request.getParameter( PARAMETER_NEXT_URL );
-        if ( isFromDisplaySignalement ) {
-            model.put( PARAMETER_FROM_PAGE, PARAMETER_VALUE_DISPLAY_PAGE);
+        if ( isFromDisplaySignalement )
+        {
+            model.put( PARAMETER_FROM_PAGE, PARAMETER_VALUE_DISPLAY_PAGE );
             model.put( MARK_BACK_URL, URL_JSP_DISPLAY_SIGNALEMENTS );
             request.getSession( ).setAttribute( PARAMETER_NEXT_URL, URL_JSP_DISPLAY_SIGNALEMENTS );
         }
-        else if ( ( nextURL != null ) && nextURL.contains( PARAMETER_WEBAPP_RAMEN ) )
-        {
-            // redirect on RAMEN Webapp
-            UrlItem urlRedirect = new UrlItem( nextURL );
-
-            String serviceID = request.getParameter( PARAMETER_SERVICE_ID );
-            if ( serviceID != null )
-            {
-                urlRedirect.addParameter( PARAMETER_SERVICE_ID, serviceID );
-            }
-
-            String sectorID = request.getParameter( PARAMETER_SECTOR_ID );
-            if ( sectorID != null )
-            {
-                urlRedirect.addParameter( PARAMETER_SECTOR_ID, sectorID );
-            }
-
-            String unitID = request.getParameter( PARAMETER_UNIT_ID );
-            if ( unitID != null )
-            {
-                urlRedirect.addParameter( PARAMETER_UNIT_ID, unitID );
-            }
-
-            model.put( MARK_BACK_URL, urlRedirect.getUrl( ) );
-        }
         else
-        {
-            // stay on SIGNALEMENT Webapp
-            model.put( MARK_BACK_URL, JSP_MANAGE_SIGNALEMENT );
-        }
+            if ( ( nextURL != null ) && nextURL.contains( PARAMETER_WEBAPP_RAMEN ) )
+            {
+                // redirect on RAMEN Webapp
+                UrlItem urlRedirect = new UrlItem( nextURL );
+
+                String serviceID = request.getParameter( PARAMETER_SERVICE_ID );
+                if ( serviceID != null )
+                {
+                    urlRedirect.addParameter( PARAMETER_SERVICE_ID, serviceID );
+                }
+
+                String sectorID = request.getParameter( PARAMETER_SECTOR_ID );
+                if ( sectorID != null )
+                {
+                    urlRedirect.addParameter( PARAMETER_SECTOR_ID, sectorID );
+                }
+
+                String unitID = request.getParameter( PARAMETER_UNIT_ID );
+                if ( unitID != null )
+                {
+                    urlRedirect.addParameter( PARAMETER_UNIT_ID, unitID );
+                }
+
+                model.put( MARK_BACK_URL, urlRedirect.getUrl( ) );
+            }
+            else
+            {
+                // stay on SIGNALEMENT Webapp
+                model.put( MARK_BACK_URL, JSP_MANAGE_SIGNALEMENT );
+            }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_WORKFLOW, getLocale( ), model );
 
@@ -3450,33 +3546,38 @@ public class SignalementJspBean extends AbstractJspBean
             // _massSignalementIds contains the ids of the check markers, these are the ones to export
             listeSignalementExportCSVDTO = _signalementExportService.findByIds( _massSignalementIds );
         }
-        else if ( dashboardSignalementList != null )
-        {
-            int[] signalementIds = new int[dashboardSignalementList.size( )];
-            for ( int i = 0; i < signalementIds.length; i++ )
-            {
-                signalementIds[i] = dashboardSignalementList.get( i );
-            }
-            listeSignalementExportCSVDTO = _signalementExportService.findByIds( signalementIds );
-        }
         else
-        {
-            SignalementFilter filter = getSignalementFilter( request );
+            if ( dashboardSignalementList != null )
+            {
+                int [ ] signalementIds = new int [ dashboardSignalementList.size( )];
+                for ( int i = 0; i < signalementIds.length; i++ )
+                {
+                    signalementIds [i] = dashboardSignalementList.get( i );
+                }
+                listeSignalementExportCSVDTO = _signalementExportService.findByIds( signalementIds );
+            }
+            else
+            {
+                SignalementFilter filter = getSignalementFilter( request );
 
-            listeSignalementExportCSVDTO = _signalementExportService.findByFilter( filter );
-        }
+                listeSignalementExportCSVDTO = _signalementExportService.findByFilter( filter );
+            }
 
-        String[] datas;
+        String [ ] datas;
         try
         {
             CSVWriter writer = null;
             response.setCharacterEncoding( CSV_ISO );
             writer = new CSVWriter( response.getWriter( ), CSV_SEPARATOR );
 
-            writer.writeNext( new String[] { "Numéro", "Priorité", "Type", "Alias", "Alias mobile", "Direction", "Quartier", "Adresse", "Coordonnée X", "Coordonnée Y", "Arrondissement",
-                    "Secteur d'affectation", "Date de création", "Heure de création", "Etat", "Mail usager", "Commentaire usager", "Nombre de photos", "Raisons de rejet", "Nombre de suivis",
-                    "Nombre de félicitations", "Date de clôture", "Présence de photos de service fait", "Mail du destinataire du courriel", "Expéditeur courriel", "Date envoi courriel",
-                    "Identifiant type de message service fait", "Nom exécuteur service fait", "Date de dernière prise en compte", "Date de programmation", "Commentaire agent terrain" } );
+            writer.writeNext( new String [ ] {
+                    "Numéro", "Priorité", "Type", "Alias", "Alias mobile", "Direction", "Quartier", "Adresse", "Coordonnée X", "Coordonnée Y", "Arrondissement",
+                    "Secteur d'affectation", "Date de création", "Heure de création", "Etat", "Mail usager", "Commentaire usager", "Nombre de photos",
+                    "Raisons de rejet", "Nombre de suivis", "Nombre de félicitations", "Date de clôture", "Présence de photos de service fait",
+                    "Mail du destinataire du courriel", "Expéditeur courriel", "Date envoi courriel", "Identifiant type de message service fait",
+                    "Nom exécuteur service fait", "Date de dernière prise en compte", "Date de programmation", "Commentaire agent terrain", "Rejeté par",
+                    "Sous Surveillance par", "Nombre de requalifications"
+            } );
             for ( SignalementExportCSVDTO signalementDTO : listeSignalementExportCSVDTO )
             {
                 datas = signalementDTO.getTabAllDatas( );
@@ -3486,7 +3587,7 @@ public class SignalementJspBean extends AbstractJspBean
             writer.close( );
 
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
             AppLogService.error( e );
         }
@@ -3495,37 +3596,39 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Return a list of address.
      *
-     * @param add the add
-     * @param allParameter the all parameter
+     * @param add
+     *            the add
+     * @param allParameter
+     *            the all parameter
      * @return an address list
      */
     private List<Adresse> getCoordinatesFromAccess( Adresse add, String allParameter )
     {
         String delimiter = "/";
 
-        String[] temp = allParameter.split( delimiter );
+        String [ ] temp = allParameter.split( delimiter );
 
         // get the address libel
-        String libelAddress = temp[0].toLowerCase( );
+        String libelAddress = temp [0].toLowerCase( );
 
         // get the lat/lng in lambert 27561
-        String tempLatLng = temp[1].substring( 8 );
+        String tempLatLng = temp [1].substring( 8 );
 
         String tempLatLng2 = tempLatLng.substring( 0, tempLatLng.length( ) - 1 );
-        String[] separatedLatLng = tempLatLng2.split( "\\s" );
+        String [ ] separatedLatLng = tempLatLng2.split( "\\s" );
 
-        String strLat = separatedLatLng[0];
-        String strLng = separatedLatLng[1];
+        String strLat = separatedLatLng [0];
+        String strLng = separatedLatLng [1];
 
         Double dLat = Double.parseDouble( strLat );
         Double dLng = Double.parseDouble( strLng );
 
         // transform the lambert coordinates to WGS84 for the database
-        Double[] geom = _signalementService.getGeomFromLambertToWgs84( dLat, dLng );
+        Double [ ] geom = _signalementService.getGeomFromLambertToWgs84( dLat, dLng );
 
         add.setAdresse( libelAddress );
-        add.setLat( geom[1] );
-        add.setLng( geom[0] );
+        add.setLat( geom [1] );
+        add.setLng( geom [0] );
         List<Adresse> addresses = new ArrayList<>( );
         addresses.add( add );
         return addresses;
@@ -3550,7 +3653,7 @@ public class SignalementJspBean extends AbstractJspBean
         {
             nIdSignalement = Integer.parseInt( strSignalementId );
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
             return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
         }
@@ -3572,8 +3675,8 @@ public class SignalementJspBean extends AbstractJspBean
 
         }
 
-        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRMATION_DELETE_SIGNALEMENT, null, MESSAGE_TITLE_DELETE_SIGNALEMENT, JSP_DELETE_SIGNALEMENT, SELF,
-                AdminMessage.TYPE_CONFIRMATION, urlParam, JSP_MANAGE_SIGNALEMENT );
+        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRMATION_DELETE_SIGNALEMENT, null, MESSAGE_TITLE_DELETE_SIGNALEMENT,
+                JSP_DELETE_SIGNALEMENT, SELF, AdminMessage.TYPE_CONFIRMATION, urlParam, JSP_MANAGE_SIGNALEMENT );
     }
 
     /**
@@ -3593,7 +3696,7 @@ public class SignalementJspBean extends AbstractJspBean
         {
             nIdSignalement = Integer.parseInt( strSignalementId );
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
             return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
         }
@@ -3635,13 +3738,13 @@ public class SignalementJspBean extends AbstractJspBean
             }
         }
 
-        String[] messageArgs = new String[1];
+        String [ ] messageArgs = new String [ 1];
 
         String elementCount = Integer.toString( _massSignalementIds.length );
-        messageArgs[0] = elementCount;
+        messageArgs [0] = elementCount;
 
-        return AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_MASS_DELETE_SIGNALEMENT, messageArgs, MESSAGE_CONFIRMATION_MASS_DELETE_SIGNALEMENT, JSP_MASS_DELETE_SIGNALEMENT, SELF,
-                AdminMessage.TYPE_CONFIRMATION, urlParam, JSP_MANAGE_SIGNALEMENT );
+        return AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_MASS_DELETE_SIGNALEMENT, messageArgs, MESSAGE_CONFIRMATION_MASS_DELETE_SIGNALEMENT,
+                JSP_MASS_DELETE_SIGNALEMENT, SELF, AdminMessage.TYPE_CONFIRMATION, urlParam, JSP_MANAGE_SIGNALEMENT );
     }
 
     /**
@@ -3660,7 +3763,7 @@ public class SignalementJspBean extends AbstractJspBean
             {
                 _signalementService.doDeleteSignalement( _massSignalementIds );
             }
-            catch ( NumberFormatException e )
+            catch( NumberFormatException e )
             {
                 return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
             }
@@ -3672,9 +3775,10 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Get the sector list attach to the selected unit.
      *
-     * @param request            the request
-     * @param response            the response
-     *
+     * @param request
+     *            the request
+     * @param response
+     *            the response
      */
     public void getSectorListByIdDirection( HttpServletRequest request, HttpServletResponse response )
     {
@@ -3705,10 +3809,11 @@ public class SignalementJspBean extends AbstractJspBean
                         {
                             listAuthorizedUnits.add( userUnit );
                         }
-                        else if ( _unitService.isParent( userUnit, unitSelected ) )
-                        {
-                            listAuthorizedUnits.add( unitSelected );
-                        }
+                        else
+                            if ( _unitService.isParent( userUnit, unitSelected ) )
+                            {
+                                listAuthorizedUnits.add( unitSelected );
+                            }
                     }
                 }
                 else
@@ -3743,12 +3848,12 @@ public class SignalementJspBean extends AbstractJspBean
                 }
                 jsonStringer.endArray( ).endObject( );
             }
-            catch ( NumberFormatException e )
+            catch( NumberFormatException e )
             {
                 jsonStringer.object( ).key( "errors" ).array( ).value( e.getMessage( ) ).endArray( ).endObject( );
             }
         }
-        catch ( IOException e1 )
+        catch( IOException e1 )
         {
             AppLogService.error( e1.getMessage( ), e1 );
         }
@@ -3758,7 +3863,8 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Finds all report that the user can see, based on its domain.
      *
-     * @param request            The HTTP request
+     * @param request
+     *            The HTTP request
      * @return redirection url
      */
     public String getDisplaySignalement( HttpServletRequest request )
@@ -3785,7 +3891,8 @@ public class SignalementJspBean extends AbstractJspBean
             AdminUser adminUser = AdminUserService.getAdminUser( request );
             // Retrieving user domains
             Collection<DomaineFonctionnel> domainesFonctionnels = _domaineFonctionnelService.getAllDomainesFonctionnelActifs( );
-            domainesFonctionnels = RBACService.getAuthorizedCollection( domainesFonctionnels, DomaineFonctionnelSignalementResourceIdService.PERMISSION_CONSULT_SIGNALEMENT, adminUser );
+            domainesFonctionnels = RBACService.getAuthorizedCollection( domainesFonctionnels,
+                    DomaineFonctionnelSignalementResourceIdService.PERMISSION_CONSULT_SIGNALEMENT, adminUser );
             domaineFonc = domainesFonctionnels.iterator( ).next( );
         }
 
@@ -3832,18 +3939,20 @@ public class SignalementJspBean extends AbstractJspBean
                 }
                 filter.setListIdQuartier( domainQuartiers );
             }
-            else if ( domainQuartiers.size( ) == 1 )
-            {
-                // No filter and only 1 field -> selected by default
-                filtreQuartier = true;
-                filter.setListIdQuartier( domainQuartiers );
-            }
-            else if ( domainQuartiers.size( ) > 1 )
-            {
-                // No filter and several fields -> Selected value empty but search on all neighborhoods
-                filter.setListIdQuartier( domainQuartiers );
-                isAllQuartier = true;
-            }
+            else
+                if ( domainQuartiers.size( ) == 1 )
+                {
+                    // No filter and only 1 field -> selected by default
+                    filtreQuartier = true;
+                    filter.setListIdQuartier( domainQuartiers );
+                }
+                else
+                    if ( domainQuartiers.size( ) > 1 )
+                    {
+                        // No filter and several fields -> Selected value empty but search on all neighborhoods
+                        filter.setListIdQuartier( domainQuartiers );
+                        isAllQuartier = true;
+                    }
         }
         else
         {
@@ -3881,30 +3990,13 @@ public class SignalementJspBean extends AbstractJspBean
         {
             filter.setIdDirection( 1 );
         }
-        Integer totalResult = _signalementService.countIdSignalementByFilter( filter, getPlugin( ) );
-        List<Signalement> signalementList = _signalementService.findByFilter( filter, getPaginationProperties( request, totalResult ), true );
+
+        Integer totalResult = _signalementExportService.countSearchResult( filter );
+        List<Signalement> signalementList = _signalementExportService.findByFilterSearch( filter, getPaginationProperties( request, totalResult ) );
 
         if ( isAllQuartier )
         {
             filter.setListIdQuartier( new ArrayList<>( ) );
-        }
-
-        Unit unitPrincipaleSector = null;
-
-        // get the first unit linked to the report sector
-        for ( Signalement signalement : signalementList )
-        {
-            Sector sector = signalement.getSecteur( );
-            List<Unit> listUnitsSector = _unitService.findBySectorId( sector.getIdSector( ) );
-
-            for ( Unit unit : listUnitsSector )
-            {
-                if ( unit.getIdParent( ) == 0 )
-                {
-                    unitPrincipaleSector = unit;
-                    signalement.setDirectionSector( unitPrincipaleSector );
-                }
-            }
         }
 
         // sort list by first unit of each report
@@ -3926,7 +4018,6 @@ public class SignalementJspBean extends AbstractJspBean
 
         anomaliesCount = totalResult;
 
-
         // the paginator
         model.put( SignalementConstants.MARK_NB_ITEMS_PER_PAGE, StringUtils.EMPTY + _nItemsPerPage );
         model.put( SignalementConstants.MARK_PAGINATOR, paginator );
@@ -3935,7 +4026,7 @@ public class SignalementJspBean extends AbstractJspBean
         Map<String, String> mapStates = new HashMap<>( );
         WorkflowService workflowService = WorkflowService.getInstance( );
         Integer signalementWorkflowId = _signalementWorkflowService.getSignalementWorkflowId( );
-        Map<String,Action> mapActionRequalifier = new HashMap<>( );
+        Map<String, Action> mapActionRequalifier = new HashMap<>( );
         if ( workflowService.isAvailable( ) )
         {
             for ( Signalement signalement : paginator.getPageItems( ) )
@@ -3944,10 +4035,10 @@ public class SignalementJspBean extends AbstractJspBean
                 State state = workflowService.getState( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE, signalementWorkflowId, null );
                 List<Action> lstAction = _signalementWorkflowService.findActionByName( SignalementConstants.WORKFLOW_ACTION_NAME_REQUALIFIER );
                 Optional<Action> optAction = lstAction.stream( ).filter( action -> action.getStateBefore( ).getId( ) == state.getId( ) ).findFirst( );
-                if (optAction.isPresent( )) {
-                    mapActionRequalifier.put( signalement.getId( ).toString( ), optAction.get( ));
+                if ( optAction.isPresent( ) )
+                {
+                    mapActionRequalifier.put( signalement.getId( ).toString( ), optAction.get( ) );
                 }
-
 
                 mapStates.put( signalement.getId( ).toString( ), state == null ? "Non défini" : state.getName( ) );
             }
@@ -3977,10 +4068,12 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Get the domain.
      *
-     * @param request            HttpServletRequest
-     * @param response            HTTPServletResponse
-     *
-     * @throws IOException             throws IOException
+     * @param request
+     *            HttpServletRequest
+     * @param response
+     *            HTTPServletResponse
+     * @throws IOException
+     *             throws IOException
      */
     public void getDomain( HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
@@ -4069,7 +4162,8 @@ public class SignalementJspBean extends AbstractJspBean
             for ( TypeSignalement typeSignalement : typesAnomalies )
             {
                 if ( CollectionUtils.isNotEmpty( domFonc.getTypesSignalementIds( ) )
-                        && ( domFonc.getTypesSignalementIds( ).contains( typeSignalement.getIdCategory( ) ) || domFonc.getTypesSignalementIds( ).contains( typeSignalement.getId( ) ) ) )
+                        && ( domFonc.getTypesSignalementIds( ).contains( typeSignalement.getIdCategory( ) )
+                                || domFonc.getTypesSignalementIds( ).contains( typeSignalement.getId( ) ) ) )
                 {
                     TypeSignalementItem typeItem = new TypeSignalementItem( );
                     typeItem.setChecked( false );
@@ -4104,7 +4198,7 @@ public class SignalementJspBean extends AbstractJspBean
         {
             response.getWriter( ).print( domFoncJson );
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
             AppLogService.error( e.getMessage( ), e );
         }
@@ -4113,9 +4207,12 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Returns a json, containing all domains, with their criteria.
      *
-     * @param request            the HttpServletRequest
-     * @param response            the HttpServletResponse
-     * @throws IOException             throws IOException
+     * @param request
+     *            the HttpServletRequest
+     * @param response
+     *            the HttpServletResponse
+     * @throws IOException
+     *             throws IOException
      */
     public void initDomains( HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
@@ -4125,7 +4222,8 @@ public class SignalementJspBean extends AbstractJspBean
 
         // Retrieving user domains
         Collection<DomaineFonctionnel> domainesFonctionnels = _domaineFonctionnelService.getAllDomainesFonctionnelActifs( );
-        domainesFonctionnels = RBACService.getAuthorizedCollection( domainesFonctionnels, DomaineFonctionnelSignalementResourceIdService.PERMISSION_CONSULT_SIGNALEMENT, adminUser );
+        domainesFonctionnels = RBACService.getAuthorizedCollection( domainesFonctionnels,
+                DomaineFonctionnelSignalementResourceIdService.PERMISSION_CONSULT_SIGNALEMENT, adminUser );
 
         // District
         arrondissements = _arrondissementService.getAllArrondissement( );
@@ -4210,7 +4308,8 @@ public class SignalementJspBean extends AbstractJspBean
                     for ( TypeSignalement typeSignalement : typesAnomalies )
                     {
                         if ( CollectionUtils.isNotEmpty( domFonc.getTypesSignalementIds( ) )
-                                && ( domFonc.getTypesSignalementIds( ).contains( typeSignalement.getIdCategory( ) ) || domFonc.getTypesSignalementIds( ).contains( typeSignalement.getId( ) ) ) )
+                                && ( domFonc.getTypesSignalementIds( ).contains( typeSignalement.getIdCategory( ) )
+                                        || domFonc.getTypesSignalementIds( ).contains( typeSignalement.getId( ) ) ) )
                         {
                             TypeSignalementItem typeItem = new TypeSignalementItem( );
                             typeItem.setChecked( false );
@@ -4248,7 +4347,7 @@ public class SignalementJspBean extends AbstractJspBean
         {
             response.getWriter( ).print( domainesFoncJson );
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
             AppLogService.error( e.getMessage( ), e );
         }
@@ -4257,7 +4356,8 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Gets all Sectors based on Units.
      *
-     * @param listUnits            the units list
+     * @param listUnits
+     *            the units list
      * @return a sector list
      */
     public List<Sector> getSectorsByUnits( List<Unit> listUnits )
@@ -4285,9 +4385,10 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Get the sector list attach to the selected unit.
      *
-     * @param request            the request
-     * @param response            the response
-     *
+     * @param request
+     *            the request
+     * @param response
+     *            the response
      */
     public void getSectorListByIdDirectionForDisplay( HttpServletRequest request, HttpServletResponse response )
     {
@@ -4332,12 +4433,12 @@ public class SignalementJspBean extends AbstractJspBean
                     jsonStringer.endArray( ).endObject( );
                 }
             }
-            catch ( NumberFormatException e )
+            catch( NumberFormatException e )
             {
                 jsonStringer.object( ).key( "errors" ).array( ).value( e.getMessage( ) ).endArray( ).endObject( );
             }
         }
-        catch ( IOException e1 )
+        catch( IOException e1 )
         {
             AppLogService.error( e1 );
         }
@@ -4350,15 +4451,14 @@ public class SignalementJspBean extends AbstractJspBean
      */
     private List<State> getListeEtats( )
     {
-        List<State> listeEtat = ( List<State> ) WorkflowService.getInstance( ).getAllStateByWorkflow( SignalementConstants.SIGNALEMENT_WORKFLOW_ID, getUser( ) );
+        List<State> listeEtat = (List<State>) WorkflowService.getInstance( ).getAllStateByWorkflow( SignalementConstants.SIGNALEMENT_WORKFLOW_ID, getUser( ) );
         List<State> listeTemp = new ArrayList<>( );
-        String[] idStateNotDisplay = AppPropertiesService.getProperty( STATE_NOT_DISPLAY ).split( "," );
+        String [ ] idStateNotDisplay = AppPropertiesService.getProperty( STATE_NOT_DISPLAY ).split( "," );
 
         if ( idStateNotDisplay.length > 0 )
         {
             List<Integer> listTmp = Arrays.asList( idStateNotDisplay ).stream( ).map( Integer::parseInt ).collect( Collectors.toList( ) );
-            listTmp.stream( ).forEach( (Integer idState) ->
-            {
+            listTmp.stream( ).forEach( ( Integer idState ) -> {
                 for ( State state : listeEtat )
                 {
                     if ( state.getId( ) == idState.intValue( ) )
@@ -4370,7 +4470,7 @@ public class SignalementJspBean extends AbstractJspBean
         }
         listeEtat.removeAll( listeTemp );
 
-        listeEtat.sort( (o1, o2 ) -> Integer.valueOf( o1.getOrder( )).compareTo( Integer.valueOf(o2.getOrder( ) ) ) );
+        listeEtat.sort( ( o1, o2 ) -> Integer.valueOf( o1.getOrder( ) ).compareTo( Integer.valueOf( o2.getOrder( ) ) ) );
 
         return listeEtat;
     }
@@ -4378,10 +4478,12 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * FInds all the units matchings the localization and within the specified radius.
      *
-     * @param request            the HttpServletRequest
-     * @param response            the HttpServletResponse
-     *
-     * @throws IOException             throws IOException
+     * @param request
+     *            the HttpServletRequest
+     * @param response
+     *            the HttpServletResponse
+     * @throws IOException
+     *             throws IOException
      */
     public void getSectorsByGeomAndUnits( HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
@@ -4399,7 +4501,7 @@ public class SignalementJspBean extends AbstractJspBean
                 nLat = Double.parseDouble( strLat );
             }
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
             throw new FunctionnalException( SignalementConstants.MESSAGE_ERROR_OCCUR );
         }
@@ -4411,7 +4513,7 @@ public class SignalementJspBean extends AbstractJspBean
                 nLng = Double.parseDouble( strLng );
             }
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
             throw new FunctionnalException( SignalementConstants.MESSAGE_ERROR_OCCUR );
         }
@@ -4423,7 +4525,7 @@ public class SignalementJspBean extends AbstractJspBean
                 nTypeSignalementId = Integer.parseInt( strTypeSignalementId );
             }
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
             throw new FunctionnalException( SignalementConstants.MESSAGE_ERROR_OCCUR );
         }
@@ -4459,7 +4561,7 @@ public class SignalementJspBean extends AbstractJspBean
         {
             response.getWriter( ).print( result.toString( ) );
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
             AppLogService.error( e.getMessage( ), e );
         }
@@ -4481,7 +4583,6 @@ public class SignalementJspBean extends AbstractJspBean
      *            the request
      * @param response
      *            the response
-     *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
@@ -4495,21 +4596,24 @@ public class SignalementJspBean extends AbstractJspBean
             List<Integer> signalementIds = _signalementService.getIdsSignalementByFilter( filter );
             // tri par id croissant
             signalementIds = signalementIds.stream( ).sorted( ).collect( Collectors.toList( ) );
-            int[] signalementIdsArray = signalementIds.stream( ).mapToInt( i -> i ).toArray( );
+            int [ ] signalementIdsArray = signalementIds.stream( ).mapToInt( i -> i ).toArray( );
             listeSignalementExportCSVDTO = _signalementExportService.findByIds( signalementIdsArray );
 
-            String[] datas;
+            String [ ] datas;
             try
             {
                 CSVWriter writer = null;
                 response.setCharacterEncoding( CSV_ISO );
                 writer = new CSVWriter( response.getWriter( ), CSV_SEPARATOR );
 
-                writer.writeNext( new String[] { "Numéro de pin", "Numéro", "Priorité", "Type", "Alias", "Alias mobile", "Direction", "Quartier", "Adresse", "Coordonnée X", "Coordonnée Y",
-                        "Arrondissement", "Secteur d'affectation", "Date de création", "Heure de création", "Etat", "Mail usager", "Commentaire usager", "Nombre de photos", "Raisons de rejet",
-                        "Nombre de suivis", "Nombre de félicitations", "Date de clôture", "Présence de photos de service fait", "Mail du destinataire du courriel", "Expéditeur courriel",
-                        "Date envoi courriel", "Identifiant type de message service fait", "Nom exécuteur service fait", "Date de dernière prise en compte", "Date de programmation",
-                "Commentaire agent terrain" } );
+                writer.writeNext( new String [ ] {
+                        "Numéro de pin", "Numéro", "Priorité", "Type", "Alias", "Alias mobile", "Direction", "Quartier", "Adresse", "Coordonnée X",
+                        "Coordonnée Y", "Arrondissement", "Secteur d'affectation", "Date de création", "Heure de création", "Etat", "Mail usager",
+                        "Commentaire usager", "Nombre de photos", "Raisons de rejet", "Nombre de suivis", "Nombre de félicitations", "Date de clôture",
+                        "Présence de photos de service fait", "Mail du destinataire du courriel", "Expéditeur courriel", "Date envoi courriel",
+                        "Identifiant type de message service fait", "Nom exécuteur service fait", "Date de dernière prise en compte", "Date de programmation",
+                        "Commentaire agent terrain", "Rejeté par", "Sous Surveillance par", "Nombre de requalifications"
+                } );
                 int numPin = 1;
                 for ( SignalementExportCSVDTO signalementDTO : listeSignalementExportCSVDTO )
                 {
@@ -4521,7 +4625,7 @@ public class SignalementJspBean extends AbstractJspBean
                 writer.close( );
 
             }
-            catch ( IOException e )
+            catch( IOException e )
             {
                 AppLogService.error( e );
             }
@@ -4532,10 +4636,12 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Get as json all reports in purpose to display them as marker on the map.
      *
-     * @param request            the HttpServletRequest
-     * @param response            the HttpServletResponse
-     *
-     * @throws IOException             throws IOException
+     * @param request
+     *            the HttpServletRequest
+     * @param response
+     *            the HttpServletResponse
+     * @throws IOException
+     *             throws IOException
      */
     public void getSignalementsJsonForMap( HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
@@ -4557,21 +4663,37 @@ public class SignalementJspBean extends AbstractJspBean
         {
             signalements = _signalementService.getByIds( dashboardSignalementList, null, null );
         }
-        else if ( filter != null )
-        {
-            List<Integer> signalementIds = _signalementService.getIdsSignalementByFilter( filter );
-            // tri par id croissant
-            signalementIds = signalementIds.stream( ).sorted( ).collect( Collectors.toList( ) );
-            signalements = _signalementService.getByIds( signalementIds, null, null );
-        }
+        else
+            if ( filter != null )
+            {
+                Integer totalResult = _signalementExportService.countSearchResult( filter );
+                signalements = _signalementExportService.findByFilterSearch( filter, getPaginationProperties( request, totalResult ) );
+            }
 
         for ( Signalement signalement : signalements )
         {
             SignalementMapMarkerDTO sigMarker = new SignalementMapMarkerDTO( );
             sigMarker.setIdSignalement( signalement.getId( ) );
 
+            String typeSignalement;
+            String dateCreation;
+
+            if ( CollectionUtils.isNotEmpty( dashboardSignalementList ) )
+            {
+                typeSignalement = signalement.getTypeSignalement( ).getLibelle( );
+                dateCreation = signalement.getDateCreation( ) + " " + DateUtils.getHourFr( signalement.getHeureCreation( ) );
+                sigMarker.setLng( signalement.getAdresses( ).get( 0 ).getLng( ) );
+                sigMarker.setLat( signalement.getAdresses( ).get( 0 ).getLat( ) );
+            }
+            else
+            {
+                typeSignalement = signalement.getType( );
+                dateCreation = signalement.getDateCreation( );
+                sigMarker.setLng( signalement.getAdresses( ).get( 0 ).getLat( ) );
+                sigMarker.setLat( signalement.getAdresses( ).get( 0 ).getLng( ) );
+            }
+
             // Creation date
-            String dateCreation = signalement.getDateCreation( ) + " " + DateUtils.getHourFr( signalement.getHeureCreation( ) );
             String dateCreationTitle = I18nService.getLocalizedString( "dansmarue.map.tooltips.datecreation", request.getLocale( ) );
             sigMarker.addTooltipText( dateCreationTitle, dateCreation );
 
@@ -4586,31 +4708,25 @@ public class SignalementJspBean extends AbstractJspBean
             sigMarker.addTooltipText( prioriteTitle, priorite );
 
             // Report type
-            String typeSignalement = signalement.getTypeSignalement( ).getLibelle( );
             String typeSignalementTitle = I18nService.getLocalizedString( "dansmarue.map.tooltips.typeSignalement", request.getLocale( ) );
             sigMarker.addTooltipText( typeSignalementTitle, typeSignalement );
-
-            // Lng
-            sigMarker.setLng( signalement.getAdresses( ).get( 0 ).getLng( ) );
-
-            // Lat
-            sigMarker.setLat( signalement.getAdresses( ).get( 0 ).getLat( ) );
 
             // State
             State stateSignalement = WorkflowService.getInstance( ).getState( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE,
                     _signalementWorkflowService.getSignalementWorkflowId( ), null );
-            if ( GREEN_MARKER_STATES.contains( stateSignalement.getId( ) ) )
+            if ( _listGreenMarkerStates.contains( stateSignalement.getId( ) ) )
             {
                 sigMarker.setIconName( LeafletDansMaRueConstants.GREEN_ICON );
             }
-            else if ( YELLOW_MARKER_STATES.contains( stateSignalement.getId( ) ) )
-            {
-                sigMarker.setIconName( LeafletDansMaRueConstants.YELLOW_ICON );
-            }
             else
-            {
-                sigMarker.setIconName( LeafletDansMaRueConstants.RED_ICON );
-            }
+                if ( _listYellowMarkerStates.contains( stateSignalement.getId( ) ) )
+                {
+                    sigMarker.setIconName( LeafletDansMaRueConstants.YELLOW_ICON );
+                }
+                else
+                {
+                    sigMarker.setIconName( LeafletDansMaRueConstants.RED_ICON );
+                }
 
             signalementMarkers.add( sigMarker );
         }
@@ -4622,7 +4738,7 @@ public class SignalementJspBean extends AbstractJspBean
         {
             response.getWriter( ).print( sigMarkers );
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
             AppLogService.error( e.getMessage( ), e );
         }
@@ -4631,8 +4747,10 @@ public class SignalementJspBean extends AbstractJspBean
     /**
      * Returns if the user has selected advanced criteria.
      *
-     * @param filter            the report filter
-     * @param availableArrondissementIds            the available districts ids
+     * @param filter
+     *            the report filter
+     * @param availableArrondissementIds
+     *            the available districts ids
      * @return true if the user has selected advanced criterias
      */
     private boolean hasCriteresAvances( SignalementFilter filter, List<Integer> availableArrondissementIds )
@@ -4640,17 +4758,22 @@ public class SignalementJspBean extends AbstractJspBean
         boolean hasCritereAdresse = StringUtils.isNotBlank( filter.getAdresse( ) );
         boolean hasCritereMail = StringUtils.isNotBlank( filter.getMail( ) );
         boolean hasCritereCommentaire = StringUtils.isNotBlank( filter.getCommentaire( ) );
-        boolean hasCritereArrondissement = CollectionUtils.isNotEmpty( filter.getListIdArrondissements( ) ) && !( filter.getListIdArrondissements( ).containsAll( availableArrondissementIds ) );
+        boolean hasCritereArrondissement = CollectionUtils.isNotEmpty( filter.getListIdArrondissements( ) )
+                && !( filter.getListIdArrondissements( ).containsAll( availableArrondissementIds ) );
         boolean hasCritereQuartier = CollectionUtils.isNotEmpty( filter.getListIdQuartier( ) );
         boolean hasCritereCommentaireAgent = StringUtils.isNotBlank( filter.getCommentaireAgentTerrain( ) );
+        boolean hasCritereDateServiceDone = StringUtils.isNotBlank( filter.getDateDoneBegin( ) ) || StringUtils.isNotBlank( filter.getDateDoneEnd( ) );
+        boolean hasCritereMailDernierTraitement = StringUtils.isNotBlank( filter.getMailDernierIntervenant( ) );
 
-        return hasCritereAdresse || hasCritereMail || hasCritereCommentaire || hasCritereArrondissement || hasCritereQuartier || hasCritereCommentaireAgent;
+        return hasCritereAdresse || hasCritereMail || hasCritereCommentaire || hasCritereArrondissement || hasCritereQuartier || hasCritereCommentaireAgent
+                || hasCritereDateServiceDone || hasCritereMailDernierTraitement;
     }
 
     /**
      * Encode URI component.
      *
-     * @param component the component
+     * @param component
+     *            the component
      * @return the string
      */
     private String encodeURIComponent( String component )
@@ -4660,10 +4783,10 @@ public class SignalementJspBean extends AbstractJspBean
 
         try
         {
-            result = URLEncoder.encode( component, "UTF-8" ).replaceAll( "\\%28", "(" ).replaceAll( "\\%29", ")" ).replaceAll( "\\+", "%20" ).replaceAll( "\\%27", "'" ).replaceAll( "\\%21", "!" )
-                    .replaceAll( "\\%7E", "~" );
+            result = URLEncoder.encode( component, "UTF-8" ).replaceAll( "\\%28", "(" ).replaceAll( "\\%29", ")" ).replaceAll( "\\+", "%20" )
+                    .replaceAll( "\\%27", "'" ).replaceAll( "\\%21", "!" ).replaceAll( "\\%7E", "~" );
         }
-        catch ( UnsupportedEncodingException e )
+        catch( UnsupportedEncodingException e )
         {
             AppLogService.error( e.getMessage( ), e );
             result = component;

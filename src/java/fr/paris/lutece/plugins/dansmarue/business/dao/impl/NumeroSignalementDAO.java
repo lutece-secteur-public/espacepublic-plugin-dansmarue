@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,6 @@ import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-
 /**
  * The Class NumeroSignalementDAO.
  */
@@ -47,13 +46,13 @@ public class NumeroSignalementDAO implements INumeroSignalementDAO
 {
 
     /** The Constant SELECT_NUMBER_LOCKED. */
-    private static final String SELECT_NUMBER_LOCKED    = "SELECT numero FROM signalement_numero_signalement WHERE mois = ? AND annee = ? FOR UPDATE";
+    private static final String SELECT_NUMBER_LOCKED = "SELECT numero FROM signalement_numero_signalement WHERE mois = ? AND annee = ? FOR UPDATE";
 
     /** The Constant UPDATE_INCREMENT_NUMBER. */
     private static final String UPDATE_INCREMENT_NUMBER = "UPDATE signalement_numero_signalement SET numero = numero + 1 WHERE mois = ? AND annee = ?";
 
     /** The Constant INSERT_NEW_COMBINATION. */
-    private static final String INSERT_NEW_COMBINATION  = "INSERT INTO signalement_numero_signalement(mois,annee,numero) VALUES (?,?,?)";
+    private static final String INSERT_NEW_COMBINATION = "INSERT INTO signalement_numero_signalement(mois,annee,numero) VALUES (?,?,?)";
 
     /**
      * {@inheritDoc}
@@ -73,7 +72,7 @@ public class NumeroSignalementDAO implements INumeroSignalementDAO
             {
                 insertNewCombinationLine( strMonth, nYear );
             }
-            catch ( AppException ex )
+            catch( AppException ex )
             {
                 AppLogService.error( "Error when initializing a number line signalement_numero_signalement : " + ex.getMessage( ), ex );
             }
@@ -95,8 +94,10 @@ public class NumeroSignalementDAO implements INumeroSignalementDAO
     /**
      * Inserts a new combination line.
      *
-     * @param strMonth            Month value
-     * @param nYear            Year
+     * @param strMonth
+     *            Month value
+     * @param nYear
+     *            Year
      */
     private void insertNewCombinationLine( String strMonth, int nYear )
     {
@@ -114,8 +115,10 @@ public class NumeroSignalementDAO implements INumeroSignalementDAO
     /**
      * Gets the next number to use based on the given combination.
      *
-     * @param strMonth            Month value
-     * @param nYear            Year
+     * @param strMonth
+     *            Month value
+     * @param nYear
+     *            Year
      * @return The next file number Null if combination line does not exists
      */
     private Long getNumber( String strMonth, int nYear )
@@ -140,8 +143,10 @@ public class NumeroSignalementDAO implements INumeroSignalementDAO
     /**
      * Increments the number for a given combination.
      *
-     * @param strMonth            Month value
-     * @param nYear            Year
+     * @param strMonth
+     *            Month value
+     * @param nYear
+     *            Year
      */
     private void incrementNumber( String strMonth, int nYear )
     {
@@ -154,9 +159,12 @@ public class NumeroSignalementDAO implements INumeroSignalementDAO
     /**
      * Fills the dao with the required parameters.
      *
-     * @param strMonth the str month
-     * @param nYear the n year
-     * @param daoUtil the dao util
+     * @param strMonth
+     *            the str month
+     * @param nYear
+     *            the n year
+     * @param daoUtil
+     *            the dao util
      */
     private void fillDAOWithCombination( String strMonth, int nYear, DAOUtil daoUtil )
     {

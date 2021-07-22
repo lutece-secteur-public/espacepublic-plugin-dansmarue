@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,6 +37,8 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -55,40 +57,34 @@ public final class DateUtils
 {
 
     /** The Constant YEAR_1900. */
-    private static final int             YEAR_1900                               = 1900;
-
-    /** The sdf annee. */
-    private static SimpleDateFormat      _sdfAnnee;
+    private static final int YEAR_1900 = 1900;
 
     /** The Constant DATE_CRITERE_ENTRE_LE. */
-    public static final int              DATE_CRITERE_ENTRE_LE                   = 0;
+    public static final int DATE_CRITERE_ENTRE_LE = 0;
 
     /** The Constant DATE_CRITERE_ET_LE. */
-    public static final int              DATE_CRITERE_ET_LE                      = 1;
+    public static final int DATE_CRITERE_ET_LE = 1;
 
     /** The Constant DATE_CRITERE_OU_LE. */
-    public static final int              DATE_CRITERE_OU_LE                      = 2;
+    public static final int DATE_CRITERE_OU_LE = 2;
 
     /** The Constant DATE_FR. */
-    public static final String           DATE_FR                                 = "dd/MM/yyyy";
+    public static final String DATE_FR = "dd/MM/yyyy";
 
     /** The Constant HOUR_FR. */
-    public static final String           HOUR_FR                                 = "HH:mm";
+    public static final String HOUR_FR = "HH:mm";
 
     /** The Constant HOUR_FR_SANS_COLONNE. */
-    public static final String           HOUR_FR_SANS_COLONNE                    = "HHmm";
+    public static final String HOUR_FR_SANS_COLONNE = "HHmm";
 
     /** The Constant HOUR_FR_AVEC_SECONDES. */
-    public static final String           HOUR_FR_AVEC_SECONDES                   = "HH:mm:ss";
+    public static final String HOUR_FR_AVEC_SECONDES = "HH:mm:ss";
 
     /** The Constant DATE_FR_HR_SANS_COLONNE. */
-    public static final String           DATE_FR_HR_SANS_COLONNE                 = "dd/MM/yyyyHHmm";
+    public static final String DATE_FR_HR_SANS_COLONNE = "dd/MM/yyyyHHmm";
 
     /** The Constant DATE_FR_HR_SANS_COLONNE_AVEC_DEUX_POINT. */
-    public static final String           DATE_FR_HR_SANS_COLONNE_AVEC_DEUX_POINT = "dd/MM/yyyyHH:mm";
-
-    /** The Constant XML_DATE_FORMAT. */
-    public static final SimpleDateFormat XML_DATE_FORMAT                         = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ss'Z'" );
+    public static final String DATE_FR_HR_SANS_COLONNE_AVEC_DEUX_POINT = "dd/MM/yyyyHH:mm";
 
     /**
      * Empty constructor.
@@ -117,16 +113,16 @@ public final class DateUtils
     /**
      * Returns a date year.
      *
-     * @param date            date
+     * @param date
+     *            date
      * @return year
      */
     public static synchronized String getAnnee( Date date )
     {
-        if ( _sdfAnnee == null )
-        {
-            _sdfAnnee = new SimpleDateFormat( "yyyy" );
-        }
-        return _sdfAnnee.format( date );
+
+        SimpleDateFormat sdfAnnee = new SimpleDateFormat( "yyyy" );
+
+        return sdfAnnee.format( date );
     }
 
     /**
@@ -144,7 +140,8 @@ public final class DateUtils
     /**
      * Gets the annee int.
      *
-     * @param date the date
+     * @param date
+     *            the date
      * @return the annee int
      */
     public static int getAnneeInt( Date date )
@@ -178,7 +175,8 @@ public final class DateUtils
     /**
      * Returns the current date.
      *
-     * @param strPattern            the current date format
+     * @param strPattern
+     *            the current date format
      * @return the current date
      */
     public static String getCurrentDateString( String strPattern )
@@ -206,8 +204,10 @@ public final class DateUtils
     /**
      * Returns the date in the format defined by strPattern.
      *
-     * @param date            date
-     * @param strPattern            the desired format for the date
+     * @param date
+     *            date
+     * @param strPattern
+     *            the desired format for the date
      * @return the date in EEEE dd MMMMM yyyyy format
      */
     public static String getDate( Date date, String strPattern )
@@ -219,8 +219,10 @@ public final class DateUtils
     /**
      * Transforms a date in string format of type dd/MM/yyyyyy to Timestamp object.
      *
-     * @param strDate            Date to be transformed
-     * @param isStartOfDayHour            TRUE if the time is to be 00:01 FALSE if the time is to be 23:59
+     * @param strDate
+     *            Date to be transformed
+     * @param isStartOfDayHour
+     *            TRUE if the time is to be 00:01 FALSE if the time is to be 23:59
      * @return objet Timestamp corresponding to the date given in parameter
      */
     public static Timestamp getDate( String strDate, boolean isStartOfDayHour )
@@ -239,7 +241,7 @@ public final class DateUtils
         {
             date = dateFormat.parse( strDate.trim( ) );
         }
-        catch ( ParseException e )
+        catch( ParseException e )
         {
             return null;
         }
@@ -267,8 +269,10 @@ public final class DateUtils
     /**
      * Returns a timestamp whose time must be 00:01 FALSE if the time must be 23:59.
      *
-     * @param date            Date to be transformed
-     * @param isStartOfDayHour            true if the time is to be 00h01 FALSE if the time is to be 23h59
+     * @param date
+     *            Date to be transformed
+     * @param isStartOfDayHour
+     *            true if the time is to be 00h01 FALSE if the time is to be 23h59
      * @return objet Timestamp corresponding to the date given in parameter
      */
     public static Timestamp getDate( Timestamp date, boolean isStartOfDayHour )
@@ -296,8 +300,10 @@ public final class DateUtils
     /**
      * Returns the date in the format defined by strPattern.
      *
-     * @param date            the date
-     * @param strPattern            the format wishes from the date
+     * @param date
+     *            the date
+     * @param strPattern
+     *            the format wishes from the date
      * @return the date in EEEE dd MMMMM yyyyy format
      */
     public static String getDate( Timestamp date, String strPattern )
@@ -309,7 +315,8 @@ public final class DateUtils
     /**
      * Return string for date dd/MM/yyyy.
      *
-     * @param date            the date
+     * @param date
+     *            the date
      * @return date dd/MM/yyyy
      */
     public static String getDateFr( Date date )
@@ -324,7 +331,8 @@ public final class DateUtils
     /**
      * Transforms a date in string format of type HH:mm into a date object.
      *
-     * @param strHour            Date to be transformed
+     * @param strHour
+     *            Date to be transformed
      * @return objet date corresponding to the date given in parameter
      */
     public static Timestamp getHour( String strHour )
@@ -345,7 +353,7 @@ public final class DateUtils
             date = dateFormat.parse( strHour.trim( ) );
             sqlDate = new Timestamp( date.getTime( ) );
         }
-        catch ( ParseException e )
+        catch( ParseException e )
         {
             return null;
         }
@@ -356,7 +364,8 @@ public final class DateUtils
     /**
      * Return string for date HH:mm.
      *
-     * @param date            the date
+     * @param date
+     *            the date
      * @return date HH:mm
      */
     public static String getHourFr( Date date )
@@ -367,7 +376,8 @@ public final class DateUtils
     /**
      * Return string for date HH:mm:ss.
      *
-     * @param timestamp            the hours to read
+     * @param timestamp
+     *            the hours to read
      * @return the formated hours
      */
     public static String getHourWithSecondsFr( Date timestamp )
@@ -399,7 +409,8 @@ public final class DateUtils
     /**
      * Returns the year of a date.
      *
-     * @param date            date
+     * @param date
+     *            date
      * @return year
      */
     public static String getMois( Date date )
@@ -411,7 +422,8 @@ public final class DateUtils
     /**
      * Gets the mois int.
      *
-     * @param date the date
+     * @param date
+     *            the date
      * @return the mois int
      */
     public static int getMoisInt( Date date )
@@ -425,7 +437,8 @@ public final class DateUtils
     /**
      * Gets the string.
      *
-     * @param date the date
+     * @param date
+     *            the date
      * @return the string
      */
     public static String getString( Date date )
@@ -446,8 +459,10 @@ public final class DateUtils
     /**
      * Checks if the date is <strong>STRICTLY</strong> after the reference date.
      *
-     * @param strDateToCheck            the date to check
-     * @param strReferenceDateDate            the date to be checked against
+     * @param strDateToCheck
+     *            the date to check
+     * @param strReferenceDateDate
+     *            the date to be checked against
      * @return true if the the date to check is after the reference date
      */
     public static boolean isAfter( String strDateToCheck, String strReferenceDateDate )
@@ -457,7 +472,7 @@ public final class DateUtils
         long lDateReference = DateUtil.formatDate( strReferenceDateDate, Locale.FRANCE ).getTime( );
 
         // check values
-        return lDateToCheck >= lDateReference;
+        return lDateToCheck > lDateReference;
     }
 
     /**
@@ -505,8 +520,10 @@ public final class DateUtils
     /**
      * Parses the.
      *
-     * @param strDate the str date
-     * @param format the format
+     * @param strDate
+     *            the str date
+     * @param format
+     *            the format
      * @return the date
      */
     private static Date parse( String strDate, String format )
@@ -519,7 +536,7 @@ public final class DateUtils
             {
                 ret = sdf.parse( strDate );
             }
-            catch ( ParseException e )
+            catch( ParseException e )
             {
                 ret = null;
             }
@@ -546,7 +563,8 @@ public final class DateUtils
     /**
      * Parses the hour.
      *
-     * @param hour the hour
+     * @param hour
+     *            the hour
      * @return the date
      */
     public static Date parseHour( String hour )
@@ -557,7 +575,8 @@ public final class DateUtils
     /**
      * Validate a date.
      *
-     * @param date            la date
+     * @param date
+     *            la date
      * @return boolean return true if the field is formated with dd/mm/yyyy
      */
     public static boolean validateDate( String date )
@@ -576,7 +595,7 @@ public final class DateUtils
                 c.setTime( parse );
                 c.getTime( );
             }
-            catch ( Exception ex )
+            catch( Exception ex )
             {
                 AppLogService.error( ex.getMessage( ), ex );
                 hasError = false;
@@ -636,12 +655,13 @@ public final class DateUtils
 
             }
 
-            ret = dateEffetValide && ( !obligatoire || (  donneesPresentes ) );
+            ret = dateEffetValide && ( !obligatoire || ( donneesPresentes ) );
         }
-        else if ( obligatoire )
-        {
-            ret = false;
-        }
+        else
+            if ( obligatoire )
+            {
+                ret = false;
+            }
         return ret;
     }
 
@@ -656,19 +676,19 @@ public final class DateUtils
     {
         if ( StringUtils.isNotEmpty( sHeure ) )
         {
-            String[] sHeureSplit = sHeure.split( ":" );
+            String [ ] sHeureSplit = sHeure.split( ":" );
             if ( sHeureSplit.length == 2 )
             {
                 try
                 {
-                    int heures = Integer.parseInt( sHeureSplit[0] );
-                    int minutes = Integer.parseInt( sHeureSplit[1] );
+                    int heures = Integer.parseInt( sHeureSplit [0] );
+                    int minutes = Integer.parseInt( sHeureSplit [1] );
                     if ( ( heures >= 0 ) && ( heures < 24 ) && ( minutes >= 0 ) && ( minutes < 60 ) )
                     {
                         return true;
                     }
                 }
-                catch ( NumberFormatException e )
+                catch( NumberFormatException e )
                 {
                     return false;
                 }
@@ -730,7 +750,8 @@ public final class DateUtils
     /**
      * Return string for date HHmm.
      *
-     * @param date            the date
+     * @param date
+     *            the date
      * @return date HH:mm
      */
     public static String getHourFrSansColonne( Date date )
@@ -741,9 +762,11 @@ public final class DateUtils
     /**
      * Format date sql with time.
      *
-     * @param dateString the date string
+     * @param dateString
+     *            the date string
      * @return the java.sql. timestamp
-     * @throws ParseException the parse exception
+     * @throws ParseException
+     *             the parse exception
      */
     public static java.sql.Timestamp formatDateSqlWithTime( String dateString ) throws ParseException
     {
@@ -761,6 +784,35 @@ public final class DateUtils
         }
 
         return new java.sql.Timestamp( dateValue.getTime( ) );
+    }
+
+    /**
+     * Checks if is date more than X day.
+     *
+     * @param strDateCreation
+     *            the str date creation
+     * @param nbDay
+     *            the nb day
+     * @return true, if is date more than X day
+     */
+    public static boolean isDateMoreThanXDay( String strDateCreation, Integer nbDay )
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat( DATE_FR );
+
+        Date currentDate = new Date( );
+        LocalDateTime localDateTime = currentDate.toInstant( ).atZone( ZoneId.systemDefault( ) ).toLocalDateTime( );
+        localDateTime = localDateTime.minusDays( nbDay );
+
+        Date currentDatePlusXDay = Date.from( localDateTime.atZone( ZoneId.systemDefault( ) ).toInstant( ) );
+        try
+        {
+            Date dateCreation = sdf.parse( strDateCreation );
+            return dateCreation.compareTo( currentDatePlusXDay ) < 0;
+        }
+        catch( ParseException e )
+        {
+            return false;
+        }
     }
 
 }

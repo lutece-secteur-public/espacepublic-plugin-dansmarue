@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48,10 +48,10 @@ public class ValidationException extends FunctionnalException
 {
 
     /** The Constant serialVersionUID. */
-    private static final long            serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     /** The Constant VALIDATION_ERROR. */
-    public static final String           VALIDATION_ERROR = I18nService.getLocalizedString( "validation.erreur", Locale.getDefault( ) );
+    public static final String VALIDATION_ERROR = I18nService.getLocalizedString( "validation.erreur", Locale.getDefault( ) );
 
     /** The constraint violation list. */
     private transient List<ConstraintViolation<?>> _constraintViolationList;
@@ -59,8 +59,10 @@ public class ValidationException extends FunctionnalException
     /**
      * Instantiates a new validation exception.
      *
-     * @param bean the bean
-     * @param constraintViolation the constraint violation
+     * @param bean
+     *            the bean
+     * @param constraintViolation
+     *            the constraint violation
      */
     public ValidationException( Object bean, ConstraintViolation<?> constraintViolation )
     {
@@ -72,7 +74,8 @@ public class ValidationException extends FunctionnalException
     /**
      * Instantiates a new validation exception.
      *
-     * @param bean the bean
+     * @param bean
+     *            the bean
      */
     public ValidationException( Object bean )
     {
@@ -93,7 +96,8 @@ public class ValidationException extends FunctionnalException
     /**
      * Sets the constraint violation list.
      *
-     * @param constraintViolationList            the constraintViolationList to set
+     * @param constraintViolationList
+     *            the constraintViolationList to set
      */
     public void setConstraintViolationList( List<ConstraintViolation<?>> constraintViolationList )
     {
@@ -103,14 +107,22 @@ public class ValidationException extends FunctionnalException
     /**
      * Adds the constraint violation.
      *
-     * @param constraintViolation the constraint violation
+     * @param constraintViolation
+     *            the constraint violation
      */
     public void addConstraintViolation( ConstraintViolation<?> constraintViolation )
     {
         _constraintViolationList.add( constraintViolation );
     }
 
-    /* (non-Javadoc)
+    /**
+     * Gets the message.
+     *
+     * @return the message
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Throwable#getMessage()
      */
     @Override
@@ -122,8 +134,9 @@ public class ValidationException extends FunctionnalException
         {
             for ( ConstraintViolation<?> constraintViolation : _constraintViolationList )
             {
-                sbMessage.append( System.getProperty( "line.separator" ) ).append( "Valeur '" ).append( constraintViolation.getInvalidValue( ) ).append( "' incorrecte pour '" )
-                .append( constraintViolation.getPropertyPath( ) ).append( "' : " ).append( constraintViolation.getMessage( ) );
+                sbMessage.append( System.getProperty( "line.separator" ) ).append( "Valeur '" ).append( constraintViolation.getInvalidValue( ) )
+                        .append( "' incorrecte pour '" ).append( constraintViolation.getPropertyPath( ) ).append( "' : " )
+                        .append( constraintViolation.getMessage( ) );
             }
         }
         return sbMessage.toString( );

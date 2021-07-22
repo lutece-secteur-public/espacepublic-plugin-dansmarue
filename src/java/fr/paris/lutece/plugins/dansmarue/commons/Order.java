@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,20 +44,20 @@ public class Order implements Serializable
     /**
      * serialVersionUID.
      */
-    private static final long   serialVersionUID = -887656883773949701L;
+    private static final long serialVersionUID = -887656883773949701L;
 
     /** The Constant DESC. */
-    private static final String DESC             = "DESC";
+    private static final String DESC = "DESC";
 
     /** The Constant ASC. */
-    private static final String ASC              = "ASC";
+    private static final String ASC = "ASC";
 
     /** The str name. */
-    private String              _strName;
+    private String _strName;
 
     /** The str order. */
     // ASC or DESC
-    private String              _strOrder;
+    private String _strOrder;
 
     /**
      * Instantiates a new order.
@@ -70,8 +70,10 @@ public class Order implements Serializable
     /**
      * Instantiates a new order.
      *
-     * @param name the name
-     * @param order the order
+     * @param name
+     *            the name
+     * @param order
+     *            the order
      */
     public Order( String name, String order )
     {
@@ -82,8 +84,10 @@ public class Order implements Serializable
     /**
      * Instantiates a new order.
      *
-     * @param name the name
-     * @param bIsAsc the b is asc
+     * @param name
+     *            the name
+     * @param bIsAsc
+     *            the b is asc
      */
     public Order( String name, boolean bIsAsc )
     {
@@ -111,7 +115,8 @@ public class Order implements Serializable
     /**
      * Sets the name.
      *
-     * @param pName            the name to set
+     * @param pName
+     *            the name to set
      */
     public void setName( String pName )
     {
@@ -131,7 +136,8 @@ public class Order implements Serializable
     /**
      * Sets the order.
      *
-     * @param pOrder            the order to set
+     * @param pOrder
+     *            the order to set
      */
     public void setOrder( String pOrder )
     {

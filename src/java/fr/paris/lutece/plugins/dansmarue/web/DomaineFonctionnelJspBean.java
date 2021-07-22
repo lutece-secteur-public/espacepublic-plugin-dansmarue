@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -76,136 +76,150 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
 {
 
     /** The Constant serialVersionUID. */
-    private static final long          serialVersionUID                                = 6689540999532217301L;
+    private static final long serialVersionUID = 6689540999532217301L;
 
     /** The Constant MESSAGE_CONFIRMATION_DELETE_DOMAINE_FONCTIONNEL. */
     // MESSAGES
-    private static final String        MESSAGE_CONFIRMATION_DELETE_DOMAINE_FONCTIONNEL = "dansmarue.message.domainefonctionnel.delete.confirmation";
+    private static final String MESSAGE_CONFIRMATION_DELETE_DOMAINE_FONCTIONNEL = "dansmarue.message.domainefonctionnel.delete.confirmation";
 
     /** The Constant MESSAGE_TITLE_DELETE_DOMAINE_FONCTIONNEL. */
-    private static final String        MESSAGE_TITLE_DELETE_DOMAINE_FONCTIONNEL        = "dansmarue.messagetitle.domainefonctionnel.delete.confirmation";
+    private static final String MESSAGE_TITLE_DELETE_DOMAINE_FONCTIONNEL = "dansmarue.messagetitle.domainefonctionnel.delete.confirmation";
 
     /** The Constant PARAMETER_DOMAINE_FONCTIONNEL_ID. */
     // PARAMETERS
-    private static final String        PARAMETER_DOMAINE_FONCTIONNEL_ID                = "domaine_fonctionnel_id";
+    private static final String PARAMETER_DOMAINE_FONCTIONNEL_ID = "domaine_fonctionnel_id";
 
     /** The Constant PARAMETER_ARRONDISSEMENTS. */
-    private static final String        PARAMETER_ARRONDISSEMENTS                       = "arrondissements";
+    private static final String PARAMETER_ARRONDISSEMENTS = "arrondissements";
 
     /** The Constant PARAMETER_QUARTIERS. */
-    private static final String        PARAMETER_QUARTIERS                             = "conseilQuartier";
+    private static final String PARAMETER_QUARTIERS = "conseilQuartier";
 
     /** The Constant PARAMETER_CATEGORIES. */
-    private static final String        PARAMETER_CATEGORIES                            = "categories";
+    private static final String PARAMETER_CATEGORIES = "categories";
 
     /** The Constant PARAMETER_UNITS. */
-    private static final String        PARAMETER_UNITS                                 = "units";
+    private static final String PARAMETER_UNITS = "units";
 
     /** The Constant JSP_MANAGE_DOMAINE_FONCTIONNEL. */
     // JSP
-    private static final String        JSP_MANAGE_DOMAINE_FONCTIONNEL                  = "jsp/admin/plugins/signalement/ManageDomaineFonctionnel.jsp";
+    private static final String JSP_MANAGE_DOMAINE_FONCTIONNEL = "jsp/admin/plugins/signalement/ManageDomaineFonctionnel.jsp";
 
     /** The Constant JSP_DELETE_DOMAINE_FONCTIONNEL. */
-    private static final String        JSP_DELETE_DOMAINE_FONCTIONNEL                  = "jsp/admin/plugins/signalement/DoDeleteDomaineFonctionnel.jsp";
+    private static final String JSP_DELETE_DOMAINE_FONCTIONNEL = "jsp/admin/plugins/signalement/DoDeleteDomaineFonctionnel.jsp";
 
     /** The Constant JSP_SAVE_DOMAINE_FONCTIONNEL. */
-    private static final String        JSP_SAVE_DOMAINE_FONCTIONNEL                    = "SaveDomaineFonctionnel.jsp";
+    private static final String JSP_SAVE_DOMAINE_FONCTIONNEL = "SaveDomaineFonctionnel.jsp";
 
     /** The Constant JSP_MODIFY_DOMAINE_FONCTIONNEL. */
-    private static final String        JSP_MODIFY_DOMAINE_FONCTIONNEL                  = "ModifyDomaineFonctionnel.jsp";
+    private static final String JSP_MODIFY_DOMAINE_FONCTIONNEL = "ModifyDomaineFonctionnel.jsp";
 
     /** The Constant RIGHT_MANAGE_DOMAINE_FONCTIONNEL. */
     // RIGHT
-    public static final String         RIGHT_MANAGE_DOMAINE_FONCTIONNEL                = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
+    public static final String RIGHT_MANAGE_DOMAINE_FONCTIONNEL = "REFERENTIEL_MANAGEMENT_SIGNALEMENT";
 
     /** The Constant ERROR_OCCUR. */
     // CONSTANTS
-    public static final String         ERROR_OCCUR                                     = "error";
+    public static final String ERROR_OCCUR = "error";
 
     /** The Constant MARK_DOMAINE_FONCTIONNEL_LIST. */
     // Markers
-    private static final String        MARK_DOMAINE_FONCTIONNEL_LIST                   = "domaine_fonctionnel_list";
+    private static final String MARK_DOMAINE_FONCTIONNEL_LIST = "domaine_fonctionnel_list";
 
     /** The Constant MARK_DOMAINE_FONCTIONNEL. */
-    private static final String        MARK_DOMAINE_FONCTIONNEL                        = "domaine_fonctionnel";
+    private static final String MARK_DOMAINE_FONCTIONNEL = "domaine_fonctionnel";
 
     /** The Constant MARK_ARRONDISSEMENT_LIST. */
-    private static final String        MARK_ARRONDISSEMENT_LIST                        = "arrondissement_list";
+    private static final String MARK_ARRONDISSEMENT_LIST = "arrondissement_list";
 
     /** The Constant MARK_QUARTIER_LIST. */
-    private static final String        MARK_QUARTIER_LIST                              = "quartier_list";
+    private static final String MARK_QUARTIER_LIST = "quartier_list";
 
     /** The Constant MARK_ARRONDISSEMENT_LIST_SIZE. */
-    private static final String        MARK_ARRONDISSEMENT_LIST_SIZE                   = "arrondissement_list_size";
+    private static final String MARK_ARRONDISSEMENT_LIST_SIZE = "arrondissement_list_size";
 
     /** The Constant MARK_CATEGORY_LIST. */
-    private static final String        MARK_CATEGORY_LIST                              = "category_list";
+    private static final String MARK_CATEGORY_LIST = "category_list";
 
     /** The Constant MARK_CATEGORY_LIST_SIZE. */
-    private static final String        MARK_CATEGORY_LIST_SIZE                         = "category_list_size";
+    private static final String MARK_CATEGORY_LIST_SIZE = "category_list_size";
 
     /** The Constant MARK_UNIT_TREE. */
-    private static final String        MARK_UNIT_TREE                                  = "unit_tree";
+    private static final String MARK_UNIT_TREE = "unit_tree";
 
     /** The Constant MARK_UNIT_LIST_SIZE. */
-    private static final String        MARK_UNIT_LIST_SIZE                             = "unit_list_size";
+    private static final String MARK_UNIT_LIST_SIZE = "unit_list_size";
 
     /** The Constant TEMPLATE_MANAGE_DOMAINE_FONCTIONNEL. */
     // TEMPLATES
-    private static final String        TEMPLATE_MANAGE_DOMAINE_FONCTIONNEL             = "admin/plugins/signalement/manage_domaine_fonctionnel.html";
+    private static final String TEMPLATE_MANAGE_DOMAINE_FONCTIONNEL = "admin/plugins/signalement/manage_domaine_fonctionnel.html";
 
     /** The Constant TEMPLATE_SAVE_DOMAINE_FONCTIONNEL. */
-    private static final String        TEMPLATE_SAVE_DOMAINE_FONCTIONNEL               = "admin/plugins/signalement/save_domaine_fonctionnel.html";
+    private static final String TEMPLATE_SAVE_DOMAINE_FONCTIONNEL = "admin/plugins/signalement/save_domaine_fonctionnel.html";
 
     /** The Constant TEMPLATE_MODIFY_DOMAINE_FONCTIONNEL. */
-    private static final String        TEMPLATE_MODIFY_DOMAINE_FONCTIONNEL             = "admin/plugins/signalement/modify_domaine_fonctionnel.html";
+    private static final String TEMPLATE_MODIFY_DOMAINE_FONCTIONNEL = "admin/plugins/signalement/modify_domaine_fonctionnel.html";
 
     /** The domaine fonctionnel service. */
     // SERVICES
     private transient IDomaineFonctionnelService _domaineFonctionnelService;
 
     /** The arrondissement service. */
-    private transient IArrondissementService     _arrondissementService;
+    private transient IArrondissementService _arrondissementService;
 
     /** The quartier service. */
-    private transient IConseilQuartierService    _quartierService;
+    private transient IConseilQuartierService _quartierService;
 
     /** The type signalement service. */
-    private transient ITypeSignalementService    _typeSignalementService;
+    private transient ITypeSignalementService _typeSignalementService;
 
     /** The unit service. */
-    private transient IUnitService               _unitService                                    = SpringContextService.getBean( IUnitService.BEAN_UNIT_SERVICE );
+    private transient IUnitService _unitService = SpringContextService.getBean( IUnitService.BEAN_UNIT_SERVICE );
 
     /** The Constant PROPERTY_DOMAINE_ARRONDISSEMENT_SELECT_SIZE. */
     // PROPERTIES
-    private static final String        PROPERTY_DOMAINE_ARRONDISSEMENT_SELECT_SIZE     = AppPropertiesService.getProperty( "signalement.domaine.select.arrondissement.list.size" );
+    private static final String PROPERTY_DOMAINE_ARRONDISSEMENT_SELECT_SIZE = AppPropertiesService
+            .getProperty( "signalement.domaine.select.arrondissement.list.size" );
 
     /** The Constant PROPERTY_DOMAINE_UNIT_SELECT_SIZE. */
-    private static final String        PROPERTY_DOMAINE_UNIT_SELECT_SIZE               = AppPropertiesService.getProperty( "signalement.domaine.select.unit.list.size" );
+    private static final String PROPERTY_DOMAINE_UNIT_SELECT_SIZE = AppPropertiesService.getProperty( "signalement.domaine.select.unit.list.size" );
 
     /** The Constant PROPERTY_DOMAINE_CATEGORIE_SELECT_SIZE. */
-    private static final String        PROPERTY_DOMAINE_CATEGORIE_SELECT_SIZE          = AppPropertiesService.getProperty( "signalement.domaine.select.categorie.list.size" );
+    private static final String PROPERTY_DOMAINE_CATEGORIE_SELECT_SIZE = AppPropertiesService.getProperty( "signalement.domaine.select.categorie.list.size" );
 
     /** The Constant PROPERTY_DOMAINE_UNIT_DEPTH. */
-    private static final Integer       PROPERTY_DOMAINE_UNIT_DEPTH                     = AppPropertiesService.getPropertyInt( "signalement.domaine.unit.depth", 0 );
+    private static final Integer PROPERTY_DOMAINE_UNIT_DEPTH = AppPropertiesService.getPropertyInt( "signalement.domaine.unit.depth", 0 );
 
-    /* (non-Javadoc)
+    /**
+     * Inits the.
+     *
+     * @param request
+     *            the request
+     * @param strRight
+     *            the str right
+     * @throws AccessDeniedException
+     *             the access denied exception
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.dansmarue.web.AbstractJspBean#init(javax.servlet.http.HttpServletRequest, java.lang.String)
      */
     @Override
     public void init( HttpServletRequest request, String strRight ) throws AccessDeniedException
     {
         super.init( request, strRight );
-        _domaineFonctionnelService = ( IDomaineFonctionnelService ) SpringContextService.getBean( "domaineFonctionnelService" );
-        _arrondissementService = ( IArrondissementService ) SpringContextService.getBean( "signalement.arrondissementService" );
-        _quartierService = ( IConseilQuartierService ) SpringContextService.getBean( "signalement.conseilQuartierService" );
-        _typeSignalementService = ( ITypeSignalementService ) SpringContextService.getBean( "typeSignalementService" );
+        _domaineFonctionnelService = (IDomaineFonctionnelService) SpringContextService.getBean( "domaineFonctionnelService" );
+        _arrondissementService = (IArrondissementService) SpringContextService.getBean( "signalement.arrondissementService" );
+        _quartierService = (IConseilQuartierService) SpringContextService.getBean( "signalement.conseilQuartierService" );
+        _typeSignalementService = (ITypeSignalementService) SpringContextService.getBean( "typeSignalementService" );
     }
 
     /**
      * Get the manage DomaineFonctionnel page.
      *
-     * @param request            the request
+     * @param request
+     *            the request
      * @return the page with DomaineFonctionnel list
      */
     public String getManageDomaineFonctionnel( HttpServletRequest request )
@@ -224,7 +238,8 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
     /**
      * Delete a DomaineFonctionnel.
      *
-     * @param request            The HTTP request
+     * @param request
+     *            The HTTP request
      * @return redirection url
      */
     public String doDeleteDomaineFonctionnel( HttpServletRequest request )
@@ -238,7 +253,7 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
         {
             nIdDomaineFonctionnel = Integer.parseInt( strDomaineFonctionnelId );
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
 
             return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
@@ -253,7 +268,8 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
     /**
      * Returns the confirmation message to delete a DomaineFonctionnel.
      *
-     * @param request            The Http request
+     * @param request
+     *            The Http request
      * @return the html code message
      */
     public String getDeleteDomaineFonctionnel( HttpServletRequest request )
@@ -269,7 +285,7 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
         {
             nIdDomaineFonctionnel = Integer.parseInt( strIdDomaineFonctionnel );
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
             return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
         }
@@ -277,15 +293,16 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
         Map<String, Object> urlParam = new HashMap<String, Object>( );
         urlParam.put( PARAMETER_DOMAINE_FONCTIONNEL_ID, nIdDomaineFonctionnel );
 
-        return AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_DELETE_DOMAINE_FONCTIONNEL, null, MESSAGE_CONFIRMATION_DELETE_DOMAINE_FONCTIONNEL, JSP_DELETE_DOMAINE_FONCTIONNEL, "_self",
-                AdminMessage.TYPE_CONFIRMATION, urlParam, strJspBack );
+        return AdminMessageService.getMessageUrl( request, MESSAGE_TITLE_DELETE_DOMAINE_FONCTIONNEL, null, MESSAGE_CONFIRMATION_DELETE_DOMAINE_FONCTIONNEL,
+                JSP_DELETE_DOMAINE_FONCTIONNEL, "_self", AdminMessage.TYPE_CONFIRMATION, urlParam, strJspBack );
 
     }
 
     /**
      * Returns the form for DomaineFonctionnel creation.
      *
-     * @param request            The HTTP request
+     * @param request
+     *            The HTTP request
      * @return HTML Form
      */
 
@@ -303,7 +320,7 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
 
         if ( ve != null )
         {
-            domaineFonctionnel = ( DomaineFonctionnel ) ve.getBean( );
+            domaineFonctionnel = (DomaineFonctionnel) ve.getBean( );
             model.put( ERROR_OCCUR, getHtmlError( ve ) );
         }
 
@@ -331,7 +348,8 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
     /**
      * Returns the form for DomaineFonctionnel modification.
      *
-     * @param request            The HTTP request
+     * @param request
+     *            The HTTP request
      * @return HTML Form
      */
 
@@ -350,7 +368,7 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
         {
             nIdDomaineFonctionnel = Integer.parseInt( strIdDomaineFonctionnel );
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
             return AdminMessageService.getMessageUrl( request, SignalementConstants.MESSAGE_ERROR_OCCUR, AdminMessage.TYPE_STOP );
         }
@@ -361,7 +379,7 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
         FunctionnalException ve = getErrorOnce( request );
         if ( ve != null )
         {
-            domaineFonctionnel = ( DomaineFonctionnel ) ve.getBean( );
+            domaineFonctionnel = (DomaineFonctionnel) ve.getBean( );
             model.put( ERROR_OCCUR, getHtmlError( ve ) );
         }
 
@@ -389,7 +407,8 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
     /**
      * Modify a DomaineFonctionnel.
      *
-     * @param request            The HTTP request
+     * @param request
+     *            The HTTP request
      * @return redirection url
      */
 
@@ -402,10 +421,10 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
         DomaineFonctionnel domaineFonctionnel = new DomaineFonctionnel( );
         populate( domaineFonctionnel, request );
 
-        String[] arrondissements = request.getParameterValues( PARAMETER_ARRONDISSEMENTS );
-        String[] categories = request.getParameterValues( PARAMETER_CATEGORIES );
-        String[] units = request.getParameterValues( PARAMETER_UNITS );
-        String[] quartiers = request.getParameterValues( PARAMETER_QUARTIERS );
+        String [ ] arrondissements = request.getParameterValues( PARAMETER_ARRONDISSEMENTS );
+        String [ ] categories = request.getParameterValues( PARAMETER_CATEGORIES );
+        String [ ] units = request.getParameterValues( PARAMETER_UNITS );
+        String [ ] quartiers = request.getParameterValues( PARAMETER_QUARTIERS );
 
         if ( !ArrayUtils.isEmpty( arrondissements ) )
         {
@@ -435,7 +454,7 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
             {
                 _domaineFonctionnelService.store( domaineFonctionnel );
             }
-            catch ( BusinessException e )
+            catch( BusinessException e )
             {
                 UrlItem url = new UrlItem( JSP_MODIFY_DOMAINE_FONCTIONNEL );
                 url.addParameter( PARAMETER_DOMAINE_FONCTIONNEL_ID, domaineFonctionnel.getId( ) );
@@ -454,7 +473,8 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
     /**
      * Save a DomaineFonctionnel.
      *
-     * @param request            The HTTP request
+     * @param request
+     *            The HTTP request
      * @return redirection url
      */
     public String doSaveDomaineFonctionnel( HttpServletRequest request )
@@ -467,10 +487,10 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
         DomaineFonctionnel domaineFonctionnel = new DomaineFonctionnel( );
         populate( domaineFonctionnel, request );
 
-        String[] arrondissements = request.getParameterValues( PARAMETER_ARRONDISSEMENTS );
-        String[] categories = request.getParameterValues( PARAMETER_CATEGORIES );
-        String[] units = request.getParameterValues( PARAMETER_UNITS );
-        String[] quartiers = request.getParameterValues( PARAMETER_QUARTIERS );
+        String [ ] arrondissements = request.getParameterValues( PARAMETER_ARRONDISSEMENTS );
+        String [ ] categories = request.getParameterValues( PARAMETER_CATEGORIES );
+        String [ ] units = request.getParameterValues( PARAMETER_UNITS );
+        String [ ] quartiers = request.getParameterValues( PARAMETER_QUARTIERS );
 
         if ( !ArrayUtils.isEmpty( quartiers ) )
         {
@@ -500,7 +520,7 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
             {
                 _domaineFonctionnelService.insert( domaineFonctionnel );
             }
-            catch ( BusinessException e )
+            catch( BusinessException e )
             {
                 UrlItem url = new UrlItem( JSP_SAVE_DOMAINE_FONCTIONNEL );
                 return manageFunctionnalException( request, e, url.getUrl( ) );
@@ -518,14 +538,16 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
     /**
      * Return the url of the JSP which called the last action.
      *
-     * @param request            The Http request
+     * @param request
+     *            The Http request
      * @return The url of the last JSP
      */
     private String doGoBack( HttpServletRequest request )
     {
         String strJspBack = request.getParameter( SignalementConstants.MARK_JSP_BACK );
 
-        return StringUtils.isNotBlank( strJspBack ) ? ( AppPathService.getBaseUrl( request ) + strJspBack ) : AppPathService.getBaseUrl( request ) + JSP_MANAGE_DOMAINE_FONCTIONNEL;
+        return StringUtils.isNotBlank( strJspBack ) ? ( AppPathService.getBaseUrl( request ) + strJspBack )
+                : ( AppPathService.getBaseUrl( request ) + JSP_MANAGE_DOMAINE_FONCTIONNEL );
 
     }
 

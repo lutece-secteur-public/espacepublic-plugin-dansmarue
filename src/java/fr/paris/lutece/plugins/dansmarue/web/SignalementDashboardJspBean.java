@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,6 +54,7 @@ import fr.paris.lutece.plugins.dansmarue.service.ISignalementUnitService;
 import fr.paris.lutece.plugins.dansmarue.service.ISiraUserService;
 import fr.paris.lutece.plugins.dansmarue.service.ITypeSignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.role.SignalementResourceIdService;
+import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.dansmarue.utils.ListUtils;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.modules.dansmarue.service.sector.ISectorService;
@@ -73,112 +74,111 @@ public class SignalementDashboardJspBean extends AbstractJspBean
 {
 
     /** The Constant serialVersionUID. */
-    private static final long                serialVersionUID                      = -5000201974017218954L;
+    private static final long serialVersionUID = -5000201974017218954L;
 
     // RIGHTS
     /** The Constant RIGHT_MANAGE_SIGNALEMENT. */
-    public static final String               RIGHT_MANAGE_SIGNALEMENT              = "SIGNALEMENT_DASHBOARD";
+    public static final String RIGHT_MANAGE_SIGNALEMENT = "SIGNALEMENT_DASHBOARD";
 
     // TEMPLATES
-    /**  The Constants TEMPLATE_MANAGE_SIGNALEMENT_DASHBOARD. */
-    private static final String              TEMPLATE_MANAGE_SIGNALEMENT_DASHBOARD = "admin/plugins/signalement/manage_signalement_dashboard.html";
+    /** The Constants TEMPLATE_MANAGE_SIGNALEMENT_DASHBOARD. */
+    private static final String TEMPLATE_MANAGE_SIGNALEMENT_DASHBOARD = "admin/plugins/signalement/manage_signalement_dashboard.html";
 
     // PARAMETERS
     /** The Constant PARAMETER_SIGNALEMENT_ID. */
-    public static final String               PARAMETER_SIGNALEMENT_ID              = "signalement_id";
+    public static final String PARAMETER_SIGNALEMENT_ID = "signalement_id";
 
     /** The Constant PARAMETER_SELECTED_STATE. */
-    public static final String               PARAMETER_SELECTED_STATE              = "selectedState";
+    public static final String PARAMETER_SELECTED_STATE = "selectedState";
 
     /** The Constant PARAMETER_SELECTED_PERIOD. */
-    public static final String               PARAMETER_SELECTED_PERIOD             = "selectedPeriod";
+    public static final String PARAMETER_SELECTED_PERIOD = "selectedPeriod";
 
     /** The Constant PARAMETER_SELECTED_TRANCHE. */
-    public static final String               PARAMETER_SELECTED_TRANCHE            = "selectedTranche";
+    public static final String PARAMETER_SELECTED_TRANCHE = "selectedTranche";
 
     /** The Constant SESSION_ATTRIBUTE_SIGNALEMENT. */
     // SESSION
-    private static final String              SESSION_ATTRIBUTE_SIGNALEMENT         = "signalement";
+    private static final String SESSION_ATTRIBUTE_SIGNALEMENT = "signalement";
 
     /** The Constant MARK_ARRONDISSEMENT_LIST. */
     // MARKERS
-    private static final String              MARK_ARRONDISSEMENT_LIST              = "arrondissement_list";
+    private static final String MARK_ARRONDISSEMENT_LIST = "arrondissement_list";
 
     /** The Constant MARK_STATES1_LIST. */
-    private static final String              MARK_STATES1_LIST                     = "states_list_1";
+    private static final String MARK_STATES1_LIST = "states_list_1";
 
     /** The Constant MARK_STATES2_LIST. */
-    private static final String              MARK_STATES2_LIST                     = "states_list_2";
+    private static final String MARK_STATES2_LIST = "states_list_2";
 
     /** The Constant MARK_CATEGORY_LIST. */
-    private static final String              MARK_CATEGORY_LIST                    = "category_list";
+    private static final String MARK_CATEGORY_LIST = "category_list";
 
     /** The Constant MARK_ENTITE_PARENT_USER. */
-    private static final String              MARK_ENTITE_PARENT_USER               = "entiteParentUser";
+    private static final String MARK_ENTITE_PARENT_USER = "entiteParentUser";
 
     /** The Constant MARK_SIGNALEMENTS. */
-    private static final String              MARK_SIGNALEMENTS                     = "signalements_list";
+    private static final String MARK_SIGNALEMENTS = "signalements_list";
 
     /** The Constant MARK_STATES_LIST. */
-    private static final String              MARK_STATES_LIST                      = "states_list";
+    private static final String MARK_STATES_LIST = "states_list";
 
     /** The Constant MARK_DASHBOARD_USER_UNIT_TREE. */
-    private static final String              MARK_DASHBOARD_USER_UNIT_TREE         = "user_unit_tree";
+    private static final String MARK_DASHBOARD_USER_UNIT_TREE = "user_unit_tree";
 
     /** The Constant MARK_DASHBOARD_MAX_DEPTH. */
-    private static final String              MARK_DASHBOARD_MAX_DEPTH              = "maxDepth";
+    private static final String MARK_DASHBOARD_MAX_DEPTH = "maxDepth";
 
     /** The Constant PROPERTY_ID_STATE_DIRECTION_TABLEAU1. */
     // PROPERTIES
-    private static final String              PROPERTY_ID_STATE_DIRECTION_TABLEAU1  = "signalement.dashboard.state.direction.tableauUn";
+    private static final String PROPERTY_ID_STATE_DIRECTION_TABLEAU1 = "signalement.dashboard.state.direction.tableauUn";
 
     /** The Constant PROPERTY_ID_STATE_DIRECTION_TABLEAU2. */
-    private static final String              PROPERTY_ID_STATE_DIRECTION_TABLEAU2  = "signalement.dashboard.state.direction.tableauDeux";
+    private static final String PROPERTY_ID_STATE_DIRECTION_TABLEAU2 = "signalement.dashboard.state.direction.tableauDeux";
 
     /** The Constant PROPERTY_ID_STATE_PRESTA_TABLEAU1. */
-    private static final String              PROPERTY_ID_STATE_PRESTA_TABLEAU1     = "signalement.dashboard.state.prestataire.tableauUn";
+    private static final String PROPERTY_ID_STATE_PRESTA_TABLEAU1 = "signalement.dashboard.state.prestataire.tableauUn";
 
     /** The Constant PROPERTY_ID_STATE_ADMIN_TABLEAU1. */
-    private static final String              PROPERTY_ID_STATE_ADMIN_TABLEAU1      = "signalement.dashboard.state.admin.tableauUn";
+    private static final String PROPERTY_ID_STATE_ADMIN_TABLEAU1 = "signalement.dashboard.state.admin.tableauUn";
 
     /** The Constant PROPERTY_ID_STATE_ADMIN_TABLEAU2. */
-    private static final String              PROPERTY_ID_STATE_ADMIN_TABLEAU2      = "signalement.dashboard.state.admin.tableauDeux";
+    private static final String PROPERTY_ID_STATE_ADMIN_TABLEAU2 = "signalement.dashboard.state.admin.tableauDeux";
 
     /** The signalement service. */
     // SERVICES
-    private transient ISignalementService              _signalementService                   = SpringContextService.getBean( "signalementService" );
+    private transient ISignalementService _signalementService = SpringContextService.getBean( "signalementService" );
 
     /** The type signalement service. */
-    private transient ITypeSignalementService          _typeSignalementService               = SpringContextService.getBean( "typeSignalementService" );
+    private transient ITypeSignalementService _typeSignalementService = SpringContextService.getBean( "typeSignalementService" );
 
     /** The unit service. */
-    private transient IUnitService                     _unitService                          = SpringContextService.getBean( "unittree.unitService" );
+    private transient IUnitService _unitService = SpringContextService.getBean( "unittree.unitService" );
 
     /** The arrondissement service. */
-    private transient IArrondissementService           _arrondissementService                = SpringContextService.getBean( "signalement.arrondissementService" );
+    private transient IArrondissementService _arrondissementService = SpringContextService.getBean( "signalement.arrondissementService" );
 
     /** The state service. */
-    private transient IStateService                    _stateService                         = SpringContextService.getBean( "workflow.stateService" );
-
-
+    private transient IStateService _stateService = SpringContextService.getBean( "workflow.stateService" );
 
     /** The sector service. */
-    private transient ISectorService                   _sectorService                        = SpringContextService.getBean( "unittree-dansmarue.sectorService" );
+    private transient ISectorService _sectorService = SpringContextService.getBean( "unittree-dansmarue.sectorService" );
 
     /** The signalement unit service. */
-    private transient ISignalementUnitService          _signalementUnitService               = SpringContextService.getBean( "signalementUnitService" );
+    private transient ISignalementUnitService _signalementUnitService = SpringContextService.getBean( "signalementUnitService" );
 
     /** The sira user service. */
-    private transient ISiraUserService                 _siraUserService                      = SpringContextService.getBean( "siraUserService" );
+    private transient ISiraUserService _siraUserService = SpringContextService.getBean( "siraUserService" );
 
     /** The tableau de bord filter. */
     // MEMBERS
-    private TableauDeBordFilter              tableauDeBordFilter                   = null;
+    private TableauDeBordFilter tableauDeBordFilter = null;
 
     /**
      * View for the report management dashboard.
      *
-     * @param request            the HttpServletRequest
+     * @param request
+     *            the HttpServletRequest
      * @return the dashboard view
      */
     public String doGetManageSignalementDashboard( HttpServletRequest request )
@@ -214,10 +214,7 @@ public class SignalementDashboardJspBean extends AbstractJspBean
         setEntite( model, userUnitsList.get( 0 ) );
 
         // Application des critères de recherche
-        if ( tableauDeBordFilter == null )
-        {
-            tableauDeBordFilter = new TableauDeBordFilter( );
-        }
+        tableauDeBordFilter = new TableauDeBordFilter( );
         populate( tableauDeBordFilter, request );
         setTableauDeBordFilter( userUnitsList.get( 0 ).getIdUnit( ), request );
         model.put( MARK_FILTER, tableauDeBordFilter );
@@ -266,8 +263,10 @@ public class SignalementDashboardJspBean extends AbstractJspBean
     /**
      * Sets the tableau de bord filter.
      *
-     * @param unitId            the new tableau de bord filter
-     * @param request the request
+     * @param unitId
+     *            the new tableau de bord filter
+     * @param request
+     *            the request
      */
     private void setTableauDeBordFilter( Integer unitId, HttpServletRequest request )
     {
@@ -320,19 +319,21 @@ public class SignalementDashboardJspBean extends AbstractJspBean
 
     /**
      * Set TableauDeBordCategoryFilter.
+     * 
      * @param depthCategory
-     *          category level
+     *            category level
      * @param categorieId
-     *          id category
+     *            id category
      */
-    private void setTableauDeBordCategoryFilter( String depthCategory, String categorieId) {
+    private void setTableauDeBordCategoryFilter( String depthCategory, String categorieId )
+    {
 
         List<Integer> categoryIds = new ArrayList<>( );
         int ncategorieId = Integer.parseInt( categorieId );
         categoryIds.add( ncategorieId );
 
         // Récupération des catégories enfants en fonction du nivau de la catégorie sélectionnée
-        switch ( depthCategory )
+        switch( depthCategory )
         {
             case "0":
                 // Niveau 0 -> 2 niveaux d'enfant
@@ -357,7 +358,7 @@ public class SignalementDashboardJspBean extends AbstractJspBean
                 break;
         }
 
-        tableauDeBordFilter.setCategoryIds( categoryIds.stream( ).map( Integer::new ).toArray( Integer[]::new ) );
+        tableauDeBordFilter.setCategoryIds( categoryIds.stream( ).map( Integer::new ).toArray( Integer [ ]::new ) );
         tableauDeBordFilter.setCategoryId( ncategorieId );
         tableauDeBordFilter.setCategoryParentId( _typeSignalementService.findByIdTypeSignalement( ncategorieId ).getIdTypeSignalementParent( ) );
         tableauDeBordFilter.setDepthCategory( Integer.parseInt( depthCategory ) );
@@ -384,15 +385,16 @@ public class SignalementDashboardJspBean extends AbstractJspBean
             listIdStateTableau1 = getListByProperty( PROPERTY_ID_STATE_ADMIN_TABLEAU1 );
             listIdStateTableau2 = getListByProperty( PROPERTY_ID_STATE_ADMIN_TABLEAU2 );
         }
-        else if ( isUserPrestataire )
-        {
-            listIdStateTableau1 = getListByProperty( PROPERTY_ID_STATE_PRESTA_TABLEAU1 );
-        }
         else
-        {
-            listIdStateTableau1 = getListByProperty( PROPERTY_ID_STATE_DIRECTION_TABLEAU1 );
-            listIdStateTableau2 = getListByProperty( PROPERTY_ID_STATE_DIRECTION_TABLEAU2 );
-        }
+            if ( isUserPrestataire )
+            {
+                listIdStateTableau1 = getListByProperty( PROPERTY_ID_STATE_PRESTA_TABLEAU1 );
+            }
+            else
+            {
+                listIdStateTableau1 = getListByProperty( PROPERTY_ID_STATE_DIRECTION_TABLEAU1 );
+                listIdStateTableau2 = getListByProperty( PROPERTY_ID_STATE_DIRECTION_TABLEAU2 );
+            }
 
         model.put( MARK_STATES1_LIST, listIdStateTableau1 );
         model.put( MARK_STATES2_LIST, listIdStateTableau2 );
@@ -401,8 +403,10 @@ public class SignalementDashboardJspBean extends AbstractJspBean
     /**
      * Sets the category list in the model.
      *
-     * @param model            the model
-     * @param unitId the unit id
+     * @param model
+     *            the model
+     * @param unitId
+     *            the unit id
      */
     private void setCategoryList( Map<String, Object> model, Integer unitId )
     {
@@ -440,7 +444,7 @@ public class SignalementDashboardJspBean extends AbstractJspBean
         String strIds = AppPropertiesService.getProperty( property );
         if ( StringUtils.isNotBlank( strIds ) )
         {
-            String[] idArr = strIds.split( "," );
+            String [ ] idArr = strIds.split( "," );
             listInteger = ListUtils.getListOfIntFromStrArray( idArr );
         }
 
@@ -450,8 +454,10 @@ public class SignalementDashboardJspBean extends AbstractJspBean
     /**
      * Redirects to manage reports page, with reports list.
      *
-     * @param request            the HttpServletRequest
-     * @throws AccessDeniedException             throws AccessDeniedException
+     * @param request
+     *            the HttpServletRequest
+     * @throws AccessDeniedException
+     *             throws AccessDeniedException
      */
     public void redirectToManageSignalement( HttpServletRequest request ) throws AccessDeniedException
     {
@@ -472,15 +478,15 @@ public class SignalementDashboardJspBean extends AbstractJspBean
         // Period
         List<String> period = new ArrayList<>( );
 
-        switch ( selectedPeriod )
+        switch( selectedPeriod )
         {
-            case 0:
+            case 2:
                 period.add( I18nService.getLocalizedString( "dansmarue.dashboard.criterias.period.30jours", request.getLocale( ) ) );
                 break;
             case 1:
                 period.add( I18nService.getLocalizedString( "dansmarue.dashboard.criterias.period.90jours", request.getLocale( ) ) );
                 break;
-            case 2:
+            case 0:
                 period.add( I18nService.getLocalizedString( "dansmarue.dashboard.criterias.period.180jours", request.getLocale( ) ) );
                 break;
             default:
@@ -511,7 +517,7 @@ public class SignalementDashboardJspBean extends AbstractJspBean
         {
             List<Arrondissement> arrondissements = _arrondissementService.getAllArrondissement( );
             List<String> arrondissementCriteria = new ArrayList<>( );
-            Integer[] arrondissementIds = tableauDeBordFilter.getArrondissementIds( );
+            Integer [ ] arrondissementIds = tableauDeBordFilter.getArrondissementIds( );
             for ( Integer arrondissementId : arrondissementIds )
             {
                 for ( Arrondissement arrondissement : arrondissements )
@@ -526,20 +532,51 @@ public class SignalementDashboardJspBean extends AbstractJspBean
         }
 
         // Tranche - Si ce n'est pas un clique sur l'entete du tableau
+        valueTrancheCriteria( request, criterias, selectedState );
+
+        // Initialisation de la SignalementJspBean
+        SignalementJspBean signalement = (SignalementJspBean) request.getSession( ).getAttribute( SESSION_ATTRIBUTE_SIGNALEMENT );
+        if ( null == signalement )
+        {
+            signalement = new SignalementJspBean( );
+            signalement.init( request, "SIGNALEMENT_MANAGEMENT", SignalementResourceIdService.KEY_ID_RESOURCE,
+                    SignalementResourceIdService.PERMISSION_RECHERCHER_SIGNALEMENT );
+            request.getSession( ).setAttribute( SESSION_ATTRIBUTE_SIGNALEMENT, signalement );
+        }
+
+        // Set des critères
+        signalement.setDashboardCriterias( criterias );
+
+        // Set des signalementsIds
+        signalement.setDashboardSignalementList( _signalementService.getIdSignalementsTDB( tableauDeBordFilter ) );
+    }
+
+    /**
+     * Value tranche crieria with selected tranche.
+     * 
+     * @param request
+     *            http request
+     * @param criterias
+     *            criteria map
+     * @param selectedState
+     *            selected state
+     */
+    private void valueTrancheCriteria( HttpServletRequest request, Map<String, List<String>> criterias, Integer selectedState )
+    {
         if ( request.getParameter( PARAMETER_SELECTED_TRANCHE ) != null )
         {
             List<String> tranche = new ArrayList<>( );
 
-            switch ( request.getParameter( PARAMETER_SELECTED_TRANCHE ) )
+            switch( request.getParameter( PARAMETER_SELECTED_TRANCHE ) )
             {
                 case "0":
-                    tranche.add( I18nService.getLocalizedString( "dansmarue.dashboard.tranche0", request.getLocale( ) ) );
+                    tranche.add( valueLabelTrancheCriteria( request, "0", selectedState ) );
                     break;
                 case "1":
-                    tranche.add( I18nService.getLocalizedString( "dansmarue.dashboard.tranche1", request.getLocale( ) ) );
+                    tranche.add( valueLabelTrancheCriteria( request, "1", selectedState ) );
                     break;
                 case "2":
-                    tranche.add( I18nService.getLocalizedString( "dansmarue.dashboard.tranche1", request.getLocale( ) ) );
+                    tranche.add( valueLabelTrancheCriteria( request, "2", selectedState ) );
                     break;
                 default:
                     break;
@@ -551,20 +588,29 @@ public class SignalementDashboardJspBean extends AbstractJspBean
         {
             tableauDeBordFilter.setTrancheId( null );
         }
+    }
 
-        // Initialisation de la SignalementJspBean
-        SignalementJspBean signalement = ( SignalementJspBean ) request.getSession( ).getAttribute( SESSION_ATTRIBUTE_SIGNALEMENT );
-        if ( null == signalement )
+    /**
+     * Value label for tranche criteria/.
+     *
+     * @param request
+     *            http request
+     * @param selectedTranche
+     *            selected tranche
+     * @param selectedState
+     *            selected state
+     * @return the string
+     */
+    private String valueLabelTrancheCriteria( HttpServletRequest request, String selectedTranche, Integer selectedState )
+    {
+        if ( ( SignalementConstants.ID_STATE_PROGRAMME.intValue( ) == selectedState )
+                || ( SignalementConstants.ID_STATE_PROGRAMME_PRESTATAIRE.intValue( ) == selectedState ) )
         {
-            signalement = new SignalementJspBean( );
-            signalement.init( request, "SIGNALEMENT_MANAGEMENT", SignalementResourceIdService.KEY_ID_RESOURCE, SignalementResourceIdService.PERMISSION_RECHERCHER_SIGNALEMENT );
-            request.getSession( ).setAttribute( SESSION_ATTRIBUTE_SIGNALEMENT, signalement );
+            return I18nService.getLocalizedString( "dansmarue.dashboard.service.programme.tranche" + selectedTranche, request.getLocale( ) );
         }
-
-        // Set des critères
-        signalement.setDashboardCriterias( criterias );
-
-        // Set des signalementsIds
-        signalement.setDashboardSignalementList( _signalementService.getIdSignalementsTDB( tableauDeBordFilter ) );
+        else
+        {
+            return I18nService.getLocalizedString( "dansmarue.dashboard.tranche" + selectedTranche, request.getLocale( ) );
+        }
     }
 }

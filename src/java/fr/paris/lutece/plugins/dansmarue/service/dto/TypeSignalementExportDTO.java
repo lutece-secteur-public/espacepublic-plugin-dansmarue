@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,25 +40,25 @@ public class TypeSignalementExportDTO
 {
 
     /** The str libelle niveau 1. */
-    private String  _strLibelleNiveau1;
+    private String _strLibelleNiveau1;
 
     /** The str libelle niveau 2. */
-    private String  _strLibelleNiveau2;
+    private String _strLibelleNiveau2;
 
     /** The str libelle niveau 3. */
-    private String  _strLibelleNiveau3;
+    private String _strLibelleNiveau3;
 
     /** The str libelle concat. */
-    private String  _strLibelleConcat;
+    private String _strLibelleConcat;
 
     /** The str alias. */
-    private String  _strAlias;
+    private String _strAlias;
 
     /** The str alias mobile. */
-    private String  _strAliasMobile;
+    private String _strAliasMobile;
 
     /** The str direction. */
-    private String  _strDirection;
+    private String _strDirection;
 
     /** The str actif. */
     private Boolean _strActif;
@@ -79,7 +79,8 @@ public class TypeSignalementExportDTO
     /**
      * Sets the libelle niveau 1.
      *
-     * @param _strLibelleNiveau1 the new libelle niveau 1
+     * @param _strLibelleNiveau1
+     *            the new libelle niveau 1
      */
     public void setLibelleNiveau1( String _strLibelleNiveau1 )
     {
@@ -99,7 +100,8 @@ public class TypeSignalementExportDTO
     /**
      * Sets the libelle niveau 2.
      *
-     * @param _strLibelleNiveau2 the new libelle niveau 2
+     * @param _strLibelleNiveau2
+     *            the new libelle niveau 2
      */
     public void setLibelleNiveau2( String _strLibelleNiveau2 )
     {
@@ -119,7 +121,8 @@ public class TypeSignalementExportDTO
     /**
      * Sets the libelle niveau 3.
      *
-     * @param _strLibelleNiveau3 the new libelle niveau 3
+     * @param _strLibelleNiveau3
+     *            the new libelle niveau 3
      */
     public void setLibelleNiveau3( String _strLibelleNiveau3 )
     {
@@ -139,7 +142,8 @@ public class TypeSignalementExportDTO
     /**
      * Sets the libelle concat.
      *
-     * @param _strLibelleConcat the new libelle concat
+     * @param _strLibelleConcat
+     *            the new libelle concat
      */
     public void setLibelleConcat( String _strLibelleConcat )
     {
@@ -159,7 +163,8 @@ public class TypeSignalementExportDTO
     /**
      * Sets the alias.
      *
-     * @param _strAlias the new alias
+     * @param _strAlias
+     *            the new alias
      */
     public void setAlias( String _strAlias )
     {
@@ -179,7 +184,8 @@ public class TypeSignalementExportDTO
     /**
      * Sets the alias mobile.
      *
-     * @param _strAliasMobile the new alias mobile
+     * @param _strAliasMobile
+     *            the new alias mobile
      */
     public void setAliasMobile( String _strAliasMobile )
     {
@@ -199,7 +205,8 @@ public class TypeSignalementExportDTO
     /**
      * Sets the direction.
      *
-     * @param _strDirection the new direction
+     * @param _strDirection
+     *            the new direction
      */
     public void setDirection( String _strDirection )
     {
@@ -226,7 +233,8 @@ public class TypeSignalementExportDTO
     /**
      * Sets the actif.
      *
-     * @param _strActif the new actif
+     * @param _strActif
+     *            the new actif
      */
     public void setActif( Boolean _strActif )
     {
@@ -253,7 +261,8 @@ public class TypeSignalementExportDTO
     /**
      * Sets the pour agent.
      *
-     * @param _strPourAgent the new pour agent
+     * @param _strPourAgent
+     *            the new pour agent
      */
     public void setPourAgent( Boolean _strPourAgent )
     {
@@ -265,8 +274,11 @@ public class TypeSignalementExportDTO
      *
      * @return the tab all datas
      */
-    public String[] getTabAllDatas( )
+    public String [ ] getTabAllDatas( )
     {
-        return new String[] { getLibelleNiveau1( ), getLibelleNiveau2( ), getLibelleNiveau3( ), getLibelleConcat( ), getAlias( ), getAliasMobile( ), getDirection( ), getActif( ), getPourAgent( ) };
+        return new String [ ] {
+                getLibelleNiveau1( ), getLibelleNiveau2( ), getLibelleNiveau3( ), getLibelleConcat( ), getAlias( ), getAliasMobile( ), getDirection( ),
+                getActif( ), getPourAgent( )
+        };
     }
 }

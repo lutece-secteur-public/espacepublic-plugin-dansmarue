@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,6 @@ import java.util.List;
 
 import fr.paris.lutece.plugins.dansmarue.commons.Order;
 
-
 /**
  * The Class SignalementFilter.
  */
@@ -48,73 +47,101 @@ public class SignalementFilter implements Serializable
 {
 
     /** The Constant serialVersionUID. */
-    private static final long     serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     /** The list id type signalements. */
-    private List<Integer>         _listIdTypeSignalements;
+    private List<Integer> _listIdTypeSignalements;
 
     /** The n id domaine. */
-    private int                   _nIdDomaine;
+    private int _nIdDomaine;
 
     /** The n id type signalement. */
-    private int                   _nIdTypeSignalement;
+    private int _nIdTypeSignalement;
 
     /** The str numero. */
-    private String                _strNumero;
+    private String _strNumero;
 
     /** The n id direction. */
-    private int                   _nIdDirection;
+    private int _nIdDirection;
 
     /** The list id arrondissements. */
-    private List<Integer>         _listIdArrondissements;
+    private List<Integer> _listIdArrondissements;
 
     /** The n id arrondissement. */
-    private int                   _nIdArrondissement;
+    private int _nIdArrondissement;
 
     /** The n id sector. */
-    private int                   _nIdSector;
+    private int _nIdSector;
 
     /** The str adresse. */
-    private String                _strAdresse;
+    private String _strAdresse;
 
     /** The str mail. */
-    private String                _strMail;
+    private String _strMail;
 
     /** The str commentaire. */
-    private String                _strCommentaire;
+    private String _strCommentaire;
 
     /** The str commentaire agent terrain. */
-    private String                _strCommentaireAgentTerrain;
+    private String _strCommentaireAgentTerrain;
 
     /** The str date begin. */
-    private String                _strDateBegin;
+    private String _strDateBegin;
 
     /** The str date end. */
-    private String                _strDateEnd;
+    private String _strDateEnd;
+
+    /** The str date service done begin. */
+    private String _strDateDoneBegin;
+
+    /** The str date service done end. */
+    private String _strDateDoneEnd;
+
+    /** The str date requalification begin. */
+    private String _strDateRequalificationBegin;
+
+    /** The str date requalification end. */
+    private String _strDateRequalificationEnd;
+
+    /** The str date programmation begin. */
+    private String _strDateProgrammingBegin;
+
+    /** The str date programmation end. */
+    private String _strDateProgrammingEnd;
 
     /** The n id etat. */
-    private int                   _nIdEtat;
+    private int _nIdEtat;
 
     /** The list etats. */
     private List<EtatSignalement> _listEtats;
 
+    /** The list priorites. */
+    private List<Integer> _listIdPriorites;
+
     /** The list id secteur autorises. */
-    private List<Integer>         _listIdSecteurAutorises;
+    private List<Integer> _listIdSecteurAutorises;
 
     /** The list id unit. */
-    private List<Integer>         _listIdUnit;
+    private List<Integer> _listIdUnit;
 
     /** The list id categories. */
-    private List<Integer>         _listIdCategories;
+    private List<Integer> _listIdCategories;
 
     /** The list id quartier. */
-    private List<Integer>         _listIdQuartier;
+    private List<Integer> _listIdQuartier;
+
+    /**
+     * Mail dernier interveant sur l'anomalie.
+     */
+    private String _strMailDernierIntervenant;
 
     /** The b order asc. */
-    private boolean               _bOrderAsc;
+    private boolean _bOrderAsc;
 
     /** The list orders. */
-    private List<Order>           _listOrders      = new ArrayList<>( );
+    private List<Order> _listOrders = new ArrayList<>( );
+
+    private int _nIdFdt;
 
     /**
      * Init empty list for report filter to avoid Null Pointer Exception.
@@ -129,6 +156,7 @@ public class SignalementFilter implements Serializable
         _listIdCategories = Collections.emptyList( );
         _listIdQuartier = Collections.emptyList( );
         _listOrders = Collections.emptyList( );
+        _listIdPriorites = Collections.emptyList( );
     }
 
     /**
@@ -144,11 +172,33 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the etats.
      *
-     * @param etats the new etats
+     * @param etats
+     *            the new etats
      */
     public void setEtats( List<EtatSignalement> etats )
     {
         _listEtats = etats;
+    }
+
+    /**
+     * Gets priorites.
+     *
+     * @return the priorite
+     */
+    public List<Integer> getPriorites( )
+    {
+        return _listIdPriorites;
+    }
+
+    /**
+     * Sets the priorites.
+     *
+     * @param priorites
+     *            the priorites
+     */
+    public void setPriorites( List<Integer> priorites )
+    {
+        _listIdPriorites = priorites;
     }
 
     /**
@@ -164,7 +214,8 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the list id secteur autorises.
      *
-     * @param listIdSecteurAutorises the new list id secteur autorises
+     * @param listIdSecteurAutorises
+     *            the new list id secteur autorises
      */
     public void setListIdSecteurAutorises( List<Integer> listIdSecteurAutorises )
     {
@@ -174,7 +225,8 @@ public class SignalementFilter implements Serializable
     /**
      * get Set the order to ascending or descending.
      *
-     * @param bOrderAsc            the order (true if ascending)
+     * @param bOrderAsc
+     *            the order (true if ascending)
      */
     public void setOrderAsc( boolean bOrderAsc )
     {
@@ -194,7 +246,8 @@ public class SignalementFilter implements Serializable
     /**
      * Set the column to order.
      *
-     * @param orders            the column name
+     * @param orders
+     *            the column name
      */
     public void setOrders( List<Order> orders )
     {
@@ -214,7 +267,8 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the id type signalement.
      *
-     * @param nIdTypeSignalement the new id type signalement
+     * @param nIdTypeSignalement
+     *            the new id type signalement
      */
     public void setIdTypeSignalement( int nIdTypeSignalement )
     {
@@ -234,7 +288,8 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the list id type signalements.
      *
-     * @param listIdTypeSignalements            the list of reporting type ids to set
+     * @param listIdTypeSignalements
+     *            the list of reporting type ids to set
      */
     public void setListIdTypeSignalements( List<Integer> listIdTypeSignalements )
     {
@@ -254,7 +309,8 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the id direction.
      *
-     * @param pIdDirection            the idDirection to set
+     * @param pIdDirection
+     *            the idDirection to set
      */
     public void setIdDirection( int pIdDirection )
     {
@@ -274,7 +330,8 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the adresse.
      *
-     * @param pAdresse            the address to set
+     * @param pAdresse
+     *            the address to set
      */
     public void setAdresse( String pAdresse )
     {
@@ -294,7 +351,8 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the mail.
      *
-     * @param pMail            the mail to set
+     * @param pMail
+     *            the mail to set
      */
     public void setMail( String pMail )
     {
@@ -314,7 +372,8 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the commentaire.
      *
-     * @param pCommentaire            the commentary to set
+     * @param pCommentaire
+     *            the commentary to set
      */
     public void setCommentaire( String pCommentaire )
     {
@@ -334,7 +393,8 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the commentaire agent terrain.
      *
-     * @param pCommentaireAgentTerrain the new commentaire agent terrain
+     * @param pCommentaireAgentTerrain
+     *            the new commentaire agent terrain
      */
     public void setCommentaireAgentTerrain( String pCommentaireAgentTerrain )
     {
@@ -354,11 +414,75 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the date begin.
      *
-     * @param pDateBegin            the DateBegin to set
+     * @param pDateBegin
+     *            the DateBegin to set
      */
     public void setDateBegin( String pDateBegin )
     {
         _strDateBegin = pDateBegin;
+    }
+
+    /**
+     * Gets the date done begin.
+     *
+     * @return the DateDoneBegin
+     */
+    public String getDateDoneBegin( )
+    {
+        return _strDateDoneBegin;
+    }
+
+    /**
+     * Sets the date done begin.
+     *
+     * @param pDateDoneBegin
+     *            the DateDoneBegin to set
+     */
+    public void setDateDoneBegin( String pDateDoneBegin )
+    {
+        _strDateDoneBegin = pDateDoneBegin;
+    }
+
+    /**
+     * Gets the date requalification begin.
+     *
+     * @return the DateRequalificationBegin
+     */
+    public String getDateRequalificationBegin( )
+    {
+        return _strDateRequalificationBegin;
+    }
+
+    /**
+     * Sets the date requalification begin.
+     *
+     * @param pDateRequalificationBegin
+     *            the DateDoneBegin to set
+     */
+    public void setDateRequalificationBegin( String pDateRequalificationBegin )
+    {
+        _strDateRequalificationBegin = pDateRequalificationBegin;
+    }
+
+    /**
+     * Gets the date programmation begin.
+     *
+     * @return the DateRequalificationBegin
+     */
+    public String getDateProgrammationBegin( )
+    {
+        return _strDateProgrammingBegin;
+    }
+
+    /**
+     * Sets the date programmation begin.
+     *
+     * @param pDateProgrammationBegin
+     *            the pDateProgrammationBegin to set
+     */
+    public void setDateProgrammationBegin( String pDateProgrammationBegin )
+    {
+        _strDateProgrammingBegin = pDateProgrammationBegin;
     }
 
     /**
@@ -374,11 +498,75 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the date end.
      *
-     * @param pDateEnd            the DateEnd to set
+     * @param pDateEnd
+     *            the DateEnd to set
      */
     public void setDateEnd( String pDateEnd )
     {
         _strDateEnd = pDateEnd;
+    }
+
+    /**
+     * Gets the date service done end.
+     *
+     * @return the DateDoneEnd
+     */
+    public String getDateDoneEnd( )
+    {
+        return _strDateDoneEnd;
+    }
+
+    /**
+     * Sets the date done end.
+     *
+     * @param pDateDoneEnd
+     *            the DateDoneEnd to set
+     */
+    public void setDateDoneEnd( String pDateDoneEnd )
+    {
+        _strDateDoneEnd = pDateDoneEnd;
+    }
+
+    /**
+     * Gets the date requalification end.
+     *
+     * @return the DateRequalificationEnd
+     */
+    public String getDateRequalificationEnd( )
+    {
+        return _strDateRequalificationEnd;
+    }
+
+    /**
+     * Sets the date requalification end.
+     *
+     * @param pDateRequalificationEnd
+     *            the pDateRequalificationEnd to set
+     */
+    public void setDateRequalificationEnd( String pDateRequalificationEnd )
+    {
+        _strDateRequalificationEnd = pDateRequalificationEnd;
+    }
+
+    /**
+     * Gets the date programmation end.
+     *
+     * @return the DateProgrammationEnd
+     */
+    public String getDateProgrammationEnd( )
+    {
+        return _strDateProgrammingEnd;
+    }
+
+    /**
+     * Sets the date programmation end.
+     *
+     * @param pDateProgrammationEnd
+     *            the pDateProgrammationEnd to set
+     */
+    public void setDateProgrammationEnd( String pDateProgrammationEnd )
+    {
+        _strDateProgrammingEnd = pDateProgrammationEnd;
     }
 
     /**
@@ -404,7 +592,8 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the numero.
      *
-     * @param pNumero            the number to set
+     * @param pNumero
+     *            the number to set
      */
     public void setNumero( String pNumero )
     {
@@ -424,7 +613,8 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the id etat.
      *
-     * @param pIdEtat            the idEtat to set
+     * @param pIdEtat
+     *            the idEtat to set
      */
     public void setIdEtat( int pIdEtat )
     {
@@ -444,7 +634,8 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the id arrondissement.
      *
-     * @param nIdArrondissement the new id arrondissement
+     * @param nIdArrondissement
+     *            the new id arrondissement
      */
     public void setIdArrondissement( int nIdArrondissement )
     {
@@ -464,7 +655,8 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the list id arrondissements.
      *
-     * @param listIdArrondissements the new list id arrondissements
+     * @param listIdArrondissements
+     *            the new list id arrondissements
      */
     public void setListIdArrondissements( List<Integer> listIdArrondissements )
     {
@@ -484,7 +676,8 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the id sector.
      *
-     * @param idSector the new id sector
+     * @param idSector
+     *            the new id sector
      */
     public void setIdSector( int idSector )
     {
@@ -504,7 +697,8 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the list id categories.
      *
-     * @param listIdCategories the new list id categories
+     * @param listIdCategories
+     *            the new list id categories
      */
     public void setListIdCategories( List<Integer> listIdCategories )
     {
@@ -514,7 +708,8 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the id domaine.
      *
-     * @param nIdDomaine the new id domaine
+     * @param nIdDomaine
+     *            the new id domaine
      */
     public void setIdDomaine( int nIdDomaine )
     {
@@ -544,7 +739,8 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the list id quartier.
      *
-     * @param listIdQuartier the new list id quartier
+     * @param listIdQuartier
+     *            the new list id quartier
      */
     public void setListIdQuartier( List<Integer> listIdQuartier )
     {
@@ -564,11 +760,42 @@ public class SignalementFilter implements Serializable
     /**
      * Sets the list id unit.
      *
-     * @param listIdUnit the new list id unit
+     * @param listIdUnit
+     *            the new list id unit
      */
     public void setListIdUnit( List<Integer> listIdUnit )
     {
         _listIdUnit = listIdUnit;
     }
 
+    /**
+     * Gets the mail dernier intervenant.
+     *
+     * @return mail dernier intervenant
+     */
+    public String getMailDernierIntervenant( )
+    {
+        return _strMailDernierIntervenant;
+    }
+
+    /**
+     * Set mail dernier intervenant.
+     *
+     * @param mailDernierIntervenant
+     *            the new mail dernier intervenant
+     */
+    public void setMailDernierIntervenant( String mailDernierIntervenant )
+    {
+        _strMailDernierIntervenant = mailDernierIntervenant;
+    }
+
+    public int getIdFdt( )
+    {
+        return _nIdFdt;
+    }
+
+    public void setIdFdt( int nIdFdt )
+    {
+        _nIdFdt = nIdFdt;
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.dansmarue.business.entities;
 
-
 /**
  * The Class SignalementDossier.
  */
@@ -44,7 +43,7 @@ public class SignalementDossier
     private Integer _nId;
 
     /** The str type. */
-    private String  _strType;
+    private String _strType;
 
     /**
      * Gets the id.
@@ -69,7 +68,8 @@ public class SignalementDossier
     /**
      * Sets the id.
      *
-     * @param id the new id
+     * @param id
+     *            the new id
      */
     public void setId( Integer id )
     {
@@ -79,7 +79,8 @@ public class SignalementDossier
     /**
      * Sets the type.
      *
-     * @param type the new type
+     * @param type
+     *            the new type
      */
     public void setType( String type )
     {

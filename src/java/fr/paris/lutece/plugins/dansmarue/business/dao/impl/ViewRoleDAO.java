@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,22 +50,23 @@ public class ViewRoleDAO implements IViewRoleDAO
 {
 
     /** The Constant SQL_QUERY_CHECK_USER_RESTRICTIONS. */
-    private static final String SQL_QUERY_CHECK_USER_RESTRICTIONS                    = " SELECT COUNT( carr.resource_id ) FROM core_admin_user cau INNER JOIN core_user_role cur ON cau.id_user = cur.id_user INNER JOIN core_admin_role_resource carr ON cur.role_key = carr.role_key WHERE cau.id_user = ? AND carr.resource_type IN ( '"
+    private static final String SQL_QUERY_CHECK_USER_RESTRICTIONS = " SELECT COUNT( carr.resource_id ) FROM core_admin_user cau INNER JOIN core_user_role cur ON cau.id_user = cur.id_user INNER JOIN core_admin_role_resource carr ON cur.role_key = carr.role_key WHERE cau.id_user = ? AND carr.resource_type IN ( '"
             + Arrondissement.RESOURCE_TYPE + "','" + TypeSignalement.RESOURCE_TYPE + "') AND carr.resource_id != '" + RBAC.WILDCARD_RESOURCES_ID + "' ";
 
     /** The Constant SQL_QUERY_FIND_ARRONDISSEMENT_RESTRICTION_LIST. */
-    private static final String SQL_QUERY_FIND_ARRONDISSEMENT_RESTRICTION_LIST       = " SELECT DISTINCT carr.resource_id FROM core_admin_user cau INNER JOIN core_user_role cur ON cau.id_user = cur.id_user INNER JOIN core_admin_role_resource carr ON cur.role_key = carr.role_key WHERE cau.id_user = ? AND carr.resource_type = '"
+    private static final String SQL_QUERY_FIND_ARRONDISSEMENT_RESTRICTION_LIST = " SELECT DISTINCT carr.resource_id FROM core_admin_user cau INNER JOIN core_user_role cur ON cau.id_user = cur.id_user INNER JOIN core_admin_role_resource carr ON cur.role_key = carr.role_key WHERE cau.id_user = ? AND carr.resource_type = '"
             + Arrondissement.RESOURCE_TYPE + "' AND carr.resource_id != '" + RBAC.WILDCARD_RESOURCES_ID + "' ";
 
     /** The Constant SQL_QUERY_FIND_TYPE_SIGNALEMENT_RESTRICTION_LIST. */
-    private static final String SQL_QUERY_FIND_TYPE_SIGNALEMENT_RESTRICTION_LIST     = " SELECT DISTINCT carr.resource_id FROM core_admin_user cau INNER JOIN core_user_role cur ON cau.id_user = cur.id_user INNER JOIN core_admin_role_resource carr ON cur.role_key = carr.role_key WHERE cau.id_user = ? AND carr.resource_type = '"
+    private static final String SQL_QUERY_FIND_TYPE_SIGNALEMENT_RESTRICTION_LIST = " SELECT DISTINCT carr.resource_id FROM core_admin_user cau INNER JOIN core_user_role cur ON cau.id_user = cur.id_user INNER JOIN core_admin_role_resource carr ON cur.role_key = carr.role_key WHERE cau.id_user = ? AND carr.resource_type = '"
             + TypeSignalement.RESOURCE_TYPE + "' AND carr.resource_id != '" + RBAC.WILDCARD_RESOURCES_ID + "' ";
 
     /** The Constant SQL_QUERY_FIND_CATEGORY_SIGNALEMENT_RESTRICTION_LIST. */
     private static final String SQL_QUERY_FIND_CATEGORY_SIGNALEMENT_RESTRICTION_LIST = "SELECT DISTINCT vstsawpl.id_parent AS id_category FROM core_user_role cur"
             + " INNER JOIN core_admin_role_resource carr ON carr.role_key = cur.role_key"
             + " INNER JOIN v_signalement_type_signalement_with_parents_links vstsawpl ON vstsawpl.id_type_signalement = CAST(carr.resource_id AS BIGINT)"
-            + " WHERE cur.id_user = ? AND carr.resource_type = '" + TypeSignalement.RESOURCE_TYPE + "'" + " AND carr.resource_id != '" + RBAC.WILDCARD_RESOURCES_ID + "'" + " AND vstsawpl.actif = 1";
+            + " WHERE cur.id_user = ? AND carr.resource_type = '" + TypeSignalement.RESOURCE_TYPE + "'" + " AND carr.resource_id != '"
+            + RBAC.WILDCARD_RESOURCES_ID + "'" + " AND vstsawpl.actif = 1";
 
     /**
      * {@inheritDoc}

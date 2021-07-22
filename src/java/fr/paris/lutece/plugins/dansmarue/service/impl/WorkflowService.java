@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -65,18 +65,25 @@ public class WorkflowService extends AbstractCacheableService implements IWorkfl
     private static final String SIGNALEMENT_WORKFLOW_KEY = "workflow_signalement";
 
     /** The Constant SERVICE_NAME. */
-    private static final String SERVICE_NAME             = "Signalement workflow service";
+    private static final String SERVICE_NAME = "Signalement workflow service";
 
     /** The workflow DAO. */
     // DAO
     @Inject
-    private IWorkflowDAO        _workflowDAO;
+    private IWorkflowDAO _workflowDAO;
 
     /** The task service. */
     @Inject
-    private ITaskService        _taskService;
+    private ITaskService _taskService;
 
-    /* (non-Javadoc)
+    /**
+     * Gets the name.
+     *
+     * @return the name
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.portal.service.util.LuteceService#getName()
      */
     @Override
@@ -94,7 +101,7 @@ public class WorkflowService extends AbstractCacheableService implements IWorkfl
     @Override
     public Integer getSignalementWorkflowId( )
     {
-        Integer nIdWorkflow = ( Integer ) getFromCache( SIGNALEMENT_WORKFLOW_KEY );
+        Integer nIdWorkflow = (Integer) getFromCache( SIGNALEMENT_WORKFLOW_KEY );
         if ( nIdWorkflow == null )
         {
             nIdWorkflow = _workflowDAO.selectWorkflowId( null );
@@ -212,14 +219,24 @@ public class WorkflowService extends AbstractCacheableService implements IWorkfl
         return _workflowDAO.selectMessageServiceFaitPresta( listTaskPrestaServiceFaitToReturn );
     }
 
-    /* (non-Javadoc)
+    /**
+     * Gets the messages service fait.
+     *
+     * @param tasks
+     *            the tasks
+     * @return the messages service fait
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.dansmarue.service.IWorkflowService#getMessagesServiceFait(java.util.List)
      */
     @Override
     public List<NotificationSignalementUserMultiContents> getMessagesServiceFait( List<ITask> tasks )
     {
 
-        List<ITask> filterList = tasks.stream( ).filter( task -> SignalementConstants.TASK_KEY_NOTIFICATION_USER_MULTICONTENTS.equals( task.getTaskType( ).getKey( ) ) )
+        List<ITask> filterList = tasks.stream( )
+                .filter( task -> SignalementConstants.TASK_KEY_NOTIFICATION_USER_MULTICONTENTS.equals( task.getTaskType( ).getKey( ) ) )
                 .collect( Collectors.toList( ) );
 
         return _workflowDAO.getMessageByIdMessage( filterList );
@@ -243,11 +260,21 @@ public class WorkflowService extends AbstractCacheableService implements IWorkfl
         return _workflowDAO.findIdTaskByTaskKey( strTakKeyName );
     }
 
-    /* (non-Javadoc)
+    /**
+     * Find action by name.
+     *
+     * @param strActionName
+     *            the str action name
+     * @return the list
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.dansmarue.service.IWorkflowService#findActionByName(java.lang.String)
      */
     @Override
-    public List<Action> findActionByName (String strActionName) {
+    public List<Action> findActionByName( String strActionName )
+    {
         return _workflowDAO.findActionByName( strActionName );
     }
 

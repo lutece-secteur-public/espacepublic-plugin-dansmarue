@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,6 @@ import fr.paris.lutece.plugins.dansmarue.service.IPhotoService;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.image.ImageResourceProvider;
 
-
 /**
  * This class provide services for ImageServiceTypeObjet.
  */
@@ -51,12 +50,13 @@ public class ImageThumbnailService implements ImageResourceProvider
 
     /** The photo service. */
     @Autowired
-    private IPhotoService       _photoService;
+    private IPhotoService _photoService;
 
     /**
      * Get the resource for image.
      *
-     * @param nIdPhoto            The identifier of nIdPhoto object
+     * @param nIdPhoto
+     *            The identifier of nIdPhoto object
      * @return The ImageResource
      */
     @Override

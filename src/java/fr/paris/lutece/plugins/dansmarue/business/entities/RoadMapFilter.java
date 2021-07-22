@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,28 +50,28 @@ public class RoadMapFilter implements Serializable
     private static final long serialVersionUID = 1L;
 
     /** The b afficher signalements du jour. */
-    private Boolean           _bAfficherSignalementsDuJour;
+    private Boolean _bAfficherSignalementsDuJour;
 
     /** The b order asc. */
-    private boolean           _bOrderAsc;
+    private boolean _bOrderAsc;
 
     /** The heure debut service. */
-    private Date              _heureDebutService;
+    private Date _heureDebutService;
 
     /** The n id sector. */
-    private Integer           _nIdSector;
+    private Integer _nIdSector;
 
     /** The n id service. */
-    private Integer           _nIdService;
+    private Integer _nIdService;
 
     /** The order. */
-    private Order             _order;
+    private Order _order;
 
     /** The str ddate. */
-    private String            _strDdate;
+    private String _strDdate;
 
     /** The list id sector. */
-    private List<Integer>     _listIdSector;
+    private List<Integer> _listIdSector;
 
     /**
      * Gets the afficher signalements du jour.
@@ -189,7 +189,8 @@ public class RoadMapFilter implements Serializable
     /**
      * Sets the afficher signalements du jour.
      *
-     * @param afficherSignalementsDuJour the new afficher signalements du jour
+     * @param afficherSignalementsDuJour
+     *            the new afficher signalements du jour
      */
     public void setAfficherSignalementsDuJour( Boolean afficherSignalementsDuJour )
     {
@@ -210,7 +211,8 @@ public class RoadMapFilter implements Serializable
     /**
      * Sets the heure debut service.
      *
-     * @param heureDebutService            the heureDebutService to set
+     * @param heureDebutService
+     *            the heureDebutService to set
      */
     public void setHeureDebutService( Date heureDebutService )
     {

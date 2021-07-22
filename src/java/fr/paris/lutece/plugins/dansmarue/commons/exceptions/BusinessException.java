@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,6 @@ import java.util.Map;
 
 import fr.paris.lutece.portal.service.i18n.I18nService;
 
-
 /**
  * The Class BusinessException.
  */
@@ -49,16 +48,18 @@ public class BusinessException extends FunctionnalException
     private static final long serialVersionUID = -615983331551016543L;
 
     /** The str code. */
-    private String            _strCode;
+    private String _strCode;
 
     /** The str arguments. */
-    private String[]          _strArguments;
+    private String [ ] _strArguments;
 
     /**
      * Exception constructor.
      *
-     * @param bean            the bean object
-     * @param code            Exception code
+     * @param bean
+     *            the bean object
+     * @param code
+     *            Exception code
      */
     public BusinessException( Object bean, String code )
     {
@@ -69,9 +70,12 @@ public class BusinessException extends FunctionnalException
     /**
      * Exception constructor.
      *
-     * @param bean            the bean object
-     * @param additionalParameters            Additional Exception Parameters
-     * @param code            Exception code
+     * @param bean
+     *            the bean object
+     * @param additionalParameters
+     *            Additional Exception Parameters
+     * @param code
+     *            Exception code
      */
     public BusinessException( Object bean, Map<String, Object> additionalParameters, String code )
     {
@@ -82,10 +86,14 @@ public class BusinessException extends FunctionnalException
     /**
      * Exception constructor.
      *
-     * @param bean            the bean object
-     * @param additionalParameters            Additional Exception Parameters
-     * @param code            Exception code
-     * @param arguments            Exception arguments
+     * @param bean
+     *            the bean object
+     * @param additionalParameters
+     *            Additional Exception Parameters
+     * @param code
+     *            Exception code
+     * @param arguments
+     *            Exception arguments
      */
     public BusinessException( Object bean, Map<String, Object> additionalParameters, String code, String... arguments )
     {
@@ -96,9 +104,12 @@ public class BusinessException extends FunctionnalException
     /**
      * Exception constructor.
      *
-     * @param bean            the bean object
-     * @param code            Exception code
-     * @param arguments            Exception arguments
+     * @param bean
+     *            the bean object
+     * @param code
+     *            Exception code
+     * @param arguments
+     *            Exception arguments
      */
     public BusinessException( Object bean, String code, String... arguments )
     {
@@ -120,7 +131,8 @@ public class BusinessException extends FunctionnalException
     /**
      * Initialize the exception code.
      *
-     * @param code            Exception code
+     * @param code
+     *            Exception code
      */
     public void setCode( String code )
     {
@@ -132,7 +144,7 @@ public class BusinessException extends FunctionnalException
      *
      * @return exception arguments
      */
-    public String[] getArguments( )
+    public String [ ] getArguments( )
     {
         return _strArguments;
     }
@@ -140,9 +152,10 @@ public class BusinessException extends FunctionnalException
     /**
      * Initialize the exception arguments.
      *
-     * @param arguments            exception arguments
+     * @param arguments
+     *            exception arguments
      */
-    public void setArguments( String[] arguments )
+    public void setArguments( String [ ] arguments )
     {
         _strArguments = arguments;
     }

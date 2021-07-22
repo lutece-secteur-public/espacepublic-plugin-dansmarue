@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,8 @@ public interface IDashboardPeriodService
     /**
      * Inserts into the database a new dashboard period.
      *
-     * @param dashboardPeriod            the dashboard period to insert
+     * @param dashboardPeriod
+     *            the dashboard period to insert
      * @return the dashboard period id
      */
     public Long insert( DashboardPeriod dashboardPeriod );
@@ -54,14 +55,16 @@ public interface IDashboardPeriodService
     /**
      * Removes from the data base a dashboard period.
      *
-     * @param lId            the id of the dashboard period to remove
+     * @param lId
+     *            the id of the dashboard period to remove
      */
     public void remove( long lId );
 
     /**
      * Loads a dashboard period from its id.
      *
-     * @param lId            the id of the dashboard period to load
+     * @param lId
+     *            the id of the dashboard period to load
      * @return The dashboard period matching the id null otherwise
      */
     public DashboardPeriod load( long lId );
@@ -69,7 +72,8 @@ public interface IDashboardPeriodService
     /**
      * Updates a SignalementDashboardPeriod.
      *
-     * @param dashboardPeriod            the dashboard period element to update
+     * @param dashboardPeriod
+     *            the dashboard period element to update
      */
     void update( DashboardPeriod dashboardPeriod );
 

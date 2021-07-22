@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,29 +37,26 @@ import java.io.Serializable;
 
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 
-
 /**
  * The Class Arrondissement.
  */
 public class Arrondissement implements Comparable<Arrondissement>, RBACResource, Serializable
 {
 
-    /**
-     *
-     */
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 6397234356269742444L;
 
     /** The Constant RESOURCE_TYPE. */
     public static final String RESOURCE_TYPE = "SIGNALEMENT_ARRONDISSEMENT";
 
     /** The n id. */
-    private Long               _nId;
+    private Long _nId;
 
     /** The str numero. */
-    private String             _strNumero;
+    private String _strNumero;
 
     /** The b actif. */
-    private boolean            _bActif;
+    private boolean _bActif;
 
     /**
      * Gets the id.
@@ -74,7 +71,8 @@ public class Arrondissement implements Comparable<Arrondissement>, RBACResource,
     /**
      * Sets the id.
      *
-     * @param id the new id
+     * @param id
+     *            the new id
      */
     public void setId( Long id )
     {
@@ -94,7 +92,8 @@ public class Arrondissement implements Comparable<Arrondissement>, RBACResource,
     /**
      * Sets the numero.
      *
-     * @param numero the new numero
+     * @param numero
+     *            the new numero
      */
     public void setNumero( String numero )
     {
@@ -114,7 +113,8 @@ public class Arrondissement implements Comparable<Arrondissement>, RBACResource,
     /**
      * Sets the actif.
      *
-     * @param actif the new actif
+     * @param actif
+     *            the new actif
      */
     public void setActif( boolean actif )
     {

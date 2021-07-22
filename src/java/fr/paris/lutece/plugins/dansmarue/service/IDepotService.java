@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.plugins.dansmarue.commons.exceptions.FunctionnalException;
 
-
 /**
  * IDepotService.
  */
@@ -47,16 +46,20 @@ public interface IDepotService
     /**
      * Do create a depot.
      *
-     * @param request            the HTTP request
-     * @param resourceId            the original resource id
+     * @param request
+     *            the HTTP request
+     * @param resourceId
+     *            the original resource id
      */
     void doCreate( HttpServletRequest request, int resourceId );
 
     /**
      * Do validate a depot.
      *
-     * @param request            the HTTP request
-     * @throws FunctionnalException the functionnal exception
+     * @param request
+     *            the HTTP request
+     * @throws FunctionnalException
+     *             the functionnal exception
      */
     void doValidate( HttpServletRequest request ) throws FunctionnalException;
 }

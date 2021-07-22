@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,21 +53,24 @@ public interface IObservationRejetService
     /**
      * Delete a reject observation.
      *
-     * @param nIdObservationRejet            the reject observation id
+     * @param nIdObservationRejet
+     *            the reject observation id
      */
     void doDeleteObservationRejet( int nIdObservationRejet );
 
     /**
      * Save a new reject observation.
      *
-     * @param observationRejet            the reject observation
+     * @param observationRejet
+     *            the reject observation
      */
     void doSaveObservationRejet( ObservationRejet observationRejet );
 
     /**
      * Load a reject observation.
      *
-     * @param nIdObservationRejet            the observationRejet id
+     * @param nIdObservationRejet
+     *            the observationRejet id
      * @return a reject observation
      */
     ObservationRejet getById( Integer nIdObservationRejet );
@@ -82,35 +85,40 @@ public interface IObservationRejetService
     /**
      * Decreases the order of the next reject.
      *
-     * @param observationRejet            the observationRejet object
+     * @param observationRejet
+     *            the observationRejet object
      */
     void increaseOrdreOfRejet( ObservationRejet observationRejet );
 
     /**
      * Increases the order of the previous reject.
      *
-     * @param observationRejet            the observationRejet object
+     * @param observationRejet
+     *            the observationRejet object
      */
     void decreaseOrdreOfRejet( ObservationRejet observationRejet );
 
     /**
      * Increases all the next orders.
      *
-     * @param nIdObservationRejet            the reject observation id
+     * @param nIdObservationRejet
+     *            the reject observation id
      */
     void increaseOrdreOfAllNext( int nIdObservationRejet );
 
     /**
      * Decreases all the next orders.
      *
-     * @param nIdObservationRejet            the reject observation id
+     * @param nIdObservationRejet
+     *            the reject observation id
      */
     void decreaseOrdreOfAllNext( int nIdObservationRejet );
 
     /**
      * Counts the number of time the reject observation has been used.
      *
-     * @param nIdObservationRejet            the id of reject observation to get the use count
+     * @param nIdObservationRejet
+     *            the id of reject observation to get the use count
      * @return the number of reject observation uses
      */
     int countByIdObservationRejet( int nIdObservationRejet );
@@ -125,7 +133,8 @@ public interface IObservationRejetService
     /**
      * Updates a reject observation order, by its id.
      *
-     * @param observationRejet            the observationRejet object
+     * @param observationRejet
+     *            the observationRejet object
      */
     void updateObservationRejetOrdre( ObservationRejet observationRejet );
 }

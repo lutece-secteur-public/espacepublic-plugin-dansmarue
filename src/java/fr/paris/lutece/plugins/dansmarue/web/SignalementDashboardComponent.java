@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,7 +59,6 @@ import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
-
 /**
  * Calendar Dashboard Component This component displays directories.
  */
@@ -68,50 +67,52 @@ public class SignalementDashboardComponent extends DashboardComponent
 
     /** The Constant MARK_URL. */
     // MARKS
-    private static final String MARK_URL                      = "url";
+    private static final String MARK_URL = "url";
 
     /** The Constant MARK_ICON. */
-    private static final String MARK_ICON                     = "icon";
+    private static final String MARK_ICON = "icon";
 
     /** The Constant MARK_NAME. */
-    private static final String MARK_NAME                     = "name";
+    private static final String MARK_NAME = "name";
 
     /** The Constant MARK_LAST_NAME. */
-    private static final String MARK_LAST_NAME                = "lastname";
+    private static final String MARK_LAST_NAME = "lastname";
 
     /** The Constant MARK_EMAIL. */
-    private static final String MARK_EMAIL                    = "email";
+    private static final String MARK_EMAIL = "email";
 
     /** The Constant MARK_ENTITY. */
-    private static final String MARK_ENTITY                   = "entity";
+    private static final String MARK_ENTITY = "entity";
 
     /** The Constant MARK_PROFILE. */
-    private static final String MARK_PROFILE                  = "profile";
+    private static final String MARK_PROFILE = "profile";
 
     /** The Constant PARAMETER_PLUGIN_NAME. */
     // PARAMETERS
-    private static final String PARAMETER_PLUGIN_NAME         = "plugin_name";
+    private static final String PARAMETER_PLUGIN_NAME = "plugin_name";
 
     /** The Constant TEMPLATE_DASHBOARD_ZONE_1. */
     // TEMPLATES
-    private static final String TEMPLATE_DASHBOARD_ZONE_1     = "/admin/plugins/signalement/signalement_dashboard_zone_1.html";
+    private static final String TEMPLATE_DASHBOARD_ZONE_1 = "/admin/plugins/signalement/signalement_dashboard_zone_1.html";
 
     /** The Constant TEMPLATE_DASHBOARD_OTHER_ZONE. */
     private static final String TEMPLATE_DASHBOARD_OTHER_ZONE = "/admin/plugins/signalement/signalement_dashboard_other_zone.html";
 
     /** The Constant ZONE_1. */
     // OTHER CONSTANTS
-    private static final int    ZONE_1                        = 1;
+    private static final int ZONE_1 = 1;
 
     /** The unit service. */
     // SERVICES
-    private IUnitService        _unitService                  = SpringContextService.getBean( "unittree.unitService" );
+    private IUnitService _unitService = SpringContextService.getBean( "unittree.unitService" );
 
     /**
      * The HTML code of the component.
      *
-     * @param user            The Admin User
-     * @param request            HttpServletRequest
+     * @param user
+     *            The Admin User
+     * @param request
+     *            HttpServletRequest
      * @return The dashboard component
      */
     @Override

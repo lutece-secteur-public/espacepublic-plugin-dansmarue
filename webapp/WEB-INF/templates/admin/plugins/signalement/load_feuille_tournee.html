@@ -1,0 +1,30 @@
+<#include "macro/commons_signalement.html" />
+<script src="js/jquery.multi-select.min.js"></script>
+<script src="js/jquery.quicksearch.js"></script>
+<link rel="stylesheet" href="css/multi-select.css" type="text/css"/>
+<link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
+<#include "macro/map_feuille_de_tournee_consult.html" />
+<#include "macro/table_feuille_de_tournee_consult.html" />
+<#include "macro/modal_export_pdf.html" />
+
+<@box color='primary'>
+	<div class="box-header">
+		<h3 class="box-title">#i18n{dansmarue.tournee.consult.titre}</h3>
+	</div>
+</@box>
+
+<div class="row">
+	<div class="col-xs-2 col-sm-12 col-md-12 col-lg-12">
+		<a class="btn btn-paris btn-blue" href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp">#i18n{dansmarue.button.return} </a>
+		<div class="pull-right">
+			<@button id="export" class="btn btn-paris btn-red" title='#i18n{dansmarue.tournee.exportpdf}' params='onclick="addFeuilleDeTourneeId(${feuille_de_tournee.id}); carteToBase64();" data-toggle="modal" data-target="#exportFDTModal"' />
+		</div>
+	</div>
+</div>
+<hr>
+<fieldset id="map-fdt">
+	<@map_feuille_de_tournee_consult/>
+</fieldset>
+<br><br>
+<@table_feuille_de_tournee_consult/>
+<@modal_export_pdf/>

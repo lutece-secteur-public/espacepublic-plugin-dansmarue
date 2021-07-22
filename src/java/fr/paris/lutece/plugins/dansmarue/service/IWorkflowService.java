@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,15 +57,18 @@ public interface IWorkflowService
     /**
      * Update DansMaRue workflow id.
      *
-     * @param nIdWorkflow            DansMaRue workflow id
+     * @param nIdWorkflow
+     *            DansMaRue workflow id
      */
     void setSignalementWorkflowId( Integer nIdWorkflow );
 
     /**
      * Returns the action id according to the start and finish states.
      *
-     * @param idStateBefore            the state before processing
-     * @param idStateAfter            the state after processing
+     * @param idStateBefore
+     *            the state before processing
+     * @param idStateAfter
+     *            the state after processing
      * @return The id of the action -1 if not found
      */
     int selectIdActionByStates( int idStateBefore, int idStateAfter );
@@ -73,7 +76,8 @@ public interface IWorkflowService
     /**
      * Returns the notification message linked to a workflow history.
      *
-     * @param idHistory            the workflow history id
+     * @param idHistory
+     *            the workflow history id
      * @return the notification message
      */
     String selectMessageNotification( Integer idHistory );
@@ -81,7 +85,8 @@ public interface IWorkflowService
     /**
      * Returns the user access code from the id of the report.
      *
-     * @param idResource            the workflow resource id
+     * @param idResource
+     *            the workflow resource id
      * @return the user access code
      */
     String selectUserServiceFait( Integer idResource );
@@ -89,7 +94,8 @@ public interface IWorkflowService
     /**
      * Returns the notification multicontent message linked to a workflow history.
      *
-     * @param idHistory            the workflow history id
+     * @param idHistory
+     *            the workflow history id
      * @return the notification message
      */
     String selectMultiContentsMessageNotification( Integer idHistory );
@@ -97,9 +103,12 @@ public interface IWorkflowService
     /**
      * Returns a list of workflow resource history.
      *
-     * @param nIdResource            the workflow resource id
-     * @param strResourceType            the workflow resource type
-     * @param nIdWorkflow            the workflow history id
+     * @param nIdResource
+     *            the workflow resource id
+     * @param strResourceType
+     *            the workflow resource type
+     * @param nIdWorkflow
+     *            the workflow history id
      * @return a list of workflow resource history
      */
     List<ResourceHistory> getAllHistoryByResource( int nIdResource, String strResourceType, int nIdWorkflow );
@@ -107,9 +116,12 @@ public interface IWorkflowService
     /**
      * Returns the last workflow history resource.
      *
-     * @param nIdResource            the workflow resource id
-     * @param strResourceType            the workflow resource type
-     * @param nIdWorkflow            the workflow history id
+     * @param nIdResource
+     *            the workflow resource id
+     * @param strResourceType
+     *            the workflow resource type
+     * @param nIdWorkflow
+     *            the workflow history id
      * @return a workflow resource history
      */
     ResourceHistory getLastHistoryResource( int nIdResource, String strResourceType, int nIdWorkflow );
@@ -117,7 +129,8 @@ public interface IWorkflowService
     /**
      * Returns the notification messages associated with a task.
      *
-     * @param listTaskPrestaServiceFait            a list of service done tasks
+     * @param listTaskPrestaServiceFait
+     *            a list of service done tasks
      * @return a map of tasks id and messages associated with the task
      */
     Map<Integer, List<NotificationSignalementUserMultiContents>> selectMessageServiceFaitPresta( String listTaskPrestaServiceFait );
@@ -125,7 +138,8 @@ public interface IWorkflowService
     /**
      * Returns List Message Service Fait.
      *
-     * @param tasks            a list of task linked to message service fait
+     * @param tasks
+     *            a list of task linked to message service fait
      * @return the messages service fait
      */
     List<NotificationSignalementUserMultiContents> getMessagesServiceFait( List<ITask> tasks );
@@ -157,5 +171,5 @@ public interface IWorkflowService
      *            action name
      * @return list action
      */
-    List<Action> findActionByName (String strActionName);
+    List<Action> findActionByName( String strActionName );
 }

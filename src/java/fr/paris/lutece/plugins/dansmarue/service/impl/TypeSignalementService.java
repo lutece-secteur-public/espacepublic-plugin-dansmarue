@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -67,20 +67,20 @@ public class TypeSignalementService implements ITypeSignalementService
 
     /** The Constant MESSAGE_ERROR_TYPE_SIGNALEMENT_MUST_BE_UNIQUE. */
     // MESSAGES
-    private static final String      MESSAGE_ERROR_TYPE_SIGNALEMENT_MUST_BE_UNIQUE     = "dansmarue.message.errortypesignalement.alreadyexists";
+    private static final String MESSAGE_ERROR_TYPE_SIGNALEMENT_MUST_BE_UNIQUE = "dansmarue.message.errortypesignalement.alreadyexists";
 
     /** The Constant MESSAGE_ERROR_TYPE_NON_ACTIF_RATTACHE_A_DIRECTION. */
-    private static final String      MESSAGE_ERROR_TYPE_NON_ACTIF_RATTACHE_A_DIRECTION = "dansmarue.message.errortypesignalement.actifwithnounit";
+    private static final String MESSAGE_ERROR_TYPE_NON_ACTIF_RATTACHE_A_DIRECTION = "dansmarue.message.errortypesignalement.actifwithnounit";
 
     /** The Constant MESSAGE_ERROR_TYPE_HORS_DMR_NON_FINAL. */
-    private static final String      MESSAGE_ERROR_TYPE_HORS_DMR_NON_FINAL             = "dansmarue.message.errortypesignalement.horsDMR.notfinal";
+    private static final String MESSAGE_ERROR_TYPE_HORS_DMR_NON_FINAL = "dansmarue.message.errortypesignalement.horsDMR.notfinal";
 
     /** The Constant MESSAGE_ERROR_TYPE_HORS_DMR_MISSING_FIELD. */
-    private static final String      MESSAGE_ERROR_TYPE_HORS_DMR_MISSING_FIELD         = "dansmarue.message.errortypesignalement.horsDMR.missingfield";
+    private static final String MESSAGE_ERROR_TYPE_HORS_DMR_MISSING_FIELD = "dansmarue.message.errortypesignalement.horsDMR.missingfield";
 
     /** The typesignalement DAO. */
     @Inject
-    private ITypeSignalementDAO      _typesignalementDAO;
+    private ITypeSignalementDAO _typesignalementDAO;
 
     /** The message typologie service. */
     @Inject
@@ -482,7 +482,7 @@ public class TypeSignalementService implements ITypeSignalementService
             {
                 BeanUtils.copyProperties( dest, typeSignalement );
             }
-            catch ( IllegalAccessException | InvocationTargetException e )
+            catch( IllegalAccessException | InvocationTargetException e )
             {
                 AppLogService.error( e );
             }
@@ -549,15 +549,15 @@ public class TypeSignalementService implements ITypeSignalementService
     /**
      * Gets the list parent from list enfant.
      *
-     * @param listTypeSignalement the list type signalement
+     * @param listTypeSignalement
+     *            the list type signalement
      * @return the list parent from list enfant
      */
     private List<TypeSignalementDTO> getListParentFromListEnfant( List<TypeSignalementDTO> listTypeSignalement )
     {
         // Pour chaque type, récupération de l'id parent
         LinkedHashSet<Integer> idsParent = new LinkedHashSet<>( );
-        listTypeSignalement.forEach( (TypeSignalementDTO type) ->
-        {
+        listTypeSignalement.forEach( ( TypeSignalementDTO type ) -> {
             if ( type.getIdTypeSignalementParent( ) != 0 )
             {
                 idsParent.add( type.getIdTypeSignalementParent( ) );
@@ -591,7 +591,7 @@ public class TypeSignalementService implements ITypeSignalementService
             {
                 BeanUtils.copyProperties( dest, typeSignalement );
             }
-            catch ( IllegalAccessException | InvocationTargetException e )
+            catch( IllegalAccessException | InvocationTargetException e )
             {
                 AppLogService.error( e );
             }
@@ -759,8 +759,7 @@ public class TypeSignalementService implements ITypeSignalementService
     {
         List<TypeSignalement> listTypeSignalementWithMessage = new ArrayList<>( );
 
-        _typesignalementDAO.getListTypeSignalementLastLevel( ).forEach( (TypeSignalement typeSignalement) ->
-        {
+        _typesignalementDAO.getListTypeSignalementLastLevel( ).forEach( ( TypeSignalement typeSignalement ) -> {
             if ( typeSignalement.getNbMessages( ) > 0 )
             {
                 typeSignalement.setActif( _messageTypologieService.isMessageActifForTypeSignalement( typeSignalement.getId( ) ) );
@@ -779,8 +778,7 @@ public class TypeSignalementService implements ITypeSignalementService
     {
         List<TypeSignalement> listTypeSignalementWithMessage = new ArrayList<>( );
 
-        _typesignalementDAO.getListTypeSignalementLastLevel( ).forEach( ( TypeSignalement typeSignalement) ->
-        {
+        _typesignalementDAO.getListTypeSignalementLastLevel( ).forEach( ( TypeSignalement typeSignalement ) -> {
             if ( typeSignalement.getNbMessages( ) == 0 )
             {
                 listTypeSignalementWithMessage.add( typeSignalement );
@@ -826,7 +824,16 @@ public class TypeSignalementService implements ITypeSignalementService
         return _typesignalementDAO.getAllTypeSignalementDTOBySource( idSource );
     }
 
-    /* (non-Javadoc)
+    /**
+     * Gets the all type lastlevel not in source.
+     *
+     * @param idSource
+     *            the id source
+     * @return the all type lastlevel not in source
+     */
+    /*
+     * (non-Javadoc)
+     * 
      * @see fr.paris.lutece.plugins.dansmarue.service.ITypeSignalementService#getAllTypeLastlevelNotInSource(java.lang.Integer)
      */
     @Override
@@ -887,5 +894,14 @@ public class TypeSignalementService implements ITypeSignalementService
     public void updateSource( Source source )
     {
         _typesignalementDAO.updateSource( source );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isTypeSignalementSelectable( int idTypeSignalement )
+    {
+        return _typesignalementDAO.isTypeSignalementSelectable( idTypeSignalement );
     }
 }

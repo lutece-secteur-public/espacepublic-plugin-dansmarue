@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,10 +57,10 @@ public class ObservationRejetService implements IObservationRejetService
 
     /** The Constant MESSAGE_ERROR_OBSERVATION_REJET_NAME_MUST_BE_UNIQUE. */
     // MESSAGES
-    private static final String  MESSAGE_ERROR_OBSERVATION_REJET_NAME_MUST_BE_UNIQUE = "dansmarue.message.observationRejet.error.alreadyExists";
+    private static final String MESSAGE_ERROR_OBSERVATION_REJET_NAME_MUST_BE_UNIQUE = "dansmarue.message.observationRejet.error.alreadyExists";
 
     /** The Constant MESSAGE_ERROR_OBSERVATION_REJET_ORDER_INVALID. */
-    private static final String  MESSAGE_ERROR_OBSERVATION_REJET_ORDER_INVALID       = "dansmarue.message.observationRejet.error.order.invalid";
+    private static final String MESSAGE_ERROR_OBSERVATION_REJET_ORDER_INVALID = "dansmarue.message.observationRejet.error.order.invalid";
 
     /**
      * {@inheritDoc}
@@ -210,7 +210,8 @@ public class ObservationRejetService implements IObservationRejetService
     /**
      * Checks if the order is valid.
      *
-     * @param observationRejet the observation rejet
+     * @param observationRejet
+     *            the observation rejet
      * @return true if test pass false otherwise
      */
     private boolean validateRejetOrder( ObservationRejet observationRejet )

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -61,7 +61,8 @@ public class HistorySignalementDTO
     /**
      * Set the date.
      *
-     * @param date            the new date (string)
+     * @param date
+     *            the new date (string)
      */
     public void setDate( String date )
     {
@@ -81,7 +82,8 @@ public class HistorySignalementDTO
     /**
      * Set the state.
      *
-     * @param state            the new state (string)
+     * @param state
+     *            the new state (string)
      */
     public void setState( String state )
     {
@@ -101,7 +103,8 @@ public class HistorySignalementDTO
     /**
      * Set the message.
      *
-     * @param message            the new message (string)
+     * @param message
+     *            the new message (string)
      */
     public void setMessage( String message )
     {

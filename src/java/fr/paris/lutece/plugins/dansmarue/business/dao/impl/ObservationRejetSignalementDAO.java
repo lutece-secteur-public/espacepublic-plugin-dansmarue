@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,6 @@ import fr.paris.lutece.plugins.dansmarue.business.dao.IObservationRejetSignaleme
 import fr.paris.lutece.plugins.dansmarue.business.entities.ObservationRejet;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-
 /**
  * The Class ObservationRejetSignalementDAO.
  */
@@ -48,18 +47,19 @@ public class ObservationRejetSignalementDAO implements IObservationRejetSignalem
 {
 
     /** The Constant SQL_QUERY_NEW_PK. */
-    private static final String SQL_QUERY_NEW_PK                 = "SELECT nextval('seq_observation_rejet_signalement')";
+    private static final String SQL_QUERY_NEW_PK = "SELECT nextval('seq_observation_rejet_signalement')";
 
     /** The Constant SQL_QUERY_INSERT. */
-    private static final String SQL_QUERY_INSERT                 = "INSERT INTO signalement_observation_rejet_signalement (id_observation_rejet_signalement, fk_id_signalement, fk_id_observation_rejet, observation_rejet_comment) "
+    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_observation_rejet_signalement (id_observation_rejet_signalement, fk_id_signalement, fk_id_observation_rejet, observation_rejet_comment) "
             + "VALUES (?,?,?,?)";
 
     /** The Constant SQL_QUERY_DELETE. */
-    private static final String SQL_QUERY_DELETE                 = "DELETE FROM signalement_observation_rejet_signalement WHERE id_signalement=? AND id_observation_rejet=?";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_observation_rejet_signalement WHERE id_signalement=? AND id_observation_rejet=?";
 
     /** The Constant SQL_QUERY_FIND_BY_ID_SIGNALEMENT. */
     private static final String SQL_QUERY_FIND_BY_ID_SIGNALEMENT = "SELECT id_observation_rejet, libelle, actif, ordre, observation_rejet_comment FROM signalement_observation_rejet sor "
-            + " RIGHT JOIN signalement_observation_rejet_signalement sors " + " ON sors.fk_id_observation_rejet = sor.id_observation_rejet WHERE fk_id_signalement=?";
+            + " RIGHT JOIN signalement_observation_rejet_signalement sors "
+            + " ON sors.fk_id_observation_rejet = sor.id_observation_rejet WHERE fk_id_signalement=?";
 
     /**
      * Generates a new primary key.
@@ -86,7 +86,8 @@ public class ObservationRejetSignalementDAO implements IObservationRejetSignalem
     @Override
     public void insert( int idSignalement, Integer idRaisonRejet, String observationRejetComment )
     {
-        try(DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT )){
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT ) )
+        {
             Long idOservationRejetSignalement = newPrimaryKey( );
             int nIndex = 1;
 
@@ -151,7 +152,7 @@ public class ObservationRejetSignalementDAO implements IObservationRejetSignalem
         {
             nIndex = 1;
             ObservationRejet observationRejet = new ObservationRejet( );
-            Long observationRejetId = ( ( Long ) daoUtil.getObject( nIndex++ ) );
+            Long observationRejetId = ( (Long) daoUtil.getObject( nIndex++ ) );
             if ( null != observationRejetId )
             {
                 observationRejet.setId( observationRejetId.intValue( ) );

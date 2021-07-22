@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,34 +47,34 @@ public class SignalementDossierDTO
 {
 
     /** The date creation. */
-    private Date         _dateCreation;
+    private Date _dateCreation;
 
     /** The date debut service. */
-    private Date         _dateDebutService;
+    private Date _dateDebutService;
 
     /** The heure creation. */
-    private Date         _heureCreation;
+    private Date _heureCreation;
 
     /** The heure debut service. */
-    private Date         _heureDebutService;
+    private Date _heureDebutService;
 
     /** The n id. */
-    private Integer      _nId;
+    private Integer _nId;
 
     /** The list actions. */
     private List<Action> _listActions;
 
     /** The photos. */
-    private List<Photo>  _photos;
+    private List<Photo> _photos;
 
     /** The str adresse. */
-    private String       _strAdresse;
+    private String _strAdresse;
 
     /** The str num ressource. */
-    private String       _strNumRessource;
+    private String _strNumRessource;
 
     /** The str type. */
-    private String       _strType;
+    private String _strType;
 
     /**
      * Gets the adresse.
@@ -96,8 +96,8 @@ public class SignalementDossierDTO
         boolean datesNotNulls = ( _dateCreation != null ) && ( _dateDebutService != null );
         boolean heuresNotNulls = ( _heureCreation != null ) && ( _heureDebutService != null );
 
-        return datesNotNulls && heuresNotNulls
-                && ( _dateCreation.after( _dateDebutService ) || ( DateUtils.sameDate( _dateCreation, _dateDebutService ) && DateUtils.sameHourOrAfter( _heureCreation, _heureDebutService ) ) );
+        return datesNotNulls && heuresNotNulls && ( _dateCreation.after( _dateDebutService )
+                || ( DateUtils.sameDate( _dateCreation, _dateDebutService ) && DateUtils.sameHourOrAfter( _heureCreation, _heureDebutService ) ) );
     }
 
     /**
@@ -196,7 +196,8 @@ public class SignalementDossierDTO
     /**
      * Sets the adresse.
      *
-     * @param adresse the new adresse
+     * @param adresse
+     *            the new adresse
      */
     public void setAdresse( String adresse )
     {
@@ -206,7 +207,8 @@ public class SignalementDossierDTO
     /**
      * Sets the date creation.
      *
-     * @param strDate the new date creation
+     * @param strDate
+     *            the new date creation
      */
     public void setDateCreation( String strDate )
     {
@@ -226,7 +228,8 @@ public class SignalementDossierDTO
     /**
      * Sets the date debut service.
      *
-     * @param strDateDebutService the new date debut service
+     * @param strDateDebutService
+     *            the new date debut service
      */
     public void setDateDebutService( String strDateDebutService )
     {
@@ -236,7 +239,8 @@ public class SignalementDossierDTO
     /**
      * Sets the heure creation.
      *
-     * @param heureCreation the new heure creation
+     * @param heureCreation
+     *            the new heure creation
      */
     public void setHeureCreation( Date heureCreation )
     {
@@ -246,7 +250,8 @@ public class SignalementDossierDTO
     /**
      * Sets the heure debut service.
      *
-     * @param heureDebutService the new heure debut service
+     * @param heureDebutService
+     *            the new heure debut service
      */
     public void setHeureDebutService( Date heureDebutService )
     {
@@ -256,7 +261,8 @@ public class SignalementDossierDTO
     /**
      * Sets the id.
      *
-     * @param id the new id
+     * @param id
+     *            the new id
      */
     public void setId( Integer id )
     {
@@ -266,7 +272,8 @@ public class SignalementDossierDTO
     /**
      * Sets the list actions.
      *
-     * @param listActions the new list actions
+     * @param listActions
+     *            the new list actions
      */
     public void setListActions( List<Action> listActions )
     {
@@ -276,7 +283,8 @@ public class SignalementDossierDTO
     /**
      * Sets the num ressource.
      *
-     * @param numRessource the new num ressource
+     * @param numRessource
+     *            the new num ressource
      */
     public void setNumRessource( String numRessource )
     {
@@ -286,7 +294,8 @@ public class SignalementDossierDTO
     /**
      * Sets the photos.
      *
-     * @param photos the new photos
+     * @param photos
+     *            the new photos
      */
     public void setPhotos( List<Photo> photos )
     {
@@ -296,7 +305,8 @@ public class SignalementDossierDTO
     /**
      * Sets the type.
      *
-     * @param type the new type
+     * @param type
+     *            the new type
      */
     public void setType( String type )
     {

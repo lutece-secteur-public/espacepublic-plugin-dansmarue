@@ -32,9 +32,13 @@ function getSigMarkers(){
 			color = "red";
 		}
 		
+		var itemPerPage=${paginator.itemsPerPage};
+		var currentPage=${paginator.pageCurrent};
+		var signalementNumber =( ( currentPage-1 ) * itemPerPage ) + index;
+		
 		var marker = L.marker([signalement.lat,signalement.lng], {
           icon: new L.AwesomeNumberMarkers({
-            number: index, 
+            number: signalementNumber, 
             markerColor: color
         })});
 		
@@ -45,8 +49,6 @@ function getSigMarkers(){
 		markers.addLayer(marker);
 		oms.addMarker(marker);
 		heatMapData.push([signalement.lat,signalement.lng, 0.05]);
-		
-		
 		index++;
 	  });
 	  
@@ -460,6 +462,23 @@ $(document).ready(function() {
 						</div>
 						<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 							<div class="form-group">
+								<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12" for="filter_fdt">#i18n{dansmarue.reportingList.feuilleDeTournee}</label>
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<#if feuille_de_tournee_list?has_content && feuille_de_tournee_list?size != 0>
+										<select name="idFdt"  id="idFdt" class="selectpicker show-menu-arrow form-control" data-size="10" data-actions-box="true" data-live-search="true">
+											<option></option>
+											<#list feuille_de_tournee_list as feuilleDeTournee>
+												<option value="${feuilleDeTournee.id}" 
+													<#if filter.idFdt?? && filter.idFdt==feuilleDeTournee.id>selected</#if> >
+													${feuilleDeTournee.nom}
+												</option>
+											</#list>
+										</select>
+									<#else>
+										#i18n{dansmarue.reportingList.listEmpty} 
+									</#if>
+								</div>
+								
 								<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
 									for="filter_dateBegin">
 									#i18n{dansmarue.reportingList.creationDate}</label>
@@ -557,6 +576,16 @@ $(document).ready(function() {
 												id="filter_commentaireAgentTerrain" maxlength="255" />
 										</div>
 									</div>
+									<div class="form-group">
+										<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+											for="filter_mailDernierIntervenant">#i18n{dansmarue.reportingList.mailDernierIntervenant}
+										</label>
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+											<input type="text" value="${filter.mailDernierIntervenant!}"
+												class="form-control input-sm" name="mailDernierIntervenant"
+												id="filter_mailDernierIntervenant" maxlength="255" />
+										</div>
+									</div>
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 									<div class="form-group">
@@ -584,6 +613,41 @@ $(document).ready(function() {
 													<option value="${conseilQuartier.idConsqrt}" <#if (filter.listIdQuartier?has_content && filter.listIdQuartier?seq_contains(conseilQuartier.idConsqrt?number))>selected</#if> >${conseilQuartier.nomConsqrt}</option>
 												</#list>
 											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+											for="filter_dateDoneBegin">
+											#i18n{dansmarue.reportingList.serviceFaitDate}</label>
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+											<div class="input-daterange">
+												<div class="col-xs-1">
+													#i18n{dansmarue.reportingList.from}</div>
+												<div class="col-xs-3 ">
+													<div class="input-group">
+														<div class="input-group-addon">
+															<span class="glyphicon glyphicon-calendar"></span>
+														</div>
+														<input class="form-control input-sm" type="text"
+															value="${filter.dateDoneBegin!}" name="dateDoneBegin"
+															id="filter_dateDoneBegin" maxlength="10" />
+													</div>
+												</div>
+											</div>
+											<div class="input-daterange">
+												<div class="col-xs-1">#i18n{dansmarue.reportingList.to}
+												</div>
+												<div class="col-xs-3">
+													<div class="input-group">
+														<div class="input-group-addon">
+															<span class="glyphicon glyphicon-calendar"></span>
+														</div>
+														<input class="form-control input-sm" type="text"
+															value="${filter.dateDoneEnd!}" name="dateDoneEnd"
+															id="filter_dateDoneEnd" />
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -760,6 +824,7 @@ $(document).ready(function() {
 								<th><input type="checkbox" name="selectAll" id="selectAll"
 									value="selectAll"
 									title="#i18n{dansmarue.reportingList.alt.selectAll}" /></th> </@hasAutorisationMacro>
+								<th>#</th>
 								<th>#i18n{dansmarue.reportingList.actions}</th>
 								<th><@sort
 									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
@@ -806,8 +871,14 @@ $(document).ready(function() {
 								permissions=["TRAITEMENT_MASSE","SUPPRIMER_SIGNALEMENT_MASSE","EXPORTER_SIGNALEMENT"]>
 								<td class="signalement-checkbox"><input type="checkbox"
 									name="signalement_id" value="${signalement.id}"
-									title="#i18n{dansmarue.reportingList.alt.select}" /></td>
+									title="#i18n{dansmarue.reportingList.alt.select}" />
+								</td>
 								</@hasAutorisationMacro>
+								<td class="signalement-actions">
+									<#assign itemPerPage=paginator.itemsPerPage currentPage=paginator.pageCurrent>
+								  	<#assign signalementNumber=( ( paginator.pageCurrent-1 ) * paginator.itemsPerPage ) + signalement?index + 1>
+								  	 ${signalementNumber} 
+								</td>
 								<td class="signalement-actions">
 								
 									<@a class="btn btn-xs
@@ -896,7 +967,7 @@ $(document).ready(function() {
 								<td class="signalement-comment">${signalement.commentaire!}</td>
 								<td class="signalement-comment">${signalement.commentaireAgentTerrain!}</td>
 								<td class="signalement-date">${signalement.dateCreation!}</td>
-								<td class="signalement-etat">${map_etats[signalement.id?string]!}</td>
+								<td class="signalement-etat">${map_etats[signalement.id?string]!} <#if map_programming_date[signalement.id?string]?? && map_programming_date[signalement.id?string]> <br> ${signalement.datePrevueTraitement!}</#if> </td>
 							</tr>
 							</#list> <#else>
 							<tr>
@@ -922,35 +993,73 @@ $(document).ready(function() {
 							name="exportcsv" class="btn btn-xs btn-primary">
 							<i class="glyphicon glyphicon-save"></i>
 						</button>
-						</@estAutoriseMacro> <@estAutoriseMacro
-						ressourceType="GESTION_DES_SIGNALEMENTS"
-						permission="TRAITEMENT_MASSE">
-						<button class="btn btn-xs btn-primary" type="submit" value="4"
-							id="button-fait-masse" name="servicefait"
-							title="#i18n{dansmarue.caseList.ServiceFaitMasse}">
-							<i class="glyphicon glyphicon-ok"></i>
-						</button>
-						<button class="btn btn-xs btn-primary" type="submit" value="5"
-							id="button-programmer-masse" name="programmer"
-							title="#i18n{dansmarue.caseList.ProgrammerMasse}">
-							<i class="glyphicon glyphicon-calendar"></i>
-						</button>
-
-						<button class="btn btn-xs btn-primary" type="submit" value="6"
-							id="button-reprogrammer-masse" name="reprogrammer"
-							title="#i18n{dansmarue.caseList.ReprogrammerMasse}">
-							<i class="glyphicon glyphicon-refresh"></i>
-						</button>
-						</@estAutoriseMacro>
-						<@estAutoriseMacro
-						ressourceType="GESTION_DES_SIGNALEMENTS"
-						permission="SUPPRIMER_SIGNALEMENT_MASSE">
-						<button class="btn btn-xs btn-primary" type="submit" value="7"
-							id="button-supprimer-masses" name="masse_deletes"
-							title="#i18n{dansmarue.caseList.SupprimerMasse}">
-							<i class="glyphicon glyphicon-trash"></i>
-						</button>
-						</@estAutoriseMacro>
+						</@estAutoriseMacro> 
+						
+						<#if hasSignalementPrestataire >
+						
+							<@estAutoriseMacro
+							ressourceType="GESTION_DES_SIGNALEMENTS"
+							permission="TRAITEMENT_MASSE">
+							<button class="btn btn-xs btn-primary" type="submit" value="4"
+								id="button-fait-masse" name="servicefait"
+								title="#i18n{dansmarue.caseList.ServiceFaitMasse}" disabled>
+								<i class="glyphicon glyphicon-ok"></i>
+							</button>						
+							<button class="btn btn-xs btn-primary" type="submit" value="5"
+								id="button-programmer-masse" name="programmer"
+								title="#i18n{dansmarue.caseList.ProgrammerMasse}" disabled>
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+							<button class="btn btn-xs btn-primary" type="submit" value="6"
+								id="button-reprogrammer-masse" name="reprogrammer"
+								title="#i18n{dansmarue.caseList.ReprogrammerMasse}" disabled>
+								<i class="glyphicon glyphicon-refresh"></i>
+							</button>
+							</@estAutoriseMacro>
+							<@estAutoriseMacro
+							ressourceType="GESTION_DES_SIGNALEMENTS"
+							permission="SUPPRIMER_SIGNALEMENT_MASSE">
+							<button class="btn btn-xs btn-primary" type="submit" value="7"
+								id="button-supprimer-masses" name="masse_deletes"
+								title="#i18n{dansmarue.caseList.SupprimerMasse}" disabled>
+								<i class="glyphicon glyphicon-trash"></i>
+							</button>
+						
+							</@estAutoriseMacro>
+						<#else>
+						
+							<@estAutoriseMacro
+							ressourceType="GESTION_DES_SIGNALEMENTS"
+							permission="TRAITEMENT_MASSE">
+							<button class="btn btn-xs btn-primary" type="submit" value="4"
+								id="button-fait-masse" name="servicefait"
+								title="#i18n{dansmarue.caseList.ServiceFaitMasse}">
+								<i class="glyphicon glyphicon-ok"></i>
+							</button>
+							<button class="btn btn-xs btn-primary" type="submit" value="5"
+								id="button-programmer-masse" name="programmer"
+								title="#i18n{dansmarue.caseList.ProgrammerMasse}">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+	
+							<button class="btn btn-xs btn-primary" type="submit" value="6"
+								id="button-reprogrammer-masse" name="reprogrammer"
+								title="#i18n{dansmarue.caseList.ReprogrammerMasse}">
+								<i class="glyphicon glyphicon-refresh"></i>
+							</button>
+							</@estAutoriseMacro>
+							<@estAutoriseMacro
+							ressourceType="GESTION_DES_SIGNALEMENTS"
+							permission="SUPPRIMER_SIGNALEMENT_MASSE">
+							<button class="btn btn-xs btn-primary" type="submit" value="7"
+								id="button-supprimer-masses" name="masse_deletes"
+								title="#i18n{dansmarue.caseList.SupprimerMasse}">
+								<i class="glyphicon glyphicon-trash"></i>
+							</button>
+							</@estAutoriseMacro>
+							
+						</#if>
+						
 					</div>
 				</form>
 				<@paginationSig paginator=paginator combo=1 />
@@ -991,10 +1100,13 @@ $(document).ready(function() {
         updateSectorList(-1, true);
         $("#filter_adresse").val('');
         $("#filter_mail").val('');
+        $("#filter_mailDernierIntervenant").val('');
         $("#filter_commentaire").val('');
         $("#filter_commentaireAgentTerrain").val('');
         $("#filter_dateBegin").val('');
         $("#filter_dateEnd").val('');
+        $("#filter_dateDoneBegin").val('');
+        $("#filter_dateDoneEnd").val('');
         $("#dashboardCriterias").html("");
 		
 		$("#conseilQuartier").selectpicker('val', '');
