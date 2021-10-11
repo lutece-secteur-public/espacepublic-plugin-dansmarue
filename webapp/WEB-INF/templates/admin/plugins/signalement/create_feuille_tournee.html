@@ -1,3 +1,4 @@
+<@adresse_autocomplete_includes/>
 <script src="js/jquery.multi-select.min.js"></script>
 <script src="js/jquery.quicksearch.js"></script>
 <link rel="stylesheet" href="css/multi-select.css" type="text/css"/>
@@ -406,6 +407,7 @@ span.textbox input {
 
 var isFilterSearchNameOk = false;
 
+
 function deleteFilter() {
   let nameSelectedFilter = $( "#filtre option:selected" ).text();
   if (nameSelectedFilter.trim().length > 0) {
@@ -602,4 +604,12 @@ $('#typologieSelect').multiSelect({
 		  return;
 		}
 	}
+	 
+</script>
+
+<script>
+
+$.getScript("jsp/admin/plugins/leaflet/DoGetAutocomplete.jsp", function(data){
+	addAutocomplete("filter_adresse",null);
+});
 </script>

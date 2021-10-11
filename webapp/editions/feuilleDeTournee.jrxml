@@ -140,11 +140,11 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="360">
+		<band height="802">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<printWhenExpression><![CDATA[$F{displayMap}.equals("true")]]></printWhenExpression>
 			<image scaleImage="FillFrame">
-				<reportElement x="0" y="0" width="585" height="280" uuid="96df8fcb-4968-4b93-8fd8-9ca3494ba6a5">
+				<reportElement x="0" y="230" width="585" height="250" uuid="96df8fcb-4968-4b93-8fd8-9ca3494ba6a5">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -152,29 +152,49 @@
 				</reportElement>
 				<imageExpression><![CDATA[javax.imageio.ImageIO.read(new java.io.ByteArrayInputStream(java.util.Base64.getDecoder().decode($F{carteBase64})))]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="0" y="490" width="585" height="30" uuid="bfec7866-2810-4817-8cdb-34200880d938"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom}]]></textFieldExpression>
+			</textField>
+			<break>
+				<reportElement x="0" y="730" width="99" height="1" uuid="391ee82b-4662-4d5b-a7c5-88a784ca3de4"/>
+			</break>
 		</band>
 	</title>
 	<pageHeader>
 		<band height="20">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField>
-				<reportElement style="titre_valeurs" x="55" y="-69" width="300" height="15" uuid="842d043d-effd-4722-9ee4-0c645cdb9ec1"/>
+				<reportElement style="titre_valeurs" x="55" y="0" width="300" height="15" uuid="842d043d-effd-4722-9ee4-0c645cdb9ec1">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{nom}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="titre" x="0" y="-69" width="55" height="15" uuid="fb8aaaa5-4bd6-43e1-b65c-0c8fc424b30a"/>
+				<reportElement style="titre" x="0" y="0" width="55" height="15" uuid="fb8aaaa5-4bd6-43e1-b65c-0c8fc424b30a">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<text><![CDATA[Nom FDT]]></text>
 			</staticText>
 			<textField>
-				<reportElement style="titre_valeurs" x="425" y="-69" width="70" height="15" uuid="30d9c607-8c57-4da5-99cf-696ddb5c5548"/>
+				<reportElement style="titre_valeurs" x="425" y="0" width="70" height="15" uuid="30d9c607-8c57-4da5-99cf-696ddb5c5548">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{dateCreation}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="titre" x="355" y="-69" width="70" height="15" uuid="4af4e591-28c1-479c-b69c-05a3db5fae4b"/>
+				<reportElement style="titre" x="355" y="0" width="70" height="15" uuid="4af4e591-28c1-479c-b69c-05a3db5fae4b">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<text><![CDATA[Date création]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="495" y="-69" width="50" height="15" uuid="43b54239-92f0-4d99-b546-bef38407d971"/>
+				<reportElement x="495" y="0" width="50" height="15" uuid="43b54239-92f0-4d99-b546-bef38407d971">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
@@ -185,7 +205,9 @@
 				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="545" y="-69" width="40" height="15" uuid="841a2afa-3dcc-44a8-b81c-9c19e538dcc8"/>
+				<reportElement x="545" y="0" width="40" height="15" uuid="841a2afa-3dcc-44a8-b81c-9c19e538dcc8">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
@@ -201,12 +223,13 @@
 	<detail>
 		<band height="107" splitType="Stretch">
 			<componentElement>
-				<reportElement x="0" y="-70" width="585" height="105" uuid="7ccc3137-2fc2-44cc-9846-b954058325d7">
+				<reportElement x="0" y="1" width="585" height="105" uuid="7ccc3137-2fc2-44cc-9846-b954058325d7">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
 					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Dataset1" uuid="41208292-3226-4540-bbc9-2c022e59398c">
@@ -224,24 +247,13 @@
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="50" uuid="fb2120b9-051f-4a30-8a54-e8c8d8f4877d">
+						<jr:column width="100" uuid="fb2120b9-051f-4a30-8a54-e8c8d8f4877d">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
 							<jr:detailCell style="Table_TD" height="104">
 								<image hAlign="Center" vAlign="Middle">
-									<reportElement x="0" y="0" width="50" height="104" isRemoveLineWhenBlank="true" uuid="0a50bb4c-1b65-43e2-a0f7-f7b036e1e8cf"/>
+									<reportElement x="0" y="0" width="100" height="104" isRemoveLineWhenBlank="true" uuid="0a50bb4c-1b65-43e2-a0f7-f7b036e1e8cf"/>
 									<box padding="3"/>
-									<imageExpression><![CDATA[javax.imageio.ImageIO.read(new java.io.ByteArrayInputStream(java.util.Base64.getDecoder().decode($F{imageEnsembleContent})))]]></imageExpression>
-								</image>
-							</jr:detailCell>
-						</jr:column>
-						<jr:column width="50" uuid="aeddb041-3cf7-415b-aa9c-1273d3d9c180">
-							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
-							<jr:detailCell style="Table_TD" height="104">
-								<property name="com.jaspersoft.studio.unit.width" value="px"/>
-								<image hAlign="Center" vAlign="Middle">
-									<reportElement x="0" y="0" width="50" height="104" isRemoveLineWhenBlank="true" uuid="705f173a-da30-417b-b9fb-d407d49666fa"/>
-									<box padding="3"/>
-									<imageExpression><![CDATA[javax.imageio.ImageIO.read(new java.io.ByteArrayInputStream(java.util.Base64.getDecoder().decode($F{imagePresContent})))]]></imageExpression>
+									<imageExpression><![CDATA[$F{imageEnsembleContent} != null ? javax.imageio.ImageIO.read(new java.io.ByteArrayInputStream(java.util.Base64.getDecoder().decode($F{imageEnsembleContent}))) : javax.imageio.ImageIO.read(new java.io.ByteArrayInputStream(java.util.Base64.getDecoder().decode($F{imagePresContent})))]]></imageExpression>
 								</image>
 							</jr:detailCell>
 						</jr:column>

@@ -759,10 +759,16 @@ function updateSectorList(idDirection, idDomaine){
 								 </#if>
 								</td>
 								<td class="signalement-photo">
-									<#if signalement.photos?has_content> 
-										<a href='#' data-toggle="modal" data-target="#imageModal" image-url='${signalement.photos[0].imageUrl}'>
-											<img src="${signalement.photos[0].imageThumbnailUrl}" width="100" />
-										</a>
+									<#if signalement.photos?has_content>
+										<#assign isHidden = false>
+										<#list signalement.photos as photo>
+											<span id='${signalement.id}'> 
+												<a href='#' data-toggle="modal" data-target="#imageModal" id-vue='${photo.vue}' id-signalement='${signalement.id}' image-url='${photo.imageUrl}' <#if isHidden> style='display: none'</#if>>
+											<img src="${photo.imageThumbnailUrl}" width="100" />
+												</a>
+											</span>
+											<#assign isHidden = true>
+										</#list>
 									</#if>
 								</td>
 								<td class="signalement-vote">${signalement.suivi!}</td>

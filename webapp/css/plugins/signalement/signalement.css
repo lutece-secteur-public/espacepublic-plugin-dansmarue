@@ -526,6 +526,10 @@ label.btn-radio > [type='radio']{
 	flex-wrap: wrap;
 }
 
+.row-flex-fdt #legende label{
+	margin-bottom: 0px;
+}
+
 .col-flex-fdt {
 	align-items: center;
 	display: flex;

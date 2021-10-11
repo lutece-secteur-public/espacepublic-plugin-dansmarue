@@ -1099,6 +1099,7 @@ $(document).ready(function() {
         $('#idSector option:first').attr("selected", "selected");
         updateSectorList(-1, true);
         $("#filter_adresse").val('');
+        $("#filter_fdt").val('');
         $("#filter_mail").val('');
         $("#filter_mailDernierIntervenant").val('');
         $("#filter_commentaire").val('');
@@ -1109,6 +1110,8 @@ $(document).ready(function() {
         $("#filter_dateDoneEnd").val('');
         $("#dashboardCriterias").html("");
 		
+        $("#idFdt").selectpicker('val', '');
+        $("#idFdt").selectpicker('refresh');
 		$("#conseilQuartier").selectpicker('val', '');
         $("#conseilQuartier").selectpicker('refresh');
         

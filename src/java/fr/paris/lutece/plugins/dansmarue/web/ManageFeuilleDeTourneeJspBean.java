@@ -685,21 +685,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
             int [ ] idsSignalement = feuilleDeTournee.getListSignalementIds( ).stream( ).mapToInt( i -> i ).toArray( );
 
             List<SignalementExportCSVDTO> signalements = _signalementExportService.findByIdsWithPhoto( idsSignalement );
-
-            List<SignalementExportCSVDTO> signalementsOrderToDisplay = new ArrayList<>( );
-
-            for ( int i = 0; i < idsSignalement.length; i++ )
-            {
-                for ( SignalementExportCSVDTO signalement : signalements )
-                {
-                    if ( signalement.getIdSignalement( ).intValue( ) == idsSignalement [i] )
-                    {
-                        signalementsOrderToDisplay.add( signalement );
-                    }
-                }
-            }
-
-            resultListSignalement.addAll( signalementsOrderToDisplay );
+            resultListSignalement.addAll( signalements );
 
             LocalizedDelegatePaginator<SignalementExportCSVDTO> paginator = this.getPaginator( request, resultListSignalement,
                     URL_JSP_MANAGE_FEUILLE_TOURNEE + "?view=load&idFeuilleDeTournee=" + feuilledeDeTourneId, signalements.size( ) );
@@ -710,7 +696,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
             model.put( MARK_SIGNALEMENT_LIST, paginator.getPageItems( ) );
             model.put( MARK_NOM_TEMPLATE, NOM_TEMPLATE );
             model.put( MARK_SIGNALEMENTS_MAP_LIST,
-                    _feuilleTourneeService.getSignalementsMapMarkerDTOFromSignalementsConsultation( signalementsOrderToDisplay, request.getLocale( ) ) );
+                    _feuilleTourneeService.getSignalementsMapMarkerDTOFromSignalementsConsultation( signalements, request.getLocale( ) ) );
         }
 
         Locale locale = getLocale( );

@@ -98,7 +98,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
     /** The Constant SQL_QUERY_ADD_FILTER_LIST_TYPE_SIGNALEMENT. */
     // Filter by report type list
-    private static final String SQL_QUERY_ADD_FILTER_LIST_TYPE_SIGNALEMENT = " id_type_signalement IN ({0}) ";
+    private static final String SQL_QUERY_ADD_FILTER_LIST_TYPE_SIGNALEMENT = " id_type_signalement IN ( SELECT id_type_signalement FROM v_signalement_type_signalement_with_parents_links WHERE id_parent in ({0}) ) ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_TYPE_SIGNALEMENT. */
     // Filter by report type
@@ -161,6 +161,14 @@ public class SignalementExportDAO implements ISignalementExportDAO
     /** The Constant SQL_QUERY_ADD_FILTER_DATE_END. */
     // Filter by end date
     private static final String SQL_QUERY_ADD_FILTER_DATE_END = " to_date(date_creation,'DD/MM/YYYY') <= ? ";
+
+    /** The Constant SQL_QUERY_ADD_FILTER_DATE_PROGRAMMATION_BEGIN. */
+    // Filter by begin programmation date
+    private static final String SQL_QUERY_ADD_FILTER_DATE_PROGRAMMATION_BEGIN = " to_date(date_prevu_traitement,'DD/MM/YYYY') >= ? ";
+
+    /** The Constant SQL_QUERY_ADD_FILTER_DATE_PROGRAMMATION_END. */
+    // Filter by end programmation date
+    private static final String SQL_QUERY_ADD_FILTER_DATE_PROGRAMMATION_END = " to_date(date_prevu_traitement,'DD/MM/YYYY') <= ? ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_DATE_DONE_BEGIN. */
     // Filter by begin date
@@ -259,7 +267,8 @@ public class SignalementExportDAO implements ISignalementExportDAO
         StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECTALL );
 
         sbSQL.append( MessageFormat.format( SQL_QUERY_WHERE_ID_IN, StringUtils.remove( StringUtils.remove( Arrays.toString( ids ), '[' ), ']' ) ) );
-
+        addDefaultOrderFDTSearch( sbSQL );
+        
         DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ), plugin );
         daoUtil.executeQuery( );
 
@@ -473,10 +482,10 @@ public class SignalementExportDAO implements ISignalementExportDAO
                 if ( listSignalementFind.stream( ).anyMatch( signalement -> signalement.getId( ) == daoUtil.getInt( 1 ) ) )
                 {
                     listSignalementFind.stream( ).filter( signalement -> signalement.getId( ) == daoUtil.getInt( 1 ) ).findFirst( )
-                            .ifPresent( ( Signalement signalement ) -> {
-                                signalement.setPhotos( addPhotosToSignalement( daoUtil, signalement.getPhotos( ) ) );
-                                signalement.setListActionAvailable( addActionToSignalement( daoUtil, signalement.getListActionAvailable( ) ) );
-                            } );
+                    .ifPresent( ( Signalement signalement ) -> {
+                        signalement.setPhotos( addPhotosToSignalement( daoUtil, signalement.getPhotos( ) ) );
+                        signalement.setListActionAvailable( addActionToSignalement( daoUtil, signalement.getListActionAvailable( ) ) );
+                    } );
 
                 }
                 else
@@ -781,6 +790,22 @@ public class SignalementExportDAO implements ISignalementExportDAO
             sbSQL.append( SQL_QUERY_ADD_FILTER_DATE_END );
         }
 
+        // Programmation date
+        boolean dateProgrammationBeginNotEmpty = StringUtils.isNotBlank( filter.getDateProgrammationBegin( ) );
+        boolean dateProgrammationEndNotEmpty = StringUtils.isNotBlank( filter.getDateProgrammationEnd( ) );
+
+        if ( dateProgrammationBeginNotEmpty )
+        {
+            nIndex = addSQLWhereOr( false, sbSQL, nIndex );
+            sbSQL.append( SQL_QUERY_ADD_FILTER_DATE_PROGRAMMATION_BEGIN );
+        }
+
+        if ( dateProgrammationEndNotEmpty )
+        {
+            nIndex = addSQLWhereOr( false, sbSQL, nIndex );
+            sbSQL.append( SQL_QUERY_ADD_FILTER_DATE_PROGRAMMATION_END );
+        }
+
         // Service Fait date
         if ( StringUtils.isNotBlank( filter.getDateDoneBegin( ) ) )
         {
@@ -898,7 +923,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
     /**
      * Add default order clause to query
-     * 
+     *
      * @param sbSQL
      *            string builder query
      */
@@ -949,6 +974,16 @@ public class SignalementExportDAO implements ISignalementExportDAO
         if ( StringUtils.isNotBlank( filter.getDateEnd( ) ) )
         {
             daoUtil.setDate( nIdx++, DateUtil.formatDateSql( filter.getDateEnd( ), Locale.FRENCH ) );
+        }
+
+        if ( StringUtils.isNotBlank( filter.getDateProgrammationBegin( ) ) )
+        {
+            daoUtil.setDate( nIdx++, DateUtil.formatDateSql( filter.getDateProgrammationBegin( ), Locale.FRENCH ) );
+        }
+
+        if ( StringUtils.isNotBlank( filter.getDateProgrammationEnd( ) ) )
+        {
+            daoUtil.setDate( nIdx++, DateUtil.formatDateSql( filter.getDateProgrammationEnd( ), Locale.FRENCH ) );
         }
 
         if ( StringUtils.isNotBlank( filter.getDateDoneBegin( ) ) )
