@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -130,6 +130,9 @@ public class SignalementFilter implements Serializable
     /** The list id quartier. */
     private List<Integer> _listIdQuartier;
 
+    /** The photo id. */
+    private int _nIdVuePhoto;
+
     /**
      * Mail dernier interveant sur l'anomalie.
      */
@@ -142,6 +145,8 @@ public class SignalementFilter implements Serializable
     private List<Order> _listOrders = new ArrayList<>( );
 
     private int _nIdFdt;
+
+    private String _strOnglet;
 
     /**
      * Init empty list for report filter to avoid Null Pointer Exception.
@@ -748,6 +753,27 @@ public class SignalementFilter implements Serializable
     }
 
     /**
+     * Gets the id photo.
+     *
+     * @return the id photo
+     */
+    public int getIdVuePhoto( )
+    {
+        return _nIdVuePhoto;
+    }
+
+    /**
+     * Sets the id photo.
+     *
+     * @param idVuePhoto
+     *            the new id vue photo
+     */
+    public void setIdVuePhoto( int idVuePhoto )
+    {
+        _nIdVuePhoto = idVuePhoto;
+    }
+
+    /**
      * Gets the list id unit.
      *
      * @return the list id unit
@@ -798,4 +824,15 @@ public class SignalementFilter implements Serializable
     {
         _nIdFdt = nIdFdt;
     }
+
+    public String getOnglet( )
+    {
+        return _strOnglet;
+    }
+
+    public void setOnglet( String onglet )
+    {
+        this._strOnglet = onglet;
+    }
+
 }

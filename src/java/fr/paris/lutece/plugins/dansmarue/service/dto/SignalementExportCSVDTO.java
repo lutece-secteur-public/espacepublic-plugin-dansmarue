@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -153,6 +153,8 @@ public class SignalementExportCSVDTO
     private String _strRegExSpecialCaracter = "[’]";
 
     private Integer _nIdSignalement;
+
+    private Integer _nIdStatut;
 
     /** The photos. */
     private List<PhotoDMR> _listPhotos = new ArrayList<>( );
@@ -941,6 +943,16 @@ public class SignalementExportCSVDTO
     public void setPhotos( List<PhotoDMR> pPhotos )
     {
         _listPhotos = pPhotos;
+    }
+
+    public Integer getIdStatut( )
+    {
+        return _nIdStatut;
+    }
+
+    public void setIdStatut( Integer nIdStatut )
+    {
+        this._nIdStatut = nIdStatut;
     }
 
 }

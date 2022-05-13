@@ -144,7 +144,7 @@ form>a>img, .actionsButtons>a>img {
 	text-decoration:underline;
 }
 
-#manage-signalement	.toggle-map-btns{
+#manage-signalement	.toggle-map-btns, #select-signalement-fdt .toggle-map-btns{
 	text-transform: uppercase;
 	background-color: rgb(255,255,255);
 	color: rgb(12,81,138);
@@ -152,29 +152,29 @@ form>a>img, .actionsButtons>a>img {
 	border: solid 1px #ddd;
 }
 				
-#manage-signalement	.toggle-map-btns.active{
+#manage-signalement	.toggle-map-btns.active, #select-signalement-fdt .toggle-map-btns.active{
 	background-color: rgb(12,81,138);
 	color: rgb(255,255,255);
 }
 
-#manage-signalement	#toggle-map-btns{
+#manage-signalement	#toggle-map-btns, #select-signalement-fdt #toggle-map-btns {
 	margin: 10px 0px;
 }
 
-#manage-signalement .svg{
+#manage-signalement .svg, #select-signalement-fdt .svg{
 	width: 25px;
 	height: 25px;
 }
 
-#manage-signalement .toggle-map-btns svg{
+#manage-signalement .toggle-map-btns svg, #select-signalement-fdt .toggle-map-btns svg{
 	vertical-align:middle;
 }
 
-#manage-signalement .toggle-map-btns svg path{
+#manage-signalement .toggle-map-btns svg path, #select-signalement-fdt .toggle-map-btns svg path{
 	fill: rgb(12,81,138);
 }
 
-#manage-signalement .toggle-map-btns.active svg path{
+#manage-signalement .toggle-map-btns.active svg path, #select-signalement-fdt .toggle-map-btns.active svg path{
 	fill: rgb(255,255,255);
 }
 
@@ -565,7 +565,6 @@ label.btn-radio > [type='radio']{
 }
 
 .fdt-modal-save .blueDmr {
-	width: 130px;
 	height: 30px;
 	color: rgb(12,81,138);
 	font-weight: 700;
@@ -602,4 +601,25 @@ label.btn-radio > [type='radio']{
 
 .create-fdt-modale .greyDmr {
 	color: rgb(153,153,153);
+}
+
+#select-signalement-fdt .toggle-map-btns label
+{
+    cursor: pointer;
+}
+
+
+
+.col-lg-5ths {
+  position: relative;
+  min-height: 1px;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+@media (min-width: 1200px) {
+  .col-lg-5ths {
+    width: 20%;
+    float: left;
+  }
 }

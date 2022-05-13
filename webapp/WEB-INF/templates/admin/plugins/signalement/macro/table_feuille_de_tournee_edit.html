@@ -14,24 +14,25 @@
 				<th><input type="checkbox" id="checkboxHeader"></th>
 				<th>#i18n{dansmarue.reportingList.actions}</th>
 				<th>#</th>
-				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?action=doSearchAno" attribute="photo.id_photo"/>#i18n{dansmarue.reportingList.photo}</th>
-				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?action=doSearchAno" attribute="numSignalement"/>#i18n{dansmarue.reportingList.number}</th>
-				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?action=doSearchAno" attribute="priorite.libelle"/>#i18n{dansmarue.reportingList.priority}</th>
-				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?action=doSearchAno" attribute="type.libelle"/>#i18n{dansmarue.reportingList.type}</th>
-				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?action=doSearchAno" attribute="direction_unit.label"/>#i18n{dansmarue.reportingList.direction}</th>
-				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?action=doSearchAno" attribute="adr.adresse"/>#i18n{dansmarue.reportingList.adress}</th>
-				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?action=doSearchAno" attribute="signalement.commentaire"/>#i18n{dansmarue.reportingList.comment}</th>
-				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?action=doSearchAno" attribute="signalement.commentaireAgentTerrain"/>#i18n{dansmarue.saveSignalement.commentaireAgentTerrain}</th>
-				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?action=doSearchAno" attribute="signalement.date_creation"/>#i18n{dansmarue.reportingList.creationDate}</th>
-				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?action=doSearchAno" attribute="signalement.date_programmation"/>#i18n{dansmarue.reportingList.programmingDate}</th>
-				<th>#i18n{dansmarue.reportingList.etat}</th>
+				<th>#i18n{dansmarue.reportingList.photo}</th>
+				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=edit&param_onglet_actif=liste&idFeuilleDeTournee=${feuille_de_tournee.id!}" attribute="numero"/>#i18n{dansmarue.reportingList.number}</th>
+				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=edit&param_onglet_actif=liste&idFeuilleDeTournee=${feuille_de_tournee.id!}" attribute="priorite"/>#i18n{dansmarue.reportingList.priority}</th>
+				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=edit&param_onglet_actif=liste&idFeuilleDeTournee=${feuille_de_tournee.id!}" attribute="type_signalement"/>#i18n{dansmarue.reportingList.type}</th>
+				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=edit&param_onglet_actif=liste&idFeuilleDeTournee=${feuille_de_tournee.id!}" attribute="direction"/>#i18n{dansmarue.reportingList.direction}</th>
+				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=edit&param_onglet_actif=liste&idFeuilleDeTournee=${feuille_de_tournee.id!}" attribute="adresse"/>#i18n{dansmarue.reportingList.adress}</th>
+				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=edit&param_onglet_actif=liste&idFeuilleDeTournee=${feuille_de_tournee.id!}" attribute="commentaire_usager"/>#i18n{dansmarue.reportingList.comment}</th>
+				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=edit&param_onglet_actif=liste&idFeuilleDeTournee=${feuille_de_tournee.id!}" attribute="commentaire_agent_terrain"/>#i18n{dansmarue.saveSignalement.commentaireAgentTerrain}</th>
+				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=edit&param_onglet_actif=liste&idFeuilleDeTournee=${feuille_de_tournee.id!}" attribute="date_creation"/>#i18n{dansmarue.reportingList.creationDate}</th>
+				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=edit&param_onglet_actif=liste&idFeuilleDeTournee=${feuille_de_tournee.id!}" attribute="date_prevu_traitement"/>#i18n{dansmarue.reportingList.programmingDate}</th>
+				<th><@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=edit&param_onglet_actif=liste&idFeuilleDeTournee=${feuille_de_tournee.id!}" attribute="etat"/>#i18n{dansmarue.reportingList.etat}</th>
 			</tr>
 		</thead>
 		<tbody>
 			<#if signalement_list?has_content> 
 			  <#list signalement_list as signalement>
 			    <tr id="ancre-signalement-${signalement.idSignalement}" class="signalement-list-element">
-			      <td><input type="checkbox" checked id="checkboxSignalement-${signalement.idSignalement}" class="checkboxSignalement" onchange="checkSignalement(this, ${signalement.idSignalement})"></td>
+			      <td><input type="checkbox" id="checkboxSignalement-${signalement.idSignalement}" class="checkboxSignalement" onchange="selectSignalement(this, ${signalement.idSignalement})"
+				  <#if signalementSelectIds?seq_contains(signalement.idSignalement)> checked</#if>></td>
 			      <td class="signalement-actions">
 			      	<span title="Afficher" style="color: #ff0c0c; font-size: 25px; cursor:pointer" onclick="showMarker(${signalement.idSignalement})"><i class="fa fa-map-marker"></i></span>
 			      	<a href="jsp/admin/plugins/signalement/ViewSignalement.jsp?signalement_id=${signalement.idSignalement}" class="btn btn-xs btn-primary" title="Details" target="blank" style="margin-bottom: 25%;">
@@ -47,8 +48,8 @@
 				     <#if signalement.photos?has_content> 
 						<#assign isHidden = false>
 							<#list signalement.photos as photo> 
-								<span id='${signalement.idSignalement}'>
-									<a href='#' data-toggle="modal" data-target="#imageModal" id-vue='${photo.vue}' id-signalement='${signalement.idSignalement}' image-url='${photo.imageUrl}' <#if isHidden> style='display: none'</#if>>
+								<span  id-signalement-photo='${signalement.idSignalement}'>
+									<a href='#' data-toggle="modal" data-target="#imageModal" id-vue='${photo.vue}' id-signalement='${signalement.idSignalement}' image-url='${photo.imageUrl}' isTabMosaique='false' <#if isHidden> style='display: none'</#if>>
 								      <img src="${photo.imageThumbnailUrl}" width="100" />
 									</a>
 								</span>
@@ -73,9 +74,9 @@
 			</#if>
 		</tbody>
 	  </table>
-	  <form action="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" method="post" id="form-pagination">
+	  <!--<form action="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" method="post" id="form-pagination">
 	  	<button type="submit" id="form-pagination-btn-submit" name="action_doSearchAno" style="display: none;"></button>
-	  </form>
+	  </form>-->
 	  
 	  <@paginationSig paginator=paginator combo=1 />
 	</fieldset>
@@ -85,129 +86,101 @@
 			<a class="btn btn-paris btn-blue" href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp">#i18n{dansmarue.button.return} </a>
 			<div class="pull-right">
 				<@button id="export" params='disabled' class="btn btn-paris btn-red" title='#i18n{dansmarue.tournee.exportpdf}' />
-				<@button params='data-toggle="modal" data-target="#saveFDTModal"' class="btn btn-paris btn-red save" title='#i18n{dansmarue.tournee.sauvegarder}' />
+				<@button params='data-toggle="modal" data-target="#saveFDTModal" onclick="clickSaveBtn()"' class="btn btn-paris btn-red save" title='#i18n{dansmarue.tournee.sauvegarder}' />
 			</div>
 		</div>
 	</div>
 	
 	<script>
-		var isNameOk = false;
+		var nbSigSelect = 0;
+		var nbSigUnselect = 0;
+		<#if signalementSelectIds?has_content>
+			<#list signalementSelectIds as signalementId>
+				signalement_select_arr.push(${signalementId});
+			</#list>
+		</#if>
 		
-		$("document").ready(function() {
-			addDateToPrefix();
-		});
+		nbSigSelect = signalement_select_arr.length;
+		var nbTotalAno = ${paginator.itemsCount};
+		nbSigUnselect = nbTotalAno - signalement_select_arr.length;
 		
-		
-		/* Création du préfix du nom */
-		function addDateToPrefix() {
-			var today = new Date();
-			var dd = today.getDate();
-			var mm = today.getMonth()+1; 
-			var yyyy = today.getFullYear();
-			
-			if(dd<10) 
-			    dd='0'+dd;
-	
-			if(mm<10)
-			    mm='0'+mm;
-			
-			var date = yyyy.toString() + mm.toString() + dd.toString();
-			
-			$("#fdt_prefixe").append( date + "_" );
-			
-			var inputVal = $("#param_save_fdt_name_prefix").val();
-			$("#param_save_fdt_name_prefix").val(inputVal + date + "_");
-		}
-		
-		/* Select/unselect signalement */
-		function checkSignalement( checkbox, signalementId ) {
-			if (checkbox.checked)
-		    {
-				addToSelection(signalementId);
-		    } else {
-		    	removeFromSelection(signalementId);
-		    }
-		}
+		$(".nbSigSelect").text(nbSigSelect);
+		$(".nbSigUnselect").text(nbSigUnselect);
 		
 		/* Selection de masse */
 		$("#checkboxHeader").click(function() {
 			$('.checkboxSignalement:checkbox').not(this).prop('checked', this.checked).trigger("change");
 		});
 		
+		//Bouton actualiser le nombre de signalement par page.
+		$("button[title='Actualiser']").click(function(){
+			   event.preventDefault();
+			   
+	           let numberItemPerPage = $('#items_per_page').find('option:selected').attr('value');
+			   
+			   let searchParams = new URLSearchParams(window.location.search);
+			   if ( searchParams.has("view") ) {
+			      searchParams.delete("items_per_page");
+				  searchParams.append("items_per_page",numberItemPerPage);
+				  window.location.href = window.location.href.split('?')[0]+'?'+searchParams.toString();
+			   } else {
+				   var idFeuilleDeTourneeVal = $('#idFeuilleDeTournee').val();
+				   window.location.href = window.location.href+'?view=edit&idFeuilleDeTournee='+idFeuilleDeTourneeVal+'&param_onglet_actif=liste&items_per_page='+numberItemPerPage;
+			   }		  
+		});
+		
 		/* Changement page tableau */
-		$("#signalement-paginator a").click(function(){
-			addSignalementsToForm( "form-pagination" );
+		$("#signalement-paginator a").click(function(event){
+		
+		    event.preventDefault();
 			
-			var page_index = new URLSearchParams($(this).attr('href')).get('page_index');
-			var inputPageIndex = $("<input>").attr({"type":"hidden","name":"page_index"}).val(page_index);
-			$('#form-pagination').append(inputPageIndex);
+			var link = $(this).attr('href');
+			const url = new URL(link);
 			
-			$("#form-pagination-btn-submit").click();
-			return false;
+			let searchParams = new URLSearchParams(url.search);
+			let currentURL = new URLSearchParams(window.location.search);
+			if (currentURL.has("sorted_attribute_name")) {
+			   searchParams.append("sorted_attribute_name",currentURL.get("sorted_attribute_name"))
+			}
+			if (currentURL.has("asc_sort")) {
+			   searchParams.append("asc_sort",currentURL.get("asc_sort"))
+			}
+			
+			window.location.href = link + '&'+searchParams.toString();
+			
 		});
-		
-		$(".save").click(function(){
-			$("#form-saveFdt #signalementSelectIds").remove();
-			addSignalementsToForm( "form-saveFdt" );
-		});
-		
-		/* Ajout des signalements au formulaire */
-		function addSignalementsToForm( idForm ) {
-			var inputSignalements = $("<input>").attr({"type":"hidden","name":"signalementSelectIds", "id":"signalementSelectIds"}).val(signalement_select_arr);
-			$('#'+idForm).append(inputSignalements);
-		}
-		
-		function validateUpdateFDT() {
-			var inputIsUpdate = $("<input>").attr({"type":"hidden","name":"param_save_fdt_is_update", "id":"param_save_fdt_is_update"}).val("true");
-			$('#form-saveFdt').append(inputIsUpdate);
-			isNameOk = true;
-			$('#submitFDT').click ();
-		}
 		
 		/* Mise en surbrillance du marker sélectionné sur la carte*/
 		function showMarker( signalementId ) {
-			signalement_arr.forEach(function(signalement) {
-				if(signalement.idSignalement == signalementId) {
-					signalement.isSurbrillance = !signalement.isSurbrillance;
-				} else {
-					signalement.isSurbrillance = false;
-				}
-			});
-			drawMarkers();
+			var inputOngletActif = $("<input>").attr({"type":"hidden","name":"param_onglet_actif", "id":"param_onglet_actif"}).val("carte");
+			var inputMarkerSelect = $("<input>").attr({"type":"hidden","name":"marker_select", "id":"marker_select"}).val(signalementId);
+			$('#form-saveSelectSignalement').append(inputOngletActif);
+			$('#form-saveSelectSignalement').append(inputMarkerSelect);
+			addSignalementsToForm("form-saveSelectSignalement");
+			$('#saveSelectSignalement').click();
 		}
+		
+		
+		
+		/* Select/unselect signalement */
+		function selectSignalement( checkbox, signalementId ) {
+			if (checkbox.checked && !signalement_select_arr.includes( signalementId ))
+		    {
+				signalement_select_arr.push( signalementId);
+				nbSigSelect++;
+	            nbSigUnselect--;
+	            $(".nbSigSelect").text(nbSigSelect);
+			    $(".nbSigUnselect").text(nbSigUnselect);
+		    } else {
+		    	removeItem(signalement_select_arr, signalementId);
+		    	nbSigSelect--;
+	            nbSigUnselect++;
+	            $(".nbSigSelect").text(nbSigSelect);
+			    $(".nbSigUnselect").text(nbSigUnselect);
+		    }
+		}
+		
 	</script>
-	
-	<!-- Modal Sauvegarde FDT-->
-	<div class="modal fade create-fdt-modale" id="saveFDTModal" tabindex="-1" role="dialog" aria-labelledby="exportFDTModal" aria-hidden="true">
-	  <div class="modal-dialog" role="document"> 
-	    <div class="modal-content">
-	      <@tform method='post' action='jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp' id="form-saveFdt">
-	      <div class="modal-header">
-	        <h3 class="modal-title">#i18n{dansmarue.tournee.select.popup.title}</h3>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-	        <div class="col-lg-12 fdt-modal-save">
-	        	<span class="blueDmr">#i18n{dansmarue.tournee.select.popup.createur} : </span> <input type="text" name="param_search_filter_creator" value="${user_login} " readonly><br><br>
-	        	<span class="blueDmr">#i18n{dansmarue.tournee.select.popup.nom}</span><br>
-	        	<span class="help">#i18n{dansmarue.tournee.select.popup.nom.help}</span><br>
-	        	<span class="prefixe" id="fdt_prefixe">#dskey{sitelabels.site_property.feuilledetournee.nom.prefix}${user_entite}_</span><input type='text' id="fdt_name" maxlength="32" value="${updated_part_name!}" required name="param_save_fdt_name" /><br><br>
-	        	<span class="blueDmr">#i18n{dansmarue.tournee.select.popup.commentaire}</span><br>
-	        	<textarea name="param_save_fdt_comment" rows='4' cols='50' maxlength='255'>${fdt_comment!}</textarea><br><br>
-			</div>
-	      </div>
-	      <input id="param_save_fdt_name_prefix" name="param_save_fdt_name_prefix" type="hidden" value="#dskey{sitelabels.site_property.feuilledetournee.nom.prefix}${user_entite}_">
-	      <input id="idFeuilleDeTournee" name="idFeuilleDeTournee" type="hidden" value="${feuille_de_tournee.id}">
-	      <div class="modal-footer">
-		    <@button class="btn btn-paris btn-red" id="submitFDT" type='submit' name='action_doUpdateFDT' title='#i18n{dansmarue.saveSignalement.save}' />
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">#i18n{dansmarue.saveSignalement.cancel}</button>
-	      </div>
-	      </@tform>
-	    </div>
-	  </div>
-	</div>
 	
 	<style type="text/css">
 	  div.pull-left {

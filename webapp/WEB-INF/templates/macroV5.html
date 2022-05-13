@@ -23,13 +23,24 @@
 				//Récupération de la vue selectionnée
 				idVueSelect = event.relatedTarget.getAttribute('id-vue');
 				
+				var isTabMosaique = event.relatedTarget.getAttribute('isTabMosaique');
+				
 				//Récupération des vues et des imagesUrl
 				vues = [];
 				imageUrl = [];
-				for(let photo of document.querySelectorAll("[id='"+idSignalement+"'] > [id-vue]")) {
-					vues.push(photo.getAttribute('id-vue'));
-					imageUrl.push(photo.getAttribute('image-url'));
-				  }
+				
+				if(isTabMosaique=='false'){
+					for(let photo of document.querySelectorAll("[id-signalement-photo='"+idSignalement+"'] > [id-vue]")) {
+						vues.push(photo.getAttribute('id-vue'));
+						imageUrl.push(photo.getAttribute('image-url'));
+					}
+				} else {
+					for(let photo of document.querySelectorAll("[id-signalement-mosaique='"+idSignalement+"'] > [id-vue]")) {
+						vues.push(photo.getAttribute('id-vue'));
+						imageUrl.push(photo.getAttribute('image-url'));
+					}
+				}
+				
 				
 				var indexPhoto = vues.indexOf(idVueSelect);
 				toggleFleche(indexPhoto, imageUrl.length);

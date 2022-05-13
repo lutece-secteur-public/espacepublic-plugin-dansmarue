@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -312,11 +312,23 @@ public final class SignalementConstants
     /** The Constant NOM_PHOTO_SERVICE_FAIT_PJ. */
     public static final String NOM_PHOTO_SERVICE_FAIT_PJ = AppPropertiesService.getProperty( "signalement.photo.fait" );
 
+    /** The Constant PHOTO_SERVICE_FAIT_NOM. */
+    public static final String PHOTO_SERVICE_FAIT_NOM = "Photo Service fait";
+
+    /** The Constant PHOTO_INITIALE_NOM. */
+    public static final String PHOTO_INITIALE_NOM = "Photo initiale";
+
     /** The Constant PROPERTY_MARKER_STATES_GREEN. */
     public static final String PROPERTY_MARKER_STATES_GREEN = "signalement.map.markers.states.green";
 
     /** The Constant PROPERTY_MARKER_STATES_YELLOW. */
     public static final String PROPERTY_MARKER_STATES_YELLOW = "signalement.map.markers.states.yellow";
+
+    public static final String TYPE_EXPORT_FDT_CARTE = "1";
+
+    public static final String TYPE_EXPORT_FDT_LISTE = "2";
+
+    public static final String TYPE_EXPORT_FDT_FULL = "3";
 
     /**
      * Utility class - empty constructor.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48,6 +48,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -106,6 +107,7 @@ import fr.paris.lutece.plugins.dansmarue.service.dto.DashboardSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DossierSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.HistorySignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
+import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementAdresseConstants;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.ImgUtils;
@@ -509,7 +511,31 @@ public class SignalementService implements ISignalementService
         Long numeroSignalement = _numeroSignalementService.findByMonthYear( signalement.getMois( ), signalement.getAnnee( ) );
         signalement.setNumero( numeroSignalement.intValue( ) );
 
+        checkAbreviationAdresse( signalement );
+
         return _signalementDAO.insert( signalement );
+    }
+
+    /**
+     * Remove abreviation from adresse.
+     *
+     * @param signalement
+     *            the signalement
+     */
+    public void checkAbreviationAdresse( Signalement signalement )
+    {
+        if ( ( signalement != null ) && ( signalement.getAdresses( ) != null ) && ( signalement.getAdresses( ).get( 0 ) != null )
+                && StringUtils.isNotBlank( signalement.getAdresses( ).get( 0 ).getAdresse( ) ) )
+        {
+            AtomicReference<String> adresse = new AtomicReference<>( signalement.getAdresses( ).get( 0 ).getAdresse( ) );
+            SignalementAdresseConstants.ABREVIATION_MAP.forEach( ( String key, String val ) -> {
+                if ( adresse.get( ).contains( key ) )
+                {
+                    adresse.set( adresse.get( ).replace( key, val ) );
+                }
+            } );
+            signalement.getAdresses( ).get( 0 ).setAdresse( adresse.get( ) );
+        }
     }
 
     /**
@@ -1266,12 +1292,20 @@ public class SignalementService implements ISignalementService
      * {@inheritDoc}
      */
     @Override
-    public List<Signalement> findAllSignalementInPerimeterWithInfo( Double lat, Double lng, Integer radius )
+    public List<Signalement> findAllSignalementInPerimeterWithInfo( Double lat, Double lng, Integer radius, String specificSignalementNumberSearch )
     {
         List<Integer> listStatus = getStatusToShowToPublic( );
 
         List<Integer> listIdSignalementInParameter = _signalementDAO.findAllSignalementInPerimeter( lat, lng, radius, listStatus );
+
         List<Signalement> listAllSignalement = new ArrayList<>( );
+
+        if ( !StringUtils.isEmpty( specificSignalementNumberSearch ) )
+        {
+            Signalement signalement = getAnomalieByNumber( specificSignalementNumberSearch );
+            listAllSignalement.add( signalement );
+            return listAllSignalement;
+        }
 
         for ( Integer nIdSignalement : listIdSignalementInParameter )
         {
@@ -1967,44 +2001,6 @@ public class SignalementService implements ISignalementService
      * {@inheritDoc}
      */
     @Override
-    public Collection<Action> getListActionsByIdSignalementAndUser( Signalement signalement )
-    {
-        // workflow action
-        Collection<Action> listActions = new ArrayList<>( );
-
-        String strListActionsNonAffichables = AppPropertiesService.getProperty( PROPERTY_ACTIONS_NON_AFFICHABLES );
-        List<String> listActionsNonAffichables = Arrays.asList( strListActionsNonAffichables.split( "," ) );
-
-        String strListActionsNonAffichablesPrestataire = AppPropertiesService.getProperty( PROPERTY_ACTIONS_NON_AFFICHABLES_PRESTATAIRE );
-        List<String> listActionsNonAffichablesPrestataire = Arrays.asList( strListActionsNonAffichablesPrestataire.split( "," ) );
-
-        for ( Action action : signalement.getListActionAvailable( ) )
-        {
-            boolean estAffichable = true;
-            if ( listActionsNonAffichables.contains( String.valueOf( action.getId( ) ) ) )
-            {
-                estAffichable = false;
-            }
-            if ( ( ( signalement.getIdState( ) == AppPropertiesService.getPropertyInt( ID_STATE_TRANSFERE_PRESTATAIRE, -1 ) )
-                    || ( signalement.getIdState( ) == AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE, -1 ) ) )
-                    && listActionsNonAffichablesPrestataire.contains( String.valueOf( action.getId( ) ) ) && signalement.getIsSendWS( ) )
-            {
-                estAffichable = false;
-            }
-            if ( estAffichable )
-            {
-                listActions.add( action );
-            }
-
-        }
-
-        return listActions;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean isSignalementFollowable( int nIdSignalement )
     {
         boolean ret = true;
@@ -2370,8 +2366,8 @@ public class SignalementService implements ISignalementService
     @Override
     public EtatSignalement getStateIfDateIndicated( SignalementFilter signalementFilter )
     {
-        if ( ( signalementFilter.getDateDoneBegin( ) != null && !signalementFilter.getDateDoneBegin( ).isEmpty( ) )
-                || ( signalementFilter.getDateDoneEnd( ) != null && !signalementFilter.getDateDoneEnd( ).isEmpty( ) ) )
+        if ( ( ( signalementFilter.getDateDoneBegin( ) != null ) && !signalementFilter.getDateDoneBegin( ).isEmpty( ) )
+                || ( ( signalementFilter.getDateDoneEnd( ) != null ) && !signalementFilter.getDateDoneEnd( ).isEmpty( ) ) )
         {
             EtatSignalement etatSignalement = new EtatSignalement( );
             etatSignalement.setCoche( true );

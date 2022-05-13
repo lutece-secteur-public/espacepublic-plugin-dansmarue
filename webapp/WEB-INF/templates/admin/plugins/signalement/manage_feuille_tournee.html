@@ -1,6 +1,4 @@
 <link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
-<#include "macro/modal_export_pdf.html" />
-<#include "macro/modal_transfert_fdt.html" />
 <!-- Formulaire de recherche -->
 <@box color='primary'>
 	<@boxBody>
@@ -73,19 +71,27 @@
 						#i18n{dansmarue.tournee.resultat.header.action}
 					</th>
 					<th>
-						<@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" attribute=""/>
+						<@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" attribute="nom"/>
 						#i18n{dansmarue.tournee.resultat.header.nom}
 					</th>
 					<th>
-						<@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" attribute=""/>
+						<@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" attribute="direction"/>
+						#i18n{dansmarue.tournee.resultat.header.direction}
+					</th>
+					<th>
+						<@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" attribute="entite"/>
+						#i18n{dansmarue.tournee.resultat.header.entite}
+					</th>
+					<th>
+						<@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" attribute="createur"/>
 						#i18n{dansmarue.tournee.resultat.header.createur}
 					</th>
 					<th>
-						<@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" attribute=""/>
+						<@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" attribute="date_creation"/>
 						#i18n{dansmarue.tournee.resultat.header.date.creation}
 					</th>
 					<th>
-						<@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" attribute=""/>
+						<@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" attribute="date_modification"/>
 						#i18n{dansmarue.tournee.resultat.header.date.modification}
 					</th>
 				</tr>
@@ -106,18 +112,15 @@
 							<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?action=getDeleteFDT&idFeuilleDeTournee=${fdt.id}" class="btn btn-xs btn-danger" 
 								title="#i18n{dansmarue.tournee.pdf.param.btn.delete}"> <i class="glyphicon glyphicon-trash"></i>
 							</a>
-							<button value="exportcsv"
-								data-toggle="modal" data-target="#exportFDTModal"
-								title="#i18n{dansmarue.tournee.pdf.param.btn.export}"
-								name="exportcsv" class="btn btn-xs btn-primary" onclick="addFeuilleDeTourneeId(${fdt.id})">
-								<i class="glyphicon glyphicon-save"></i>
-							</button>
-							<a href="#transfertFDTModal" onclick="addTransfertFeuilleDeTourneeId(${fdt.id})" title="#i18n{dansmarue.tournee.pdf.param.btn.transfer}" data-toggle="modal" data-target="#transfertFDTModal">
-								<img src="image?resource_type=workflow_icon_img&amp;id=12" alt="#i18n{dansmarue.tournee.pdf.param.btn.transfer}" width="24px">
-							</a>
 						</td>
 						<td> 
 							${fdt.nom!}
+						</td>
+						<td> 
+							${fdt.directionLibelle!}
+						</td>
+						<td> 
+							${fdt.entiteLibelle!}
 						</td>
 						<td> 
 							${fdt.createur!}
@@ -161,5 +164,3 @@
 		return dd +"/" + mm +"/" + yyyy;
 	}
 </script>
-<@modal_export_pdf/>
-<@modal_transfert_fdt/>

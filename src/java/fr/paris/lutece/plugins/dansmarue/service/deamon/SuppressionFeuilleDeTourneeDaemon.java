@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,7 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 public class SuppressionFeuilleDeTourneeDaemon extends Daemon
 {
-    private int _jourDelaiSuppression = Integer.parseInt( AppPropertiesService.getProperty( "signalement.deamon.suppressionFDT.delai.jour", "8" ) );
+    private int _jourDelaiSuppression = Integer.parseInt( AppPropertiesService.getProperty( "daemon.suppressionFDT.delai.jour", "30" ) );
     private IFeuilleDeTourneeService _feuilleTourneeService = SpringContextService.getBean( "feuilleDeTourneeService" );
 
     /**

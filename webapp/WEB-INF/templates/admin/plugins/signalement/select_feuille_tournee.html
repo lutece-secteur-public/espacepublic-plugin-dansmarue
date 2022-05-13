@@ -1,10 +1,167 @@
 <#include "macro/commons_signalement.html" />
 <script src="js/jquery.multi-select.min.js"></script>
 <script src="js/jquery.quicksearch.js"></script>
+<script type="text/javascript" src="js/sira.js"></script>
 <link rel="stylesheet" href="css/multi-select.css" type="text/css"/>
 <link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
 <#include "macro/map_feuille_de_tournee.html" />
 <#include "macro/table_feuille_de_tournee.html" />
+
+<script>
+	var signalement_select_arr = [];
+	var isNameOk = false;
+	
+	$("document").ready(function() {
+		addDateToPrefix();
+		let input = document.querySelector('#direction_id');
+		input.addEventListener('change', function () {
+			updateEntityList($("#direction_id").val());
+		});
+	});
+	
+	/* Création du préfix du nom */
+	function addDateToPrefix() {
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth()+1; 
+		var yyyy = today.getFullYear();
+		
+		if(dd<10) 
+		    dd='0'+dd;
+
+		if(mm<10)
+		    mm='0'+mm;
+		
+		var date = yyyy.toString() + mm.toString() + dd.toString();
+		
+		$("#fdt_prefixe").append( date + "_" );
+		
+		var inputVal = $("#param_save_fdt_name_prefix").val();
+		$("#param_save_fdt_name_prefix").val(inputVal + date + "_");
+	}
+	
+	function clickSaveBtn(  ) {
+		$("#form-saveFdt #signalementSelectIds").remove();
+		$("#form-saveFdt #markerSelectIndex").remove();
+		addSignalementsToForm( "form-saveFdt" );
+	}
+	
+	/* Ajout des signalements au formulaire */
+	function addSignalementsToForm( idForm ) {
+		var inputSignalements = $("<input>").attr({"type":"hidden","name":"signalementSelectIds", "id":"signalementSelectIds"}).val(signalement_select_arr);
+		$('#'+idForm).append(inputSignalements);
+		
+		/*var inputMarkerSelect = $("<input>").attr({"type":"hidden","name":"markerSelectIndex", "id":"markerSelectIndex"}).val(order_marker_select_arr);
+		$('#'+idForm).append(inputMarkerSelect);*/
+	}
+	
+	function checkNameValue() {
+		if( !isNameOk ) {
+			event.preventDefault();
+			var nameFdt = $("#param_save_fdt_name_prefix").val() + $("#fdt_name").val();
+			
+			$.get( "jsp/admin/plugins/signalement/CheckNameFDT.jsp", {param_fdt_name:nameFdt}, function( data ) {
+				if ( nameFdt === data.nom ) {
+					$('#fdtExistante').text( data.nom + " le " + data.dateCreation + " par " + data.createur )
+					$('#warningSaveFdtModal').modal('show');
+				} else {
+					isNameOk = true;
+					$('#submitFDT').click ();
+				}
+			});
+		}
+		else {
+			return;
+		}
+		
+	}
+	
+	//transform map to base64 String 
+	function carteToBase64(){
+		  html2canvas(document.querySelector("#map_canvas"), {allowTaint: true,useCORS: true, 
+		   onclone: function (mapClone) {
+			  var children = [].slice.call(mapClone.querySelector("div.leaflet-marker-pane").getElementsByTagName('div'),0);
+			  var i = 0;
+			  var arrayLength = children.length;
+			  while(i < arrayLength) {
+				if (children[i].classList.contains("awesome-number-marker-icon-blue") !== true) {
+				 children[i].remove();
+				} 
+				else {
+			       //changement des numeros sur marker en fonction de l'orde de selection
+				   var markerValue = children[i].firstChild.firstChild.innerText;
+				   var order = order_marker_select_arr.indexOf(parseInt(markerValue));
+				   children[i].firstChild.firstChild.innerText = order+1;
+				}
+				i++;
+			  }
+		   }}).then(function(canvas) {
+		    if ($('#param_carte_base_64').length > 0) {
+		      document.getElementById('param_carte_base_64').remove();
+			}
+            var dataURL = canvas.toDataURL('image/jpeg', 0.5);
+			var inputCarteBase64 = $("<input>").attr({"type":"hidden","name":"param_carte_base_64", "id":"param_carte_base_64"}).val(dataURL.split(';base64,')[1]);
+			$('#form-saveFdt').append(inputCarteBase64);
+          });
+	}
+	
+	function validateUpdateFDT() {
+		var inputIsUpdate = $("<input>").attr({"type":"hidden","name":"param_save_fdt_is_update", "id":"param_save_fdt_is_update"}).val("true");
+		$('#form-saveFdt').append(inputIsUpdate);
+		isNameOk = true;
+		$('#submitFDT').click();
+	}
+	
+	function changeOnglet( onglet ) {
+		var inputOngletActif = $("<input>").attr({"type":"hidden","name":"param_onglet_actif", "id":"param_onglet_actif"}).val(onglet);
+		$('#form-saveSelectSignalement').append(inputOngletActif);
+		addSignalementsToForm("form-saveSelectSignalement");
+		$('#saveSelectSignalement').click();
+	}
+	
+	/*Remove item from array*/
+	function removeItem(arr, value) { 
+	  const index = arr.indexOf(value);
+	  if (index > -1) {
+	    arr.splice(index, 1);
+	  }
+	  return arr;
+	}
+	
+	// Update the entity List with selected Unit (direction)
+	function updateEntityList(idDirection){
+	    if( (idDirection > 0) && idDirection != "")
+	    {
+	        jQuery.ajax( {
+	            url :"jsp/admin/plugins/signalement/DoGetEntityListByIdDirectionAjax.jsp",
+	            data: {
+	                direction_id: idDirection
+	            },
+	            success : function(data) { 
+	                var text = "";
+	                if(!(data.entity_list === void 0))
+	                {
+	                    var entities = data.entity_list || [];
+	                    var selectEntity = $("#entite_id");
+	                    selectEntity.empty();
+	                    if (entities.length > 0) {
+	                        $.each(entities, function(index, entity){
+	                                var option = $("<option />").attr("value", entity.id).text(entity.value);
+	                                selectEntity.append(option);
+	                        });     
+	                    }
+	                }
+	            },
+	            error:function (xhr, ajaxOptions, thrownError){
+	                alert(thrownError); 
+	            }   
+	        });
+	    }
+	    else {
+	    	$("#entite_id").empty();
+	    }
+	}
+</script>
 
 <@box color='primary'>
 	<div class="box-header">
@@ -15,16 +172,120 @@
 <div class="row">
 	<div class="col-xs-2 col-sm-12 col-md-12 col-lg-12">
 		<a class="btn btn-paris btn-blue" href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=create">#i18n{dansmarue.button.return} </a>
-		<span style="color: #0C518A;">#i18n{dansmarue.tournee.select.result}</span> : ${paginator.itemsCount}
+		<span style="color: #0C518A;">#i18n{dansmarue.tournee.select.result}</span> : <#if paginator??> ${paginator.itemsCount}<#else> ${signalements_map_list?size} </#if>
 		<div class="pull-right">
 			<@button id="export" params='disabled' class="btn btn-paris btn-red" title='#i18n{dansmarue.tournee.exportpdf}' />
-			<@button params='data-toggle="modal" data-target="#saveFDTModal" onclick="carteToBase64()"' class="btn btn-paris btn-red save" title='#i18n{dansmarue.tournee.sauvegarder}' />
+			<@button id="saveBtn" params='data-toggle="modal" data-target="#saveFDTModal" onclick="clickSaveBtn()"' class="btn btn-paris btn-red save" title='#i18n{dansmarue.tournee.sauvegarder}' />
 		</div>
 	</div>
 </div>
 <hr>
-<fieldset id="map-fdt">
-	<@map_feuille_de_tournee/>
-</fieldset>
-<br><br>
-<@table_feuille_de_tournee/>
+
+<div class="row" id="select-signalement-fdt">
+	<fieldset>
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div class="btn-group">
+				  	<label class="btn toggle-map-btns <#if onglet_actif='carte'>active</#if>"  id="display-map-btn" onclick="changeOnglet('carte')" >
+				  		<img id="map-icon" class="svg toggle-icon" src="images/admin/skin/plugins/signalement/map-icon.svg"/><label>Carte</label>
+				  	</label>
+				  	<label class="btn toggle-map-btns <#if onglet_actif='liste'>active</#if>"  id="display-list-btn" onclick="changeOnglet('liste')">
+						<img id="list-icon" class="svg toggle-icon" src="images/admin/skin/plugins/signalement/list-icon.svg"/><label>Liste</label>
+				  	</label>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+</div>
+
+<#if onglet_actif == "carte">
+	<fieldset id="map-fdt">
+		<@map_feuille_de_tournee/>
+	</fieldset>
+<#else>
+	<@table_feuille_de_tournee/>
+</#if>
+
+<@tform method='post' action='jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp' id="form-saveSelectSignalement" class="hide">
+	<@button class="btn btn-paris btn-red" id="saveSelectSignalement" type='submit' name='action_doSearchAno' title='#i18n{dansmarue.saveSignalement.save}' />
+</@tform>
+
+<!-- Modal Sauvegarde FDT-->
+<div class="modal fade create-fdt-modale" id="saveFDTModal" tabindex="-1" role="dialog" aria-labelledby="exportFDTModal" aria-hidden="true">
+  <div class="modal-dialog" role="document"> 
+    <div class="modal-content">
+      <@tform method='post' action='jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp' id="form-saveFdt">
+      <div class="modal-header">
+        <h3 class="modal-title">#i18n{dansmarue.tournee.select.popup.title}</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="col-lg-12 fdt-modal-save">
+        	<div class="form-group">
+        		<span class="blueDmr col-sm-12 col-lg-4">#i18n{dansmarue.tournee.select.popup.createur} : </span> 
+        		<div class="col-sm-12 col-lg-8">
+        			<input type="text" name="param_search_filter_creator" value="${user_login} " readonly>
+        		</div>
+        	</div>
+        	<div class="form-group">
+				<#if direction_list!?has_content && (direction_list!?size > 1)>
+					<span class="blueDmr col-sm-12 col-lg-4">#i18n{dansmarue.tournee.select.popup.direction}* : </span>
+					<div class="col-sm-12 col-lg-8">
+						<@comboWithParams additionalParameters="class='form-control input-sm' required" name="direction_id" items=direction_list default_value="" />
+					</div>
+				<#else>
+					#i18n{dansmarue.reportingList.listEmpty} 
+				</#if>
+			</div>
+			
+			<div class="form-group">
+				<#if direction_list!?has_content && (direction_list!?size > 1)>
+					<span class="blueDmr col-sm-12 col-lg-4">#i18n{dansmarue.tournee.select.popup.entite} : </span>
+					<div class="col-sm-12 col-lg-8">
+						<select id="entite_id" name="entite_id" class="form-control input-sm"></select>
+					</div>
+				<#else>
+					#i18n{dansmarue.reportingList.listEmpty} 
+				</#if>
+			</div>
+			
+        	<span class="blueDmr">#i18n{dansmarue.tournee.select.popup.nom}</span><br>
+        	<span class="help">#i18n{dansmarue.tournee.select.popup.nom.help}</span><br>
+        	<span class="prefixe" id="fdt_prefixe">#dskey{sitelabels.site_property.feuilledetournee.nom.prefix}${user_entite}_</span><input type='text' id="fdt_name" maxlength="32" required name="param_save_fdt_name" /><br><br>
+        	<span class="blueDmr">#i18n{dansmarue.tournee.select.popup.commentaire}</span><br>
+        	<textarea name="param_save_fdt_comment" rows='4' cols='50' maxlength='255'></textarea><br><br>
+		</div>
+      </div>
+      <input id="param_save_fdt_name_prefix" name="param_save_fdt_name_prefix" type="hidden" value="#dskey{sitelabels.site_property.feuilledetournee.nom.prefix}${user_entite}_">
+      <div class="modal-footer">
+	    <@button class="btn btn-paris btn-red" id="submitFDT" type='submit' name='action_dosaveFDT' title='#i18n{dansmarue.saveSignalement.save}' params='onclick="checkNameValue()"' />
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">#i18n{dansmarue.saveSignalement.cancel}</button>
+      </div>
+      </@tform>
+    </div>
+  </div>
+</div>
+
+<!-- Modal warning save fdt -->
+<div class="modal fade create-fdt-modale" id="warningSaveFdtModal" tabindex="-1" role="dialog" aria-labelledby="warningSaveFdtModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="warningModalLabel">Attention </h5>
+      </div>
+      <div class="modal-body">
+      	<span id="nom-existant">
+      		<p>#i18n{dansmarue.tournee.select.popup.erreur.nom.existant}</p>
+      		<p id="fdtExistante"></p>
+			<p>#i18n{dansmarue.tournee.select.popup.erreur.nom.existant.suppression}</p>
+      	</span>
+      </div>
+      <div class="modal-footer">
+	    <@button class="btn btn-paris btn-red"  title='Oui' params='onclick="validateUpdateFDT()"' />
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+      </div>
+    </div>
+  </div>
+</div>

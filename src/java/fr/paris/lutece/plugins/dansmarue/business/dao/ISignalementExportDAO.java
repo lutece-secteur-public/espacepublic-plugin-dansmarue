@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,6 +37,7 @@ import java.util.List;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
+import fr.paris.lutece.plugins.dansmarue.commons.Order;
 import fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -105,5 +106,31 @@ public interface ISignalementExportDAO
      * @return a list of reports formatted for search
      */
     List<Signalement> searchFindByFilter( SignalementFilter filter, List<String> listIdSignalement, Plugin plugin );
+
+    /**
+     * Search find by filter for FDT.
+     *
+     * @param filter
+     *            the filter
+     * @param listIdSignalement
+     *            the list id signalement
+     * @param plugin
+     *            the plugin
+     * @return the list
+     */
+    List<Signalement> searchFindByFilterForFDT( SignalementFilter filter, List<String> listIdSignalement, Plugin plugin );
+
+    /**
+     * Find by ids with order.
+     *
+     * @param ids
+     *            the ids
+     * @param order
+     *            the order
+     * @param plugin
+     *            the plugin
+     * @return the list
+     */
+    List<SignalementExportCSVDTO> findByIdsWithOrder( int [ ] ids, Order order, Plugin plugin );
 
 }

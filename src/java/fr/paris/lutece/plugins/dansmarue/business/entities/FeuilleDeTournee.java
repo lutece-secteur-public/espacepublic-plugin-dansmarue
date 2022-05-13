@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,6 +35,8 @@ package fr.paris.lutece.plugins.dansmarue.business.entities;
 
 import java.io.Serializable;
 import java.util.List;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * The Class FeuilleDeTournee.
@@ -83,6 +85,15 @@ public class FeuilleDeTournee implements Serializable
     /** display map in jasper pdf */
     private String _strDisplayMap;
 
+    @NotNull( message = "Le champ direction est obligatoire." )
+    private Integer _nIdDirection;
+
+    private Integer _nIdEntite;
+
+    private String _strDirectionLibelle;
+
+    private String _strEntiteLibelle;
+
     /**
      * Instantiates a new feuille de tournee.
      */
@@ -105,8 +116,13 @@ public class FeuilleDeTournee implements Serializable
      *            the list signalement ids
      * @param strNom
      *            the str nom
+     * @param nIdDirection
+     *            the n id direction
+     * @param nIdEntite
+     *            the n id entite
      */
-    public FeuilleDeTournee( String strCreateur, Integer nUnitId, String strCommentaire, Integer nFiltreFdtId, List<Integer> listSignalementIds, String strNom )
+    public FeuilleDeTournee( String strCreateur, Integer nUnitId, String strCommentaire, Integer nFiltreFdtId, List<Integer> listSignalementIds, String strNom,
+            Integer nIdDirection, Integer nIdEntite )
     {
         super( );
         _strCreateur = strCreateur;
@@ -115,6 +131,8 @@ public class FeuilleDeTournee implements Serializable
         _nFiltreFdtId = nFiltreFdtId;
         _listSignalementIds = listSignalementIds;
         _strNom = strNom;
+        _nIdDirection = nIdDirection;
+        _nIdEntite = nIdEntite;
     }
 
     /**
@@ -395,6 +413,46 @@ public class FeuilleDeTournee implements Serializable
     public void setDisplayMap( String displayMap )
     {
         _strDisplayMap = displayMap;
+    }
+
+    public Integer getIdDirection( )
+    {
+        return _nIdDirection;
+    }
+
+    public void setIdDirection( Integer idDirection )
+    {
+        _nIdDirection = idDirection;
+    }
+
+    public Integer getIdEntite( )
+    {
+        return _nIdEntite;
+    }
+
+    public void setIdEntite( Integer idEntite )
+    {
+        _nIdEntite = idEntite;
+    }
+
+    public String getDirectionLibelle( )
+    {
+        return _strDirectionLibelle;
+    }
+
+    public void setDirectionLibelle( String directionLibelle )
+    {
+        _strDirectionLibelle = directionLibelle;
+    }
+
+    public String getEntiteLibelle( )
+    {
+        return _strEntiteLibelle;
+    }
+
+    public void setEntiteLibelle( String entiteLibelle )
+    {
+        _strEntiteLibelle = entiteLibelle;
     }
 
 }

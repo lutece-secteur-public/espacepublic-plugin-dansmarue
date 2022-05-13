@@ -4,11 +4,11 @@
   <parent>
     <groupId>fr.paris.lutece.tools</groupId>
     <artifactId>lutece-global-pom</artifactId>
-    <version>5.0.2</version>
+    <version>5.1.2</version>
   </parent>
   <groupId>fr.paris.lutece.plugins</groupId>
   <artifactId>plugin-dansmarue</artifactId>
-  <version>6.8.8-SNAPSHOT</version>
+  <version>6.10.7-SNAPSHOT</version>
   <packaging>lutece-plugin</packaging>
   <name>plugin Dans Ma Rue (BO signalement)</name>
   <url>https://dev.lutece.paris.fr/gitlab/tmma/r59/plugin-signalement</url>
@@ -181,52 +181,4 @@
             </snapshots>
         </repository>       
     </repositories>
-
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.5.3</version>
-        <configuration combine.self="override">
-          <tagNameFormat>plugin-dansmarue-@{project.version}</tagNameFormat>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.5</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.4.201502262128</version>
-        <executions>
-          <execution>
-            <id>pre-unit-test</id>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-            <configuration>
-              <destFile>../target/coverage-reports/jacoco-unit.exec</destFile>
-              <append>true</append>
-            </configuration>
-          </execution>
-          <execution>
-            <id>post-unit-test</id>
-            <phase>test</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
-            <configuration>
-              <dataFile>../target/coverage-reports/jacoco-unit.exec</dataFile>
-              <outputDirectory>../target/coverage-reports/jacoco-ut</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
 </project>

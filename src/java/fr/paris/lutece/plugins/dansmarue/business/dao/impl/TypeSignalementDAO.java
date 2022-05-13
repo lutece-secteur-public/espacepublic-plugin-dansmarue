@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -1094,7 +1094,7 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
     public TypeSignalement getTypeSignalementByIdWithParents( Integer nIdTypeSignalement )
     {
         TypeSignalement ret = getTypeSignalement( nIdTypeSignalement );
-        if ( ret.getIdTypeSignalementParent( ) != null )
+        if ( ret != null && ret.getIdTypeSignalementParent( ) != null )
         {
             this.getTypeSignalementByIdWithParents( ret, ret.getIdTypeSignalementParent( ) );
         }

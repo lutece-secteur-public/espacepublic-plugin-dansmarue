@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,6 +37,7 @@ import java.util.List;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
+import fr.paris.lutece.plugins.dansmarue.commons.Order;
 import fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
 
@@ -92,4 +93,26 @@ public interface ISignalementExportService
      * @return the list
      */
     List<SignalementExportCSVDTO> findByIdsWithPhoto( int [ ] ids );
+
+    /**
+     * Find by ids with photo with order.
+     *
+     * @param ids
+     *            the ids
+     * @param order
+     *            the order
+     * @return the list
+     */
+    List<SignalementExportCSVDTO> findByIdsWithPhotoWithOrder( int [ ] ids, Order order );
+
+    /**
+     * Find by filter search for FDT.
+     *
+     * @param filter
+     *            the filter
+     * @param paginationProperties
+     *            the pagination properties
+     * @return the list
+     */
+    List<Signalement> findByFilterSearchForFDT( SignalementFilter filter, PaginationProperties paginationProperties );
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -359,6 +359,8 @@ public class SignalementJspBean extends AbstractJspBean
     /** The Constant PARAMETER_DIRECTION_ID. */
     private static final String PARAMETER_DIRECTION_ID = "direction_id";
 
+    private static final String PARAMETER_ONGLET = "onglet";
+
     /** The Constant PARAMETER_FROM_PAGE *. */
     private static final String PARAMETER_FROM_PAGE = "from_page";
 
@@ -416,6 +418,9 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant MARK_CONSEIL_QUARTIER_LIST. */
     private static final String MARK_CONSEIL_QUARTIER_LIST = "conseilQuartier_list";
+
+    /** The Constant MARK_VUE_PHOTO_LIST. */
+    private static final String MARK_VUE_PHOTO_LIST = "vuePhoto_list";
 
     /** The Constant MARK_ETATS_LIST. */
     private static final String MARK_ETATS_LIST = "etat_list";
@@ -1008,6 +1013,9 @@ public class SignalementJspBean extends AbstractJspBean
         List<ConseilQuartier> listeConseilQuartier = _conseilQuartier.selectQuartiersList( );
         model.put( MARK_CONSEIL_QUARTIER_LIST, listeConseilQuartier );
 
+        ReferenceList listVuePhotos = choiceTypePhoto( );
+        model.put( MARK_VUE_PHOTO_LIST, listVuePhotos );
+
         ReferenceItem refItem = new ReferenceItem( );
         refItem.setCode( Long.toString( -1 ) );
         refItem.setName( StringUtils.EMPTY );
@@ -1103,15 +1111,8 @@ public class SignalementJspBean extends AbstractJspBean
             {
                 // workflow actions
                 Collection<Action> listActions = null;
-                if ( dashboardSignalementList != null )
-                {
-                    listActions = _signalementService.getListActionsByIdSignalementAndUser( signalement.getId( ).intValue( ), signalementWorkflowId,
-                            getUser( ) );
-                }
-                else
-                {
-                    listActions = _signalementService.getListActionsByIdSignalementAndUser( signalement );
-                }
+
+                listActions = _signalementService.getListActionsByIdSignalementAndUser( signalement.getId( ).intValue( ), signalementWorkflowId, getUser( ) );
 
                 mapActions.put( signalement.getId( ).toString( ), new ArrayList<Action>( listActions ) );
 
@@ -1187,6 +1188,22 @@ public class SignalementJspBean extends AbstractJspBean
 
         return getAdminPage( getTemplate( TEMPLATE_MANAGE_SIGNALEMENT, model ) );
 
+    }
+
+    private ReferenceList choiceTypePhoto( )
+    {
+
+        ReferenceList listTypePhoto = new ReferenceList( );
+        ReferenceItem refItemTypePhoto1 = new ReferenceItem( );
+        refItemTypePhoto1.setCode( String.valueOf( 1 ) );
+        refItemTypePhoto1.setName( SignalementConstants.PHOTO_INITIALE_NOM );
+        listTypePhoto.add( refItemTypePhoto1 );
+        ReferenceItem refItemTypePhoto2 = new ReferenceItem( );
+        refItemTypePhoto2.setCode( String.valueOf( 2 ) );
+        refItemTypePhoto2.setName( SignalementConstants.PHOTO_SERVICE_FAIT_NOM );
+        listTypePhoto.add( refItemTypePhoto2 );
+
+        return listTypePhoto;
     }
 
     /**
@@ -1386,6 +1403,10 @@ public class SignalementJspBean extends AbstractJspBean
 
         // Date de fin à la date actuelle
         _signalementFilter.setDateEnd( LocalDate.now( ).format( DateTimeFormatter.ofPattern( DateUtils.DATE_FR ) ) );
+        _signalementFilter.setOnglet( "liste" );
+
+        // Photo Initial par defaut
+        _signalementFilter.setIdVuePhoto( 1 );
     }
 
     /**
@@ -3770,6 +3791,21 @@ public class SignalementJspBean extends AbstractJspBean
 
         }
         return getHomeUrl( request );
+    }
+
+    /**
+     * Do update onglet actif.
+     *
+     * @param request
+     *            the request
+     */
+    public void doUpdateOngletActif( HttpServletRequest request )
+    {
+        String strOnglet = request.getParameter( PARAMETER_ONGLET );
+        if ( StringUtils.isNotEmpty( strOnglet ) )
+        {
+            _signalementFilter.setOnglet( strOnglet );
+        }
     }
 
     /**

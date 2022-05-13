@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,6 +45,7 @@ import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.dansmarue.utils.SignalementUtils;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.portal.service.daemon.Daemon;
+import fr.paris.lutece.portal.service.datastore.DatastoreService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -67,7 +68,7 @@ public class WebServicePartnerDaemon extends Daemon
     // maximum amount of anomalies treated by the daemon at once
     private static final String MAX_ANOMALIES_TRAITED = "signalement.daemon.maxAnomalies.traited";
     // Nb days between today and signalement creation date
-    private static final String NB_DAYS_SINCE_CREATION_DATE = "signalement.daemon.nbdays.trasfert.partner";
+    private static final String NB_DAYS_SINCE_CREATION_DATE = "sitelabels.site_property.daemon.nbdays.trasfert.partner";
 
     /** The signalement workflow service. */
     // service
@@ -94,7 +95,7 @@ public class WebServicePartnerDaemon extends Daemon
 
         // 1) find the anomalies with the failure state
         int stateToFind = Integer.valueOf( AppPropertiesService.getProperty( ID_STATE_ECHEC_WS ) );
-        int nbDays = Integer.valueOf( AppPropertiesService.getProperty( NB_DAYS_SINCE_CREATION_DATE ) );
+        int nbDays = Integer.valueOf( DatastoreService.getDataValue( NB_DAYS_SINCE_CREATION_DATE, "30" ) );
         List<Integer> lstIdsSignalementFound = _signalementDAO.findIdsSingalementForWSPartnerDeamon( stateToFind, nbDays );
 
         AppLogService.info( lstIdsSignalementFound.size( ) + " anomalie(s) found with the failure send by ws" );

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -200,9 +200,11 @@ public interface ISignalementService
      *            the lng
      * @param radius
      *            the radius
+     * @param specificSignalementNumberSearch
+     *            specific Signalement to find (function SearchByNumber mobile application)
      * @return a list of all the reports in the given parameter
      */
-    List<Signalement> findAllSignalementInPerimeterWithInfo( Double lat, Double lng, Integer radius );
+    List<Signalement> findAllSignalementInPerimeterWithInfo( Double lat, Double lng, Integer radius, String specificSignalementNumberSearch );
 
     /**
      * Gets the anomalie by number.
@@ -725,21 +727,12 @@ public interface ISignalementService
 
     /**
      * Find Signalement prestataire.
-     * 
+     *
      * @param idSignalement
      *            id Signalement.
      * @return prestataire label.
      */
     String findPrestataireSignalement( int idSignalement );
-
-    /**
-     * Retrive list action to display.
-     *
-     * @param signalement
-     *            the signalement
-     * @return List action
-     */
-    Collection<Action> getListActionsByIdSignalementAndUser( Signalement signalement );
 
     /**
      * Gets the state if date indicated.

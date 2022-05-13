@@ -36,6 +36,11 @@
 		var signalement_arr = [];
 		var isMapInitOnce = false;
 		
+		var markerSelect;
+		<#if marker_select??>
+			markerSelect = ${marker_select};
+		</#if>
+		
 		$.getScript("jsp/admin/plugins/signalement/DoGetMap.jsp", function(data){
 			initLeafletMap("map_canvas");
 			drawMarkers();
@@ -52,6 +57,11 @@
 					signalement.lng = ${s.lng?replace(',', '.')};
 					signalement.tooltip ="${s.tooltip}";
 					signalement.colorNumber = "${s.colorNumber}";
+					
+					if(markerSelect == signalement.idSignalement) {
+						signalement.isSurbrillance = true;
+					}
+					
 					signalement_arr.push(signalement);
 				</#list>
 			}
@@ -96,6 +106,29 @@
 			var coordPoint = new Proj4js.Point(item.lng,item.lat);
 			Proj4js.transform(projSourceMapSRID, projDestSRID, coordPoint);
 			zoomToWithoutMarker(coordPoint.y,coordPoint.x);
+		}
+		
+		//transform map to base64 String 
+		function carteToBase64(){
+			  html2canvas(document.querySelector("#map_canvas"), {allowTaint: true,useCORS: true, 
+			   onclone: function (mapClone) {
+				  var children = [].slice.call(mapClone.querySelector("div.leaflet-marker-pane").getElementsByTagName('div'),0);
+				  var i = 0;
+				  var arrayLength = children.length;
+				  while(i < arrayLength) {
+					if (children[i].classList.contains("awesome-number-marker-icon-blue") !== true) {
+					 children[i].remove();
+					}
+					i++;
+				  }
+			   }}).then(function(canvas) {
+			    if ($('#param_carte_base_64').length > 0) {
+			      document.getElementById('param_carte_base_64').remove();
+				}
+	            var dataURL = canvas.toDataURL('image/jpeg', 0.5);
+				var inputCarteBase64 = $("<input>").attr({"type":"hidden","name":"param_carte_base_64", "id":"param_carte_base_64"}).val(dataURL.split(';base64,')[1]);
+				$('#form-export').append(inputCarteBase64);
+	          });
 		}
 		
 	</script>

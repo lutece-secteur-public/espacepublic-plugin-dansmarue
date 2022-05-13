@@ -144,7 +144,7 @@
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<printWhenExpression><![CDATA[$F{displayMap}.equals("true")]]></printWhenExpression>
 			<image scaleImage="FillFrame">
-				<reportElement x="0" y="230" width="585" height="250" uuid="96df8fcb-4968-4b93-8fd8-9ca3494ba6a5">
+				<reportElement x="0" y="200" width="585" height="250" uuid="96df8fcb-4968-4b93-8fd8-9ca3494ba6a5">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -153,11 +153,32 @@
 				<imageExpression><![CDATA[javax.imageio.ImageIO.read(new java.io.ByteArrayInputStream(java.util.Base64.getDecoder().decode($F{carteBase64})))]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="0" y="490" width="585" height="30" uuid="bfec7866-2810-4817-8cdb-34200880d938"/>
+				<reportElement x="0" y="460" width="585" height="30" uuid="bfec7866-2810-4817-8cdb-34200880d938"/>
 				<textElement textAlignment="Center">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nom}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="500" width="100" height="20" uuid="80c35710-cd05-44ce-b78d-5b56dd88f4b5">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<printWhenExpression><![CDATA[!$F{commentaire}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Commentaire : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="15" y="520" width="570" height="50" uuid="7b79aeaa-b5f3-4552-902a-a3aec2c15e03">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<printWhenExpression><![CDATA[$F{commentaire} != null]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{commentaire}]]></textFieldExpression>
 			</textField>
 			<break>
 				<reportElement x="0" y="730" width="99" height="1" uuid="391ee82b-4662-4d5b-a7c5-88a784ca3de4"/>
@@ -250,7 +271,7 @@
 						<jr:column width="100" uuid="fb2120b9-051f-4a30-8a54-e8c8d8f4877d">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
 							<jr:detailCell style="Table_TD" height="104">
-								<image hAlign="Center" vAlign="Middle">
+								<image hAlign="Center" vAlign="Middle" onErrorType="Blank">
 									<reportElement x="0" y="0" width="100" height="104" isRemoveLineWhenBlank="true" uuid="0a50bb4c-1b65-43e2-a0f7-f7b036e1e8cf"/>
 									<box padding="3"/>
 									<imageExpression><![CDATA[$F{imageEnsembleContent} != null ? javax.imageio.ImageIO.read(new java.io.ByteArrayInputStream(java.util.Base64.getDecoder().decode($F{imageEnsembleContent}))) : javax.imageio.ImageIO.read(new java.io.ByteArrayInputStream(java.util.Base64.getDecoder().decode($F{imagePresContent})))]]></imageExpression>

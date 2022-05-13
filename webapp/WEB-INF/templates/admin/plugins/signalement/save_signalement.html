@@ -247,9 +247,7 @@
 							for="#i18n{dansmarue.saveSignalement.commentaire}">#i18n{dansmarue.saveSignalement.commentaire}
 							: </label>
 						<div class="<@inputStyle />">
-							<input type="text" id="commentaire"
-								value="${(signalement.commentaire)!}" name="commentaire"
-								class="form-control input-sm" maxlength="155" />
+							<textarea rows="5" maxlength="250" style="width: 100%" id="commentaire" name="commentaire">${(signalement.commentaire)!}</textarea>
 						</div>
 					</div>
 					<div class="form-group">

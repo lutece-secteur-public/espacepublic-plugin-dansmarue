@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -72,7 +72,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
     /** The Constant SQL_QUERY_SELECTALL. */
     // SQL QUERIES
-    private static final String SQL_QUERY_SELECTALL = "SELECT numero, priorite, type_signalement, alias, alias_mobile, direction, quartier, adresse, coord_x, coord_y, arrondissement, secteur, date_creation, heure_creation, etat, mail_usager, commentaire_usager, nb_photos, raisons_rejet, nb_suivis, nb_felicitations, date_cloture, is_photo_service_fait, mail_destinataire_courriel, courriel_expediteur, date_envoi_courriel, id_mail_service_fait, executeur_service_fait, date_derniere_action, date_prevu_traitement, commentaire_agent_terrain, executeur_rejet, executeur_mise_surveillance, nb_requalifications, id_signalement "
+    private static final String SQL_QUERY_SELECTALL = "SELECT numero, priorite, type_signalement, alias, alias_mobile, direction, quartier, adresse, coord_x, coord_y, arrondissement, secteur, date_creation, heure_creation, etat, mail_usager, commentaire_usager, nb_photos, raisons_rejet, nb_suivis, nb_felicitations, date_cloture, is_photo_service_fait, mail_destinataire_courriel, courriel_expediteur, date_envoi_courriel, id_mail_service_fait, executeur_service_fait, date_derniere_action, date_prevu_traitement, commentaire_agent_terrain, executeur_rejet, executeur_mise_surveillance, nb_requalifications, id_signalement, id_wkf_state "
             + "FROM  signalement_export";
 
     /** The Constant SQL_QUERY_SEARCH_ID. */
@@ -83,6 +83,9 @@ public class SignalementExportDAO implements ISignalementExportDAO
             + " FROM  signalement_export se" + " LEFT OUTER JOIN signalement_photo sp on sp.fk_id_signalement = se.id_signalement"
             + " inner join signalement_signalement ss on ss.id_signalement = se.id_signalement" + " inner join workflow_state ws on ws.name = se.etat"
             + " LEFT OUTER JOIN workflow_action wa on wa.id_state_before = ws.id_state";
+
+    private static final String SQL_QUERY_SELECTALL_SEARCH_FOR_FDT = "select se.id_signalement , se.numero, se.priorite, se.type_signalement, se.direction, se.adresse, se.coord_x, se.coord_y, se.date_creation, se.etat,se.mail_usager, se.commentaire_usager, se.nb_suivis, se.date_prevu_traitement, se.commentaire_agent_terrain, se.id_wkf_state, sp.vue_photo , sp.image_thumbnail, sp.id_photo\r\n"
+            + "from signalement_export se left outer join signalement_photo sp on sp.fk_id_signalement = se.id_signalement";
 
     /** The Constant SQL_QUERY_COUNT_SEARCH. */
     private static final String SQL_QUERY_COUNT_SEARCH = "SELECT count(*) FROM  signalement_export";
@@ -189,8 +192,11 @@ public class SignalementExportDAO implements ISignalementExportDAO
     /** The Constant SQL_QUERY_NO_STATE_FILTER. */
     private static final String SQL_QUERY_NO_STATE_FILTER = " etat is not null ";
 
-    private static final String SQL_QUERY_DEFAULT_ORDER_FDT = " id_arrondissement  asc, lower(regexp_replace(adresse,'[[:digit:]]','','g')) asc, "
-            + "nullif(regexp_replace(split_part(adresse,' ',1), '\\D', '', 'g'), '')::int asc ";
+    private static final String SQL_QUERY_DEFAULT_ORDER_FDT = " CASE WHEN arrondissement = 'Paris Centre' and SUBSTR(SUBSTRING(adresse, '(75[0-9][0-9][0-9])'),4,2) ~ '^[0-9\\.]+$'" +
+            "    THEN SUBSTR(SUBSTRING(adresse, '(75[0-9][0-9][0-9])'),4,2) " +
+            "    END, id_arrondissement  asc, lower(regexp_replace(adresse,'[[:digit:]]','','g')) asc, " +
+            "    nullif(regexp_replace(split_part(adresse,' ',1), '\\D', '', 'g'), '')::int asc ";
+
 
     /** The Constant SQL_AND. */
     // SQL Constants
@@ -245,6 +251,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
         _ordersMap.put( "signalement.date_creation", "id_signalement" );
         _ordersMap.put( "signalement.heure_creation", null );
         _ordersMap.put( "photo.id_photo", "nb_photos" );
+        _ordersMap.put( "etat", "etat" );
     }
 
     /**
@@ -268,7 +275,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
         sbSQL.append( MessageFormat.format( SQL_QUERY_WHERE_ID_IN, StringUtils.remove( StringUtils.remove( Arrays.toString( ids ), '[' ), ']' ) ) );
         addDefaultOrderFDTSearch( sbSQL );
-        
+
         DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ), plugin );
         daoUtil.executeQuery( );
 
@@ -276,53 +283,99 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
         while ( daoUtil.next( ) )
         {
-            int nIndex = 1;
-
-            SignalementExportCSVDTO exportReport = new SignalementExportCSVDTO( );
-
-            exportReport.setNumeroSignalement( daoUtil.getString( nIndex++ ) );
-            exportReport.setPriorite( daoUtil.getString( nIndex++ ) );
-            exportReport.setTypeSignalement( daoUtil.getString( nIndex++ ) );
-            exportReport.setAlias( daoUtil.getString( nIndex++ ) );
-            exportReport.setAliasMobile( daoUtil.getString( nIndex++ ) );
-            exportReport.setDirection( daoUtil.getString( nIndex++ ) );
-            exportReport.setQuartier( daoUtil.getString( nIndex++ ) );
-            exportReport.setAdresse( daoUtil.getString( nIndex++ ) );
-            exportReport.setCoordX( daoUtil.getDouble( nIndex++ ) );
-            exportReport.setCoordY( daoUtil.getDouble( nIndex++ ) );
-            exportReport.setArrondissement( daoUtil.getString( nIndex++ ) );
-            exportReport.setSecteur( daoUtil.getString( nIndex++ ) );
-            exportReport.setDateCreation( daoUtil.getString( nIndex++ ) );
-            exportReport.setHeureCreation( daoUtil.getString( nIndex++ ) );
-            exportReport.setEtat( daoUtil.getString( nIndex++ ) );
-            exportReport.setMailusager( daoUtil.getString( nIndex++ ) );
-            exportReport.setCommentaireUsager( daoUtil.getString( nIndex++ ) );
-            exportReport.setNbPhotos( daoUtil.getInt( nIndex++ ) );
-            exportReport.setRaisonsRejet( daoUtil.getString( nIndex++ ) );
-            exportReport.setNbSuivis( daoUtil.getInt( nIndex++ ) );
-            exportReport.setNbFelicitations( daoUtil.getInt( nIndex++ ) );
-            exportReport.setDateCloture( daoUtil.getString( nIndex++ ) );
-            exportReport.setPhotoServiceFait( daoUtil.getBoolean( nIndex++ ) );
-            exportReport.setMailDestinataireCourriel( daoUtil.getString( nIndex++ ) );
-            exportReport.setCourrielExpediteur( daoUtil.getString( nIndex++ ) );
-            exportReport.setDateEnvoiCourriel( daoUtil.getString( nIndex++ ) );
-            exportReport.setIdMailServiceFait( daoUtil.getInt( nIndex++ ) );
-            exportReport.setExecuteurServiceFait( daoUtil.getString( nIndex++ ) );
-            exportReport.setDateDerniereAction( daoUtil.getString( nIndex++ ) );
-            exportReport.setDatePrevuTraitement( daoUtil.getString( nIndex++ ) );
-            exportReport.setCommentairAgentTerrain( daoUtil.getString( nIndex++ ) );
-            exportReport.setExecuteurRejet( daoUtil.getString( nIndex++ ) );
-            exportReport.setExecuteurMiseSurveillance( daoUtil.getString( nIndex++ ) );
-            exportReport.setNbRequalifications( daoUtil.getInt( nIndex++ ) );
-            exportReport.setIdSignalement( daoUtil.getInt( nIndex ) );
-
-            exportList.add( exportReport );
-
+            exportList.add( fillSignalement( daoUtil ) );
         }
 
         daoUtil.close( );
 
         return exportList;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<SignalementExportCSVDTO> findByIdsWithOrder( int [ ] ids, Order order, Plugin plugin )
+    {
+        StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECTALL );
+
+        sbSQL.append( MessageFormat.format( SQL_QUERY_WHERE_ID_IN, StringUtils.remove( StringUtils.remove( Arrays.toString( ids ), '[' ), ']' ) ) );
+
+        if ( StringUtils.equals( "adresse", order.getName( ) ) )
+        {
+            sbSQL.append( "ORDER BY " + SQL_QUERY_DEFAULT_ORDER_FDT );
+        }
+        else
+        {
+            sbSQL.append( "ORDER BY " + order.getName( ) + " " + order.getOrder( ) );
+        }
+
+        DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ), plugin );
+        daoUtil.executeQuery( );
+
+        List<SignalementExportCSVDTO> exportList = new ArrayList<>( );
+
+        while ( daoUtil.next( ) )
+        {
+            exportList.add( fillSignalement( daoUtil ) );
+        }
+
+        daoUtil.close( );
+
+        return exportList;
+    }
+
+    /**
+     * Fill signalement.
+     *
+     * @param daoUtil
+     *            the dao util
+     * @return the signalement export CSVDTO
+     */
+    private SignalementExportCSVDTO fillSignalement( DAOUtil daoUtil )
+    {
+        int nIndex = 1;
+
+        SignalementExportCSVDTO exportReport = new SignalementExportCSVDTO( );
+
+        exportReport.setNumeroSignalement( daoUtil.getString( nIndex++ ) );
+        exportReport.setPriorite( daoUtil.getString( nIndex++ ) );
+        exportReport.setTypeSignalement( daoUtil.getString( nIndex++ ) );
+        exportReport.setAlias( daoUtil.getString( nIndex++ ) );
+        exportReport.setAliasMobile( daoUtil.getString( nIndex++ ) );
+        exportReport.setDirection( daoUtil.getString( nIndex++ ) );
+        exportReport.setQuartier( daoUtil.getString( nIndex++ ) );
+        exportReport.setAdresse( daoUtil.getString( nIndex++ ) );
+        exportReport.setCoordX( daoUtil.getDouble( nIndex++ ) );
+        exportReport.setCoordY( daoUtil.getDouble( nIndex++ ) );
+        exportReport.setArrondissement( daoUtil.getString( nIndex++ ) );
+        exportReport.setSecteur( daoUtil.getString( nIndex++ ) );
+        exportReport.setDateCreation( daoUtil.getString( nIndex++ ) );
+        exportReport.setHeureCreation( daoUtil.getString( nIndex++ ) );
+        exportReport.setEtat( daoUtil.getString( nIndex++ ) );
+        exportReport.setMailusager( daoUtil.getString( nIndex++ ) );
+        exportReport.setCommentaireUsager( daoUtil.getString( nIndex++ ) );
+        exportReport.setNbPhotos( daoUtil.getInt( nIndex++ ) );
+        exportReport.setRaisonsRejet( daoUtil.getString( nIndex++ ) );
+        exportReport.setNbSuivis( daoUtil.getInt( nIndex++ ) );
+        exportReport.setNbFelicitations( daoUtil.getInt( nIndex++ ) );
+        exportReport.setDateCloture( daoUtil.getString( nIndex++ ) );
+        exportReport.setPhotoServiceFait( daoUtil.getBoolean( nIndex++ ) );
+        exportReport.setMailDestinataireCourriel( daoUtil.getString( nIndex++ ) );
+        exportReport.setCourrielExpediteur( daoUtil.getString( nIndex++ ) );
+        exportReport.setDateEnvoiCourriel( daoUtil.getString( nIndex++ ) );
+        exportReport.setIdMailServiceFait( daoUtil.getInt( nIndex++ ) );
+        exportReport.setExecuteurServiceFait( daoUtil.getString( nIndex++ ) );
+        exportReport.setDateDerniereAction( daoUtil.getString( nIndex++ ) );
+        exportReport.setDatePrevuTraitement( daoUtil.getString( nIndex++ ) );
+        exportReport.setCommentairAgentTerrain( daoUtil.getString( nIndex++ ) );
+        exportReport.setExecuteurRejet( daoUtil.getString( nIndex++ ) );
+        exportReport.setExecuteurMiseSurveillance( daoUtil.getString( nIndex++ ) );
+        exportReport.setNbRequalifications( daoUtil.getInt( nIndex++ ) );
+        exportReport.setIdSignalement( daoUtil.getInt( nIndex++ ) );
+        exportReport.setIdStatut( daoUtil.getInt( nIndex ) );
+
+        return exportReport;
     }
 
     /**
@@ -397,7 +450,9 @@ public class SignalementExportDAO implements ISignalementExportDAO
             exportReport.setCommentairAgentTerrain( daoUtil.getString( nIndex++ ) );
             exportReport.setExecuteurRejet( daoUtil.getString( nIndex++ ) );
             exportReport.setExecuteurMiseSurveillance( daoUtil.getString( nIndex++ ) );
-            exportReport.setNbRequalifications( daoUtil.getInt( nIndex ) );
+            exportReport.setNbRequalifications( daoUtil.getInt( nIndex++ ) );
+            exportReport.setIdSignalement( daoUtil.getInt( nIndex++ ) );
+            exportReport.setIdStatut( daoUtil.getInt( nIndex ) );
 
             exportList.add( exportReport );
 
@@ -540,6 +595,93 @@ public class SignalementExportDAO implements ISignalementExportDAO
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Signalement> searchFindByFilterForFDT( SignalementFilter filter, List<String> listIdSignalement, Plugin plugin )
+    {
+
+        List<Signalement> listSignalementFind = new ArrayList<>( );
+
+        StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECTALL_SEARCH_FOR_FDT );
+        sbSQL.append( MessageFormat.format( SQL_QUERY_WHERE_NUMERO_IN, String.join( ",", listIdSignalement ) ) );
+        // ADD ORDERS
+        // ADD ORDERS
+        if ( ( filter.getOrders( ).get( 0 ) != null ) && DEFAULT_ORDER_FDT.equals( filter.getOrders( ).get( 0 ).getName( ) ) )
+        {
+            addDefaultOrderFDTSearch( sbSQL );
+        }
+        else
+        {
+            List<Order> listeOrders = convertOrderToClause( filter.getOrders( ) );
+            addOrderClause( sbSQL, listeOrders );
+        }
+
+        try ( DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ), plugin ) ; )
+        {
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                int nIndex = 1;
+
+                if ( listSignalementFind.stream( ).anyMatch( signalement -> signalement.getId( ) == daoUtil.getInt( 1 ) ) )
+                {
+                    listSignalementFind.stream( ).filter( signalement -> signalement.getId( ) == daoUtil.getInt( 1 ) ).findFirst( )
+                    .ifPresent( ( Signalement signalement ) -> {
+                        signalement.setPhotos( addPhotosToSignalement( daoUtil, signalement.getPhotos( ) ) );
+                        signalement.setListActionAvailable( addActionToSignalement( daoUtil, signalement.getListActionAvailable( ) ) );
+                    } );
+
+                }
+                else
+                {
+
+                    Signalement exportReport = new Signalement( );
+
+                    exportReport.setId( daoUtil.getLong( nIndex++ ) );
+                    exportReport.setNumeroComplet( daoUtil.getString( nIndex++ ) );
+                    Priorite priorite = new Priorite( );
+                    priorite.setLibelle( daoUtil.getString( nIndex++ ) );
+                    exportReport.setPriorite( priorite );
+                    exportReport.setTypeSignalementComplet( daoUtil.getString( nIndex++ ) );
+                    Unit direction = new Unit( );
+                    direction.setLabel( daoUtil.getString( nIndex++ ) );
+                    exportReport.setDirectionSector( direction );
+                    List<Adresse> listAdresse = new ArrayList<>( );
+                    Adresse adresse = new Adresse( );
+                    adresse.setAdresse( daoUtil.getString( nIndex++ ) );
+                    adresse.setLat( daoUtil.getDouble( nIndex++ ) );
+                    adresse.setLng( daoUtil.getDouble( nIndex++ ) );
+                    listAdresse.add( adresse );
+                    exportReport.setAdresses( listAdresse );
+                    exportReport.setDateCreation( daoUtil.getString( nIndex++ ) );
+                    exportReport.setStateName( daoUtil.getString( nIndex++ ) );
+
+                    List<Signaleur> listSignaleur = new ArrayList<>( );
+                    Signaleur signaleur = new Signaleur( );
+                    signaleur.setMail( daoUtil.getString( nIndex++ ) );
+                    listSignaleur.add( signaleur );
+                    exportReport.setSignaleurs( listSignaleur );
+                    exportReport.setCommentaire( daoUtil.getString( nIndex++ ) );
+                    exportReport.setSuivi( daoUtil.getInt( nIndex++ ) );
+                    exportReport.setDatePrevueTraitement( daoUtil.getString( nIndex++ ) );
+                    exportReport.setCommentaireAgentTerrain( daoUtil.getString( nIndex++ ) );
+                    exportReport.setIdState( daoUtil.getInt( nIndex ) );
+
+                    List<PhotoDMR> listPhotos = new ArrayList<>( );
+                    exportReport.setPhotos( addPhotosToSignalement( daoUtil, listPhotos ) );
+
+                    listSignalementFind.add( exportReport );
+                }
+            }
+
+        }
+
+        return listSignalementFind;
+    }
+
+    /**
      * Add photo to signalement if not exist.
      *
      * @param daoUtil
@@ -569,7 +711,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
             ImageResource image = new ImageResource( );
             image.setImage( (byte [ ]) oImageContentThumbnail );
             photo.setImageThumbnail( image );
-            photo.setVue( indexVuePhoto );
+            photo.setVue( daoUtil.getInt( indexVuePhoto ) );
             photo.setId( idPhoto );
             listPhotos.add( photo );
 
@@ -681,7 +823,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
         {
             nIndex = addSQLWhereOr( false, sbSQL, nIndex );
             sbSQL.append( SQL_QUERY_ADD_FILTER_NUMERO );
-            sbSQL.append( SIMPLE_QUOTE + filter.getNumero( ) + SIMPLE_QUOTE );
+            sbSQL.append( SIMPLE_QUOTE + filter.getNumero( ).toUpperCase( ).trim( ) + SIMPLE_QUOTE );
         }
 
         // Board

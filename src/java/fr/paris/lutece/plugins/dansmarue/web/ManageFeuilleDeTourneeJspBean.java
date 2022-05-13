@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -61,6 +61,7 @@ import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.dansmarue.commons.Order;
 import fr.paris.lutece.plugins.dansmarue.commons.ResultList;
+import fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties;
 import fr.paris.lutece.plugins.dansmarue.service.IArrondissementService;
 import fr.paris.lutece.plugins.dansmarue.service.IConseilQuartierService;
 import fr.paris.lutece.plugins.dansmarue.service.IFeuilleDeTourneeService;
@@ -79,6 +80,7 @@ import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
+import fr.paris.lutece.portal.service.datastore.DatastoreService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -90,14 +92,18 @@ import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import fr.paris.lutece.portal.web.constants.Messages;
 import fr.paris.lutece.portal.web.constants.Parameters;
 import fr.paris.lutece.portal.web.util.LocalizedDelegatePaginator;
+import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
+import fr.paris.lutece.util.beanvalidation.ValidationError;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.sf.json.util.JSONBuilder;
 
 @Controller( controllerJsp = "ManageFeuilleDeTournee.jsp", controllerPath = "jsp/admin/plugins/signalement/", right = "FEUILLE_DE_TOURNEE" )
 public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
@@ -107,86 +113,95 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
     // Template html
     private static final String TEMPLATE_MANAGE = "/admin/plugins/signalement/manage_feuille_tournee.html";
     private static final String TEMPLATE_CREATE = "/admin/plugins/signalement/create_feuille_tournee.html";
-    private static final String TEMPLATE_EDIT = "/admin/plugins/signalement/edit_feuille_tournee.html";
-    private static final String TEMPLATE_LOAD = "/admin/plugins/signalement/load_feuille_tournee.html";
+    private static final String TEMPLATE_EDIT   = "/admin/plugins/signalement/edit_feuille_tournee.html";
+    private static final String TEMPLATE_LOAD   = "/admin/plugins/signalement/load_feuille_tournee.html";
     private static final String TEMPLATE_SELECT = "/admin/plugins/signalement/select_feuille_tournee.html";
 
     // View
     private static final String VIEW_MANAGE = "manage";
     private static final String VIEW_CREATE = "create";
-    private static final String VIEW_EDIT = "edit";
-    private static final String VIEW_LOAD = "load";
+    private static final String VIEW_EDIT   = "edit";
+    private static final String VIEW_LOAD   = "load";
 
     // Action
     private static final String ACTION_INIT_SEARCH_ANO = "doInitSearchAno";
-    private static final String ACTION_SEARCH_FDT = "doSearchFDT";
-    private static final String ACTION_SEARCH_ANO = "doSearchAno";
-    private static final String ACTION_SAVE_FDT = "dosaveFDT";
-    private static final String ACTION_UPDATE_FDT = "doUpdateFDT";
-    private static final String ACTION_SAVE_FILTER = "doSaveFilter";
-    private static final String ACTION_UPDATE_FILTER = "doUpdateFilter";
-    private static final String ACTION_DELETE_FILTER = "doDeleteFilter";
-    private static final String ACTION_LOAD_FILTER = "doLoadFilter";
-    private static final String ACTION_GET_DELETE_FDT = "getDeleteFDT";
+    private static final String ACTION_SEARCH_FDT      = "doSearchFDT";
+    private static final String ACTION_SEARCH_ANO      = "doSearchAno";
+    private static final String ACTION_SAVE_FDT        = "dosaveFDT";
+    private static final String ACTION_UPDATE_FDT      = "doUpdateFDT";
+    private static final String ACTION_SAVE_FILTER     = "doSaveFilter";
+    private static final String ACTION_UPDATE_FILTER   = "doUpdateFilter";
+    private static final String ACTION_DELETE_FILTER   = "doDeleteFilter";
+    private static final String ACTION_LOAD_FILTER     = "doLoadFilter";
+    private static final String ACTION_GET_DELETE_FDT  = "getDeleteFDT";
 
     // Marker
 
-    private static final String MARK_USER_ENTITE = "user_entite";
-    private static final String MARK_ID_FILTER_SELECT = "id_filter_select";
-    private static final String MARK_FILTER_LIST = "filter_list";
-    private static final String MARK_TYPE_LIST = "type_list";
-    private static final String MARK_ETAT_LIST = "etat_list";
-    private static final String MARK_FILTER = "filter";
-    private static final String MARK_PRIORITE_LIST = "priorite_list";
-    private static final String MARK_ARRONDISSEMENT_LIST = "arrondissement_list";
-    private static final String MARK_CONSEIL_QUARTIER_LIST = "conseilQuartier_list";
-    private static final String MARK_SECTEUR_LIST = "secteur_list";
-    private static final String MARK_ID_ETATS_DEFAULT = "etats_default";
-    private static final String MARK_SEARCH_FILTER_CREATOR = "search_filter_creator";
-    public static final String MARK_NOM_TEMPLATE = "nom_template";
-    private static final String MARK_SIGNALEMENT_LIST = "signalement_list";
-    private static final String MARK_TOTAL_SIGNALEMENT = "total_signalement";
-    private static final String MARK_LIST_FDT = "fdt_list";
-    private static final String MARK_FILTER_FDT = "filter_fdt";
-    private static final String MARK_SIGNALEMENTS_MAP_LIST = "signalements_map_list";
+    private static final String MARK_USER_ENTITE             = "user_entite";
+    private static final String MARK_ID_FILTER_SELECT        = "id_filter_select";
+    private static final String MARK_FILTER_LIST             = "filter_list";
+    private static final String MARK_TYPE_LIST               = "type_list";
+    private static final String MARK_ETAT_LIST               = "etat_list";
+    private static final String MARK_FILTER                  = "filter";
+    private static final String MARK_PRIORITE_LIST           = "priorite_list";
+    private static final String MARK_ARRONDISSEMENT_LIST     = "arrondissement_list";
+    private static final String MARK_CONSEIL_QUARTIER_LIST   = "conseilQuartier_list";
+    private static final String MARK_SECTEUR_LIST            = "secteur_list";
+    private static final String MARK_ENTITY_LIST             = "entity_list";
+    private static final String MARK_ID_ETATS_DEFAULT        = "etats_default";
+    private static final String MARK_SEARCH_FILTER_CREATOR   = "search_filter_creator";
+    public static final  String MARK_NOM_TEMPLATE            = "nom_template";
+    private static final String MARK_SIGNALEMENT_LIST        = "signalement_list";
+    private static final String MARK_TOTAL_SIGNALEMENT       = "total_signalement";
+    private static final String MARK_LIST_FDT                = "fdt_list";
+    private static final String MARK_FILTER_FDT              = "filter_fdt";
+    private static final String MARK_SIGNALEMENTS_MAP_LIST   = "signalements_map_list";
     private static final String MARK_SIGNALEMENTS_SELECT_IDS = "signalementSelectIds";
-    private static final String MARK_USER_LOGIN = "user_login";
-    private static final String MARK_FEUILLE_DE_TOURNEE = "feuille_de_tournee";
-    private static final String MARK_UPDATED_PART_FDT_NAME = "updated_part_name";
-    private static final String MARK_FDT_COMMENT = "fdt_comment";
+    private static final String MARK_USER_LOGIN              = "user_login";
+    private static final String MARK_FEUILLE_DE_TOURNEE      = "feuille_de_tournee";
+    private static final String MARK_UPDATED_PART_FDT_NAME   = "updated_part_name";
+    private static final String MARK_FDT_COMMENT             = "fdt_comment";
+    private static final String MARK_ONGLET_ACTIF            = "onglet_actif";
+    private static final String MARK_MARKER_SELECT           = "marker_select";
+    private static final String MARK_DIRECTION_LIST          = "direction_list";
+    private static final String MARK_ENTITE_LIST             = "entite_list";
 
     // Parameter
-    private static final String PARAMETER_SEARCH_FILTER_CREATOR = "param_search_filter_creator";
-    private static final String PARAMETER_SEARCH_FILTER_NAME = "param_search_filter_name";
-    private static final String PARAMETER_SEARCH_FILTER_COMMENT = "param_search_filter_comment";
-    private static final String PARAMETER_SEARCH_FILTER_SELECT = "param_filter";
-    private static final String PARAMETER_FILTER_LOAD = "param_filter_load";
-    private static final String PARAMETER_NAME = "param_fdt_name";
-    private static final String PARAMETER_ETAT = "etat";
-    private static final String PARAMETER_PRIORITE = "priorite";
-    private static final String PARAMETER_TYPOLOGIE = "typologieSelect";
-    private static final String PARAMETER_ARRONDISEMENT = "arrondissement";
-    private static final String PARAMETER_QUARTIER = "listIdQuartierParam";
-    private static final String PARAMETER_DATE_BEGIN = "dateBegin";
-    private static final String PARAMETER_DATE_END = "dateEnd";
+    private static final String PARAMETER_SEARCH_FILTER_CREATOR      = "param_search_filter_creator";
+    private static final String PARAMETER_SEARCH_FILTER_NAME         = "param_search_filter_name";
+    private static final String PARAMETER_SEARCH_FILTER_COMMENT      = "param_search_filter_comment";
+    private static final String PARAMETER_SEARCH_FILTER_SELECT       = "param_filter";
+    private static final String PARAMETER_FILTER_LOAD                = "param_filter_load";
+    private static final String PARAMETER_NAME                       = "param_fdt_name";
+    private static final String PARAMETER_ETAT                       = "etat";
+    private static final String PARAMETER_PRIORITE                   = "priorite";
+    private static final String PARAMETER_TYPOLOGIE                  = "typologieSelect";
+    private static final String PARAMETER_ARRONDISEMENT              = "arrondissement";
+    private static final String PARAMETER_QUARTIER                   = "listIdQuartierParam";
+    private static final String PARAMETER_DATE_BEGIN                 = "dateBegin";
+    private static final String PARAMETER_DATE_END                   = "dateEnd";
     private static final String PARAMETER_DATE_REQUALIFICATION_BEGIN = "dateRequalificationBegin";
-    private static final String PARAMETER_DATE_REQUALIFICATION_END = "dateRequalificationEnd";
-    private static final String PARAMETER_DATE_PROGRAMMATION_BEGIN = "dateProgrammationBegin";
-    private static final String PARAMETER_DATE_PROGRAMMATION_END = "dateProgrammationEnd";
-    private static final String PARAMETER_COMMENTAIRE_AGENT_TERRAIN = "commentaireAgentTerrain";
-    private static final String PARAMETER_COMMENTAIRE_USAGER = "commentaire";
-    private static final String PARAMETER_ADRESSE = "adresse";
-    private static final String PARAMETER_ENTITE = "idSector";
-    private static final String PARAMETER_MAP_CHECKBOX = "mapCheckbox";
-    private static final String PARAMETER_DESTINAIRES_EXPORT = "destinataires";
-    private static final String PARAMETER_DESTINAIRES_TRANSFERT = "destinatairesTransfert";
-    private static final String PARAMETER_FEUILLE_DE_TOURNEE_ID = "idFeuilleDeTournee";
-    private static final String PARAMETER_SIGNALEMENTS_SELECT_IDS = "signalementSelectIds";
-    private static final String PARAMETER_SAVE_NAME_PREFIX = "param_save_fdt_name_prefix";
-    private static final String PARAMETER_SAVE_NAME = "param_save_fdt_name";
-    private static final String PARAMETER_SAVE_IS_UPDATE = "param_save_fdt_is_update";
+    private static final String PARAMETER_DATE_REQUALIFICATION_END   = "dateRequalificationEnd";
+    private static final String PARAMETER_DATE_PROGRAMMATION_BEGIN   = "dateProgrammationBegin";
+    private static final String PARAMETER_DATE_PROGRAMMATION_END     = "dateProgrammationEnd";
+    private static final String PARAMETER_COMMENTAIRE_AGENT_TERRAIN  = "commentaireAgentTerrain";
+    private static final String PARAMETER_COMMENTAIRE_USAGER         = "commentaire";
+    private static final String PARAMETER_ADRESSE                    = "adresse";
+    private static final String PARAMETER_MAIL_USAGER                = "mail";
+    private static final String PARAMETER_ENTITE                     = "idSector";
+    private static final String PARAMETER_DESTINAIRES_EXPORT         = "destinataires";
+    private static final String PARAMETER_FEUILLE_DE_TOURNEE_ID      = "idFeuilleDeTournee";
+    private static final String PARAMETER_SIGNALEMENTS_SELECT_IDS    = "signalementSelectIds";
+    private static final String PARAMETER_SAVE_NAME_PREFIX           = "param_save_fdt_name_prefix";
+    private static final String PARAMETER_SAVE_NAME                  = "param_save_fdt_name";
+    private static final String PARAMETER_SAVE_IS_UPDATE             = "param_save_fdt_is_update";
     private static final String PARAMETER_CARTE_BASE64 = "param_carte_base_64";
     private static final String PARAMETER_SAVE_COMMENT = "param_save_fdt_comment";
+    private static final String PARAMETER_ONGLET_ACTIF = "param_onglet_actif";
+    private static final String PARAMETER_TYPE_EXPORT = "param_type_export";
+    private static final String PARAMETER_MARKER_SELECT = "marker_select";
+    private static final String PARAMETER_DIRECTION_ID = "direction_id";
+    private static final String PARAMETER_ENTITE_ID = "entite_id";
 
     // MESSAGES
     private static final String MESSAGE_ERROR_DATE = "dansmarue.message.fdt.date.error";
@@ -213,22 +228,31 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
 
     private static final String TYPE_PDF = "application/pdf";
 
-    private static final String NOM_TEMPLATE = "feuilleDeTournee";
+    private static final String NOM_TEMPLATE               = "feuilleDeTournee";
+    private static final String NOM_TEMPLATE_CARTE         = "feuilleDeTourneeCarte";
+    private static final String EXTENSION_APPLICATION_JSON = "application/json";
+    private static final String JSON_KEY_ID                = "id";
+    public static final  String PAGE_INDEX                 = "page_index";
+    public static final  String ID_UNIT                    = "idUnit";
+    public static final  String LABEL                      = "label";
 
     // Service
-    private transient ITypeSignalementService _typeSignalementService = SpringContextService.getBean( "typeSignalementService" );
-    private transient IPrioriteService _prioriteService = SpringContextService.getBean( "prioriteService" );
-    private transient IArrondissementService _arrondissementService = SpringContextService.getBean( "signalement.arrondissementService" );
-    private transient IConseilQuartierService _conseilQuartier = SpringContextService.getBean( "signalement.conseilQuartierService" );
-    private transient IUnitService _unitService = SpringContextService.getBean( "unittree.unitService" );
-    private transient ISectorService _sectorService = SpringContextService.getBean( "unittree-dansmarue.sectorService" );
-    private transient IFeuilleDeTourneeService _feuilleTourneeService = SpringContextService.getBean( "feuilleDeTourneeService" );
-    private transient ISignalementExportService _signalementExportService = SpringContextService.getBean( "signalementExportService" );
+    private final transient ITypeSignalementService   _typeSignalementService   = SpringContextService.getBean( "typeSignalementService" );
+    private final transient IPrioriteService          _prioriteService          = SpringContextService.getBean( "prioriteService" );
+    private final transient IArrondissementService    _arrondissementService    = SpringContextService.getBean( "signalement.arrondissementService" );
+    private final transient IConseilQuartierService   _conseilQuartier          = SpringContextService.getBean( "signalement.conseilQuartierService" );
+    private final transient IUnitService              _unitService              = SpringContextService.getBean( "unittree.unitService" );
+    private final transient ISectorService            _sectorService            = SpringContextService.getBean( "unittree-dansmarue.sectorService" );
+    private final transient IFeuilleDeTourneeService  _feuilleTourneeService    = SpringContextService.getBean( "feuilleDeTourneeService" );
+    private final transient ISignalementExportService _signalementExportService = SpringContextService.getBean( "signalementExportService" );
 
     private static final String STATE_NOT_DISPLAY = "signalement.state.not.display";
 
-    private SignalementFilter _signalementFilter;
+    private SignalementFilter      _signalementFilter;
     private FeuilleDeTourneeFilter _feuilleDeTourneeFilter;
+
+    private static final String ONGLET_ACTIF_CARTE   = "carte";
+    private static final String ONGLET_ACTIF_TABLEAU = "tableau";
 
     /**
      * Page de gestion des feuilles de tournée.
@@ -248,7 +272,22 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
 
         _feuilleDeTourneeFilter = _feuilleTourneeService.initFdtFilter( _feuilleDeTourneeFilter );
 
-        List<FeuilleDeTournee> feuilleDeTourneeList = _feuilleTourneeService.loadFdtByFilter( _feuilleDeTourneeFilter );
+        List<FeuilleDeTournee> feuilleDeTourneeList;
+
+        String strSortedAttributeName = request.getParameter( Parameters.SORTED_ATTRIBUTE_NAME );
+        if ( strSortedAttributeName != null )
+        {
+            String strAscSort = request.getParameter( Parameters.SORTED_ASC );
+            boolean bIsAscSort = Boolean.parseBoolean( strAscSort );
+            Order order = new Order( strSortedAttributeName, bIsAscSort );
+
+            feuilleDeTourneeList = _feuilleTourneeService.loadFdtByFilterWithOrder( _feuilleDeTourneeFilter, order );
+        }
+        else
+        {
+            feuilleDeTourneeList = _feuilleTourneeService.loadFdtByFilter( _feuilleDeTourneeFilter );
+        }
+
         List<FeuilleDeTournee> feuilleDeTourneeListAutorise = _feuilleTourneeService.getFeuilleDeTourneeAutorise( feuilleDeTourneeList,
                 AdminUserService.getAdminUser( request ) );
 
@@ -263,6 +302,10 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
     @Action( ACTION_SEARCH_FDT )
     public String doSearchFdt( HttpServletRequest request )
     {
+        if ( _feuilleDeTourneeFilter == null )
+        {
+            _feuilleDeTourneeFilter = new FeuilleDeTourneeFilter( );
+        }
         populate( _feuilleDeTourneeFilter, request );
 
         if ( !_feuilleDeTourneeFilter.isDatesValid( ) )
@@ -318,12 +361,12 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         {
             int idFilter = Integer.parseInt( request.getParameter( PARAMETER_FILTER_LOAD ) );
 
-            model.put( MARK_FILTER, initFilterWithSelectedFilter( request, states, idFilter ) );
+            model.put( MARK_FILTER, initFilterWithSelectedFilter( states, idFilter ) );
             model.put( MARK_ID_FILTER_SELECT, idFilter );
         }
         else
         {
-            model.put( MARK_FILTER, initFilter( request, states, priorites, arrondissements ) );
+            model.put( MARK_FILTER, initFilter( states, priorites, arrondissements ) );
             model.put( MARK_ID_FILTER_SELECT, DEFAULT_ID );
         }
 
@@ -345,8 +388,6 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
     /**
      * Init signalement Filter.
      *
-     * @param request
-     *            the request
      * @param states
      *            All display state
      * @param priorites
@@ -355,7 +396,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
      *            all arrondisements
      * @return SignalementFilter
      */
-    private SignalementFilter initFilter( HttpServletRequest request, List<State> states, List<Priorite> priorites, List<Arrondissement> arrondissements )
+    private SignalementFilter initFilter( List<State> states, List<Priorite> priorites, List<Arrondissement> arrondissements )
     {
         _signalementFilter = new SignalementFilter( );
 
@@ -403,19 +444,11 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
     /**
      * Init signalement Filter with filter load.
      *
-     * @param request
-     *            the request
-     * @param states
-     *            All display state
-     * @param priorites
-     *            all priorites
-     * @param arrondissements
-     *            all arrondisements
-     * @param idFilterLoad
-     *            id filter select
+     * @param states       All display state
+     * @param idFilterLoad id filter select
      * @return SignalementFilter
      */
-    private SignalementFilter initFilterWithSelectedFilter( HttpServletRequest request, List<State> states, int idFilterLoad )
+    private SignalementFilter initFilterWithSelectedFilter( List<State> states, int idFilterLoad )
     {
 
         String jsonFilterValue = _feuilleTourneeService.loadSearchFilterById( idFilterLoad );
@@ -492,11 +525,11 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         _signalementFilter = new SignalementFilter( );
 
         _signalementFilter
-                .setListIdTypeSignalements( new ArrayList<Integer>( JSONArray.toCollection( jsonObjectFilterValue.getJSONArray( PARAMETER_TYPOLOGIE ) ) ) );
+        .setListIdTypeSignalements( new ArrayList<Integer>( JSONArray.toCollection( jsonObjectFilterValue.getJSONArray( PARAMETER_TYPOLOGIE ) ) ) );
         _signalementFilter.setEtats( etats );
         _signalementFilter.setPriorites( new ArrayList<Integer>( JSONArray.toCollection( jsonObjectFilterValue.getJSONArray( PARAMETER_PRIORITE ) ) ) );
         _signalementFilter
-                .setListIdArrondissements( new ArrayList<Integer>( JSONArray.toCollection( jsonObjectFilterValue.getJSONArray( PARAMETER_ARRONDISEMENT ) ) ) );
+        .setListIdArrondissements( new ArrayList<Integer>( JSONArray.toCollection( jsonObjectFilterValue.getJSONArray( PARAMETER_ARRONDISEMENT ) ) ) );
         _signalementFilter.setListIdQuartier( new ArrayList<Integer>( JSONArray.toCollection( jsonObjectFilterValue.getJSONArray( PARAMETER_QUARTIER ) ) ) );
 
         _signalementFilter.setDateBegin( jsonObjectFilterValue.getString( PARAMETER_DATE_BEGIN ) );
@@ -512,6 +545,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         _signalementFilter.setCommentaire( jsonObjectFilterValue.getString( PARAMETER_COMMENTAIRE_USAGER ) );
         _signalementFilter.setAdresse( jsonObjectFilterValue.getString( PARAMETER_ADRESSE ) );
         _signalementFilter.setIdSector( jsonObjectFilterValue.getInt( PARAMETER_ENTITE ) );
+        _signalementFilter.setMail( jsonObjectFilterValue.getString( PARAMETER_MAIL_USAGER ) );
 
         return _signalementFilter;
 
@@ -609,20 +643,58 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
 
         if ( feuilleDeTournee.getId( ) != null )
         {
-            if ( !_feuilleTourneeService.isUnitAuthorizedToUser( connectedUser, _unitService.getUnit( feuilleDeTournee.getUnitId( ), false ) ) )
+            int idEntite = feuilleDeTournee.getIdEntite() > -1 ? feuilleDeTournee.getIdEntite() : feuilleDeTournee.getIdDirection();
+            if ( !_feuilleTourneeService.isUnitAuthorizedToUser( connectedUser, _unitService.getUnit( idEntite, false ) ) )
             {
                 throw new AccessDeniedException( MESSAGE_ACCESS_DENIED );
             }
 
-            ResultList<SignalementExportCSVDTO> resultListSignalement = new ResultList<>( );
+            String ongletActif = request.getParameter( PARAMETER_ONGLET_ACTIF );
+            if ( ( ongletActif == null ) && ( request.getParameter( PAGE_INDEX ) == null ) )
+            {
+                ongletActif = ONGLET_ACTIF_CARTE;
+            }
+            else if ( ongletActif == null )
+            {
+                ongletActif = ONGLET_ACTIF_TABLEAU;
+            }
+            model.put( MARK_ONGLET_ACTIF, ongletActif );
 
-            List<SignalementExportCSVDTO> signalements = _signalementExportService
-                    .findByIdsWithPhoto( feuilleDeTournee.getListSignalementIds( ).stream( ).mapToInt( i -> i ).toArray( ) );
 
-            resultListSignalement.addAll( signalements );
+            List<SignalementExportCSVDTO> signalements;
+
+            String strSortedAttributeName = request.getParameter( Parameters.SORTED_ATTRIBUTE_NAME );
+            if ( strSortedAttributeName != null )
+            {
+                String strAscSort = request.getParameter( Parameters.SORTED_ASC );
+                boolean bIsAscSort = Boolean.parseBoolean( strAscSort );
+                Order order = new Order( strSortedAttributeName, bIsAscSort );
+
+                signalements = _signalementExportService
+                        .findByIdsWithPhotoWithOrder( feuilleDeTournee.getListSignalementIds( ).stream( ).mapToInt( i -> i ).toArray( ), order );
+            }
+            else
+            {
+                signalements = _signalementExportService
+                        .findByIdsWithPhoto( feuilleDeTournee.getListSignalementIds( ).stream( ).mapToInt( i -> i ).toArray( ) );
+            }
+
+            if ( request.getParameterValues( PARAMETER_SIGNALEMENTS_SELECT_IDS ) != null )
+            {
+                model.put( MARK_SIGNALEMENTS_SELECT_IDS, Arrays.asList( request.getParameter( PARAMETER_SIGNALEMENTS_SELECT_IDS ).split(",") ).
+                        stream( ).map( str -> Integer.parseInt( str ) ).collect( Collectors.toList( ) ) );
+            }
+            else
+            {
+                model.put( MARK_SIGNALEMENTS_SELECT_IDS, feuilleDeTournee.getListSignalementIds( ) );
+            }
+
+
+
+            ResultList<SignalementExportCSVDTO> resultListSignalement = managePaginationForViewEditAndLoad(request,signalements);
 
             LocalizedDelegatePaginator<SignalementExportCSVDTO> paginator = this.getPaginator( request, resultListSignalement,
-                    URL_JSP_MANAGE_FEUILLE_TOURNEE + "?view=load&idFeuilleDeTournee=" + feuilledeDeTourneId, signalements.size( ) );
+                    URL_JSP_MANAGE_FEUILLE_TOURNEE + "?view=edit&idFeuilleDeTournee=" + feuilledeDeTourneId, signalements.size( ) );
 
             model.put( SignalementConstants.MARK_NB_ITEMS_PER_PAGE, StringUtils.EMPTY + _nItemsPerPage );
             model.put( MARK_FEUILLE_DE_TOURNEE, feuilleDeTournee );
@@ -632,14 +704,16 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
             model.put( SignalementConstants.MARK_PAGINATOR, paginator );
             model.put( MARK_SIGNALEMENT_LIST, paginator.getPageItems( ) );
             model.put( MARK_NOM_TEMPLATE, NOM_TEMPLATE );
-            model.put( MARK_SIGNALEMENTS_MAP_LIST,
-                    _feuilleTourneeService.getSignalementsMapMarkerDTOFromSignalementsEdition( signalements, request.getLocale( ) ) );
+            model.put( MARK_SIGNALEMENTS_MAP_LIST, _feuilleTourneeService.getSignalementsMapMarkerDTOFromSignalementsEdition( signalements, request.getLocale( ) ) );
 
             List<Unit> listUnit = _unitService.getUnitsByIdUser( connectedUser.getUserId( ), false );
             Unit unit = listUnit.isEmpty( ) ? null : listUnit.get( 0 );
             model.put( MARK_USER_ENTITE, unit != null ? unit.getLabel( ) : "" );
 
             model.put( MARK_USER_LOGIN, connectedUser.getAccessCode( ) );
+            model.put( MARK_MARKER_SELECT, request.getParameter( PARAMETER_MARKER_SELECT ) );
+            model.put( MARK_DIRECTION_LIST, ListUtils.toReferenceList( _unitService.getUnitsFirstLevel( false ), ID_UNIT, LABEL, StringUtils.EMPTY ) );
+            model.put( MARK_ENTITE_LIST, ListUtils.toReferenceList( getEntityListByIdDirection( feuilleDeTournee.getIdDirection( ) ), ID_UNIT, LABEL, null ) );
         }
         else
         {
@@ -665,6 +739,8 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         Map<String, Object> model = getModel( );
         int feuilledeDeTourneId = -1;
 
+        String strSortedAttributeName = request.getParameter( Parameters.SORTED_ATTRIBUTE_NAME );
+
         if ( request.getAttribute( PARAMETER_FEUILLE_DE_TOURNEE_ID ) != null )
         {
             feuilledeDeTourneId = (int) request.getAttribute( PARAMETER_FEUILLE_DE_TOURNEE_ID );
@@ -676,16 +752,40 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
                 feuilledeDeTourneId = Integer.parseInt( request.getParameter( PARAMETER_FEUILLE_DE_TOURNEE_ID ) );
             }
 
+        String ongletActif = request.getParameter( PARAMETER_ONGLET_ACTIF );
+        if ( ( ongletActif == null ) && ( request.getParameter( PAGE_INDEX ) == null ) )
+        {
+            ongletActif = ONGLET_ACTIF_CARTE;
+        }
+        else if ( ongletActif == null )
+        {
+            ongletActif = ONGLET_ACTIF_TABLEAU;
+        }
+
         FeuilleDeTournee feuilleDeTournee = _feuilleTourneeService.load( feuilledeDeTourneId );
 
         if ( feuilleDeTournee != null )
         {
-            ResultList<SignalementExportCSVDTO> resultListSignalement = new ResultList<>( );
 
             int [ ] idsSignalement = feuilleDeTournee.getListSignalementIds( ).stream( ).mapToInt( i -> i ).toArray( );
 
-            List<SignalementExportCSVDTO> signalements = _signalementExportService.findByIdsWithPhoto( idsSignalement );
-            resultListSignalement.addAll( signalements );
+            List<SignalementExportCSVDTO> signalements;
+
+            if ( strSortedAttributeName != null )
+            {
+                String strAscSort = request.getParameter( Parameters.SORTED_ASC );
+                boolean bIsAscSort = Boolean.parseBoolean( strAscSort );
+                Order order = new Order( strSortedAttributeName, bIsAscSort );
+
+                signalements = _signalementExportService.findByIdsWithPhotoWithOrder( idsSignalement, order );
+            }
+            else
+            {
+                signalements = _signalementExportService.findByIdsWithPhoto( idsSignalement );
+            }
+
+
+            ResultList<SignalementExportCSVDTO> resultListSignalement = managePaginationForViewEditAndLoad(request,signalements);
 
             LocalizedDelegatePaginator<SignalementExportCSVDTO> paginator = this.getPaginator( request, resultListSignalement,
                     URL_JSP_MANAGE_FEUILLE_TOURNEE + "?view=load&idFeuilleDeTournee=" + feuilledeDeTourneId, signalements.size( ) );
@@ -697,12 +797,32 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
             model.put( MARK_NOM_TEMPLATE, NOM_TEMPLATE );
             model.put( MARK_SIGNALEMENTS_MAP_LIST,
                     _feuilleTourneeService.getSignalementsMapMarkerDTOFromSignalementsConsultation( signalements, request.getLocale( ) ) );
+            model.put( MARK_ONGLET_ACTIF, ongletActif );
+            model.put( MARK_MARKER_SELECT, request.getParameter( PARAMETER_MARKER_SELECT ) );
         }
 
         Locale locale = getLocale( );
         HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_LOAD, locale, model );
 
         return getAdminPage( templateList.getHtml( ) );
+    }
+
+
+    private ResultList<SignalementExportCSVDTO> managePaginationForViewEditAndLoad(HttpServletRequest request, List<SignalementExportCSVDTO> signalements ) {
+
+        ResultList<SignalementExportCSVDTO> resultListSignalement = new ResultList<>( );
+
+
+        PaginationProperties paginationProerties = getPaginationProperties( request, signalements.size( ) );
+        int minIndex = paginationProerties.getFirstResult( );
+        int maxIndex = ( paginationProerties.getPageIndex( ) * paginationProerties.getItemsPerPage( ) ) < signalements.size( )
+                ? paginationProerties.getPageIndex( ) * paginationProerties.getItemsPerPage( )
+                        : signalements.size( );
+        List<SignalementExportCSVDTO> signalementToDisplay = signalements.subList( minIndex, maxIndex );
+
+        resultListSignalement.addAll( signalementToDisplay );
+
+        return resultListSignalement;
     }
 
     /**
@@ -734,6 +854,16 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
     {
         Map<String, Object> model = getModel( );
 
+        String ongletActif = request.getParameter( PARAMETER_ONGLET_ACTIF );
+        if ( ( ongletActif == null ) && ( request.getParameter( PAGE_INDEX ) == null ) )
+        {
+            ongletActif = ONGLET_ACTIF_CARTE;
+        }
+        else if ( ongletActif == null )
+        {
+            ongletActif = ONGLET_ACTIF_TABLEAU;
+        }
+
         if ( ( _signalementFilter.getListIdUnit( ) == null ) || _signalementFilter.getListIdUnit( ).isEmpty( ) )
         {
             AdminUser connectedUser = AdminUserService.getAdminUser( request );
@@ -744,25 +874,43 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         addFilterOrder( request );
 
         int totalAnomalies = _signalementExportService.countSearchResult( _signalementFilter );
-        List<Signalement> listSignalements = _signalementExportService.findByFilterSearch( _signalementFilter,
-                getPaginationProperties( request, totalAnomalies ) );
 
-        ResultList<Signalement> resultListSignalement = new ResultList<>( );
+        if ( !_feuilleTourneeService.isNbResultOk( totalAnomalies ) )
+        {
+            String [ ] args = new String [ 1];
+            args [0] = DatastoreService.getDataValue( "sitelabels.site_property.feuille.de.tournee.limite.signalement", "0" );
 
-        resultListSignalement.addAll( listSignalements );
+            return redirect( request, AdminMessageService.getMessageUrl( request, "dansmarue.map.max.results.execeeded", args, AdminMessage.TYPE_STOP ) );
+        }
 
-        resultListSignalement.setTotalResult( listSignalements.size( ) );
-        LocalizedDelegatePaginator<Signalement> paginator = this.getPaginator( request, resultListSignalement,
-                URL_JSP_MANAGE_FEUILLE_TOURNEE + "?action=doSearchAno", totalAnomalies );
+        if ( ongletActif.equals( ONGLET_ACTIF_CARTE ) )
+        {
+            List<Signalement> listSignalementsMap = _signalementExportService.findByFilterSearch( _signalementFilter, null );
+            model.put( MARK_SIGNALEMENTS_MAP_LIST, _feuilleTourneeService.getSignalementsMapMarkerDTO( listSignalementsMap, request.getLocale( ) ) );
+        }
+        else
+        {
+            List<Signalement> listSignalements = _signalementExportService.findByFilterSearch( _signalementFilter,
+                    getPaginationProperties( request, totalAnomalies ) );
 
-        // the paginator
-        model.put( SignalementConstants.MARK_NB_ITEMS_PER_PAGE, StringUtils.EMPTY + _nItemsPerPage );
-        model.put( SignalementConstants.MARK_PAGINATOR, paginator );
-        model.put( MARK_SIGNALEMENT_LIST, paginator.getPageItems( ) );
+            ResultList<Signalement> resultListSignalement = new ResultList<>( );
 
-        model.put( MARK_TOTAL_SIGNALEMENT, listSignalements.size( ) );
+            resultListSignalement.addAll( listSignalements );
 
-        model.put( MARK_SIGNALEMENTS_MAP_LIST, _feuilleTourneeService.getSignalementsMapMarkerDTO( _signalementFilter, request.getLocale( ) ) );
+            resultListSignalement.setTotalResult( listSignalements.size( ) );
+            LocalizedDelegatePaginator<Signalement> paginator = this.getPaginator( request, resultListSignalement,
+                    URL_JSP_MANAGE_FEUILLE_TOURNEE + "?action=doSearchAno", totalAnomalies );
+
+            // the paginator
+            model.put( SignalementConstants.MARK_NB_ITEMS_PER_PAGE, StringUtils.EMPTY + _nItemsPerPage );
+            model.put( SignalementConstants.MARK_PAGINATOR, paginator );
+            model.put( MARK_SIGNALEMENT_LIST, paginator.getPageItems( ) );
+
+            model.put( MARK_TOTAL_SIGNALEMENT, listSignalements.size( ) );
+        }
+
+        model.put( MARK_ONGLET_ACTIF, ongletActif );
+        model.put( MARK_MARKER_SELECT, request.getParameter( PARAMETER_MARKER_SELECT ) );
 
         if ( request.getParameterValues( PARAMETER_SIGNALEMENTS_SELECT_IDS ) != null )
         {
@@ -775,6 +923,11 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         model.put( MARK_USER_ENTITE, unit != null ? unit.getLabel( ) : "" );
 
         model.put( MARK_USER_LOGIN, connectedUser.getAccessCode( ) );
+
+        ReferenceList directionList = new ReferenceList( );
+        directionList.addItem( "", "" );
+        directionList.addAll( ListUtils.toReferenceList( _unitService.getUnitsFirstLevel( false ), ID_UNIT, LABEL, null ) );
+        model.put( MARK_DIRECTION_LIST, directionList );
 
         Locale locale = getLocale( );
         HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_SELECT, locale, model );
@@ -880,6 +1033,9 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
             List<Integer> idsSelect = idsSelectStr.stream( ).map( Integer::parseInt ).collect( Collectors.toList( ) );
 
             String comment = request.getParameter( PARAMETER_SAVE_COMMENT );
+            Integer idEntite = request.getParameter( PARAMETER_ENTITE_ID ) != null ? Integer.parseInt( request.getParameter( PARAMETER_ENTITE_ID ) ) : null;
+            Integer idDirection = request.getParameter( PARAMETER_DIRECTION_ID ) != null ? Integer.parseInt( request.getParameter( PARAMETER_DIRECTION_ID ) )
+                    : null;
 
             AdminUser connectedUser = AdminUserService.getAdminUser( request );
             List<Unit> listUnit = _unitService.getUnitsByIdUser( connectedUser.getUserId( ), false );
@@ -889,7 +1045,13 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
             Boolean isUpdate = request.getParameter( PARAMETER_SAVE_IS_UPDATE ) != null;
 
             FeuilleDeTournee feuilleDeTournee = new FeuilleDeTournee( AdminUserService.getAdminUser( request ).getAccessCode( ), idUnit, comment, 1, idsSelect,
-                    name );
+                    name, idDirection, idEntite );
+
+            List<ValidationError> errors = validate( feuilleDeTournee, "" );
+            if ( !errors.isEmpty( ) )
+            {
+                return redirect( request, AdminMessageService.getMessageUrl( request, Messages.MESSAGE_INVALID_ENTRY, errors ) );
+            }
 
             if ( request.getParameter( PARAMETER_CARTE_BASE64 ) != null )
             {
@@ -924,17 +1086,12 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         if ( ( request.getParameterValues( PARAMETER_SIGNALEMENTS_SELECT_IDS ) != null )
                 && !request.getParameterValues( PARAMETER_SIGNALEMENTS_SELECT_IDS ) [0].isEmpty( ) && ( strFeuilleDeTourneeId != null ) )
         {
-            Integer feuilleDeTourneeId = Integer.parseInt( request.getParameter( PARAMETER_FEUILLE_DE_TOURNEE_ID ) );
-            String nom = request.getParameter( PARAMETER_SAVE_NAME_PREFIX ) + request.getParameter( PARAMETER_SAVE_NAME );
-            List<String> idsSelectStr = Arrays.asList( request.getParameterValues( PARAMETER_SIGNALEMENTS_SELECT_IDS ) [0].split( "," ) );
-            List<Integer> idsSelect = idsSelectStr.stream( ).map( Integer::parseInt ).collect( Collectors.toList( ) );
-            String comment = request.getParameter( PARAMETER_SAVE_COMMENT );
+            FeuilleDeTournee feuilleDeTournee = populateFeuilleDeTournee( request );
 
-            FeuilleDeTournee feuilleDeTournee = _feuilleTourneeService.load( feuilleDeTourneeId );
-            feuilleDeTournee.setListSignalementIds( idsSelect );
-            feuilleDeTournee.setCommentaire( comment );
+            String nom = request.getParameter( PARAMETER_SAVE_NAME_PREFIX ) + request.getParameter( PARAMETER_SAVE_NAME );
             String originalName = feuilleDeTournee.getNom( ).substring( StringUtils.ordinalIndexOf( feuilleDeTournee.getNom( ), "_", 4 ) + 1 );
             String newName = nom.substring( StringUtils.ordinalIndexOf( nom, "_", 4 ) + 1 );
+
             if ( originalName.equals( newName ) )
             {
                 _feuilleTourneeService.update( feuilleDeTournee );
@@ -942,6 +1099,13 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
             }
             else
             {
+                AdminUser connectedUser = AdminUserService.getAdminUser( request );
+                String userAccessCode = connectedUser.getAccessCode( );
+                if ( !StringUtils.isEmpty( userAccessCode ) )
+                {
+                    feuilleDeTournee.setCreateur( userAccessCode );
+                }
+
                 feuilleDeTournee.setNom( nom );
                 Integer newId = _feuilleTourneeService.insert( feuilleDeTournee );
                 request.setAttribute( PARAMETER_FEUILLE_DE_TOURNEE_ID, newId );
@@ -955,11 +1119,29 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         }
     }
 
+    private FeuilleDeTournee populateFeuilleDeTournee( HttpServletRequest request )
+    {
+        Integer feuilleDeTourneeId = Integer.parseInt( request.getParameter( PARAMETER_FEUILLE_DE_TOURNEE_ID ) );
+        List<String> idsSelectStr = Arrays.asList( request.getParameterValues( PARAMETER_SIGNALEMENTS_SELECT_IDS )[0].split( "," ) );
+        List<Integer> idsSelect = idsSelectStr.stream( ).map( Integer::parseInt ).collect( Collectors.toList( ) );
+        String comment = request.getParameter( PARAMETER_SAVE_COMMENT );
+
+        Integer idEntite = request.getParameter( PARAMETER_ENTITE_ID ) != null ? Integer.parseInt( request.getParameter( PARAMETER_ENTITE_ID ) ) : -1;
+        Integer idDirection = request.getParameter( PARAMETER_DIRECTION_ID ) != null ? Integer.parseInt( request.getParameter( PARAMETER_DIRECTION_ID ) ) : null;
+
+        FeuilleDeTournee feuilleDeTournee = _feuilleTourneeService.load( feuilleDeTourneeId );
+        feuilleDeTournee.setListSignalementIds( idsSelect );
+        feuilleDeTournee.setCommentaire( comment );
+        feuilleDeTournee.setIdDirection( idDirection );
+        feuilleDeTournee.setIdEntite( idEntite );
+
+        return feuilleDeTournee;
+    }
+
     /**
      * Do save filter.
      *
-     * @param request
-     *            the request
+     * @param request the request
      * @return the string
      */
     @Action( ACTION_SAVE_FILTER )
@@ -1112,23 +1294,23 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         jsonObject.accumulate( PARAMETER_COMMENTAIRE_USAGER, request.getParameter( PARAMETER_COMMENTAIRE_USAGER ) );
         jsonObject.accumulate( PARAMETER_ADRESSE, request.getParameter( PARAMETER_ADRESSE ) );
         jsonObject.accumulate( PARAMETER_ENTITE, request.getParameter( PARAMETER_ENTITE ) );
+        jsonObject.accumulate( PARAMETER_MAIL_USAGER, request.getParameter( PARAMETER_MAIL_USAGER ) );
 
         return jsonObject.toString( );
     }
 
     public void doExportPDF( HttpServletRequest request, HttpServletResponse response )
     {
-        boolean isExportWithMap = request.getParameter( PARAMETER_MAP_CHECKBOX ) != null;
         String destinairesParam = request.getParameter( PARAMETER_DESTINAIRES_EXPORT );
         Integer feuilleeDeTourneId = request.getParameter( PARAMETER_FEUILLE_DE_TOURNEE_ID ) != null
                 ? Integer.parseInt( request.getParameter( PARAMETER_FEUILLE_DE_TOURNEE_ID ) )
-                : 0;
+                        : 0;
         String base64Map = request.getParameter( PARAMETER_CARTE_BASE64 );
-        String pathToTemplate = request.getServletContext( ).getRealPath( "editions" ) + "/" + NOM_TEMPLATE + ".jrxml";
 
         String nomExport = _feuilleTourneeService.load( feuilleeDeTourneId ).getNom( ) + ".pdf";
+        String typeExport = request.getParameter( PARAMETER_TYPE_EXPORT );
 
-        byte [ ] bytesData = generateAndSendPdf( feuilleeDeTourneId, isExportWithMap, base64Map, pathToTemplate, destinairesParam );
+        byte [ ] bytesData = generateAndSendPdf( feuilleeDeTourneId, base64Map, destinairesParam, typeExport, request );
 
         response.setContentType( TYPE_PDF );
 
@@ -1156,37 +1338,45 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
                 }
                 catch( IOException e )
                 {
-                    e.printStackTrace( );
+                    AppLogService.error( "[EditionUtils.getEdition]Erreur lors de la génération du pdf", e );
                 }
             }
         }
 
     }
 
-    public String doTransfertPDF( HttpServletRequest request, HttpServletResponse response )
-    {
-        Integer feuilleeDeTourneId = request.getParameter( PARAMETER_FEUILLE_DE_TOURNEE_ID ) != null
-                ? Integer.parseInt( request.getParameter( PARAMETER_FEUILLE_DE_TOURNEE_ID ) )
-                : 0;
-        String pathToTemplate = request.getServletContext( ).getRealPath( "editions" ) + "/" + NOM_TEMPLATE + ".jrxml";
-        String destinairesParam = request.getParameter( PARAMETER_DESTINAIRES_TRANSFERT );
-
-        generateAndSendPdf( feuilleeDeTourneId, true, null, pathToTemplate, destinairesParam );
-
-        return doGoBack( request );
-    }
-
-    public byte [ ] generateAndSendPdf( Integer feuilleeDeTourneId, boolean isExportWithMap, String base64Map, String pathToTemplate, String destinairesParam )
+    public byte [ ] generateAndSendPdf( Integer feuilleeDeTourneId, String base64Map, String destinairesParam, String typeExport, HttpServletRequest request )
     {
 
         List<String> destinairesList = _feuilleTourneeService.getDestinatairesFromParam( destinairesParam );
 
         if ( !destinairesList.isEmpty( ) && !_feuilleTourneeService.isFormatEmailOK( destinairesList ) )
         {
-            return null;
+            return new byte[0];
         }
         else
         {
+            boolean isExportWithMap = true;
+            String nomTemplate = "";
+
+            switch( typeExport )
+            {
+                case SignalementConstants.TYPE_EXPORT_FDT_CARTE:
+                    nomTemplate = NOM_TEMPLATE_CARTE;
+                    break;
+                case SignalementConstants.TYPE_EXPORT_FDT_LISTE:
+                    nomTemplate = NOM_TEMPLATE;
+                    isExportWithMap = false;
+                    break;
+                case SignalementConstants.TYPE_EXPORT_FDT_FULL:
+                    nomTemplate = NOM_TEMPLATE;
+                    break;
+                default:
+                    break;
+            }
+
+            String pathToTemplate = request.getServletContext( ).getRealPath( "editions" ) + "/" + nomTemplate + ".jrxml";
+
             JRDataSource dataSource = _feuilleTourneeService.generateTemplateDataSource( feuilleeDeTourneId, isExportWithMap, base64Map );
             byte [ ] bytesData;
             try
@@ -1198,14 +1388,12 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
                 _feuilleTourneeService.sendFeuilleDeTourneeByMail( destinairesList, bytesData, nomExport );
 
                 return bytesData;
-            }
-            catch( JRException e )
+            } catch ( JRException e )
             {
                 AppLogService.error( "Erreur lors de la génération du pdf", e );
             }
         }
-        return null;
-
+        return new byte[0];
     }
 
     public void checkNameFDT( HttpServletRequest request, HttpServletResponse response ) throws IOException
@@ -1214,7 +1402,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
 
         ObjectMapper mapper = new ObjectMapper( );
         String feuilleDeTournee = mapper.writeValueAsString( _feuilleTourneeService.findFDTByName( nomFDT ) );
-        response.setContentType( "application/json" );
+        response.setContentType( EXTENSION_APPLICATION_JSON );
 
         try
         {
@@ -1233,7 +1421,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
 
         ObjectMapper mapper = new ObjectMapper( );
         String filterSearch = mapper.writeValueAsString( _feuilleTourneeService.findFilterSearch( filterSearchName ) );
-        response.setContentType( "application/json" );
+        response.setContentType( EXTENSION_APPLICATION_JSON );
 
         try
         {
@@ -1246,4 +1434,69 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
 
     }
 
+    /**
+     * Gets the entity list by id direction.
+     *
+     * @param request
+     *            the request
+     * @param response
+     *            the response
+     */
+    public void getEntityListByIdDirection( HttpServletRequest request, HttpServletResponse response )
+    {
+        String strDirectionId = request.getParameter( PARAMETER_DIRECTION_ID );
+
+        JSONBuilder jsonStringer;
+        response.setContentType( EXTENSION_APPLICATION_JSON );
+        try
+        {
+            jsonStringer = new JSONBuilder( response.getWriter( ) );
+            try
+            {
+                Integer directionId = Integer.parseInt( strDirectionId );
+
+                ReferenceList refListEntity = ListUtils.toReferenceList( getEntityListByIdDirection( directionId ), ID_UNIT, LABEL, "" );
+
+                jsonStringer.object( ).key( MARK_ENTITY_LIST ).array( );
+                for ( ReferenceItem sector : refListEntity )
+                {
+                    jsonStringer.object( ).key( JSON_KEY_ID ).value( sector.getCode( ) ).key( "value" ).value( sector.getName( ) ).endObject( );
+                }
+                jsonStringer.endArray( ).endObject( );
+            }
+            catch ( NumberFormatException e )
+            {
+                jsonStringer.object( ).key( "errors" ).array( ).value( e.getMessage( ) ).endArray( ).endObject( );
+            }
+        }
+        catch ( IOException e1 )
+        {
+            AppLogService.error( e1.getMessage( ), e1 );
+        }
+    }
+
+    private List<Unit> getEntityListByIdDirection( Integer directionId )
+    {
+        List<Unit> entityList = new ArrayList<>( );
+
+        // Récupération des entités de niveau 2
+        List<Unit> entityLvl2List = _unitService.getSubUnits( directionId, false );
+
+        // Récupération des entités de niveau 3
+        for ( Unit entityLvl2 : entityLvl2List )
+        {
+            entityList.add( entityLvl2 );
+            if ( _unitService.hasSubUnits( entityLvl2.getIdUnit( ) ) )
+            {
+                List<Unit> entityLvl3List = _unitService.getSubUnits( entityLvl2.getIdUnit( ), false );
+                for ( Unit entityLvl3 : entityLvl3List )
+                {
+                    entityLvl3.setLabel( entityLvl2.getLabel( ) + " / " + entityLvl3.getLabel( ) );
+                    entityList.add( entityLvl3 );
+                }
+            }
+        }
+
+        return entityList;
+    }
 }
