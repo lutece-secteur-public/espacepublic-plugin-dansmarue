@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,31 +33,10 @@
  */
 package fr.paris.lutece.plugins.dansmarue.service.impl;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.dansmarue.business.dao.IPhotoDAO;
 import fr.paris.lutece.plugins.dansmarue.business.dao.impl.FeuilleDeTourneeDAO;
-import fr.paris.lutece.plugins.dansmarue.business.entities.FeuilleDeTournee;
-import fr.paris.lutece.plugins.dansmarue.business.entities.FeuilleDeTourneeFilter;
-import fr.paris.lutece.plugins.dansmarue.business.entities.FeuilleDeTourneeFilterSearch;
-import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
-import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementBean;
-import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
+import fr.paris.lutece.plugins.dansmarue.business.entities.*;
+import fr.paris.lutece.plugins.dansmarue.commons.Order;
 import fr.paris.lutece.plugins.dansmarue.service.IFeuilleDeTourneeService;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementExportService;
 import fr.paris.lutece.plugins.dansmarue.service.IWorkflowService;
@@ -66,23 +45,24 @@ import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementMapMarkerDTO;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
-import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.datastore.DatastoreService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.mail.MailService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
-import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.util.mail.FileAttachment;
 import fr.paris.lutece.util.string.StringUtil;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.commons.lang.StringUtils;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The Class FeuilleDeTourneeService.
@@ -225,16 +205,19 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
             List<PhotoDMR> photos = _photoDAO.findWithFullPhotoBySignalementId( signalementBean.getId( ) );
             for ( PhotoDMR photo : photos )
             {
-                if ( photo.getVue( ) == 0 )
+                if ( photo.getImage( ) != null && photo.getImage( ).getImage( ) != null )
                 {
-                    signalementBean.setImagePresContent( Base64.getEncoder( ).encodeToString( photo.getImage( ).getImage( ) ) );
-                }
-                else
-                    if ( photo.getVue( ) == 1 )
+                    if ( photo.getVue( ) == 0 )
+                    {
+                        signalementBean.setImagePresContent( Base64.getEncoder( ).encodeToString( photo.getImage( ).getImage( ) ) );
+                    }
+                    else if ( photo.getVue( ) == 1 )
                     {
                         signalementBean.setImageEnsembleContent( Base64.getEncoder( ).encodeToString( photo.getImage( ).getImage( ) ) );
                     }
+                }
             }
+
         }
 
         return listSignalementsBean;
@@ -391,27 +374,27 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
      * {@inheritDoc}
      */
     @Override
-    public List<SignalementMapMarkerDTO> getSignalementsMapMarkerDTO( SignalementFilter signalementFilter, Locale locale )
+    public List<FeuilleDeTournee> loadFdtByFilterWithOrder( FeuilleDeTourneeFilter feuilleDeTourneeFilter, Order order )
+    {
+        return _feuilleDeTourneeDao.loadFdtByFilterWithOrder( feuilleDeTourneeFilter, order );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<SignalementMapMarkerDTO> getSignalementsMapMarkerDTO( List<Signalement> signalementList, Locale locale )
     {
         List<SignalementMapMarkerDTO> signalementMarkers = new ArrayList<>( );
 
-        List<Signalement> signalements = new ArrayList<>( );
-
-        if ( signalementFilter != null )
-        {
-            signalements = _signalementExportService.findByFilterSearch( signalementFilter, null );
-        }
-
-        for ( Signalement signalement : signalements )
+        for ( Signalement signalement : signalementList )
         {
             SignalementMapMarkerDTO sigMarker = new SignalementMapMarkerDTO( );
             sigMarker.setIdSignalement( signalement.getId( ) );
             sigMarker.setLng( signalement.getAdresses( ).get( 0 ).getLng( ) );
             sigMarker.setLat( signalement.getAdresses( ).get( 0 ).getLat( ) );
-            State stateSignalement = WorkflowService.getInstance( ).getState( signalement.getId( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE,
-                    _signalementWorkflowService.getSignalementWorkflowId( ), null );
-            setColorNumberMarker( stateSignalement.getId( ), sigMarker );
-            fillPopup( sigMarker, signalement, stateSignalement, locale );
+            setColorNumberMarker( signalement.getIdState( ), sigMarker );
+            fillPopup( sigMarker, signalement, locale );
 
             signalementMarkers.add( sigMarker );
         }
@@ -434,10 +417,8 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
             sigMarker.setLng( signalement.getCoordY( ) );
             sigMarker.setLat( signalement.getCoordX( ) );
 
-            State stateSignalement = WorkflowService.getInstance( ).getState( signalement.getIdSignalement( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE,
-                    _signalementWorkflowService.getSignalementWorkflowId( ), null );
-            setColorNumberMarker( stateSignalement.getId( ), sigMarker );
-            fillPopupWithDTO( sigMarker, signalement, stateSignalement, locale, false );
+            setColorNumberMarker( signalement.getIdStatut( ), sigMarker );
+            fillPopupWithDTO( sigMarker, signalement, locale, false );
 
             signalementMarkers.add( sigMarker );
         }
@@ -459,10 +440,8 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
             sigMarker.setIdSignalement( Long.valueOf( signalement.getIdSignalement( ) ) );
             sigMarker.setLng( signalement.getCoordY( ) );
             sigMarker.setLat( signalement.getCoordX( ) );
-            State stateSignalement = WorkflowService.getInstance( ).getState( signalement.getIdSignalement( ).intValue( ), Signalement.WORKFLOW_RESOURCE_TYPE,
-                    _signalementWorkflowService.getSignalementWorkflowId( ), null );
-            setColorNumberMarker( stateSignalement.getId( ), sigMarker );
-            fillPopupWithDTO( sigMarker, signalement, stateSignalement, locale, true );
+            setColorNumberMarker( signalement.getIdStatut( ), sigMarker );
+            fillPopupWithDTO( sigMarker, signalement, locale, true );
 
             signalementMarkers.add( sigMarker );
         }
@@ -502,7 +481,7 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
      * @param locale
      *            the locale
      */
-    private void fillPopup( SignalementMapMarkerDTO sigMarker, Signalement signalement, State stateSignalement, Locale locale )
+    private void fillPopup( SignalementMapMarkerDTO sigMarker, Signalement signalement, Locale locale )
     {
         // Numero
         String numeroTitle = I18nService.getLocalizedString( "dansmarue.map.tooltips.numero", locale );
@@ -510,7 +489,7 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
 
         // Etat
         String etatTitle = I18nService.getLocalizedString( "dansmarue.map.tooltips.etat", locale );
-        sigMarker.addTooltipTextWithClass( etatTitle, stateSignalement.getName( ) );
+        sigMarker.addTooltipTextWithClass( etatTitle, signalement.getStateName( ) );
 
         // Type
         String typeTitle = I18nService.getLocalizedString( "dansmarue.map.tooltips.type", locale );
@@ -554,8 +533,7 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
      * @param locale
      *            the locale
      */
-    private void fillPopupWithDTO( SignalementMapMarkerDTO sigMarker, SignalementExportCSVDTO signalement, State stateSignalement, Locale locale,
-            boolean isEdition )
+    private void fillPopupWithDTO( SignalementMapMarkerDTO sigMarker, SignalementExportCSVDTO signalement, Locale locale, boolean isEdition )
     {
         // Numero
         String numeroTitle = I18nService.getLocalizedString( "dansmarue.map.tooltips.numero", locale );
@@ -563,7 +541,7 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
 
         // Etat
         String etatTitle = I18nService.getLocalizedString( "dansmarue.map.tooltips.etat", locale );
-        sigMarker.addTooltipTextWithClass( etatTitle, stateSignalement.getName( ) );
+        sigMarker.addTooltipTextWithClass( etatTitle, signalement.getEtat( ) );
 
         // Type
         String typeTitle = I18nService.getLocalizedString( "dansmarue.map.tooltips.type", locale );
@@ -656,12 +634,34 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
 
         for ( FeuilleDeTournee feuilleDeTournee : feuilleDeTourneeList )
         {
-            if ( isUnitAuthorizedToUser( connectedUser, _unitService.getUnit( feuilleDeTournee.getUnitId( ), false ) ) )
+            int idEntite = feuilleDeTournee.getIdEntite() > -1 ? feuilleDeTournee.getIdEntite() : feuilleDeTournee.getIdDirection();
+            if ( isUnitAuthorizedToUserWithoutAdminControl( connectedUser, _unitService.getUnit( idEntite, false ) ) )
             {
                 feuilleDeTourneeListAutorise.add( feuilleDeTournee );
             }
         }
         return feuilleDeTourneeListAutorise;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isUnitAuthorizedToUserWithoutAdminControl( AdminUser user, Unit unit )
+    {
+        List<Unit> listUnitsUser = _unitService.getUnitsByIdUser( user.getUserId( ), false );
+
+        if ( unit != null )
+        {
+            for ( Unit unitUser : listUnitsUser )
+            {
+                if ( ( unitUser.getIdUnit( ) == unit.getIdUnit( ) ) || _unitService.isParent( unitUser, unit ) )
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -710,12 +710,28 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
 
         for ( FeuilleDeTournee feuilleDeTournee : feuilleDeTourneeList )
         {
-            if ( isUnitAuthorizedToUser( connectedUser, _unitService.getUnit( feuilleDeTournee.getUnitId( ), false ) ) )
+            int idEntite = feuilleDeTournee.getIdEntite() > -1 ? feuilleDeTournee.getIdEntite() : feuilleDeTournee.getIdDirection();
+            if ( isUnitAuthorizedToUserWithoutAdminControl( connectedUser, _unitService.getUnit( idEntite, false ) ) )
             {
                 feuilleDeTourneeListAutorise.add( feuilleDeTournee );
             }
         }
         return feuilleDeTourneeListAutorise;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isNbResultOk( int totalAnomalies )
+    {
+        if ( !StringUtils.equals( "0", DatastoreService.getDataValue( "sitelabels.site_property.feuille.de.tournee.limite.signalement", "0" ) ) )
+        {
+            int nbMaxResult = Integer.parseInt( DatastoreService.getDataValue( "sitelabels.site_property.feuille.de.tournee.limite.signalement", "0" ) );
+            return totalAnomalies < nbMaxResult;
+        }
+
+        return true;
     }
 
 }

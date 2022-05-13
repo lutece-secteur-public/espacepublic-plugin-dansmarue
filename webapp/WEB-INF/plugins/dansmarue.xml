@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?><plug-in>
+<?xml version="1.0" encoding="UTF-8"?><plug-in>
 
 	<!-- Plugin Informations -->
 	<name>signalement</name>
 	<class>fr.paris.lutece.plugins.dansmarue.service.SignalementPlugin</class>
-	<version>6.8.8-SNAPSHOT</version>
+	<version>6.10.6</version>
 	<description>signalement.plugin.description</description>
 	<documentation/>
 	<installation/>

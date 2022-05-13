@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,6 +38,7 @@ import java.util.List;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Adresse;
 import fr.paris.lutece.plugins.dansmarue.service.IAdresseService;
 import fr.paris.lutece.portal.service.daemon.Daemon;
+import fr.paris.lutece.portal.service.datastore.DatastoreService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 /**
@@ -50,31 +51,43 @@ public class RattrapageAdressesDaemon extends Daemon
     // service
     private IAdresseService _adresseService = SpringContextService.getBean( "adresseSignalementService" );
 
+    private static final String SITE_LABEL_NB_TOUR = "sitelabels.site_property.demon.rattrapage.adresse.nb.tour";
+
     /**
      * Run.
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Runnable#run()
      */
     @Override
     public void run( )
     {
-        // 1) find 5 anomalies with bad adresse
-        List<Adresse> listWrongAdresses = _adresseService.findWrongAdresses( );
+        int nbTours = Integer.parseInt( DatastoreService.getDataValue( SITE_LABEL_NB_TOUR, "1" ) );
+        int compteur = 0;
+        int nbAddressToProcess = 5;
 
-        // 2) call WS openstreetmap for reverse geocoding
-        listWrongAdresses.forEach( adresse -> adresse.setAdresse( _adresseService.getAdresseByPosition( adresse ) ) );
+        while ( ( compteur < nbTours ) && ( nbAddressToProcess == 5 ) )
+        {
+            // 1) find 5 anomalies with bad adresse
+            List<Adresse> listWrongAdresses = _adresseService.findWrongAdresses( );
+            nbAddressToProcess = listWrongAdresses.size( );
 
-        // 3) Update adresses
-        listWrongAdresses.forEach( adresse -> _adresseService.updateAdresse( adresse ) );
+            // 2) call WS openstreetmap for reverse geocoding
+            listWrongAdresses.forEach( adresse -> adresse.setAdresse( _adresseService.getAdresseByPosition( adresse ) ) );
 
-        // 4) Rattrapages d'adresses avec des cas particuliers (DMR-1433) :
-        // - adresses avec E-Arrondissement
-        // - adresses en Parigi pour la ville
-        // - adresses qui n'ont pas de virgule avant le code postale
-        _adresseService.fixAdresses( );
+            // 3) Update adresses
+            listWrongAdresses.forEach( adresse -> _adresseService.updateAdresse( adresse ) );
+
+            // 4) Rattrapages d'adresses avec des cas particuliers (DMR-1433) :
+            // - adresses avec E-Arrondissement
+            // - adresses en Parigi pour la ville
+            // - adresses qui n'ont pas de virgule avant le code postale
+            _adresseService.fixAdresses( );
+
+            compteur++;
+        }
 
     }
 

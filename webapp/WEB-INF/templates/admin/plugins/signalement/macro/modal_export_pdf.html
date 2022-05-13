@@ -11,20 +11,30 @@
 	        </button>
 	      </div>
 	      <div class="modal-body">
-	        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	        	<span class="blueDmr">#i18n{dansmarue.tournee.pdf.param.modele}:</span> ${nom_template}
-			</div>
-			<br><br>
 			<div class="row">
 				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-					<input type="checkbox" id="mapCheckbox" name="mapCheckbox" value="1">
-		 		    <label for="mapCheckbox">#i18n{dansmarue.tournee.pdf.param.include}</label><br>
-		 		    <span class="greyDmr">#i18n{dansmarue.tournee.pdf.param.include.help}</span>
-				</div>
-				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-					<span class="blueDmr">#i18n{dansmarue.tournee.pdf.param.format} :</span> 
-					<input type="radio" id="formatRadio" name="formatRadio" value="pdf" checked>
-					<label for="formatRadio">PDF </label><span class="greyDmr"> #i18n{dansmarue.tournee.pdf.param.format.help}</span>
+					<span class="blueDmr">#i18n{dansmarue.tournee.pdf.param.typeExport} :</span> 
+					<#if onglet_actif='carte'>
+						<div class="form-check">
+						  <input class="form-check-input" type="radio" name="param_type_export" id="type_export_map" value="1">
+						  <label class="form-check-label" for="type_export_map">
+						    #i18n{dansmarue.tournee.pdf.param.typeExport.carte}
+						  </label>
+						</div>
+						<div class="form-check">
+						  <input class="form-check-input" type="radio" name="param_type_export" id="type_export_full" checked value="3">
+						  <label class="form-check-label" for="type_export_full">
+						    #i18n{dansmarue.tournee.pdf.param.typeExport.full}
+						  </label>
+						</div>
+					</#if>
+					<div class="form-check">
+					  <input class="form-check-input" type="radio" name="param_type_export" id="type_export_liste" value="2" <#if onglet_actif='liste'>checked</#if>>
+					  <label class="form-check-label" for="type_export_liste">
+					    #i18n{dansmarue.tournee.pdf.param.typeExport.liste}
+					  </label>
+					</div>
+					
 				</div>
 			</div>
 			<br><br>

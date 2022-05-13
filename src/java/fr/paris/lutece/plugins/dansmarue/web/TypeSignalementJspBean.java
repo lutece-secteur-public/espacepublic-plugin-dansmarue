@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -1027,8 +1027,8 @@ public class TypeSignalementJspBean extends AbstractJspBean
             writer = new CSVWriter( response.getWriter( ), CSV_SEPARATOR );
 
             writer.writeNext( new String [ ] {
-                    "Libellé niveau 1", "Libellé niveau 2", "Libellé niveau 3", "Libellé concaténés", "Alias", "Alias mobile", "Direction concernée", "Actif",
-                    "Pour agent uniquement"
+                    "Identifiant", "Libellé niveau 1", "Libellé niveau 2", "Libellé niveau 3", "Libellé concaténés", "Alias", "Alias mobile",
+                    "Direction concernée", "Actif", "Pour agent uniquement"
             } );
             for ( TypeSignalementExportDTO typeSignalementExportDTO : listTypeSignalementExportDTO )
             {
@@ -1076,6 +1076,7 @@ public class TypeSignalementJspBean extends AbstractJspBean
         typeSignalementExportDTO.setDirection( typeSignalementDTO.getUnit( ).getLabel( ) );
         typeSignalementExportDTO.setActif( typeSignalementDTO.isActif( ) );
         typeSignalementExportDTO.setPourAgent( typeSignalementDTO.getIsAgent( ) );
+        typeSignalementExportDTO.setId( typeSignalementDTO.getId( ) );
     }
 
     /**

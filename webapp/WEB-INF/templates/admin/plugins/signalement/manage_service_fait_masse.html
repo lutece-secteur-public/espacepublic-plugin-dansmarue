@@ -71,7 +71,7 @@
 								<div class="col-sm-6" style="text-align:left">
 									<select name="type"  id="type" class="selectpicker show-menu-arrow form-control" data-actions-box="true" data-live-search="true">
 										<#list list_type as type>
-											<option value="${type.id}">${type.libelle}</option>
+											<option value="${type.id}">${type.formatTypeSignalement}</option>
 										</#list>
 									</select>
 								</div>
@@ -97,7 +97,7 @@
 											<#if (filter.idTypeSignalements)?has_content && filter.idTypeSignalements?seq_contains(type.id)>
 												<tr id="typeAdd${type.id}">
 													<td>
-														<input name='idTypeSignalements' type='hidden' value=${type.id}>${type.libelle}
+														<input name='idTypeSignalements' type='hidden' value=${type.id}>${type.formatTypeSignalement}
 													</td>
 														<td class='text-right'>
 														<i onclick='supprimerType(${type.id})' class='glyphicon glyphicon-trash btn btn-danger btn-sm'></i>

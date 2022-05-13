@@ -43,13 +43,18 @@
 	<script>
 		var nbSigSelect = 0;
 		var nbSigUnselect = 0;
-		var signalement_select_arr = [];
+		var order_marker_select_arr = [];
 		var selectMode = true;
-		var layerGroupMarkers;
 		var isMapInitOnce = false;
 		var signalement_arr = [];
 		//Signalements sélectionnés avant le changement de page du tableau
 		var signalement_previously_select = [];
+		var markers;
+		var polygonDrawer;
+		var markerSelect;
+		<#if marker_select??>
+			markerSelect = ${marker_select};
+		</#if>
 	
 		$.getScript("jsp/admin/plugins/signalement/DoGetMap.jsp", function(data){
 			initLeafletMap("map_canvas");
@@ -62,19 +67,22 @@
 			nbSigUnselect = 0;
 			nbSigSelect = 0;
 			
-			var markers = new L.FeatureGroup().addTo(leafletmap);
-			
 			if(!isMapInitOnce) {
+				polygonDrawer = new L.Draw.Polygon(leafletmap);
+				markers = new L.FeatureGroup().addTo(leafletmap);
 				<#list signalements_map_list as s>
 					var signalement = new Object();
 					signalement.idSignalement = ${s.idSignalement};
 					signalement.lat = ${s.lat?replace(',', '.')};
 					signalement.lng = ${s.lng?replace(',', '.')};
 					signalement.tooltip ="${s.tooltip}";
-					signalement.isSelect = true;
+					signalement.isSelect = false;
 					signalement.colorNumber = "${s.colorNumber}";
 					signalement_arr.push(signalement);
-					signalement_select_arr.push(signalement.idSignalement);
+					
+					if(markerSelect == signalement.idSignalement) {
+						signalement.isSurbrillance = true;
+					}
 				</#list>
 				
 				<#if signalementSelectIds?has_content>
@@ -84,16 +92,20 @@
 				</#if>
 			}
 			
-			//Add signalements markers on map
 			var index=1;
 			signalement_arr.forEach(function(signalement) {
+				var markerIndex = markers.getLayers().findIndex( marker => marker.options.options.idSignalement == signalement.idSignalement );
 				var color;
 				if( signalement.isSelect ) {
 					color = "blue";
 					nbSigSelect++;
+					if (order_marker_select_arr.indexOf(index) === -1){
+						  order_marker_select_arr.push(index);
+					}	
 				} else {
 					color = "orange";
 					nbSigUnselect++;
+					removeItem(order_marker_select_arr, index);
 				}
 				
 				if( signalement.isSurbrillance ){
@@ -117,15 +129,19 @@
 				marker.on('click',function(){setBoutonAction( signalement.idSignalement, signalement.isSelect )});
 				
 				index++;
+				
+				if(isMapInitOnce || markerIndex != -1) {
+					markers.removeLayer(markers.getLayers()[markerIndex]);
+				} 
 				marker.addTo(markers);
 			});
+			
 			
 			$(".nbSigSelect").text(nbSigSelect);
 		    $(".nbSigUnselect").text(nbSigUnselect);
 			
 			//Add draw function on buttons
 			if(!isMapInitOnce) {
-				var polygonDrawer = new L.Draw.Polygon(leafletmap);
 				$('#selectOnMap').click(function() {
 				    polygonDrawer.enable();
 				});
@@ -149,7 +165,7 @@
 			        		
 			        		updateSelectStatut( marker.options.options.idSignalement, true);
 				        	incrementCompteurSelect( marker.options.options.idSignalement );
-				        	addToSelection( marker.options.options.idSignalement );
+				        	addToSelectionFromPolygon( marker.options.options.idSignalement );
 			        	}
 			        	//Mode désélection activé
 			        	else if ( signalement_select_arr.length > 0 ) {
@@ -160,7 +176,7 @@
 			        		
 			        		updateSelectStatut( marker.options.options.idSignalement, false);
 			        		decrementCompteurSelect( marker.options.options.idSignalement );
-			        		removeFromSelection( marker.options.options.idSignalement );
+			        		removeFromSelectionFromPolygon( marker.options.options.idSignalement );
 			        	}
 			        }
 			    });
@@ -175,7 +191,6 @@
 		   
 		    $("#map_spinner").addClass("hidden");
 		    $("#map_canvas").removeClass("hidden");
-		    layerGroupMarkers = markers;
 		    isMapInitOnce = true;
 		};
 		
@@ -191,10 +206,18 @@
 		/*Ajout d'un signalement à la selection*/
 		function addToSelection( signalementId ) {
 			if( !signalement_select_arr.includes( signalementId ) ) {
-		        signalement_select_arr.push( signalementId);
+			  signalement_select_arr.push( signalementId);
 			}
 			updateSelectStatut( signalementId, true );
 			drawMarkers();
+			$('#checkboxSignalement-'+signalementId+':checkbox').prop('checked', true);
+		}
+		
+		function addToSelectionFromPolygon( signalementId ) {
+			if( !signalement_select_arr.includes( signalementId ) ) {
+			  signalement_select_arr.push( signalementId);
+			}
+			updateSelectStatut( signalementId, true );
 			$('#checkboxSignalement-'+signalementId+':checkbox').prop('checked', true);
 		}
 		
@@ -203,6 +226,13 @@
 			removeItem(signalement_select_arr, signalementId)
 			updateSelectStatut( signalementId, false );
 			drawMarkers();
+			$('#checkboxSignalement-'+signalementId+':checkbox').prop('checked', false);
+		}
+		
+		/*Suppression d'un signalement à la selection*/
+		function removeFromSelectionFromPolygon( signalementId ) {
+			removeItem(signalement_select_arr, signalementId)
+			updateSelectStatut( signalementId, false );
 			$('#checkboxSignalement-'+signalementId+':checkbox').prop('checked', false);
 		}
 		
@@ -238,15 +268,6 @@
 			selectMode = false;
 		}
 		
-		/*Remove item from array*/
-		function removeItem(arr, value) { 
-		  const index = arr.indexOf(value);
-		  if (index > -1) {
-		    arr.splice(index, 1);
-		  }
-		  return arr;
-		}
-		
 		/*Unselect all signalement*/
 		function unselectAll() {
             signalement_select_arr = [];
@@ -274,6 +295,7 @@
 				addToSelection(signalementId);
 			});
 		}
+		
 		
 		$.getScript("jsp/site/plugins/leaflet/DoGetAutocomplete.jsp", function(data){
 			addAutocomplete("adresse",adressSelectCallback);

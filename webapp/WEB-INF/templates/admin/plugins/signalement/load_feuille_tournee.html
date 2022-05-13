@@ -1,4 +1,5 @@
 <#include "macro/commons_signalement.html" />
+<script type="text/javascript" src="js/sira.js"></script>
 <script src="js/jquery.multi-select.min.js"></script>
 <script src="js/jquery.quicksearch.js"></script>
 <link rel="stylesheet" href="css/multi-select.css" type="text/css"/>
@@ -15,16 +16,57 @@
 
 <div class="row">
 	<div class="col-xs-2 col-sm-12 col-md-12 col-lg-12">
-		<a class="btn btn-paris btn-blue" href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp">#i18n{dansmarue.button.return} </a>
 		<div class="pull-right">
-			<@button id="export" class="btn btn-paris btn-red" title='#i18n{dansmarue.tournee.exportpdf}' params='onclick="addFeuilleDeTourneeId(${feuille_de_tournee.id}); carteToBase64();" data-toggle="modal" data-target="#exportFDTModal"' />
+			<a class="btn btn-paris btn-blue" href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp">#i18n{dansmarue.button.return} </a>			
+			<#if onglet_actif='carte'>
+				<@button id="export" class="btn btn-paris btn-red" title='#i18n{dansmarue.tournee.exportpdf}' params='onclick="addFeuilleDeTourneeId(${feuille_de_tournee.id});carteToBase64();" data-toggle="modal" data-target="#exportFDTModal"' />
+			<#else>
+				<@button id="export" class="btn btn-paris btn-red" title='#i18n{dansmarue.tournee.exportpdf}' params='onclick="addFeuilleDeTourneeId(${feuille_de_tournee.id});" data-toggle="modal" data-target="#exportFDTModal"' />
+			</#if>
+			
 		</div>
 	</div>
 </div>
 <hr>
-<fieldset id="map-fdt">
-	<@map_feuille_de_tournee_consult/>
-</fieldset>
+
+<div class="row" id="select-signalement-fdt">
+	<fieldset>
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div class="btn-group">
+					<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=load&param_onglet_actif=carte&idFeuilleDeTournee=${feuille_de_tournee.id}">
+					  	<label class="btn toggle-map-btns <#if onglet_actif='carte'>active</#if>"  id="display-map-btn">
+					  		<img id="map-icon" class="svg toggle-icon" src="images/admin/skin/plugins/signalement/map-icon.svg"/><label>Carte</label>
+					  	</label>
+				  	</a>
+				  	<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=load&param_onglet_actif=liste&idFeuilleDeTournee=${feuille_de_tournee.id}">
+					  	<label class="btn toggle-map-btns <#if onglet_actif='liste'>active</#if>"  id="display-list-btn">
+							<img id="list-icon" class="svg toggle-icon" src="images/admin/skin/plugins/signalement/list-icon.svg"/><label>Liste</label>
+					  	</label>
+					</a>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+</div>
 <br><br>
-<@table_feuille_de_tournee_consult/>
+<#if onglet_actif == "carte">
+	<fieldset id="map-fdt">
+		<@map_feuille_de_tournee_consult/>
+	</fieldset>
+<#else>
+	<fieldset id="map-fdt">
+		<@table_feuille_de_tournee_consult/>
+	</fieldset>
+</#if>
 <@modal_export_pdf/>
+
+<script>
+	function changeOnglet( onglet ) {
+		var inputOngletActif = $("<input>").attr({"type":"hidden","name":"param_onglet_actif", "id":"param_onglet_actif"}).val(onglet);
+		$('#form-saveSelectSignalement').append(inputOngletActif);
+		addSignalementsToForm("form-saveSelectSignalement");
+		$('#saveSelectSignalement').click();
+	}
+</script>
+

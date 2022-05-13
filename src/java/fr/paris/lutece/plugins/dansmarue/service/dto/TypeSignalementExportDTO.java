@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -65,6 +65,8 @@ public class TypeSignalementExportDTO
 
     /** The str pour agent. */
     private Boolean _strPourAgent;
+
+    private Integer _nId;
 
     /**
      * Gets the libelle niveau 1.
@@ -270,6 +272,27 @@ public class TypeSignalementExportDTO
     }
 
     /**
+     * Gets the id.
+     *
+     * @return the id
+     */
+    public Integer getId( )
+    {
+        return _nId;
+    }
+
+    /**
+     * Sets the id.
+     *
+     * @param id
+     *            the new id
+     */
+    public void setId( Integer id )
+    {
+        _nId = id;
+    }
+
+    /**
      * Gets the tab all datas.
      *
      * @return the tab all datas
@@ -277,8 +300,8 @@ public class TypeSignalementExportDTO
     public String [ ] getTabAllDatas( )
     {
         return new String [ ] {
-                getLibelleNiveau1( ), getLibelleNiveau2( ), getLibelleNiveau3( ), getLibelleConcat( ), getAlias( ), getAliasMobile( ), getDirection( ),
-                getActif( ), getPourAgent( )
+                getId( ) != null ? String.valueOf( getId( ) ) : "", getLibelleNiveau1( ), getLibelleNiveau2( ), getLibelleNiveau3( ), getLibelleConcat( ),
+                getAlias( ), getAliasMobile( ), getDirection( ), getActif( ), getPourAgent( )
         };
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,10 @@ import java.util.List;
 import java.util.Map;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.FeuilleDeTournee;
+import fr.paris.lutece.plugins.dansmarue.business.entities.FeuilleDeTourneeFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.FeuilleDeTourneeFilterSearch;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementBean;
+import fr.paris.lutece.plugins.dansmarue.commons.Order;
 
 /**
  * The Interface IFeuilleDeTourneeDAO.
@@ -107,7 +109,7 @@ public interface IFeuilleDeTourneeDAO
 
     /**
      * Find a SearchFilter.
-     * 
+     *
      * @param filterName
      *            filter name to find
      * @return search filter found
@@ -150,7 +152,7 @@ public interface IFeuilleDeTourneeDAO
 
     /**
      * Update map feuille de tournee.
-     * 
+     *
      * @param idFeuilleDeTournee
      *            the id feuille de tournee
      * @param base64map
@@ -189,4 +191,24 @@ public interface IFeuilleDeTourneeDAO
      * @return the list
      */
     List<FeuilleDeTournee> findAll( );
+
+    /**
+     * Load fdt by filter.
+     *
+     * @param feuilleDeTourneeFilter
+     *            the feuille de tournee filter
+     * @return the list
+     */
+    List<FeuilleDeTournee> loadFdtByFilter( FeuilleDeTourneeFilter feuilleDeTourneeFilter );
+
+    /**
+     * Load fdt by filter with order.
+     *
+     * @param feuilleDeTourneeFilter
+     *            the feuille de tournee filter
+     * @param order
+     *            the order
+     * @return the list
+     */
+    List<FeuilleDeTournee> loadFdtByFilterWithOrder( FeuilleDeTourneeFilter feuilleDeTourneeFilter, Order order );
 }

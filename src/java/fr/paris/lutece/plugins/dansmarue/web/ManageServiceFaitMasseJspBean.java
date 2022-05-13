@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -131,7 +131,7 @@ public class ManageServiceFaitMasseJspBean extends AbstractJspBean
     {
         Map<String, Object> model = new HashMap<>( );
         model.put( MARK_LIST_STATE, getEtatEnCours( ) );
-        model.put( MARK_LIST_TYPE_SIGNALEMENT, _typeSignalementService.getListTypeSignalementLastLevelWithoutMessage( ) );
+        model.put( MARK_LIST_TYPE_SIGNALEMENT, _typeSignalementService.getAllTypeSignalementActif( ) );
         model.put( SignalementConstants.MARK_LOCALE, request.getLocale( ) );
         model.put( MARK_FILTER, _serviceFaitMasseFilter );
 

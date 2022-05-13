@@ -4,6 +4,7 @@
 <@leaflet_cluster_includes/>
 <@simpleModal modal_id="map-modal" text=i18n("dansmarue.map.max.results.execeeded",map_max_results)/>
 
+
 <script type="text/javascript" src="js/sira.js"></script>
 <link rel="stylesheet" href="css/plugins/leaflet/leaflet_awesome_number_markers.css" />
 <script src="js/leaflet_awesome_number_markers.js"></script>
@@ -187,6 +188,18 @@ function updateSectorList(idDirection, isDeleteField){
     }
 }
 
+function updateOngletActif( onglet ) {
+	jQuery.ajax( {
+        url :"jsp/admin/plugins/signalement/DoUpdateOngletActif.jsp",
+        data: {
+        	onglet: onglet
+        },
+        error:function (xhr, ajaxOptions, thrownError){
+            alert(thrownError); 
+        }   
+    });
+}
+
 function initType(){
 	// on recupere la valeur choisi dans la datalist
 	var valeurChoisie = $('#typeSignalements').val();
@@ -225,6 +238,11 @@ function initTypeValue (){
 }
 
 $(document).ready(function() {
+	var filterActif = "liste";
+	<#if filter.onglet??>
+		filterActif = "${filter.onglet}";
+	</#if>
+	
     $("#idDirection").change(function(){
         updateSectorList($("#idDirection").val(), false);
         return false;
@@ -235,14 +253,18 @@ $(document).ready(function() {
 		$.getScript("jsp/admin/plugins/signalement/DoGetMap.jsp", function(data){
 			initLeafletMap("map_canvas");
 			getSigMarkers();
-			$(".map_item").addClass("hidden");
+			if(filterActif != "carte") {
+				$(".map_item").addClass("hidden");
+			}
 		});
 		
 		$("#display-map-btn").click(function(){
 			$(".map_item").removeClass("hidden");
 			$("#list-block").addClass("hidden");
+			$(".mozaique_item").addClass("hidden");
 			$(".leaflet-control-zoom-in").prop('title', 'Zoomer');
 			$(".leaflet-control-zoom-out").prop('title', 'Dezoomer');
+			updateOngletActif("carte");
 		});
 	</#if>
     
@@ -268,9 +290,43 @@ $(document).ready(function() {
 	isOptionAvance = true
 	</#if>
 	
+	// Affichage de l'onglet selectionné lors de la derniere recherche
+	if(filterActif == "carte") {
+		$(".map_item").removeClass("hidden");
+		$("#list-block").addClass("hidden");
+		$("#mozaique-block").addClass("hidden");
+		$(".leaflet-control-zoom-in").prop('title', 'Zoomer');
+		$(".leaflet-control-zoom-out").prop('title', 'Dezoomer');
+		$("#display-list-btn").removeClass("active");
+		$("#display-mozaique-btn").removeClass("active");
+		$("#display-map-btn").addClass("active");
+	} else if(filterActif == "mozaique") {
+		$(".map_item").addClass("hidden");
+		$("#list-block").addClass("hidden");
+		$("#mozaique-block").removeClass("hidden");
+		$("#display-list-btn").removeClass("active");
+		$("#display-mozaique-btn").addClass("active");
+	} else {
+		$("#list-block").removeClass("hidden");
+		$("#mozaique-block").addClass("hidden");
+		$("#display-list-btn").addClass("active");
+		$("#display-mozaique-btn").removeClass("active");
+	}
+	
+	
+	
 	$("#display-list-btn").click(function(){
 		$(".map_item").addClass("hidden");
 		$("#list-block").removeClass("hidden");
+		$(".mozaique_item").addClass("hidden");
+		updateOngletActif("liste");
+	});
+	
+	$("#display-mozaique-btn").click(function(){
+		$(".map_item").addClass("hidden");
+		$("#list-block").addClass("hidden");
+		$(".mozaique_item").removeClass("hidden");
+		updateOngletActif("mozaique");
 	});
 	
     var types = new Array();
@@ -349,7 +405,34 @@ $(document).ready(function() {
 		  checkboxes[i].checked = false
 		}
 	}
+	
+/* 	$('#arrowRight').click(function() {
+		$('.mozaique_item > div:first')
+		.next()
+		.end()
+		.appendTo('.mozaique_item');
+	});
+		
+	$('#arrowLeft').click(function() {
+		$('.mozaique_item > div:last')
+		.prependTo('.mozaique_item')
+		.next()
+		.end();
+	});
+	
+	$( "#rotationHoraire" ).click(function() {
+		rotation = rotation + 90;
+		$(".mozaique-photo").css({'transform': 'rotate('+rotation+'deg)'});
+	});
+	
+	$( "#rotationAntiHoraire2" ).click(function() {
+		rotation = rotation - 90;
+		$(".mozaique-photo").css({'transform': 'rotate('+rotation+'deg)'});
+	});
+ */
+	 
 
+	
 </script>
 <link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
 <link rel="stylesheet" href="js/jquery/plugins/autocomplete/jquery.autocomplete.css" type="text/css" media="screen, projection" />	
@@ -360,6 +443,33 @@ $(document).ready(function() {
     overflow-y: auto;
     overflow-x: hidden;
   }
+  
+.mozaique-img {
+	display: block;
+	margin: auto;
+	overflow: hidden;
+	width: auto;
+	height: 300px;
+ }
+
+.mozaique-address {
+	padding-bottom: 30px;
+ 	text-align: center;
+}
+ 
+.mozaique-id {
+	text-align: center;
+}
+ 
+#display-mozaique-btn input[type=radio] {
+	display: none;
+}
+
+.mozaique_item{
+    position: relative;
+}
+
+ 
 </style>
 <div id="overlay"> <div id="text">#i18n{dansmarue.gerenation.carte}</div> </div>
 <div id="manage-signalement" class="row">
@@ -614,7 +724,20 @@ $(document).ready(function() {
 												</#list>
 											</select>
 										</div>
+										
+										<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+											for="filter_photo">#i18n{dansmarue.reportingList.vuePhoto}
+										</label>
+										
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+											<#if vuePhoto_list!?has_content && (vuePhoto_list!?size > 1)>
+												<@comboWithParams additionalParameters="class='form-control
+												input-sm'" name="idVuePhoto"
+												default_value="${filter.idVuePhoto!}" items=vuePhoto_list />
+											<#else> #i18n{dansmarue.reportingList.listEmpty} </#if>
+										</div>
 									</div>
+																					
 									<div class="form-group">
 										<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
 											for="filter_dateDoneBegin">
@@ -698,6 +821,9 @@ $(document).ready(function() {
 						  <label class="btn toggle-map-btns active"  id="display-list-btn">
 							<input type="radio" name="options"  autocomplete="off" checked><img id="list-icon" class="svg toggle-icon" src="images/admin/skin/plugins/signalement/list-icon.svg"/><label>Liste</label>
 						  </label>
+						  <label class="btn toggle-map-btns"  id="display-mozaique-btn">
+							<input type="radio" name="options"  autocomplete="off"><span class="glyphicon glyphicon-th"></span><label style="margin-left: 4px;">Mosaique</label>
+						  </label>						  
 						</div>
 						<div id="map_nb_result_div" class="map_item pull-right hidden">
 							<label class="label-title">#i18n{dansmarue.reportingList.search.results} : </label><span> ${(paginator.itemsCount)} #i18n{dansmarue.reportingList.present.anomalies}</span>
@@ -719,13 +845,61 @@ $(document).ready(function() {
 				<div class="row">
 					<div id="toggle-map-btns" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<div class="btn-group">
-						  <button class="btn toggle-map-btns" data-toggle="modal" data-target="#map-modal"><img id="map-icon" class="svg toggle-icon" src="images/admin/skin/plugins/signalement/map-icon.svg"/><label>Carte</label></button>
-						  <button class="btn toggle-map-btns active"><img id="list-icon" class="svg toggle-icon" src="images/admin/skin/plugins/signalement/list-icon.svg"/><label>Liste</label></button>
-						</div>
+							<div class="btn-group" data-toggle="buttons">
+							  <button class="btn toggle-map-btns" data-toggle="modal" data-target="#map-modal"><img id="map-icon" class="svg toggle-icon" src="images/admin/skin/plugins/signalement/map-icon.svg"/><label>Carte</label></button>
+							  <label class="btn toggle-map-btns active"  id="display-list-btn">
+								<input type="radio" name="options"  autocomplete="off" checked><img id="list-icon" class="svg toggle-icon" src="images/admin/skin/plugins/signalement/list-icon.svg"/><label>Liste</label>
+							  </label>
+							  <label class="btn toggle-map-btns"  id="display-mozaique-btn">
+								<input type="radio" name="options"  autocomplete="off"><span class="glyphicon glyphicon-th"></span><label style="margin-left: 4px;">Mozaique</label>
+							  </label>						  
+							</div>
+						 </div>
 					</div>
 				</div>
 			</fieldset>
 			</#if>
+			
+			<fieldset id="mozaique-block" class="mozaique_item hidden">
+				<div class="row">
+					<@paginationSig paginator=paginator combo=1 />
+				</div>
+				<div class="row">
+					<#if signalement_list?has_content> 
+						<#list signalement_list as signalement>
+							<div id="ancre-signalement-${signalement.id}" class="col-xs-12 col-sm-12 col-md-6 col-lg-5ths signalement-list-element">
+								<div class="mozaique-photo">
+									<#assign isPhotoShow = false>
+									<#if signalement.photos?has_content>
+										<#list signalement.photos as photo>
+											<#assign isHidden = ((filter.idVuePhoto == 2 && photo.vue != 2) || (filter.idVuePhoto != 2  && photo.vue == 2)) || isPhotoShow >
+											<span id-signalement-mosaique='${signalement.id}'>
+												<a href='#' data-toggle="modal" data-target="#imageModal"  id-vue='${photo.vue}' id-signalement='${signalement.id}' image-url='${photo.imageUrl}' isTabMosaique='true' <#if isHidden> style='display: none'</#if>>
+													<img src="${photo.imageUrl}" class="mozaique-img img-thumbnail"/>
+												</a>
+											</span>
+											<#assign isPhotoShow = !isHidden || isPhotoShow>
+										</#list>	
+									</#if>
+									<#if !isPhotoShow && filter.idVuePhoto == 2 >
+										<img src="images/admin/skin/plugins/signalement/pas_de_photo_service_fait.png" class="mozaique-img img-thumbnail"/>
+									<#elseif !isPhotoShow>
+										<img src="images/admin/skin/plugins/signalement/pas_de_photo_initiale.png" class="mozaique-img img-thumbnail"/>	
+									</#if>
+								</div>
+								<div class="mozaique-id">
+									<a class="link" href="jsp/admin/plugins/signalement/ViewSignalement.jsp?signalement_id=${signalement.id}">${signalement.numeroSignalement!}</a>
+								</div>
+								<div class="mozaique-address">
+									<a class="link" href="jsp/admin/plugins/signalement/ViewSignalement.jsp?signalement_id=${signalement.id}">${signalement.adresses[0].adresse!}</a>
+								</div>
+							</div>
+						</#list>
+					</#if>
+				</div>
+				<@paginationSig paginator=paginator combo=1 />					
+			</fieldset>
+			
 			<fieldset id="list-block">
 				<@paginationSig paginator=paginator combo=1 />
 				<form action="jsp/admin/plugins/signalement/ProcessAction.jsp"
@@ -862,6 +1036,8 @@ $(document).ready(function() {
 								<th>#i18n{dansmarue.reportingList.etat}</th>
 							</tr>
 						</thead>
+						
+						
 						<tbody>
 							<#if signalement_list?has_content> <#list signalement_list as
 							signalement>
@@ -907,18 +1083,18 @@ $(document).ready(function() {
 									
 									<#assign list_actions = map_actions[signalement.id?string] />
 									<#-- actions du workflow --> 
-									<#list list_actions as action>
-									<#if
-									rights.estAutorise("*","*",(signalement.secteur.idSector)!?string)>
-									
-									<a title="${action.name}"
-									href="jsp/admin/plugins/signalement/ProcessAction.jsp?action_id=${action.id}&amp;signalement_id=${signalement.id}">
-										<img width="24px"
-										src="image?resource_type=workflow_icon_img&id=${action.icon.id}"
-										alt="${action.name}" />
-									</a> </#if> 
-									
-									</#list> 
+										<#list list_actions as action>
+										<#if
+										rights.estAutorise("*","*",(signalement.secteur.idSector)!?string)>
+										
+										<a title="${action.name}"
+										href="jsp/admin/plugins/signalement/ProcessAction.jsp?action_id=${action.id}&amp;signalement_id=${signalement.id}">
+											<img width="24px"
+											src="image?resource_type=workflow_icon_img&id=${action.icon.id}"
+											alt="${action.name}" />
+										</a> </#if> 
+										
+										</#list> 
 									
 									<#if !(signalement.isSendWS) >
 									<@a class="btn btn-xs btn-danger" visu=false
@@ -942,15 +1118,16 @@ $(document).ready(function() {
 
 								<td class="signalement-photo">
 									<#if signalement.photos?has_content> 
-										<#assign isHidden = false>
-										<#list signalement.photos as photo> 
-											<span id='${signalement.id}'>
-												<a href='#' data-toggle="modal" data-target="#imageModal" id-vue='${photo.vue}' id-signalement='${signalement.id}' image-url='${photo.imageUrl}' <#if isHidden> style='display: none'</#if>>
-													<img src="${photo.imageThumbnailUrl}" width="100" />
+										<#assign isPhotoShow = false>
+										<#list signalement.photos as photo>
+											<#assign isHidden = (filter.idVuePhoto == 2 && photo.vue != 2) || isPhotoShow >
+											<span id-signalement-photo='${signalement.id}'>
+												<a href='#' data-toggle="modal" data-target="#imageModal"  id-vue='${photo.vue}' id-signalement='${signalement.id}' image-url='${photo.imageUrl}' isTabMosaique='false' <#if isHidden> style='display: none'</#if>>
+													<img src="${photo.imageThumbnailUrl}" width="100"/>
 												</a>
 											</span>
-											<#assign isHidden = true>
-										</#list>
+											<#assign isPhotoShow = !isHidden || isPhotoShow>
+										</#list>							
 									</#if>
 								</td>
 								<td class="signalement-suivi">${signalement.suivi!}</td>
@@ -1104,8 +1281,12 @@ $(document).ready(function() {
         $("#filter_mailDernierIntervenant").val('');
         $("#filter_commentaire").val('');
         $("#filter_commentaireAgentTerrain").val('');
-        $("#filter_dateBegin").val('');
-        $("#filter_dateEnd").val('');
+        
+        var date = new Date();
+        $("#filter_dateEnd").val( date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getFullYear() );
+        date.setMonth( date.getMonth() - 1 );
+        $("#filter_dateBegin").val( date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getFullYear() );
+        
         $("#filter_dateDoneBegin").val('');
         $("#filter_dateDoneEnd").val('');
         $("#dashboardCriterias").html("");
@@ -1134,6 +1315,8 @@ $(document).ready(function() {
 		$("#dashboard_criterias").hide();
 		 
     }
+    
+    
 </script>
 
 <script src="js/jquery.cookie.js"></script>
@@ -1165,13 +1348,15 @@ $(window).load(function() {
             $('html, body').animate({scrollTop:$("#main-footer").offset().top});
         });
     }
+
+
 });
 
 
 $(document).ready(function() {
 	$.getScript("jsp/admin/plugins/leaflet/DoGetAutocomplete.jsp", function(data){
 		addAutocomplete("filter_adresse",null);
-	});
+	});	
 });
 
 </script>

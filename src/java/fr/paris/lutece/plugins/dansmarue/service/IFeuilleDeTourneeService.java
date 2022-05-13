@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,8 +40,9 @@ import java.util.Map;
 import fr.paris.lutece.plugins.dansmarue.business.entities.FeuilleDeTournee;
 import fr.paris.lutece.plugins.dansmarue.business.entities.FeuilleDeTourneeFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.FeuilleDeTourneeFilterSearch;
+import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementBean;
-import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
+import fr.paris.lutece.plugins.dansmarue.commons.Order;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementMapMarkerDTO;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
@@ -109,7 +110,7 @@ public interface IFeuilleDeTourneeService
 
     /**
      * Find Filter search.
-     * 
+     *
      * @param nameToSearch
      *            name of filter
      * @return FilterSearch find
@@ -209,15 +210,26 @@ public interface IFeuilleDeTourneeService
     List<FeuilleDeTournee> loadFdtByFilter( FeuilleDeTourneeFilter feuilleDeTourneeFilter );
 
     /**
+     * Load fdt by filter with order.
+     *
+     * @param feuilleDeTourneeFilter
+     *            the feuille de tournee filter
+     * @param order
+     *            the order
+     * @return the list
+     */
+    List<FeuilleDeTournee> loadFdtByFilterWithOrder( FeuilleDeTourneeFilter feuilleDeTourneeFilter, Order order );
+
+    /**
      * Gets the signalements map marker DTO.
      *
-     * @param signalementFilter
-     *            the signalement filter
+     * @param signalementList
+     *            the signalement list
      * @param locale
      *            the locale
      * @return the signalements map marker DTO
      */
-    List<SignalementMapMarkerDTO> getSignalementsMapMarkerDTO( SignalementFilter signalementFilter, Locale locale );
+    List<SignalementMapMarkerDTO> getSignalementsMapMarkerDTO( List<Signalement> signalementList, Locale locale );
 
     /**
      * Gets the noms existant.
@@ -302,6 +314,8 @@ public interface IFeuilleDeTourneeService
      */
     List<FeuilleDeTournee> getAllFeuilleDeTourneeAutorise( AdminUser connectedUser );
 
+    boolean isUnitAuthorizedToUserWithoutAdminControl( AdminUser user, Unit unit );
+
     /**
      * Checks if is unit is authorized to user.
      *
@@ -320,4 +334,13 @@ public interface IFeuilleDeTourneeService
      *            the jour delai suppression
      */
     void deleteOldFeuilleDeTournee( int jourDelaiSuppression );
+
+    /**
+     * Checks if is nb result ok.
+     *
+     * @param totalAnomalies
+     *            the total anomalies
+     * @return true, if is nb result ok
+     */
+    boolean isNbResultOk( int totalAnomalies );
 }
