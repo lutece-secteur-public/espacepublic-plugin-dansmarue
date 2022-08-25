@@ -195,7 +195,7 @@ public class SignalementService implements ISignalementService
     private static final String ID_STATE_REJETE = "signalement.idStateRejete";
 
     /** The Constant ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE. */
-    private static final String ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE = "signalement.idStateServiceProgrammePrestataire";
+    private static final String ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE          = "signalement.idStateServiceProgrammePrestataire";
 
     /** The Constant ID_STATE_TRANSFERE_PRESTATAIRE. */
     private static final String ID_STATE_TRANSFERE_PRESTATAIRE = "signalement.idStateTransferePrestataire";
@@ -1981,9 +1981,8 @@ public class SignalementService implements ISignalementService
             {
                 estAffichable = false;
             }
-            if ( ( ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_TRANSFERE_PRESTATAIRE, -1 ) )
-                    || ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE, -1 ) ) )
-                    && listActionsNonAffichablesPrestataire.contains( String.valueOf( action.getId( ) ) ) && signalement.getIsSendWS( ) )
+            if ( ( ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_TRANSFERE_PRESTATAIRE, -1 ) ) || ( state.getId( ) == AppPropertiesService.getPropertyInt(
+                    ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE, -1 ) ) ) && listActionsNonAffichablesPrestataire.contains( String.valueOf( action.getId( ) ) ) && signalement.getIsSendWS( ) )
             {
                 estAffichable = false;
             }
@@ -1992,6 +1991,40 @@ public class SignalementService implements ISignalementService
                 listActions.add( action );
             }
 
+        }
+
+        return listActions;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<Action> getListActionsBySignalementAndUser( Signalement signalement, Integer workflowId, AdminUser user, State state )
+    {
+        // workflow action
+        Collection<Action> listActions = new ArrayList<>( );
+        Collection<Action> listActionsPossibles = _signalementDAO.getActionForState( state.getId( ), workflowId );
+
+        List<String> listActionsNonAffichables = Arrays.asList( AppPropertiesService.getProperty( PROPERTY_ACTIONS_NON_AFFICHABLES ).split( "," ) );
+        List<String> listActionsNonAffichablesPrestataire = Arrays.asList( AppPropertiesService.getProperty( PROPERTY_ACTIONS_NON_AFFICHABLES_PRESTATAIRE ).split( "," ) );
+
+        // Retrieve the state to lock some actions
+        WorkflowService workflowService = WorkflowService.getInstance( );
+
+        for ( Action action : listActionsPossibles )
+        {
+            boolean isActionIsInListNonAffichable = listActionsNonAffichables.contains( String.valueOf( action.getId( ) ) );
+            boolean isSignalementEstEnvoyeUnPrestataire = ( ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_TRANSFERE_PRESTATAIRE, -1 ) )
+                    || ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE, -1 ) ) );
+            boolean isActionIsInListNonAffichablePrestataire = listActionsNonAffichablesPrestataire.contains( String.valueOf( action.getId( ) ) );
+
+            boolean isActionAffichable = !isActionIsInListNonAffichable && !( isSignalementEstEnvoyeUnPrestataire && isActionIsInListNonAffichablePrestataire && signalement.getIsSendWS( ) );
+
+            if ( isActionAffichable )
+            {
+                listActions.add( action );
+            }
         }
 
         return listActions;
@@ -2257,9 +2290,9 @@ public class SignalementService implements ISignalementService
      * {@inheritDoc}
      */
     @Override
-    public List<Long> findAnoWithoutState( )
+    public List<Long> findAnoWithoutState( int delay )
     {
-        return _signalementDAO.findAnoWithoutState( );
+        return _signalementDAO.findAnoWithoutState( delay );
     }
 
     /**

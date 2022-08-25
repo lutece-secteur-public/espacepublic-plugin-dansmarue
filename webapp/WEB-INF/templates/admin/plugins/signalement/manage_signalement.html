@@ -35,7 +35,7 @@ function getSigMarkers(){
 		
 		var itemPerPage=${paginator.itemsPerPage};
 		var currentPage=${paginator.pageCurrent};
-		var signalementNumber =( ( currentPage-1 ) * itemPerPage ) + index;
+		var signalementNumber = index;
 		
 		var marker = L.marker([signalement.lat,signalement.lng], {
           icon: new L.AwesomeNumberMarkers({
@@ -483,7 +483,7 @@ $(document).ready(function() {
 				<fieldset>
 					<form class="form-horizontal"
 						action="jsp/admin/plugins/signalement/ManageSignalement.jsp"
-						method="post" name="form">
+						method="post" name="form" id="formulaireDeRecherche">
 
 						<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 <#-- 							<div class="form-group"> -->
@@ -804,6 +804,7 @@ $(document).ready(function() {
 										id="re-init-button" onclick="deleteFields()">
 										#i18n{dansmarue.reportingList.reInitChamps}
 									</button>
+									<input id="isReinitSearch" name="isReinitSearch" value="0" type="hidden" />
 
 								</div>
 							</div>
@@ -1265,55 +1266,8 @@ $(document).ready(function() {
     
     function deleteFields()
     {
-        //$('#idTypeSignalement option:selected').removeAttr('selected');
-       // $('#idTypeSignalement option:first').attr("selected", "selected");
-       	$("#idTypeSignalement").val('');
-       	$("#typeSignalements").val('');
-        $("#filter_numero").val('');
-        $('#idDirection option:selected').removeAttr('selected');
-        $('#idDirection option:first').attr("selected", "selected");
-        $('#idSector option:selected').removeAttr('selected');
-        $('#idSector option:first').attr("selected", "selected");
-        updateSectorList(-1, true);
-        $("#filter_adresse").val('');
-        $("#filter_fdt").val('');
-        $("#filter_mail").val('');
-        $("#filter_mailDernierIntervenant").val('');
-        $("#filter_commentaire").val('');
-        $("#filter_commentaireAgentTerrain").val('');
-        
-        var date = new Date();
-        $("#filter_dateEnd").val( date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getFullYear() );
-        date.setMonth( date.getMonth() - 1 );
-        $("#filter_dateBegin").val( date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getFullYear() );
-        
-        $("#filter_dateDoneBegin").val('');
-        $("#filter_dateDoneEnd").val('');
-        $("#dashboardCriterias").html("");
-		
-        $("#idFdt").selectpicker('val', '');
-        $("#idFdt").selectpicker('refresh');
-		$("#conseilQuartier").selectpicker('val', '');
-        $("#conseilQuartier").selectpicker('refresh');
-        
-// 		$("#categoryCheckboxes .btn-checkbox").removeClass("active");
-// 		$("input[name='category']").attr('checked',false);
-		
-		$("#checkbox_arrondissement input:checkbox").attr('checked',false);
-		$("#checkbox_arrondissement label").removeClass("active");
-		
-        $("#checkbox_etat input:checkbox").attr('checked',false);
-		$("#checkbox_etat label").removeClass("active");
-		$("#checkbox_etat input:checkbox").each(function(index,data){
-	       	var dataId = $(data).attr('id');
-			if(idEtatsDefault.indexOf(dataId) > -1){
-				$(data).parent().addClass("active");
-				data.checked= true;
-			}
-       	});
-		
-		$("#dashboard_criterias").hide();
-		 
+		 $("#isReinitSearch").val("1");
+		 $("#formulaireDeRecherche").submit();
     }
     
     

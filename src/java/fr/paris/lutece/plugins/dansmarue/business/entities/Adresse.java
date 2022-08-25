@@ -33,14 +33,17 @@
  */
 package fr.paris.lutece.plugins.dansmarue.business.entities;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.*;
+
+import java.io.*;
 
 /**
  * The Class Adresse.
  */
 @JsonIgnoreProperties( ignoreUnknown = true )
-public class Adresse
+public class Adresse implements Serializable
 {
+    private static final long serialVersionUID = 205930739101196524L;
 
     /** The lat. */
     private Double _lat;

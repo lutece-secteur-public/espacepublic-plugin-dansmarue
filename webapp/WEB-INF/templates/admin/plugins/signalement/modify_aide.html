@@ -1,0 +1,35 @@
+<@box>
+	<@boxHeader title='#i18n{dansmarue.manage_aides.title}' />
+	<@boxBody>
+    <@tform method="post" name="modify_aide" action="jsp/admin/plugins/signalement/ManageAides.jsp" params='enctype="multipart/form-data"'>
+			<@messages errors=errors />
+			<input type="hidden" id="id" name="id" value="${aide.id}"/>
+			<@formGroup labelFor='libelle' labelKey='#i18n{dansmarue.modify_aide.labelLibelle}' mandatory=true>
+          		<@input type='text' id='libelle' name='libelle'  maxlength=255 value='${aide.libelle!\'\'}' tabIndex='0' />
+			</@formGroup>
+			<@formGroup labelFor='hypertexteUrl' labelKey='#i18n{dansmarue.actualite.hypertexteUrl}' mandatory=true>
+          	<@input type='text' id='hypertexteUrl' name='hypertexteUrl'  maxlength=255 value='${aide.hypertexteUrl!}' tabIndex='1' />
+		   </@formGroup>
+		   <div class="form-group">
+				<label class="<@labelStyle />" for="image">#i18n{dansmarue.actualite.image} <i class="fa fa-asterisk" aria-hidden="true"></i></label> 
+				  <#if aide.imageUrl!?has_content >
+					<div class="<@inputStyle />">
+						<img width="100" src='${aide.imageUrl!}' /><br />
+					</div>
+				  </#if>
+			</div>
+			<div class="form-group">
+				<label class="<@labelStyle />" for="image">&nbsp;</label>
+					<div class="<@inputStyle />">
+						<input type="file" id="photo" name="photo" maxlength="100" />
+					</div>
+			</div>
+			<@formGroup labelFor='actif' labelKey='#i18n{dansmarue.modify_aide.labelActif}' mandatory=true>
+				<@checkBox id="actif" name="actif"  value="1" checked=aide.actif!'false' tabIndex='2' />
+			</@formGroup>
+        <@actionButtons button1Name="action_modifyAide" button2Name="view_manageAide"/>
+    </@tform>
+	</@boxBody>
+</@box>
+<#include "/admin/util/editor/editor.html" /> 
+<@initEditor />

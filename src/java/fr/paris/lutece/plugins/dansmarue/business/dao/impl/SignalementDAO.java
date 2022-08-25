@@ -43,6 +43,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -72,6 +73,10 @@ import fr.paris.lutece.plugins.dansmarue.service.dto.DossierSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
 import fr.paris.lutece.plugins.unittree.modules.dansmarue.business.sector.Sector;
+import fr.paris.lutece.plugins.workflowcore.business.action.Action;
+import fr.paris.lutece.plugins.workflowcore.business.icon.Icon;
+import fr.paris.lutece.plugins.workflowcore.business.state.State;
+import fr.paris.lutece.plugins.workflowcore.business.workflow.Workflow;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.date.DateUtil;
@@ -317,7 +322,7 @@ public class SignalementDAO implements ISignalementDAO
             + "order by state.id_state, tranche_date_creation asc";
 
     /** The Constant SQL_QUERY_FIND_ANO_WITHOUT_STATES. */
-    private static final String SQL_QUERY_FIND_ANO_WITHOUT_STATES = "select id_signalement, date_creation from signalement_signalement s left join workflow_resource_workflow w on s.id_signalement = w.id_resource where w.id_resource is null order by date_creation desc limit 10";
+    private static final String SQL_QUERY_FIND_ANO_WITHOUT_STATES = "select id_signalement, date_creation from signalement_signalement s left join workflow_resource_workflow w on s.id_signalement = w.id_resource where w.id_resource is null and s.date_creation < now()::timestamp - interval '?m' order by date_creation desc limit 10";
 
     /** The Constant SQL_QUERY_GET_REPARTITION_SERVICE_FAIT_MASSE. */
     private static final String SQL_QUERY_GET_REPARTITION_SERVICE_FAIT_MASSE = "select type.libelle, count(signalement.id_signalement) from signalement_signalement signalement join workflow_resource_workflow workflow on workflow.id_resource=signalement.id_signalement join signalement_type_signalement type on type.id_type_signalement = signalement.fk_id_type_signalement";
@@ -2781,10 +2786,11 @@ public class SignalementDAO implements ISignalementDAO
      * {@inheritDoc}
      */
     @Override
-    public List<Long> findAnoWithoutState( )
+    public List<Long> findAnoWithoutState(int delay )
     {
         List<Long> listAnomaliesId = new ArrayList<>( );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_ANO_WITHOUT_STATES );
+        String request = SQL_QUERY_FIND_ANO_WITHOUT_STATES.replace( "?", String.valueOf( delay )  );
+        DAOUtil daoUtil = new DAOUtil( request );
 
         daoUtil.executeQuery( );
 
@@ -3097,5 +3103,75 @@ public class SignalementDAO implements ISignalementDAO
 
         }
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<Action> getActionForState( int stateId, Integer workflowId )
+    {
+        List<Action> listAction = new ArrayList( );
+        Action action = null;
+
+        try ( DAOUtil daoUtil = new DAOUtil(
+                "SELECT a.id_action,a.name,a.description,a.id_workflow,a.id_state_before, a.id_state_after,a.id_icon,a.is_automatic,a.is_mass_action,a.display_order,a.is_automatic_reflexive_action,i.name,i.mime_type,i.file_value,i.width,i.height  FROM workflow_action a LEFT JOIN workflow_icon i ON (a.id_icon = i.id_icon) where id_state_before = ? and id_workflow = ? ORDER BY display_order" ); )
+        {
+            int nIndex = 1;
+
+            daoUtil.setInt( nIndex++, stateId );
+            daoUtil.setInt( nIndex, workflowId );
+
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                int nPos = 0;
+                action = new Action( );
+                nPos = nPos + 1;
+                action.setId( daoUtil.getInt( nPos ) );
+                ++nPos;
+                action.setName( daoUtil.getString( nPos ) );
+                ++nPos;
+                action.setDescription( daoUtil.getString( nPos ) );
+                Workflow workflow = new Workflow( );
+                ++nPos;
+                workflow.setId( daoUtil.getInt( nPos ) );
+                action.setWorkflow( workflow );
+                State stateBefore = new State( );
+                ++nPos;
+                stateBefore.setId( daoUtil.getInt( nPos ) );
+                action.setStateBefore( stateBefore );
+                State stateAfter = new State( );
+                ++nPos;
+                stateAfter.setId( daoUtil.getInt( nPos ) );
+                action.setStateAfter( stateAfter );
+                Icon icon = new Icon( );
+                ++nPos;
+                icon.setId( daoUtil.getInt( nPos ) );
+                ++nPos;
+                action.setAutomaticState( daoUtil.getBoolean( nPos ) );
+                ++nPos;
+                action.setMassAction( daoUtil.getBoolean( nPos ) );
+                ++nPos;
+                action.setOrder( daoUtil.getInt( nPos ) );
+                ++nPos;
+                action.setAutomaticReflexiveAction( daoUtil.getBoolean( nPos ) );
+                ++nPos;
+                icon.setName( daoUtil.getString( nPos ) );
+                ++nPos;
+                icon.setMimeType( daoUtil.getString( nPos ) );
+                ++nPos;
+                icon.setValue( daoUtil.getBytes( nPos ) );
+                ++nPos;
+                icon.setWidth( daoUtil.getInt( nPos ) );
+                ++nPos;
+                icon.setHeight( daoUtil.getInt( nPos ) );
+                action.setIcon( icon );
+                listAction.add( action );
+            }
+
+        }
+        return listAction;
     }
 }

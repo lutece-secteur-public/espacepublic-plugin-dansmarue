@@ -1,0 +1,59 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<div class="box box-info">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{dansmarue.actualite.link.administrer}</h3>
+				<span class="pull-right"> <a
+					href="jsp/admin/plugins/signalement/SaveActualite.jsp"
+					class="btn btn-sm btn-primary"> <i
+						class="glyphicon glyphicon-plus"></i>
+						#i18n{dansmarue.commons.ajouter}
+				</a>
+				</span>
+			</div>
+
+			<div class="box-body">
+				<#if actualite_list?has_content &&
+				actualite_list?size != 0>
+				<table class="table table-striped table-condensed">
+					<tr>
+						<th class="col-lg-2">#i18n{dansmarue.commons.modifierOrdre}</th>
+						<th class="col-lg-4">#i18n{dansmarue.commons.libelle}</th>
+						<th class="col-lg-2">#i18n{dansmarue.commons.actif}</th>
+						<th class="col-lg-2">#i18n{dansmarue.commons.ordre}</th>
+						<th class="col-lg-2">#i18n{dansmarue.commons.actions}</th>
+					</tr>
+
+					<#list actualite_list as actualite>
+					<tr>
+						<td><a alt="#i18n{dansmarue.listtypesignalement.flechehaut.alt}"
+							title="#i18n{dansmarue.listtypesignalement.flechehaut.title}"
+							href="jsp/admin/plugins/signalement/DoDecreaseActualiteOrder.jsp?id=${actualite.id}&ordre=${actualite.ordre}">
+								<i class="glyphicon glyphicon-arrow-up"></i>
+						</a> <a alt="#i18n{dansmarue.listtypesignalement.flechebas.alt}"
+							title="#i18n{dansmarue.listtypesignalement.flechebas.title}"
+							href="jsp/admin/plugins/signalement/DoIncreaseActualiteOrder.jsp?id=${actualite.id}&ordre=${actualite.ordre}">
+								<i class="glyphicon glyphicon-arrow-down"></i>
+						</a></td>
+						<td>${actualite.libelle}</td>
+						<td>${actualite.actif?string("#i18n{dansmarue.commons.oui}","#i18n{dansmarue.commons.non}")}</td>
+						<td>${actualite.ordre!}</td>
+						<td><a class="btn btn-primary btn-sm"
+							alt="#i18n{dansmarue.commons.modifier}"
+							title="#i18n{dansmarue.commons.modifier}"
+							href="jsp/admin/plugins/signalement/ModifyActualite.jsp?actualite_id=${actualite.id}">
+								<i class="glyphicon glyphicon-edit"></i>
+						</a> <a class="btn btn-danger btn-sm"
+							alt="#i18n{dansmarue.commons.supprimer}"
+							title="#i18n{dansmarue.commons.supprimer}"
+							href="jsp/admin/plugins/signalement/DeleteActualite.jsp?actualite_id=${actualite.id}">
+								<i class="glyphicon glyphicon-trash"></i>
+						</a></td>
+					</tr>
+					</#list>
+				</table>
+				<br /> <#else> #i18n{dansmarue.commons.liste.vide} </#if>
+			</div>
+		</div>
+	</div>
+</div>

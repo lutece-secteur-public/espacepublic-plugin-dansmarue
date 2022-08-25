@@ -8,7 +8,7 @@
   </parent>
   <groupId>fr.paris.lutece.plugins</groupId>
   <artifactId>plugin-dansmarue</artifactId>
-  <version>6.10.7-SNAPSHOT</version>
+  <version>6.11.3-SNAPSHOT</version>
   <packaging>lutece-plugin</packaging>
   <name>plugin Dans Ma Rue (BO signalement)</name>
   <url>https://dev.lutece.paris.fr/gitlab/tmma/r59/plugin-signalement</url>

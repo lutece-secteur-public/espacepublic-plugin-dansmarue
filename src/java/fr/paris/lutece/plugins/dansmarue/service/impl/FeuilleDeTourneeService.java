@@ -211,10 +211,11 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
                     {
                         signalementBean.setImagePresContent( Base64.getEncoder( ).encodeToString( photo.getImage( ).getImage( ) ) );
                     }
-                    else if ( photo.getVue( ) == 1 )
-                    {
-                        signalementBean.setImageEnsembleContent( Base64.getEncoder( ).encodeToString( photo.getImage( ).getImage( ) ) );
-                    }
+                    else
+                        if ( photo.getVue( ) == 1 )
+                        {
+                            signalementBean.setImageEnsembleContent( Base64.getEncoder( ).encodeToString( photo.getImage( ).getImage( ) ) );
+                        }
                 }
             }
 
@@ -634,7 +635,7 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
 
         for ( FeuilleDeTournee feuilleDeTournee : feuilleDeTourneeList )
         {
-            int idEntite = feuilleDeTournee.getIdEntite() > -1 ? feuilleDeTournee.getIdEntite() : feuilleDeTournee.getIdDirection();
+            int idEntite = feuilleDeTournee.getIdEntite( ) > -1 ? feuilleDeTournee.getIdEntite( ) : feuilleDeTournee.getIdDirection( );
             if ( isUnitAuthorizedToUserWithoutAdminControl( connectedUser, _unitService.getUnit( idEntite, false ) ) )
             {
                 feuilleDeTourneeListAutorise.add( feuilleDeTournee );
@@ -710,7 +711,7 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
 
         for ( FeuilleDeTournee feuilleDeTournee : feuilleDeTourneeList )
         {
-            int idEntite = feuilleDeTournee.getIdEntite() > -1 ? feuilleDeTournee.getIdEntite() : feuilleDeTournee.getIdDirection();
+            int idEntite = feuilleDeTournee.getIdEntite( ) > -1 ? feuilleDeTournee.getIdEntite( ) : feuilleDeTournee.getIdDirection( );
             if ( isUnitAuthorizedToUserWithoutAdminControl( connectedUser, _unitService.getUnit( idEntite, false ) ) )
             {
                 feuilleDeTourneeListAutorise.add( feuilleDeTournee );

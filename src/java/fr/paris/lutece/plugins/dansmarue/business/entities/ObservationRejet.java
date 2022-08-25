@@ -33,13 +33,16 @@
  */
 package fr.paris.lutece.plugins.dansmarue.business.entities;
 
-import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.*;
+
+import java.io.*;
 
 /**
  * The Class ObservationRejet.
  */
-public class ObservationRejet
+public class ObservationRejet implements Serializable
 {
+    private static final long serialVersionUID = -5725720906490767417L;
 
     /** The n id. */
     private Integer _nId;

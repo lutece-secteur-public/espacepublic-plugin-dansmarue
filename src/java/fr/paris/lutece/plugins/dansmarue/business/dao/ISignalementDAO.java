@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.dansmarue.business.dao;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,7 @@ import fr.paris.lutece.plugins.dansmarue.business.entities.TableauDeBordFilter;
 import fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DashboardSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DossierSignalementDTO;
+import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 /**
@@ -457,10 +459,11 @@ public interface ISignalementDAO
 
     /**
      * Find ano without state.
-     *
+     * @param delay
+     *         delay in minutes since anomaly creation before delete.
      * @return the list
      */
-    List<Long> findAnoWithoutState( );
+    List<Long> findAnoWithoutState( int delay );
 
     /**
      * Gets the repartition service fait masse.
@@ -518,4 +521,12 @@ public interface ISignalementDAO
      */
     String findLabelPrestataireSignalement( int idSignalement );
 
+    /**
+     * Gets action for state.
+     *
+     * @param stateId the state id
+     * @param workflowId the workflow id
+     * @return the action for state
+     */
+    Collection<Action> getActionForState( int stateId, Integer workflowId );
 }

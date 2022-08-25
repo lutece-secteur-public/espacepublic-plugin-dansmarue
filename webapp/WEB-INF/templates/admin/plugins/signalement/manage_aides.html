@@ -1,0 +1,57 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<div class="box box-info">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{dansmarue.manage_aides.title}</h3>
+				<span class="pull-right"> 
+				<@tform class='form-inline pull-right' name='manage_aide' action='jsp/admin/plugins/signalement/ManageAides.jsp'>
+					<@button type='submit' name='view_createAide' buttonIcon='plus' title='#i18n{dansmarue.manage_aides.buttonAdd}' />
+				</@tform>
+				</span>
+			</div>
+
+			<div class="box-body">
+				<#if aide_list?has_content &&
+				aide_list?size != 0>
+				<table class="table table-striped table-condensed">
+					<tr>
+						<th class="col-lg-2">#i18n{dansmarue.commons.modifierOrdre}</th>
+						<th class="col-lg-4">#i18n{dansmarue.commons.libelle}</th>
+						<th class="col-lg-2">#i18n{dansmarue.commons.actif}</th>
+						<th class="col-lg-2">#i18n{dansmarue.commons.ordre}</th>
+						<th class="col-lg-2">#i18n{dansmarue.commons.actions}</th>
+					</tr>
+
+					<#list aide_list as aide>
+					<tr>
+						<td><a alt="#i18n{dansmarue.listtypesignalement.flechehaut.alt}"
+							title="#i18n{dansmarue.listtypesignalement.flechehaut.title}"
+							href="jsp/admin/plugins/signalement/ManageAides.jsp?action=decreaseOrdreAide&id=${aide.id}&ordre=${aide.ordre}">
+								<i class="glyphicon glyphicon-arrow-up"></i>
+						</a> <a alt="#i18n{dansmarue.listtypesignalement.flechebas.alt}"
+							title="#i18n{dansmarue.listtypesignalement.flechebas.title}"
+							href="jsp/admin/plugins/signalement/ManageAides.jsp?action=increaseOrdreAide&id=${aide.id}&ordre=${aide.ordre}">
+								<i class="glyphicon glyphicon-arrow-down"></i>
+						</a></td>
+						<td>${aide.libelle}</td>
+						<td>${aide.actif?string("#i18n{dansmarue.commons.oui}","#i18n{dansmarue.commons.non}")}</td>
+						<td>${aide.ordre!}</td>
+						<td><a class="btn btn-primary btn-sm"
+							alt="#i18n{dansmarue.commons.modifier}"
+							title="#i18n{dansmarue.commons.modifier}"
+							 href='jsp/admin/plugins/signalement/ManageAides.jsp?view=modifyAide&aide_id=${aide.id}'>
+								<i class="glyphicon glyphicon-edit"></i>
+						</a> <a class="btn btn-danger btn-sm"
+							alt="#i18n{dansmarue.commons.supprimer}"
+							title="#i18n{dansmarue.commons.supprimer}"
+							href='jsp/admin/plugins/signalement/ManageAides.jsp?action=confirmRemoveAide&aide_id=${aide.id}' title='#i18n{portal.util.labelDelete}'>
+								<i class="glyphicon glyphicon-trash"></i>
+						</a></td>
+					</tr>
+					</#list>
+				</table>
+				<br /> <#else> #i18n{dansmarue.commons.liste.vide} </#if>
+			</div>
+		</div>
+	</div>
+</div>
