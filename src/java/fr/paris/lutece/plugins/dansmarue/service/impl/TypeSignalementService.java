@@ -401,7 +401,7 @@ public class TypeSignalementService implements ITypeSignalementService
         List<TypeSignalement> listResult = new ArrayList<TypeSignalement>( );
         for ( TypeSignalement type : listAllTypes )
         {
-            if ( type.getActif( ) && ( type.getUnit( ).getIdUnit( ) != 0 ) )
+            if ( type.getActif( ) && ( type.getUnit( ).getIdUnit( ) != 0 )  && !type.isHorsDMR( ) )
             {
                 listResult.add( type );
             }
@@ -833,7 +833,7 @@ public class TypeSignalementService implements ITypeSignalementService
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.dansmarue.service.ITypeSignalementService#getAllTypeLastlevelNotInSource(java.lang.Integer)
      */
     @Override

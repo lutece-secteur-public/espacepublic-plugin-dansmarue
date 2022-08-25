@@ -33,11 +33,14 @@
  */
 package fr.paris.lutece.plugins.dansmarue.business.entities;
 
+import java.io.*;
+
 /**
  * The Class Signaleur.
  */
-public class Signaleur
+public class Signaleur implements Serializable
 {
+    private static final long serialVersionUID = -8717498744256079506L;
 
     /** The id. */
     private Long _id;

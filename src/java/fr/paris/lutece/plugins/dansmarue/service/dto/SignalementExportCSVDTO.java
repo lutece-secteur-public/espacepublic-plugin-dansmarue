@@ -166,15 +166,12 @@ public class SignalementExportCSVDTO
      */
     public String [ ] getTabAllDatas( )
     {
-        return new String [ ] {
-                getNumeroSignalement( ), getPriorite( ), getTypeSignalement( ), getAlias( ), getAliasMobile( ), getDirection( ), getQuartier( ), getAdresse( ),
-                Double.toString( getCoordX( ) ), Double.toString( getCoordY( ) ), getArrondissement( ), getSecteur( ), getDateCreation( ), getHeureCreation( ),
-                getEtat( ), getMailUsager( ), getCommentaireUsager( ), Integer.toString( getNbPhotos( ) ), getRaisonsRejet( ),
-                Integer.toString( getNbSuivis( ) ), Integer.toString( getNbFelicitations( ) ), getDateCloture( ),
-                isPhotoServiceFait( ) ? "Photo présente" : "Pas de photo", getMailDestinataireCourriel( ), getCourrielExpediteur( ), getDateEnvoiCourriel( ),
-                getIdMailServiceFait( ) != 0 ? getIdMailServiceFait( ).toString( ) : "", getExecuteurServiceFait( ), getDateDerniereAction( ),
-                getDatePrevuTraitement( ), getCommentairAgentTerrain( ), getExecuteurRejet( ), getExecuteurMiseSurveillance( ), getNbRequalifications( )
-        };
+        return new String[] { String.valueOf( getIdSignalement( ) ), getNumeroSignalement( ), getPriorite( ), getTypeSignalement( ), getAlias( ), getAliasMobile( ), getDirection( ), getQuartier( ),
+                getAdresse( ), Double.toString( getCoordX( ) ), Double.toString( getCoordY( ) ), getArrondissement( ), getSecteur( ), getDateCreation( ), getHeureCreation( ), getEtat( ),
+                getMailUsager( ), getCommentaireUsager( ), Integer.toString( getNbPhotos( ) ), getRaisonsRejet( ), Integer.toString( getNbSuivis( ) ), Integer.toString( getNbFelicitations( ) ),
+                getDateCloture( ), isPhotoServiceFait( ) ? "Photo présente" : "Pas de photo", getMailDestinataireCourriel( ), getCourrielExpediteur( ), getDateEnvoiCourriel( ),
+                getIdMailServiceFait( ) != 0 ? getIdMailServiceFait( ).toString( ) : "", getExecuteurServiceFait( ), getDateDerniereAction( ), getDatePrevuTraitement( ), getCommentairAgentTerrain( ),
+                getExecuteurRejet( ), getExecuteurMiseSurveillance( ), getNbRequalifications( ) };
     }
 
     /**

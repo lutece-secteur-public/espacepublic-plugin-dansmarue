@@ -1,12 +1,21 @@
 <@modalImage/>
 <#macro table_feuille_de_tournee_edit>
 	<fieldset id="list-block">
-	  <div class="pull-left">
-	     <label class="fdt-generate-vue">#i18n{dansmarue.tournee.select.vuelist}</label><br>
+	   <div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	  	  <div class="pull-left">
+	     	<label class="fdt-generate-vue">#i18n{dansmarue.tournee.select.vuelist}</label><br>
+	      </div>
+	      <div class="pull-right">
+	      	<label>#i18n{dansmarue.tournee.select.nb.select} <span class="nbSigSelect"></span></label></br>
+	      	<label>#i18n{dansmarue.tournee.select.nb.unselect} <span class="nbSigUnselect">${paginator.itemsCount}</span></label>
+		  </div>
+     	</div>
 	  </div>
-	  <div class="pull-right">
-	      <label>#i18n{dansmarue.tournee.select.nb.select} <span class="nbSigSelect"></span></label></br>
-	      <label>#i18n{dansmarue.tournee.select.nb.unselect} <span class="nbSigUnselect">${paginator.itemsCount}</span></label>
+	  <div class="row" >
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		  <@paginationSig paginator=paginator combo=1 />
+		</div>
 	  </div>
 	  <table id="table-signalements" class="table table-condensed">
 		<thead>
@@ -113,10 +122,10 @@
 		});
 		
 		//Bouton actualiser le nombre de signalement par page.
-		$("button[title='Actualiser']").click(function(){
+		$("button[title='Actualiser']").click(function(event){
 			   event.preventDefault();
 			   
-	           let numberItemPerPage = $('#items_per_page').find('option:selected').attr('value');
+	           let numberItemPerPage = $(event.target).parent().closest('div').find('#items_per_page').find('option:selected').attr('value');
 			   
 			   let searchParams = new URLSearchParams(window.location.search);
 			   if ( searchParams.has("view") ) {

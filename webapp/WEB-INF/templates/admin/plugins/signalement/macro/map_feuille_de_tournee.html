@@ -67,6 +67,9 @@
 			nbSigUnselect = 0;
 			nbSigSelect = 0;
 			
+			//Spider
+			var oms = new OverlappingMarkerSpiderfier(leafletmap, {keepSpiderfied: true});
+			
 			if(!isMapInitOnce) {
 				polygonDrawer = new L.Draw.Polygon(leafletmap);
 				markers = new L.FeatureGroup().addTo(leafletmap);
@@ -127,6 +130,7 @@
 				marker.bindPopup(signalement.tooltip);
 				marker.on('click',function(){this.openPopup()});
 				marker.on('click',function(){setBoutonAction( signalement.idSignalement, signalement.isSelect )});
+				oms.addMarker(marker);
 				
 				index++;
 				

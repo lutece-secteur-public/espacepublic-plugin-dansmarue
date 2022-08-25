@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.dansmarue.service;
 
+import fr.paris.lutece.plugins.dansmarue.service.impl.ImageActualiteService;
+import fr.paris.lutece.plugins.dansmarue.service.impl.ImageAideService;
 import fr.paris.lutece.plugins.dansmarue.service.impl.ImageObjetService;
 import fr.paris.lutece.portal.service.image.ImageResourceManager;
 import fr.paris.lutece.portal.service.image.ImageResourceProvider;
@@ -57,6 +59,8 @@ public class SignalementPlugin extends PluginDefaultImplementation
     public void init( )
     {
         ImageObjetService.init( );
+        ImageActualiteService.init( );
+        ImageAideService.init( );
         ImageResourceManager.registerProvider( (ImageResourceProvider) SpringContextService.getBean( "signalement.imageService" ) );
         ImageResourceManager.registerProvider( (ImageResourceProvider) SpringContextService.getBean( "signalement.imageThumbnailService" ) );
     }

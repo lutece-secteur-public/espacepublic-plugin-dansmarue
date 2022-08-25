@@ -33,16 +33,17 @@
  */
 package fr.paris.lutece.plugins.dansmarue.business.entities;
 
-import fr.paris.lutece.portal.service.image.ImageResource;
-import fr.paris.lutece.portal.service.image.ImageResourceProvider;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.portal.web.constants.Parameters;
-import fr.paris.lutece.util.url.UrlItem;
+import fr.paris.lutece.portal.service.image.*;
+import fr.paris.lutece.portal.service.spring.*;
+import fr.paris.lutece.portal.web.constants.*;
+import fr.paris.lutece.util.url.*;
+
+import java.io.*;
 
 /**
  * The Class PhotoDMR.
  */
-public class PhotoDMR
+public class PhotoDMR implements Serializable
 {
 
     /** The Constant OVERVIEW. */
@@ -53,6 +54,8 @@ public class PhotoDMR
 
     /** The Constant SERVICE_DONE_VIEW. */
     public static final Integer SERVICE_DONE_VIEW = 2;
+
+    private static final long serialVersionUID = -4451594648109782317L;
 
     /** The id. */
     private Long _id;

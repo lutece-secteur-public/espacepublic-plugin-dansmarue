@@ -13,6 +13,8 @@ $.ajaxSetup({ cache: false });
 
 function getSigMarkers(){
 	var markers = L.markerClusterGroup();
+	var heatMapData = [];
+
 	$("#map_canvas").addClass("hidden");
 	$.get( "jsp/admin/plugins/signalement/DoGetSignalementsJsonForDisplayMap.jsp", function( data ) {
 	  data.forEach(function(signalement){
@@ -22,11 +24,59 @@ function getSigMarkers(){
 		marker.on('mouseout',function(){this.closePopup()});
 		marker.on('click',function(){window.open("jsp/admin/plugins/signalement/ViewSignalement.jsp?signalement_id=" + signalement.idSignalement);});
 		markers.addLayer(marker);
+		heatMapData.push([signalement.lat,signalement.lng, 0.05]);
 	  });
 	  leafletmap.addLayer(markers);
+	  var heatLayer = L.heatLayer(heatMapData, {maxZoom:17, radius:30, minOpacity:0.75});
 	  $("#map_spinner").addClass("hidden");
 	  $("#map_canvas").removeClass("hidden");
+
+	  var overlayMaps = {
+		    "Anomalies": markers,
+		    "Carte de chaleur": heatLayer
+		};
+
+	  L.control.layers(overlayMaps,null).addTo(leafletmap);
+
+	  //A chaque changement de layer, changement du zoom max et de la légende
+	  leafletmap.on('layeradd', function(eo) {
+			if(eo.layer._heat) {
+				leafletmap.options.maxZoom = 17;
+				$(".legendeGestionAno").html(getLegendHeatMap())
+			} else {
+				leafletmap.options.maxZoom = 19;
+				$(".legendeGestionAno").html(getLegendPin())
+			}
+		});
+
+		/*Ajout de la legende*/
+	  var legend = L.control({ position: "bottomleft" });
+
+	  legend.onAdd = function(map) {
+	    var div = L.DomUtil.create("div", "legendeGestionAno");
+	    div.innerHTML = getLegendPin();
+
+	    return div;
+	  };
+
+	  legend.addTo(leafletmap);
+
+		leafletmap.options.maxZoom = 17;
 	});
+
+	//Fonctions de remplissage des l�gendes
+	  function getLegendPin(){
+		 var legend = "<h4>Emplacement des anomalies:</h4>";
+		 legend += "Pour ajuster la liste des anomalies pr&eacute;sent&eacute;es dans l'export/sur la carte, il faut filtrer au niveau du r&eacute;sultat de la recherche au pr&eacute;alable";
+		 return legend;
+	  }
+
+	  function getLegendHeatMap(){
+		 var legend = "<h4>Carte de chaleur:</h4>";
+		 legend += "L'intensit&eacute; de la couleur des zones d&eacute;marqu&eacute;es diminue &agrave; mesure qu'on zoom sur la carte";
+		 legend += "<br>Le Niveau le plus bas de zoom est celui du quartier";
+		 return legend;
+	  }
 	
 }
 </script>
@@ -153,7 +203,7 @@ function updateFiltersFromDomain(idDomaine,reset){
 		success : function(domain) { 
 			$("#idDirection, #idSector, #checkbox_arrondissement").html("");
 			if(reset){
-				deleteFields(true);
+				deleteFields(false);
 			}
 			// Arrondissements
 		   var arrondissements = domain.arrondissementsRefList;
@@ -616,7 +666,7 @@ function updateSectorList(idDirection, idDomaine){
 										#i18n{dansmarue.reportingList.search}
 									</button>
 									<button type="button" class="btn btn-paris btn-blue btn-lg"
-										id="re-init-button" onclick="deleteFields(false)">
+										id="re-init-button" onclick="deleteFields(true)">
 										#i18n{dansmarue.reportingList.reInitChamps}
 									</button>
 
@@ -848,13 +898,19 @@ function updateSectorList(idDirection, idDomaine){
         $("#filter_mailDernierIntervenant").val('');
         $("#filter_commentaire").val('');
         $("#filter_commentaireAgentTerrain").val('');
-        $("#filter_dateBegin").val('');
-        $("#filter_dateEnd").val('');
         $("#filter_dateDoneBegin").val('');
         $("#filter_dateDoneEnd").val('');
 
-		isReset ? $("#conseilQuartier option").remove() : $("#conseilQuartier").selectpicker('val', '');
-       
+        if (isReset) {
+          var date = new Date();
+          $("#filter_dateEnd").val( date.toLocaleDateString('fr') );
+          date.setMonth( date.getMonth() - 1 );
+          $("#filter_dateBegin").val( date.toLocaleDateString('fr') );
+          $("#conseilQuartier").selectpicker('val', '');
+		} else {
+		  $("#conseilQuartier option").remove();
+		}
+	   
         $("#conseilQuartier").selectpicker('refresh');
         
 // 		$("#categoryCheckboxes .btn-checkbox").removeClass("active");

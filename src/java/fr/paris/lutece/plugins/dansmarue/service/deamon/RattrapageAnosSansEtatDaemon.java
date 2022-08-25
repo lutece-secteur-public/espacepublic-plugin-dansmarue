@@ -41,6 +41,7 @@ import fr.paris.lutece.plugins.dansmarue.service.ISignalementService;
 import fr.paris.lutece.portal.service.daemon.Daemon;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 /**
  * The Class RattrapageAnosSansEtatDaemon.
@@ -52,12 +53,14 @@ public class RattrapageAnosSansEtatDaemon extends Daemon
     // service
     private ISignalementService _signalementService = SpringContextService.getBean( "signalementService" );
 
+    private static final int DELAY_BEFORE_DELETE = AppPropertiesService.getPropertyInt( "daemon.delayInMinutes.before.delete", 60 );
+
     /**
      * Run.
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Runnable#run()
      */
     @Override
@@ -66,7 +69,7 @@ public class RattrapageAnosSansEtatDaemon extends Daemon
         StopWatch watch = new StopWatch( );
         watch.start( );
         // Get the anomalies id without state - limit to 50
-        List<Long> listAnomaliesId = _signalementService.findAnoWithoutState( );
+        List<Long> listAnomaliesId = _signalementService.findAnoWithoutState( DELAY_BEFORE_DELETE );
 
         // Delete this anomalies
         if ( !listAnomaliesId.isEmpty( ) )

@@ -49,6 +49,10 @@
 		/* Ajoute les markers sur la carte */
 		function drawMarkers(){
 			var markers = new L.FeatureGroup().addTo(leafletmap);
+			
+			//Spider
+			var oms = new OverlappingMarkerSpiderfier(leafletmap, {keepSpiderfied: true});
+			
 			if(!isMapInitOnce) {
 				<#list signalements_map_list as s>
 					var signalement = new Object();
@@ -90,6 +94,7 @@
 				
 				marker.bindPopup(signalement.tooltip);
 				marker.on('click',function(){this.openPopup()});
+				oms.addMarker(marker);
 				
 				index++;
 				marker.addTo(markers);

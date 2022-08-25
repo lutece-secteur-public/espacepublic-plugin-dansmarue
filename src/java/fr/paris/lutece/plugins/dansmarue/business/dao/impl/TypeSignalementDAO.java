@@ -1704,7 +1704,7 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.dansmarue.business.dao.ITypeSignalementDAO#getAllTypeLastlevelNotInSource(java.lang.Integer)
      */
     @Override

@@ -90,7 +90,7 @@ public class FeuilleDeTourneeDAO implements IFeuilleDeTourneeDAO
 
     private static final String SQL_QUERY_LOAD_SIGNALEMENTS_BEAN_BY_ID = "select id_signalement, commentaire_usager, commentaire_agent_terrain, date_creation, date_prevu_traitement, adresse, numero, priorite, etat, type_signalement from signalement_export inner join (select unnest((select signalement_ids from signalement_feuille_de_tournee where id=?)::BIGINT[]) as sub) as n2 on n2.sub = id_signalement order by  CASE WHEN arrondissement = 'Paris Centre' and SUBSTR(SUBSTRING(adresse, '(75[0-9][0-9][0-9])'),4,2) ~ '^[0-9\\.]+$'"
             + "THEN SUBSTR(SUBSTRING(adresse, '(75[0-9][0-9][0-9])'),4,2)"
-            + "END, id_arrondissement  asc, lower(regexp_replace(adresse,'[[:digit:]]','','g')) asc, nullif(regexp_replace(split_part(adresse,' ',1), '\\D', '', 'g'), '')::int asc";
+            + "END, id_arrondissement  asc, ltrim(regexp_replace(regexp_replace(regexp_replace(lower(adresse),'[[:digit:]]','','g'),'^[a-z] |^[A-Z] ',''),'bis |ter |quater ','')) asc, nullif(regexp_replace(split_part(adresse,' ',1), '\\D', '', 'g'), '')::int asc";
 
     private static final String SQL_QUERY_LOAD_FDT_BY_FILTER = "SELECT id, createur, fk_id_unit, date_creation, date_modification, commentaire, id_filtre_init, signalement_ids, nom, uu.\"label\" direction, uu2.\"label\" entite, id_direction, id_entite FROM signalement_feuille_de_tournee fdt left join unittree_unit uu on uu.id_unit = fdt.id_direction left join unittree_unit uu2 on uu2.id_unit = fdt.id_entite ";
 

@@ -83,59 +83,95 @@ public final class SignalementConstants
     /** The Constant MARK_LOCALE. */
     public static final String MARK_LOCALE = "locale";
 
-    /** The Constant PROPERTY_DEFAULT_ITEM_PER_PAGE. */
+    /**
+     * The Constant PROPERTY_DEFAULT_ITEM_PER_PAGE.
+     */
     // Properties
     public static final String PROPERTY_DEFAULT_ITEM_PER_PAGE = "signalement.itemsPerPage";
 
-    /** The Constant PROPERTY_SERVICE_FAIT_VALUE. */
+    /**
+     * The Constant PROPERTY_SERVICE_FAIT_VALUE.
+     */
     public static final String PROPERTY_SERVICE_FAIT_VALUE = "signalement.idStateServiceFait";
 
     public static final String PROPERTY_SERVICE_FAIT_LIBELLE = "signalement.libelleStateServiceFait";
 
-    /** The Constant PARAMETER_BUTTON_CANCEL. */
+    /**
+     * The Constant PARAMETER_BUTTON_CANCEL.
+     */
     // Parameters
     public static final String PARAMETER_BUTTON_CANCEL = "cancel";
 
-    /** The Constant PARAMETER_ERROR. */
+    /**
+     * The Constant PARAMETER_ERROR.
+     */
     public static final String PARAMETER_ERROR = "error";
 
-    /** The Constant PARAMETER_VALIDATE_NEXT. */
+    /**
+     * The Constant PARAMETER_VALIDATE_NEXT.
+     */
     public static final String PARAMETER_VALIDATE_NEXT = "validate_next";
 
-    /** The Constant PARAMETER_BUTTON_SEARCH. */
+    /**
+     * The Constant PARAMETER_BUTTON_SEARCH.
+     */
     public static final String PARAMETER_BUTTON_SEARCH = "search";
 
-    /** The Constant PARAMETER_PRIORITE. */
+    /**
+     * The Constant PARAMETER_PRIORITE.
+     */
     public static final String PARAMETER_PRIORITE = "priorite";
 
-    /** The Constant MESSAGE_ERROR_OCCUR. */
+    /**
+     * The Constant MESSAGE_ERROR_OCCUR.
+     */
     // Messages
     public static final String MESSAGE_ERROR_OCCUR = "dansmarue.message.error.erroroccur";
 
-    /** The Constant MESSAGE_SIGNALEMENT_NOT_FOUND. */
+    public static final String MESSAGE_ERROR_PRIORITE = "dansmarue.message.error.priorite";
+
+    public static final String MESSAGE_ERROR_TYPE_SIGNALEMENT = "dansmarue.message.error.typeSignalement";
+
+    /**
+     * The Constant MESSAGE_SIGNALEMENT_NOT_FOUND.
+     */
     public static final String MESSAGE_SIGNALEMENT_NOT_FOUND = "dansmarue.task_annulation_signalement.signalementNotFound";
 
-    /** The Constant MESSAGE_OBSERVATION_NOT_FOUND. */
+    /**
+     * The Constant MESSAGE_OBSERVATION_NOT_FOUND.
+     */
     public static final String MESSAGE_OBSERVATION_NOT_FOUND = "task_annulation_signalement.observationNotFound";
 
-    /** The Constant ATTRIBUTE_HAS_NEXT. */
+    /**
+     * The Constant ATTRIBUTE_HAS_NEXT.
+     */
     // Attribute
     public static final String ATTRIBUTE_HAS_NEXT = "has_next";
 
-    /** The Constant ATTRIBUTE_SESSION_DERNIERE_SAISIE_ACTION. */
+    /**
+     * The Constant ATTRIBUTE_SESSION_DERNIERE_SAISIE_ACTION.
+     */
     // Attribute session
     public static final String ATTRIBUTE_SESSION_DERNIERE_SAISIE_ACTION = "derniere_saisie_action";
 
-    /** The Constant ATTRIBUTE_SESSION_IS_USER_RECTRICTED. */
+    /**
+     * The Constant ATTRIBUTE_SESSION_IS_USER_RECTRICTED.
+     */
     public static final String ATTRIBUTE_SESSION_IS_USER_RECTRICTED = "signalement_is_user_restricted";
 
-    /** The Constant ATTRIBUTE_SESSION_LIST_RESTRICTED_ARRONDISSEMENTS. */
+    /**
+     * The Constant ATTRIBUTE_SESSION_LIST_RESTRICTED_ARRONDISSEMENTS.
+     */
     public static final String ATTRIBUTE_SESSION_LIST_RESTRICTED_ARRONDISSEMENTS = "signalement_list_restricted_arrondissements";
 
-    /** The Constant ATTRIBUTE_SESSION_LIST_RESTRICTED_TYPE_SIGNALEMENT. */
+    /**
+     * The Constant ATTRIBUTE_SESSION_LIST_RESTRICTED_TYPE_SIGNALEMENT.
+     */
     public static final String ATTRIBUTE_SESSION_LIST_RESTRICTED_TYPE_SIGNALEMENT = "signalement_list_restricted_type_signalement";
 
-    /** The Constant ATTRIBUTE_SESSION_LIST_RESTRICTED_CATEGORY_SIGNALEMENT. */
+    /**
+     * The Constant ATTRIBUTE_SESSION_LIST_RESTRICTED_CATEGORY_SIGNALEMENT.
+     */
     public static final String ATTRIBUTE_SESSION_LIST_RESTRICTED_CATEGORY_SIGNALEMENT = "signalement_list_restricted_category_signalement";
 
     /** The Constant REFERENCE_LIST_ID. */
@@ -329,6 +365,12 @@ public final class SignalementConstants
     public static final String TYPE_EXPORT_FDT_LISTE = "2";
 
     public static final String TYPE_EXPORT_FDT_FULL = "3";
+
+    /** The Constant PROPERTY_URL_PICTURE. */
+    public static final String PROPERTY_URL_NEWS_PICTURE = "signalement-rest.url_news_picture";
+
+    /** The Constant PROPERTY_URL_PICTURE. */
+    public static final String PROPERTY_URL_HELP_PICTURE = "signalement-rest.url_help_picture";
 
     /**
      * Utility class - empty constructor.

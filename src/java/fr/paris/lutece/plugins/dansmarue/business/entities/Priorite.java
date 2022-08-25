@@ -33,12 +33,16 @@
  */
 package fr.paris.lutece.plugins.dansmarue.business.entities;
 
+import java.io.*;
+
 /**
  * The Class Priorite.
  */
-public class Priorite
+public class Priorite implements Serializable
 {
 
+    private static final long serialVersionUID = -4659583432830516262L;
+    
     /** The id. */
     private Long _id;
 

@@ -99,6 +99,7 @@ public class FeuilleDeTournee implements Serializable
      */
     public FeuilleDeTournee( )
     {
+        _nIdDirection = -1;
     }
 
     /**
@@ -173,6 +174,7 @@ public class FeuilleDeTournee implements Serializable
         _listSignalementIds = listSignalementIds;
         _listSignalement = listSignalement;
         _listSignalementBean = listSignalementBean;
+        _nIdDirection = -1;
     }
 
     /**

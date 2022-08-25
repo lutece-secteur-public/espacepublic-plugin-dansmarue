@@ -677,10 +677,12 @@ public interface ISignalementService
 
     /**
      * Find ano without state.
+     * @param delay
+     *         delay in minutes since anomaly creation before delete.
      *
      * @return the list
      */
-    List<Long> findAnoWithoutState( );
+    List<Long> findAnoWithoutState( int delay );
 
     /**
      * Find user for service done.
@@ -742,4 +744,6 @@ public interface ISignalementService
      * @return the state if date indicated
      */
     EtatSignalement getStateIfDateIndicated( SignalementFilter signalementFilter );
+
+    Collection<Action> getListActionsBySignalementAndUser( Signalement signalement, Integer signalementWorkflowId, AdminUser user, State state );
 }

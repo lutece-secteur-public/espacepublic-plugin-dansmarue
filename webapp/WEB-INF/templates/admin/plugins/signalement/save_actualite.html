@@ -1,0 +1,65 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<div class="box box-info">
+			<div class="box-header">
+				<a href="jsp/admin/plugins/signalement/ManageActualite.jsp"><h3 class="box-title">#i18n{dansmarue.actualite.link.administrer}</h3></a>
+			</div>
+
+			<div class="box-body">
+				${error!}
+				<form class="form-horizontal" method="post" enctype="multipart/form-data"
+					action="jsp/admin/plugins/signalement/DoSaveActualite.jsp">
+					<input type="hidden" id="jsp_back" name="jsp_back"
+						value="${jsp_back!}" /> <input type="hidden" name="id"
+						value="${(actualite.id)!}" />
+					<div class="col-xs-12 col-sm-12 col-md-12">
+						<div class="form-group">
+							<label class="<@labelStyle />" for="libelle">#i18n{dansmarue.actualite.libelle}
+								* : </label>
+							<div class="<@inputStyle />">
+								<input class="form-control input-sm" id="libelle"
+									name="libelle" value="${actualite.libelle!}"/>
+							</div>
+						</div>
+						<@formGroup labelFor='texte' labelKey='#i18n{dansmarue.actualite.texte}* :'>
+          	              <@input type='textarea' id='texte' name='texte' class="richtext" value='${actualite.texte!\'\'}' tabIndex='1' />
+		                </@formGroup>
+						<div class="form-group">
+							<label class="<@labelStyle />">
+							#i18n{dansmarue.actualite.image} * : </label>
+							<div class="<@inputStyle />">
+								<input type="file" id="photo" name="photo" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="<@labelStyle />" for="actif">#i18n{dansmarue.commons.actif}
+								* :</label>
+							<div class="<@inputStyle />">
+								<input class="checkbox" TYPE=CHECKBOX NAME="actif" value="true"<#if
+								actualite.actif >checked="checked"</#if>>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div
+							class="col-xs-12 col-sm-offset-3 col-sm-6 col-md-offset-3 col-md-6">
+							<button type="submit" value="#i18n{dansmarue.commons.save}"
+								name="#i18n{dansmarue.commons.save}"
+								class="btn btn-primary btn-sm" tabindex="3">
+								<i class="glyphicon glyphicon-ok"></i>
+								#i18n{dansmarue.commons.save}
+							</button>
+							<button type="submit" value="#i18n{dansmarue.commons.cancel}"
+								name="cancel" class="btn btn-default btn-sm">
+								<i class="glyphicon glyphicon-remove-circle"></i>
+								#i18n{dansmarue.commons.cancel}
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<#include "/admin/util/editor/editor.html" /> 
+<@initEditor />
