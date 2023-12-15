@@ -143,7 +143,7 @@ public interface IAideDAO
      * @param nIdAide
      *            the aide id
      */
-    void increaseOrdreOfAllNext( int nIdAide );
+    void increaseOrdreOfAllNext( long nIdAide );
 
     /**
      * Decreases all the next orders.
@@ -151,7 +151,7 @@ public interface IAideDAO
      * @param nIdAide
      *            the aide id
      */
-    void decreaseOrdreOfAllNext( int nIdAide );
+    void decreaseOrdreOfAllNext( long nIdAide );
 
     /**
      * Returns the number of aide existing.

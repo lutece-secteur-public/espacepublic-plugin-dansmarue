@@ -275,6 +275,27 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
      * {@inheritDoc}
      */
     @Override
+    public TypeSignalement getTypeSignalementUseCache( Integer nId, final List<TypeSignalement> typeSignalementInCache )
+    {
+
+        if ( typeSignalementInCache != null )
+        {
+            for ( TypeSignalement type : typeSignalementInCache )
+            {
+                if ( type.getId( ).equals( nId ) )
+                {
+                    return type;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public TypeSignalement getTypeSignalementWithoutUnit( Integer nId )
     {
         List<TypeSignalement> allTypes;
@@ -1094,7 +1115,7 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
     public TypeSignalement getTypeSignalementByIdWithParents( Integer nIdTypeSignalement )
     {
         TypeSignalement ret = getTypeSignalement( nIdTypeSignalement );
-        if ( ret != null && ret.getIdTypeSignalementParent( ) != null )
+        if ( ( ret != null ) && ( ret.getIdTypeSignalementParent( ) != null ) )
         {
             this.getTypeSignalementByIdWithParents( ret, ret.getIdTypeSignalementParent( ) );
         }

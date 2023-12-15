@@ -72,23 +72,20 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
     /** The Constant SQL_QUERY_SELECTALL. */
     // SQL QUERIES
-    private static final String SQL_QUERY_SELECTALL =
-            "SELECT numero, priorite, type_signalement, alias, alias_mobile, direction, quartier, adresse, coord_x, coord_y, arrondissement, secteur, date_creation, heure_creation, etat, mail_usager, commentaire_usager, nb_photos, raisons_rejet, nb_suivis, nb_felicitations, date_cloture, is_photo_service_fait, mail_destinataire_courriel, courriel_expediteur, date_envoi_courriel, id_mail_service_fait, executeur_service_fait, date_derniere_action, date_prevu_traitement, commentaire_agent_terrain, executeur_rejet, executeur_mise_surveillance, nb_requalifications, id_signalement, id_wkf_state "
-                    + "FROM  signalement_export";
+    private static final String SQL_QUERY_SELECTALL = "SELECT numero, priorite, type_signalement, alias, alias_mobile, direction, quartier, adresse, coord_x, coord_y, arrondissement, secteur, date_creation, heure_creation, etat, mail_usager, commentaire_usager, nb_photos, raisons_rejet, nb_suivis, nb_felicitations, date_cloture, is_photo_service_fait, mail_destinataire_courriel, courriel_expediteur, date_envoi_courriel, id_mail_service_fait, executeur_service_fait, date_derniere_action, date_prevu_traitement, commentaire_agent_terrain, executeur_rejet, executeur_mise_surveillance, nb_requalifications, id_signalement, id_wkf_state, precision_terrain "
+            + "FROM  signalement_export";
 
     /** The Constant SQL_QUERY_SEARCH_ID. */
     private static final String SQL_QUERY_SEARCH_ID = "SELECT numero FROM  signalement_export";
 
-    private static final String SQL_QUERY_SELECTALL_SEARCH =
-            "SELECT se.id_signalement , se.numero, se.priorite, se.type_signalement, se.direction, se.adresse, se.coord_x, se.coord_y, se.date_creation, se.etat, se.mail_usager, se.commentaire_usager,"
-                    + " se.nb_suivis, se.date_prevu_traitement, se.commentaire_agent_terrain, ss.is_send_ws, ws.id_state, sp.vue_photo , sp.id_photo, wa.id_action, wa.name, wa.id_icon"
-                    + " FROM  signalement_export se" + " LEFT OUTER JOIN signalement_photo sp on sp.fk_id_signalement = se.id_signalement"
-                    + " inner join signalement_signalement ss on ss.id_signalement = se.id_signalement" + " inner join workflow_state ws on ws.name = se.etat"
-                    + " LEFT OUTER JOIN workflow_action wa on wa.id_state_before = ws.id_state";
+    private static final String SQL_QUERY_SELECTALL_SEARCH = "SELECT se.id_signalement , se.numero, se.priorite, se.type_signalement, se.direction, se.adresse, se.coord_x, se.coord_y, se.date_creation, se.etat, se.mail_usager, se.commentaire_usager,"
+            + " se.nb_suivis, se.date_prevu_traitement, se.commentaire_agent_terrain, ss.precision_terrain, ss.is_send_ws, ws.id_state, sp.vue_photo , sp.id_photo, sp.chemin_photo, sp.chemin_photo_miniature, wa.id_action, wa.name, wa.id_icon"
+            + " FROM  signalement_export se" + " LEFT OUTER JOIN signalement_photo sp on sp.fk_id_signalement = se.id_signalement"
+            + " inner join signalement_signalement ss on ss.id_signalement = se.id_signalement" + " inner join workflow_state ws on ws.name = se.etat"
+            + " LEFT OUTER JOIN workflow_action wa on wa.id_state_before = ws.id_state";
 
-    private static final String SQL_QUERY_SELECTALL_SEARCH_FOR_FDT =
-            "select se.id_signalement , se.numero, se.priorite, se.type_signalement, se.direction, se.adresse, se.coord_x, se.coord_y, se.date_creation, se.etat,se.mail_usager, se.commentaire_usager, se.nb_suivis, se.date_prevu_traitement, se.commentaire_agent_terrain, se.id_wkf_state, sp.vue_photo , sp.image_thumbnail, sp.id_photo\r\n"
-                    + "from signalement_export se left outer join signalement_photo sp on sp.fk_id_signalement = se.id_signalement";
+    private static final String SQL_QUERY_SELECTALL_SEARCH_FOR_FDT = "select se.id_signalement , se.numero, se.priorite, se.type_signalement, se.direction, se.adresse, se.coord_x, se.coord_y, se.date_creation, se.etat,se.mail_usager, se.commentaire_usager, se.nb_suivis, se.date_prevu_traitement, se.commentaire_agent_terrain, se.id_wkf_state, sp.vue_photo , sp.image_thumbnail, sp.id_photo, sp.chemin_photo, sp.chemin_photo_miniature\r\n"
+            + "from signalement_export se left outer join signalement_photo sp on sp.fk_id_signalement = se.id_signalement";
 
     /** The Constant SQL_QUERY_COUNT_SEARCH. */
     private static final String SQL_QUERY_COUNT_SEARCH = "SELECT count(*) FROM  signalement_export";
@@ -132,6 +129,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
     /** The Constant SQL_QUERY_ADD_FILTER_LIST_ARRONDISSEMENT. */
     // Filter by Arrondissements list
     private static final String SQL_QUERY_ADD_FILTER_LIST_ARRONDISSEMENT = " id_arrondissement IN ({0}) ";
+    private static final String SQL_QUERY_ADD_FILTER_LIST_DIRECTION = " id_direction IN ({0}) ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_LIST_QUARTIER. */
     // Filter by neighborhood list
@@ -185,6 +183,10 @@ public class SignalementExportDAO implements ISignalementExportDAO
     // Filter by end date
     private static final String SQL_QUERY_ADD_FILTER_DATE_DONE_END = " to_date(date_derniere_action,'DD/MM/YYYY') <= ? AND id_wkf_state = 10";
 
+    /** The Constant SQL_QUERY_ADD_FILTER_PHOTO_DONE_ONLY. */
+    // Filter by end date
+    private static final String SQL_QUERY_ADD_FILTER_PHOTO_DONE_ONLY = " is_photo_service_fait = 1 AND id_wkf_state = 10";
+
     /** The Constant SQL_QUERY_ADD_FILTER_MAIL. */
     // Filter by mail
     private static final String SQL_QUERY_ADD_FILTER_MAIL_DERNIER_INTERVENANT = " (lower_unaccent(executeur_service_fait) LIKE lower_unaccent(?) OR lower_unaccent(executeur_rejet) LIKE lower_unaccent(?))";
@@ -213,6 +215,8 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
     /** The Constant SQL_OR. */
     private static final String SQL_OR = " OR ";
+
+    private static final String SQL_ORDER_BY = "ORDER BY";
 
     /** The Constant SEJ_ID. */
     // Constants
@@ -255,12 +259,14 @@ public class SignalementExportDAO implements ISignalementExportDAO
         _ordersMap.put( "priorite.libelle", "priorite" );
         _ordersMap.put( "type.libelle", "type_signalement" );
         _ordersMap.put( "direction_unit.label", "direction" );
-        _ordersMap.put( "adr.adresse", "adresse" );
+        _ordersMap.put( "adr.adresse", ADRESSE );
         _ordersMap.put( "signalement.commentaire", "commentaire_usager" );
         _ordersMap.put( "signalement.date_creation", "id_signalement" );
         _ordersMap.put( "signalement.heure_creation", null );
         _ordersMap.put( "photo.id_photo", "nb_photos" );
         _ordersMap.put( "etat", "etat" );
+        _ordersMap.put( "signalement.precisionTerrain", "precision_terrain" );
+        _ordersMap.put( "signalement.commentaireAgentTerrain", "commentaire_agent_terrain");
     }
 
     /**
@@ -312,15 +318,18 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
         if ( StringUtils.equals( ADRESSE, order.getName( ) ) )
         {
-            if ("asc".equalsIgnoreCase( order.getOrder( ) )) {
-                sbSQL.append( "ORDER BY " + SQL_QUERY_DEFAULT_ORDER_FDT_ASC );
-            } else {
-                sbSQL.append( "ORDER BY " + SQL_QUERY_DEFAULT_ORDER_FDT_DESC );
+            if ( "asc".equalsIgnoreCase( order.getOrder( ) ) )
+            {
+                sbSQL.append( SQL_ORDER_BY + " " + SQL_QUERY_DEFAULT_ORDER_FDT_ASC );
+            }
+            else
+            {
+                sbSQL.append( SQL_ORDER_BY + " "  + SQL_QUERY_DEFAULT_ORDER_FDT_DESC );
             }
         }
         else
         {
-            sbSQL.append( "ORDER BY " + order.getName( ) + " " + order.getOrder( ) );
+            sbSQL.append( SQL_ORDER_BY + " " + order.getName( ) + " " + order.getOrder( ) );
         }
 
         DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ), plugin );
@@ -386,7 +395,8 @@ public class SignalementExportDAO implements ISignalementExportDAO
         exportReport.setExecuteurMiseSurveillance( daoUtil.getString( nIndex++ ) );
         exportReport.setNbRequalifications( daoUtil.getInt( nIndex++ ) );
         exportReport.setIdSignalement( daoUtil.getInt( nIndex++ ) );
-        exportReport.setIdStatut( daoUtil.getInt( nIndex ) );
+        exportReport.setIdStatut( daoUtil.getInt( nIndex++ ) );
+        exportReport.setPrecisionTerrain( daoUtil.getString( nIndex ) );
 
         return exportReport;
     }
@@ -465,7 +475,8 @@ public class SignalementExportDAO implements ISignalementExportDAO
             exportReport.setExecuteurMiseSurveillance( daoUtil.getString( nIndex++ ) );
             exportReport.setNbRequalifications( daoUtil.getInt( nIndex++ ) );
             exportReport.setIdSignalement( daoUtil.getInt( nIndex++ ) );
-            exportReport.setIdStatut( daoUtil.getInt( nIndex ) );
+            exportReport.setIdStatut( daoUtil.getInt( nIndex++ ) );
+            exportReport.setPrecisionTerrain( daoUtil.getString( nIndex ) );
 
             exportList.add( exportReport );
 
@@ -527,6 +538,15 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
         StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECTALL_SEARCH );
         sbSQL.append( MessageFormat.format( SQL_QUERY_WHERE_NUMERO_IN, String.join( ",", listIdSignalement ) ) );
+
+        int index = 2;
+
+        if ( CollectionUtils.isNotEmpty(filter.getListIdDirection())) {
+            String unionQuery = StringUtils.join(filter.getListIdDirection(), COMMA_SEPARATOR);
+            index = addSQLWhereOr(false, sbSQL, index);
+            sbSQL.append(MessageFormat.format(SQL_QUERY_ADD_FILTER_LIST_DIRECTION, unionQuery));
+        }
+
         // ADD ORDERS
         if ( ( filter.getOrders( ).get( 0 ) != null ) && DEFAULT_ORDER_FDT.equals( filter.getOrders( ).get( 0 ).getName( ) ) )
         {
@@ -588,6 +608,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
                     exportReport.setSuivi( daoUtil.getInt( nIndex++ ) );
                     exportReport.setDatePrevueTraitement( daoUtil.getString( nIndex++ ) );
                     exportReport.setCommentaireAgentTerrain( daoUtil.getString( nIndex++ ) );
+                    exportReport.setPrecisionTerrain( daoUtil.getString( nIndex++ ) );
                     exportReport.setSendWs( daoUtil.getBoolean( nIndex++ ) );
                     exportReport.setIdState( daoUtil.getInt( nIndex ) );
 
@@ -705,26 +726,26 @@ public class SignalementExportDAO implements ISignalementExportDAO
     private List<PhotoDMR> addPhotosToSignalement( DAOUtil daoUtil, List<PhotoDMR> listPhotos )
     {
 
-        int indexVuePhoto = 18;
-        int indexPhotoMiniature = 19;
-        int indexIdPhoto = 20;
 
-        long idPhoto = daoUtil.getLong( indexIdPhoto );
+
+        long idPhoto = daoUtil.getLong( "id_photo" );
 
         if ( listPhotos.stream( ).filter( photo -> photo.getId( ).longValue( ) == idPhoto ).count( ) > 0 )
         {
             return listPhotos;
         }
 
-        Object oImageContentThumbnail = daoUtil.getBytes( indexPhotoMiniature );
+        Object oImageContentThumbnail = daoUtil.getBytes( "chemin_photo_miniature" );
         if ( oImageContentThumbnail != null )
         {
             PhotoDMR photo = new PhotoDMR( );
             ImageResource image = new ImageResource( );
-            image.setImage( ( byte[] ) oImageContentThumbnail );
+            image.setImage( (byte [ ]) oImageContentThumbnail );
             photo.setImageThumbnail( image );
-            photo.setVue( daoUtil.getInt( indexVuePhoto ) );
+            photo.setVue( daoUtil.getInt( "vue_photo" ) );
             photo.setId( idPhoto );
+            photo.setCheminPhoto( daoUtil.getString( "chemin_photo" ) );
+            photo.setCheminPhotoMiniature( daoUtil.getString( "chemin_photo_miniature" ) );
             listPhotos.add( photo );
 
         }
@@ -735,10 +756,9 @@ public class SignalementExportDAO implements ISignalementExportDAO
     private List<PhotoDMR> addPhotosToSignalementWithoudThumbnail( DAOUtil daoUtil, List<PhotoDMR> listPhotos )
     {
 
-        int indexVuePhoto = 18;
-        int indexIdPhoto = 19;
 
-        long idPhoto = daoUtil.getLong( indexIdPhoto );
+
+        long idPhoto = daoUtil.getLong( "id_photo" );
 
         if ( ( listPhotos.stream( ).filter( photo -> photo.getId( ).longValue( ) == idPhoto ).count( ) > 0 ) || ( idPhoto == 0 ) )
         {
@@ -746,8 +766,10 @@ public class SignalementExportDAO implements ISignalementExportDAO
         }
 
         PhotoDMR photo = new PhotoDMR( );
-        photo.setVue( daoUtil.getInt( indexVuePhoto ) );
+        photo.setVue( daoUtil.getInt( "vue_photo" ) );
         photo.setId( idPhoto );
+        photo.setCheminPhoto( daoUtil.getString( "chemin_photo" ) );
+        photo.setCheminPhotoMiniature( daoUtil.getString( "chemin_photo_miniature" ) );
         listPhotos.add( photo );
 
         return listPhotos;
@@ -764,18 +786,14 @@ public class SignalementExportDAO implements ISignalementExportDAO
      */
     private List<Action> addActionToSignalement( DAOUtil daoUtil, List<Action> listAction )
     {
-        int indexIdAction = 21;
-        int indexActionName = 22;
-        int indexActionIconId = 23;
-
-        int idAction = daoUtil.getInt( indexIdAction );
+        int idAction =  daoUtil.getInt( "id_action" );
         if ( idAction > 0 )
         {
             Action action = new Action( );
             action.setId( idAction );
-            action.setName( daoUtil.getString( indexActionName ) );
+            action.setName( daoUtil.getString( "name" ) );
             Icon icon = new Icon( );
-            icon.setId( daoUtil.getInt( indexActionIconId ) );
+            icon.setId( daoUtil.getInt( "id_icon" ) );
             action.setIcon( icon );
 
             if ( listAction.stream( ).noneMatch( a -> a.getId( ) == idAction ) )
@@ -789,18 +807,15 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
     private List<Action> addActionToSignalementWithoudThumbnail( DAOUtil daoUtil, List<Action> listAction )
     {
-        int indexIdAction = 20;
-        int indexActionName = 21;
-        int indexActionIconId = 22;
 
-        int idAction = daoUtil.getInt( indexIdAction );
+        int idAction = daoUtil.getInt( "id_action" );
         if ( idAction > 0 )
         {
             Action action = new Action( );
             action.setId( idAction );
-            action.setName( daoUtil.getString( indexActionName ) );
+            action.setName( daoUtil.getString( "name" ) );
             Icon icon = new Icon( );
-            icon.setId( daoUtil.getInt( indexActionIconId ) );
+            icon.setId( daoUtil.getInt( "id_icon" ) );
             action.setIcon( icon );
 
             if ( listAction.stream( ).noneMatch( a -> a.getId( ) == idAction ) )
@@ -854,7 +869,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
         StringBuilder sbSQL = new StringBuilder( query );
 
         boolean bHasFilterSignalementType = filter.getIdTypeSignalement( ) > 0;
-        boolean bHasFilterUnit = filter.getIdDirection( ) > 0;
+        boolean bHasFilterUnit = CollectionUtils.isNotEmpty( filter.getListIdDirection( ) );
         boolean bHasFilterCategory = !CollectionUtils.isEmpty( filter.getListIdCategories( ) );
 
         int nIndex = 1;
@@ -896,14 +911,16 @@ public class SignalementExportDAO implements ISignalementExportDAO
         // Board
         if ( bHasFilterUnit )
         {
-            nIndex = addSQLWhereOr( false, sbSQL, nIndex );
-            sbSQL.append( SQL_QUERY_ADD_FILTER_DIRECTION );
             // Special case Specificity for DEVE entity, change the id from SEJ to DEVE
-            if ( filter.getIdDirection( ) == SEJ_ID )
+            if ( filter.getListIdDirection( ).contains( SEJ_ID) )
             {
-                filter.setIdDirection( 1 );
+                filter.getListIdDirection().removeIf(idDirection -> idDirection.equals(SEJ_ID));
+                filter.getListIdDirection().add( 1 );
             }
-            sbSQL.append( filter.getIdDirection( ) );
+
+            String unionQuery = StringUtils.join( filter.getListIdDirection( ), COMMA_SEPARATOR );
+            nIndex = addSQLWhereOr( false, sbSQL, nIndex );
+            sbSQL.append( MessageFormat.format( SQL_QUERY_ADD_FILTER_LIST_DIRECTION, unionQuery ) );
         }
 
         // district
@@ -1028,6 +1045,13 @@ public class SignalementExportDAO implements ISignalementExportDAO
             sbSQL.append( SQL_QUERY_ADD_FILTER_DATE_DONE_END );
         }
 
+        // Photo service fait uniquement
+        if ( ( filter.getIdVuePhoto( ) == 2 ) && filter.isPhotoDoneOnly( ) )
+        {
+            nIndex = addSQLWhereOr( false, sbSQL, nIndex );
+            sbSQL.append( SQL_QUERY_ADD_FILTER_PHOTO_DONE_ONLY );
+        }
+
         // Mail dernier intervenant
         if ( StringUtils.isNotBlank( filter.getMailDernierIntervenant( ) ) )
         {
@@ -1097,43 +1121,77 @@ public class SignalementExportDAO implements ISignalementExportDAO
     private void addOrderClause( StringBuilder sbSQL, List<Order> listeOrders )
     {
 
-        sbSQL.append( " ORDER BY " );
+        sbSQL.append( " "+SQL_ORDER_BY +" " );
         int index = 1;
 
         for ( Order order : listeOrders )
         {
             if ( SIGNALEUR_MAIL.equals( order.getName( ) ) )
             {
-                if ( index == listeOrders.size( ) )
-                {
-                    sbSQL.append( order.getName( ) + " " + order.getOrder( ) + " NULLS LAST " );
-                }
-                else
-                {
-                    sbSQL.append( order.getName( ) + " " + order.getOrder( ) + " NULLS LAST, " );
-                    index++;
-                }
-            } else if (ADRESSE.equals( order.getName( ) )) {
-                if ("asc".equalsIgnoreCase( order.getOrder( ) )) {
-                    sbSQL.append( SQL_QUERY_DEFAULT_ORDER_FDT_ASC  );
-                } else {
-                    sbSQL.append( SQL_QUERY_DEFAULT_ORDER_FDT_DESC );
-                }
+                index =  orderMail( sbSQL, order, index, listeOrders.size( ) );
             }
             else
-            {
-                if ( index == listeOrders.size( ) )
+                if ( ADRESSE.equals( order.getName( ) ) )
                 {
-                    sbSQL.append( order.getName( ) + " " + order.getOrder( ) + " " );
+                    orderAdresse( sbSQL, order );
                 }
                 else
                 {
-                    sbSQL.append( order.getName( ) + " " + order.getOrder( ) + ", " );
-                    index++;
+                    if ( index == listeOrders.size( ) )
+                    {
+                        sbSQL.append( order.getName( ) + " " + order.getOrder( ) + " " );
+                    }
+                    else
+                    {
+                        sbSQL.append( order.getName( ) + " " + order.getOrder( ) + ", " );
+                        index++;
+                    }
                 }
-            }
         }
 
+    }
+
+    /**
+     * Add order mail.
+     *
+     * @param sbSQL
+     *            string builder query
+     * @param order
+     *            order mail
+     * @param index
+     * @param listOrderSize
+     * @return
+     */
+    private int orderMail( StringBuilder sbSQL, Order order, int index, int listOrderSize )
+    {
+        if ( index == listOrderSize )
+        {
+            sbSQL.append( order.getName( ) + " " + order.getOrder( ) + " NULLS LAST " );
+        } else
+        {
+            sbSQL.append( order.getName( ) + " " + order.getOrder( ) + " NULLS LAST, " );
+            index++;
+        }
+
+        return index;
+    }
+
+    /**
+     * Add order adresse
+     * @param sbSQL
+     *           string builder query
+     * @param order
+     *            order adresse
+     */
+    private void orderAdresse( StringBuilder sbSQL, Order order )
+    {
+        if ( "asc".equalsIgnoreCase( order.getOrder( ) ) )
+        {
+            sbSQL.append( SQL_QUERY_DEFAULT_ORDER_FDT_ASC );
+        } else
+        {
+            sbSQL.append( SQL_QUERY_DEFAULT_ORDER_FDT_DESC );
+        }
     }
 
     /**
@@ -1144,7 +1202,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
      */
     private void addDefaultOrderFDTSearch( StringBuilder sbSQL )
     {
-        sbSQL.append( " ORDER BY " );
+        sbSQL.append( " "+SQL_ORDER_BY +" " );
         sbSQL.append( SQL_QUERY_DEFAULT_ORDER_FDT_ASC );
     }
 

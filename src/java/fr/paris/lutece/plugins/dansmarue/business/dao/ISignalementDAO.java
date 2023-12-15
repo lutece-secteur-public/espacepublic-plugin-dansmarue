@@ -37,6 +37,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import fr.paris.lutece.plugins.dansmarue.business.entities.RequalificationMasseFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.ServiceFaitMasseFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDashboardFilter;
@@ -368,13 +369,15 @@ public interface ISignalementDAO
      *            the report address
      * @param idSector
      *            the report sector
+     * @param idHistory
+     *            the workflow history id
      * @param idTask
      *            the workflow task id
      * @param commentaireAgentTerrain
      *            commentaire Agent Terrain
      */
     void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector, Integer idTask,
-            String commentaireAgentTerrain );
+            Integer idHistory,String commentaireAgentTerrain );
 
     /**
      * Returns a list of requalification entries for a report, if it has been requalified.
@@ -406,30 +409,6 @@ public interface ISignalementDAO
     SignalementRequalification getSignalementRequalificationByTaskHistory( int idHistory, int idTask );
 
     /**
-     * Update the requalification.
-     *
-     * @param lIdSignalement
-     *            the report id
-     * @param idTask
-     *            the workflow task id
-     * @param idHistory
-     *            the workflow history id
-     */
-    void updateRequalification( long lIdSignalement, int idTask, int idHistory );
-
-    /**
-     * Update the requalification history task.
-     *
-     * @param lIdSignalement
-     *            the report id
-     * @param idTask
-     *            the workflow task id
-     * @param idHistory
-     *            the workflow history id
-     */
-    void updateRequalificationHistoryTask( long lIdSignalement, int idTask, int idHistory );
-
-    /**
      * Gets the signalements for the TDB.
      *
      * @param tableauDeBordFilter
@@ -459,8 +438,9 @@ public interface ISignalementDAO
 
     /**
      * Find ano without state.
+     *
      * @param delay
-     *         delay in minutes since anomaly creation before delete.
+     *            delay in minutes since anomaly creation before delete.
      * @return the list
      */
     List<Long> findAnoWithoutState( int delay );
@@ -499,6 +479,31 @@ public interface ISignalementDAO
     void updateDatePassageServiceFaitMasse( ServiceFaitMasseFilter serviceFaitMasseFilter );
 
     /**
+     * Gets the repartition requalification masse.
+     *
+     * @param requalificationMasseFilter
+     *            the requalification masse filter
+     * @return the repartition requalification masse
+     */
+    Map<String, Integer> getRepartitionRequalificationMasse( RequalificationMasseFilter requalificationMasseFilter );
+
+    /**
+     * Adds the requalification histo masse.
+     *
+     * @param requalificationMasseFilter
+     *            the requalification masse filter
+     */
+    void addRequalificationHistoMasse( RequalificationMasseFilter requalificationMasseFilter );
+
+    /**
+     * Update type requalification masse.
+     *
+     * @param requalificationMasseFilter
+     *            the requalification masse filter
+     */
+    void updateTypeRequalificationMasse( RequalificationMasseFilter requalificationMasseFilter );
+
+    /**
      * Gets the signalements service programme ids.
      *
      * @return the signalements service programme ids
@@ -524,9 +529,24 @@ public interface ISignalementDAO
     /**
      * Gets action for state.
      *
-     * @param stateId the state id
-     * @param workflowId the workflow id
+     * @param stateId
+     *            the state id
+     * @param workflowId
+     *            the workflow id
      * @return the action for state
      */
     Collection<Action> getActionForState( int stateId, Integer workflowId );
+
+    /**
+     * Search signalement with id list. Method use by mobil application
+     *
+     * @param idsSignalement
+     *            List of id signalement
+     * @return List Signalement
+     */
+    List<Signalement> getSignalementForMobilByListId( List<Integer> idsSignalement );
+
+    void addHistoriqueCommentaireAgentTerrain( Signalement signalement, int nIdResourceHistory );
+
+    String getHistoriqueCommentaireAgentTerrain( int nIdResourceHistory );
 }

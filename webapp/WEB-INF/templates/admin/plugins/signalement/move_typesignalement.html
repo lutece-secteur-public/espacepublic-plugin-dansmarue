@@ -207,6 +207,7 @@ function doUpdateTypeSignalement(idParentSelectionne, doSuppressionMessageTypolo
 		  swal ( "Erreur" ,  "La mise à jour a échouée" ,  "error" );
 		  $(".loader").css("display", "none");	
 		  $(".overlay").css('z-index', 20);
+	  }).always(function() {
 	  });
 }
 

@@ -94,6 +94,10 @@ public class DomaineFonctionnel implements RBACResource
     @Transient
     private ReferenceList _typesAnomalieRefList;
 
+    /** The anomaly types ref list. */
+    @Transient
+    private ReferenceList _feuillesDeTourneeRefList;
+
     /** ENTITIES from unittree. */
     private List<Integer> _unitIds;
 
@@ -400,6 +404,27 @@ public class DomaineFonctionnel implements RBACResource
     public void setQuartierRefList( ReferenceList quartierRefList )
     {
         _quartierRefList = quartierRefList;
+    }
+
+    /**
+     * Gets the feuilles de tournee ref list.
+     *
+     * @return the feuilles de tournee ref list
+     */
+    public ReferenceList getFeuillesDeTourneeRefList( )
+    {
+        return _feuillesDeTourneeRefList;
+    }
+
+    /**
+     * Sets the feuilles de tournee ref list.
+     *
+     * @param feuillesDeTourneeRefList
+     *            the new feuilles de tournee ref list
+     */
+    public void setFeuillesDeTourneeRefList( ReferenceList feuillesDeTourneeRefList )
+    {
+        _feuillesDeTourneeRefList = feuillesDeTourneeRefList;
     }
 
 }

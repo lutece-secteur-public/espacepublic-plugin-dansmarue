@@ -401,7 +401,7 @@ public class TypeSignalementService implements ITypeSignalementService
         List<TypeSignalement> listResult = new ArrayList<TypeSignalement>( );
         for ( TypeSignalement type : listAllTypes )
         {
-            if ( type.getActif( ) && ( type.getUnit( ).getIdUnit( ) != 0 )  && !type.isHorsDMR( ) )
+            if ( type.getActif( ) && ( type.getUnit( ).getIdUnit( ) != 0 ) && !type.isHorsDMR( ) )
             {
                 listResult.add( type );
             }
@@ -749,6 +749,24 @@ public class TypeSignalementService implements ITypeSignalementService
     {
         _typesignalementDAO.updateParent( nIdTypeSignalement, nIdParent );
         _typesignalementDAO.refreshViewTypesWithParentsLinks( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<TypeSignalement> getListTypeSignalementActifLastLevel( )
+    {
+        List<TypeSignalement> listTypeSignalementWithMessage = new ArrayList<>( );
+
+        _typesignalementDAO.getListTypeSignalementLastLevel( ).forEach( ( TypeSignalement typeSignalement ) -> {
+            if ( typeSignalement.getActif( ) )
+            {
+                listTypeSignalementWithMessage.add( typeSignalement );
+            }
+        } );
+
+        return listTypeSignalementWithMessage;
     }
 
     /**

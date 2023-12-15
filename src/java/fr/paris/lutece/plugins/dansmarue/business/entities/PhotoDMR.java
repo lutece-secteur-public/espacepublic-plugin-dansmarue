@@ -33,12 +33,13 @@
  */
 package fr.paris.lutece.plugins.dansmarue.business.entities;
 
-import fr.paris.lutece.portal.service.image.*;
-import fr.paris.lutece.portal.service.spring.*;
-import fr.paris.lutece.portal.web.constants.*;
-import fr.paris.lutece.util.url.*;
+import java.io.Serializable;
 
-import java.io.*;
+import fr.paris.lutece.portal.service.image.ImageResource;
+import fr.paris.lutece.portal.service.image.ImageResourceProvider;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.web.constants.Parameters;
+import fr.paris.lutece.util.url.UrlItem;
 
 /**
  * The Class PhotoDMR.
@@ -47,36 +48,46 @@ public class PhotoDMR implements Serializable
 {
 
     /** The Constant OVERVIEW. */
-    public static final Integer OVERVIEW = 1;
+    public static final Integer OVERVIEW          = 1;
 
     /** The Constant DETAILED_VIEW. */
-    public static final Integer DETAILED_VIEW = 0;
+    public static final Integer DETAILED_VIEW     = 0;
 
     /** The Constant SERVICE_DONE_VIEW. */
     public static final Integer SERVICE_DONE_VIEW = 2;
 
-    private static final long serialVersionUID = -4451594648109782317L;
+    private static final long   serialVersionUID  = -4451594648109782317L;
 
     /** The id. */
-    private Long _id;
+    private Long                _id;
 
     /** The image. */
-    private ImageResource _image = null;
+    private ImageResource       _image            = null;
 
     /** The image thumbnail. */
-    private ImageResource _imageThumbnail = new ImageResource( );
+    private ImageResource       _imageThumbnail   = new ImageResource( );
 
     /** The signalement. */
-    private Signalement _signalement;
+    private Signalement         _signalement;
 
     /** The str date. */
-    private String _strDate;
+    private String              _strDate;
 
     /** The n vue. */
-    private Integer _nVue;
+    private Integer             _nVue;
 
     /** if photo is anonymized. */
-    private boolean _bIsAnonymized;
+    private boolean             _bIsAnonymized;
+
+    /**
+     * Path to photo on S3 server
+     */
+    private String              _cheminPhoto;
+
+    /**
+     * Path to photo thumbnail on S3 server
+     */
+    private String              _cheminPhotoMiniature;
 
     /**
      * Gets the id.
@@ -127,11 +138,36 @@ public class PhotoDMR implements Serializable
      */
     public String getImageUrl( )
     {
-        String strResourceType = ( (ImageResourceProvider) SpringContextService.getBean( "signalement.imageService" ) ).getResourceTypeId( );
+        String strResourceType = ( ( ImageResourceProvider ) SpringContextService.getBean( "signalement.imageService" ) ).getResourceTypeId( );
         UrlItem url = new UrlItem( Parameters.IMAGE_SERVLET );
         url.addParameter( Parameters.RESOURCE_TYPE, strResourceType );
-        url.addParameter( Parameters.RESOURCE_ID, Long.toString( _id ) );
+        String idValue = Long.toString( _id );
+        String token = getImageToken( );
+        if (token != null)
+        {
+            idValue += "_" + token;
+        }
+        url.addParameter( Parameters.RESOURCE_ID, idValue );
         return url.getUrlWithEntity( );
+    }
+
+    /**
+     * Gets the image token.
+     *
+     * @return the image token
+     */
+    public String getImageToken( )
+    {
+        if (_cheminPhoto != null)
+        {
+            String[] pathToken = _cheminPhoto.split( "_", 2 );
+            // Checks if the path splited correctly, in which case it is not an error message and we can proceed
+            if (pathToken.length == 2)
+            {
+                return pathToken[0];
+            }
+        }
+        return null;
     }
 
     /**
@@ -141,11 +177,36 @@ public class PhotoDMR implements Serializable
      */
     public String getImageThumbnailUrl( )
     {
-        String strResourceType = ( (ImageResourceProvider) SpringContextService.getBean( "signalement.imageThumbnailService" ) ).getResourceTypeId( );
+        String strResourceType = ( ( ImageResourceProvider ) SpringContextService.getBean( "signalement.imageThumbnailService" ) ).getResourceTypeId( );
         UrlItem url = new UrlItem( Parameters.IMAGE_SERVLET );
         url.addParameter( Parameters.RESOURCE_TYPE, strResourceType );
-        url.addParameter( Parameters.RESOURCE_ID, Long.toString( _id ) );
+        String idValue = Long.toString( _id );
+        String token = getImageThumbnailToken( );
+        if (token != null)
+        {
+            idValue += "_" + token;
+        }
+        url.addParameter( Parameters.RESOURCE_ID, idValue );
         return url.getUrlWithEntity( );
+    }
+
+    /**
+     * Gets the image thumbnail token.
+     *
+     * @return the image thumbnail token
+     */
+    public String getImageThumbnailToken( )
+    {
+        if (_cheminPhotoMiniature != null)
+        {
+            String[] pathToken = _cheminPhotoMiniature.split( "_", 2 );
+            // Checks if the path splited correctly, in which case it is not an error message and we can proceed
+            if (pathToken.length == 2)
+            {
+                return pathToken[0];
+            }
+        }
+        return null;
     }
 
     /**
@@ -186,7 +247,7 @@ public class PhotoDMR implements Serializable
      * @param imageContent
      *            the new image content
      */
-    public void setImageContent( byte [ ] imageContent )
+    public void setImageContent( byte[] imageContent )
     {
         _image.setImage( imageContent );
     }
@@ -197,7 +258,7 @@ public class PhotoDMR implements Serializable
      * @param imageContent
      *            the new thumbnailed image
      */
-    public void setImageThumbnailWithBytes( byte [ ] imageContent )
+    public void setImageThumbnailWithBytes( byte[] imageContent )
     {
         _imageThumbnail.setImage( imageContent );
 
@@ -285,6 +346,26 @@ public class PhotoDMR implements Serializable
     public void setAnonymized( boolean isAnonymized )
     {
         _bIsAnonymized = isAnonymized;
+    }
+
+    public String getCheminPhoto( )
+    {
+        return _cheminPhoto;
+    }
+
+    public String getCheminPhotoMiniature( )
+    {
+        return _cheminPhotoMiniature;
+    }
+
+    public void setCheminPhoto( String cheminPhoto )
+    {
+        _cheminPhoto = cheminPhoto;
+    }
+
+    public void setCheminPhotoMiniature( String cheminPhotoMiniature )
+    {
+        _cheminPhotoMiniature = cheminPhotoMiniature;
     }
 
 }

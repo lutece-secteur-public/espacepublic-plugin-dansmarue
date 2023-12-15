@@ -37,8 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.log4j.Logger;
-
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.httpaccess.HttpAccess;
 import net.sf.json.JSONObject;
@@ -48,9 +47,6 @@ import net.sf.json.JSONObject;
  */
 public class AndroidPushService
 {
-
-    /** The Constant LOGGER. */
-    private static final Logger LOGGER = Logger.getLogger( AndroidPushService.class );
 
     /** The Constant PROPERTY_GCM_API_KEY. */
     // PROPERTIES
@@ -133,7 +129,7 @@ public class AndroidPushService
         }
         catch( Exception ex )
         {
-            LOGGER.error( "Error when calling the Android push WS", ex );
+            AppLogService.error( "Error when calling the Android push WS", ex );
         }
     }
 

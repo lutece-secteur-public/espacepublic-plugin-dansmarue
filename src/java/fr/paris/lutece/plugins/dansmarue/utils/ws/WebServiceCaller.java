@@ -46,8 +46,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.httpaccess.HttpAccess;
 import fr.paris.lutece.util.httpaccess.HttpAccessException;
@@ -83,9 +83,6 @@ public class WebServiceCaller implements IWebServiceCaller
     /** The Constant PROPERTY_AUTH_SECRET. */
     private static final String PROPERTY_AUTH_SECRET = "signalement.trace.webservices.secret";
 
-    /** The Constant LOGGER. */
-    private static final Logger LOGGER = Logger.getLogger( WebServiceCaller.class );
-
     /**
      * Post JSON.
      *
@@ -99,36 +96,39 @@ public class WebServiceCaller implements IWebServiceCaller
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.dansmarue.utils.ws.IWebServiceCaller#postJSON(java.lang.String, net.sf.json.JSONObject)
      */
     @Override
     public String postJSON( String strUrl, JSONObject json ) throws IOException
     {
-        LOGGER.debug( "Send to " + strUrl + " : " + json.toString( ) );
+        AppLogService.debug( "Send to " + strUrl + " : " + json.toString( ) );
         URL url = new URL( strUrl );
         HttpURLConnection conn = (HttpURLConnection) url.openConnection( );
         conn.setDoOutput( true );
         conn.setRequestMethod( PARAMETER_METHOD );
         conn.setRequestProperty( MARK_CONTENT_TYPE, PARAMETER_TYPE_FORM );
 
-        OutputStreamWriter os = new OutputStreamWriter( conn.getOutputStream( ) );
-        os.write( wrapJsonToPostData( json ) );
-        os.flush( );
+        try ( OutputStreamWriter os = new OutputStreamWriter( conn.getOutputStream( ) ) )
+        {
+            os.write( wrapJsonToPostData( json ) );
+            os.flush( );
+        }
 
         if ( conn.getResponseCode( ) != HttpURLConnection.HTTP_OK )
         {
-            LOGGER.error( "Connection response code : " + conn.getResponseCode( ) );
+            AppLogService.error( "Connection response code : " + conn.getResponseCode( ) );
             throw new RuntimeException( "Failed : HTTP error code : " + conn.getResponseCode( ) );
         }
 
         BufferedReader br = new BufferedReader( new InputStreamReader( ( conn.getInputStream( ) ) ) );
 
         StringBuilder strBuilder = new StringBuilder( );
-        String output;
-        while ( ( output = br.readLine( ) ) != null )
+        String output = br.readLine( );
+        while ( output != null )
         {
             strBuilder.append( output );
+            output = br.readLine( );
         }
 
         conn.disconnect( );
@@ -165,7 +165,7 @@ public class WebServiceCaller implements IWebServiceCaller
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.dansmarue.utils.ws.IWebServiceCaller#callWebService(java.lang.String, java.util.Map,
      * fr.paris.lutece.util.signrequest.RequestAuthenticator, java.util.List)
      */

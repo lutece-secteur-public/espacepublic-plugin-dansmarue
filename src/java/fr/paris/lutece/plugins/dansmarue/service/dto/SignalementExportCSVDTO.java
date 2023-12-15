@@ -156,6 +156,9 @@ public class SignalementExportCSVDTO
 
     private Integer _nIdStatut;
 
+    /** The str precision terrain */
+    private String _strPrecisionTerrain;
+
     /** The photos. */
     private List<PhotoDMR> _listPhotos = new ArrayList<>( );
 
@@ -166,12 +169,16 @@ public class SignalementExportCSVDTO
      */
     public String [ ] getTabAllDatas( )
     {
-        return new String[] { String.valueOf( getIdSignalement( ) ), getNumeroSignalement( ), getPriorite( ), getTypeSignalement( ), getAlias( ), getAliasMobile( ), getDirection( ), getQuartier( ),
-                getAdresse( ), Double.toString( getCoordX( ) ), Double.toString( getCoordY( ) ), getArrondissement( ), getSecteur( ), getDateCreation( ), getHeureCreation( ), getEtat( ),
-                getMailUsager( ), getCommentaireUsager( ), Integer.toString( getNbPhotos( ) ), getRaisonsRejet( ), Integer.toString( getNbSuivis( ) ), Integer.toString( getNbFelicitations( ) ),
-                getDateCloture( ), isPhotoServiceFait( ) ? "Photo présente" : "Pas de photo", getMailDestinataireCourriel( ), getCourrielExpediteur( ), getDateEnvoiCourriel( ),
-                getIdMailServiceFait( ) != 0 ? getIdMailServiceFait( ).toString( ) : "", getExecuteurServiceFait( ), getDateDerniereAction( ), getDatePrevuTraitement( ), getCommentairAgentTerrain( ),
-                getExecuteurRejet( ), getExecuteurMiseSurveillance( ), getNbRequalifications( ) };
+        return new String [ ] {
+                String.valueOf( getIdSignalement( ) ), getNumeroSignalement( ), getPriorite( ), getTypeSignalement( ), getAlias( ), getAliasMobile( ),
+                getDirection( ), getQuartier( ), getAdresse( ), Double.toString( getCoordX( ) ), Double.toString( getCoordY( ) ), getArrondissement( ),
+                getSecteur( ), getDateCreation( ), getHeureCreation( ), getEtat( ), getMailUsager( ), getCommentaireUsager( ),
+                Integer.toString( getNbPhotos( ) ), getRaisonsRejet( ), Integer.toString( getNbSuivis( ) ), Integer.toString( getNbFelicitations( ) ),
+                getDateCloture( ), isPhotoServiceFait( ) ? "Photo présente" : "Pas de photo", getMailDestinataireCourriel( ), getCourrielExpediteur( ),
+                getDateEnvoiCourriel( ), getIdMailServiceFait( ) != 0 ? getIdMailServiceFait( ).toString( ) : "", getExecuteurServiceFait( ),
+                getDateDerniereAction( ), getDatePrevuTraitement( ), getCommentairAgentTerrain( ), getExecuteurRejet( ), getExecuteurMiseSurveillance( ),
+                getPrecisionTerrain(), getNbRequalifications( )
+        };
     }
 
     /**
@@ -950,6 +957,27 @@ public class SignalementExportCSVDTO
     public void setIdStatut( Integer nIdStatut )
     {
         this._nIdStatut = nIdStatut;
+    }
+
+    /**
+     * Gets the precision terrain.
+     *
+     * @return the precision terrain
+     */
+    public String getPrecisionTerrain( )
+    {
+        return _strPrecisionTerrain;
+    }
+
+    /**
+     * Sets the precision terrain.
+     *
+     * @param precision terrain
+     *            the new precision terrain
+     */
+    public void setPrecisionTerrain( String precisionTerrain )
+    {
+        _strPrecisionTerrain = precisionTerrain;
     }
 
 }

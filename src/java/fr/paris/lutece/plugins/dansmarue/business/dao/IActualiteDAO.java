@@ -134,7 +134,7 @@ public interface IActualiteDAO
      * @param nIdActualite
      *            the actualite id
      */
-    void increaseOrdreOfAllNext( int nIdActualite );
+    void increaseOrdreOfAllNext( long nIdActualite );
 
     /**
      * Decreases all the next orders.
@@ -142,7 +142,7 @@ public interface IActualiteDAO
      * @param nIdActualite
      *            the actualite id
      */
-    void decreaseOrdreOfAllNext( int nIdActualite );
+    void decreaseOrdreOfAllNext( long nIdActualite );
 
     /**
      * Returns the number of actualite existing.

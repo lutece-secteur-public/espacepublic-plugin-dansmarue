@@ -35,12 +35,13 @@ package fr.paris.lutece.plugins.dansmarue.service.role;
 
 import java.util.Locale;
 
+import fr.paris.lutece.plugins.dansmarue.utils.IListUtils;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.DomaineFonctionnel;
 import fr.paris.lutece.plugins.dansmarue.service.IDomaineFonctionnelService;
 import fr.paris.lutece.plugins.dansmarue.service.SignalementPlugin;
-import fr.paris.lutece.plugins.dansmarue.utils.ListUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.impl.ListUtils;
 import fr.paris.lutece.portal.service.rbac.Permission;
 import fr.paris.lutece.portal.service.rbac.ResourceIdService;
 import fr.paris.lutece.portal.service.rbac.ResourceType;
@@ -65,6 +66,10 @@ public class DomaineFonctionnelSignalementResourceIdService extends ResourceIdSe
 
     /** The domaine fonctionnel service. */
     private IDomaineFonctionnelService _domaineFonctionnelService;
+
+    /** The list utils */
+    // UTILS
+    private transient IListUtils _listUtils = SpringContextService.getBean( "signalement.listUtils" );
 
     /**
      * {@inheritDoc}
@@ -98,7 +103,7 @@ public class DomaineFonctionnelSignalementResourceIdService extends ResourceIdSe
         {
             _domaineFonctionnelService = (IDomaineFonctionnelService) SpringContextService.getBean( "domaineFonctionnelService" );
         }
-        return ListUtils.toReferenceList( _domaineFonctionnelService.getAllDomainesFonctionnel( ), "id", "libelle", null );
+        return _listUtils.toReferenceList( _domaineFonctionnelService.getAllDomainesFonctionnel( ), "id", "libelle", null );
     }
 
     /**

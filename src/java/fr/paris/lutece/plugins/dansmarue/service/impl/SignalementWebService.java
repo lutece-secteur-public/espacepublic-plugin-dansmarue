@@ -43,6 +43,8 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import fr.paris.lutece.plugins.dansmarue.utils.IDateUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.ISignalementUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
@@ -53,8 +55,6 @@ import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.commons.exceptions.BusinessException;
 import fr.paris.lutece.plugins.dansmarue.commons.exceptions.TechnicalException;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementWebService;
-import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
-import fr.paris.lutece.plugins.dansmarue.utils.SignalementUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.ws.IWebServiceCaller;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -112,6 +112,17 @@ public class SignalementWebService implements ISignalementWebService
     @Named( "signalementAdresseDAO" )
     private IAdresseDAO _adresseSignalementDAO;
 
+    /** The signalement utils */
+    // UTILS
+    @Inject
+    @Named( "signalement.signalementUtils" )
+    private ISignalementUtils _signalementUtils;
+
+    /** The date utils. */
+    @Inject
+    @Named( "signalement.dateUtils" )
+    private IDateUtils _dateUtils;
+
     /**
      * {@inheritDoc}
      */
@@ -120,7 +131,7 @@ public class SignalementWebService implements ISignalementWebService
     {
         JSONObject response = null;
 
-        if ( signalement.getAdresses( ).isEmpty( ) || !SignalementUtils.isValidAddress( signalement.getAdresses( ).get( 0 ).getAdresse( ) ) )
+        if ( signalement.getAdresses( ).isEmpty( ) || !_signalementUtils.isValidAddress( signalement.getAdresses( ).get( 0 ).getAdresse( ) ) )
         {
             return generateErrorResponse( "Error invalid address id signalement " + signalement.getId( ) );
         }
@@ -213,7 +224,7 @@ public class SignalementWebService implements ISignalementWebService
         jsonAnomalie.accumulate( "id", signalement.getId( ) );
         jsonAnomalie.accumulate( "reference", signalement.getNumeroSignalement( ) );
         jsonAnomalie.accumulate( "date_creation", signalement.getDateCreation( ) );
-        jsonAnomalie.accumulate( "heure_creation", DateUtils.getHourWithSecondsFr( signalement.getHeureCreation( ) ) );
+        jsonAnomalie.accumulate( "heure_creation", _dateUtils.getHourWithSecondsFr( signalement.getHeureCreation( ) ) );
         jsonAnomalie.accumulate( "commentaire", encode( signalement.getCommentaire( ) ) );
         jsonAnomalie.accumulate( "type", encode( signalement.getTypeSignalement( ).getLibelle( ) ) );
         jsonAnomalie.accumulate( "priorite", encode( signalement.getPriorite( ).getLibelle( ) ) );
@@ -233,6 +244,8 @@ public class SignalementWebService implements ISignalementWebService
                 photoJson.accumulate( "id_photo", p.getId( ) );
                 photoJson.accumulate( "vue_photo", p.getVue( ) );
                 photoJson.accumulate( "photo", getImageBase64( p.getImage( ) ) );
+                photoJson.accumulate( "lien_photo", p.getImageUrl( ) );
+                photoJson.accumulate( "token_photo", p.getImageToken( ) );
                 array.add( photoJson );
             }
             jsonAnomalie.accumulate( JSON_TAG_PHOTOS, array );

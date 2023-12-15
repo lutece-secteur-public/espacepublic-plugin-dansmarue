@@ -69,9 +69,11 @@ public interface IFeuilleDeTourneeService
      *
      * @param feuilleDeTournee
      *            the feuille de tournee
+     * @param isCopy
+     *            feuilleDeTournee is a copy
      * @return the integer
      */
-    Integer insert( FeuilleDeTournee feuilleDeTournee );
+    Integer insert( FeuilleDeTournee feuilleDeTournee, boolean isCopy );
 
     /**
      * Save a search filter.

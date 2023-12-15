@@ -33,15 +33,6 @@
  */
 package fr.paris.lutece.plugins.dansmarue.web;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.DomaineFonctionnel;
 import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
@@ -53,9 +44,10 @@ import fr.paris.lutece.plugins.dansmarue.service.IConseilQuartierService;
 import fr.paris.lutece.plugins.dansmarue.service.IDomaineFonctionnelService;
 import fr.paris.lutece.plugins.dansmarue.service.ITypeSignalementService;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
-import fr.paris.lutece.plugins.dansmarue.utils.ListUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.IListUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.UnitUtils;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
+import fr.paris.lutece.plugins.unittree.service.unit.UnitService;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -67,6 +59,13 @@ import fr.paris.lutece.portal.web.constants.Messages;
 import fr.paris.lutece.util.beanvalidation.ValidationError;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class provides the user interface to manage form features ( manage, create, modify, remove).
@@ -174,7 +173,11 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
     private transient ITypeSignalementService _typeSignalementService;
 
     /** The unit service. */
-    private transient IUnitService _unitService = SpringContextService.getBean( IUnitService.BEAN_UNIT_SERVICE );
+    private transient IUnitService _unitService = SpringContextService.getBean( UnitService.BEAN_UNIT_SERVICE );
+
+    /** The list utils */
+    // UTILS
+    private transient IListUtils _listUtils = SpringContextService.getBean( "signalement.listUtils" );
 
     /** The Constant PROPERTY_DOMAINE_ARRONDISSEMENT_SELECT_SIZE. */
     // PROPERTIES
@@ -428,21 +431,21 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
 
         if ( !ArrayUtils.isEmpty( arrondissements ) )
         {
-            List<Integer> arrondissementList = ListUtils.getListOfIntFromStrArray( arrondissements );
+            List<Integer> arrondissementList = _listUtils.getListOfIntFromStrArray( arrondissements );
             domaineFonctionnel.setArrondissementsIds( arrondissementList );
         }
         if ( !ArrayUtils.isEmpty( quartiers ) )
         {
-            domaineFonctionnel.setQuartiersIds( ListUtils.getListOfIntFromStrArray( quartiers ) );
+            domaineFonctionnel.setQuartiersIds( _listUtils.getListOfIntFromStrArray( quartiers ) );
         }
         if ( !ArrayUtils.isEmpty( categories ) )
         {
-            List<Integer> categoryList = ListUtils.getListOfIntFromStrArray( categories );
+            List<Integer> categoryList = _listUtils.getListOfIntFromStrArray( categories );
             domaineFonctionnel.setTypesSignalementIds( categoryList );
         }
         if ( !ArrayUtils.isEmpty( units ) )
         {
-            List<Integer> unidsIds = ListUtils.getListOfIntFromStrArray( units );
+            List<Integer> unidsIds = _listUtils.getListOfIntFromStrArray( units );
             domaineFonctionnel.setUnitIds( unidsIds );
         }
 
@@ -494,21 +497,21 @@ public class DomaineFonctionnelJspBean extends AbstractJspBean
 
         if ( !ArrayUtils.isEmpty( quartiers ) )
         {
-            domaineFonctionnel.setQuartiersIds( ListUtils.getListOfIntFromStrArray( quartiers ) );
+            domaineFonctionnel.setQuartiersIds( _listUtils.getListOfIntFromStrArray( quartiers ) );
         }
         if ( !ArrayUtils.isEmpty( arrondissements ) )
         {
-            List<Integer> arrondissementList = ListUtils.getListOfIntFromStrArray( arrondissements );
+            List<Integer> arrondissementList = _listUtils.getListOfIntFromStrArray( arrondissements );
             domaineFonctionnel.setArrondissementsIds( arrondissementList );
         }
         if ( !ArrayUtils.isEmpty( categories ) )
         {
-            List<Integer> categoryList = ListUtils.getListOfIntFromStrArray( categories );
+            List<Integer> categoryList = _listUtils.getListOfIntFromStrArray( categories );
             domaineFonctionnel.setTypesSignalementIds( categoryList );
         }
         if ( !ArrayUtils.isEmpty( units ) )
         {
-            List<Integer> unitsIds = ListUtils.getListOfIntFromStrArray( units );
+            List<Integer> unitsIds = _listUtils.getListOfIntFromStrArray( units );
             domaineFonctionnel.setUnitIds( unitsIds );
         }
 

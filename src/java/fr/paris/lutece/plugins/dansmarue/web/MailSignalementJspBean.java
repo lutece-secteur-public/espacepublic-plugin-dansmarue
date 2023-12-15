@@ -53,7 +53,7 @@ import fr.paris.lutece.plugins.dansmarue.commons.exceptions.FunctionnalException
 import fr.paris.lutece.plugins.dansmarue.service.IPhotoService;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementService;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
-import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.IDateUtils;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.mail.MailItem;
@@ -168,6 +168,10 @@ public class MailSignalementJspBean extends AbstractJspBean
     /** The photo service. */
     private transient IPhotoService _photoService;
 
+    /** The date utils */
+    // UTILS
+    private transient IDateUtils _dateUtils = SpringContextService.getBean( "signalement.dateUtils" );
+
     /** The Constant PROPERTY_BASE_URL. */
     // PROPERTIES
     private static final String PROPERTY_BASE_URL = "lutece.prod.url";
@@ -181,9 +185,6 @@ public class MailSignalementJspBean extends AbstractJspBean
 
     /** The Constant MARK_WEBAPP_URL. */
     private static final String MARK_WEBAPP_URL = "webapp_url";
-
-    /** The Constant MARK_SENDER_MAIL. */
-    private static final String MARK_SENDER_MAIL = "sender_mail";
 
     /** The Constant JSP_MANAGE_MAIL. */
     // JSP
@@ -217,7 +218,7 @@ public class MailSignalementJspBean extends AbstractJspBean
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.dansmarue.web.AbstractJspBean#init(javax.servlet.http.HttpServletRequest, java.lang.String, java.lang.String,
      * java.lang.String)
      */
@@ -289,7 +290,7 @@ public class MailSignalementJspBean extends AbstractJspBean
 
                 // date_creation
                 strBuff.append( LINE_SEPARATOR + MESSAGE_MAIL_DATE_CREATION + " : Le " + signalement.getDateCreation( ) + " à "
-                        + DateUtils.getHourFr( signalement.getHeureCreation( ) ) );
+                        + _dateUtils.getHourFr( signalement.getHeureCreation( ) ) );
 
                 // mail
                 if ( !signaleurs.isEmpty( ) && !signaleurs.get( 0 ).getMail( ).isEmpty( ) )
@@ -326,7 +327,7 @@ public class MailSignalementJspBean extends AbstractJspBean
 
                 // Link to the consultation page with BO account
                 strBuff.append( LINE_SEPARATOR + LINE_SEPARATOR + MESSAGE_MAIL_LINK_WITH_ACCOUNT + " : <a href=\"" + getLinkConsultationWithAcc( )
-                        + signalement.getId( ) + "\">" + getLinkConsultationWithAcc( ) + signalement.getId( ) + "</a>" );
+                + signalement.getId( ) + "\">" + getLinkConsultationWithAcc( ) + signalement.getId( ) + "</a>" );
 
                 // Link to the consultation page user
                 strBuff.append( LINE_SEPARATOR + LINE_SEPARATOR + MESSAGE_MAIL_LINK + " : <a href=\"" + getLinkConsultation( ) + signalement.getToken( ) + "\">"
@@ -340,7 +341,8 @@ public class MailSignalementJspBean extends AbstractJspBean
 
         AdminUser user = getUser( );
 
-        model.put( MARK_SENDER_MAIL, user.getEmail( ) );
+        mailItem.setSenderEmail( user.getEmail(  ));
+
         model.put( PARAMETER_SIGNALEMENT_ID, nIdCase );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( "locale", getLocale( ) );
@@ -387,6 +389,9 @@ public class MailSignalementJspBean extends AbstractJspBean
         MailItem mailItem = new MailItem( );
 
         populate( mailItem, request );
+
+        AdminUser user = getUser( );
+        mailItem.setSenderEmail( user.getEmail(  ));
 
         if ( strWantPhotosInEmail.equals( PARAMETER_ON ) )
         {
@@ -486,24 +491,24 @@ public class MailSignalementJspBean extends AbstractJspBean
         {
             if ( ( photo.getImage( ) != null ) && ( photo.getImage( ).getImage( ) != null ) )
             {
-                String [ ] mime = photo.getImage( ).getMimeType( ).split( "/" );
-                String imgExtention = mime [1];
+                String imgExtention = photo.getImage( ).getMimeType( ).contains( "/" ) ? photo.getImage( ).getMimeType( ).split( "/" )[1] : photo.getImage( ).getMimeType( );
+                String fileAttachmentMime = SignalementConstants.MIME_TYPE_START + imgExtention;
 
                 if ( photo.getVue( ) == 1 )
                 {
                     files.add( new FileAttachment( SignalementConstants.NOM_PHOTO_ENSEMBLE_PJ + imgExtention, photo.getImage( ).getImage( ),
-                            photo.getImage( ).getMimeType( ) ) );
+                            fileAttachmentMime ) );
                 }
                 else
                     if ( photo.getVue( ) == 0 )
                     {
                         files.add( new FileAttachment( SignalementConstants.NOM_PHOTO_PRES_PJ + imgExtention, photo.getImage( ).getImage( ),
-                                photo.getImage( ).getMimeType( ) ) );
+                                fileAttachmentMime ) );
                     }
                     else
                     {
                         files.add( new FileAttachment( SignalementConstants.NOM_PHOTO_SERVICE_FAIT_PJ + imgExtention, photo.getImage( ).getImage( ),
-                                photo.getImage( ).getMimeType( ) ) );
+                                fileAttachmentMime ) );
                     }
 
             }

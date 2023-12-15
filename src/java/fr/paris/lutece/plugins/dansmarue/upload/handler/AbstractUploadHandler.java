@@ -38,7 +38,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -50,6 +49,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -94,7 +94,7 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
     private static final String HANDLER_NAME = "DansmarueAsynchronousUploadHandler";
 
     /** The extension list. */
-    private static List<String> extensionList = Arrays.asList( "jpeg", "png", "jpg" );
+    private static String[] extensionList = { "jpeg", "png", "jpg" };
 
     /**
      * Instantiates a new abstract upload handler.
@@ -126,7 +126,7 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler#addFileItemToUploadedFilesList(org.apache.commons.fileupload.FileItem,
      * java.lang.String, javax.servlet.http.HttpServletRequest)
      */
@@ -177,7 +177,7 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler#canUploadFiles(javax.servlet.http.HttpServletRequest, java.lang.String,
      * java.util.List, java.util.Locale)
      */
@@ -196,9 +196,9 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
 
             for ( FileItem fileItem : listFileItemsToUpload )
             {
-                if ( !extensionList.contains( FilenameUtils.getExtension( fileItem.getName( ).toLowerCase( ) ) ) )
+                if ( !ArrayUtils.contains( extensionList, FilenameUtils.getExtension( fileItem.getName( ).toLowerCase( ) ) ) )
                 {
-                    return I18nService.getLocalizedString( ERROR_EXTENSION, locale ) + StringUtils.join( extensionList.toArray( ), ", " );
+                    return I18nService.getLocalizedString( ERROR_EXTENSION, locale ) + StringUtils.join( extensionList, ", " );
                 }
             }
         }
@@ -212,7 +212,7 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler#getHandlerName()
      */
     @Override
@@ -255,7 +255,7 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler#getListUploadedFiles(java.lang.String, javax.servlet.http.HttpSession)
      */
     @Override
@@ -285,7 +285,7 @@ public abstract class AbstractUploadHandler extends AbstractAsynchronousUploadHa
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler#removeFileItem(java.lang.String, javax.servlet.http.HttpSession, int)
      */
     @Override

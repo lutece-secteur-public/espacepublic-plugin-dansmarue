@@ -69,6 +69,10 @@
 		class="fr.paris.lutece.plugins.dansmarue.service.impl.AideService" />
 	<bean id="signalement.cachesService"
 		  class="fr.paris.lutece.plugins.dansmarue.service.impl.CachesService" />
+	<bean id="unitSiraService"
+		  class="fr.paris.lutece.plugins.unittree.modules.dansmarue.service.unit.UnitSiraService" />
+	<bean id="depotManager"
+		  class="fr.paris.lutece.plugins.dansmarue.service.impl.DepotManager" />
 
 	<!-- Declaration des DAO -->
 	<bean id="dansmarue.numeroSignalementDAO"
@@ -130,6 +134,16 @@
 	<bean id="signalement.imageThumbnailService"
 		class="fr.paris.lutece.plugins.dansmarue.service.impl.ImageThumbnailService" />
 
+	<!-- Declaration des Utils -->
+	<bean id="signalement.signalementUtils"
+		  class="fr.paris.lutece.plugins.dansmarue.utils.impl.SignalementUtils" />
+	<bean id="signalement.dateUtils"
+		  class="fr.paris.lutece.plugins.dansmarue.utils.impl.DateUtils" />
+	<bean id="signalement.listUtils"
+		  class="fr.paris.lutece.plugins.dansmarue.utils.impl.ListUtils" />
+    <bean id="signalement.stockagePhotoUtils" 
+    	  class="fr.paris.lutece.plugins.dansmarue.utils.StockagePhotoUtils" />
+
 	<!-- WS context -->
 
 	<bean id="signalement.signalementWebService"
@@ -151,5 +165,6 @@
         <property name="descriptionKey"><value>dansmarue.site_properties.description</value></property>
         <property name="keysPrefix"><value>dansmarue.site_property.</value></property>
     </bean>
+    
 </beans>
 

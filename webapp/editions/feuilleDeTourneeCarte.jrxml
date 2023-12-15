@@ -17,6 +17,9 @@
 	<field name="commentaire" class="java.lang.String">
 		<fieldDescription><![CDATA[commentaire]]></fieldDescription>
 	</field>
+	<field name="infoAvantTournee" class="java.lang.String">
+	    <fieldDescription><![CDATA[infoAvantTournee]]></fieldDescription>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -80,25 +83,25 @@
 				<text><![CDATA[Date création]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="10" y="500" width="100" height="20" uuid="70d38e00-04dc-4172-8574-f360f08a752e">
+				<reportElement x="10" y="500" width="200" height="20" uuid="70d38e00-04dc-4172-8574-f360f08a752e">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<printWhenExpression><![CDATA[!$F{commentaire}.isEmpty()]]></printWhenExpression>
+					<printWhenExpression><![CDATA[!$F{infoAvantTournee}.isEmpty()]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Commentaire : ]]></text>
+				<text><![CDATA[Infos avant tournée :]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="15" y="525" width="800" height="30" uuid="e14dfc3b-cc34-4daf-ae32-eb21e8bd8316">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<printWhenExpression><![CDATA[$F{commentaire} != null]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{infoAvantTournee} != null]]></printWhenExpression>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{commentaire}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{infoAvantTournee}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

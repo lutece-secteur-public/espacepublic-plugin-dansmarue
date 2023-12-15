@@ -251,7 +251,7 @@ public class AdresseService implements IAdresseService
     {
         HttpAccess http = new HttpAccess( );
         String answer = http.doGet(
-                AppPropertiesService.getProperty( URL_REVERSE_GEOCODING_STORE_ADR ) + "StoreAdr/rest/AdressesPostales/R59/xy/(" + lng + "," + lat + ",5)" );
+                AppPropertiesService.getProperty( URL_REVERSE_GEOCODING_STORE_ADR ) + "StoreAdr/rest/AdressesPostales/S66/xy/(" + lng + "," + lat + ",5)" );
 
         Map<String, ArrayList> answerMap = new Gson( ).fromJson( answer, Map.class );
 

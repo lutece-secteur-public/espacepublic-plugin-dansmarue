@@ -112,6 +112,7 @@
 	            data: {
 	                direction_id: idDirection
 	            },
+	            dataType: "json",
 	            success : function(data) { 
 	                var text = "";
 	                if(!(data.entity_list === void 0))
@@ -134,7 +135,9 @@
 	            },
 	            error:function (xhr, ajaxOptions, thrownError){
 	                alert(thrownError); 
-	            }   
+	            },
+	            complete:function (xhr, status, err) {
+   				}   
 	        });
 	    } else {
 	    	$("#entite_id").empty();
@@ -233,9 +236,9 @@
 			</div>
         	<span class="blueDmr">#i18n{dansmarue.tournee.select.popup.nom}</span><br>
         	<span class="help">#i18n{dansmarue.tournee.select.popup.nom.help}</span><br>
-        	<span class="prefixe" id="fdt_prefixe">#dskey{sitelabels.site_property.feuilledetournee.nom.prefix}${user_entite}_</span><input type='text' id="fdt_name" maxlength="32" value="${updated_part_name!}" required name="param_save_fdt_name" /><br><br>
-        	<span class="blueDmr">#i18n{dansmarue.tournee.select.popup.commentaire}</span><br>
-        	<textarea name="param_save_fdt_comment" rows='4' cols='50' maxlength='255'>${fdt_comment!}</textarea><br><br>
+        	<span class="prefixe" id="fdt_prefixe">#dskey{sitelabels.site_property.feuilledetournee.nom.prefix}[id]_${user_entite}_</span><input type='text' id="fdt_name" maxlength="32" value="${updated_part_name!}" required name="param_save_fdt_name" /><br><br>
+			<span class="blueDmr">#i18n{dansmarue.tournee.select.popup.info_avant_tournee}</span><br>
+			<textarea name="param_save_fdt_info_avant_tournee" rows='4' cols='50' maxlength='255'>${fdt_info_avant_tournee!}</textarea><br><br>
 		</div>
       </div>
       <input id="param_save_fdt_name_prefix" name="param_save_fdt_name_prefix" type="hidden" value="#dskey{sitelabels.site_property.feuilledetournee.nom.prefix}${user_entite}_">

@@ -65,7 +65,7 @@ public class AnonymizationPhotoDAO implements IAnonymizationPhotoDAO
     private static final String SQL_QUERY_UPDATE_PHOTO = "update signalement_photo set image_content = ?, image_thumbnail = ?, is_anonymized = 1 where id_photo = ?;";
 
     /** The Constant SQL_QUERY_SELECT_ALL_PHOTO_SIGNALEMENT. */
-    private static final String SQL_QUERY_SELECT_ALL_PHOTO_SIGNALEMENT = "select id_photo, fk_id_signalement, vue_photo, is_anonymized from signalement_photo sp, workflow_resource_workflow wrw "
+    private static final String SQL_QUERY_SELECT_ALL_PHOTO_SIGNALEMENT = "select id_photo, fk_id_signalement, vue_photo, sp.chemin_photo, sp.chemin_photo_miniature, is_anonymized from signalement_photo sp, workflow_resource_workflow wrw "
             + "where sp.fk_id_signalement = wrw.id_resource and sp.fk_id_signalement in "
             + "( select fk_id_signalement from signalement_photo sp2 where sp2.id_photo = ?) and wrw.id_state  = ?;";
 
@@ -160,7 +160,9 @@ public class AnonymizationPhotoDAO implements IAnonymizationPhotoDAO
                 signalement.setId( daoUtil.getLong( 2 ) );
                 photo.setSignalement( signalement );
                 photo.setVue( daoUtil.getInt( 3 ) );
-                photo.setAnonymized( daoUtil.getBoolean( 4 ) );
+                photo.setCheminPhoto( daoUtil.getString( 4 ) );
+                photo.setCheminPhotoMiniature( daoUtil.getString( 5 ) );
+                photo.setAnonymized( daoUtil.getBoolean( 6 ) );
 
                 listPhotos.add( photo );
             }

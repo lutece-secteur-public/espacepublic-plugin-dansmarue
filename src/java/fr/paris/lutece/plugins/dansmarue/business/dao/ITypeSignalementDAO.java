@@ -209,6 +209,17 @@ public interface ITypeSignalementDAO
     TypeSignalement getTypeSignalement( Integer typeSignalementId );
 
     /**
+     * Gets a report type by its id.
+     *
+     * @param typeSignalementId
+     *            report type id
+     * @param typeSignalementInCache
+     *            type signalement in cache
+     * @return the report type
+     */
+    TypeSignalement getTypeSignalementUseCache( Integer nId, final List<TypeSignalement> typeSignalementInCache );
+
+    /**
      * Get a report type with every parents without their photos.
      *
      * @param nId

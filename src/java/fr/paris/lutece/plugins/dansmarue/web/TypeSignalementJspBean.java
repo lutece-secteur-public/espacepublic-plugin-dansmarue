@@ -43,6 +43,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fr.paris.lutece.plugins.dansmarue.utils.IListUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.ISignalementUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
@@ -56,8 +58,6 @@ import fr.paris.lutece.plugins.dansmarue.service.dto.TypeSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.TypeSignalementExportDTO;
 import fr.paris.lutece.plugins.dansmarue.service.impl.ImageObjetService;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
-import fr.paris.lutece.plugins.dansmarue.utils.ListUtils;
-import fr.paris.lutece.plugins.dansmarue.utils.SignalementUtils;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
 import fr.paris.lutece.portal.service.fileupload.FileUploadService;
@@ -197,6 +197,13 @@ public class TypeSignalementJspBean extends AbstractJspBean
     /** The unit service. */
     private transient IUnitService _unitService = (IUnitService) SpringContextService.getBean( "unittree.unitService" );
 
+    /** The signalement utils */
+    // UTILS
+    private transient ISignalementUtils _signalementUtils = (ISignalementUtils) SpringContextService.getBean( "signalement.signalementUtils" );
+
+    /** The list utils */
+    private transient IListUtils _listUtils = (IListUtils) SpringContextService.getBean( "signalement.listUtils" );
+
     /** The Constant CSV_ISO. */
     private static final String CSV_ISO = "ISO-8859-1";
 
@@ -312,7 +319,7 @@ public class TypeSignalementJspBean extends AbstractJspBean
                 }
                 else
                     if ( action.equals( ACTION_DESCENDRE ) )
-                    // ACTION_DESCENDRE
+                        // ACTION_DESCENDRE
                     {
                         TypeSignalement typeSignalement = _typeSignalementService.findByIdTypeSignalement( idTypeSignalement );
                         int nIdTypeSignalementOrdreSuperieur = _typeSignalementService.getIdTypeSignalementOrdreSuperieur( typeSignalement );
@@ -490,8 +497,8 @@ public class TypeSignalementJspBean extends AbstractJspBean
 
         model.put( MARK_TYPE_SIGNALEMENT_PARENT_ID, nIdTypeSignalementParent );
 
-        ReferenceList listeUnits = ListUtils.toReferenceList( _unitService.getUnitsFirstLevel( false ), "idUnit", "label", "" );
-        SignalementUtils.changeUnitDEVEIntoSEJ( listeUnits );
+        ReferenceList listeUnits = _listUtils.toReferenceList( _unitService.getUnitsFirstLevel( false ), "idUnit", "label", "" );
+        _signalementUtils.changeUnitDEVEIntoSEJ( listeUnits );
 
         model.put( MARK_UNIT_LIST, listeUnits );
 
@@ -664,8 +671,8 @@ public class TypeSignalementJspBean extends AbstractJspBean
             model.put( "error", getHtmlError( ve ) );
         }
 
-        ReferenceList listeUnits = ListUtils.toReferenceList( _unitService.getUnitsFirstLevel( false ), "idUnit", "label", "" );
-        SignalementUtils.changeUnitDEVEIntoSEJ( listeUnits );
+        ReferenceList listeUnits = _listUtils.toReferenceList( _unitService.getUnitsFirstLevel( false ), "idUnit", "label", "" );
+        _signalementUtils.changeUnitDEVEIntoSEJ( listeUnits );
 
         model.put( MARK_UNIT_LIST, listeUnits );
 
@@ -775,7 +782,8 @@ public class TypeSignalementJspBean extends AbstractJspBean
     {
         boolean possedeParent = true;
         boolean typeActif = typeSignalement.getActif( );
-        TypeSignalement typeSignalementTemp = typeSignalement;
+        TypeSignalement typeSignalementParent = _typeSignalementService.getParent( typeSignalement.getId( ) );
+        TypeSignalement nextParent;
 
         // children treatment
         if ( !typeActif )
@@ -785,66 +793,58 @@ public class TypeSignalementJspBean extends AbstractJspBean
         }
 
         // parents treatment
-        while ( possedeParent && ( _typeSignalementService.getParent( typeSignalementTemp.getId( ) ) != null ) )
+        while ( ( typeSignalementParent != null ) && ( typeSignalementParent.getId( ) != null ) )
         {
-            // If the parent is not the root <===> the parent of the parent != null
-            if ( _typeSignalementService.getParent( typeSignalementTemp.getId( ) ).getId( ) != null )
+            nextParent = _typeSignalementService.getParent( typeSignalementParent.getId( ) );
+            // If you have chosen to put the report on active
+            if ( typeActif )
             {
-                // typeSignalementTemp becomes its parent
-                typeSignalementTemp = _typeSignalementService.getParent( typeSignalementTemp.getId( ) );
-                // If you have chosen to put the report on active
-                if ( typeActif )
+                // If the parent is inactive: it is activated
+                if ( !typeSignalementParent.getActif( ) )
                 {
-                    // If the parent is inactive: it is activated
-                    if ( !typeSignalementTemp.getActif( ) )
+                    typeSignalementParent.setActif( true );
+                    if ( nextParent != null )
                     {
-                        typeSignalementTemp.setActif( true );
-                        if ( _typeSignalementService.getParent( typeSignalementTemp.getId( ) ) != null )
-                        {
-                            _typeSignalementService.update( typeSignalementTemp );
-                        }
-                        else
-                        {
-                            _typeSignalementService.updateWithoutParent( typeSignalementTemp );
-                        }
+                        _typeSignalementService.update( typeSignalementParent );
                     }
-                }
-                else
-                {
-                    // If you have chosen to inactivate the report
-                    if ( typeSignalementTemp.getActif( ) )
+                    else
                     {
-
-                        // if the parent is still active, check if all its subtypes are inactive: if so, put it inactive
-                        boolean allInactifs = true;
-                        List<TypeSignalement> listeSousTypes = _typeSignalementService.getAllSousTypeSignalement( typeSignalementTemp.getId( ) );
-                        for ( TypeSignalement type : listeSousTypes )
-                        {
-                            if ( type.getActif( ) )
-                            {
-                                allInactifs = false;
-                            }
-                        }
-                        // We put it inactive unless it's the root.
-                        if ( allInactifs )
-                        {
-                            typeSignalementTemp.setActif( false );
-                            if ( _typeSignalementService.getParent( typeSignalementTemp.getId( ) ) != null )
-                            {
-                                _typeSignalementService.update( typeSignalementTemp );
-                            }
-                            else
-                            {
-                                _typeSignalementService.updateWithoutParent( typeSignalementTemp );
-                            }
-                        }
+                        _typeSignalementService.updateWithoutParent( typeSignalementParent );
                     }
                 }
             }
             else
             {
-                possedeParent = false;
+                // If you have chosen to inactivate the report
+                if ( typeSignalementParent.getActif( ) )
+                {
+
+                    // if the parent is still active, check if all its subtypes are inactive: if so, put it inactive
+                    boolean allInactifs = true;
+                    List<TypeSignalement> listeSousTypes = _typeSignalementService.getAllSousTypeSignalement( typeSignalementParent.getId( ) );
+                    for ( TypeSignalement type : listeSousTypes )
+                    {
+                        if ( type.getActif( ) )
+                        {
+                            allInactifs = false;
+                        }
+                    }
+                    // We put it inactive unless it's the root.
+                    if ( allInactifs )
+                    {
+                        typeSignalementParent.setActif( false );
+                        if ( nextParent != null )
+                        {
+                            _typeSignalementService.update( typeSignalementParent );
+                        }
+                        else
+                        {
+                            _typeSignalementService.updateWithoutParent( typeSignalementParent );
+                        }
+                    }
+                }
             }
+            typeSignalementParent = nextParent;
         }
     }
 

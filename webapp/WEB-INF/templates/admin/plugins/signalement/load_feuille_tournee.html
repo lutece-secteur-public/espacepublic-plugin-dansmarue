@@ -8,6 +8,30 @@
 <#include "macro/table_feuille_de_tournee_consult.html" />
 <#include "macro/modal_export_pdf.html" />
 
+<style>
+	.pull-center{
+		position:absolute;
+		margin-top: -50px;
+		margin-left: 255px;
+	}
+
+	.info-table {
+		border-collapse: separate;
+		border-spacing: 20px 0;
+	}
+
+	table.info-table  td{
+    	border: 3px solid #000000 ;
+    	padding-left: 2px;
+    	padding-right: 2px;
+    	min-width: 305px;
+    	max-width: 305px;
+    	font-size: 12.8px;
+    	vertical-align: top;
+	}
+</style>
+
+
 <@box color='primary'>
 	<div class="box-header">
 		<h3 class="box-title">#i18n{dansmarue.tournee.consult.titre}</h3>
@@ -49,6 +73,20 @@
 		</div>
 	</fieldset>
 </div>
+
+<div class="pull-center">
+	<table class="info-table">
+		<tr>
+			<th>Infos avant tournée</th>
+			<th>Infos après tournée</th>
+		</tr>
+		<tr>
+			<td>${feuille_de_tournee.infoAvantTournee!}</td>
+			<td>${feuille_de_tournee.infoApresTournee!}</td>
+		</tr>
+	</table>
+</div>
+
 <br><br>
 <#if onglet_actif == "carte">
 	<fieldset id="map-fdt">

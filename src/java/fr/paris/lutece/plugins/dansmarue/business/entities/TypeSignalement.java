@@ -33,16 +33,18 @@
  */
 package fr.paris.lutece.plugins.dansmarue.business.entities;
 
-import fr.paris.lutece.plugins.unittree.business.unit.*;
-import fr.paris.lutece.portal.service.image.*;
-import fr.paris.lutece.portal.service.rbac.*;
-import org.apache.commons.lang.*;
-import org.codehaus.jackson.annotate.*;
-import org.hibernate.validator.constraints.*;
+import fr.paris.lutece.plugins.unittree.business.unit.Unit;
+import fr.paris.lutece.portal.service.image.ImageResource;
+import fr.paris.lutece.portal.service.rbac.RBACResource;
+import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import java.io.*;
+import javax.persistence.Transient;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * The Class TypeSignalement.
@@ -52,7 +54,7 @@ public class TypeSignalement implements RBACResource, Serializable
 
     /** The Constant RESOURCE_TYPE. */
     public static final String RESOURCE_TYPE = "TYPE_SIGNALEMENT";
-    
+
     private static final long serialVersionUID = -2520171653522143829L;
 
     /** The n id. */

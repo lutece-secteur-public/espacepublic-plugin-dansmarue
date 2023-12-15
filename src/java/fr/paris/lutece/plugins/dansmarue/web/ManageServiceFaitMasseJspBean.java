@@ -47,6 +47,8 @@ import fr.paris.lutece.plugins.dansmarue.service.ISignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.ITypeSignalementService;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
+import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -131,7 +133,7 @@ public class ManageServiceFaitMasseJspBean extends AbstractJspBean
     {
         Map<String, Object> model = new HashMap<>( );
         model.put( MARK_LIST_STATE, getEtatEnCours( ) );
-        model.put( MARK_LIST_TYPE_SIGNALEMENT, _typeSignalementService.getAllTypeSignalementActif( ) );
+        model.put( MARK_LIST_TYPE_SIGNALEMENT, _typeSignalementService.getListTypeSignalementActifLastLevel( ) );
         model.put( SignalementConstants.MARK_LOCALE, request.getLocale( ) );
         model.put( MARK_FILTER, _serviceFaitMasseFilter );
 
@@ -160,7 +162,7 @@ public class ManageServiceFaitMasseJspBean extends AbstractJspBean
 
         Map<String, Object> model = new HashMap<>( );
         model.put( MARK_LIST_STATE, getEtatEnCours( ) );
-        model.put( MARK_LIST_TYPE_SIGNALEMENT, _typeSignalementService.getListTypeSignalementLastLevelWithoutMessage( ) );
+        model.put( MARK_LIST_TYPE_SIGNALEMENT, _typeSignalementService.getListTypeSignalementActifLastLevel( ) );
         model.put( SignalementConstants.MARK_LOCALE, request.getLocale( ) );
         model.put( MARK_FILTER, _serviceFaitMasseFilter );
 
@@ -182,6 +184,10 @@ public class ManageServiceFaitMasseJspBean extends AbstractJspBean
     public String doExecuteServiceFait( HttpServletRequest request )
     {
         Map<String, Object> model = new HashMap<>( );
+
+        // Récupération de l'utilisateur connecté à ajouter dans l'historique
+        AdminUser adminUser = AdminUserService.getAdminUser( request );
+        _serviceFaitMasseFilter.setAdminUserAccessCode( adminUser != null ? adminUser.getAccessCode( ) : "admin" );
 
         // Récupération du paramètre à ajouter dans l'historique
         _serviceFaitMasseFilter.setCommentaire( request.getParameter( "commentaire" ) );

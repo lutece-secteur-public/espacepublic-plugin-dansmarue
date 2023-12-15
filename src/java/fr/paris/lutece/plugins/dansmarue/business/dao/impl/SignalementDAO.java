@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.dansmarue.business.dao.impl;
 
+import fr.paris.lutece.plugins.dansmarue.business.entities.FeuilleDeTourneeFilterSearch;
 import static fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants.PERIODE_MAP;
 
 import java.sql.Timestamp;
@@ -50,15 +51,21 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementDAO;
+import fr.paris.lutece.plugins.dansmarue.business.entities.Adresse;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.DashboardPeriod;
 import fr.paris.lutece.plugins.dansmarue.business.entities.EtatSignalement;
+import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Priorite;
+import fr.paris.lutece.plugins.dansmarue.business.entities.RequalificationMasseFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.ServiceFaitMasseFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDashboardFilter;
@@ -71,7 +78,7 @@ import fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DashboardSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DossierSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
-import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.IDateUtils;
 import fr.paris.lutece.plugins.unittree.modules.dansmarue.business.sector.Sector;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.icon.Icon;
@@ -116,15 +123,15 @@ public class SignalementDAO implements ISignalementDAO
     private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_signalement WHERE id_signalement = ?";
 
     /** The Constant SQL_QUERY_SELECT. */
-    private static final String SQL_QUERY_SELECT = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon, token, service_fait_date_passage, felicitations, date_mise_surveillance, date_rejet, courriel_destinataire, courriel_expediteur, courriel_date, is_send_ws, commentaire_agent_terrain FROM signalement_signalement WHERE id_signalement = ?";
+    private static final String SQL_QUERY_SELECT = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon, token, service_fait_date_passage, felicitations, date_mise_surveillance, date_rejet, courriel_destinataire, courriel_expediteur, courriel_date, is_send_ws, commentaire_agent_terrain, precision_terrain FROM signalement_signalement WHERE id_signalement = ?";
 
     /** The Constant SQL_QUERY_SELECT_BY_NUMBER. */
-    private static final String SQL_QUERY_SELECT_BY_NUMBER = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon, token, service_fait_date_passage, felicitations, date_mise_surveillance, date_rejet, courriel_destinataire, courriel_expediteur, courriel_date, is_send_ws, commentaire_agent_terrain FROM signalement_signalement WHERE prefix || annee || mois || numero = ?";
+    private static final String SQL_QUERY_SELECT_BY_NUMBER = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon, token, service_fait_date_passage, felicitations, date_mise_surveillance, date_rejet, courriel_destinataire, courriel_expediteur, courriel_date, is_send_ws, commentaire_agent_terrain, precision_terrain FROM signalement_signalement WHERE prefix || annee || mois || numero = ?";
 
     /** The Constant SQL_QUERY_SELECT_BY_STATUS. */
     private static final String SQL_QUERY_SELECT_BY_STATUS = "SELECT signalement.id_signalement, signalement.suivi, signalement.date_creation, signalement.date_prevue_traitement, signalement.commentaire, signalement.annee,  signalement.mois, signalement.numero, signalement.prefix, signalement.fk_id_priorite,   signalement.fk_id_arrondissement,  signalement.fk_id_type_signalement,  signalement.fk_id_sector,   signalement.is_doublon, signalement.service_fait_date_passage FROM signalement_signalement AS signalement  INNER JOIN workflow_resource_workflow AS resource_workflow ON resource_workflow.id_resource = signalement.id_signalement  INNER JOIN workflow_resource_history AS resource_history ON resource_history.id_resource = signalement.id_signalement INNER JOIN workflow_action AS action ON action.id_action = resource_history.id_action WHERE resource_workflow.resource_type = ''SIGNALEMENT_SIGNALEMENT''  AND resource_history.resource_type = ''SIGNALEMENT_SIGNALEMENT''  AND resource_workflow.id_state = ? AND action.id_state_after = ? AND resource_history.creation_date + '''{0} ''days''::interval < now();";
     /** The Constant SQL_QUERY_UPDATE. */
-    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_signalement SET id_signalement=?, suivi=?, date_creation=?, date_prevue_traitement=?, commentaire=? , fk_id_priorite=?, fk_id_type_signalement=?, fk_id_arrondissement = ?, fk_id_sector = ?, is_doublon = ?, service_fait_date_passage = ?, courriel_destinataire = ?, courriel_expediteur = ?, courriel_date = ?, is_send_ws = ?, commentaire_agent_terrain=? WHERE id_signalement=?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_signalement SET id_signalement=?, suivi=?, date_creation=?, date_prevue_traitement=?, commentaire=? , fk_id_priorite=?, fk_id_type_signalement=?, fk_id_arrondissement = ?, fk_id_sector = ?, is_doublon = ?, service_fait_date_passage = ?, courriel_destinataire = ?, courriel_expediteur = ?, courriel_date = ?, is_send_ws = ?, commentaire_agent_terrain=?, precision_terrain=? WHERE id_signalement=?";
 
     /** The Constant SQL_QUERY_SELECT_ALL. */
     private static final String SQL_QUERY_SELECT_ALL = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon, is_send_ws FROM signalement_signalement";
@@ -185,6 +192,7 @@ public class SignalementDAO implements ISignalementDAO
 
     /** The Constant SQL_QUERY_ADD_FILTER_DIRECTION. */
     private static final String SQL_QUERY_ADD_FILTER_DIRECTION = " uus.id_unit = ? ";
+    private static final String SQL_QUERY_ADD_FILTER_DIRECTION_IN = " uus.id_unit in ? ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_LIST_ARRONDISSEMENT. */
     private static final String SQL_QUERY_ADD_FILTER_LIST_ARRONDISSEMENT = " signalement.fk_id_arrondissement IN ({0}) ";
@@ -292,7 +300,7 @@ public class SignalementDAO implements ISignalementDAO
             + "inner join workflow_resource_history h on h.id_history = v.id_history " + "where h.id_resource= ?)";
 
     /** The Constant SQL_QUERY_INSERT_REQUALIFICATION. */
-    private static final String SQL_QUERY_INSERT_REQUALIFICATION = "INSERT INTO signalement_requalification(id_signalement,id_type_signalement,adresse,id_sector,date_requalification,id_task,commentaire_agent_terrain) VALUES (?,?,?,?,?,?,?)";
+    private static final String SQL_QUERY_INSERT_REQUALIFICATION = "INSERT INTO signalement_requalification(id_signalement,id_type_signalement,adresse,id_sector,date_requalification,id_task,id_history,commentaire_agent_terrain) VALUES (?,?,?,?,?,?,?,?)";
 
     /** The Constant SQL_QUERY_SELECT_REQUALIFICATION. */
     private static final String SQL_QUERY_SELECT_REQUALIFICATION = "SELECT * from signalement_requalification where id_signalement = ? ORDER BY date_requalification DESC";
@@ -331,7 +339,7 @@ public class SignalementDAO implements ISignalementDAO
     private static final String SQL_QUERY_GET_ID_SIGNALEMENT_SERVICE_FAIT_MASSE = "select signalement.id_signalement from signalement_signalement signalement join workflow_resource_workflow workflow on workflow.id_resource = signalement.id_signalement join signalement_type_signalement type on type.id_type_signalement = signalement.fk_id_type_signalement";
 
     /** The Constant SQL_QUERY_INSERT_HISTORY_SERVICE_FAIT_MASSE_PART_1. */
-    private static final String SQL_QUERY_INSERT_HISTORY_SERVICE_FAIT_MASSE_PART_1 = "WITH insHistory AS ( insert into workflow_resource_history (id_resource, resource_type, id_workflow, id_action, creation_date, user_access_code) select id_signalement, 'SIGNALEMENT_SIGNALEMENT', 2, 70, localtimestamp, 'admin' from signalement_signalement where signalement_signalement.id_signalement in ( ";
+    private static final String SQL_QUERY_INSERT_HISTORY_SERVICE_FAIT_MASSE_PART_1 = "WITH insHistory AS ( insert into workflow_resource_history (id_resource, resource_type, id_workflow, id_action, creation_date, user_access_code) select id_signalement, 'SIGNALEMENT_SIGNALEMENT', 2, 70, localtimestamp, ? from signalement_signalement where signalement_signalement.id_signalement in ( ";
 
     /** The Constant SQL_QUERY_INSERT_HISTORY_SERVICE_FAIT_MASSE_PART_2. */
     private static final String SQL_QUERY_INSERT_HISTORY_SERVICE_FAIT_MASSE_PART_2 = " ) RETURNING id_history ) insert into workflow_task_comment_value (id_history, id_task, comment_value) select id_history, 150, ? from insHistory ";
@@ -341,6 +349,21 @@ public class SignalementDAO implements ISignalementDAO
 
     /** The Constant SQL_QUERY_UPDATE_DATE_PASSAGE_FAIT_MASSE. */
     private static final String SQL_QUERY_UPDATE_DATE_PASSAGE_FAIT_MASSE = " update signalement_signalement set service_fait_date_passage = (select current_timestamp) ";
+
+    /** The Constant SQL_QUERY_GET_ID_SIGNALEMENT_REQUALIFICATION_MASSE. */
+    private static final String SQL_QUERY_GET_ID_SIGNALEMENT_REQUALIFICATION_MASSE = "select signalement.id_signalement from signalement_signalement signalement join workflow_resource_workflow workflow on workflow.id_resource=signalement.id_signalement join signalement_type_signalement type on type.id_type_signalement = signalement.fk_id_type_signalement";
+
+    /** The Constant SQL_QUERY_GET_REPARTITION_REQUALIFICATION_MASSE. */
+    private static final String SQL_QUERY_GET_REPARTITION_REQUALIFICATION_MASSE = "select type.libelle, count(signalement.id_signalement) from signalement_signalement signalement join workflow_resource_workflow workflow on workflow.id_resource=signalement.id_signalement join signalement_type_signalement type on type.id_type_signalement = signalement.fk_id_type_signalement";
+
+    /** The Constant SQL_QUERY_UPDATE_TYPE_REQUALIFICATION_MASSE. */
+    private static final String SQL_QUERY_UPDATE_TYPE_REQUALIFICATION_MASSE = " update signalement_signalement set fk_id_type_signalement = ? ";
+
+    /** The Constant SQL_QUERY_INSERT_HISTORY_REQUALIFICATION_MASSE_PART_1. */
+    private static final String SQL_QUERY_INSERT_HISTORY_REQUALIFICATION_MASSE_PART_1 = "with insHistory as ( insert into workflow_resource_history (id_resource, resource_type, id_workflow, id_action, creation_date, user_access_code) select id_signalement, 'SIGNALEMENT_SIGNALEMENT', 2, 14, localtimestamp, ? from signalement_signalement where signalement_signalement.id_signalement in ( ";
+
+    /** The Constant SQL_QUERY_INSERT_HISTORY_REQUALIFICATION_MASSE_PART_2. */
+    private static final String SQL_QUERY_INSERT_HISTORY_REQUALIFICATION_MASSE_PART_2 = " ) RETURNING id_history, id_resource ), insComment as ( insert into workflow_task_comment_value (id_history, id_task, comment_value) select id_history, 36, ? from insHistory ) insert into signalement_requalification (id_signalement, id_type_signalement, adresse, id_sector, date_requalification, id_task, id_history, commentaire_agent_terrain) select sig.id_signalement, sig.fk_id_type_signalement, adr.adresse, sig.fk_id_sector, localtimestamp, 16, his.id_history , sig.commentaire_agent_terrain from insHistory his left join signalement_signalement sig on his.id_resource = sig.id_signalement left join signalement_adresse adr on sig.id_signalement = adr.fk_id_signalement";
 
     /** The Constant SQL_QUERY_GET_SIGNALEMENTS_PROGRAMME. */
     private static final String SQL_QUERY_GET_SIGNALEMENTS_PROGRAMME = "select id_signalement from signalement_signalement join workflow_resource_workflow w on w.id_resource = id_signalement where date_prevue_traitement = NOW()::date and w.id_state=9";
@@ -352,6 +375,14 @@ public class SignalementDAO implements ISignalementDAO
     private static final String SQL_QUERY_FIND_LABEL_PRESTATAIRE = "select uu.label from signalement_signalement ss, unittree_unit_sector uus , unittree_unit uu , signalement_workflow_webservice_config_unit swwcu "
             + "where ss.fk_id_sector = uus.id_sector and uus.id_unit = uu.id_unit and uu.id_unit = swwcu.id_unit and ss.id_signalement = ? and swwcu.urlprestataire is not null limit 1";
 
+    /** The Constant SQL_SEARCH_SIGNALEMENT_FOR_MOBIL_BY_LIST_ID. */
+    private static final String SQL_SEARCH_SIGNALEMENT_FOR_MOBIL_BY_LIST_ID = "select se.id_signalement, se.nb_suivis, se.date_creation, se.heure_creation, se.commentaire_usager, se.numero, se.id_type_signalement, ss.token, se.nb_felicitations, ss.fk_id_priorite, ss.is_send_ws, se.commentaire_agent_terrain,"
+            + "se.adresse, se.coord_x, se.coord_y, se.etat, se.id_wkf_state, sp.id_photo, sp.vue_photo, sp.chemin_photo, sp.chemin_photo_miniature "
+            + "from signalement_export se inner join signalement_signalement ss on ss.id_signalement = se.id_signalement left join signalement_photo sp on sp.fk_id_signalement = se.id_signalement "
+            + "where se.id_signalement in ({0}) " + "order by se.id_signalement desc";
+    private static final String SQL_QUERY_INSERT_HISTORIQUE_COMMENTAIRE_AGENT_TERRAIN = "INSERT INTO signalement_historique_commentaire_agent_terrain (id_history, comment_value) VALUES(?,?)";
+    private static final String SQL_QUERY_LOAD_HISTORIQUE_COMMENTAIRE_AGENT_TERRAIN = "SELECT comment_value FROM signalement_historique_commentaire_agent_terrain where id_history=?";
+
     /**
      * Makes references between client sort keyword and actual sql joins / columns names.
      */
@@ -359,6 +390,11 @@ public class SignalementDAO implements ISignalementDAO
 
     /** The Constant SQL_WHERE_DATE_CREATION. */
     private static final String SQL_WHERE_DATE_CREATION = "where date_creation > (now() - ''{0} days''::interval)";
+
+    /** The date utils */
+    @Inject
+    @Named( "signalement.dateUtils" )
+    private transient IDateUtils _dateUtils;
 
     /**
      * Instantiates a new report dao.
@@ -483,9 +519,9 @@ public class SignalementDAO implements ISignalementDAO
             int nIndex = 1;
             signalement.setId( daoUtil.getLong( nIndex++ ) );
             signalement.setSuivi( daoUtil.getInt( nIndex++ ) );
-            signalement.setDateCreation( DateUtils.getDateFr( daoUtil.getDate( nIndex ) ) );
+            signalement.setDateCreation( _dateUtils.getDateFr( daoUtil.getDate( nIndex ) ) );
             signalement.setHeureCreation( daoUtil.getTimestamp( nIndex++ ) );
-            signalement.setDatePrevueTraitement( DateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
+            signalement.setDatePrevueTraitement( _dateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
             signalement.setCommentaire( daoUtil.getString( nIndex++ ) );
             signalement.setAnnee( daoUtil.getInt( nIndex++ ) );
             signalement.setMois( daoUtil.getString( nIndex++ ) );
@@ -522,19 +558,19 @@ public class SignalementDAO implements ISignalementDAO
             Date serviceFaitTraitement = daoUtil.getTimestamp( nIndex++ );
             if ( serviceFaitTraitement != null )
             {
-                signalement.setDateServiceFaitTraitement( DateUtils.getDateFr( serviceFaitTraitement ) );
-                signalement.setHeureServiceFaitTraitement( DateUtils.getHourFrSansColonne( serviceFaitTraitement ) );
+                signalement.setDateServiceFaitTraitement( _dateUtils.getDateFr( serviceFaitTraitement ) );
+                signalement.setHeureServiceFaitTraitement( _dateUtils.getHourFrSansColonne( serviceFaitTraitement ) );
             }
             signalement.setFelicitations( daoUtil.getInt( nIndex++ ) );
             Date miseEnSurveillance = daoUtil.getTimestamp( nIndex++ );
             if ( miseEnSurveillance != null )
             {
-                signalement.setDateMiseEnSurveillance( DateUtils.getDateFr( miseEnSurveillance ) );
+                signalement.setDateMiseEnSurveillance( _dateUtils.getDateFr( miseEnSurveillance ) );
             }
             Date rejet = daoUtil.getTimestamp( nIndex++ );
             if ( rejet != null )
             {
-                signalement.setDateRejet( DateUtils.getDateFr( rejet ) );
+                signalement.setDateRejet( _dateUtils.getDateFr( rejet ) );
             }
             signalement.setCourrielDestinataire( daoUtil.getString( nIndex++ ) );
             signalement.setCourrielExpediteur( daoUtil.getString( nIndex++ ) );
@@ -586,7 +622,7 @@ public class SignalementDAO implements ISignalementDAO
             String dateTraitementString = signalement.getDateServiceFaitTraitement( ) + signalement.getHeureServiceFaitTraitement( );
             try
             {
-                daoUtil.setTimestamp( nIndex++, DateUtils.formatDateSqlWithTime( dateTraitementString ) );
+                daoUtil.setTimestamp( nIndex++, _dateUtils.formatDateSqlWithTime( dateTraitementString ) );
             }
             catch( ParseException e )
             {
@@ -603,6 +639,7 @@ public class SignalementDAO implements ISignalementDAO
         daoUtil.setTimestamp( nIndex++, signalement.getCourrielDate( ) );
         daoUtil.setBoolean( nIndex++, signalement.getIsSendWS( ) );
         daoUtil.setString( nIndex++, signalement.getCommentaireAgentTerrain( ) );
+        daoUtil.setString( nIndex++, signalement.getPrecisionTerrain() );
         daoUtil.setLong( nIndex, signalement.getId( ) );
         daoUtil.executeUpdate( );
         daoUtil.close( );
@@ -662,9 +699,9 @@ public class SignalementDAO implements ISignalementDAO
         int nIndex = 1;
         signalement.setId( daoUtil.getLong( nIndex++ ) );
         signalement.setSuivi( daoUtil.getInt( nIndex++ ) );
-        signalement.setDateCreation( DateUtils.getDateFr( daoUtil.getDate( nIndex ) ) );
+        signalement.setDateCreation( _dateUtils.getDateFr( daoUtil.getDate( nIndex ) ) );
         signalement.setHeureCreation( daoUtil.getTimestamp( nIndex++ ) );
-        signalement.setDatePrevueTraitement( DateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
+        signalement.setDatePrevueTraitement( _dateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
         signalement.setCommentaire( daoUtil.getString( nIndex++ ) );
 
         signalement.setAnnee( daoUtil.getInt( nIndex++ ) );
@@ -702,19 +739,19 @@ public class SignalementDAO implements ISignalementDAO
         Date serviceFaitTraitement = daoUtil.getTimestamp( nIndex++ );
         if ( serviceFaitTraitement != null )
         {
-            signalement.setDateServiceFaitTraitement( DateUtils.getDateFr( serviceFaitTraitement ) );
-            signalement.setHeureServiceFaitTraitement( DateUtils.getHourFrSansColonne( serviceFaitTraitement ) );
+            signalement.setDateServiceFaitTraitement( _dateUtils.getDateFr( serviceFaitTraitement ) );
+            signalement.setHeureServiceFaitTraitement( _dateUtils.getHourFrSansColonne( serviceFaitTraitement ) );
         }
         signalement.setFelicitations( daoUtil.getInt( nIndex++ ) );
         Date miseEnSurveillance = daoUtil.getTimestamp( nIndex++ );
         if ( miseEnSurveillance != null )
         {
-            signalement.setDateMiseEnSurveillance( DateUtils.getDateFr( miseEnSurveillance ) );
+            signalement.setDateMiseEnSurveillance( _dateUtils.getDateFr( miseEnSurveillance ) );
         }
         Date rejet = daoUtil.getTimestamp( nIndex++ );
         if ( rejet != null )
         {
-            signalement.setDateRejet( DateUtils.getDateFr( rejet ) );
+            signalement.setDateRejet( _dateUtils.getDateFr( rejet ) );
         }
 
         signalement.setCourrielDestinataire( daoUtil.getString( nIndex++ ) );
@@ -726,7 +763,8 @@ public class SignalementDAO implements ISignalementDAO
             signalement.setCourrielDate( courrielDate );
         }
         signalement.setSendWs( daoUtil.getBoolean( nIndex++ ) );
-        signalement.setCommentaireAgentTerrain( daoUtil.getString( nIndex ) );
+        signalement.setCommentaireAgentTerrain( daoUtil.getString( nIndex++ ) );
+        signalement.setPrecisionTerrain( daoUtil.getString( nIndex ) );
 
         return signalement;
     }
@@ -841,7 +879,7 @@ public class SignalementDAO implements ISignalementDAO
         }
 
         boolean bHasFilterSignalementType = filter.getIdTypeSignalement( ) > 0;
-        boolean bHasFilterUnit = filter.getIdDirection( ) > 0;
+        boolean bHasFilterUnit = CollectionUtils.isNotEmpty( filter.getListIdDirection( ) );
         boolean bHasFilerMail = ( filter.getMail( ) != null ) && !StringUtils.isBlank( filter.getMail( ) );
         boolean bHasFilterCategory = !CollectionUtils.isEmpty( filter.getListIdCategories( ) );
         boolean bHasFilterAdress = !StringUtils.isEmpty( filter.getAdresse( ) );
@@ -921,8 +959,15 @@ public class SignalementDAO implements ISignalementDAO
         // Board
         if ( bHasFilterUnit )
         {
+            int listeLength = filter.getListIdDirection( ).size( );
+            Character [ ] array = new Character [ listeLength];
+            for ( int i = 0; i < listeLength; i++ )
+            {
+                array [i] = '?';
+            }
+            String unionQuery = StringUtils.join( array, COMA_SEPARATOR );
             nIndex = addSQLWhereOr( false, sbSQL, nIndex );
-            sbSQL.append( SQL_QUERY_ADD_FILTER_DIRECTION );
+            sbSQL.append( MessageFormat.format( SQL_QUERY_ADD_FILTER_DIRECTION_IN, unionQuery ) );
         }
 
         // district
@@ -1173,9 +1218,12 @@ public class SignalementDAO implements ISignalementDAO
         }
 
         // Board
-        if ( filter.getIdDirection( ) > 0 )
+        if ( CollectionUtils.isNotEmpty( filter.getListIdDirection( ) ) )
         {
-            daoUtil.setLong( nIndex++, filter.getIdDirection( ) );
+            for ( Integer nIdDirection : filter.getListIdDirection( ) )
+            {
+                daoUtil.setLong( nIndex++, nIdDirection );
+            }
         }
 
         // District
@@ -1344,9 +1392,10 @@ public class SignalementDAO implements ISignalementDAO
         DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ), plugin );
 
         // Special case Specificity for DEVE entity, change the id from SEJ to DEVE
-        if ( filter.getIdDirection( ) == SEJ_ID )
+        if ( filter.getListIdDirection( ).contains( SEJ_ID ) )
         {
-            filter.setIdDirection( 1 );
+            filter.getListIdDirection( ).removeIf( idDirection -> idDirection.equals( SEJ_ID ) );
+            filter.getListIdDirection( ).add( 1 );
         }
 
         setFilterValues( filter, daoUtil );
@@ -1415,8 +1464,8 @@ public class SignalementDAO implements ISignalementDAO
 
         signalement.setId( daoUtil.getLong( nIndex++ ) );
         signalement.setSuivi( daoUtil.getInt( nIndex++ ) );
-        signalement.setDateCreation( DateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
-        signalement.setDatePrevueTraitement( DateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
+        signalement.setDateCreation( _dateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
+        signalement.setDatePrevueTraitement( _dateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
         signalement.setCommentaire( daoUtil.getString( nIndex++ ) );
         signalement.setAnnee( daoUtil.getInt( nIndex++ ) );
         signalement.setMois( daoUtil.getString( nIndex++ ) );
@@ -1548,8 +1597,9 @@ public class SignalementDAO implements ISignalementDAO
 
         if ( ( listStatus != null ) && !listStatus.isEmpty( ) )
         {
-            Object [ ] qMarks = new Object [ listStatus.size( )];
-            for ( int i = 0; i < listStatus.size( ); i++ )
+            int listStatusSize = listStatus.size( );
+            Object [ ] qMarks = new Object [ listStatusSize];
+            for ( int i = 0; i < listStatusSize; i++ )
             {
                 qMarks [i] = '?';
             }
@@ -1607,8 +1657,9 @@ public class SignalementDAO implements ISignalementDAO
 
         if ( ( listStatus != null ) && !listStatus.isEmpty( ) )
         {
-            Object [ ] qMarks = new Object [ listStatus.size( )];
-            for ( int i = 0; i < listStatus.size( ); i++ )
+            int listStatusSize = listStatus.size( );
+            Object [ ] qMarks = new Object [ listStatusSize];
+            for ( int i = 0; i < listStatusSize; i++ )
             {
                 qMarks [i] = '?';
             }
@@ -1638,8 +1689,8 @@ public class SignalementDAO implements ISignalementDAO
             DossierSignalementDTO dossierSignalementDTO = new DossierSignalementDTO( );
             dossierSignalementDTO.setId( (long) daoUtil.getInt( nIndex++ ) );
             dossierSignalementDTO.setAdresse( daoUtil.getString( nIndex++ ) );
-            dossierSignalementDTO.setDateCreation( DateUtils.getDateFr( daoUtil.getDate( nIndex ) ) );
-            dossierSignalementDTO.setHeureCreation( DateUtils.getHourFr( daoUtil.getTimestamp( nIndex++ ) ) );
+            dossierSignalementDTO.setDateCreation( _dateUtils.getDateFr( daoUtil.getDate( nIndex ) ) );
+            dossierSignalementDTO.setHeureCreation( _dateUtils.getHourFr( daoUtil.getTimestamp( nIndex++ ) ) );
             dossierSignalementDTO.setCommentaire( daoUtil.getString( nIndex++ ) );
             dossierSignalementDTO.setLng( daoUtil.getDouble( nIndex++ ) );
             dossierSignalementDTO.setLat( daoUtil.getDouble( nIndex++ ) );
@@ -1659,7 +1710,7 @@ public class SignalementDAO implements ISignalementDAO
     @Override
     public Integer getDistanceBetweenSignalement( double lat1, double lng1, double lat2, double lng2 )
     {
-        String query = "SELECT ST_Distance(ST_GeographyFromText('POINT(" + lng1 + "" + lat1 + ")'), " + "ST_GeographyFromText('POINT(" + lng2 + "" + lat2
+        String query = "SELECT ST_Distance(ST_GeographyFromText('POINT(" + lng1 + " " + lat1 + ")'), " + "ST_GeographyFromText('POINT(" + lng2 + " " + lat2
                 + ")')) ";
 
         Integer distance = 0;
@@ -1826,7 +1877,7 @@ public class SignalementDAO implements ISignalementDAO
 
         boolean bHasFilerMail = ( filter.getMail( ) != null ) && !StringUtils.isBlank( filter.getMail( ) );
         boolean bHasFilterSignalementType = filter.getIdTypeSignalement( ) > 0;
-        boolean bHasFilterUnit = filter.getIdDirection( ) > 0;
+        boolean bHasFilterUnit = CollectionUtils.isNotEmpty( filter.getListIdDirection( ) );
         boolean bHasFilterCategory = !CollectionUtils.isEmpty( filter.getListIdCategories( ) );
         boolean bHasFilterAdress = !StringUtils.isEmpty( filter.getAdresse( ) );
         boolean bHasFilterQuatier = !CollectionUtils.isEmpty( filter.getListIdQuartier( ) );
@@ -1897,7 +1948,7 @@ public class SignalementDAO implements ISignalementDAO
         }
 
         // Board
-        if ( filter.getIdDirection( ) > 0 )
+        if ( CollectionUtils.isNotEmpty( filter.getListIdDirection( ) ) )
         {
             nIndex = addSQLWhereOr( false, sbSQL, nIndex );
             sbSQL.append( SQL_QUERY_ADD_FILTER_DIRECTION );
@@ -2456,7 +2507,7 @@ public class SignalementDAO implements ISignalementDAO
      */
     @Override
     public void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector, Integer idTask,
-            String commentaireAgentTerrain )
+            Integer idHistory, String commentaireAgentTerrain )
     {
 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_REQUALIFICATION );
@@ -2467,6 +2518,7 @@ public class SignalementDAO implements ISignalementDAO
         daoUtil.setInt( nIndex++, idSector );
         daoUtil.setTimestamp( nIndex++, new Timestamp( Calendar.getInstance( ).getTimeInMillis( ) ) );
         daoUtil.setInt( nIndex++, idTask );
+        daoUtil.setInt( nIndex++, idHistory );
         daoUtil.setString( nIndex, commentaireAgentTerrain );
 
         daoUtil.executeUpdate( );
@@ -2474,40 +2526,6 @@ public class SignalementDAO implements ISignalementDAO
         daoUtil.close( );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updateRequalification( long lIdSignalement, int idTask, int idHistory )
-    {
-
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_REQUALIFICATION );
-        int nIndex = 1;
-        daoUtil.setInt( nIndex++, idHistory );
-        daoUtil.setLong( nIndex++, lIdSignalement );
-        daoUtil.setInt( nIndex, idTask );
-        daoUtil.executeUpdate( );
-
-        daoUtil.close( );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updateRequalificationHistoryTask( long lIdSignalement, int idTask, int idHistory )
-    {
-
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_REQUALIFICATION_HISTORY_TASK );
-        int nIndex = 1;
-        daoUtil.setInt( nIndex++, idHistory );
-        daoUtil.setInt( nIndex++, idTask );
-        daoUtil.setLong( nIndex, lIdSignalement );
-
-        daoUtil.executeUpdate( );
-
-        daoUtil.close( );
-    }
 
     /**
      * {@inheritDoc}
@@ -2533,7 +2551,7 @@ public class SignalementDAO implements ISignalementDAO
             signalementRequalification.setIdTypeSignalement( daoUtil.getInt( nIndex++ ) );
             signalementRequalification.setAdresse( daoUtil.getString( nIndex++ ) );
             signalementRequalification.setIdSector( daoUtil.getInt( nIndex++ ) );
-            signalementRequalification.setDateRequalification( DateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
+            signalementRequalification.setDateRequalification( _dateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
             signalementRequalification.setIdTask( daoUtil.getInt( nIndex ) );
 
             listRequalification.add( signalementRequalification );
@@ -2570,7 +2588,7 @@ public class SignalementDAO implements ISignalementDAO
             signalementRequalification.setIdTypeSignalement( daoUtil.getInt( nIndex++ ) );
             signalementRequalification.setAdresse( daoUtil.getString( nIndex++ ) );
             signalementRequalification.setIdSector( daoUtil.getInt( nIndex++ ) );
-            signalementRequalification.setDateRequalification( DateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
+            signalementRequalification.setDateRequalification( _dateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
             signalementRequalification.setIdTask( daoUtil.getInt( nIndex++ ) );
             signalementRequalification.setCommentaireAgentTerrain( daoUtil.getString( nIndex ) );
         }
@@ -2786,10 +2804,10 @@ public class SignalementDAO implements ISignalementDAO
      * {@inheritDoc}
      */
     @Override
-    public List<Long> findAnoWithoutState(int delay )
+    public List<Long> findAnoWithoutState( int delay )
     {
         List<Long> listAnomaliesId = new ArrayList<>( );
-        String request = SQL_QUERY_FIND_ANO_WITHOUT_STATES.replace( "?", String.valueOf( delay )  );
+        String request = SQL_QUERY_FIND_ANO_WITHOUT_STATES.replace( "?", String.valueOf( delay ) );
         DAOUtil daoUtil = new DAOUtil( request );
 
         daoUtil.executeQuery( );
@@ -2994,16 +3012,21 @@ public class SignalementDAO implements ISignalementDAO
      *            the dao util
      * @param filter
      *            the filter
-     * @param addComment
-     *            the add comment
+     * @param addUserAndComment
+     *            the add user and comment
      */
-    private void setValuesToConditions( DAOUtil daoUtil, ServiceFaitMasseFilter filter, boolean addComment )
+    private void setValuesToConditions( DAOUtil daoUtil, ServiceFaitMasseFilter filter, boolean addUserAndComment )
     {
         int nIndex = 1;
         boolean dateBeginNotEmpty = ( filter.getDateBegin( ) != null ) && !StringUtils.isBlank( filter.getDateBegin( ) );
         boolean dateEndNotEmpty = ( filter.getDateEnd( ) != null ) && !StringUtils.isBlank( filter.getDateEnd( ) );
         boolean isStateNotEmpty = !ArrayUtils.isEmpty( filter.getIdEtats( ) );
         boolean isTypeAnoNotEmpty = !ArrayUtils.isEmpty( filter.getIdTypeSignalements( ) );
+
+        if ( addUserAndComment )
+        {
+            daoUtil.setString( nIndex++, filter.getAdminUserAccessCode( ) );
+        }
 
         if ( dateBeginNotEmpty )
         {
@@ -3031,7 +3054,198 @@ public class SignalementDAO implements ISignalementDAO
             }
         }
 
-        if ( addComment )
+        if ( addUserAndComment )
+        {
+            daoUtil.setString( nIndex, filter.getCommentaire( ) );
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, Integer> getRepartitionRequalificationMasse( RequalificationMasseFilter filter )
+    {
+        Map<String, Integer> repartition = new HashMap<>( );
+        StringBuilder sbSQL = new StringBuilder( SQL_QUERY_GET_REPARTITION_REQUALIFICATION_MASSE );
+
+        // Ajout des conditions
+        getConditionsRequalificationMasse( filter, sbSQL );
+        sbSQL.append( " group by type.libelle" );
+
+        DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ) );
+
+        // Ajout des valeurs aux conditions
+        setValuesToConditions( daoUtil, filter, false, false );
+
+        // Execution de la requête
+        daoUtil.executeQuery( );
+
+        // Récupération des résultats
+        while ( daoUtil.next( ) )
+        {
+            int nIndex = 1;
+            repartition.put( daoUtil.getString( nIndex++ ), daoUtil.getInt( nIndex ) );
+        }
+
+        daoUtil.close( );
+
+        return repartition;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addRequalificationHistoMasse( RequalificationMasseFilter filter )
+    {
+        // Début de la requete d'insert
+        StringBuilder sbSQL = new StringBuilder( SQL_QUERY_INSERT_HISTORY_REQUALIFICATION_MASSE_PART_1 );
+
+        // Ajout de l'id des signalements via le filtre
+        sbSQL.append( SQL_QUERY_GET_ID_SIGNALEMENT_REQUALIFICATION_MASSE );
+
+        // Ajout des conditions
+        getConditionsRequalificationMasse( filter, sbSQL );
+
+        // Fin de la requete d'insert
+        sbSQL.append( SQL_QUERY_INSERT_HISTORY_REQUALIFICATION_MASSE_PART_2 );
+
+        DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ) );
+
+        // Ajout des valeurs aux conditions
+        setValuesToConditions( daoUtil, filter, true, false );
+
+        // Execution de la requête
+        daoUtil.executeUpdate( );
+
+        daoUtil.close( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updateTypeRequalificationMasse( RequalificationMasseFilter filter )
+    {
+        StringBuilder sbSQL = new StringBuilder( SQL_QUERY_UPDATE_TYPE_REQUALIFICATION_MASSE );
+        sbSQL.append( " where id_signalement in ( " );
+
+        // Ajout de l'id des signalements via le filtre
+        sbSQL.append( SQL_QUERY_GET_ID_SIGNALEMENT_REQUALIFICATION_MASSE );
+
+        // Ajout des conditions
+        getConditionsRequalificationMasse( filter, sbSQL );
+
+        sbSQL.append( ")" );
+
+        DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ) );
+
+        // Ajout des valeurs aux conditions
+        setValuesToConditions( daoUtil, filter, false, true );
+
+        // Execution de la requête
+        daoUtil.executeUpdate( );
+
+        daoUtil.close( );
+    }
+
+    /**
+     * Gets the conditions requalification masse.
+     *
+     * @param filter
+     *            the filter
+     * @param sbSQL
+     *            the sb SQL
+     * @return the conditions requalification masse
+     */
+    private void getConditionsRequalificationMasse( RequalificationMasseFilter filter, StringBuilder sbSQL )
+    {
+        boolean dateBeginNotEmpty = ( filter.getDateBegin( ) != null ) && !StringUtils.isBlank( filter.getDateBegin( ) );
+        boolean dateEndNotEmpty = ( filter.getDateEnd( ) != null ) && !StringUtils.isBlank( filter.getDateEnd( ) );
+        boolean isTypeAnoNotEmpty = !ArrayUtils.isEmpty( filter.getIdTypeSignalements( ) );
+
+        List<String> conditionsList = new ArrayList<>( );
+
+        if ( dateBeginNotEmpty )
+        {
+            conditionsList.add( SQL_QUERY_ADD_FILTER_DATE_BEGIN );
+        }
+
+        if ( dateEndNotEmpty )
+        {
+            conditionsList.add( SQL_QUERY_ADD_FILTER_DATE_END );
+        }
+
+        if ( isTypeAnoNotEmpty )
+        {
+            StringBuilder typeCondition = new StringBuilder( " signalement.fk_id_type_signalement in (" );
+
+            int listeLength = filter.getIdTypeSignalements( ).length;
+            Character [ ] array = new Character [ listeLength];
+
+            Arrays.fill( array, '?' );
+
+            String unionQuery = StringUtils.join( array, COMA_SEPARATOR );
+
+            typeCondition.append( unionQuery ).append( " ) " );
+            conditionsList.add( typeCondition.toString( ) );
+        }
+
+        if ( dateBeginNotEmpty || dateEndNotEmpty || isTypeAnoNotEmpty )
+        {
+            sbSQL.append( " where " ).append( StringUtils.join( conditionsList, " and " ) );
+        }
+    }
+
+    /**
+     * Sets the values to conditions.
+     *
+     * @param daoUtil
+     *            the dao util
+     * @param filter
+     *            the filter
+     * @param addUserAndComment
+     *            the add user and comment
+     * @param addTypeCible
+     *            the add type cible
+     */
+    private void setValuesToConditions( DAOUtil daoUtil, RequalificationMasseFilter filter, boolean addUserAndComment, boolean addTypeCible )
+    {
+        int nIndex = 1;
+        boolean dateBeginNotEmpty = ( filter.getDateBegin( ) != null ) && !StringUtils.isBlank( filter.getDateBegin( ) );
+        boolean dateEndNotEmpty = ( filter.getDateEnd( ) != null ) && !StringUtils.isBlank( filter.getDateEnd( ) );
+        boolean isTypeAnoNotEmpty = !ArrayUtils.isEmpty( filter.getIdTypeSignalements( ) );
+
+        if ( addTypeCible )
+        {
+            daoUtil.setInt( nIndex++, filter.getIdTypeCible( ) );
+        }
+
+        if ( addUserAndComment )
+        {
+            daoUtil.setString( nIndex++, filter.getAdminUserAccessCode( ) );
+        }
+
+        if ( dateBeginNotEmpty )
+        {
+            daoUtil.setDate( nIndex++, DateUtil.formatDateSql( filter.getDateBegin( ), Locale.FRENCH ) );
+        }
+
+        if ( dateEndNotEmpty )
+        {
+            daoUtil.setDate( nIndex++, DateUtil.formatDateSql( filter.getDateEnd( ), Locale.FRENCH ) );
+        }
+
+        if ( isTypeAnoNotEmpty )
+        {
+            for ( Integer idType : filter.getIdTypeSignalements( ) )
+            {
+                daoUtil.setInt( nIndex++, idType );
+            }
+        }
+
+        if ( addUserAndComment )
         {
             daoUtil.setString( nIndex, filter.getCommentaire( ) );
         }
@@ -3115,7 +3329,7 @@ public class SignalementDAO implements ISignalementDAO
         Action action = null;
 
         try ( DAOUtil daoUtil = new DAOUtil(
-                "SELECT a.id_action,a.name,a.description,a.id_workflow,a.id_state_before, a.id_state_after,a.id_icon,a.is_automatic,a.is_mass_action,a.display_order,a.is_automatic_reflexive_action,i.name,i.mime_type,i.file_value,i.width,i.height  FROM workflow_action a LEFT JOIN workflow_icon i ON (a.id_icon = i.id_icon) where id_state_before = ? and id_workflow = ? ORDER BY display_order" ); )
+                "SELECT a.id_action,a.name,a.description,a.id_workflow,a.id_state_before, a.id_state_after,a.id_icon,a.is_automatic,a.is_mass_action,a.display_order,a.is_automatic_reflexive_action,i.name,i.mime_type,i.file_value,i.width,i.height  FROM workflow_action a LEFT JOIN workflow_icon i ON (a.id_icon = i.id_icon) where id_state_before = ? and id_workflow = ? ORDER BY display_order" ) ; )
         {
             int nIndex = 1;
 
@@ -3173,5 +3387,116 @@ public class SignalementDAO implements ISignalementDAO
 
         }
         return listAction;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Signalement> getSignalementForMobilByListId( List<Integer> idsSignalement )
+    {
+        List<Signalement> listSignalement = new ArrayList<>( );
+        if ( idsSignalement.isEmpty( ) )
+        {
+            return listSignalement;
+        }
+
+        String queryInClause = StringUtils.join( idsSignalement, COMA_SEPARATOR );
+        try ( DAOUtil daoUtil = new DAOUtil( MessageFormat.format( SQL_SEARCH_SIGNALEMENT_FOR_MOBIL_BY_LIST_ID, queryInClause ) ) ; )
+        {
+            daoUtil.executeQuery( );
+            long lastIdSignalement = -1;
+            while ( daoUtil.next( ) )
+            {
+                int nPos = 1;
+                long idSignalement = daoUtil.getLong( nPos );
+                if ( lastIdSignalement != idSignalement )
+                {
+                    nPos++;
+                    Signalement signalement = new Signalement( );
+                    signalement.setId( idSignalement );
+                    signalement.setSuivi( daoUtil.getInt( nPos++ ) );
+                    signalement.setDateCreation( daoUtil.getString( nPos++ ) );
+                    signalement.setHeureCreation( _dateUtils.getHour( daoUtil.getString( nPos++ ) ) );
+                    signalement.setCommentaire( daoUtil.getString( nPos++ ) );
+                    signalement.setNumeroComplet( daoUtil.getString( nPos++ ) );
+                    TypeSignalement type = new TypeSignalement( );
+                    type.setId( daoUtil.getInt( nPos++ ) );
+                    signalement.setTypeSignalement( type );
+                    signalement.setToken( daoUtil.getString( nPos++ ) );
+                    signalement.setFelicitations( daoUtil.getInt( nPos++ ) );
+                    Priorite priorite = new Priorite( );
+                    priorite.setId( daoUtil.getInt( nPos++ ) );
+                    signalement.setPriorite( priorite );
+                    signalement.setSendWs( daoUtil.getBoolean( nPos++ ) );
+                    signalement.setCommentaireAgentTerrain( daoUtil.getString( nPos++ ) );
+                    Adresse adresse = new Adresse( );
+                    adresse.setAdresse( daoUtil.getString( nPos++ ) );
+                    adresse.setLng( daoUtil.getDouble( nPos++ ) );
+                    adresse.setLat( daoUtil.getDouble( nPos++ ) );
+                    List<Adresse> listAdresse = new ArrayList<>( );
+                    listAdresse.add( adresse );
+                    signalement.setAdresses( listAdresse );
+                    signalement.setStateName( daoUtil.getString( nPos++ ) );
+                    signalement.setIdState( daoUtil.getInt( nPos++ ) );
+                    List<PhotoDMR> listPhotoDMR = new ArrayList<>( );
+                    PhotoDMR photoDMR = new PhotoDMR( );
+                    photoDMR.setId( daoUtil.getLong( nPos++ ) );
+                    photoDMR.setVue( daoUtil.getInt( nPos++ ) );
+                    photoDMR.setCheminPhoto( daoUtil.getString( nPos++ ) );
+                    photoDMR.setCheminPhotoMiniature( daoUtil.getString( nPos ) );
+                    signalement.setPhotos( listPhotoDMR );
+
+                    listSignalement.add( signalement );
+
+                    lastIdSignalement = idSignalement;
+
+                }
+                else
+                {
+                    nPos = 17;
+                    PhotoDMR photoDMR = new PhotoDMR( );
+                    photoDMR.setId( daoUtil.getLong( nPos++ ) );
+                    photoDMR.setVue( daoUtil.getInt( nPos++ ) );
+                    photoDMR.setCheminPhoto( daoUtil.getString( nPos++ ) );
+                    photoDMR.setCheminPhotoMiniature( daoUtil.getString( nPos ) );
+                    listSignalement.get( listSignalement.size( ) - 1 ).getPhotos( ).add( photoDMR );
+                }
+            }
+        }
+
+        return listSignalement;
+    }
+
+    @Override
+    public void addHistoriqueCommentaireAgentTerrain( Signalement signalement, int nIdResourceHistory )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_HISTORIQUE_COMMENTAIRE_AGENT_TERRAIN ); )
+        {
+            int nIndex = 1;
+            daoUtil.setInt( nIndex++, nIdResourceHistory );
+            daoUtil.setString( nIndex, signalement.getCommentaireAgentTerrain( ) != null ? signalement.getCommentaireAgentTerrain( ) : "" );
+
+            daoUtil.executeUpdate( );
+        }
+    }
+
+    @Override
+    public String getHistoriqueCommentaireAgentTerrain( int nIdResourceHistory )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_LOAD_HISTORIQUE_COMMENTAIRE_AGENT_TERRAIN ) )
+        {
+            daoUtil.setInt( 1, nIdResourceHistory );
+            daoUtil.executeQuery( );
+
+            if ( daoUtil.next( ) )
+            {
+                return daoUtil.getString( 1 );
+            }
+            else
+            {
+                return "";
+            }
+        }
     }
 }

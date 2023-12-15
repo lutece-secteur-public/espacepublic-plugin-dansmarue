@@ -160,7 +160,7 @@ public class EtatSignalement implements Serializable
             return false;
         }
 
-        EtatSignalement etatSignalement = ( EtatSignalement ) o;
+        EtatSignalement etatSignalement = (EtatSignalement) o;
         return _lId == etatSignalement._lId && _strLibelle.equals( etatSignalement._strLibelle );
 
     }

@@ -54,7 +54,7 @@ public class Signalement implements Serializable
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -6605556413130882923L;
 
@@ -123,6 +123,9 @@ public class Signalement implements Serializable
 
     /** The month. */
     private String _strMois;
+
+    /** The str precision terrain. */
+    private String _strPrecisionTerrain;
 
     /** The prefix. */
     private String _strPrefix;
@@ -386,6 +389,16 @@ public class Signalement implements Serializable
     }
 
     /**
+     * Gets the precision terrain.
+     *
+     * @return the precision terrain
+     */
+    public String getPrecisionTerrain( )
+    {
+        return _strPrecisionTerrain;
+    }
+
+    /**
      * Gets the prefix.
      *
      * @return the prefix
@@ -620,6 +633,17 @@ public class Signalement implements Serializable
     }
 
     /**
+     * Sets the precision terrain.
+     *
+     * @param precisionTerrain
+     *            the new precision terrain
+     */
+    public void setPrecisionTerrain( String precisionTerrain )
+    {
+        _strPrecisionTerrain = precisionTerrain;
+    }
+
+    /**
      * Sets the prefix.
      *
      * @param prefix
@@ -748,7 +772,8 @@ public class Signalement implements Serializable
      */
     public void setAdressesForm( int index, Adresse adresse )
     {
-        while ( index >= _listAdresses.size( ) )
+        int missingIndexes = index - _listAdresses.size( );
+        for (int i = 0; i <= missingIndexes; i++)
         {
             _listAdresses.add( new Adresse( ) );
         }
@@ -765,7 +790,8 @@ public class Signalement implements Serializable
      */
     public Adresse getAdressesForm( int index )
     {
-        while ( index >= _listAdresses.size( ) )
+        int missingIndexes = index - _listAdresses.size( );
+        for (int i = 0; i <= missingIndexes; i++)
         {
             _listAdresses.add( new Adresse( ) );
         }
@@ -1044,7 +1070,7 @@ public class Signalement implements Serializable
 
     /**
      * Get list actions available.
-     * 
+     *
      * @return list action
      */
     public List<Action> getListActionAvailable( )

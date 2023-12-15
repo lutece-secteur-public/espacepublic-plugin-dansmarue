@@ -127,6 +127,9 @@
 	<field name="commentaire" class="java.lang.String">
 		<fieldDescription><![CDATA[commentaire]]></fieldDescription>
 	</field>
+	<field name="infoAvantTournee" class="java.lang.String">
+	    <fieldDescription><![CDATA[infoAvantTournee]]></fieldDescription>
+	</field>
 	<field name="displayMap" class="java.lang.String">
 		<fieldDescription><![CDATA[displayMap]]></fieldDescription>
 	</field>
@@ -160,25 +163,25 @@
 				<textFieldExpression><![CDATA[$F{nom}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="10" y="500" width="100" height="20" uuid="80c35710-cd05-44ce-b78d-5b56dd88f4b5">
+				<reportElement x="10" y="500" width="200" height="20" uuid="80c35710-cd05-44ce-b78d-5b56dd88f4b5">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<printWhenExpression><![CDATA[!$F{commentaire}.isEmpty()]]></printWhenExpression>
+					<printWhenExpression><![CDATA[!$F{infoAvantTournee}.isEmpty()]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Commentaire : ]]></text>
+				<text><![CDATA[Infos avant tournée : ]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="15" y="520" width="570" height="50" uuid="7b79aeaa-b5f3-4552-902a-a3aec2c15e03">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<printWhenExpression><![CDATA[$F{commentaire} != null]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{infoAvantTournee} != null]]></printWhenExpression>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{commentaire}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{infoAvantTournee}]]></textFieldExpression>
 			</textField>
 			<break>
 				<reportElement x="0" y="730" width="99" height="1" uuid="391ee82b-4662-4d5b-a7c5-88a784ca3de4"/>

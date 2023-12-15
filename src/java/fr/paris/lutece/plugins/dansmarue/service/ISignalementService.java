@@ -40,6 +40,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.EtatSignalement;
+import fr.paris.lutece.plugins.dansmarue.business.entities.RequalificationMasseFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.ServiceFaitMasseFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDashboardFilter;
@@ -214,6 +215,15 @@ public interface ISignalementService
      * @return the anomalie by number
      */
     Signalement getAnomalieByNumber( String number );
+
+    /**
+     * Gets list anomalies with photo,signaleur and adress.
+     *
+     * @param idsSignalement
+     *            list id signalement to search
+     * @return list anomalie
+     */
+    List<Signalement> getAnomalieWithExtraInfoForMobilSearch( List<Integer> idsSignalement );
 
     /**
      * Select all the report for a given point and a radius.
@@ -586,17 +596,6 @@ public interface ISignalementService
      */
     SignalementRequalification getSignalementRequalificationByTaskHistory( int nIdHistory, int idTask );
 
-    /**
-     * Update the requalification.
-     *
-     * @param lIdSignalement
-     *            the report id
-     * @param nIdHistory
-     *            the workflow history id
-     * @param idTask
-     *            the workflow task id
-     */
-    void setRequalificationIdHistory( Long lIdSignalement, int nIdHistory, int idTask );
 
     /**
      * Save the requalification of a report.
@@ -611,23 +610,14 @@ public interface ISignalementService
      *            the report sector
      * @param idTask
      *            the workflow task id
+     ** @param idHistory
+     *            the workflow history id
+     *
      * @param commentaireAgentTerrain
      *            commentaire Agent Terrain
      */
     void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector, Integer idTask,
-            String commentaireAgentTerrain );
-
-    /**
-     * Update the requalification history task.
-     *
-     * @param lIdSignalement
-     *            the report id
-     * @param idHistory
-     *            the workflow history id
-     * @param idTask
-     *            the workflow task id
-     */
-    void setRequalificationIdHistoryAndIdTask( Long lIdSignalement, int idHistory, int idTask );
+            Integer idHistory, String commentaireAgentTerrain );
 
     /**
      * Gets the letter by month.
@@ -677,8 +667,9 @@ public interface ISignalementService
 
     /**
      * Find ano without state.
+     *
      * @param delay
-     *         delay in minutes since anomaly creation before delete.
+     *            delay in minutes since anomaly creation before delete.
      *
      * @return the list
      */
@@ -711,7 +702,25 @@ public interface ISignalementService
      *            the service fait masse filter
      * @return true, if successful
      */
-    boolean executeServiceFaitMasse( ServiceFaitMasseFilter serviceFaitMasseFilter );
+    boolean executeServiceFaitMasse( ServiceFaitMasseFilter serviceFaitMasseFilter );;
+
+    /**
+     * Gets the repartition requalification masse.
+     *
+     * @param requalificationMasseFilter
+     *            the requalification masse filter
+     * @return the repartition requalification masse
+     */
+    Map<String, Integer> getRepartitionRequalificationMasse( RequalificationMasseFilter requalificationMasseFilter );
+
+    /**
+     * Execute requalification masse.
+     *
+     * @param requalificationMasseFilter
+     *            the requalification masse filter
+     * @return null if successful, error message otherwise
+     */
+    String executeRequalificationMasse( RequalificationMasseFilter requalificationMasseFilter );
 
     /**
      * Gets the signalements service programme ids.
@@ -746,4 +755,8 @@ public interface ISignalementService
     EtatSignalement getStateIfDateIndicated( SignalementFilter signalementFilter );
 
     Collection<Action> getListActionsBySignalementAndUser( Signalement signalement, Integer signalementWorkflowId, AdminUser user, State state );
+
+    void addHistoriqueCommentaireAgentTerrain( Signalement signalement, int nIdResourceHistory );
+
+    String getHistoriqueCommentaireAgentTerrain( int nIdHistory );
 }

@@ -1,4 +1,5 @@
 <#include "macro/commons_signalement.html" />
+<#include "/util/calendar/macro_datepicker.html" />
 <@adresse_autocomplete_includes/>
 <@leaflet_map_includes/>
 <@leaflet_cluster_includes/>
@@ -7,6 +8,7 @@
 
 <script type="text/javascript" src="js/sira.js"></script>
 <link rel="stylesheet" href="css/plugins/leaflet/leaflet_awesome_number_markers.css" />
+<link rel="stylesheet" href="css/bootstrap-select.css" />
 <script src="js/leaflet_awesome_number_markers.js"></script>
 <script type="text/javascript">
 
@@ -163,6 +165,7 @@ function updateSectorList(idDirection, isDeleteField){
             data: {
                 direction_id: idDirection
             },
+            dataType: "json",
             success : function(data) { 
                 var text = "";
                 if(!(data.secteur_list === void 0))
@@ -183,7 +186,9 @@ function updateSectorList(idDirection, isDeleteField){
             },
             error:function (xhr, ajaxOptions, thrownError){
                 alert(thrownError); 
-            }   
+            },
+			complete:function (xhr, status, err) {
+   			}
         });
     }
 }
@@ -194,10 +199,19 @@ function updateOngletActif( onglet ) {
         data: {
         	onglet: onglet
         },
+        dataType: "html",
         error:function (xhr, ajaxOptions, thrownError){
-            alert(thrownError); 
-        }   
+            alert(thrownError);
+        },
+        complete:function (xhr, status, err) {
+		}
     });
+}
+
+function updatePhotoDoneOnly( photoDoneOnly ) {
+	$("#photoDoneOnly").val(photoDoneOnly);
+	$("#forceSearch").val("");
+	$("#formulaireDeRecherche").submit();
 }
 
 function initType(){
@@ -241,6 +255,11 @@ $(document).ready(function() {
 	var filterActif = "liste";
 	<#if filter.onglet??>
 		filterActif = "${filter.onglet}";
+	</#if>
+	
+	var photoDoneOnly = false;
+	<#if filter.photoDoneOnly?? && filter.photoDoneOnly == true>
+		photoDoneOnly = true;
 	</#if>
 	
     $("#idDirection").change(function(){
@@ -327,6 +346,24 @@ $(document).ready(function() {
 		$("#list-block").addClass("hidden");
 		$(".mozaique_item").removeClass("hidden");
 		updateOngletActif("mozaique");
+	});
+	
+	if(photoDoneOnly) {
+		$("#photo-done-filter-yes").addClass("active");
+		$("#photo-done-filter-no").removeClass("active");
+		$("#photoDoneOnly").val("true");
+	} else {
+		$("#photo-done-filter-yes").removeClass("active");
+		$("#photo-done-filter-no").addClass("active");
+		$("#photoDoneOnly").val("false");
+	}
+	
+	$("#photo-done-filter-yes").click(function(){
+		updatePhotoDoneOnly("true");
+	});
+	
+	$("#photo-done-filter-no").click(function(){
+		updatePhotoDoneOnly("false");
 	});
 	
     var types = new Array();
@@ -469,6 +506,11 @@ $(document).ready(function() {
     position: relative;
 }
 
+.signalement-suivi{
+	width: 0.1%;
+}
+
+#formulaireDeRecherche .dropdown-menu > li > a{ width: 100%; }
  
 </style>
 <div id="overlay"> <div id="text">#i18n{dansmarue.gerenation.carte}</div> </div>
@@ -542,12 +584,14 @@ $(document).ready(function() {
 								<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
 									for="filter_direction">#i18n{dansmarue.reportingList.direction}
 									</label>
-								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><#if
-									direction_list!?has_content && (direction_list!?size > 1)>
-									<@comboWithParams additionalParameters="class='form-control
-									input-sm'" name="idDirection"
-									default_value="${filter.idDirection!}" items=direction_list />
-									<#else> #i18n{dansmarue.reportingList.listEmpty} </#if></div>
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<#if direction_list!?has_content && (direction_list!?size > 1)>
+									<select name="listIdDirectionParam"  id="idDirection" class="selectpicker show-menu-arrow form-control"  data-size="10" multiple data-actions-box="true" data-live-search="true">
+                                    	<#list direction_list as direction>
+											<option value="${direction.code}" <#if (filter.listIdDirection?has_content && filter.listIdDirection?seq_contains(direction.code?number))>selected</#if> >${direction.name}</option>
+                                    	</#list>
+                                    </select>
+                                    <#else> #i18n{dansmarue.reportingList.listEmpty} </#if></div>
 							</div>
 							<div class="form-group">
 								<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
@@ -556,7 +600,7 @@ $(document).ready(function() {
 								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 									<#if secteur_list?has_content && secteur_list?size != 0>
 									<@comboWithParams additionalParameters="class='form-control
-									input-sm'" name="idSector" default_value="${filter.idSector!}"
+									input-sm'" name="idSector" default_value="${filter.idSectr!}"
 									items=secteur_list /> <#else>
 									#i18n{dansmarue.reportingList.listEmpty} </#if>
 									<noscript>
@@ -736,6 +780,8 @@ $(document).ready(function() {
 												default_value="${filter.idVuePhoto!}" items=vuePhoto_list />
 											<#else> #i18n{dansmarue.reportingList.listEmpty} </#if>
 										</div>
+										
+										<input id="photoDoneOnly" name="photoDoneOnly" value="false" type="hidden" />
 									</div>
 																					
 									<div class="form-group">
@@ -804,6 +850,7 @@ $(document).ready(function() {
 										id="re-init-button" onclick="deleteFields()">
 										#i18n{dansmarue.reportingList.reInitChamps}
 									</button>
+									<input id="forceSearch" name="search" type="hidden" />
 									<input id="isReinitSearch" name="isReinitSearch" value="0" type="hidden" />
 
 								</div>
@@ -863,11 +910,28 @@ $(document).ready(function() {
 			
 			<fieldset id="mozaique-block" class="mozaique_item hidden">
 				<div class="row">
+					<#if ((filter.idVuePhoto!) == 2)>
+						<div id="photo-done-filter" class="pull-left">
+							<label class="label-title">#i18n{dansmarue.reportingList.photoDoneFilter} : </label>
+							<div class="btn-group btn-group-sm" data-toggle="buttons">
+							  <label class="btn toggle-photo-done-btns"  id="photo-done-filter-yes">
+								<input type="radio" name="photo-done-filter" autocomplete="off"><label>#i18n{dansmarue.reportingList.photoDoneFilter.yes}</label>
+							  </label>
+							  <label class="btn toggle-photo-done-btns active"  id="photo-done-filter-no">
+								<input type="radio" name="photo-done-filter"  autocomplete="off" checked><label>#i18n{dansmarue.reportingList.photoDoneFilter.no}</label>
+							  </label>						  
+							</div>
+						</div>
+					</#if>
 					<@paginationSig paginator=paginator combo=1 />
 				</div>
 				<div class="row">
 					<#if signalement_list?has_content> 
 						<#list signalement_list as signalement>
+							<#assign modulo5 = signalement?index%5>
+							<#if modulo5==0>
+								<div class="row">
+							</#if>
 							<div id="ancre-signalement-${signalement.id}" class="col-xs-12 col-sm-12 col-md-6 col-lg-5ths signalement-list-element">
 								<div class="mozaique-photo">
 									<#assign isPhotoShow = false>
@@ -895,6 +959,9 @@ $(document).ready(function() {
 									<a class="link" href="jsp/admin/plugins/signalement/ViewSignalement.jsp?signalement_id=${signalement.id}">${signalement.adresses[0].adresse!}</a>
 								</div>
 							</div>
+							<#if modulo5==4 || (signalement?index == (signalement_list?size-1))>
+								</div>
+							</#if>
 						</#list>
 					</#if>
 				</div>
@@ -905,256 +972,288 @@ $(document).ready(function() {
 				<@paginationSig paginator=paginator combo=1 />
 				<form action="jsp/admin/plugins/signalement/ProcessAction.jsp"
 					method="post">
-					<div class="pull-left">
-						<!-- creation Signalement/exportCSV/exportAllCSV/serviceFait/Programmer/Reprogrammer -->
-						<@a class="btn btn-xs btn-primary"
-						additionalParameters="title='#i18n{dansmarue.caseList.CreateSignalement}'"
-						visu=false
-						href="jsp/admin/plugins/signalement/SaveSignalement.jsp"> <i
-							class="glyphicon glyphicon-plus"></i> </@a>
-
-						<!-- export en input pour r�cup�rer les dossiers coch�s -->
-						<@estAutoriseMacro ressourceType="GESTION_DES_SIGNALEMENTS"
-						permission="EXPORTER_SIGNALEMENT">
-						<button type="submit" value="exportcsv"
-							title="#i18n{dansmarue.caseList.ExportSignalement}"
-							name="exportcsv" class="btn btn-xs btn-primary">
-							<i class="glyphicon glyphicon-save"></i>
-						</button>
-						</@estAutoriseMacro> 
-						
-						<#if hasSignalementPrestataire >
-						
-							<@estAutoriseMacro
-							ressourceType="GESTION_DES_SIGNALEMENTS"
-							permission="TRAITEMENT_MASSE">
-							<button class="btn btn-xs btn-primary" type="submit" value="4"
-								id="button-fait-masse" name="servicefait"
-								title="#i18n{dansmarue.caseList.ServiceFaitMasse}" disabled>
-								<i class="glyphicon glyphicon-ok"></i>
-							</button>						
-							<button class="btn btn-xs btn-primary" type="submit" value="5"
-								id="button-programmer-masse" name="programmer"
-								title="#i18n{dansmarue.caseList.ProgrammerMasse}" disabled>
-								<i class="glyphicon glyphicon-calendar"></i>
+					<div class="row">
+						<div class="pull-left">
+							<!-- creation Signalement/exportCSV/exportAllCSV/serviceFait/Programmer/Reprogrammer -->
+							<@a class="btn btn-xs btn-primary"
+							additionalParameters="title='#i18n{dansmarue.caseList.CreateSignalement}'"
+							visu=false
+							href="jsp/admin/plugins/signalement/SaveSignalement.jsp"> <i
+								class="glyphicon glyphicon-plus"></i> </@a>
+	
+							<!-- export en input pour r�cup�rer les dossiers coch�s -->
+							<@estAutoriseMacro ressourceType="GESTION_DES_SIGNALEMENTS"
+							permission="EXPORTER_SIGNALEMENT">
+							<button type="submit" value="exportcsv"
+								title="#i18n{dansmarue.caseList.ExportSignalement}"
+								name="exportcsv" class="btn btn-xs btn-primary">
+								<i class="glyphicon glyphicon-save"></i>
 							</button>
-							<button class="btn btn-xs btn-primary" type="submit" value="6"
-								id="button-reprogrammer-masse" name="reprogrammer"
-								title="#i18n{dansmarue.caseList.ReprogrammerMasse}" disabled>
-								<i class="glyphicon glyphicon-refresh"></i>
-							</button>
-							</@estAutoriseMacro>
-							<@estAutoriseMacro
-							ressourceType="GESTION_DES_SIGNALEMENTS"
-							permission="SUPPRIMER_SIGNALEMENT_MASSE">
-							<button class="btn btn-xs btn-primary" type="submit" value="7"
-								id="button-supprimer-masses" name="masse_deletes"
-								title="#i18n{dansmarue.caseList.SupprimerMasse}" disabled>
-								<i class="glyphicon glyphicon-trash"></i>
-							</button>
+							</@estAutoriseMacro> 
 							
-							</@estAutoriseMacro>
-						
-						<#else>
-						
-							<@estAutoriseMacro
-							ressourceType="GESTION_DES_SIGNALEMENTS"
-							permission="TRAITEMENT_MASSE">
-							<button class="btn btn-xs btn-primary" type="submit" value="4"
-								id="button-fait-masse" name="servicefait"
-								title="#i18n{dansmarue.caseList.ServiceFaitMasse}">
-								<i class="glyphicon glyphicon-ok"></i>
-							</button>
-							<button class="btn btn-xs btn-primary" type="submit" value="5"
-								id="button-programmer-masse" name="programmer"
-								title="#i18n{dansmarue.caseList.ProgrammerMasse}">
-								<i class="glyphicon glyphicon-calendar"></i>
-							</button>
-							<button class="btn btn-xs btn-primary" type="submit" value="6"
-								id="button-reprogrammer-masse" name="reprogrammer"
-								title="#i18n{dansmarue.caseList.ReprogrammerMasse}">
-								<i class="glyphicon glyphicon-refresh"></i>
-							</button>
-							</@estAutoriseMacro>
-							<@estAutoriseMacro
-							ressourceType="GESTION_DES_SIGNALEMENTS"
-							permission="SUPPRIMER_SIGNALEMENT_MASSE">
-							<button class="btn btn-xs btn-primary" type="submit" value="7"
-								id="button-supprimer-masses" name="masse_deletes"
-								title="#i18n{dansmarue.caseList.SupprimerMasse}">
-								<i class="glyphicon glyphicon-trash"></i>
-							</button>
-						
-							</@estAutoriseMacro>
-						</#if>
-						
-					</div>
-					<br />
-					<br />
-					<table id="table-signalements" class="table table-condensed">
-						<thead>
-							<tr>
-								<@hasAutorisationMacro ressourceType="GESTION_DES_SIGNALEMENTS"
-								permissions=["TRAITEMENT_MASSE","SUPPRIMER_SIGNALEMENT_MASSE","EXPORTER_SIGNALEMENT"]>
-								<th><input type="checkbox" name="selectAll" id="selectAll"
-									value="selectAll"
-									title="#i18n{dansmarue.reportingList.alt.selectAll}" /></th> </@hasAutorisationMacro>
-								<th>#</th>
-								<th>#i18n{dansmarue.reportingList.actions}</th>
-								<th><@sort
-									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
-									attribute="photo.id_photo"/>#i18n{dansmarue.reportingList.photo}</th>
-								<th><@sort
-									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
-									attribute="signalement.suivi"/>#i18n{dansmarue.reportingList.nbfollowers}</th>
-									<th><@sort
-									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
-									attribute="signaleur.mail"/>#i18n{dansmarue.reportingList.mail}</th> 
-								<th><@sort
-									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
-									attribute="numSignalement"/>#i18n{dansmarue.reportingList.number}</th>
-								<th><@sort
-									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
-									attribute="priorite.libelle"/>#i18n{dansmarue.reportingList.priority}</th>
-								<th><@sort
-									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
-									attribute="type.libelle"/>#i18n{dansmarue.reportingList.type}</th>
-								<th><@sort
-									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
-									attribute="direction_unit.label"/>#i18n{dansmarue.reportingList.direction}</th>
-								<th><@sort
-									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
-									attribute="adr.adresse"/>#i18n{dansmarue.reportingList.adress}</th>
-								<th><@sort
-									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
-									attribute="signalement.commentaire"/>#i18n{dansmarue.reportingList.comment}</th>
-								<th><@sort
-									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
-									attribute="signalement.commentaireAgentTerrain"/>#i18n{dansmarue.saveSignalement.commentaireAgentTerrain}</th>
-								<th><@sort
-									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
-									attribute="signalement.date_creation"/>#i18n{dansmarue.reportingList.creationDate}</th>
-								<th>#i18n{dansmarue.reportingList.etat}</th>
-							</tr>
-						</thead>
-						
-						
-						<tbody>
-							<#if signalement_list?has_content> <#list signalement_list as
-							signalement>
-							<tr id="ancre-signalement-${signalement.id}"
-								class="signalement-list-element">
-								<@hasAutorisationMacro ressourceType="GESTION_DES_SIGNALEMENTS"
-								permissions=["TRAITEMENT_MASSE","SUPPRIMER_SIGNALEMENT_MASSE","EXPORTER_SIGNALEMENT"]>
-								<td class="signalement-checkbox"><input type="checkbox"
-									name="signalement_id" value="${signalement.id}"
-									title="#i18n{dansmarue.reportingList.alt.select}" />
-								</td>
-								</@hasAutorisationMacro>
-								<td class="signalement-actions">
-									<#assign itemPerPage=paginator.itemsPerPage currentPage=paginator.pageCurrent>
-								  	<#assign signalementNumber=( ( paginator.pageCurrent-1 ) * paginator.itemsPerPage ) + signalement?index + 1>
-								  	 ${signalementNumber} 
-								</td>
-								<td class="signalement-actions">
+							<#if hasSignalementPrestataire >
+							
+								<@estAutoriseMacro
+								ressourceType="GESTION_DES_SIGNALEMENTS"
+								permission="TRAITEMENT_MASSE">
+								<button class="btn btn-xs btn-primary" type="submit" value="4"
+									id="button-fait-masse" name="servicefait"
+									title="#i18n{dansmarue.caseList.ServiceFaitMasse}" disabled>
+									<i class="glyphicon glyphicon-ok"></i>
+								</button>						
+								<button class="btn btn-xs btn-primary" type="submit" value="5"
+									id="button-programmer-masse" name="programmer"
+									title="#i18n{dansmarue.caseList.ProgrammerMasse}" disabled>
+									<i class="glyphicon glyphicon-calendar"></i>
+								</button>
+								<button class="btn btn-xs btn-primary" type="submit" value="6"
+									id="button-reprogrammer-masse" name="reprogrammer"
+									title="#i18n{dansmarue.caseList.ReprogrammerMasse}" disabled>
+									<i class="glyphicon glyphicon-refresh"></i>
+								</button>
+								<button class="btn btn-xs btn-primary" type="submit" value="7"
+									id="button-atraiter-masse" name="atraiter"
+									title="#i18n{dansmarue.caseList.ATraiterMasse}" disabled>
+									<i class="glyphicon glyphicon-folder-open"></i>
+								</button>
+								<button class="btn btn-xs btn-primary" type="submit" value="8"
+									id="button-aFaireBureau-masse" name="aFaireBureau"
+									title="#i18n{dansmarue.caseList.AFaireBureauMasse}" disabled>
+									<i class="glyphicon glyphicon-home"></i>
+								</button>
+								<button class="btn btn-xs btn-primary" type="submit" value="9"
+									id="button-AFaireTerrain-masse" name="AFaireTerrain"
+									title="#i18n{dansmarue.caseList.AFaireTerrainMasse}" disabled>
+									<i class="glyphicon glyphicon-user"></i>
+								</button>
+								</@estAutoriseMacro>
+								<@estAutoriseMacro
+								ressourceType="GESTION_DES_SIGNALEMENTS"
+								permission="SUPPRIMER_SIGNALEMENT_MASSE">
+								<button class="btn btn-xs btn-primary" type="submit" value="10"
+									id="button-supprimer-masses" name="masse_deletes"
+									title="#i18n{dansmarue.caseList.SupprimerMasse}" disabled>
+									<i class="glyphicon glyphicon-trash"></i>
+								</button>
 								
-									<@a class="btn btn-xs
-									btn-primary" visu=false
-									href="jsp/admin/plugins/signalement/ViewSignalement.jsp"
-									params="?signalement_id=${signalement.id}"
-									additionalParameters="title='#i18n{dansmarue.reportingList.alt.view}'"> <i
-									class="glyphicon glyphicon-eye-open"></i> </@a> 
-									
-									<#if !(signalement.isSendWS) >
+								</@estAutoriseMacro>
+							
+							<#else>
+							
+								<@estAutoriseMacro
+								ressourceType="GESTION_DES_SIGNALEMENTS"
+								permission="TRAITEMENT_MASSE">
+								<button class="btn btn-xs btn-primary" type="submit" value="4"
+									id="button-fait-masse" name="servicefait"
+									title="#i18n{dansmarue.caseList.ServiceFaitMasse}">
+									<i class="glyphicon glyphicon-ok"></i>
+								</button>
+								<button class="btn btn-xs btn-primary" type="submit" value="5"
+									id="button-programmer-masse" name="programmer"
+									title="#i18n{dansmarue.caseList.ProgrammerMasse}">
+									<i class="glyphicon glyphicon-calendar"></i>
+								</button>
+								<button class="btn btn-xs btn-primary" type="submit" value="6"
+									id="button-reprogrammer-masse" name="reprogrammer"
+									title="#i18n{dansmarue.caseList.ReprogrammerMasse}">
+									<i class="glyphicon glyphicon-refresh"></i>
+								</button>
+								<button class="btn btn-xs btn-primary" type="submit" value="7"
+									id="button-atraiter-masse" name="aTraiter"
+									title="#i18n{dansmarue.caseList.ATraiterMasse}">
+									<i class="glyphicon glyphicon-folder-open"></i>
+								</button>
+								<button class="btn btn-xs btn-primary" type="submit" value="8"
+									id="button-aFaireBureau-masse" name="aFaireBureau"
+									title="#i18n{dansmarue.caseList.AFaireBureauMasse}">
+									<i class="glyphicon glyphicon-home"></i>
+								</button>
+								<button class="btn btn-xs btn-primary" type="submit" value="9"
+									id="button-AFaireTerrain-masse" name="aFaireTerrain"
+									title="#i18n{dansmarue.caseList.AFaireTerrainMasse}">
+									<i class="glyphicon glyphicon-user"></i>
+								</button>
+								</@estAutoriseMacro>
+								<@estAutoriseMacro
+								ressourceType="GESTION_DES_SIGNALEMENTS"
+								permission="SUPPRIMER_SIGNALEMENT_MASSE">
+								<button class="btn btn-xs btn-primary" type="submit" value="10"
+									id="button-supprimer-masses" name="masse_deletes"
+									title="#i18n{dansmarue.caseList.SupprimerMasse}">
+									<i class="glyphicon glyphicon-trash"></i>
+								</button>
+
+								</@estAutoriseMacro>
+							</#if>
+
+						</div>
+					</div>
+					<div class="table-responsive">
+						<table id="table-signalements" class="table table-condensed">
+							<thead>
+								<tr>
+									<@hasAutorisationMacro ressourceType="GESTION_DES_SIGNALEMENTS"
+									permissions=["TRAITEMENT_MASSE","SUPPRIMER_SIGNALEMENT_MASSE","EXPORTER_SIGNALEMENT"]>
+									<th><input type="checkbox" name="selectAll" id="selectAll"
+										value="selectAll"
+										title="#i18n{dansmarue.reportingList.alt.selectAll}" /></th> </@hasAutorisationMacro>
+									<th>#</th>
+									<th>#i18n{dansmarue.reportingList.actions}</th>
+									<th><@sort
+										jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
+										attribute="photo.id_photo"/>#i18n{dansmarue.reportingList.photo}</th>
+									<th><@sort
+										jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
+										attribute="signalement.suivi"/>#i18n{dansmarue.reportingList.nbfollowers}</th>
+										<th><@sort
+										jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
+										attribute="signaleur.mail"/>#i18n{dansmarue.reportingList.mail}</th>
+									<th><@sort
+										jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
+										attribute="numSignalement"/>#i18n{dansmarue.reportingList.number}</th>
+									<th><@sort
+										jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
+										attribute="type.libelle"/>#i18n{dansmarue.reportingList.type}</th>
+									<th><@sort
+										jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
+										attribute="direction_unit.label"/>#i18n{dansmarue.reportingList.direction}</th>
+									<th><@sort
+										jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
+										attribute="adr.adresse"/>#i18n{dansmarue.reportingList.adress}</th>
+									<th><@sort
+										jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
+										attribute="signalement.commentaire"/>#i18n{dansmarue.reportingList.comment}</th>
+									<th><@sort
+										jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
+										attribute="signalement.commentaireAgentTerrain"/>#i18n{dansmarue.saveSignalement.commentaireAgentTerrain}</th>
+									<th><@sort
+										jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
+										attribute="signalement.precisionTerrain"/>#i18n{dansmarue.reportingList.precisionTerrain}</th>
+									<th><@sort
+											jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
+											attribute="signalement.date_creation"/>#i18n{dansmarue.reportingList.creationDate}</th>
+										<th>#i18n{dansmarue.reportingList.etat}</th>
+									</tr>
+							</thead>
+
+
+							<tbody>
+								<#if signalement_list?has_content> <#list signalement_list as
+								signalement>
+								<tr id="ancre-signalement-${signalement.id}"
+									class="signalement-list-element">
+									<@hasAutorisationMacro ressourceType="GESTION_DES_SIGNALEMENTS"
+									permissions=["TRAITEMENT_MASSE","SUPPRIMER_SIGNALEMENT_MASSE","EXPORTER_SIGNALEMENT"]>
+									<td class="signalement-checkbox"><input type="checkbox"
+										name="signalement_id" value="${signalement.id}"
+										title="#i18n{dansmarue.reportingList.alt.select}" />
+									</td>
+									</@hasAutorisationMacro>
+									<td class="signalement-actions">
+										<#assign itemPerPage=paginator.itemsPerPage currentPage=paginator.pageCurrent>
+									  	<#assign signalementNumber=( ( paginator.pageCurrent-1 ) * paginator.itemsPerPage ) + signalement?index + 1>
+									  	 ${signalementNumber}
+									</td>
+									<td class="signalement-actions">
+
+										<@a class="btn btn-xs
+										btn-primary" visu=false
+										href="jsp/admin/plugins/signalement/ViewSignalement.jsp"
+										params="?signalement_id=${signalement.id}"
+										additionalParameters="title='#i18n{dansmarue.reportingList.alt.view}'"> <i
+										class="glyphicon glyphicon-eye-open"></i> </@a>
+
+										<#if !(signalement.isSendWS) >
+											<@a class="btn
+											btn-xs btn-primary" visu=false
+											sector=(signalement.secteur.idSector)!?string
+											href="jsp/admin/plugins/signalement/ModifySignalement.jsp"
+											params="?signalement_id=${signalement.id}"
+											additionalParameters="title='#i18n{dansmarue.reportingList.alt.modify}'">
+											<i class="glyphicon glyphicon-edit"></i> </@a>
+										</#if>
+
+										<a
+										class="btn btn-xs btn-primary"
+										title="#i18n{dansmarue.reportingList.alt.history}"
+										href="jsp/admin/plugins/signalement/ViewHistory.jsp?signalement_id=${signalement.id}">
+											<i class="glyphicon glyphicon-book"></i>
+										</a>
+
+										<#assign list_actions = map_actions[signalement.id?string] />
+										<#-- actions du workflow -->
+											<#list list_actions as action>
+											<#if
+											rights.estAutorise("*","*",(signalement.secteur.idSector)!?string)>
+
+											<a title="${action.name}"
+											href="jsp/admin/plugins/signalement/ProcessAction.jsp?action_id=${action.id}&amp;signalement_id=${signalement.id}">
+												<img width="24px"
+												src="image?resource_type=workflow_icon_img&id=${action.icon.id}"
+												alt="${action.name}" />
+											</a> </#if>
+
+											</#list>
+
+										<#if !(signalement.isSendWS) >
+										<@a class="btn btn-xs btn-danger" visu=false
+										sector=(signalement.secteur.idSector)!?string
+										href="jsp/admin/plugins/signalement/DeleteSignalement.jsp"
+										params="?signalement_id=${signalement.id}"
+										additionalParameters="title='#i18n{dansmarue.commons.supprimer}'">
+										<i class="glyphicon glyphicon-trash"></i> </@a>
+										</#if>
+
 										<@a class="btn
 										btn-xs btn-primary" visu=false
 										sector=(signalement.secteur.idSector)!?string
-										href="jsp/admin/plugins/signalement/ModifySignalement.jsp"
+										href="jsp/admin/plugins/signalement/DoCreateMailSignalement.jsp"
 										params="?signalement_id=${signalement.id}"
-										additionalParameters="title='#i18n{dansmarue.reportingList.alt.modify}'">
-										<i class="glyphicon glyphicon-edit"></i> </@a> 
-									</#if>
-									
-									<a
-									class="btn btn-xs btn-primary"
-									title="#i18n{dansmarue.reportingList.alt.history}"
-									href="jsp/admin/plugins/signalement/ViewHistory.jsp?signalement_id=${signalement.id}">
-										<i class="glyphicon glyphicon-book"></i>
-									</a> 
-									
-									<#assign list_actions = map_actions[signalement.id?string] />
-									<#-- actions du workflow --> 
-										<#list list_actions as action>
-										<#if
-										rights.estAutorise("*","*",(signalement.secteur.idSector)!?string)>
-										
-										<a title="${action.name}"
-										href="jsp/admin/plugins/signalement/ProcessAction.jsp?action_id=${action.id}&amp;signalement_id=${signalement.id}">
-											<img width="24px"
-											src="image?resource_type=workflow_icon_img&id=${action.icon.id}"
-											alt="${action.name}" />
-										</a> </#if> 
-										
-										</#list> 
-									
-									<#if !(signalement.isSendWS) >
-									<@a class="btn btn-xs btn-danger" visu=false
-									sector=(signalement.secteur.idSector)!?string
-									href="jsp/admin/plugins/signalement/DeleteSignalement.jsp"
-									params="?signalement_id=${signalement.id}"
-									additionalParameters="title='#i18n{dansmarue.commons.supprimer}'">
-									<i class="glyphicon glyphicon-trash"></i> </@a> 
-									</#if>
-									
-									<@a class="btn
-									btn-xs btn-primary" visu=false
-									sector=(signalement.secteur.idSector)!?string
-									href="jsp/admin/plugins/signalement/DoCreateMailSignalement.jsp"
-									params="?signalement_id=${signalement.id}"
-									additionalParameters="title='#i18n{dansmarue.commons.mail}'"> <i
-									class="glyphicon glyphicon-envelope"></i> </@a>
+										additionalParameters="title='#i18n{dansmarue.commons.mail}'"> <i
+										class="glyphicon glyphicon-envelope"></i> </@a>
 
-								</td>
+									</td>
 
 
-								<td class="signalement-photo">
-									<#if signalement.photos?has_content> 
-										<#assign isPhotoShow = false>
-										<#list signalement.photos as photo>
-											<#assign isHidden = (filter.idVuePhoto == 2 && photo.vue != 2) || isPhotoShow >
-											<span id-signalement-photo='${signalement.id}'>
-												<a href='#' data-toggle="modal" data-target="#imageModal"  id-vue='${photo.vue}' id-signalement='${signalement.id}' image-url='${photo.imageUrl}' isTabMosaique='false' <#if isHidden> style='display: none'</#if>>
-													<img src="${photo.imageThumbnailUrl}" width="100"/>
-												</a>
-											</span>
-											<#assign isPhotoShow = !isHidden || isPhotoShow>
-										</#list>							
-									</#if>
-								</td>
-								<td class="signalement-suivi">${signalement.suivi!}</td>
-								<td class="signalement-mail">${(signalement.signaleurs[0].mail)!}</td>
-								<td class="signalement-id"><@a class="link" visu=true
-									href="jsp/admin/plugins/signalement/ViewSignalement.jsp"
-									params="?signalement_id=${signalement.id}">${signalement.numeroSignalement!}</@a></td>
-								<td class="signalement-priorite">${signalement.prioriteName!}</td>
-								<td class="signalement-type">${signalement.type!}</td>
-								<td class="signalement-direction">${(signalement.directionSector.label)!}</td>
-								<td class="signalement-address"><@a class="link"  visu=true
-									href="jsp/admin/plugins/signalement/ViewSignalement.jsp"
-									params="?signalement_id=${signalement.id}">${signalement.adresses[0].adresse!}</@a></td>
-								<td class="signalement-comment">${signalement.commentaire!}</td>
-								<td class="signalement-comment">${signalement.commentaireAgentTerrain!}</td>
-								<td class="signalement-date">${signalement.dateCreation!}</td>
-								<td class="signalement-etat">${map_etats[signalement.id?string]!} <#if map_programming_date[signalement.id?string]?? && map_programming_date[signalement.id?string]> <br> ${signalement.datePrevueTraitement!}</#if> </td>
-							</tr>
-							</#list> <#else>
-							<tr>
-								<td colspan="12">
-									#i18n{dansmarue.reportingList.messageNoResult}</td>
-							</tr>
-							</#if>
-						</tbody>
-					</table>
+									<td class="signalement-photo">
+										<#if signalement.photos?has_content>
+											<#assign isPhotoShow = false>
+											<#list signalement.photos as photo>
+												<#assign isHidden = (filter.idVuePhoto == 2 && photo.vue != 2) || isPhotoShow >
+												<span id-signalement-photo='${signalement.id}'>
+													<a href='#' data-toggle="modal" data-target="#imageModal"  id-vue='${photo.vue}' id-signalement='${signalement.id}' image-url='${photo.imageUrl}' isTabMosaique='false' <#if isHidden> style='display: none'</#if>>
+														<img src="${photo.imageThumbnailUrl}" width="100"/>
+													</a>
+												</span>
+												<#assign isPhotoShow = !isHidden || isPhotoShow>
+											</#list>
+										</#if>
+									</td>
+									<td class="signalement-suivi">${signalement.suivi!}</td>
+									<td class="signalement-mail">${(signalement.signaleurs[0].mail)!}</td>
+									<td class="signalement-id"><@a class="link" visu=true
+										href="jsp/admin/plugins/signalement/ViewSignalement.jsp"
+										params="?signalement_id=${signalement.id}">${signalement.numeroSignalement!}</@a></td>
+									<td class="signalement-type">${signalement.type!}</td>
+									<td class="signalement-direction">${(signalement.directionSector.label)!}</td>
+									<td class="signalement-address"><@a class="link"  visu=true
+										href="jsp/admin/plugins/signalement/ViewSignalement.jsp"
+										params="?signalement_id=${signalement.id}">${signalement.adresses[0].adresse!}</@a></td>
+									<td class="signalement-comment">${signalement.commentaire!}</td>
+									<td class="signalement-comment">${signalement.commentaireAgentTerrain!}</td>
+									<td class="signalement-precision">${signalement.precisionTerrain!}</td>
+									<td class="signalement-date">${signalement.dateCreation!}</td>
+									<td class="signalement-etat">${map_etats[signalement.id?string]!} <#if map_programming_date[signalement.id?string]?? && map_programming_date[signalement.id?string]> <br> ${signalement.datePrevueTraitement!}</#if> </td>
+								</tr>
+								</#list> <#else>
+								<tr>
+									<td colspan="12">
+										#i18n{dansmarue.reportingList.messageNoResult}</td>
+								</tr>
+								</#if>
+							</tbody>
+						</table>
+					</div>
 					<div class="pull-left">
 						<!-- creation Signalement/exportCSV/exportAllCSV/serviceFait/Programmer/Reprogrammer -->
 						<@a class="btn btn-xs btn-primary"
@@ -1171,10 +1270,10 @@ $(document).ready(function() {
 							name="exportcsv" class="btn btn-xs btn-primary">
 							<i class="glyphicon glyphicon-save"></i>
 						</button>
-						</@estAutoriseMacro> 
-						
+						</@estAutoriseMacro>
+
 						<#if hasSignalementPrestataire >
-						
+
 							<@estAutoriseMacro
 							ressourceType="GESTION_DES_SIGNALEMENTS"
 							permission="TRAITEMENT_MASSE">
@@ -1182,7 +1281,7 @@ $(document).ready(function() {
 								id="button-fait-masse" name="servicefait"
 								title="#i18n{dansmarue.caseList.ServiceFaitMasse}" disabled>
 								<i class="glyphicon glyphicon-ok"></i>
-							</button>						
+							</button>
 							<button class="btn btn-xs btn-primary" type="submit" value="5"
 								id="button-programmer-masse" name="programmer"
 								title="#i18n{dansmarue.caseList.ProgrammerMasse}" disabled>
@@ -1193,19 +1292,35 @@ $(document).ready(function() {
 								title="#i18n{dansmarue.caseList.ReprogrammerMasse}" disabled>
 								<i class="glyphicon glyphicon-refresh"></i>
 							</button>
+							<button class="btn btn-xs btn-primary" type="submit" value="7"
+								id="button-atraiter-masse" name="atraiter"
+								title="#i18n{dansmarue.caseList.ATraiterMasse}" disabled>
+								<i class="glyphicon glyphicon-folder-open"></i>
+							</button>
+							<button class="btn btn-xs btn-primary" type="submit" value="8"
+								id="button-aFaireBureau-masse" name="aFaireBureau"
+								title="#i18n{dansmarue.caseList.AFaireBureauMasse}" disabled>
+								<i class="glyphicon glyphicon-home"></i>
+							</button>
+							<button class="btn btn-xs btn-primary" type="submit" value="9"
+								id="button-AFaireTerrain-masse" name="AFaireTerrain"
+								title="#i18n{dansmarue.caseList.AFaireTerrainMasse}" disabled>
+								<i class="glyphicon glyphicon-user"></i>
+							</button>
+
 							</@estAutoriseMacro>
 							<@estAutoriseMacro
 							ressourceType="GESTION_DES_SIGNALEMENTS"
 							permission="SUPPRIMER_SIGNALEMENT_MASSE">
-							<button class="btn btn-xs btn-primary" type="submit" value="7"
+							<button class="btn btn-xs btn-primary" type="submit" value="10"
 								id="button-supprimer-masses" name="masse_deletes"
 								title="#i18n{dansmarue.caseList.SupprimerMasse}" disabled>
 								<i class="glyphicon glyphicon-trash"></i>
 							</button>
-						
+
 							</@estAutoriseMacro>
 						<#else>
-						
+
 							<@estAutoriseMacro
 							ressourceType="GESTION_DES_SIGNALEMENTS"
 							permission="TRAITEMENT_MASSE">
@@ -1219,17 +1334,32 @@ $(document).ready(function() {
 								title="#i18n{dansmarue.caseList.ProgrammerMasse}">
 								<i class="glyphicon glyphicon-calendar"></i>
 							</button>
-	
+
 							<button class="btn btn-xs btn-primary" type="submit" value="6"
 								id="button-reprogrammer-masse" name="reprogrammer"
 								title="#i18n{dansmarue.caseList.ReprogrammerMasse}">
 								<i class="glyphicon glyphicon-refresh"></i>
 							</button>
+							<button class="btn btn-xs btn-primary" type="submit" value="7"
+								id="button-atraiter-masse" name="atraiter"
+								title="#i18n{dansmarue.caseList.ATraiterMasse}" >
+								<i class="glyphicon glyphicon-folder-open"></i>
+							</button>
+							<button class="btn btn-xs btn-primary" type="submit" value="8"
+								id="button-aFaireBureau-masse" name="aFaireBureau"
+								title="#i18n{dansmarue.caseList.AFaireBureauMasse}" >
+								<i class="glyphicon glyphicon-home"></i>
+							</button>
+							<button class="btn btn-xs btn-primary" type="submit" value="9"
+								id="button-AFaireTerrain-masse" name="AFaireTerrain"
+								title="#i18n{dansmarue.caseList.AFaireTerrainMasse}" >
+								<i class="glyphicon glyphicon-user"></i>
+							</button>
 							</@estAutoriseMacro>
 							<@estAutoriseMacro
 							ressourceType="GESTION_DES_SIGNALEMENTS"
 							permission="SUPPRIMER_SIGNALEMENT_MASSE">
-							<button class="btn btn-xs btn-primary" type="submit" value="7"
+							<button class="btn btn-xs btn-primary" type="submit" value="10"
 								id="button-supprimer-masses" name="masse_deletes"
 								title="#i18n{dansmarue.caseList.SupprimerMasse}">
 								<i class="glyphicon glyphicon-trash"></i>

@@ -33,9 +33,30 @@
  */
 package fr.paris.lutece.plugins.dansmarue.service.impl;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.dansmarue.business.dao.IPhotoDAO;
 import fr.paris.lutece.plugins.dansmarue.business.dao.impl.FeuilleDeTourneeDAO;
-import fr.paris.lutece.plugins.dansmarue.business.entities.*;
+import fr.paris.lutece.plugins.dansmarue.business.entities.FeuilleDeTournee;
+import fr.paris.lutece.plugins.dansmarue.business.entities.FeuilleDeTourneeFilter;
+import fr.paris.lutece.plugins.dansmarue.business.entities.FeuilleDeTourneeFilterSearch;
+import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
+import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
+import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementBean;
 import fr.paris.lutece.plugins.dansmarue.commons.Order;
 import fr.paris.lutece.plugins.dansmarue.service.IFeuilleDeTourneeService;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementExportService;
@@ -43,26 +64,26 @@ import fr.paris.lutece.plugins.dansmarue.service.IWorkflowService;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementMapMarkerDTO;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
+import fr.paris.lutece.plugins.dansmarue.utils.StockagePhotoUtils;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.datastore.DatastoreService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.mail.MailService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.mail.FileAttachment;
 import fr.paris.lutece.util.string.StringUtil;
-import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.apache.commons.lang.StringUtils;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * The Class FeuilleDeTourneeService.
@@ -90,6 +111,7 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
 
     private static final String COLOR_NUMBER_GREEN = "green";
     private static final String COLOR_NUMBER_RED = "red";
+    private static final String KEY_PREFIX_FDT_NAME = "sitelabels.site_property.feuilledetournee.nom.prefix";
 
     /**
      * Load.
@@ -112,9 +134,10 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
      * @return the integer
      */
     @Override
-    public Integer insert( FeuilleDeTournee feuilleDeTournee )
+    public Integer insert( FeuilleDeTournee feuilleDeTournee, boolean isCopy )
     {
-        return _feuilleDeTourneeDao.insert( feuilleDeTournee );
+        String prefixFDTNom = DatastoreService.getDataValue( KEY_PREFIX_FDT_NAME, StringUtils.EMPTY );
+        return _feuilleDeTourneeDao.insert( feuilleDeTournee, prefixFDTNom, isCopy );
     }
 
     /**
@@ -203,9 +226,12 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
         for ( SignalementBean signalementBean : listSignalementsBean )
         {
             List<PhotoDMR> photos = _photoDAO.findWithFullPhotoBySignalementId( signalementBean.getId( ) );
+
+            loadPhotoOnS3Server(photos);
+
             for ( PhotoDMR photo : photos )
             {
-                if ( photo.getImage( ) != null && photo.getImage( ).getImage( ) != null )
+                if ( ( photo.getImage( ) != null ) && ( photo.getImage( ).getImage( ) != null ) )
                 {
                     if ( photo.getVue( ) == 0 )
                     {
@@ -222,6 +248,24 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
         }
 
         return listSignalementsBean;
+    }
+
+    private void loadPhotoOnS3Server(List<PhotoDMR> photos) {
+
+        StockagePhotoUtils stockagePhotoUtils =  SpringContextService.getBean( "signalement.stockagePhotoUtils" );
+
+        //Load Photo on S3 server
+        for(PhotoDMR photo : photos) {
+            if (( photo.getImage( ) == null ) || ( photo.getImage( ).getImage( ) == null ) ) {
+                ImageResource imageRessource = stockagePhotoUtils.loadPhotoOnNetAppServeur( photo.getCheminPhoto( ) );
+                photo.setImage( imageRessource );
+            }
+
+            if (( photo.getImageThumbnail( ) == null ) || ( photo.getImageThumbnail( ).getImage( ) == null ) ) {
+                ImageResource imageRessource = stockagePhotoUtils.loadPhotoOnNetAppServeur( photo.getCheminPhotoMiniature( ) );
+                photo.setImage( imageRessource );
+            }
+        }
     }
 
     /**
@@ -516,7 +560,7 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
 
         // Btn action
         String actionAjout = "<span class='btnActionTooltip' id='actionAjout_" + signalement.getId( ) + "' onclick='addToSelection(" + signalement.getId( )
-                + ")'><i style='color: #1DAF26;' class='fa fa-plus-circle'></i> #i18n{dansmarue.map.tooltips.ajouter}</span>";
+        + ")'><i style='color: #1DAF26;' class='fa fa-plus-circle'></i> #i18n{dansmarue.map.tooltips.ajouter}</span>";
         String actionSuppression = "<span class='btnActionTooltip' id='actionSuppression_" + signalement.getId( ) + "' onclick='removeFromSelection("
                 + signalement.getId( ) + ")'><i style='color: #FF0707;' class='fa fa-minus-circle'></i> #i18n{dansmarue.map.tooltips.retirer}</span>";
         sigMarker.addTooltipText( "", actionAjout + actionSuppression );
@@ -573,8 +617,8 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
                     + signalement.getIdSignalement( )
                     + ")'><i style='color: #1DAF26;' class='fa fa-plus-circle'></i> #i18n{dansmarue.map.tooltips.ajouter}</span>";
             String actionSuppression = "<span class='btnActionTooltip' id='actionSuppression_" + signalement.getIdSignalement( )
-                    + "' onclick='removeFromSelection(" + signalement.getIdSignalement( )
-                    + ")'><i style='color: #FF0707;' class='fa fa-minus-circle'></i> #i18n{dansmarue.map.tooltips.retirer}</span>";
+            + "' onclick='removeFromSelection(" + signalement.getIdSignalement( )
+            + ")'><i style='color: #FF0707;' class='fa fa-minus-circle'></i> #i18n{dansmarue.map.tooltips.retirer}</span>";
             sigMarker.addTooltipText( "", actionAjout + actionSuppression );
         }
 

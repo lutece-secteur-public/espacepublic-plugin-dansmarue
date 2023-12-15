@@ -37,8 +37,10 @@ import java.util.Date;
 import java.util.List;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.Photo;
-import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.IDateUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.impl.DateUtils;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 /**
  * The Class SignalementDossierDTO.
@@ -76,6 +78,9 @@ public class SignalementDossierDTO
     /** The str type. */
     private String _strType;
 
+    /** The date utils */
+    private transient IDateUtils _dateUtils = SpringContextService.getBean( "signalement.dateUtils" );
+
     /**
      * Gets the adresse.
      *
@@ -97,7 +102,7 @@ public class SignalementDossierDTO
         boolean heuresNotNulls = ( _heureCreation != null ) && ( _heureDebutService != null );
 
         return datesNotNulls && heuresNotNulls && ( _dateCreation.after( _dateDebutService )
-                || ( DateUtils.sameDate( _dateCreation, _dateDebutService ) && DateUtils.sameHourOrAfter( _heureCreation, _heureDebutService ) ) );
+                || ( _dateUtils.sameDate( _dateCreation, _dateDebutService ) && _dateUtils.sameHourOrAfter( _heureCreation, _heureDebutService ) ) );
     }
 
     /**
@@ -212,7 +217,7 @@ public class SignalementDossierDTO
      */
     public void setDateCreation( String strDate )
     {
-        _dateCreation = DateUtils.parseDate( strDate );
+        _dateCreation = _dateUtils.parseDate( strDate );
     }
 
     /**
@@ -233,7 +238,7 @@ public class SignalementDossierDTO
      */
     public void setDateDebutService( String strDateDebutService )
     {
-        _dateDebutService = DateUtils.parseDate( strDateDebutService );
+        _dateDebutService = _dateUtils.parseDate( strDateDebutService );
     }
 
     /**

@@ -33,13 +33,19 @@
  */
 package fr.paris.lutece.plugins.dansmarue.business.entities;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * This is the business class for the object neighborhood.
  */
-public class ConseilQuartier
+public class ConseilQuartier implements Serializable
 {
+
+
+
+    /** The Constant serialVersionUID. */
+    private static final long serialVersionUID = 1628830962955366624L;
 
     /** The n id consqrt. */
     // Variables declarations

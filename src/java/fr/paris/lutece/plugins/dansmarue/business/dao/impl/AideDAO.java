@@ -134,7 +134,7 @@ public final class AideDAO implements IAideDAO
             int nIndex = 1;
             daoUtil.setLong( nIndex++, aide.getId( ) );
             daoUtil.setString( nIndex++, aide.getLibelle( ) );
-            daoUtil.setString( nIndex++, aide.getHypertexteUrl( ));
+            daoUtil.setString( nIndex++, aide.getHypertexteUrl( ) );
             daoUtil.setBytes( nIndex++, aide.getImage( ).getImage( ) );
             daoUtil.setString( nIndex++, aide.getImage( ).getMimeType( ) );
             daoUtil.setBoolean( nIndex, aide.getActif( ) );
@@ -369,7 +369,7 @@ public final class AideDAO implements IAideDAO
             daoUtil.executeUpdate( );
             daoUtil.close( );
 
-            updateVersionAide();
+            updateVersionAide( );
         }
 
     }
@@ -389,7 +389,7 @@ public final class AideDAO implements IAideDAO
             daoUtil.executeUpdate( );
             daoUtil.close( );
 
-            updateVersionAide();
+            updateVersionAide( );
         }
 
     }
@@ -407,7 +407,7 @@ public final class AideDAO implements IAideDAO
         daoUtil.executeUpdate( );
         daoUtil.close( );
 
-        updateVersionAide();
+        updateVersionAide( );
 
     }
 
@@ -415,7 +415,7 @@ public final class AideDAO implements IAideDAO
      * {@inheritDoc}
      */
     @Override
-    public void increaseOrdreOfAllNext( int nIdAide )
+    public void increaseOrdreOfAllNext( long nIdAide )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INCREASE_ORDER_OF_ALL_NEXT );
         int nIndex = 1;
@@ -424,7 +424,7 @@ public final class AideDAO implements IAideDAO
         daoUtil.executeUpdate( );
         daoUtil.close( );
 
-        updateVersionAide();
+        updateVersionAide( );
 
     }
 
@@ -432,7 +432,7 @@ public final class AideDAO implements IAideDAO
      * {@inheritDoc}
      */
     @Override
-    public void decreaseOrdreOfAllNext( int nIdAide )
+    public void decreaseOrdreOfAllNext( long nIdAide )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DECREASE_ORDER_OF_ALL_NEXT );
         int nIndex = 1;
@@ -440,7 +440,7 @@ public final class AideDAO implements IAideDAO
         daoUtil.executeUpdate( );
         daoUtil.close( );
 
-        updateVersionAide();
+        updateVersionAide( );
 
     }
 

@@ -33,16 +33,16 @@
  */
 package fr.paris.lutece.plugins.dansmarue.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.collections.CollectionUtils;
-
 import fr.paris.lutece.plugins.dansmarue.business.entities.UnitNode;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
+import fr.paris.lutece.plugins.unittree.service.unit.UnitService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import org.apache.commons.collections.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * The Class UnitUtils.
@@ -51,7 +51,7 @@ public class UnitUtils
 {
 
     /** The unit service. */
-    private static IUnitService _unitService = SpringContextService.getBean( IUnitService.BEAN_UNIT_SERVICE );
+    private static IUnitService _unitService = SpringContextService.getBean( UnitService.BEAN_UNIT_SERVICE );
 
     /**
      * Instantiates a new unit utils.
