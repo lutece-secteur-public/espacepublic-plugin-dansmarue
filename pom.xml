@@ -11,11 +11,11 @@
   <version>7.1.2</version>
   <packaging>lutece-plugin</packaging>
   <name>plugin Dans Ma Rue (BO signalement)</name>
-  <url>https://github.com/lutece-secteur-public/espacepublic-plugin-dansmarue.git</url>
+  <url>https://github.com/lutece-secteur-public/espacepublic-plugin-dansmarue</url>
   <scm>
     <connection>scm:git:https://github.com/lutece-secteur-public/espacepublic-plugin-dansmarue.git</connection>
     <developerConnection>scm:git:https://github.com/lutece-secteur-public/espacepublic-plugin-dansmarue.git</developerConnection>
-    <url>https://github.com/lutece-secteur-public/espacepublic-plugin-dansmarue.git</url>
+    <url>https://github.com/lutece-secteur-public/espacepublic-plugin-dansmarue</url>
     <tag>plugin-dansmarue-7.1.2-BC_12497_LOT1_VA</tag>
   </scm>
   <properties>
