@@ -51,23 +51,23 @@ public class Aide
 {
 
     // Variables declarations
-    private Integer       _idAide;
+    private Integer _idAide;
 
     @NotEmpty( message = "#i18n{signalement.validation.aide.Libelle.notEmpty}" )
     @Size( max = 255, message = "#i18n{signalement.validation.aide.Libelle.size}" )
-    private String        _strLibelle;
+    private String _strLibelle;
 
     /** The str hypetexte url. */
     @NotBlank( message = "Le champ url est obligatoire" )
-    private String        _strHypertexteUrl;
+    private String _strHypertexteUrl;
 
     /** The image. */
     @NotNull( message = "L'image est obligatoire" )
     private ImageResource _image = null;
 
-    private boolean       _bActif;
+    private boolean _bActif;
 
-    private Integer       _nOrdre;
+    private Integer _nOrdre;
 
     /**
      *
@@ -178,7 +178,7 @@ public class Aide
      * @param imageContent
      *            the new image content
      */
-    public void setImageContent( byte[] imageContent )
+    public void setImageContent( byte [ ] imageContent )
     {
         _image.setImage( imageContent );
     }

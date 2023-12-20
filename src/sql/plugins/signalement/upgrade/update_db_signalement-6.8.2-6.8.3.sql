@@ -1,2 +1,0 @@
-ALTER TABLE signalement_feuille_de_tournee ADD COLUMN carte text NULL;
-UPDATE core_datastore set entity_value = '[DansMaRue] Feuille de tournée' WHERE entity_key = 'sitelabels.site_property.feuilledetournee.mail.objet';

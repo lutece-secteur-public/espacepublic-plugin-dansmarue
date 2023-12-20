@@ -37,7 +37,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fr.paris.lutece.plugins.dansmarue.utils.SignalementUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.ISignalementUtils;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 /**
@@ -249,7 +250,7 @@ public final class SignalementConstants
     public static final String SIGNALEMENT_PREFIX_KEY = "signalement.prefix.origin";
 
     /** The Constant SIGNALEMENT_PREFIXES. */
-    public static final List<String> SIGNALEMENT_PREFIXES = SignalementUtils.getProperties( SIGNALEMENT_PREFIX_KEY );
+    public static final List<String> SIGNALEMENT_PREFIXES = ( ( ISignalementUtils ) SpringContextService.getBean( "signalement.signalementUtils" ) ).getProperties( SIGNALEMENT_PREFIX_KEY );
 
     /** The Constant START_SIGNALEMENT_NUMERO. */
     public static final int START_SIGNALEMENT_NUMERO = 1;
@@ -371,6 +372,9 @@ public final class SignalementConstants
 
     /** The Constant PROPERTY_URL_PICTURE. */
     public static final String PROPERTY_URL_HELP_PICTURE = "signalement-rest.url_help_picture";
+
+    /** The Constant MIME_TYPE_START. */
+    public static final String MIME_TYPE_START        = "image/";
 
     /**
      * Utility class - empty constructor.

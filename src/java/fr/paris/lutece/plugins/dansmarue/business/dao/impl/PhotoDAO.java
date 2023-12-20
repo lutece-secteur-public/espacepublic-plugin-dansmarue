@@ -39,12 +39,15 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.IPhotoDAO;
 import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
-import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.IDateUtils;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -55,37 +58,43 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public class PhotoDAO implements IPhotoDAO
 {
 
+    /** The date utils */
+    @Inject
+    @Named( "signalement.dateUtils" )
+    private transient IDateUtils _dateUtils;
+
     /** The Constant SQL_QUERY_NEW_PK. */
     private static final String SQL_QUERY_NEW_PK = "SELECT nextval('seq_signalement_photo_id_photo')";
 
     /** The Constant SQL_QUERY_INSERT. */
-    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_photo(id_photo, image_content, image_mime_type, image_thumbnail, fk_id_signalement, date_photo, vue_photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_photo(id_photo, fk_id_signalement, date_photo, vue_photo, chemin_photo, chemin_photo_miniature) VALUES (?, ?, ?, ?, ?, ?)";
 
     /** The Constant SQL_QUERY_DELETE. */
     private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_photo WHERE id_photo=?";
 
+    private static final String SQL_QUERY_DELETE_PHOTO_FROM_DATABASE = "update signalement_photo set image_thumbnail = null, image_content= null, image_mime_type = null,  chemin_photo=?, chemin_photo_miniature=? where id_photo=?";
+
     /** The Constant SQL_QUERY_SELECT. */
-    private static final String SQL_QUERY_SELECT = "SELECT id_photo, image_content, image_mime_type, vue_photo, date_photo, fk_id_signalement, is_anonymized FROM signalement_photo WHERE id_photo =?";
-    /** The Constant SQL_QUERY_SELECT_BY_SIGNALEMENT. */
-    private static final String SQL_QUERY_SELECT_BY_SIGNALEMENT = "SELECT id_photo, image_content, image_mime_type, vue_photo, date_photo, fk_id_signalement, is_anonymized FROM signalement_photo WHERE fk_id_signalement =?";
-    /** The Constant SQL_QUERY_UPDATE. */
-    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_photo SET id_photo=?, image_content=?, image_thumbnail=?, image_mime_type=?, date_photo=?, is_anonymized = 0 WHERE id_photo=?";
+    private static final String SQL_QUERY_SELECT_PATH_PHOTO = "SELECT chemin_photo, chemin_photo_miniature FROM signalement_photo WHERE id_photo =?";
+
     /** The Constant SQL_QUERY_UPDATE_PHOTO. */
-    private static final String SQL_QUERY_UPDATE_PHOTO = "UPDATE signalement_photo SET id_photo=?, image_content=?, image_thumbnail=?, image_mime_type=?, fk_id_signalement=?, date_photo=?, is_anonymized = 0 where id_photo=?";
+    private static final String SQL_QUERY_UPDATE_PHOTO                        = "UPDATE signalement_photo SET date_photo=?, chemin_photo=?, chemin_photo_miniature=? where id_photo=?";
     /** The Constant SQL_QUERY_FIND_IMAGE_BY_PRIMARY_KEY. */
-    private static final String SQL_QUERY_FIND_IMAGE_BY_PRIMARY_KEY = "SELECT image_content, image_mime_type, vue_photo,date_photo FROM signalement_photo WHERE id_photo=?";
+    private static final String SQL_QUERY_FIND_IMAGE_BY_PRIMARY_KEY           = "SELECT image_content, image_mime_type FROM signalement_photo WHERE id_photo=?";
     /** The Constant SQL_QUERY_FIND_IMAGE_THUMBNAIL_BY_PRIMARY_KEY. */
     private static final String SQL_QUERY_FIND_IMAGE_THUMBNAIL_BY_PRIMARY_KEY = "SELECT image_thumbnail, image_mime_type FROM signalement_photo WHERE id_photo=?";
     /** The Constant SQL_QUERY_SELECT_LIST_PHOTOS. */
-    private static final String SQL_QUERY_SELECT_LIST_PHOTOS = "SELECT id_photo, fk_id_signalement, vue_photo, date_photo, is_anonymized FROM signalement_photo WHERE fk_id_signalement=?";
+    private static final String SQL_QUERY_SELECT_LIST_PHOTOS                  = "SELECT id_photo, fk_id_signalement, vue_photo, date_photo, is_anonymized, chemin_photo, chemin_photo_miniature FROM signalement_photo WHERE fk_id_signalement=?";
     /** The Constant SQL_QUERY_SELECT_LIST_PHOTOS_WITH_FULL. */
-    private static final String SQL_QUERY_SELECT_LIST_PHOTOS_WITH_FULL = "SELECT id_photo, image_content, image_thumbnail, image_mime_type, fk_id_signalement, vue_photo, date_photo, is_anonymized FROM signalement_photo WHERE fk_id_signalement=?";
+    private static final String SQL_QUERY_SELECT_LIST_PHOTOS_WITH_FULL        = "SELECT id_photo, image_content, image_thumbnail, image_mime_type, fk_id_signalement, vue_photo, date_photo, is_anonymized, chemin_photo, chemin_photo_miniature FROM signalement_photo WHERE fk_id_signalement=?";
 
     /** The Constant SQL_QUERY_SELECT_ID_FOR_SUPPRESSION_PHOTOS_DAEMON. */
-    private static final String SQL_QUERY_SELECT_ID_FOR_SUPPRESSION_PHOTOS_DAEMON = "SELECT photo.id_photo, photo.image_content, photo.image_thumbnail, photo.image_mime_type, photo.fk_id_signalement, photo.vue_photo, photo.date_photo FROM signalement_signalement signalement INNER JOIN signalement_type_signalement typeSignalement ON signalement.fk_id_type_signalement = typeSignalement.id_type_signalement INNER JOIN signalement_photo photo on photo.fk_id_signalement = signalement.id_signalement inner join workflow_resource_workflow workflow on workflow.id_resource = signalement.id_signalement WHERE typeSignalement.id_type_signalement IN ({0}) AND now() - ''{1} hours''::interval > date_creation and workflow.id_state IN ({2}) AND photo.date_photo is not null ORDER BY photo.id_photo LIMIT {3}  ;";
+    private static final String SQL_QUERY_SELECT_ID_FOR_SUPPRESSION_PHOTOS_DAEMON = "SELECT photo.id_photo, chemin_photo, chemin_photo_miniature FROM signalement_signalement signalement INNER JOIN signalement_type_signalement typeSignalement ON signalement.fk_id_type_signalement = typeSignalement.id_type_signalement INNER JOIN signalement_photo photo on photo.fk_id_signalement = signalement.id_signalement inner join workflow_resource_workflow workflow on workflow.id_resource = signalement.id_signalement WHERE typeSignalement.id_type_signalement IN ({0}) AND now() - ''{1} hours''::interval > date_creation and workflow.id_state IN ({2}) AND photo.date_photo is not null ORDER BY photo.id_photo LIMIT {3}  ;";
 
     /** The Constant EMPTY_STRING. */
     private static final String EMPTY_STRING = "";
+
+    private static final String SQL_QUERY_SELECT_LIST_PHOTOS_TO_MIGRATE = "SELECT id_photo, image_content, image_thumbnail, image_mime_type, fk_id_signalement, vue_photo, date_photo, is_anonymized, chemin_photo, chemin_photo_miniature FROM signalement_photo where chemin_photo is null and chemin_photo_miniature is null order by id_photo asc limit ?";
 
     /**
      * Generates a new primary key.
@@ -122,27 +131,6 @@ public class PhotoDAO implements IPhotoDAO
             int nIndex = 1;
             daoUtil.setLong( nIndex++, photo.getId( ) );
 
-            if ( photo.getImage( ) != null )
-            {
-                daoUtil.setBytes( nIndex++, photo.getImage( ).getImage( ) );
-                daoUtil.setString( nIndex++, photo.getImage( ).getMimeType( ) );
-            }
-            else
-            {
-                byte [ ] baImageNull = null;
-                daoUtil.setBytes( nIndex++, baImageNull );
-                daoUtil.setString( nIndex++, "" );
-            }
-            if ( photo.getImageThumbnail( ) != null )
-            {
-                daoUtil.setBytes( nIndex++, photo.getImageThumbnail( ).getImage( ) );
-            }
-            else
-            {
-                byte [ ] baImageNull = null;
-                daoUtil.setBytes( nIndex++, baImageNull );
-            }
-
             daoUtil.setLong( nIndex++, photo.getSignalement( ).getId( ) );
 
             if ( ( photo.getDate( ) != null ) && !( photo.getDate( ).equals( EMPTY_STRING ) ) )
@@ -156,8 +144,11 @@ public class PhotoDAO implements IPhotoDAO
 
             if ( photo.getVue( ) != null )
             {
-                daoUtil.setInt( nIndex, photo.getVue( ) );
+                daoUtil.setInt( nIndex++, photo.getVue( ) );
             }
+
+            daoUtil.setString( nIndex++, photo.getCheminPhoto( ) );
+            daoUtil.setString( nIndex, photo.getCheminPhotoMiniature( ) );
 
             daoUtil.executeUpdate( );
 
@@ -184,85 +175,19 @@ public class PhotoDAO implements IPhotoDAO
     public PhotoDMR load( long lId )
     {
         PhotoDMR photo = new PhotoDMR( );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_PATH_PHOTO );
         daoUtil.setLong( 1, lId );
         daoUtil.executeQuery( );
         if ( daoUtil.next( ) )
         {
             int nIndex = 1;
-            photo.setId( daoUtil.getLong( nIndex++ ) );
-            Object oImageContent = daoUtil.getBytes( nIndex++ );
-            photo.setImage( new ImageResource( ) );
-            photo.setImageContent( (byte [ ]) oImageContent );
-            photo.setMimeType( daoUtil.getString( nIndex++ ) );
-            photo.setVue( daoUtil.getInt( nIndex++ ) );
-            photo.setDate( DateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
-
-            photo.getSignalement( ).setId( daoUtil.getLong( nIndex++ ) );
-            photo.setAnonymized( daoUtil.getBoolean( nIndex ) );
+            photo.setCheminPhoto( daoUtil.getString( nIndex++ ) );
+            photo.setCheminPhotoMiniature( daoUtil.getString( nIndex ) );
         }
 
         daoUtil.close( );
 
         return photo;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public PhotoDMR loadByIdSignalement( long signalementId )
-    {
-        PhotoDMR photo = new PhotoDMR( );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_SIGNALEMENT );
-        daoUtil.setLong( 1, signalementId );
-        daoUtil.executeQuery( );
-        if ( daoUtil.next( ) )
-        {
-            int nIndex = 1;
-            photo.setId( daoUtil.getLong( nIndex++ ) );
-            Object oImageContent = daoUtil.getBytes( nIndex++ );
-            photo.setImage( new ImageResource( ) );
-            photo.setImageContent( (byte [ ]) oImageContent );
-            Object oImageThumbnailContent = daoUtil.getBytes( nIndex++ );
-            photo.setImageThumbnailWithBytes( (byte [ ]) oImageThumbnailContent );
-            photo.setMimeType( daoUtil.getString( nIndex++ ) );
-            photo.setVue( daoUtil.getInt( nIndex++ ) );
-            photo.setDate( DateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
-
-            Signalement signalement = new Signalement( );
-            signalement.setId( daoUtil.getLong( nIndex++ ) );
-            photo.setSignalement( signalement );
-
-            photo.setAnonymized( daoUtil.getBoolean( nIndex ) );
-        }
-
-        daoUtil.close( );
-
-        return photo;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void store( PhotoDMR photo )
-    {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE );
-        int nIndex = 1;
-
-        daoUtil.setLong( nIndex++, photo.getId( ) );
-
-        daoUtil.setBytes( nIndex++, photo.getImage( ).getImage( ) );
-        daoUtil.setBytes( nIndex++, photo.getImageThumbnail( ).getImage( ) );
-        daoUtil.setString( nIndex++, photo.getImage( ).getMimeType( ) );
-        daoUtil.setDate( nIndex++, DateUtil.formatDateSql( photo.getDate( ), Locale.FRENCH ) );
-
-        // WHERE
-        daoUtil.setLong( nIndex, photo.getId( ) );
-
-        daoUtil.executeUpdate( );
-        daoUtil.close( );
     }
 
     /**
@@ -274,13 +199,6 @@ public class PhotoDAO implements IPhotoDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_PHOTO );
         int nIndex = 1;
 
-        daoUtil.setLong( nIndex++, photo.getId( ) );
-
-        daoUtil.setBytes( nIndex++, photo.getImage( ).getImage( ) );
-        daoUtil.setBytes( nIndex++, photo.getImageThumbnail( ).getImage( ) );
-        daoUtil.setString( nIndex++, photo.getImage( ).getMimeType( ) );
-        daoUtil.setLong( nIndex++, photo.getSignalement( ).getId( ) );
-
         if ( photo.getDate( ) == null )
         {
             daoUtil.setDate( nIndex++, null );
@@ -289,6 +207,9 @@ public class PhotoDAO implements IPhotoDAO
         {
             daoUtil.setDate( nIndex++, DateUtil.formatDateSql( photo.getDate( ), Locale.FRENCH ) );
         }
+        daoUtil.setString( nIndex++, photo.getCheminPhoto( ) );
+        daoUtil.setString( nIndex++, photo.getCheminPhotoMiniature( ) );
+
         // WHERE
         daoUtil.setLong( nIndex, photo.getId( ) );
 
@@ -364,8 +285,10 @@ public class PhotoDAO implements IPhotoDAO
             Signalement signalement = new Signalement( );
             signalement.setId( daoUtil.getLong( nIndex++ ) );
             photo.setVue( daoUtil.getInt( nIndex++ ) );
-            photo.setDate( DateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
-            photo.setAnonymized( daoUtil.getBoolean( nIndex ) );
+            photo.setDate( _dateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
+            photo.setAnonymized( daoUtil.getBoolean( nIndex++ ) );
+            photo.setCheminPhoto( daoUtil.getString( nIndex++ ) );
+            photo.setCheminPhotoMiniature( daoUtil.getString( nIndex ) );
 
             photo.setSignalement( signalement );
             result.add( photo );
@@ -397,15 +320,17 @@ public class PhotoDAO implements IPhotoDAO
             photo.setId( daoUtil.getLong( nIndex++ ) );
             Object oImageContent = daoUtil.getBytes( nIndex++ );
             photo.setImage( new ImageResource( ) );
-            photo.setImageContent( (byte [ ]) oImageContent );
+            photo.setImageContent( ( byte[] ) oImageContent );
             Object oImageContentThumbnail = daoUtil.getBytes( nIndex++ );
-            photo.setImageThumbnailWithBytes( (byte [ ]) oImageContentThumbnail );
+            photo.setImageThumbnailWithBytes( ( byte[] ) oImageContentThumbnail );
             photo.setMimeType( daoUtil.getString( nIndex++ ) );
             Signalement signalement = new Signalement( );
             signalement.setId( daoUtil.getLong( nIndex++ ) );
             photo.setVue( daoUtil.getInt( nIndex++ ) );
-            photo.setDate( DateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
-            photo.setAnonymized( daoUtil.getBoolean( nIndex ) );
+            photo.setDate( _dateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
+            photo.setAnonymized( daoUtil.getBoolean( nIndex++ ) );
+            photo.setCheminPhoto( daoUtil.getString( nIndex++ ) );
+            photo.setCheminPhotoMiniature( daoUtil.getString( nIndex ) );
 
             photo.setSignalement( signalement );
             result.add( photo );
@@ -436,14 +361,12 @@ public class PhotoDAO implements IPhotoDAO
      * java.lang.Integer)
      */
     @Override
-    public List<PhotoDMR> findPhotosForSupprPhotosDaemon( List<String> anomaliesCible, Integer tempsConservation, List<String> etatsCible,
-            Integer limitRequest )
+    public List<PhotoDMR> findPhotosForSupprPhotosDaemon( List<String> anomaliesCible, Integer tempsConservation, List<String> etatsCible, Integer limitRequest )
     {
         String intAnomaliesCiblesValues = StringUtils.join( anomaliesCible.stream( ).toArray( ), "," );
         String intEtatsCiblesValues = StringUtils.join( etatsCible.stream( ).toArray( ), "," );
 
-        DAOUtil daoUtil = new DAOUtil( MessageFormat.format( SQL_QUERY_SELECT_ID_FOR_SUPPRESSION_PHOTOS_DAEMON, intAnomaliesCiblesValues, tempsConservation,
-                intEtatsCiblesValues, limitRequest ) );
+        DAOUtil daoUtil = new DAOUtil( MessageFormat.format( SQL_QUERY_SELECT_ID_FOR_SUPPRESSION_PHOTOS_DAEMON, intAnomaliesCiblesValues, tempsConservation, intEtatsCiblesValues, limitRequest ) );
 
         daoUtil.executeQuery( );
 
@@ -454,17 +377,8 @@ public class PhotoDAO implements IPhotoDAO
             PhotoDMR photo = new PhotoDMR( );
             int nIndex = 1;
             photo.setId( daoUtil.getLong( nIndex++ ) );
-            Object oImageContent = daoUtil.getBytes( nIndex++ );
-            photo.setImage( new ImageResource( ) );
-            photo.setImageContent( (byte [ ]) oImageContent );
-            Object oImageContentThumbnail = daoUtil.getBytes( nIndex++ );
-            photo.setImageThumbnailWithBytes( (byte [ ]) oImageContentThumbnail );
-            photo.setMimeType( daoUtil.getString( nIndex++ ) );
-            Signalement signalement = new Signalement( );
-            signalement.setId( daoUtil.getLong( nIndex++ ) );
-            photo.setVue( daoUtil.getInt( nIndex++ ) );
-            photo.setDate( DateUtils.getDateFr( daoUtil.getDate( nIndex ) ) );
-            photo.setSignalement( signalement );
+            photo.setCheminPhoto( daoUtil.getString( nIndex++ ) );
+            photo.setCheminPhotoMiniature( daoUtil.getString( nIndex ) );
 
             photos.add( photo );
         }
@@ -472,6 +386,56 @@ public class PhotoDAO implements IPhotoDAO
         daoUtil.close( );
 
         return photos;
+    }
+
+    @Override
+    public List<PhotoDMR> findPhotosToMigrate( int nNbPhotoToMigrate )
+    {
+        List<PhotoDMR> listPhotosToMigrate = new ArrayList<>( );
+
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_LIST_PHOTOS_TO_MIGRATE );
+        daoUtil.setLong( 1, nNbPhotoToMigrate );
+        daoUtil.executeQuery( );
+
+        while ( daoUtil.next( ) )
+        {
+            PhotoDMR photo = new PhotoDMR( );
+            int nIndex = 1;
+            photo.setId( daoUtil.getLong( nIndex++ ) );
+            Object oImageContent = daoUtil.getBytes( nIndex++ );
+            photo.setImage( new ImageResource( ) );
+            photo.setImageContent( ( byte[] ) oImageContent );
+            Object oImageContentThumbnail = daoUtil.getBytes( nIndex++ );
+            photo.setImageThumbnailWithBytes( ( byte[] ) oImageContentThumbnail );
+            photo.setMimeType( daoUtil.getString( nIndex++ ) );
+            Signalement signalement = new Signalement( );
+            signalement.setId( daoUtil.getLong( nIndex++ ) );
+            photo.setVue( daoUtil.getInt( nIndex++ ) );
+            photo.setDate( _dateUtils.getDateFr( daoUtil.getDate( nIndex++ ) ) );
+            photo.setAnonymized( daoUtil.getBoolean( nIndex++ ) );
+            photo.setCheminPhoto( daoUtil.getString( nIndex++ ) );
+            photo.setCheminPhotoMiniature( daoUtil.getString( nIndex ) );
+
+            photo.setSignalement( signalement );
+
+            listPhotosToMigrate.add( photo );
+        }
+
+        daoUtil.close( );
+
+        return listPhotosToMigrate;
+    }
+
+    @Override
+    public void removePhotoFromDatabase( PhotoDMR photoDMR )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_PHOTO_FROM_DATABASE ) )
+        {
+            daoUtil.setString( 1, photoDMR.getCheminPhoto( ) );
+            daoUtil.setString( 2, photoDMR.getCheminPhotoMiniature( ) );
+            daoUtil.setLong( 3, photoDMR.getId( ) );
+            daoUtil.executeUpdate( );
+        }
     }
 
 }

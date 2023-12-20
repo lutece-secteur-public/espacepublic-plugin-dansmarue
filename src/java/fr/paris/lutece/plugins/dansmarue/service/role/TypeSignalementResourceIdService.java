@@ -35,12 +35,13 @@ package fr.paris.lutece.plugins.dansmarue.service.role;
 
 import java.util.Locale;
 
+import fr.paris.lutece.plugins.dansmarue.utils.IListUtils;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.dansmarue.service.ITypeSignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.SignalementPlugin;
-import fr.paris.lutece.plugins.dansmarue.utils.ListUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.impl.ListUtils;
 import fr.paris.lutece.portal.service.rbac.Permission;
 import fr.paris.lutece.portal.service.rbac.ResourceIdService;
 import fr.paris.lutece.portal.service.rbac.ResourceType;
@@ -65,6 +66,10 @@ public class TypeSignalementResourceIdService extends ResourceIdService
 
     /** The type signalement service. */
     private ITypeSignalementService _typeSignalementService;
+
+    /** The list utils */
+    // UTILS
+    private IListUtils _listUtils = SpringContextService.getBean( "signalement.listUtils" );
 
     /**
      * {@inheritDoc}
@@ -98,7 +103,7 @@ public class TypeSignalementResourceIdService extends ResourceIdService
         {
             _typeSignalementService = (ITypeSignalementService) SpringContextService.getBean( "typeSignalementService" );
         }
-        return ListUtils.toReferenceList( _typeSignalementService.getAllTypeSignalement( ), "id", "formatTypeSignalement", null, false );
+        return _listUtils.toReferenceList( _typeSignalementService.getAllTypeSignalement( ), "id", "formatTypeSignalement", null, false );
     }
 
     /**

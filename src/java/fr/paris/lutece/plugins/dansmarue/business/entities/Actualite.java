@@ -59,7 +59,7 @@ public class Actualite
 
     /** The str texte. */
     @NotEmpty( message = "Le champ texte d\'actualité est obligatoire" )
-    @Size( max = 700 , message = "La taille du texte d'actualité est trop importante")
+    @Size( max = 700, message = "La taille du texte d'actualité est trop importante" )
     private String _strTexte;
 
     /** The image. */

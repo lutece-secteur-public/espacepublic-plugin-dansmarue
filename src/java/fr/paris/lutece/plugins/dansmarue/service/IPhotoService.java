@@ -70,12 +70,11 @@ public interface IPhotoService
     PhotoDMR load( long lId );
 
     /**
-     * Store a photo.
+     * Update a photo.
      *
-     * @param photo
-     *            the photo object
+     * @param photoDMR the photo dmr
      */
-    void store( PhotoDMR photo );
+    void update( PhotoDMR photoDMR);
 
     /**
      * Gets the image resource.
@@ -87,13 +86,15 @@ public interface IPhotoService
     ImageResource getImageResource( int nKey );
 
     /**
-     * Load a photo with the id of the report.
+     * Gets the image resource.
      *
-     * @param lId
-     *            the report id
-     * @return the photo
+     * @param nKey
+     *            the n key
+     * @param strToken
+     *            the token
+     * @return the image resource
      */
-    PhotoDMR loadByIdSignalement( long lId );
+    ImageResource getImageResource( int nKey, String strToken );
 
     /**
      * Find photos for a report id.
@@ -121,4 +122,29 @@ public interface IPhotoService
      * @return the image resource
      */
     ImageResource getImageThumbnailResource( int nIdPhoto );
+
+    /**
+     * Load a thumbnailed photo.
+     *
+     * @param nIdPhoto
+     *            the photo id
+     * @param strToken
+     *            the token
+     * @return the image resource
+     */
+    ImageResource getImageThumbnailResource( int nIdPhoto, String strToken );
+
+    /**
+     * Find photos to migrate list.
+     * @param maxPhoto
+     *         max photo load
+     * @return the list
+     */
+    List<PhotoDMR> findPhotosToMigrate( int maxPhoto);
+
+    /**
+     * Remove photo from database.
+     * @param photoDMR the photo dmr
+     */
+    void removePhotoFromDatabase( PhotoDMR photoDMR );
 }

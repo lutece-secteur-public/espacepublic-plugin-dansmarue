@@ -58,7 +58,7 @@ public class FeuilleDeTourneeFilter implements Serializable
     /** The str date creation fin. */
     private String _strDateCreationFin;
 
-    private DateTimeFormatter _formatter = DateTimeFormatter.ofPattern( "dd/MM/yyyy" );
+    private transient DateTimeFormatter _formatter = DateTimeFormatter.ofPattern( "dd/MM/yyyy" );
 
     /**
      * Gets the nom.

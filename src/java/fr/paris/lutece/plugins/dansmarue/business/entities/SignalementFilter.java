@@ -62,7 +62,7 @@ public class SignalementFilter implements Serializable
     private String _strNumero;
 
     /** The n id direction. */
-    private int _nIdDirection;
+    private List<Integer> _listIdDirection;
 
     /** The list id arrondissements. */
     private List<Integer> _listIdArrondissements;
@@ -147,6 +147,9 @@ public class SignalementFilter implements Serializable
     private int _nIdFdt;
 
     private String _strOnglet;
+
+    /** The b filter by photo service done only */
+    private boolean _bPhotoDoneOnly;
 
     /**
      * Init empty list for report filter to avoid Null Pointer Exception.
@@ -306,20 +309,20 @@ public class SignalementFilter implements Serializable
      *
      * @return the idDirection
      */
-    public int getIdDirection( )
+    public List<Integer> getListIdDirection( )
     {
-        return _nIdDirection;
+        return _listIdDirection;
     }
 
     /**
      * Sets the id direction.
      *
-     * @param pIdDirection
+     * @param listIdDirection
      *            the idDirection to set
      */
-    public void setIdDirection( int pIdDirection )
+    public void setListIdDirection( List<Integer> listIdDirection )
     {
-        _nIdDirection = pIdDirection;
+        _listIdDirection = listIdDirection;
     }
 
     /**
@@ -832,7 +835,17 @@ public class SignalementFilter implements Serializable
 
     public void setOnglet( String onglet )
     {
-        this._strOnglet = onglet;
+        _strOnglet = onglet;
+    }
+
+    public boolean isPhotoDoneOnly( )
+    {
+        return _bPhotoDoneOnly;
+    }
+
+    public void setPhotoDoneOnly( boolean photoDoneOnly )
+    {
+        _bPhotoDoneOnly = photoDoneOnly;
     }
 
 }

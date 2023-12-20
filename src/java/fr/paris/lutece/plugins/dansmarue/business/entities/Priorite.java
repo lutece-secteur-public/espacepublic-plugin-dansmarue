@@ -42,7 +42,7 @@ public class Priorite implements Serializable
 {
 
     private static final long serialVersionUID = -4659583432830516262L;
-    
+
     /** The id. */
     private Long _id;
 

@@ -1,4 +1,37 @@
 <link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
+<style>
+	.truncate-infos{
+		display:inline-block;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 20ch;
+	}
+
+	.info-block{
+		position:absolute;
+	}
+
+	.info-expanded{
+		display:none;
+		position:relative;
+		z-index:100;
+		border:1px;
+		background-color:black;
+		border-style:solid;
+		padding:3px;
+		color: white;
+		min-width: 300px;
+		max-width: 300px;
+		left: -47%;
+	}
+
+	.info-block:hover span.info-expanded{
+		display:block;
+	}
+</style>
+
+<#include "/util/calendar/macro_datepicker.html" />
 <!-- Formulaire de recherche -->
 <@box color='primary'>
 	<@boxBody>
@@ -20,7 +53,7 @@
 								<div class="input-group-addon">
 									<span class="glyphicon glyphicon-calendar"></span>
 								</div>
-								<input class="form-control input-sm" type="text" name="dateCreationDebut" 
+								<input class="form-control input-sm" type="text" name="dateCreationDebut"
 								id="dateCreationDebut" maxlength="10" value="${filter_fdt.dateCreationDebut!}" />
 							</div>
 						</div>
@@ -33,7 +66,7 @@
 								<div class="input-group-addon">
 									<span class="glyphicon glyphicon-calendar"></span>
 								</div>
-								<input class="form-control input-sm" type="text" name="dateCreationFin" 
+								<input class="form-control input-sm" type="text" name="dateCreationFin"
 								id="dateCreationFin" value="${filter_fdt.dateCreationFin!}" />
 							</div>
 						</div>
@@ -56,7 +89,7 @@
 			width="20px"
 			alt="#i18n{dansmarue.tournee.lien.creation}"
 			title="#i18n{dansmarue.tournee.lien.creation}" />
-		</a> 
+		</a>
 		<b><a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=create">#i18n{dansmarue.tournee.lien.creation}</a></b>
 		<#assign nbresult=fdt_list?size>
 		<span class="pull-right"><b>#i18n{dansmarue.reportingList.search.results}:</b> ${nbresult} #i18n{dansmarue.tournee.recherche.resultat.nb}</span>
@@ -66,7 +99,7 @@
 				<tr>
 					<th>
 						<input type="checkbox" name="selectAll" id="selectAll" value="selectAll" title="#i18n{dansmarue.reportingList.alt.selectAll}" />
-					</th> 
+					</th>
 					<th>
 						#i18n{dansmarue.tournee.resultat.header.action}
 					</th>
@@ -94,42 +127,66 @@
 						<@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" attribute="date_modification"/>
 						#i18n{dansmarue.tournee.resultat.header.date.modification}
 					</th>
+					<th>
+						<@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" attribute="info_avant_tournee"/>
+						#i18n{dansmarue.tournee.resultat.header.info.avant.tournee}
+					</th>
+					<th>
+						<@sort jsp_url="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp" attribute="info_apres_tournee"/>
+						#i18n{dansmarue.tournee.resultat.header.info.apres.tournee}
+					</th>
 				</tr>
 			</thead>
 			<tbody>
 				<#list fdt_list as fdt>
 					<tr>
-						<td> 
-							<input type="checkbox" name="id" value="${fdt.id}" title="#i18n{dansmarue.reportingList.alt.select}" /> 
+						<td>
+							<input type="checkbox" name="id" value="${fdt.id}" title="#i18n{dansmarue.reportingList.alt.select}" />
 						</td>
-						<td> 
-							<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=load&idFeuilleDeTournee=${fdt.id}" class="btn btn-xs btn-primary" 
+						<td>
+							<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=load&idFeuilleDeTournee=${fdt.id}" class="btn btn-xs btn-primary"
 								title="#i18n{dansmarue.tournee.pdf.param.btn.consult}"> <i class="glyphicon glyphicon-eye-open"></i>
 							</a>
-							<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=edit&idFeuilleDeTournee=${fdt.id}" class="btn btn-xs btn-primary" 
+							<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=edit&idFeuilleDeTournee=${fdt.id}" class="btn btn-xs btn-primary"
 								title="#i18n{dansmarue.tournee.pdf.param.btn.edit}"> <i class="glyphicon glyphicon-edit"></i>
 							</a>
-							<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?action=getDeleteFDT&idFeuilleDeTournee=${fdt.id}" class="btn btn-xs btn-danger" 
+							<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?action=getDeleteFDT&idFeuilleDeTournee=${fdt.id}" class="btn btn-xs btn-danger"
 								title="#i18n{dansmarue.tournee.pdf.param.btn.delete}"> <i class="glyphicon glyphicon-trash"></i>
 							</a>
 						</td>
-						<td> 
+						<td>
 							${fdt.nom!}
 						</td>
-						<td> 
+						<td>
 							${fdt.directionLibelle!}
 						</td>
-						<td> 
+						<td>
 							${fdt.entiteLibelle!}
 						</td>
-						<td> 
+						<td>
 							${fdt.createur!}
 						</td>
-						<td> 
+						<td style="width: 0.6%;">
 							${fdt.dateCreation!}
 						</td>
-						<td> 
+						<td>
 							${fdt.dateModification!}
+						</td>
+						<td>
+							<div class="info-block">
+								<span class="truncate-infos">${fdt.infoAvantTournee!}</span>
+								<#if fdt.infoAvantTournee ?? && fdt.infoAvantTournee?length &gt; 20 >
+								<span class="info-expanded">${fdt.infoAvantTournee!}</span>
+								</#if>
+							</div>
+						</td>
+						<td>
+							<div class="info-block">
+								<span class="truncate-infos">${fdt.infoApresTournee!}</span>
+								<#if fdt.infoApresTournee ?? && fdt.infoApresTournee?length &gt; 20 >
+								<span class="info-expanded">${fdt.infoApresTournee!}</span>
+								</#if>
+							</div>
 						</td>
 					</tr>
 				</#list>
@@ -137,7 +194,7 @@
 		</@table>
 		<!-- TODO Gérer la pagination-->
 	</@boxBody>
-</@box>	
+</@box>
 
 <@getDatePickerRangeBootstrap language="${locale.language!}" />
 

@@ -44,6 +44,9 @@ public class ServiceFaitMasseFilter implements Serializable
     /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 3607921200266975320L;
 
+    /** The str admin user access code **/
+    private String _strAdminUserAccessCode;
+
     /** The str date begin. */
     private String _strDateBegin;
 
@@ -80,6 +83,27 @@ public class ServiceFaitMasseFilter implements Serializable
     public void setIdTypeSignalements( Integer [ ] idTypeSignalements )
     {
         _idTypeSignalements = idTypeSignalements;
+    }
+
+    /**
+     * Gets the admin user access code.
+     *
+     * @return the AdminUserAccessCode
+     */
+    public String getAdminUserAccessCode( )
+    {
+        return _strAdminUserAccessCode;
+    }
+
+    /**
+     * Sets the admin user access code.
+     *
+     * @param strAdminUserAccessCode
+     *            the admin user access code to set
+     */
+    public void setAdminUserAccessCode( String strAdminUserAccessCode )
+    {
+        _strAdminUserAccessCode = strAdminUserAccessCode;
     }
 
     /**

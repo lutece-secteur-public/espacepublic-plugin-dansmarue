@@ -37,9 +37,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
+
 import fr.paris.lutece.plugins.dansmarue.business.dao.IPhotoDAO;
 import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
 import fr.paris.lutece.plugins.dansmarue.service.IPhotoService;
+import fr.paris.lutece.plugins.dansmarue.utils.StockagePhotoUtils;
 import fr.paris.lutece.portal.service.image.ImageResource;
 
 /**
@@ -48,9 +51,13 @@ import fr.paris.lutece.portal.service.image.ImageResource;
 public class PhotoService implements IPhotoService
 {
 
+
     /** The photo DAO. */
     @Inject
     private IPhotoDAO _photoDAO;
+
+    @Inject
+    private StockagePhotoUtils _stockagePhotoUtils;
 
     /**
      * {@inheritDoc}
@@ -58,7 +65,14 @@ public class PhotoService implements IPhotoService
     @Override
     public Long insert( PhotoDMR photo )
     {
-        return _photoDAO.insert( photo );
+        boolean result = _stockagePhotoUtils.savePhotoOnNetAppServeur( photo );
+        if ( result )
+        {
+            return _photoDAO.insert( photo );
+        } else
+        {
+            return ( long ) -1;
+        }
     }
 
     /**
@@ -68,6 +82,7 @@ public class PhotoService implements IPhotoService
     public void remove( long lId )
     {
         _photoDAO.remove( lId );
+        _stockagePhotoUtils.deletePhotoOnNetAppServeur( load( lId ) );
 
     }
 
@@ -84,19 +99,26 @@ public class PhotoService implements IPhotoService
      * {@inheritDoc}
      */
     @Override
-    public void store( PhotoDMR photo )
+    public ImageResource getImageResource( int nKey )
     {
-        _photoDAO.store( photo );
-
+        return _photoDAO.loadPhoto( nKey );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ImageResource getImageResource( int nKey )
+    public ImageResource getImageResource( int nKey, String strToken )
     {
-        return _photoDAO.loadPhoto( nKey );
+        PhotoDMR photoDMR = load( nKey );
+        if(StringUtils.isBlank( photoDMR.getCheminPhoto() )) {
+            return new ImageResource();
+        }
+        String storedToken = photoDMR.getCheminPhoto().split( "_" )[0];
+        if( !storedToken.equals( strToken ) ) {
+            return new ImageResource();
+        }
+        return _stockagePhotoUtils.loadPhotoOnNetAppServeur( photoDMR.getCheminPhoto( ) );
     }
 
     /**
@@ -112,9 +134,30 @@ public class PhotoService implements IPhotoService
      * {@inheritDoc}
      */
     @Override
-    public PhotoDMR loadByIdSignalement( long lId )
+    public ImageResource getImageThumbnailResource( int nIdPhoto, String strToken )
     {
-        return _photoDAO.loadByIdSignalement( lId );
+        PhotoDMR photoDMR = load( nIdPhoto );
+        if(StringUtils.isBlank( photoDMR.getCheminPhotoMiniature() )) {
+            return new ImageResource();
+        }
+        String storedToken = photoDMR.getCheminPhotoMiniature().split( "_" )[0];
+        if( !storedToken.equals( strToken ) )
+        {
+            return new ImageResource();
+        }
+        return _stockagePhotoUtils.loadPhotoOnNetAppServeur( photoDMR.getCheminPhotoMiniature( ) );
+    }
+
+    @Override
+    public List<PhotoDMR> findPhotosToMigrate( int maxPhoto)
+    {
+        return _photoDAO.findPhotosToMigrate( maxPhoto );
+    }
+
+    @Override
+    public void removePhotoFromDatabase( PhotoDMR photoDMR )
+    {
+        _photoDAO.removePhotoFromDatabase( photoDMR );
     }
 
     /**
@@ -132,6 +175,27 @@ public class PhotoService implements IPhotoService
     @Override
     public List<PhotoDMR> findWithFullPhotoBySignalementId( long lIdSignalement )
     {
-        return _photoDAO.findWithFullPhotoBySignalementId( lIdSignalement );
+        List<PhotoDMR> photos = _photoDAO.findWithFullPhotoBySignalementId( lIdSignalement );
+        //Load Photo on S3 server
+        for(PhotoDMR photo : photos) {
+            if (( photo.getImage( ) == null ) || ( photo.getImage( ).getImage( ) == null ) ) {
+                ImageResource imageRessource = _stockagePhotoUtils.loadPhotoOnNetAppServeur( photo.getCheminPhoto( ) );
+                photo.setImage( imageRessource );
+            }
+
+            if (( photo.getImageThumbnail( ) == null ) || ( photo.getImageThumbnail( ).getImage( ) == null ) ) {
+                ImageResource imageRessource = _stockagePhotoUtils.loadPhotoOnNetAppServeur( photo.getCheminPhotoMiniature( ) );
+                photo.setImageThumbnail( imageRessource );
+            }
+        }
+        return photos;
     }
+
+    @Override
+    public void update( PhotoDMR photoDMR )
+    {
+        _photoDAO.updatePhoto( photoDMR );
+
+    }
+
 }

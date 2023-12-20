@@ -43,6 +43,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import fr.paris.lutece.plugins.dansmarue.utils.IListUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -55,7 +56,6 @@ import fr.paris.lutece.plugins.dansmarue.service.ISiraUserService;
 import fr.paris.lutece.plugins.dansmarue.service.ITypeSignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.role.SignalementResourceIdService;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
-import fr.paris.lutece.plugins.dansmarue.utils.ListUtils;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.modules.dansmarue.service.sector.ISectorService;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
@@ -169,6 +169,10 @@ public class SignalementDashboardJspBean extends AbstractJspBean
 
     /** The sira user service. */
     private transient ISiraUserService _siraUserService = SpringContextService.getBean( "siraUserService" );
+
+    /** The list utils */
+    // UTILS
+    private transient IListUtils _listUtils = SpringContextService.getBean( "signalement.listUtils" );
 
     /** The tableau de bord filter. */
     // MEMBERS
@@ -445,7 +449,7 @@ public class SignalementDashboardJspBean extends AbstractJspBean
         if ( StringUtils.isNotBlank( strIds ) )
         {
             String [ ] idArr = strIds.split( "," );
-            listInteger = ListUtils.getListOfIntFromStrArray( idArr );
+            listInteger = _listUtils.getListOfIntFromStrArray( idArr );
         }
 
         return listInteger;

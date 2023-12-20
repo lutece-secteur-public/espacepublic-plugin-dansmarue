@@ -42,7 +42,8 @@ import fr.paris.lutece.plugins.dansmarue.business.entities.Adresse;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.service.IWorkflowService;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
-import fr.paris.lutece.plugins.dansmarue.utils.SignalementUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.ISignalementUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.impl.SignalementUtils;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.portal.service.daemon.Daemon;
 import fr.paris.lutece.portal.service.datastore.DatastoreService;
@@ -80,6 +81,9 @@ public class WebServicePartnerDaemon extends Daemon
 
     /** The address DAO. */
     private IAdresseDAO _addressDAO = SpringContextService.getBean( "signalementAdresseDAO" );
+
+    /** The signalement utils */
+    private ISignalementUtils _signalementUtils = SpringContextService.getBean( "signalement.signalementUtils" );
 
     /**
      * Run.
@@ -142,7 +146,7 @@ public class WebServicePartnerDaemon extends Daemon
                 // else call action id 85 Transferer prestataire
                 AppLogService.info( "call action id " + idActionTransfert + " Transferer prestataire for anomalie " + idSignalement );
                 List<Adresse> lstAddress = _addressDAO.findBySignalementId( idSignalement );
-                if ( !lstAddress.isEmpty( ) && SignalementUtils.isValidAddress( lstAddress.get( 0 ).getAdresse( ) ) )
+                if ( !lstAddress.isEmpty( ) && _signalementUtils.isValidAddress( lstAddress.get( 0 ).getAdresse( ) ) )
                 {
                     workflowService.doProcessAction( idSignalement, Signalement.WORKFLOW_RESOURCE_TYPE, idActionTransfert, null, null, Locale.FRANCE, true );
                 }

@@ -42,14 +42,14 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.apache.log4j.Logger;
-
 import fr.paris.lutece.plugins.dansmarue.business.dao.IPhotoDAO;
 import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
+import fr.paris.lutece.plugins.dansmarue.utils.StockagePhotoUtils;
 import fr.paris.lutece.portal.service.daemon.Daemon;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.image.ImageUtil;
 
@@ -82,22 +82,21 @@ public class SuppressionPhotosDaemon extends Daemon
     // dao
     private IPhotoDAO _photoDAO = SpringContextService.getBean( "photoDAO" );
 
-    /** The log. */
-    private final Logger _log = Logger.getLogger( "Photo" );
+    private StockagePhotoUtils _stockagePhotoUtils =  SpringContextService.getBean( "signalement.stockagePhotoUtils" );
 
     /**
      * Run.
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Runnable#run()
      */
     @Override
     public void run( )
     {
         Calendar dateMinusNbMonth = Calendar.getInstance( );
-        _log.info( "////////////////////// Lancement du daemon de suppression des photos au " + dateMinusNbMonth.getTime( ).toString( )
+        AppLogService.info( "////////////////////// Lancement du daemon de suppression des photos au " + dateMinusNbMonth.getTime( ).toString( )
                 + "//////////////////////" );
         // Type d'anomalie où la photo doit être supprimé
         List<String> anomaliesCible = Arrays.asList( AppPropertiesService.getProperty( TYPE_ANOMALIE_CIBLE ).split( "," ) );
@@ -108,7 +107,7 @@ public class SuppressionPhotosDaemon extends Daemon
 
         Integer limitRequest = Integer.valueOf( AppPropertiesService.getProperty( NB_LINES_PER_REQUEST ) );
 
-        _log.info( " Récupération des photos des signalement " + anomaliesCible.toString( ) + " de plus de " + dureeExistenceAnomalie + " jours " );
+        AppLogService.info( " Récupération des photos des signalement " + anomaliesCible.toString( ) + " de plus de " + dureeExistenceAnomalie + " jours " );
         List<PhotoDMR> photos = _photoDAO.findPhotosForSupprPhotosDaemon( anomaliesCible, dureeExistenceAnomalie, etatsCible, limitRequest );
 
         ImageResource image = getPhotoDelete( );
@@ -116,12 +115,17 @@ public class SuppressionPhotosDaemon extends Daemon
 
         for ( PhotoDMR photo : photos )
         {
-            photo.setImage( image );
-            photo.setImageThumbnail( imageResize );
-            photo.setDate( null );
-            _photoDAO.updatePhoto( photo );
+            if ( _stockagePhotoUtils.deletePhotoOnNetAppServeur( photo ) )
+            {
+                photo.setImage( image );
+                photo.setImageThumbnail( imageResize );
+                photo.setDate( null );
+                _stockagePhotoUtils.savePhotoOnNetAppServeur( photo );
+
+                _photoDAO.updatePhoto( photo );
+            }
         }
-        _log.info( photos.size( ) + " photos ont été supprimées" );
+        AppLogService.info( photos.size( ) + " photos ont été supprimées" );
     }
 
     /**
@@ -143,7 +147,7 @@ public class SuppressionPhotosDaemon extends Daemon
         }
         catch( Exception e )
         {
-            _log.error( "Erreur lors de la récupération de l'image de suppression" + e.getCause( ) );
+            AppLogService.error( "Erreur lors de la récupération de l'image de suppression" + e.getCause( ) );
         }
         ImageResource image = new ImageResource( );
         image.setImage( imageInByte );

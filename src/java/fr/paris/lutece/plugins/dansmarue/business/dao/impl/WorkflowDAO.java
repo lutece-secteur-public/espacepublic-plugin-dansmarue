@@ -105,6 +105,9 @@ public class WorkflowDAO implements IWorkflowDAO
     /** The Constant SQL_QUERY_UPDATE_USER_ACCESS_CODE_WORKFLOW_HISTORY. */
     private static final String SQL_QUERY_UPDATE_USER_ACCESS_CODE_WORKFLOW_HISTORY = "UPDATE workflow_resource_history set user_access_code = ? WHERE id_history = ? ";
 
+    /** The Constant SQL_QUERY_UPDATE_USER_ACCESS_CODE_WORKFLOW_HISTORY_WITH_ID_RESOURCE_ID_ACTION. */
+    private static final String SQL_QUERY_UPDATE_USER_ACCESS_CODE_WORKFLOW_HISTORYY_WITH_ID_RESOURCE_ID_ACTION = "UPDATE workflow_resource_history set user_access_code = ? WHERE id_resource = ? AND id_action = ?";
+
     /** The Constant SQL_QUERY_FIND_TASK_ID_BY_TASK_TYPE_KEY. */
     private static final String SQL_QUERY_FIND_TASK_ID_BY_TASK_TYPE_KEY = "SELECT id_task FROM workflow_task WHERE task_type_key=?";
 
@@ -483,6 +486,24 @@ public class WorkflowDAO implements IWorkflowDAO
         daoUtil.executeUpdate( );
 
         daoUtil.close( );
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updateUserAccessCodeResouceHistory( String userAccessCode, int idResource, int idAction )
+    {
+
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_USER_ACCESS_CODE_WORKFLOW_HISTORYY_WITH_ID_RESOURCE_ID_ACTION ) )
+        {
+            int nIndex = 1;
+            daoUtil.setString( nIndex++, userAccessCode );
+            daoUtil.setInt( nIndex++, idResource );
+            daoUtil.setInt( nIndex, idAction );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**

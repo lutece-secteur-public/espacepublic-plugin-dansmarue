@@ -41,12 +41,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import fr.paris.lutece.plugins.dansmarue.utils.ISignalementUtils;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.tika.io.IOUtils;
 
-import fr.paris.lutece.plugins.dansmarue.utils.SignalementUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.impl.SignalementUtils;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.string.StringUtil;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * The Class FileMessageCreationService.
@@ -66,6 +71,10 @@ public class FileMessageCreationService implements IFileMessageCreationService
     /** The Constant RETOUR_CHARIOT. */
     private static final String RETOUR_CHARIOT = "<br/>";
 
+    /** The signalement utils */
+    @Inject
+    @Named( "signalement.signalementUtils" )
+    private transient ISignalementUtils _signalementUtils;
     /**
      * Private constructor.
      */
@@ -161,43 +170,44 @@ public class FileMessageCreationService implements IFileMessageCreationService
         try
         {
             in = new FileInputStream( strFile );
+            String strContent = StringUtils.EMPTY;
+            try ( BufferedReader br = new BufferedReader( new InputStreamReader( in ) ) )
+            {
+                StringBuilder buf = new StringBuilder( );
+
+                while ( br.ready( ) )
+                {
+                    String strLine = br.readLine( );
+                    buf.append( RETOUR_CHARIOT );
+                    if ( _signalementUtils.isWindows( ) && strLine.equals( StringUtils.EMPTY ) )
+                    {
+                        buf.append( RETOUR_CHARIOT );
+                    }
+                    buf.append( strLine );
+                }
+
+                strContent = buf.toString( );
+            }
+            catch( IOException e )
+            {
+                AppLogService.error( e.getMessage( ), e );
+            }
+
+            return strContent;
         }
         catch( FileNotFoundException e )
         {
-
             AppLogService.error( e.getMessage( ), e );
 
             return StringUtils.EMPTY;
         }
-
-        String strContent = StringUtils.EMPTY;
-        try ( BufferedReader br = new BufferedReader( new InputStreamReader( in ) ) )
-        {
-            StringBuilder buf = new StringBuilder( );
-
-            while ( br.ready( ) )
-            {
-                String strLine = br.readLine( );
-                buf.append( RETOUR_CHARIOT );
-                if ( SignalementUtils.isWindows( ) && strLine.equals( StringUtils.EMPTY ) )
-                {
-                    buf.append( RETOUR_CHARIOT );
-                }
-                buf.append( strLine );
-            }
-
-            strContent = buf.toString( );
-        }
-        catch( IOException e )
-        {
-            AppLogService.error( e.getMessage( ), e );
-        }
         finally
         {
-            IOUtils.closeQuietly( in );
+            if ( in != null )
+            {
+                IOUtils.closeQuietly( in );
+            }
         }
-
-        return strContent;
     }
 
     /**

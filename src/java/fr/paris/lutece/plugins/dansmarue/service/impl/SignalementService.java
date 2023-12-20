@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -77,6 +78,7 @@ import fr.paris.lutece.plugins.dansmarue.business.entities.EtatSignalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.ObservationRejet;
 import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Priorite;
+import fr.paris.lutece.plugins.dansmarue.business.entities.RequalificationMasseFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.ServiceFaitMasseFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDashboardFilter;
@@ -107,10 +109,12 @@ import fr.paris.lutece.plugins.dansmarue.service.dto.DashboardSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DossierSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.HistorySignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
+import fr.paris.lutece.plugins.dansmarue.util.constants.DateConstants;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementAdresseConstants;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
-import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.IDateUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.ImgUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.StockagePhotoUtils;
 import fr.paris.lutece.plugins.unittree.business.unit.IUnitDAO;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.modules.dansmarue.business.sector.ISectorDAO;
@@ -122,6 +126,7 @@ import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.business.user.AdminUserHome;
+import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -138,6 +143,11 @@ import net.sf.json.JSONObject;
  */
 public class SignalementService implements ISignalementService
 {
+
+    /** The date utils. */
+    // UTILS
+    @Inject
+    private IDateUtils _dateUtils;
 
     /** The Constant PROPERTY_HIDE_RULE. */
     // PROPERTIES
@@ -195,7 +205,7 @@ public class SignalementService implements ISignalementService
     private static final String ID_STATE_REJETE = "signalement.idStateRejete";
 
     /** The Constant ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE. */
-    private static final String ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE          = "signalement.idStateServiceProgrammePrestataire";
+    private static final String ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE = "signalement.idStateServiceProgrammePrestataire";
 
     /** The Constant ID_STATE_TRANSFERE_PRESTATAIRE. */
     private static final String ID_STATE_TRANSFERE_PRESTATAIRE = "signalement.idStateTransferePrestataire";
@@ -375,6 +385,9 @@ public class SignalementService implements ISignalementService
     @Inject
     private ISignaleurService _signaleurService;
 
+    @Inject
+    private StockagePhotoUtils _stockagePhotoUtils;
+
     /**
      * {@inheritDoc}
      */
@@ -398,9 +411,9 @@ public class SignalementService implements ISignalementService
      */
     @Override
     public void saveRequalification( long lIdSignalement, Integer idTypeSignalement, String adresse, Integer idSector, Integer idTask,
-            String commentaireAgentTerrain )
+            Integer idHistory, String commentaireAgentTerrain )
     {
-        _signalementDAO.saveRequalification( lIdSignalement, idTypeSignalement, adresse, idSector, idTask, commentaireAgentTerrain );
+        _signalementDAO.saveRequalification( lIdSignalement, idTypeSignalement, adresse, idSector, idTask, idHistory, commentaireAgentTerrain );
 
     }
 
@@ -416,6 +429,21 @@ public class SignalementService implements ISignalementService
         if ( ( signalement != null ) && ( signalement.getPhotos( ) != null ) )
         {
             List<PhotoDMR> photos = _photoDAO.findWithFullPhotoBySignalementId( signalement.getId( ) );
+
+            //Load Photo on S3 server
+            for(PhotoDMR photo : photos) {
+                if (( photo.getImage( ) == null ) || ( photo.getImage( ).getImage( ) == null ) ) {
+                    ImageResource imageRessource = _stockagePhotoUtils.loadPhotoOnNetAppServeur( photo.getCheminPhoto( ) );
+                    photo.setImage( imageRessource );
+                }
+
+                if (( photo.getImageThumbnail( ) == null ) || ( photo.getImageThumbnail( ).getImage( ) == null ) ) {
+                    ImageResource imageRessource = _stockagePhotoUtils.loadPhotoOnNetAppServeur( photo.getCheminPhotoMiniature( ) );
+                    photo.setImageThumbnail( imageRessource );
+                }
+            }
+
+
             signalement.setPhotos( photos );
         }
 
@@ -574,7 +602,10 @@ public class SignalementService implements ISignalementService
                     byte [ ] resizeImage = ImageUtil.resizeImage( photo.getImage( ).getImage( ), width, height, 1 );
                     photo.setImageContent( ImgUtils.checkQuality( photo.getImage( ).getImage( ) ) );
                     photo.setImageThumbnailWithBytes( resizeImage );
-                    _photoDAO.insert( photo );
+                    boolean result = _stockagePhotoUtils.savePhotoOnNetAppServeur( photo );
+                    if (result) {
+                        _photoDAO.insert( photo );
+                    }
                 }
             }
         }
@@ -739,7 +770,7 @@ public class SignalementService implements ISignalementService
             listeSignalementExportCSVDTO.add( dto );
 
             // creation date
-            dto.setHeureCreation( DateUtils.getHourFr( signalement.getHeureCreation( ) ) );
+            dto.setHeureCreation( _dateUtils.getHourFr( signalement.getHeureCreation( ) ) );
 
             // User mail
             if ( CollectionUtils.isNotEmpty( signalement.getSignaleurs( ) ) )
@@ -798,7 +829,7 @@ public class SignalementService implements ISignalementService
             // Info date envoi courriel
             if ( signalement.getCourrielDate( ) != null )
             {
-                dto.setDateEnvoiCourriel( DateUtils.getDateFr( signalement.getCourrielDate( ) ) );
+                dto.setDateEnvoiCourriel( _dateUtils.getDateFr( signalement.getCourrielDate( ) ) );
             }
             else
             {
@@ -936,7 +967,7 @@ public class SignalementService implements ISignalementService
             dto.setEtat( state.getName( ) );
 
             // creation hour
-            dto.setHeureCreation( DateUtils.getHourFr( signalement.getHeureCreation( ) ) );
+            dto.setHeureCreation( _dateUtils.getHourFr( signalement.getHeureCreation( ) ) );
 
             // user mail
             if ( CollectionUtils.isNotEmpty( signalement.getSignaleurs( ) ) )
@@ -994,7 +1025,7 @@ public class SignalementService implements ISignalementService
             // Info date envoi courriel
             if ( signalement.getCourrielDate( ) != null )
             {
-                dto.setDateEnvoiCourriel( DateUtils.getDateFr( signalement.getCourrielDate( ) ) );
+                dto.setDateEnvoiCourriel( _dateUtils.getDateFr( signalement.getCourrielDate( ) ) );
             }
             else
             {
@@ -1229,13 +1260,7 @@ public class SignalementService implements ISignalementService
         {
             Signalement signalement = _signalementDAO.loadById( nIdSignalement );
 
-            List<PhotoDMR> listPhoto = _photoDAO.findBySignalementId( nIdSignalement );
-            List<Signaleur> listSignaleur = _signaleurDAO.findBySignalementId( nIdSignalement );
-            List<Adresse> listAdresse = _adresseDAO.findBySignalementId( nIdSignalement );
-
-            signalement.setPhotos( listPhoto );
-            signalement.setSignaleurs( listSignaleur );
-            signalement.setAdresses( listAdresse );
+            loadComplementInfoSignalement( signalement );
 
             listAllSignalement.add( signalement );
         }
@@ -1256,13 +1281,7 @@ public class SignalementService implements ISignalementService
         {
             Signalement signalement = _signalementDAO.loadById( nIdSignalement );
 
-            List<PhotoDMR> listPhoto = _photoDAO.findBySignalementId( nIdSignalement );
-            List<Signaleur> listSignaleur = _signaleurDAO.findBySignalementId( nIdSignalement );
-            List<Adresse> listAdresse = _adresseDAO.findBySignalementId( nIdSignalement );
-
-            signalement.setPhotos( listPhoto );
-            signalement.setSignaleurs( listSignaleur );
-            signalement.setAdresses( listAdresse );
+            loadComplementInfoSignalement( signalement );
 
             listAllSignalement.add( signalement );
         }
@@ -1307,28 +1326,9 @@ public class SignalementService implements ISignalementService
             return listAllSignalement;
         }
 
-        for ( Integer nIdSignalement : listIdSignalementInParameter )
-        {
-
-            Signalement signalement = _signalementDAO.loadById( nIdSignalement );
-            TypeSignalement typeSignalement = _typeSignalementDAO.getTypeSignalement( signalement.getTypeSignalement( ).getId( ) );
-            String type = typeSignalement.getIdCategory( ).toString( );
-            signalement.setTypeSignalement( typeSignalement );
-            if ( !isHiddenBySpecificRule( type, signalement.getDateCreation( ) ) )
-            {
-                List<PhotoDMR> listPhoto = _photoDAO.findBySignalementId( nIdSignalement );
-                List<Signaleur> listSignaleur = _signaleurDAO.findBySignalementId( nIdSignalement );
-                List<Adresse> listAdresse = _adresseDAO.findBySignalementId( nIdSignalement );
-
-                signalement.setPhotos( listPhoto );
-                signalement.setSignaleurs( listSignaleur );
-                signalement.setAdresses( listAdresse );
-
-                listAllSignalement.add( signalement );
-            }
-        }
-
-        return listAllSignalement;
+        return getAnomalieWithExtraInfoForMobilSearch( listIdSignalementInParameter ).stream( ).filter(
+                signalement -> !isHiddenBySpecificRule( signalement.getTypeSignalement( ).getIdCategory( ).toString( ), signalement.getDateCreation( ) ) )
+                .collect( Collectors.toList( ) );
 
     }
 
@@ -1345,6 +1345,43 @@ public class SignalementService implements ISignalementService
         {
             TypeSignalement typeSignalement = _typeSignalementDAO.getTypeSignalement( signalement.getTypeSignalement( ).getId( ) );
             signalement.setTypeSignalement( typeSignalement );
+            loadComplementInfoSignalement( signalement );
+        }
+
+        return signalement;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Signalement> getAnomalieWithExtraInfoForMobilSearch( List<Integer> idsSignalement )
+    {
+        List<Signalement> listSignalement = _signalementDAO.getSignalementForMobilByListId( idsSignalement );
+
+        CachesService _cachesService = SpringContextService.getBean( "signalement.cachesService" );
+
+        for ( Signalement signalement : listSignalement )
+        {
+            TypeSignalement typeSignalement = _typeSignalementDAO.getTypeSignalementUseCache( signalement.getTypeSignalement( ).getId( ),
+                    _cachesService.getAllTypeSignalement( ) );
+            signalement.setTypeSignalement( typeSignalement );
+        }
+
+        return listSignalement;
+    }
+
+    /**
+     * Load Photo Signaleur Adresse information for signalment.
+     *
+     * @param signalement
+     *            signalement to add complement info
+     */
+    private void loadComplementInfoSignalement( Signalement signalement )
+    {
+
+        if ( signalement != null )
+        {
             List<PhotoDMR> listPhoto = _photoDAO.findBySignalementId( signalement.getId( ) );
             List<Signaleur> listSignaleur = _signaleurDAO.findBySignalementId( signalement.getId( ) );
             List<Adresse> listAdresse = _adresseDAO.findBySignalementId( signalement.getId( ) );
@@ -1353,8 +1390,6 @@ public class SignalementService implements ISignalementService
             signalement.setSignaleurs( listSignaleur );
             signalement.setAdresses( listAdresse );
         }
-
-        return signalement;
     }
 
     /**
@@ -1372,7 +1407,7 @@ public class SignalementService implements ISignalementService
         if ( ( rule != null ) && ( rule.length( ) > 0 ) )
         {
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern( DateUtils.DATE_FR );
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern( DateConstants.DATE_FR );
             try
             {
                 for ( String strRule : rule.split( "," ) )
@@ -1468,7 +1503,11 @@ public class SignalementService implements ISignalementService
             List<PhotoDMR> listPhoto = _photoDAO.findBySignalementId( dossierSignalementDTO.getId( ) );
             if ( !listPhoto.isEmpty( ) )
             {
-                dossierSignalementDTO.setImgUrl( AppPropertiesService.getProperty( PROPERTY_URL_PICTURE ) + listPhoto.get( 0 ).getId( ) );
+                String token = "";
+                if(StringUtils.isNotBlank( listPhoto.get( 0 ).getCheminPhoto( ) )) {
+                    token = "_"+listPhoto.get( 0 ).getCheminPhoto( ).split("_")[0];
+                }
+                dossierSignalementDTO.setImgUrl( AppPropertiesService.getProperty( PROPERTY_URL_PICTURE ) + listPhoto.get( 0 ).getId( )+token );
             }
         }
 
@@ -1563,6 +1602,8 @@ public class SignalementService implements ISignalementService
         for ( PhotoDMR photo : photos )
         {
             _photoDAO.remove( photo.getId( ) );
+            _stockagePhotoUtils.deletePhotoOnNetAppServeur( photo );
+
         }
 
         // delete the address of the report
@@ -1981,8 +2022,9 @@ public class SignalementService implements ISignalementService
             {
                 estAffichable = false;
             }
-            if ( ( ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_TRANSFERE_PRESTATAIRE, -1 ) ) || ( state.getId( ) == AppPropertiesService.getPropertyInt(
-                    ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE, -1 ) ) ) && listActionsNonAffichablesPrestataire.contains( String.valueOf( action.getId( ) ) ) && signalement.getIsSendWS( ) )
+            if ( ( ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_TRANSFERE_PRESTATAIRE, -1 ) )
+                    || ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE, -1 ) ) )
+                    && listActionsNonAffichablesPrestataire.contains( String.valueOf( action.getId( ) ) ) && signalement.getIsSendWS( ) )
             {
                 estAffichable = false;
             }
@@ -2007,7 +2049,8 @@ public class SignalementService implements ISignalementService
         Collection<Action> listActionsPossibles = _signalementDAO.getActionForState( state.getId( ), workflowId );
 
         List<String> listActionsNonAffichables = Arrays.asList( AppPropertiesService.getProperty( PROPERTY_ACTIONS_NON_AFFICHABLES ).split( "," ) );
-        List<String> listActionsNonAffichablesPrestataire = Arrays.asList( AppPropertiesService.getProperty( PROPERTY_ACTIONS_NON_AFFICHABLES_PRESTATAIRE ).split( "," ) );
+        List<String> listActionsNonAffichablesPrestataire = Arrays
+                .asList( AppPropertiesService.getProperty( PROPERTY_ACTIONS_NON_AFFICHABLES_PRESTATAIRE ).split( "," ) );
 
         // Retrieve the state to lock some actions
         WorkflowService workflowService = WorkflowService.getInstance( );
@@ -2019,7 +2062,8 @@ public class SignalementService implements ISignalementService
                     || ( state.getId( ) == AppPropertiesService.getPropertyInt( ID_STATE_SERVICE_PROGRAMME_PRESTATAIRE, -1 ) ) );
             boolean isActionIsInListNonAffichablePrestataire = listActionsNonAffichablesPrestataire.contains( String.valueOf( action.getId( ) ) );
 
-            boolean isActionAffichable = !isActionIsInListNonAffichable && !( isSignalementEstEnvoyeUnPrestataire && isActionIsInListNonAffichablePrestataire && signalement.getIsSendWS( ) );
+            boolean isActionAffichable = !isActionIsInListNonAffichable
+                    && !( isSignalementEstEnvoyeUnPrestataire && isActionIsInListNonAffichablePrestataire && signalement.getIsSendWS( ) );
 
             if ( isActionAffichable )
             {
@@ -2228,24 +2272,6 @@ public class SignalementService implements ISignalementService
      * {@inheritDoc}
      */
     @Override
-    public void setRequalificationIdHistory( Long lIdSignalement, int nIdHistory, int idTask )
-    {
-        _signalementDAO.updateRequalification( lIdSignalement, idTask, nIdHistory );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setRequalificationIdHistoryAndIdTask( Long lIdSignalement, int nIdHistory, int idTask )
-    {
-        _signalementDAO.updateRequalificationHistoryTask( lIdSignalement, idTask, nIdHistory );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public List<String> getAllSuiveursMail( Integer idRessource )
     {
         List<String> followersMails = new ArrayList<>( );
@@ -2370,6 +2396,37 @@ public class SignalementService implements ISignalementService
      * {@inheritDoc}
      */
     @Override
+    public Map<String, Integer> getRepartitionRequalificationMasse( RequalificationMasseFilter requalificationMasseFilter )
+    {
+        return _signalementDAO.getRepartitionRequalificationMasse( requalificationMasseFilter );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String executeRequalificationMasse( RequalificationMasseFilter requalificationMasseFilter )
+    {
+        String error = null;
+        try
+        {
+            // Ajout de l'historique et du commentaire
+            _signalementDAO.addRequalificationHistoMasse( requalificationMasseFilter );
+            // MAJ de l'état du signalement
+            _signalementDAO.updateTypeRequalificationMasse( requalificationMasseFilter );
+        }
+        catch( Exception e )
+        {
+            AppLogService.error( "Erreur lors de l'execution de la requalification en masse", e );
+            error = e.getLocalizedMessage( );
+        }
+        return error;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<Integer> getSignalementsServiceProgrammeIds( )
     {
         return _signalementDAO.getSignalementsServiceProgrammeIds( );
@@ -2410,5 +2467,17 @@ public class SignalementService implements ISignalementService
         }
 
         return null;
+    }
+
+    @Override
+    public void addHistoriqueCommentaireAgentTerrain( Signalement signalement, int nIdResourceHistory )
+    {
+        _signalementDAO.addHistoriqueCommentaireAgentTerrain( signalement, nIdResourceHistory );
+    }
+
+    @Override
+    public String getHistoriqueCommentaireAgentTerrain( int nIdResourceHistory )
+    {
+        return _signalementDAO.getHistoriqueCommentaireAgentTerrain( nIdResourceHistory );
     }
 }

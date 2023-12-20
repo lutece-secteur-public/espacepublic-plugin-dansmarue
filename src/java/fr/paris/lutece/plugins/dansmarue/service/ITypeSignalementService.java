@@ -403,6 +403,13 @@ public interface ITypeSignalementService
     void updateParent( Integer nIdTypeSignalement, Integer nIdParent );
 
     /**
+     * Get the last lvl of active typesignalement with parents in the libelle.
+     *
+     * @return List of report type even without unit
+     */
+    List<TypeSignalement> getListTypeSignalementActifLastLevel( );
+
+    /**
      * Get the last lvl of typesignalement with parents in the libelle.
      *
      * @return List of report type even without unit

@@ -62,9 +62,13 @@ public interface IFeuilleDeTourneeDAO
      *
      * @param feuilleDeTournee
      *            the feuille de tournee
+     * @param prefixFDTNom
+     *            prefix du nom de la feuille de tournee enregistre dans core_datastore
+     * @param isCopy
+     *            feuilleDeTournee is a copy
      * @return the integer
      */
-    Integer insert( FeuilleDeTournee feuilleDeTournee );
+    Integer insert( FeuilleDeTournee feuilleDeTournee, String prefixFDTNom, boolean isCopy );
 
     /**
      * Insert search filter.

@@ -42,6 +42,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import fr.paris.lutece.plugins.dansmarue.utils.IDateUtils;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 
@@ -51,9 +53,11 @@ import fr.paris.lutece.plugins.dansmarue.business.entities.FeuilleDeTourneeFilte
 import fr.paris.lutece.plugins.dansmarue.business.entities.FeuilleDeTourneeFilterSearch;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementBean;
 import fr.paris.lutece.plugins.dansmarue.commons.Order;
-import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * The Class FeuilleDeTourneeDAO.
@@ -62,11 +66,11 @@ public class FeuilleDeTourneeDAO implements IFeuilleDeTourneeDAO
 {
 
     /** The Constant SQL_QUERY_SELECT_ALL_ARRONDISSEMENT. */
-    private static final String SQL_QUERY_SELECT_BY_ID = "SELECT id, createur, fk_id_unit, date_creation, date_modification, commentaire, id_filtre_init, signalement_ids, nom, carte, uu.\"label\", uu2.\"label\", id_direction, id_entite FROM signalement_feuille_de_tournee fdt left join unittree_unit uu on uu.id_unit = fdt.id_direction left join unittree_unit uu2 on uu2.id_unit = fdt.id_entite  where id=?";
+    private static final String SQL_QUERY_SELECT_BY_ID = "SELECT id, createur, fk_id_unit, date_creation, date_modification, commentaire, id_filtre_init, array_to_string(signalement_ids, ',') as signalement_ids, nom, carte, uu.\"label\", uu2.\"label\", id_direction, id_entite, info_avant_tournee, info_apres_tournee FROM signalement_feuille_de_tournee fdt left join unittree_unit uu on uu.id_unit = fdt.id_direction left join unittree_unit uu2 on uu2.id_unit = fdt.id_entite  where id=?";
 
-    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_feuille_de_tournee (id, createur, fk_id_unit, date_creation, commentaire, id_filtre_init, signalement_ids, nom, carte, id_direction, id_entite) VALUES(?, ?, ?, ?, ?, ?, ''{0}'', ?, ?, ?, ?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_feuille_de_tournee (id, createur, fk_id_unit, date_creation, commentaire, id_filtre_init, signalement_ids, nom, carte, id_direction, id_entite, info_avant_tournee ) VALUES(?, ?, ?, ?, ?, ?, ''{0}'', ?, ?, ?, ?, ? )";
 
-    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_feuille_de_tournee SET date_modification=?, nom = ?, commentaire = ?, id_direction = ?, id_entite = ?, signalement_ids=''{0}'' WHERE id=?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_feuille_de_tournee SET date_modification=?, nom = ?, commentaire = ?, id_direction = ?, id_entite = ?, signalement_ids=''{0}'', info_avant_tournee=?, info_apres_tournee=? WHERE id=?";
 
     private static final String SQL_QUERY_UPDATE_MAP = "UPDATE signalement_feuille_de_tournee SET carte = ? WHERE id=?";
 
@@ -92,7 +96,7 @@ public class FeuilleDeTourneeDAO implements IFeuilleDeTourneeDAO
             + "THEN SUBSTR(SUBSTRING(adresse, '(75[0-9][0-9][0-9])'),4,2)"
             + "END, id_arrondissement  asc, ltrim(regexp_replace(regexp_replace(regexp_replace(lower(adresse),'[[:digit:]]','','g'),'^[a-z] |^[A-Z] ',''),'bis |ter |quater ','')) asc, nullif(regexp_replace(split_part(adresse,' ',1), '\\D', '', 'g'), '')::int asc";
 
-    private static final String SQL_QUERY_LOAD_FDT_BY_FILTER = "SELECT id, createur, fk_id_unit, date_creation, date_modification, commentaire, id_filtre_init, signalement_ids, nom, uu.\"label\" direction, uu2.\"label\" entite, id_direction, id_entite FROM signalement_feuille_de_tournee fdt left join unittree_unit uu on uu.id_unit = fdt.id_direction left join unittree_unit uu2 on uu2.id_unit = fdt.id_entite ";
+    private static final String SQL_QUERY_LOAD_FDT_BY_FILTER = "SELECT id, createur, fk_id_unit, date_creation, date_modification, commentaire, id_filtre_init, array_to_string(signalement_ids, ',') as signalement_ids, nom, uu.\"label\" direction, uu2.\"label\" entite, id_direction, id_entite, info_avant_tournee, info_apres_tournee FROM signalement_feuille_de_tournee fdt left join unittree_unit uu on uu.id_unit = fdt.id_direction left join unittree_unit uu2 on uu2.id_unit = fdt.id_entite ";
 
     private static final String SQL_QUERY_LOAD_FDT_BY_FILTER_ADD_DATE_DEBUT = " date_trunc('days',date_creation)>=? ";
 
@@ -104,13 +108,18 @@ public class FeuilleDeTourneeDAO implements IFeuilleDeTourneeDAO
 
     private static final String SQL_QUERY_LOAD_NAMES = "select nom from signalement_feuille_de_tournee";
 
-    private static final String SQL_QUERY_LOAD_BY_NAME = "SELECT id, createur, fk_id_unit, date_creation, date_modification, commentaire, id_filtre_init, signalement_ids, nom, uu.\"label\", uu2.\"label\", id_direction, id_entite from signalement_feuille_de_tournee fdt left join unittree_unit uu on uu.id_unit = fdt.id_direction left join unittree_unit uu2 on uu2.id_unit = fdt.id_entite where nom = ?";
+    private static final String SQL_QUERY_LOAD_BY_NAME = "SELECT id, createur, fk_id_unit, date_creation, date_modification, commentaire, id_filtre_init, array_to_string(signalement_ids, ',') as signalement_ids, nom, uu.\"label\", uu2.\"label\", id_direction, id_entite, info_avant_tournee, info_apres_tournee from signalement_feuille_de_tournee fdt left join unittree_unit uu on uu.id_unit = fdt.id_direction left join unittree_unit uu2 on uu2.id_unit = fdt.id_entite where nom = ?";
 
     private static final String SQL_QUERY_DELETE = "DELETE FROM  public.signalement_feuille_de_tournee WHERE id=?";
 
     private static final String SQL_QUERY_DELETE_OLD = "delete from signalement_feuille_de_tournee where date_creation::date < now()::date  - INTERVAL ''{0} DAY''";
 
-    private static final String SQL_QUERY_SELECT_ALL = "SELECT id, createur, fk_id_unit, date_creation, date_modification, commentaire, id_filtre_init, signalement_ids, nom, uu.\"label\", uu2.\"label\", id_direction, id_entite FROM signalement_feuille_de_tournee fdt left join unittree_unit uu on uu.id_unit = fdt.id_direction left join unittree_unit uu2 on uu2.id_unit = fdt.id_entite order by id desc";
+    private static final String SQL_QUERY_SELECT_ALL = "SELECT id, createur, fk_id_unit, date_creation, date_modification, commentaire, id_filtre_init, array_to_string(signalement_ids, ',') as signalement_ids, nom, uu.\"label\", uu2.\"label\", id_direction, id_entite, info_avant_tournee, info_apres_tournee FROM signalement_feuille_de_tournee fdt left join unittree_unit uu on uu.id_unit = fdt.id_direction left join unittree_unit uu2 on uu2.id_unit = fdt.id_entite order by id desc";
+
+    /** The date utils */
+    @Inject
+    @Named( "signalement.dateUtils" )
+    private transient IDateUtils _dateUtils;
 
     /**
      * Generates a new primary key.
@@ -177,13 +186,13 @@ public class FeuilleDeTourneeDAO implements IFeuilleDeTourneeDAO
         feuilleDeTournee.setId( daoUtil.getInt( ++nIndex ) );
         feuilleDeTournee.setCreateur( daoUtil.getString( ++nIndex ) );
         feuilleDeTournee.setUnitId( daoUtil.getInt( ++nIndex ) );
-        feuilleDeTournee.setDateCreation( DateUtils.getDateFr( daoUtil.getDate( ++nIndex ) ) );
-        feuilleDeTournee.setDateModification( DateUtils.getDateFr( daoUtil.getDate( ++nIndex ) ) );
+        feuilleDeTournee.setDateCreation( _dateUtils.getDateFr( daoUtil.getDate( ++nIndex ) ) );
+        feuilleDeTournee.setDateModification( _dateUtils.getDateFr( daoUtil.getDate( ++nIndex ) ) );
         feuilleDeTournee.setCommentaire( daoUtil.getString( ++nIndex ) );
         feuilleDeTournee.setFiltreFdtId( daoUtil.getInt( ++nIndex ) );
 
         String ids = daoUtil.getString( ++nIndex );
-        List<String> idsString = Arrays.asList( ids.replace( "{", "" ).replace( "}", "" ).split( "," ) );
+        List<String> idsString = Arrays.asList( ids.split( "," ) );
         feuilleDeTournee.setListSignalementIds( idsString.stream( ).map( Integer::valueOf ).collect( Collectors.toList( ) ) );
 
         feuilleDeTournee.setNom( daoUtil.getString( ++nIndex ) );
@@ -195,6 +204,8 @@ public class FeuilleDeTourneeDAO implements IFeuilleDeTourneeDAO
         feuilleDeTournee.setEntiteLibelle( daoUtil.getString( ++nIndex ) );
         feuilleDeTournee.setIdDirection( daoUtil.getInt( ++nIndex ) );
         feuilleDeTournee.setIdEntite( daoUtil.getInt( ++nIndex ) );
+        feuilleDeTournee.setInfoAvantTournee( daoUtil.getString( ++nIndex ) );
+        feuilleDeTournee.setInfoApresTournee( daoUtil.getString( ++nIndex ) );
 
         return feuilleDeTournee;
     }
@@ -203,7 +214,7 @@ public class FeuilleDeTourneeDAO implements IFeuilleDeTourneeDAO
      * {@inheritDoc}
      */
     @Override
-    public Integer insert( FeuilleDeTournee feuilleDeTournee )
+    public Integer insert( FeuilleDeTournee feuilleDeTournee, String prefixFDTNom, boolean isCopy )
     {
         List<String> newList = feuilleDeTournee.getListSignalementIds( ).stream( ).map( String::valueOf ).collect( Collectors.toList( ) );
         int idFeuilleDeTournee;
@@ -219,10 +230,16 @@ public class FeuilleDeTourneeDAO implements IFeuilleDeTourneeDAO
             daoUtil.setTimestamp( ++nIndex, new Timestamp( System.currentTimeMillis( ) ) );
             daoUtil.setString( ++nIndex, feuilleDeTournee.getCommentaire( ) );
             daoUtil.setInt( ++nIndex, feuilleDeTournee.getFiltreFdtId( ) );
-            daoUtil.setString( ++nIndex, feuilleDeTournee.getNom( ) );
+            String nomAvecIdFeuilleDeTournee = feuilleDeTournee.getNom( );
+            if ( !isCopy )
+            {
+                nomAvecIdFeuilleDeTournee = prefixFDTNom + feuilleDeTournee.getNom( ).replace( prefixFDTNom, idFeuilleDeTournee + "_" );
+            }
+            daoUtil.setString( ++nIndex, nomAvecIdFeuilleDeTournee );
             daoUtil.setString( ++nIndex, feuilleDeTournee.getCarteBase64( ) );
             daoUtil.setInt( ++nIndex, feuilleDeTournee.getIdDirection( ) );
             daoUtil.setInt( ++nIndex, feuilleDeTournee.getIdEntite( ) != null ? feuilleDeTournee.getIdEntite( ) : -1 );
+            daoUtil.setString( ++nIndex, feuilleDeTournee.getInfoAvantTournee() );
 
             daoUtil.executeUpdate( );
         }
@@ -247,6 +264,8 @@ public class FeuilleDeTourneeDAO implements IFeuilleDeTourneeDAO
             daoUtil.setString( ++nIndex, feuilleDeTournee.getCommentaire( ) );
             daoUtil.setInt( ++nIndex, feuilleDeTournee.getIdDirection( ) );
             daoUtil.setInt( ++nIndex, feuilleDeTournee.getIdEntite( ) );
+            daoUtil.setString( ++nIndex, feuilleDeTournee.getInfoAvantTournee( ) );
+            daoUtil.setString( ++nIndex, feuilleDeTournee.getInfoApresTournee( ) );
             daoUtil.setInt( ++nIndex, feuilleDeTournee.getId( ) );
 
             daoUtil.executeUpdate( );
@@ -354,7 +373,7 @@ public class FeuilleDeTourneeDAO implements IFeuilleDeTourneeDAO
                 filterSearch.setIdEntite( daoUtil.getInt( nIndex++ ) );
                 filterSearch.setCommentaire( daoUtil.getString( nIndex++ ) );
                 Timestamp timeStamp = daoUtil.getTimestamp( nIndex );
-                filterSearch.setDate( DateUtils.getDate( timeStamp, "dd/MM/yyyy HH:mm" ) );
+                filterSearch.setDate( _dateUtils.getDate( timeStamp, "dd/MM/yyyy HH:mm" ) );
 
                 return filterSearch;
             }

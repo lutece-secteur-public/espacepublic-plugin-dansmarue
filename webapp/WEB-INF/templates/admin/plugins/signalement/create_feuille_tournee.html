@@ -1,9 +1,13 @@
 <@adresse_autocomplete_includes/>
+<#include "/util/calendar/macro_datepicker.html" />
 <script src="js/jquery.multi-select.min.js"></script>
 <script src="js/jquery.quicksearch.js"></script>
 <link rel="stylesheet" href="css/multi-select.css" type="text/css"/>
 <link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
-
+<link rel="stylesheet" href="css/bootstrap-select.css" />
+<style>
+	.dropdown-menu > li > a{ width: 100%; }
+</style>
 <@box color='primary'>
 	<div class="box-header">
 		<h3 class="box-title">#i18n{dansmarue.tournee.creation.titre}</h3>
@@ -272,6 +276,7 @@
 						id="filter_commentaire" maxlength="255" />
 				</div>
 			</@formGroup>
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
 			<!-- Adresse -->
 			<@formGroup formStyle="inline" class="col-xs-12 col-sm-12 col-md-5 col-lg-5"  labelKey='#i18n{dansmarue.reportingList.adress}'>
 				<div>

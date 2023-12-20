@@ -33,26 +33,33 @@
  */
 package fr.paris.lutece.plugins.dansmarue.service.impl;
 
-import fr.paris.lutece.plugins.dansmarue.business.dao.*;
-import fr.paris.lutece.plugins.dansmarue.business.entities.*;
-import fr.paris.lutece.plugins.dansmarue.util.constants.*;
-import fr.paris.lutece.plugins.workflowcore.business.state.*;
-import fr.paris.lutece.portal.business.user.*;
-import fr.paris.lutece.portal.service.cache.*;
-import fr.paris.lutece.portal.service.workflow.WorkflowService;
+import java.util.List;
 
-import javax.inject.*;
-import java.util.*;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import fr.paris.lutece.plugins.dansmarue.business.dao.IArrondissementDAO;
+import fr.paris.lutece.plugins.dansmarue.business.dao.IConseilQuartierDao;
+import fr.paris.lutece.plugins.dansmarue.business.dao.ITypeSignalementDAO;
+import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
+import fr.paris.lutece.plugins.dansmarue.business.entities.ConseilQuartier;
+import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
+import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
+import fr.paris.lutece.plugins.workflowcore.business.state.State;
+import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
+import fr.paris.lutece.portal.service.workflow.WorkflowService;
 
 /**
  * The Class CacheService.
  */
 public class CachesService extends AbstractCacheableService
 {
-    private static final String SERVICE_NAME     = "Caches DMR service";
-    private static final String ARRONDISSEMENTS  = "arrondissements";
+    private static final String SERVICE_NAME = "Caches DMR service";
+    private static final String ARRONDISSEMENTS = "arrondissements";
     private static final String CONSEIL_QUARTIER = "conseilQuartier";
-    private static final String WORKFLOW_STATE   = "workflowState";
+    private static final String WORKFLOW_STATE = "workflowState";
+    private static final String TYPE_SIGNALEMENT = "typeSignalement";
 
     @Inject
     @Named( "signalement.arrondissementDAO" )
@@ -61,6 +68,10 @@ public class CachesService extends AbstractCacheableService
     @Inject
     @Named( "signalement.conseilQuartierDAO" )
     private IConseilQuartierDao _conseilQuartierDAO;
+
+    @Inject
+    @Named( "typeSignalementDAO" )
+    private ITypeSignalementDAO _typesignalementDAO;
 
     /**
      * Instantiates a new Cache service.
@@ -77,7 +88,7 @@ public class CachesService extends AbstractCacheableService
      */
     public List<Arrondissement> getAllArrondissement( )
     {
-        List<Arrondissement> arrondissements = ( List<Arrondissement> ) getFromCache( ARRONDISSEMENTS );
+        List<Arrondissement> arrondissements = (List<Arrondissement>) getFromCache( ARRONDISSEMENTS );
         if ( arrondissements == null )
         {
             arrondissements = _arrondissementDAO.getAllArrondissement( );
@@ -99,7 +110,7 @@ public class CachesService extends AbstractCacheableService
      */
     public List<ConseilQuartier> selectQuartiersList( )
     {
-        List<ConseilQuartier> conseilQuartierList = ( List<ConseilQuartier> ) getFromCache( CONSEIL_QUARTIER );
+        List<ConseilQuartier> conseilQuartierList = (List<ConseilQuartier>) getFromCache( CONSEIL_QUARTIER );
         if ( conseilQuartierList == null )
         {
             conseilQuartierList = _conseilQuartierDAO.selectQuartiersList( );
@@ -111,17 +122,31 @@ public class CachesService extends AbstractCacheableService
     /**
      * Gets all state by workflow.
      *
-     * @param user the user
+     * @param user
+     *            the user
      * @return the all state by workflow
      */
     public List<State> getAllStateByWorkflow( AdminUser user )
     {
-        List<State> stateList = ( List<State> ) getFromCache( WORKFLOW_STATE );
+        List<State> stateList = (List<State>) getFromCache( WORKFLOW_STATE );
         if ( stateList == null )
         {
-            stateList = ( List<State> ) WorkflowService.getInstance( ).getAllStateByWorkflow( SignalementConstants.SIGNALEMENT_WORKFLOW_ID, user );
+            stateList = (List<State>) WorkflowService.getInstance( ).getAllStateByWorkflow( SignalementConstants.SIGNALEMENT_WORKFLOW_ID, user );
             putInCache( WORKFLOW_STATE, stateList );
         }
         return stateList;
+    }
+
+    public List<TypeSignalement> getAllTypeSignalement( )
+    {
+
+        List<TypeSignalement> listTypeSignalement = (List<TypeSignalement>) getFromCache( TYPE_SIGNALEMENT );
+        if ( listTypeSignalement == null )
+        {
+            listTypeSignalement = _typesignalementDAO.getAllTypeSignalement( );
+            putInCache( TYPE_SIGNALEMENT, listTypeSignalement );
+        }
+
+        return listTypeSignalement;
     }
 }

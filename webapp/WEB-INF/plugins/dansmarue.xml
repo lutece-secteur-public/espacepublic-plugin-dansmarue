@@ -3,7 +3,7 @@
 	<!-- Plugin Informations -->
 	<name>signalement</name>
 	<class>fr.paris.lutece.plugins.dansmarue.service.SignalementPlugin</class>
-	<version>6.11.3-SNAPSHOT</version>
+	<version>7.1.2</version>
 	<description>signalement.plugin.description</description>
 	<documentation/>
 	<installation/>
@@ -139,6 +139,12 @@
 	  <daemon-description>deamon.suppresionFeuilleDeTournee.description</daemon-description>
 	  <daemon-class>fr.paris.lutece.plugins.dansmarue.service.deamon.SuppressionFeuilleDeTourneeDaemon</daemon-class>
 	 </daemon>
+	<daemon>
+		<daemon-id>migrationPhotosDaemon</daemon-id>
+		<daemon-name>dansmarue.deamon.migrationPhotos.name</daemon-name>
+		<daemon-description>deamon.migrationPhotos.description</daemon-description>
+		<daemon-class>fr.paris.lutece.plugins.dansmarue.service.deamon.MigrationPhotosDaemon</daemon-class>
+	</daemon>
 	</daemons>
 	
 	<admin-javascript-files>

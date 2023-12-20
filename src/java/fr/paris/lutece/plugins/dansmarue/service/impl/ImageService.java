@@ -66,6 +66,20 @@ public class ImageService implements ImageResourceProvider
     }
 
     /**
+     * Get the resource for image.
+     *
+     * @param nIdPhoto
+     *            The identifier of nIdPhoto object
+     * @param strToken
+     *            The token to verify
+     * @return The ImageResource
+     */
+    public ImageResource getImageResource( int nIdPhoto, String strToken )
+    {
+        return _photoService.getImageResource( nIdPhoto, strToken );
+    }
+
+    /**
      * Get the type of resource.
      *
      * @return The type of resource

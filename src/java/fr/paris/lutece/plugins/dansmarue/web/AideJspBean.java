@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,6 @@
  *
  * License 1.0
  */
-
 package fr.paris.lutece.plugins.dansmarue.web;
 
 import java.util.HashMap;
@@ -81,7 +80,6 @@ public class AideJspBean extends AbstractJspBean
     private static final String PARAMETER_ID_AIDE = "aide_id";
     /** The Constant PARAMETER_PHOTO. */
     public static final String PARAMETER_PHOTO = "photo";
-
 
     // Views
     private static final String VIEW_MANAGE_AIDES = "manageAides";

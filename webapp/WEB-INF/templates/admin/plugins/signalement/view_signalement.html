@@ -147,7 +147,14 @@ $(document).ready(function() {
 						<div class="control-label col-xs-12 col-sm-8 col-md-6">
 							${signaleur.mail}</div>
 					</div>
-					</#if> <#if adresse.precisionLocalisation?has_content>
+					</#if>
+					<div class="form-group">
+						<label class="<@labelStyle />">
+							#i18n{dansmarue.saveSignalement.precisionTerrain} </label>
+						<div class="control-label col-xs-12 col-sm-8 col-md-6" style="word-break: break-all;">
+							${signalement.precisionTerrain!}</div>
+					</div>
+					<#if adresse.precisionLocalisation?has_content>
 					<div class="form-group">
 						<label class="<@labelStyle />">
 							#i18n{dansmarue.saveSignalement.precisionLocalisation} </label>

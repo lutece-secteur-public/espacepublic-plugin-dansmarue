@@ -94,6 +94,13 @@ public class FeuilleDeTournee implements Serializable
 
     private String _strEntiteLibelle;
 
+
+    /** The str info avant tournee. */
+    private String _strInfoAvantTournee;
+
+    /** The str info apres tournee. */
+    private String _strInfoApresTournee;
+
     /**
      * Instantiates a new feuille de tournee.
      */
@@ -123,7 +130,7 @@ public class FeuilleDeTournee implements Serializable
      *            the n id entite
      */
     public FeuilleDeTournee( String strCreateur, Integer nUnitId, String strCommentaire, Integer nFiltreFdtId, List<Integer> listSignalementIds, String strNom,
-            Integer nIdDirection, Integer nIdEntite )
+            Integer nIdDirection, Integer nIdEntite, String strInfoAvantTournee )
     {
         super( );
         _strCreateur = strCreateur;
@@ -134,6 +141,7 @@ public class FeuilleDeTournee implements Serializable
         _strNom = strNom;
         _nIdDirection = nIdDirection;
         _nIdEntite = nIdEntite;
+        _strInfoAvantTournee = strInfoAvantTournee;
     }
 
     /**
@@ -455,6 +463,26 @@ public class FeuilleDeTournee implements Serializable
     public void setEntiteLibelle( String entiteLibelle )
     {
         _strEntiteLibelle = entiteLibelle;
+    }
+
+    public String getInfoAvantTournee( )
+    {
+        return _strInfoAvantTournee;
+    }
+
+    public void setInfoAvantTournee( String strInfoAvantTournee )
+    {
+        _strInfoAvantTournee = strInfoAvantTournee;
+    }
+
+    public String getInfoApresTournee( )
+    {
+        return _strInfoApresTournee;
+    }
+
+    public void setInfoApresTournee( String strInfoApresTournee )
+    {
+        _strInfoApresTournee = strInfoApresTournee;
     }
 
 }

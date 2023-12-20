@@ -4,19 +4,19 @@
   <parent>
     <groupId>fr.paris.lutece.tools</groupId>
     <artifactId>lutece-global-pom</artifactId>
-    <version>5.1.2</version>
+    <version>6.0.0</version>
   </parent>
   <groupId>fr.paris.lutece.plugins</groupId>
   <artifactId>plugin-dansmarue</artifactId>
-  <version>6.11.3-SNAPSHOT</version>
+  <version>7.1.2</version>
   <packaging>lutece-plugin</packaging>
   <name>plugin Dans Ma Rue (BO signalement)</name>
-  <url>https://dev.lutece.paris.fr/gitlab/tmma/r59/plugin-signalement</url>
+  <url>https://github.com/lutece-secteur-public/espacepublic-plugin-dansmarue</url>
   <scm>
-    <connection>scm:git:https://dev.lutece.paris.fr/gitlab/tmma/r59/plugin-signalement.git</connection>
-    <developerConnection>scm:git:https://dev.lutece.paris.fr/gitlab/tmma/r59/plugin-signalement.git</developerConnection>
-    <url>https://dev.lutece.paris.fr/gitlab/tmma/r59/plugin-signalement</url>
-    <tag>HEAD</tag>
+    <connection>scm:git:https://github.com/lutece-secteur-public/espacepublic-plugin-dansmarue.git</connection>
+    <developerConnection>scm:git:https://github.com/lutece-secteur-public/espacepublic-plugin-dansmarue.git</developerConnection>
+    <url>https://github.com/lutece-secteur-public/espacepublic-plugin-dansmarue</url>
+    <tag>plugin-dansmarue-7.1.2-BC_12497_LOT1_VA</tag>
   </scm>
   <properties>
     <jiraComponentId>10653</jiraComponentId>
@@ -33,25 +33,11 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.javadoc.skip>false</maven.javadoc.skip>
   </properties>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>log4j</groupId>
-        <artifactId>log4j</artifactId>
-        <version>1.2.13</version>
-      </dependency>
-      <dependency>
-        <groupId>fr.paris.lutece</groupId>
-        <artifactId>lutece-core</artifactId>
-        <version>6.1.0</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>fr.paris.lutece</groupId>
       <artifactId>lutece-core</artifactId>
-      <version>6.1.0</version>
+      <version>7.0.6</version>
       <type>lutece-core</type>
       <exclusions>
         <exclusion>
@@ -67,7 +53,7 @@
     <dependency>
       <groupId>fr.paris.lutece.plugins</groupId>
       <artifactId>plugin-unittree</artifactId>
-      <version>2.1.2</version>
+      <version>3.1.0</version>
     </dependency>
     <dependency>
       <groupId>net.sf.opencsv</groupId>
@@ -77,38 +63,33 @@
     <dependency>
       <groupId>fr.paris.lutece.plugins</groupId>
       <artifactId>module-unittree-signalement</artifactId>
-      <version>[6.0.99,)</version>
+      <version>7.1.0</version>
     </dependency>
     <dependency>
       <groupId>fr.paris.lutece.plugins</groupId>
       <artifactId>module-leaflet-dansmarue</artifactId>
-      <version>[6.0.99,)</version>
-    </dependency>
-    <dependency>
-      <groupId>fr.paris.lutece.plugins</groupId>
-      <artifactId>library-freemarker</artifactId>
-      <version>1.2.1</version>
+      <version>7.0.2</version>
     </dependency>
     <dependency>
       <groupId>fr.paris.lutece.plugins</groupId>
       <artifactId>plugin-asynchronousupload</artifactId>
-      <version>1.0.5</version>
+      <version>1.1.8</version>
       <type>lutece-plugin</type>
     </dependency>
     <dependency>
       <groupId>fr.paris.lutece.plugins</groupId>
       <artifactId>library-image</artifactId>
-      <version>1.0.3</version>
+      <version>1.0.4</version>
     </dependency>
     <dependency>
       <groupId>fr.paris.lutece.plugins</groupId>
       <artifactId>library-httpaccess</artifactId>
-      <version>2.4.3</version>
+      <version>2.6.0</version>
     </dependency>
     <dependency>
       <groupId>fr.paris.lutece.plugins</groupId>
       <artifactId>library-signrequest</artifactId>
-      <version>2.0.0</version>
+      <version>2.0.5</version>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
@@ -137,13 +118,13 @@
     <dependency>
       <groupId>fr.paris.lutece.plugins</groupId>
       <artifactId>plugin-profiles</artifactId>
-      <version>2.0.3</version>
+      <version>3.1.1</version>
       <type>lutece-plugin</type>
     </dependency>
     <dependency>
       <groupId>fr.paris.lutece.plugins</groupId>
       <artifactId>library-identitystore</artifactId>
-      <version>2.0.3</version>
+      <version>2.0.6</version>
     </dependency>
     <dependency>
       <groupId>fr.paris.lutece.plugins</groupId>
@@ -161,7 +142,58 @@
          <artifactId>assertj-core</artifactId>
          <version>3.19.0</version>
      </dependency>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20140107</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox</artifactId>
+      <version>1.8.4</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.json-lib</groupId>
+      <artifactId>json-lib</artifactId>
+      <version>2.4</version>
+      <classifier>jdk15</classifier>
+    </dependency>
+    <dependency>
+      <groupId>io.minio</groupId>
+      <artifactId>minio</artifactId>
+      <version>8.4.6</version>
+    </dependency>
+    <dependency>
+      <groupId>com.lowagie</groupId>
+	  <artifactId>itext</artifactId>
+	  <version>2.1.7</version>
+ 	  <scope>compile</scope>
+	  <optional>false</optional>
+	  <exclusions>
+	   <exclusion>
+		 <groupId>org.bouncycastle</groupId>
+		  <artifactId>bcmail-jdk15on</artifactId>
+		</exclusion>
+		<exclusion>
+		  <groupId>org.bouncycastle</groupId>
+		  <artifactId>bcpkix-jdk15on</artifactId>
+		</exclusion>
+		<exclusion>
+		  <groupId>org.bouncycastle</groupId>
+          <artifactId>bctsp-jdk14</artifactId>
+		</exclusion>
+		<exclusion>
+		  <groupId>bouncycastle</groupId>
+		  <artifactId>bcmail-jdk14</artifactId>
+		</exclusion>
+		<exclusion>
+		  <groupId>bouncycastle</groupId>
+	      <artifactId>bcprov-jdk14</artifactId>
+		</exclusion>
+	  </exclusions>
+	</dependency>
   </dependencies>
+  
 
   <repositories>
         <repository>
@@ -179,6 +211,6 @@
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
-        </repository>       
-    </repositories>
+        </repository>
+  </repositories>
 </project>

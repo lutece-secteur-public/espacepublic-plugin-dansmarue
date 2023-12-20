@@ -358,7 +358,7 @@ public class ActualiteDAO implements IActualiteDAO
             daoUtil.executeUpdate( );
             daoUtil.close( );
 
-            updateVersionActualite();
+            updateVersionActualite( );
         }
 
     }
@@ -378,7 +378,7 @@ public class ActualiteDAO implements IActualiteDAO
             daoUtil.executeUpdate( );
             daoUtil.close( );
 
-            updateVersionActualite();
+            updateVersionActualite( );
         }
 
     }
@@ -396,7 +396,7 @@ public class ActualiteDAO implements IActualiteDAO
         daoUtil.executeUpdate( );
         daoUtil.close( );
 
-        updateVersionActualite();
+        updateVersionActualite( );
 
     }
 
@@ -404,7 +404,7 @@ public class ActualiteDAO implements IActualiteDAO
      * {@inheritDoc}
      */
     @Override
-    public void increaseOrdreOfAllNext( int nIdActualite )
+    public void increaseOrdreOfAllNext( long nIdActualite )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INCREASE_ORDER_OF_ALL_NEXT );
         int nIndex = 1;
@@ -413,7 +413,7 @@ public class ActualiteDAO implements IActualiteDAO
         daoUtil.executeUpdate( );
         daoUtil.close( );
 
-        updateVersionActualite();
+        updateVersionActualite( );
 
     }
 
@@ -421,7 +421,7 @@ public class ActualiteDAO implements IActualiteDAO
      * {@inheritDoc}
      */
     @Override
-    public void decreaseOrdreOfAllNext( int nIdActualite )
+    public void decreaseOrdreOfAllNext( long nIdActualite )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DECREASE_ORDER_OF_ALL_NEXT );
         int nIndex = 1;
@@ -429,7 +429,7 @@ public class ActualiteDAO implements IActualiteDAO
         daoUtil.executeUpdate( );
         daoUtil.close( );
 
-        updateVersionActualite();
+        updateVersionActualite( );
 
     }
 

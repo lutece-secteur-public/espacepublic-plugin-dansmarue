@@ -156,6 +156,19 @@ public interface IWorkflowService
     void setUserAccessCodeHistoryResource( String userAccessCode, int idResourceHistory );
 
     /**
+     * Update user access code for history resource.
+     *
+     * @param userAccessCode
+     *            User Access Code
+     * @param idResource
+     *            id resource
+     * @param idAction
+     *            id action
+     *
+     */
+    void setUserAccessCodeHistoryResource( String userAccessCode, int idResource, int idAction );
+
+    /**
      * Find list of id task corresponding with the task key name.
      *
      * @param strTakKeyName

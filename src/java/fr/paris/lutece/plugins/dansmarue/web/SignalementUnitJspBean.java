@@ -33,27 +33,26 @@
  */
 package fr.paris.lutece.plugins.dansmarue.web;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.dansmarue.business.entities.UnitNode;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementUnitService;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
-import fr.paris.lutece.plugins.dansmarue.utils.ListUtils;
+import fr.paris.lutece.plugins.dansmarue.utils.IListUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.UnitUtils;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
+import fr.paris.lutece.plugins.unittree.service.unit.UnitService;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.html.HtmlTemplate;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class provides the user interface to manage form features ( manage, create, modify, remove).
@@ -97,7 +96,11 @@ public class SignalementUnitJspBean extends AbstractJspBean
     private transient ISignalementUnitService _signalementUnitService;
 
     /** The unit service. */
-    private transient IUnitService _unitService = SpringContextService.getBean( IUnitService.BEAN_UNIT_SERVICE );
+    private transient IUnitService _unitService = SpringContextService.getBean( UnitService.BEAN_UNIT_SERVICE );
+
+    /** The list utils. */
+    // UTILS
+    private transient IListUtils _listUtils = SpringContextService.getBean( "signalement.listUtils" );
 
     /**
      * Inits the.
@@ -161,7 +164,7 @@ public class SignalementUnitJspBean extends AbstractJspBean
         List<Integer> visibleInitsIdsList = new ArrayList<>( );
         if ( !ArrayUtils.isEmpty( visibleUnitsIds ) )
         {
-            visibleInitsIdsList = ListUtils.getListOfIntFromStrArray( visibleUnitsIds );
+            visibleInitsIdsList = _listUtils.getListOfIntFromStrArray( visibleUnitsIds );
         }
         _signalementUnitService.saveVisibleUnits( visibleInitsIdsList );
         return doGoBack( request );

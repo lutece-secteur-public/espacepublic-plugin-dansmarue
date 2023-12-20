@@ -172,6 +172,18 @@ public interface IWorkflowDAO
     void updateUserAccessCodeResouceHistory( String userAccessCode, int idResourceHistory );
 
     /**
+     * Update DansMaRue workflow resource history.
+     *
+     * @param userAccessCode
+     *            User Access Code
+     * @param idResource
+     *            id resource
+     * @param idAction
+     *            id action
+     */
+    void updateUserAccessCodeResouceHistory( String userAccessCode, int idResource, int idAction );
+
+    /**
      * Find list of id task corresponding with the task key name.
      *
      * @param strTakKeyName

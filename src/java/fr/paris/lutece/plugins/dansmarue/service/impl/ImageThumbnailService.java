@@ -66,6 +66,20 @@ public class ImageThumbnailService implements ImageResourceProvider
     }
 
     /**
+     * Get the resource for image only if the token match the stored token.
+     *
+     * @param nIdPhoto
+     *            The identifier of nIdPhoto object
+     * @param strToken
+     *            The token to verify
+     * @return The ImageResource
+     */
+    public ImageResource getImageResource( int nIdPhoto, String strToken )
+    {
+        return _photoService.getImageThumbnailResource( nIdPhoto, strToken );
+    }
+
+    /**
      * Get the type of resource.
      *
      * @return The type of resource

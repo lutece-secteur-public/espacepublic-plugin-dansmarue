@@ -178,6 +178,17 @@ form>a>img, .actionsButtons>a>img {
 	fill: rgb(255,255,255);
 }
 
+#manage-signalement .toggle-photo-done-btns{
+	background-color: rgb(255,255,255);
+	color: rgb(12,81,138);
+	border: solid 1px #ddd;
+}
+
+#manage-signalement .toggle-photo-done-btns.active{
+	background-color: rgb(12,81,138);
+	color: rgb(255,255,255);
+}
+
 #manage-signalement .label-title{
 	color: #0C518A;
 }

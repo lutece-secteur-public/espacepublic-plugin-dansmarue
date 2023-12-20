@@ -37,17 +37,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fr.paris.lutece.plugins.dansmarue.util.constants.DateConstants;
+import fr.paris.lutece.plugins.dansmarue.utils.IListUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -70,8 +67,6 @@ import fr.paris.lutece.plugins.dansmarue.service.ISignalementExportService;
 import fr.paris.lutece.plugins.dansmarue.service.ITypeSignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
-import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
-import fr.paris.lutece.plugins.dansmarue.utils.ListUtils;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.modules.dansmarue.business.sector.Sector;
 import fr.paris.lutece.plugins.unittree.modules.dansmarue.service.sector.ISectorService;
@@ -161,6 +156,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
     private static final String MARK_FEUILLE_DE_TOURNEE = "feuille_de_tournee";
     private static final String MARK_UPDATED_PART_FDT_NAME = "updated_part_name";
     private static final String MARK_FDT_COMMENT = "fdt_comment";
+    private static final String MARK_FDT_INFO_AVANT_TOURNEE = "fdt_info_avant_tournee";
     private static final String MARK_ONGLET_ACTIF = "onglet_actif";
     private static final String MARK_MARKER_SELECT = "marker_select";
     private static final String MARK_DIRECTION_LIST = "direction_list";
@@ -197,6 +193,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
     private static final String PARAMETER_SAVE_IS_UPDATE = "param_save_fdt_is_update";
     private static final String PARAMETER_CARTE_BASE64 = "param_carte_base_64";
     private static final String PARAMETER_SAVE_COMMENT = "param_save_fdt_comment";
+    private static final String PARAMETER_SAVE_INFO_AVANT_TOURNEE = "param_save_fdt_info_avant_tournee";
     private static final String PARAMETER_ONGLET_ACTIF = "param_onglet_actif";
     private static final String PARAMETER_TYPE_EXPORT = "param_type_export";
     private static final String PARAMETER_MARKER_SELECT = "marker_select";
@@ -246,7 +243,11 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
     private final transient IFeuilleDeTourneeService _feuilleTourneeService = SpringContextService.getBean( "feuilleDeTourneeService" );
     private final transient ISignalementExportService _signalementExportService = SpringContextService.getBean( "signalementExportService" );
 
-    private static final String STATE_NOT_DISPLAY = "signalement.state.not.display";
+    /** The list utils */
+    // UTILS
+    private transient IListUtils _listUtils = SpringContextService.getBean( "signalement.listUtils" );
+
+    private static final String     STATE_NOT_DISPLAY = "signalement.state.not.display";
 
     private SignalementFilter _signalementFilter;
     private FeuilleDeTourneeFilter _feuilleDeTourneeFilter;
@@ -354,7 +355,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
 
         // Entite
         List<Sector> listSectorsOfUnits = getListSectorAllowed( AdminUserService.getAdminUser( request ) );
-        ReferenceList listeSecteur = ListUtils.toReferenceList( listSectorsOfUnits, ID_SECTOR, "name", StringUtils.EMPTY, true );
+        ReferenceList listeSecteur = _listUtils.toReferenceList( listSectorsOfUnits, ID_SECTOR, "name", StringUtils.EMPTY, true );
         model.put( MARK_SECTEUR_LIST, listeSecteur );
 
         if ( ( request.getParameter( PARAMETER_FILTER_LOAD ) != null ) && ( Integer.parseInt( request.getParameter( PARAMETER_FILTER_LOAD ) ) > 0 ) )
@@ -431,12 +432,12 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         int nbdays = AppPropertiesService.getPropertyInt( PROPERTY_SEARCH_INITIAL_NB_DAYS, -1 );
         if ( nbdays > 0 )
         {
-            _signalementFilter.setDateBegin( LocalDate.now( ).minusDays( nbdays ).format( DateTimeFormatter.ofPattern( DateUtils.DATE_FR ) ) );
+            _signalementFilter.setDateBegin( LocalDate.now( ).minusDays( nbdays ).format( DateTimeFormatter.ofPattern( DateConstants.DATE_FR ) ) );
 
         }
 
         // Date de fin à la date actuelle
-        _signalementFilter.setDateEnd( LocalDate.now( ).format( DateTimeFormatter.ofPattern( DateUtils.DATE_FR ) ) );
+        _signalementFilter.setDateEnd( LocalDate.now( ).format( DateTimeFormatter.ofPattern( DateConstants.DATE_FR ) ) );
 
         return _signalementFilter;
     }
@@ -510,7 +511,8 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         for ( State state : states )
         {
             JSONArray arrayIdStateSelect = jsonObjectFilterValue.getJSONArray( PARAMETER_ETAT );
-            for ( int i = 0; i < arrayIdStateSelect.size( ); i++ )
+            int size = arrayIdStateSelect.size( );
+            for ( int i = 0; i < size; i++ )
             {
                 if ( arrayIdStateSelect.getInt( i ) == state.getId( ) )
                 {
@@ -527,11 +529,11 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         _signalementFilter = new SignalementFilter( );
 
         _signalementFilter
-                .setListIdTypeSignalements( new ArrayList<Integer>( JSONArray.toCollection( jsonObjectFilterValue.getJSONArray( PARAMETER_TYPOLOGIE ) ) ) );
+        .setListIdTypeSignalements( new ArrayList<Integer>( JSONArray.toCollection( jsonObjectFilterValue.getJSONArray( PARAMETER_TYPOLOGIE ) ) ) );
         _signalementFilter.setEtats( etats );
         _signalementFilter.setPriorites( new ArrayList<Integer>( JSONArray.toCollection( jsonObjectFilterValue.getJSONArray( PARAMETER_PRIORITE ) ) ) );
         _signalementFilter
-                .setListIdArrondissements( new ArrayList<Integer>( JSONArray.toCollection( jsonObjectFilterValue.getJSONArray( PARAMETER_ARRONDISEMENT ) ) ) );
+        .setListIdArrondissements( new ArrayList<Integer>( JSONArray.toCollection( jsonObjectFilterValue.getJSONArray( PARAMETER_ARRONDISEMENT ) ) ) );
         _signalementFilter.setListIdQuartier( new ArrayList<Integer>( JSONArray.toCollection( jsonObjectFilterValue.getJSONArray( PARAMETER_QUARTIER ) ) ) );
 
         _signalementFilter.setDateBegin( jsonObjectFilterValue.getString( PARAMETER_DATE_BEGIN ) );
@@ -567,7 +569,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         List<Unit> listUnits = _unitService.getUnitsByIdUser( adminUser.getUserId( ), false );
         for ( Unit userUnit : listUnits )
         {
-            for ( Sector secteurUnit : _sectorService.loadByIdUnitWithoutChosenId( userUnit.getIdUnit( ), ID_JARDIN ) )
+            for ( Sector secteurUnit : _sectorService.loadByIdUnitWithoutChosenId(Collections.singletonList(userUnit.getIdUnit()), ID_JARDIN ) )
             {
                 boolean bFound = false;
                 for ( Sector secteur : listSectorsOfUnits )
@@ -699,8 +701,8 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
             model.put( SignalementConstants.MARK_NB_ITEMS_PER_PAGE, StringUtils.EMPTY + _nItemsPerPage );
             model.put( MARK_FEUILLE_DE_TOURNEE, feuilleDeTournee );
             model.put( MARK_UPDATED_PART_FDT_NAME,
-                    feuilleDeTournee.getNom( ).substring( StringUtils.ordinalIndexOf( feuilleDeTournee.getNom( ), "_", 4 ) + 1 ) );
-            model.put( MARK_FDT_COMMENT, feuilleDeTournee.getCommentaire( ) );
+                    feuilleDeTournee.getNom( ).substring( StringUtils.ordinalIndexOf( feuilleDeTournee.getNom( ), "_", 5 ) + 1 ) );
+            model.put( MARK_FDT_INFO_AVANT_TOURNEE, feuilleDeTournee.getInfoAvantTournee() );
             model.put( SignalementConstants.MARK_PAGINATOR, paginator );
             model.put( MARK_SIGNALEMENT_LIST, paginator.getPageItems( ) );
             model.put( MARK_NOM_TEMPLATE, NOM_TEMPLATE );
@@ -713,8 +715,8 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
 
             model.put( MARK_USER_LOGIN, connectedUser.getAccessCode( ) );
             model.put( MARK_MARKER_SELECT, request.getParameter( PARAMETER_MARKER_SELECT ) );
-            model.put( MARK_DIRECTION_LIST, ListUtils.toReferenceList( _unitService.getUnitsFirstLevel( false ), ID_UNIT, LABEL, StringUtils.EMPTY ) );
-            model.put( MARK_ENTITE_LIST, ListUtils.toReferenceList( getEntityListByIdDirection( feuilleDeTournee.getIdDirection( ) ), ID_UNIT, LABEL, null ) );
+            model.put( MARK_DIRECTION_LIST, _listUtils.toReferenceList( _unitService.getUnitsFirstLevel( false ), ID_UNIT, LABEL, StringUtils.EMPTY ) );
+            model.put( MARK_ENTITE_LIST, _listUtils.toReferenceList( getEntityListByIdDirection( feuilleDeTournee.getIdDirection( ) ), ID_UNIT, LABEL, null ) );
         }
         else
         {
@@ -817,7 +819,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         int minIndex = paginationProerties.getFirstResult( );
         int maxIndex = ( paginationProerties.getPageIndex( ) * paginationProerties.getItemsPerPage( ) ) < signalements.size( )
                 ? paginationProerties.getPageIndex( ) * paginationProerties.getItemsPerPage( )
-                : signalements.size( );
+                        : signalements.size( );
         List<SignalementExportCSVDTO> signalementToDisplay = signalements.subList( minIndex, maxIndex );
 
         resultListSignalement.addAll( signalementToDisplay );
@@ -927,7 +929,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
 
         ReferenceList directionList = new ReferenceList( );
         directionList.addItem( "", "" );
-        directionList.addAll( ListUtils.toReferenceList( _unitService.getUnitsFirstLevel( false ), ID_UNIT, LABEL, null ) );
+        directionList.addAll( _listUtils.toReferenceList( _unitService.getUnitsFirstLevel( false ), ID_UNIT, LABEL, null ) );
         model.put( MARK_DIRECTION_LIST, directionList );
 
         Locale locale = getLocale( );
@@ -1033,7 +1035,8 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
             List<String> idsSelectStr = Arrays.asList( request.getParameterValues( PARAMETER_SIGNALEMENTS_SELECT_IDS ) [0].split( "," ) );
             List<Integer> idsSelect = idsSelectStr.stream( ).map( Integer::parseInt ).collect( Collectors.toList( ) );
 
-            String comment = request.getParameter( PARAMETER_SAVE_COMMENT );
+            String infoAvantTournee = request.getParameter( PARAMETER_SAVE_INFO_AVANT_TOURNEE );
+
             Integer idEntite = request.getParameter( PARAMETER_ENTITE_ID ) != null ? Integer.parseInt( request.getParameter( PARAMETER_ENTITE_ID ) ) : null;
             Integer idDirection = request.getParameter( PARAMETER_DIRECTION_ID ) != null ? Integer.parseInt( request.getParameter( PARAMETER_DIRECTION_ID ) )
                     : null;
@@ -1045,8 +1048,8 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
 
             Boolean isUpdate = request.getParameter( PARAMETER_SAVE_IS_UPDATE ) != null;
 
-            FeuilleDeTournee feuilleDeTournee = new FeuilleDeTournee( AdminUserService.getAdminUser( request ).getAccessCode( ), idUnit, comment, 1, idsSelect,
-                    name, idDirection, idEntite );
+            FeuilleDeTournee feuilleDeTournee = new FeuilleDeTournee( AdminUserService.getAdminUser( request ).getAccessCode( ), idUnit, null, 1, idsSelect,
+                    name, idDirection, idEntite, infoAvantTournee );
 
             List<ValidationError> errors = validate( feuilleDeTournee, "" );
             if ( !errors.isEmpty( ) )
@@ -1063,7 +1066,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
 
             if ( Boolean.FALSE.equals( isUpdate ) )
             {
-                feuilleDeTourneeId = _feuilleTourneeService.insert( feuilleDeTournee );
+                feuilleDeTourneeId = _feuilleTourneeService.insert( feuilleDeTournee, false );
             }
             else
             {
@@ -1090,7 +1093,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
             FeuilleDeTournee feuilleDeTournee = populateFeuilleDeTournee( request );
 
             String nom = request.getParameter( PARAMETER_SAVE_NAME_PREFIX ) + request.getParameter( PARAMETER_SAVE_NAME );
-            String originalName = feuilleDeTournee.getNom( ).substring( StringUtils.ordinalIndexOf( feuilleDeTournee.getNom( ), "_", 4 ) + 1 );
+            String originalName = feuilleDeTournee.getNom( ).substring( StringUtils.ordinalIndexOf( feuilleDeTournee.getNom( ), "_", 5 ) + 1 );
             String newName = nom.substring( StringUtils.ordinalIndexOf( nom, "_", 4 ) + 1 );
 
             if ( originalName.equals( newName ) )
@@ -1107,8 +1110,9 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
                     feuilleDeTournee.setCreateur( userAccessCode );
                 }
 
-                feuilleDeTournee.setNom( nom );
-                Integer newId = _feuilleTourneeService.insert( feuilleDeTournee );
+                feuilleDeTournee
+                .setNom( feuilleDeTournee.getNom( ).substring( 0, StringUtils.ordinalIndexOf( feuilleDeTournee.getNom( ), "_", 5 ) + 1 ) + newName );
+                Integer newId = _feuilleTourneeService.insert( feuilleDeTournee, true );
                 request.setAttribute( PARAMETER_FEUILLE_DE_TOURNEE_ID, newId );
             }
 
@@ -1125,7 +1129,8 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         Integer feuilleDeTourneeId = Integer.parseInt( request.getParameter( PARAMETER_FEUILLE_DE_TOURNEE_ID ) );
         List<String> idsSelectStr = Arrays.asList( request.getParameterValues( PARAMETER_SIGNALEMENTS_SELECT_IDS ) [0].split( "," ) );
         List<Integer> idsSelect = idsSelectStr.stream( ).map( Integer::parseInt ).collect( Collectors.toList( ) );
-        String comment = request.getParameter( PARAMETER_SAVE_COMMENT );
+        String infoAvantTournee = request.getParameter( PARAMETER_SAVE_INFO_AVANT_TOURNEE ) ;
+
 
         Integer idEntite = request.getParameter( PARAMETER_ENTITE_ID ) != null ? Integer.parseInt( request.getParameter( PARAMETER_ENTITE_ID ) ) : -1;
         Integer idDirection = request.getParameter( PARAMETER_DIRECTION_ID ) != null ? Integer.parseInt( request.getParameter( PARAMETER_DIRECTION_ID ) )
@@ -1133,7 +1138,11 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
 
         FeuilleDeTournee feuilleDeTournee = _feuilleTourneeService.load( feuilleDeTourneeId );
         feuilleDeTournee.setListSignalementIds( idsSelect );
-        feuilleDeTournee.setCommentaire( comment );
+
+
+        feuilleDeTournee.setInfoAvantTournee(infoAvantTournee == "" ? null : infoAvantTournee );
+
+
         feuilleDeTournee.setIdDirection( idDirection );
         feuilleDeTournee.setIdEntite( idEntite );
 
@@ -1307,7 +1316,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         String destinairesParam = request.getParameter( PARAMETER_DESTINAIRES_EXPORT );
         Integer feuilleeDeTourneId = request.getParameter( PARAMETER_FEUILLE_DE_TOURNEE_ID ) != null
                 ? Integer.parseInt( request.getParameter( PARAMETER_FEUILLE_DE_TOURNEE_ID ) )
-                : 0;
+                        : 0;
         String base64Map = request.getParameter( PARAMETER_CARTE_BASE64 );
 
         String nomExport = _feuilleTourneeService.load( feuilleeDeTourneId ).getNom( ) + ".pdf";
@@ -1459,7 +1468,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
             {
                 Integer directionId = Integer.parseInt( strDirectionId );
 
-                ReferenceList refListEntity = ListUtils.toReferenceList( getEntityListByIdDirection( directionId ), ID_UNIT, LABEL, "" );
+                ReferenceList refListEntity = _listUtils.toReferenceList( getEntityListByIdDirection( directionId ), ID_UNIT, LABEL, "" );
 
                 jsonStringer.object( ).key( MARK_ENTITY_LIST ).array( );
                 for ( ReferenceItem sector : refListEntity )

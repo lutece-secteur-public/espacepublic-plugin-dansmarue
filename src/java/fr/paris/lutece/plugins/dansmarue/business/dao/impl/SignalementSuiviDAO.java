@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import fr.paris.lutece.plugins.dansmarue.utils.IDateUtils;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementSuiviDAO;
@@ -47,10 +49,12 @@ import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementSuivi;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SiraUser;
 import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
-import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
 import fr.paris.lutece.plugins.unittree.modules.dansmarue.business.sector.Sector;
 import fr.paris.lutece.portal.service.datastore.DatastoreService;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * The Class SignalementSuiviDAO.
@@ -104,6 +108,11 @@ public class SignalementSuiviDAO implements ISignalementSuiviDAO
 
     /** The Constant SQL_QUERY_DELETE_BY_ID_SIGNALEMENT. */
     private static final String SQL_QUERY_DELETE_BY_ID_SIGNALEMENT = "DELETE FROM signalement_suivi WHERE fk_id_signalement = ?";
+
+    /** The date utils */
+    @Inject
+    @Named( "signalement.dateUtils" )
+    private transient IDateUtils _dateUtils;
 
     /**
      * Generates a new primary key.
@@ -405,9 +414,9 @@ public class SignalementSuiviDAO implements ISignalementSuiviDAO
         // Fill signalement
         signalement.setId( daoUtil.getLong( ++nIndex ) );
         signalement.setSuivi( daoUtil.getInt( ++nIndex ) );
-        signalement.setDateCreation( DateUtils.getDateFr( daoUtil.getDate( ++nIndex ) ) );
+        signalement.setDateCreation( _dateUtils.getDateFr( daoUtil.getDate( ++nIndex ) ) );
         signalement.setHeureCreation( daoUtil.getTimestamp( nIndex ) );
-        signalement.setDatePrevueTraitement( DateUtils.getDateFr( daoUtil.getDate( ++nIndex ) ) );
+        signalement.setDatePrevueTraitement( _dateUtils.getDateFr( daoUtil.getDate( ++nIndex ) ) );
         signalement.setCommentaire( daoUtil.getString( ++nIndex ) );
         signalement.setAnnee( daoUtil.getInt( ++nIndex ) );
         signalement.setMois( daoUtil.getString( ++nIndex ) );
@@ -445,21 +454,21 @@ public class SignalementSuiviDAO implements ISignalementSuiviDAO
 
         if ( serviceFaitTraitement != null )
         {
-            signalement.setDateServiceFaitTraitement( DateUtils.getDateFr( serviceFaitTraitement ) );
-            signalement.setHeureServiceFaitTraitement( DateUtils.getHourFrSansColonne( serviceFaitTraitement ) );
+            signalement.setDateServiceFaitTraitement( _dateUtils.getDateFr( serviceFaitTraitement ) );
+            signalement.setHeureServiceFaitTraitement( _dateUtils.getHourFrSansColonne( serviceFaitTraitement ) );
         }
         signalement.setFelicitations( daoUtil.getInt( ++nIndex ) );
         Date miseEnSurveillance = daoUtil.getTimestamp( ++nIndex );
 
         if ( miseEnSurveillance != null )
         {
-            signalement.setDateMiseEnSurveillance( DateUtils.getDateFr( miseEnSurveillance ) );
+            signalement.setDateMiseEnSurveillance( _dateUtils.getDateFr( miseEnSurveillance ) );
         }
         Date rejet = daoUtil.getTimestamp( ++nIndex );
 
         if ( rejet != null )
         {
-            signalement.setDateRejet( DateUtils.getDateFr( rejet ) );
+            signalement.setDateRejet( _dateUtils.getDateFr( rejet ) );
         }
         signalement.setCourrielDestinataire( daoUtil.getString( ++nIndex ) );
         signalement.setCourrielExpediteur( daoUtil.getString( ++nIndex ) );

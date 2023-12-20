@@ -72,7 +72,7 @@ public class ActualiteService implements IActualiteService
     @Override
     public void doDeleteActualite( long lId )
     {
-        _actualiteDAO.decreaseOrdreOfAllNext( (int) lId );
+        _actualiteDAO.decreaseOrdreOfAllNext( lId );
         _actualiteDAO.remove( lId );
     }
 

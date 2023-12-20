@@ -70,14 +70,6 @@ public interface IPhotoDAO
     PhotoDMR load( long lId );
 
     /**
-     * Store a photo.
-     *
-     * @param photo
-     *            the photo object
-     */
-    void store( PhotoDMR photo );
-
-    /**
      * Load the data of the image from the table.
      *
      * @param nIdPhoto
@@ -104,14 +96,6 @@ public interface IPhotoDAO
      */
     List<PhotoDMR> findWithFullPhotoBySignalementId( long lIdSignalement );
 
-    /**
-     * Load a photo with the id of the report.
-     *
-     * @param lId
-     *            the report id
-     * @return the photo
-     */
-    PhotoDMR loadByIdSignalement( long lId );
 
     /**
      * Load a thumbnailed photo.
@@ -144,4 +128,19 @@ public interface IPhotoDAO
      *            the photo
      */
     void updatePhoto( PhotoDMR photo );
+
+    /**
+     * Find photos to migrate list.
+     *
+     * @param nNbPhotoToMigrate the n nb photo to migrate
+     * @return the list
+     */
+    List<PhotoDMR> findPhotosToMigrate( int nNbPhotoToMigrate );
+
+    /**
+     * Remove photo from database.
+     *
+     * @param photoDMR the photo dmr
+     */
+    void removePhotoFromDatabase( PhotoDMR photoDMR );
 }
