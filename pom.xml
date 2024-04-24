@@ -125,12 +125,24 @@
       <groupId>fr.paris.lutece.plugins</groupId>
       <artifactId>library-identitystore</artifactId>
       <version>2.0.6</version>
+	  <exclusions>
+	    <exclusion>
+		  <groupId>fr.paris.lutece.plugins</groupId>
+          <artifactId>library-httpaccess</artifactId>
+	    </exclusion>
+	  </exclusions>
     </dependency>
     <dependency>
       <groupId>fr.paris.lutece.plugins</groupId>
       <artifactId>plugin-anonymizationphoto</artifactId>
       <version>1.0.0</version>
       <type>lutece-plugin</type>
+	  <exclusions>
+	    <exclusion>
+		  <groupId>fr.paris.lutece.plugins</groupId>
+          <artifactId>library-httpaccess</artifactId>
+	    </exclusion>
+	  </exclusions>
     </dependency>
 	<dependency>
 		<groupId>net.sf.jasperreports</groupId>
@@ -199,7 +211,7 @@
         <repository>
             <id>luteceReleaseRepository</id>
             <name>luteceReleaseRepository</name>
-            <url>http://dev.lutece.paris.fr/nexus/content/groups/maven_repository/</url>
+            <url>https://dev.lutece.paris.fr/nexus/content/groups/maven_repository/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -207,7 +219,7 @@
         <repository>
             <id>luteceSnapshotRepository</id>
             <name>luteceSnapshotRepository</name>
-            <url>http://dev.lutece.paris.fr/nexus/content/groups/snapshot_repository/</url>
+            <url>https://dev.lutece.paris.fr/nexus/content/groups/snapshot_repository/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
